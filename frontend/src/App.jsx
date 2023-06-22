@@ -13,6 +13,7 @@ import Single from "./pages/createComponents/Single";
 import Multiple from "./pages/createComponents/Multiple";
 import UserProfile from "./pages/UserProfile";
 import BuyNow from "./components/cards/BuyNow";
+import { GlobalProvider } from "./Context/GlobalContext";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -29,56 +30,58 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route
-          path="*"
-          element={<LandingPage search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/"
-          element={<LandingPage search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/profile"
-          element={<Profile search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/user-profile"
-          element={<UserProfile search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/search/"
-          element={<SearchPage search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/setting"
-          element={<Setting search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/wallet"
-          element={<Wallet search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/subscription"
-          element={<Subscription search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/create"
-          element={<Create search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/create/single"
-          element={<Single search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/create/multiple"
-          element={<Multiple search={search} setSearch={setSearch} />}
-        />
-        <Route
-          path="/buy"
-          element={<BuyNow search={search} setSearch={setSearch} />}
-        />
-      </Routes>
+      <GlobalProvider>
+        <Routes>
+          <Route
+            path="*"
+            element={<LandingPage search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/"
+            element={<LandingPage search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/profile"
+            element={<Profile search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/user-profile"
+            element={<UserProfile search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/search/"
+            element={<SearchPage search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/setting"
+            element={<Setting search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/wallet"
+            element={<Wallet search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/subscription"
+            element={<Subscription search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/create"
+            element={<Create search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/create/single"
+            element={<Single search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/create/multiple"
+            element={<Multiple search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/buy"
+            element={<BuyNow search={search} setSearch={setSearch} />}
+          />
+        </Routes>
+      </GlobalProvider>
     </Router>
   );
 }
