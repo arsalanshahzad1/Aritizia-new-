@@ -1,0 +1,3 @@
+export const PINATA_API_KEY = "f8d8947de1a1117fc89f";
+export const PINATA_API_SECRET = "25c39fd49cc383e00cecc68875cc751294d731d2510c00c467fe13c6d979495f";
+

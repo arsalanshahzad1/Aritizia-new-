@@ -1,0 +1,641 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.9;
+
+// import "./IERC721.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "hardhat/console.sol";
+
+
+  error invalidPrice();
+  error invalidListingFee();
+  error invalidListingType();
+
+  interface ISwappingContract {
+    function swapUSDTForETH(uint256 usdtAmountIn) external;
+}
+
+
+  contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
+
+    using Counters for Counters.Counter;
+    Counters.Counter public _nftsSold;
+    Counters.Counter public _nftCount;
+    // uint256 public LISTING_FEE = 0.0001 ether;
+    address payable private _marketOwner;
+    ISwappingContract private swappingContract;
+
+    IERC20 USDTtoken;
+
+    constructor(address _token) {
+      _marketOwner = payable(msg.sender);
+
+        USDTtoken = IERC20(_token);  
+         swappingContract = ISwappingContract(_swappingContractAddress);
+    }
+
+
+
+    event auctionEndTimeIncreased(uint256 newTime);
+
+    
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+  ///////////////    MAPPINGS    ////////////////
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+
+
+
+    mapping(uint256 => NFT) private _idToNFT;
+    
+    mapping(uint256 => Auction) private _idToAuction;
+
+    mapping(address => mapping(address => bool)) private isFan;
+
+    mapping(address => address[]) private fanLists;
+
+    mapping(address => bool) public bannedUsers;
+
+    mapping(address => bool) public deletedUsers;
+
+
+
+
+  enum ListingType {
+          FixedPrice,
+          Auction
+      }
+
+
+  enum PaymentMethod {
+    ETHER,
+    USDT,
+    FIAT
+  }
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+  ///////////////    STRUCTS    /////////////////
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+
+
+    struct Auction{
+      uint256 tokenId;
+      address payable seller; 
+      uint256 basePrice;
+      uint256 startTime;
+      uint256 endTime;
+      uint256 highestBid;
+      address payable highestBidder;
+      bool isLive;
+    }
+
+
+    struct NFT {
+      address nftContract;
+      uint256 tokenId;
+      address payable firstOwner;
+      address payable seller;
+      address payable owner;
+      uint256 price;
+      bool listed;
+      uint256 royaltyPrice; 
+      ListingType listingType;
+      PaymentMethod paymentMethod;
+    }
+
+
+    struct Bid{
+      address bidder;
+      uint256 amount;
+      uint256 tokenId;
+    }
+
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+  ///////////////    ENUMS    ///////////////////
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+
+    event NFTListed(
+      address nftContract,
+      uint256 tokenId,
+      address seller,
+      address owner,
+      uint256 price
+    );
+
+
+    event NFTSold(
+      address nftContract,
+      uint256 tokenId,
+      address seller,
+      address owner,
+      uint256 price
+    );
+
+    
+
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+  ///////////////    MODIFIERS    ///////////////
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+
+
+
+    modifier auctionIsLive(uint256 _tokenId){
+      require(_idToAuction[_tokenId].isLive, "This NFT is not on auction at the moment.");
+      require( block.timestamp > _idToAuction[_tokenId].startTime && block.timestamp < _idToAuction[_tokenId].endTime  , "This NFT is not on auction at the moment.");
+      _;
+    }
+
+
+
+    modifier isUserBanned(){
+      require(!bannedUsers[msg.sender],"You are banned on this platform.");
+      _;
+    }
+
+
+
+    modifier isUserDeleted(){
+      require(!deletedUsers[msg.sender],"You are permenantly deleted from this platform for violating the policies.");
+      _;
+    }
+
+
+    // List the NFT on the marketplace
+    function listNft(
+      address _nftContract, 
+      uint256[] memory _tokenId, 
+      uint256 _price, 
+      uint256 _royaltyPrice, 
+      uint256 _listingType,
+      uint256 _startTime,
+      uint256 _endTime,
+      uint256 _paymentMethod
+      
+      ) public payable nonReentrant isUserBanned isUserDeleted {
+            console.log("_tokenId",_tokenId[0]);
+
+      // require(_price > 0, "Price must be at least 1 wei");
+      // require(msg.value == LISTING_FEE, "Not enough ether for listing fee");
+
+        for(uint256 i = 0; i < _tokenId.length; i++){
+            console.log("this is 1",_tokenId[i]);
+          console.log("_listingType",_listingType);
+          console.log("uint256(ListingType.Auction)",uint256(ListingType.Auction));
+        
+        if (_price < 0){
+                revert invalidPrice();
+          } 
+          else if( _listingType > uint256(ListingType.Auction)){
+              revert invalidListingType();
+        }
+        else{
+            console.log("_tokenId[i]",_tokenId[i]);
+           
+            IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId[i]);
+            console.log("this is 2");
+
+
+            // _marketOwner.transfer(LISTING_FEE);
+            // console.log("this is 3");
+
+            _nftCount.increment();
+            console.log("this is 4");
+
+            _idToNFT[i] = NFT(
+              _nftContract,
+              i, 
+              payable(msg.sender),
+              payable(msg.sender),
+              payable(address(this)),
+              _price,
+              true,
+              _royaltyPrice,
+              ListingType(_listingType),
+              PaymentMethod(_paymentMethod)
+            );
+            console.log("this is 5");
+            
+
+              if (_listingType == uint256(ListingType.Auction)){
+            console.log("this is 6");
+
+                _idToAuction[i] = Auction(
+                  i,  //tokenId
+                  payable(msg.sender), // seller
+                  _price,  // basePrice
+                  _startTime,  // startTime
+                  _endTime,   // endTime
+                  0,   // highestBid
+                  payable(address(0)),  // highestBidder
+                  false // isLive
+                );
+              }
+            console.log("this is 7");
+
+              emit NFTListed(_nftContract, i, msg.sender, address(this), _price);
+          }
+        }
+    }
+
+    
+    function getLatestUSDTPrice() public view returns (uint256) {
+        //0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46 USDt/ETH Ethereum mainnet
+        AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46); // Mainnet contract address for USDT price feed
+        (, int256 price, , ,) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
+        require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
+        return uint256(price);
+    }
+
+
+
+    function buyWithUSDT(address _nftContract, uint256 _tokenId, uint256 _amount) public payable isUserBanned isUserDeleted nonReentrant {
+        NFT storage nft = _idToNFT[_tokenId];
+        uint256 _amountInETH = _amount / getLatestUSDTPrice();
+        require(!bannedUsers[nft.owner],"The owner of this nft is blacklisted on this platform.");
+        require(!deletedUsers[nft.owner],"The owner of this nft is permanantly banned on this platform.");
+        require(nft.price >= _amountInETH,"Send more!");
+
+      address payable buyer = payable(msg.sender);
+
+      uint256 _amountAfterRoyalty;
+      uint256 _amountToBePaid;
+
+      if( nft.owner == nft.firstOwner ){
+          USDTtoken.transferFrom(msg.sender,address(this),_amount);
+          _amountToBePaid = _amount - platformFeeCalculate(_amount);
+          USDTtoken.transfer(nft.seller,_amountToBePaid);
+            // payable(nft.seller).transfer(msg.value);
+      } else{
+            
+            uint256 _royaltyFee = royaltyCalculate(_amount, nft.royaltyPrice);
+            
+            _amountAfterRoyalty = _amount - _royaltyFee;
+            _amountToBePaid = _amount - platformFeeCalculate(_amountAfterRoyalty);
+            
+            USDTtoken.transferFrom(msg.sender,address(this),_amount);
+            USDTtoken.transfer(nft.firstOwner,_royaltyFee);
+            USDTtoken.transfer(nft.seller,_amountToBePaid);
+            
+            // payable(nft.seller).transfer(_amountAfterRoyalty);
+            // payable(nft.firstOwner).transfer(_royaltyFee);
+      }
+      IERC721(_nftContract).transferFrom(address(this), buyer, nft.tokenId);
+      nft.owner = buyer;
+      nft.listed = false;
+      _nftsSold.increment();
+      emit NFTSold(_nftContract, nft.tokenId, nft.seller, buyer, _amountAfterRoyalty);
+    }
+
+    // Buy an NFT with ETH
+    function buyWithETH(address _nftContract, uint256 _tokenId) public payable isUserBanned isUserDeleted nonReentrant {
+      NFT storage nft = _idToNFT[_tokenId];
+      require(!bannedUsers[nft.owner],"The owner of this nft is blacklisted on this platform.");
+      require(!deletedUsers[nft.owner],"The owner of this nft is permanantly banned on this platform.");
+      require(msg.value >= nft.price, "Not enough ether to cover asking price");
+      
+      address payable buyer = payable(msg.sender);
+
+      uint256 _amountAfterRoyalty;
+      uint256 _amountToBePaid;
+
+
+      if( nft.owner == nft.firstOwner ){
+          _amountToBePaid = msg.value - platformFeeCalculate(msg.value);
+          payable(nft.seller).transfer(_amountToBePaid);
+      } else{
+          uint256 _amount = msg.value;
+          uint256 _royaltyFee = royaltyCalculate(_amount, nft.royaltyPrice);
+          // _amountAfterRoyalty = _amount - _royaltyFee;
+          _amountToBePaid = _amount - _royaltyFee - platformFeeCalculate(_amount);
+          payable(nft.seller).transfer(_amountToBePaid);
+          payable(nft.firstOwner).transfer(_royaltyFee);
+      }
+      IERC721(_nftContract).transferFrom(address(this), buyer, nft.tokenId);
+      nft.owner = buyer;
+      nft.listed = false;
+      _nftsSold.increment();
+      emit NFTSold(_nftContract, nft.tokenId, nft.seller, buyer, _amountAfterRoyalty);
+    }
+
+    // Resell an NFT purchased from the marketplace
+    function resellNft(
+        address _nftContract, 
+        uint256 _tokenId, 
+        uint256 _price,
+        uint256 _listingType,
+        uint256 _startTime,
+        uint256 _endTime,
+        uint256 _paymentMethod
+      ) public isUserBanned isUserDeleted nonReentrant {
+      
+      require(_price > 0, "Price must be at least 1 wei");
+      // require(msg.value == LISTING_FEE, "Not enough ether for listing fee");
+
+      IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
+
+      NFT storage nft = _idToNFT[_tokenId];
+      nft.seller = payable(msg.sender);
+      nft.owner = payable(address(this));
+      nft.price = _price;
+      nft.listed = true;
+      nft.listingType = ListingType(_listingType);
+      nft.paymentMethod = PaymentMethod(_paymentMethod);
+
+      if (_listingType == uint256(ListingType.Auction)){
+        _idToAuction[_tokenId] = Auction(
+                  _tokenId,             // tokenId
+                  payable(msg.sender),  // seller
+                  _price,               // basePrice
+                  _startTime,           // startTime
+                  _endTime,             // endTime
+                  0,                    // highestBid
+                  payable(address(0)),  // highestBidder
+                  false                 // isLive
+                );
+      }
+
+      _nftsSold.decrement();
+      emit NFTListed(_nftContract, _tokenId, msg.sender, address(this), _price);
+    }
+
+
+    function getHighestBid(uint256 _tokenId) public view returns(uint256){
+      return _idToAuction[_tokenId].highestBid;
+    }
+
+    function bidInETH(uint256 _tokenId) public auctionIsLive(_tokenId) isUserDeleted isUserBanned payable {
+        
+        require(msg.value >= _idToAuction[_tokenId].basePrice,"Minimum bid has to be higher");
+        require(msg.value >= _idToAuction[_tokenId].highestBid,"You have to bid higher than the highest bid to make an offer");
+
+        Auction storage auction = _idToAuction[_tokenId];
+
+        address payable prevBidder = auction.highestBidder;
+        uint256 prevBid = auction.highestBid;
+
+        // handle previous highest bidder
+        if(auction.highestBidder != address(0)){
+          // logic left k bid wapis krni hai ya usi me add krni hai
+          payable(prevBidder).transfer(prevBid);
+        }
+        auction.highestBid = msg.value;
+        auction.highestBidder = payable(msg.sender);
+
+        if ( auction.endTime < block.timestamp + 10 minutes){
+          auction.endTime += 5 minutes;
+          emit auctionEndTimeIncreased(auction.endTime);
+        }
+    }
+
+     function bidInUSDT(uint256 _tokenId, uint256 _amount) public auctionIsLive(_tokenId) isUserDeleted isUserBanned payable {
+        uint256 ethPriceInUsdt = getLatestUSDTPrice();
+        uint256 _amountInETH = _amount / ethPriceInUsdt;
+        require(_amountInETH >= _idToAuction[_tokenId].basePrice,"Minimum bid has to be higher");
+        require(_amount >= _idToAuction[_tokenId].highestBid,"You have to bid higher than the highest bid to make an offer");
+
+        Auction storage auction = _idToAuction[_tokenId];
+
+        address payable prevBidder = auction.highestBidder;
+        uint256 prevBid = auction.highestBid;
+
+        // handle previous highest bidder
+        if(auction.highestBidder != address(0)){
+          // logic left k bid wapis krni hai ya usi me add krni hai
+          USDTtoken.transfer(prevBidder,prevBid);
+        }
+        auction.highestBid = _amount;
+        auction.highestBidder = payable(msg.sender);
+
+        if ( auction.endTime < block.timestamp + 10 minutes){
+          auction.endTime += 5 minutes;
+          emit auctionEndTimeIncreased(auction.endTime);
+        }
+    }
+
+    function royaltyCalculate(uint256 _amount, uint256 _royaltyPercent) internal pure returns(uint256){
+      return (_amount * _royaltyPercent) / 100;
+    }
+
+     function platformFeeCalculate(uint256 _amount) internal pure returns(uint256){
+      return (_amount * 3) / 100;
+    }
+
+
+    function closeAuction(address _nftContract, uint256 _tokenId, uint256 _amount) public payable{
+
+      require(block.timestamp > _idToAuction[_tokenId].endTime,"Auction has not ended yet");
+      require(_idToAuction[_tokenId].highestBidder != address(0),"Auction has not ended yet");
+
+      NFT storage nft = _idToNFT[_tokenId];
+      Auction storage auction = _idToAuction[_tokenId];
+
+      auction.isLive = false;
+      
+      uint256 _royaltyFee;
+      uint256 _amountAfterRoyalty;
+      uint256 _amountToBePaid;
+      
+
+      nft.owner = auction.highestBidder;
+      nft.listed = false;
+
+      if(nft.paymentMethod == PaymentMethod.ETHER){
+            _amount = msg.value;
+            if(nft.owner == nft.firstOwner){
+              _amountToBePaid = _amount - platformFeeCalculate(_amount);
+              payable(nft.seller).transfer(_amountToBePaid);
+
+            } else{
+              _royaltyFee = royaltyCalculate(auction.highestBid, nft.royaltyPrice);
+              _amountToBePaid = _amount - _royaltyFee - platformFeeCalculate(_amount);
+              payable(nft.firstOwner).transfer(_royaltyFee);
+              payable(nft.seller).transfer(_amountToBePaid);
+
+            }
+              
+             } else if(nft.paymentMethod == PaymentMethod.USDT){
+                  _amount = _amount;
+                  if(nft.owner == nft.firstOwner){
+                    USDTtoken.transferFrom(msg.sender,address(this),_amount);
+                    _amountToBePaid = _amount - platformFeeCalculate(_amount);
+                    USDTtoken.transfer(nft.seller,_amountToBePaid);
+                    // payable(nft.seller).transfer(_amountToBePaid);
+                  
+                  } else{
+                    _royaltyFee = royaltyCalculate(auction.highestBid, nft.royaltyPrice);
+                    _amountToBePaid = _amount - _royaltyFee - platformFeeCalculate(_amount);
+
+                      // USDTtoken.transferFrom(msg.sender,address(this),_amount);
+                      USDTtoken.transfer(nft.seller,_amountToBePaid);
+                      USDTtoken.transfer(nft.firstOwner,_royaltyFee);
+           
+
+                    // payable(nft.firstOwner).transfer(_royaltyFee);
+                    // payable(nft.seller).transfer(_amountToBePaid);
+                  }
+      }
+      IERC721(_nftContract).transferFrom(address(this), auction.highestBidder, nft.tokenId);
+
+      _nftsSold.increment();
+      emit NFTSold(_nftContract, nft.tokenId, nft.seller, auction.highestBidder, _amountAfterRoyalty);
+
+    }
+
+
+    // function cancelAuction(){
+
+    // }
+
+    function addFans(address[] memory fans) public isUserDeleted {
+        for (uint256 i = 0; i < fans.length; i++) {
+            address fan = fans[i];
+            require(fan != address(0), "Invalid fan address");
+            require(!isFan[msg.sender][fan], "Address is already a fan");
+
+            fanLists[msg.sender].push(fan);
+            isFan[msg.sender][fan] = true;
+        }
+    }
+
+  function removeFan(address fan) public {
+        require(fan != address(0), "Invalid fan address");
+        require(isFan[msg.sender][fan], "Address is not a fan");
+
+        address[] storage fans = fanLists[msg.sender];
+        for (uint256 i = 0; i < fans.length; i++) {
+            if (fans[i] == fan) {
+                fans[i] = fans[fans.length - 1];
+                fans.pop();
+                break;
+            }
+        }
+
+        isFan[msg.sender][fan] = false;
+    }
+
+
+  function removeAllFans() public {
+        address[] storage fans = fanLists[msg.sender];
+        for (uint256 i = 0; i < fans.length; i++) {
+            isFan[msg.sender][fans[i]] = false;
+        }
+        delete fanLists[msg.sender];
+    }
+
+
+  function banUser(address _user) public onlyOwner{
+    bannedUsers[_user] = true;
+  }
+
+  
+  function unbanUser(address _user) public onlyOwner{
+    bannedUsers[_user] = false;
+  }
+
+   function deleteUser(address _user) public onlyOwner{
+    deletedUsers[_user] = true;
+  }
+
+  function checkBannedOrDeletedUser() public view returns(bool){
+    if(bannedUsers[msg.sender] || deletedUsers[msg.sender]){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+  ////////////    GETTER FUNCTIONS    ///////////
+  ///////////////////////////////////////////////
+  ///////////////////////////////////////////////
+
+    
+    function getFans() public view isUserDeleted returns (address[] memory) {
+        return fanLists[msg.sender];
+    }
+
+
+    function getListedNfts() public view isUserDeleted returns (NFT[] memory) {
+      uint256 nftCount = _nftCount.current();
+      uint256 unsoldNftsCount = nftCount - _nftsSold.current();
+
+      
+
+      NFT[] memory nfts = new NFT[](unsoldNftsCount);
+      uint nftsIndex = 0;
+      for (uint i = 0; i < nftCount; i++) {
+        if (_idToNFT[i + 1].listed) {
+          nfts[nftsIndex] = _idToNFT[i + 1];
+          nftsIndex++;
+        }
+      }
+      return nfts;
+    }
+
+    function getMyNfts() public view isUserDeleted returns (NFT[] memory) {
+      uint nftCount = _nftCount.current();
+      uint myNftCount = 0;
+      for (uint i = 0; i < nftCount; i++) {
+        if (_idToNFT[i + 1].owner == msg.sender) {
+          myNftCount++;
+        }
+      }
+
+      NFT[] memory nfts = new NFT[](myNftCount);
+      uint nftsIndex = 0;
+      for (uint i = 0; i < nftCount; i++) {
+        if (_idToNFT[i + 1].owner == msg.sender) {
+          nfts[nftsIndex] = _idToNFT[i + 1];
+          nftsIndex++;
+        }
+      }
+      return nfts;
+    }
+
+    function getMyListedNfts() public view isUserDeleted isUserBanned returns (NFT[] memory) {
+      uint nftCount = _nftCount.current();
+      uint myListedNftCount = 0;
+      for (uint i = 0; i < nftCount; i++) {
+        if (_idToNFT[i + 1].seller == msg.sender && _idToNFT[i + 1].listed) {
+          myListedNftCount++;
+        }
+      }
+
+      NFT[] memory nfts = new NFT[](myListedNftCount);
+      uint nftsIndex = 0;
+      for (uint i = 0; i < nftCount; i++) {
+        if (_idToNFT[i + 1].seller == msg.sender && _idToNFT[i + 1].listed) {
+          nfts[nftsIndex] = _idToNFT[i + 1];
+          nftsIndex++;  
+        }
+      }
+      return nfts;
+    }
+
+    function getStatusOfAuction(uint256 _tokenId) public view returns(bool){
+      if( block.timestamp > _idToAuction[_tokenId].startTime && block.timestamp < _idToAuction[_tokenId].endTime){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+
+receive() external payable {}
+
+fallback() external payable {}
+
+  }
