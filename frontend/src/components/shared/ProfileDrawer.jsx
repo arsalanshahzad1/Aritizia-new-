@@ -11,8 +11,8 @@ import Bids from "./profileDrawerTabs/Bids";
 import History from "./profileDrawerTabs/History";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-dropdown";
-import Web3Modal from "web3modal";
 import "react-dropdown/style.css";
+import Web3Modal from "web3modal";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
@@ -310,11 +310,14 @@ function ProfileDrawer({
   const [walletConnected, setWalletConnected] = useState(false);
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
+  const [amountUSD, setAmountUSD] = useState("");
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
   };
+
+  let priceInETH = price;
 
   const web3ModalRef = useRef();
 
@@ -337,9 +340,9 @@ function ProfileDrawer({
         disableInjectedProvider: false,
       });
       connectWallet();
-      // numberOFICOTokens();
+      getPriceInUSD();
     }
-  }, [walletConnected]);
+  }, [walletConnected, amountUSD]);
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -361,6 +364,33 @@ function ProfileDrawer({
     return web3Provider;
   };
 
+  // return the price of NFT in usd
+  const getPriceInUSD = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let priceETH = price;
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    // console.log("Dollar price", dollarPriceOfETH.toString());
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    // console.log("priceInETH", priceInETH);
+
+    let oneETHInUSD = 1 / priceInETH;
+    // console.log("oneETHInUSD", oneETHInUSD);
+    let priceInUSD = priceETH;
+    priceInUSD = oneETHInUSD * priceInUSD;
+    // console.log("Amount in USD", priceInUSD);
+    // console.log("Amount in USD", typeof priceInUSD);
+    // USDAmount = priceInUSD.toString();
+    priceInUSD = priceInUSD.toFixed(2);
+    setAmountUSD(priceInUSD.toString());
+  };
+
   const buyWithETH = async () => {
     const signer = await getProviderOrSigner(true);
 
@@ -369,15 +399,28 @@ function ProfileDrawer({
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
+    let aamount = amount;
+    console.log("aamount", aamount);
+    console.log("amount", amount);
+    let amountInWei = aamount * 10 ** 18;
 
     await (
-      await marketplaceContract.buyWithETH(NFT_CONTRACT_ADDRESS.address, paymentMethod, id, {
-        value: ethers.utils.parseEther(amount),
-      })
+      await marketplaceContract.buyWithETH(
+        NFT_CONTRACT_ADDRESS.address,
+        paymentMethod,
+        id,
+        {
+          value: ethers.utils.parseEther("100"),
+          gasLimit: ethers.BigNumber.from("500000"),
+        }
+      )
     ).wait();
   };
 
   const buyWithUSDT = async () => {
+    console.log("Amount", amountUSD);
+    console.log("price", price);
+
     const signer = await getProviderOrSigner(true);
 
     const marketplaceContract = new Contract(
@@ -386,35 +429,54 @@ function ProfileDrawer({
       signer
     );
 
+    console.log(
+      "TETHER_CONTRACT_ADDRESS.address",
+      TETHER_CONTRACT_ADDRESS.address
+    );
+    console.log("TETHER_CONTRACT_ADDRESS.abi", TETHER_CONTRACT_ADDRESS.abi);
+    console.log("signer", signer);
+
     const USDTContract = new Contract(
       TETHER_CONTRACT_ADDRESS.address,
-      TETHER_CONTRACT_ADDRESS.abi,
+      TETHER_CONTRACT_ABI.abi,
       signer
     );
 
-    // need approval
-
-    console.log("paymentmethod", paymentMethod);
-    console.log("amount", amount);
-
     // get the price of dollar from smartcontract and convert this value
-    let dollarPriceOfETH =  await marketplaceContract.getLatestUSDTPrice();
+
+    console.log("Amount", amountUSD);
+    console.log("price", price);
+
+    let amountInWei = amountUSD * 10 ** 6;
+    console.log("amountInWei", amountInWei);
 
     if (paymentMethod == 1) {
       const appprove = await USDTContract.approve(
         MARKETPLACE_CONTRACT_ADDRESS.address,
-        amount
+        amountInWei
       );
 
       appprove.wait();
     }
 
-    console.log("paymentmethod", paymentMethod);
-    console.log("amount", amount);
+    // console.log("paymentmethod", paymentMethod);
+    console.log(
+      "Data",
+      NFT_CONTRACT_ADDRESS.address,
+      paymentMethod,
+      id,
+      amountInWei
+    );
 
-    // await (
-    //   await marketplaceContract.buyWithUSDT(NFT_CONTRACT_ADDRESS, paymentMethod, id, amount)
-    // ).wait();
+    await (
+      await marketplaceContract.buyWithUSDT(
+        // NFT_CONTRACT_ADDRESS.address,
+        "0x245e77E56b1514D77910c9303e4b44dDb44B788c",
+        paymentMethod,
+        id,
+        amountInWei
+      )
+    ).wait();
   };
 
   const statusOptions = [
@@ -422,6 +484,7 @@ function ProfileDrawer({
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
+
   return (
     <>
       <Drawer
@@ -582,7 +645,9 @@ function ProfileDrawer({
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH<span>$9,554.59</span>
+                          {price} ETH<span>${amountUSD}</span>
+                          {/* {console.log("USDAmount", amountUSD)} */}
+                          {/* {price} ETH<span>$234</span>   */}
                         </p>
                       </div>
                     </div>
@@ -609,7 +674,6 @@ function ProfileDrawer({
                 <div className="eight-line">
                   <button
                     onClick={() => {
-                      buyWithETH();
                       setSucess(true);
                     }}
                   >

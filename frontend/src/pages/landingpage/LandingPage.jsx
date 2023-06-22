@@ -283,7 +283,6 @@ const LandingPage = ({ search, setSearch }) => {
                     description={item?.description}
                     collection={item?.collection}
                     userAddress
-                    marketplaceContract
                   />
                 ))}
               </div>

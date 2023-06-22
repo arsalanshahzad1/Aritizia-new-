@@ -4,12 +4,6 @@ import { BsShareFill } from "react-icons/bs";
 import "./Cards.css";
 import { Link } from "react-router-dom";
 
-import Web3Modal from "web3modal";
-import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
-import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
-import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
-import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import ProfileDrawer from "../shared/ProfileDrawer";
 
 const BuyNow = ({
@@ -24,29 +18,10 @@ const BuyNow = ({
   description,
   collection,
   userAddress,
-  marketplaceContract,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
-
-  // return the price of NFT in usd
-  const getPriceInUSD = async () => {
-    let priceETH = price;
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    console.log("Dollar price", dollarPriceOfETH.toString());
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    console.log("priceInETH", priceInETH);
-
-    let oneETHInUSD = 1 / priceInETH;
-    console.log("oneETHInUSD", oneETHInUSD);
-    let priceInUSD = priceETH;
-    console.log("1.3 ETH in USD", oneETHInUSD * priceInUSD);
-    priceInUSD = oneETHInUSD * priceInUSD;
-    return priceInUSD;
-  };
-
 
   const onClose = useCallback(() => {
     setIsVisible(false);

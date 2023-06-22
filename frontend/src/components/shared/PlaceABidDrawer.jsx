@@ -302,6 +302,7 @@ const PlaceABidDrawer = ({
   collection,
   userAddress,
 }) => {
+  
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
@@ -357,7 +358,33 @@ const PlaceABidDrawer = ({
       connectWallet();
       // numberOFICOTokens();
     }
-  }, [walletConnected]);
+    } , [walletConnected]);
+
+
+    // return the price of NFT in usd
+  const getPriceInUSD = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let priceETH = price;
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    console.log("Dollar price", dollarPriceOfETH.toString());
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    console.log("priceInETH", priceInETH);
+
+    let oneETHInUSD = 1 / priceInETH;
+    console.log("oneETHInUSD", oneETHInUSD);
+    let priceInUSD = priceETH;
+    console.log("1.3 ETH in USD", oneETHInUSD * priceInUSD);
+    priceInUSD = oneETHInUSD * priceInUSD;
+    return priceInUSD;
+  };
+
 
   const buyWithETH = async () => {
     // window.alert("KHAREED");
@@ -375,6 +402,47 @@ const PlaceABidDrawer = ({
       value: ethers.utils.parseEther("0.001"),
     });
     console.log("Payment made");
+  };
+
+
+  const buyWithUSDT = async () => {
+    const signer = await getProviderOrSigner(true);
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+
+    const USDTContract = new Contract(
+      TETHER_CONTRACT_ADDRESS.address,
+      TETHER_CONTRACT_ADDRESS.abi,
+      signer
+    );
+
+    // need approval
+
+    console.log("paymentmethod", paymentMethod);
+    console.log("amount", amount);
+
+    // get the price of dollar from smartcontract and convert this value
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
+    if (paymentMethod == 1) {
+      const appprove = await USDTContract.approve(
+        MARKETPLACE_CONTRACT_ADDRESS.address,
+        amount
+      );
+
+      appprove.wait();
+    }
+
+    console.log("paymentmethod", paymentMethod);
+    console.log("amount", amount);
+
+    // await (
+    //   await marketplaceContract.buyWithUSDT(NFT_CONTRACT_ADDRESS, paymentMethod, id, amount)
+    // ).wait();
   };
 
   const statusOptions = [
@@ -579,7 +647,7 @@ const PlaceABidDrawer = ({
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH<span>$9,554.59</span>
+                          {price} ETH<span>${getPriceInUSD()}</span>
                         </p>
                       </div>
                     </div>
