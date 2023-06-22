@@ -2,8 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { FaRegUser } from "react-icons/fa";
+import { useContext } from "react";
+import { GlobalContext } from "../../Context/GlobalContext";
+
 
 const Header = ({ search, setSearch, connectWallet }) => {
+  const { setactiveTabsSetting } = useContext(GlobalContext)
+
+
   const [scrolled, setScrolled] = useState(false);
   const [toggleUserDropdown, setToggleUserDropdown] = useState(false);
   const [toggleSettingDropdown, setToggleSettingDropdown] = useState(false);
@@ -11,7 +17,7 @@ const Header = ({ search, setSearch, connectWallet }) => {
   const location = useLocation();
   const path = location.pathname;
 
-  
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,16 +90,14 @@ const Header = ({ search, setSearch, connectWallet }) => {
                 {path === "/" ? (
                   <>
                     <FiSearch
-                      className={`search ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`search ${scrolled ? "black-color" : "white-color"
+                        }`}
                       onClick={() => setSearch(true)}
                     />
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                     >
                       Connect Wallet
                     </button>
@@ -123,9 +127,8 @@ const Header = ({ search, setSearch, connectWallet }) => {
                   />
                   {toggleUserDropdown && (
                     <div
-                      className={`user-login-dropdown ${
-                        scrolled ? "active" : ""
-                      }`}
+                      className={`user-login-dropdown ${scrolled ? "active" : ""
+                        }`}
                     >
                       <ul>
                         <li>
@@ -138,9 +141,8 @@ const Header = ({ search, setSearch, connectWallet }) => {
                           <Link to={"/create"}>Create</Link>
                         </li>
                         <li
-                          className={`setting ${
-                            toggleSettingDropdown ? "seeting-active" : ""
-                          }`}
+                          className={`setting ${toggleSettingDropdown ? "seeting-active" : ""
+                            }`}
                           onClick={() =>
                             setToggleSettingDropdown(!toggleSettingDropdown)
                           }
@@ -149,12 +151,10 @@ const Header = ({ search, setSearch, connectWallet }) => {
                           {toggleSettingDropdown ? (
                             <div>
                               <ul>
-                                <li>Notifications</li>
-                                <li>Appearance</li>
-                                <li>Earning</li>
-                                <li>
-                                  <Link to={"/setting"}>Edit</Link>
-                                </li>
+                                <Link to={'/setting'}><li onClick={() => setactiveTabsSetting('Notification')}>Notifications</li></Link>
+                                <Link to={'/setting'}><li onClick={() => setactiveTabsSetting('Appearance')}>Appearance</li></Link>
+                                <Link to={'/setting'}><li onClick={() => setactiveTabsSetting('Earnings')}>Earning</li></Link>
+                                <Link to={'/setting'}><li onClick={() => setactiveTabsSetting('Edit')}>Edit</li></Link>
                               </ul>
                             </div>
                           ) : (

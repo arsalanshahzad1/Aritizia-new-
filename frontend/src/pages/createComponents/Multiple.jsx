@@ -17,10 +17,13 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
+import Search from "../../components/shared/Search";
+import Duck from '../../../public/assets/images/duck.png'
+
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
-const Multiple = () => {
+const Multiple = ({ search, setSearch }) => {
   const [image, setImage] = useState("");
   // const [price, setPrice] = useState(0);
   // const [title, setTitle] = useState("");
@@ -315,19 +318,24 @@ const Multiple = () => {
   };
 
   const [royalty, setRoyalty] = useState(0);
-
   const handleSliderChange = (value) => {
-    // setRoyalty(value);
-    if (value === 33) {
-      setRoyalty(5);
-    } else if (value === 66) {
-      setRoyalty(10);
-    } else if (value === 100) {
-      setRoyalty(15);
-    }
+    // Update the value or perform any other actions
+    console.log('Slider value:', value);
+    setRoyalty(value)
+    // ...
   };
+  // const handleSliderChange = (value) => {
+  //   // setRoyalty(value);
+  //   if (value === 33) {
+  //     setRoyalty(5);
+  //   } else if (value === 66) {
+  //     setRoyalty(10);
+  //   } else if (value === 100) {
+  //     setRoyalty(15);
+  //   }
+  // };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     price,
     title,
     description,
@@ -449,121 +457,151 @@ const Multiple = () => {
     }
   };
 
+
+  const [CreateCollection, setCreateCollection] = useState('')
+  const [showCreateCollection, setshowCreateCollection] = useState(false)
+  const [showProfileNFT, setshowProfileNFT] = useState(false)
+  const [ShowMore, setShowMore] = useState(false)
+  const AddCollection = () => {
+    if (CreateCollection.length < 1) {
+      alert("Input Collection Name to Create")
+    }
+    else {
+      hideCreateCollection()
+      setshowProfileNFT(true)
+    }
+  }
+  const hideCreateCollection = () => {
+    // setCreateCollection('')
+    setshowCreateCollection(false)
+  }
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(URL.createObjectURL(file));
+  };
+
+  const fileInputRef = useRef(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+
+
+
+  const [selectedImagesNFT, setSelectedImagesNFT] = useState('');
+
+  const fileInputRef2 = useRef(null);
+
+  const handleButtonClick2 = () => {
+    fileInputRef2.current.click();
+  };
+
+  const handleFileUpload = (event) => {
+    const files = event.target.files;
+    const imageUrls = Array.from(files).map((file) => URL.createObjectURL(file));
+    setSelectedImagesNFT(imageUrls);
+  };
+
+
+
   return (
     <>
-      <Header />
+      <Header
+
+        search={search}
+        setSearch={setSearch}
+      />
       <div className="create-single">
         <PageTopSection title={"Create Multiple Collectible"} />
         <div className="create-single-section-wrap">
-          <form onSubmit={createItem}>
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-8 mx-auto">
-                  <div className="row">
-                    <div className="col-lg-12">
-                      <div className="upload-file">
-                        <h2>Upload file</h2>
-                        <FileUploader
-                          handleChange={(e) => handlechange(e)}
-                          multiple
-                          name="file"
-                          types={fileTypes}
-                          label="PNG, JPG, GIF, WEBP or MP4. Max 200mb."
-                        />
-                        <button
-                          handleChange={(e) => handlechange(e)}
-                          className="button-styling single-button"
+
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-8 mx-auto">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="row">
+                      <div className="col-lg-12">
+                        <h2>Select method</h2>
+                      </div>
+                      <div className="col-lg-3 col-md-4 col-6">
+                        <div
+                          onClick={() => {
+                            setActiveMethod(0);
+                          }}
+                          className={` create-single-card ${activeMethod === 0 ? "active" : ""
+                            }`}
                         >
-                          Browse
-                        </button>
+                          <AiFillTag />
+                          <h3>Fixed Price</h3>
+                        </div>
                       </div>
-                    </div>
-                    <div className="line-one">
-                      <div className="row">
-                        <div className="col-lg-12">
-                          <h2>Select method</h2>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-6">
-                          <div
-                            onClick={() => {
-                              setActiveMethod(0);
-                            }}
-                            className={` create-single-card ${
-                              activeMethod === 0 ? "active" : ""
+                      <div className="col-lg-3 col-md-4 col-6">
+                        <div
+                          onClick={() => {
+                            setActiveMethod(1);
+                          }}
+                          className={` create-single-card ${activeMethod === 1 ? "active" : ""
                             }`}
-                          >
-                            <AiFillTag />
-                            <h3>Fixed Price</h3>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 col-md-4 col-6">
-                          <div
-                            onClick={() => {
-                              setActiveMethod(1);
-                            }}
-                            className={` create-single-card ${
-                              activeMethod === 1 ? "active" : ""
-                            }`}
-                          >
-                            <BsFillClockFill />
-                            <h3>Timed Auction</h3>
-                          </div>
+                        >
+                          <BsFillClockFill />
+                          <h3>Timed Auction</h3>
                         </div>
                       </div>
                     </div>
-                    {activeMethod === 0 ? (
-                      <div className="line-two">
+                    <br /><br />
+                    {!showProfileNFT ? (
+                      <div>
+                        <h2>Create</h2>
+                        <div className="Create-Collection-div">
+                          <p>Create Collection</p >
+                          <br />
+                          <button
+                            onClick={() => setshowCreateCollection(true)}
+                            className="button-styling "
+                          >
+                            Create
+                          </button>
+                        </div>
+                      </div>
+                    ) :
+
+
+                      <div>
+                        <h2>Profile NFT</h2>
+                        <div className="profile-nft-row1">
+                          <div className="NFT-image-holder">
+                            <input ref={fileInputRef}
+                              type="file"
+                              style={{ display: 'none' }}
+                              onChange={handleImageUpload} />
+                            {selectedImage ? <img src={selectedImage} alt="Uploaded" />
+                              :
+                              <img src={Duck} alt="" />
+                            }
+                          </div>
+                          <div className="NFT-image-upload-txt">
+                            <p>
+                              PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
+                            </p>
+                            <button onClick={handleButtonClick} className="button-styling browse-btn">Browse</button>
+                          </div>
+                        </div>
+                        <br />
+                        <br />
                         <div className="row">
                           <div className="col-lg-9 col-md-9 col-7">
-                            <h2>Price</h2>
-                            <input
-                              type="text"
-                              value={inputValue}
-                              onChange={handleInputChange}
-                              // type="number"
-                              // placeholder="0.00"
-                              // ref={price}
-                            />
-                            {showWarning && (
-                              <p style={{ color: "red" }}>
-                                Please enter a valid positive number.
-                              </p>
-                            )}
+
+                            <p>Collection Name</p>
+                            <input type="text" value={CreateCollection} disabled />
                           </div>
-                          <div className="col-lg-3 col-md-3 col-5">
-                            <h2>Crypto</h2>
-                            <Dropdown
-                              options={cryptoOptions}
-                              onChange={(e) => {
-                                setCrypto(e.value);
-                              }}
-                              value={defaultCrypto.value}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="line-two">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Minimum bid</h2>
-                              <input
-                                type="text"
-                                value={inputValue}
-                                onChange={handleInputChange}
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
-                              />
-                              {showWarning && (
-                                <p style={{ color: "red" }}>
-                                  Please enter a valid positive number.
-                                </p>
-                              )}
-                            </div>
+                          {!ShowMore ?
                             <div className="col-lg-3 col-md-3 col-5">
-                              <h2>Crypto</h2>
+                              <p>Crypto</p>
                               <Dropdown
                                 options={cryptoOptions}
                                 onChange={(e) => {
@@ -572,114 +610,208 @@ const Multiple = () => {
                                 value={defaultCrypto.value}
                               />
                             </div>
-                          </div>
-                        </div>
-                        <div className="line-two">
-                          <div className="row">
-                            <div className="col-lg-6 col-md-6 col-6">
-                              <h2>Starting date</h2>
+                            :
+                            <div className="col-lg-3 col-md-3 col-5">
+                              <p>Crypto</p>
                               <input
-                                id="startingTime"
-                                type="date"
-                                placeholder="mm/dd/yyyy"
-                                style={{ padding: "6px 10px 6px 15px" }}
-                                value={startingDate}
-                                onChange={(e) =>
-                                  setStartingDate(e.target.value)
-                                }
+                                type="text"
+                                value={crypto.label}
                               />
                             </div>
-                            <div className="col-lg-6 col-md-6 col-6">
-                              <h2>Expiration date</h2>
-                              <input
-                                id="endTime"
-                                type="date"
-                                placeholder="mm/dd/yyyy"
-                                style={{ padding: "6px 10px 6px 15px" }}
-                                value={endingDate}
-                                onChange={(e) => setEndingDate(e.target.value)}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
 
-                    <div className="line-three">
-                      <div className="row">
-                        <div className="col-lg-12">
-                          <h2>Choose collection</h2>
-                          <p>
-                            This is the collection where your item will appear.
-                          </p>
-                          <Dropdown
-                            options={collectionOptions}
-                            onChange={(e) => {
-                              setCollection(e.value);
-                            }}
-                            value={defaultOption.value}
-                          />
+                          }
+
+
                         </div>
-                      </div>
-                    </div>
-                    <div className="line-four">
-                      <div className="row">
-                        <div className="col-lg-9">
-                          <h2>Title</h2>
-                          <input
-                            type="text"
-                            placeholder="e.g. ‘Crypto Funk"
-                            // defaultValue={title.current.value}
-                            ref={title}
-                            // onChange={(e) => setTitle(e.target.value)}
-                          />
+                        <br />
+                        <div className="line-six">
+                          <div className="row">
+                            <div className="col-lg-9">
+                              <h2>Royalties</h2>
+                              <Slider
+                                min={0}
+                                max={15}
+                                defaultValue={0}
+                                // step={null}
+                                onChange={handleSliderChange}
+                                value={royalty}
+                              />
+                            </div>
+                            <div className="col-lg-3 royality-value">
+                              {royalty} %
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="line-five">
-                      <div className="row">
-                        <div className="col-lg-9">
-                          <h2>Description</h2>
-                          <input
-                            type="text"
-                            placeholder="e.g. ‘This is very limited item’"
-                            ref={description}
-                          />
+                        <br /><br />
+                        <div>
+                          <div>
+                            <h2>Upload NFT</h2>
+                            {selectedImagesNFT.length < 1 ?
+
+                              <div className="Create-Collection-div">
+                                <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p >
+                                <br />
+                                <input
+                                  ref={fileInputRef2}
+                                  type="file"
+                                  style={{ display: 'none' }}
+                                  multiple
+                                  onChange={handleFileUpload}
+                                />
+                                <button
+                                  onClick={handleButtonClick2}
+                                  className="button-styling "
+                                >
+                                  Browse
+                                </button>
+                              </div>
+                              :
+
+                              <div className="NFT-thumbnail-holder">
+                                <div className="NFT-inner">
+
+                                  {selectedImagesNFT.map((image) => (
+                                    <div>
+                                      <img src={image} alt="" />
+                                    </div>
+                                  ))}
+                                </div>
+                                <div className="control-main-div">
+                                  <button
+                                    onClick={handleButtonClick2}
+                                    className="button-styling "
+                                  >
+                                    Add More
+                                  </button>
+
+                                </div>
+                              </div>
+                            }
+                          </div>
                         </div>
+                        <br /><br />
+
+                        {ShowMore &&
+                          (
+                            <div>
+                              <div className="line-two">
+                                <div className="row">
+                                  <div className="col-lg-9 col-md-9 col-7">
+                                    <h2>Price</h2>
+                                    <input
+                                      type="text"
+                                      value={inputValue}
+                                      onChange={handleInputChange}
+                                    // type="number"
+                                    // placeholder="0.00"
+                                    // ref={price}
+                                    />
+                                    {showWarning && (
+                                      <p style={{ color: "red" }}>
+                                        Please enter a valid positive number.
+                                      </p>
+                                    )}
+                                  </div>
+
+                                </div>
+                              </div>
+                              <div className="line-four">
+                                <div className="row">
+                                  <div className="col-lg-9">
+                                    <h2>Title</h2>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. ‘Crypto Funk"
+                                      // defaultValue={title.current.value}
+                                      ref={title}
+                                    // onChange={(e) => setTitle(e.target.value)}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="line-five">
+                                <div className="row">
+                                  <div className="col-lg-9">
+                                    <h2>Description</h2>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. ‘This is very limited item’"
+                                      ref={description}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              {/* <div className="line-seven">
+                                <div className="row">
+                                  <div className="col-lg-8">
+                                    <button type="submit" className="button-styling">
+                                      Create Item
+                                    </button>
+                                  </div>
+                                </div>
+                              </div> */}
+                            </div>
+                          )}
+                        {!ShowMore ?
+                          <div className="Button-holding-div">
+                            <button className="button-styling" onClick={() => setShowMore(true)} >
+                              Done
+                            </button>
+                            <button className="button-styling-outline">
+                              <div>
+                                Add More
+                              </div>
+                            </button>
+                          </div>
+                          :
+                          <div className="Button-holding-div">
+                            <button className="button-styling"  >
+                              Save
+                            </button>
+                            <button className="button-styling-outline">
+                              <div>
+                                Done
+                              </div>
+                            </button>
+                          </div>
+                        }
+
+
+
                       </div>
-                    </div>
-                    <div className="line-six">
-                      <div className="row">
-                        <div className="col-lg-9">
-                          <h2>Royalties</h2>
-                          <Slider
-                            min={0}
-                            defaultValue={0}
-                            marks={{ 0: "0%", 33: "5%", 66: "10%", 100: "15%" }}
-                            step={null}
-                            onChange={handleSliderChange}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="line-seven">
-                      <div className="row">
-                        <div className="col-lg-8">
-                          <button type="submit" className="button-styling">
-                            Create Item
+                    }
+
+                  </div>
+                  {showCreateCollection &&
+                    <div className="Create-collection-popup">
+                      <div className="Create-collection-popup-inner">
+                        <p>Collection Name</p>
+                        <input value={CreateCollection} onChange={(e) => setCreateCollection(e.target.value)} type="text" placeholder="Enter collection name" />
+                        <div className="popUp-btn-group">
+                          <button className="button-styling" onClick={() => AddCollection()}>
+                            Next
+                          </button>
+                          <button onClick={hideCreateCollection} className="button-styling-outline">
+                            <div>
+                              Cancel
+                            </div>
                           </button>
                         </div>
                       </div>
                     </div>
+                  }
+                  <div className="line-one">
                   </div>
                 </div>
               </div>
             </div>
-          </form>
+          </div>
+
           {/* <button onClick={getItem} className="button-styling">
             Get NFTS data
           </button> */}
         </div>
+        <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
     </>
