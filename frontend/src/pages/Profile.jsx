@@ -106,7 +106,7 @@ const Profile = ({ search, setSearch }) => {
 
     let activeMethod;
 
-    let mintedTokens = await marketplaceContract.getMyListedNfts(address);
+    let mintedTokens = await marketplaceContract.getMyNfts(address);
 
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);

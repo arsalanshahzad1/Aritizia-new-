@@ -28,7 +28,7 @@ const LandingPage = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
 
   const connectWallet = async () => {
-    console.log("Connect wallet");
+    // console.log("Connect wallet");
     try {
       await getProviderOrSigner();
       setWalletConnected(true);
@@ -74,42 +74,59 @@ const LandingPage = ({ search, setSearch }) => {
     );
 
     let activeMethod;
-    console.log("Active Method", activeMethod);
-    console.log("time", Date.now());
+    // console.log("Active Method", activeMethod);
+    // console.log("time", Date.now());
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    console.log("Dollar price", dollarPriceOfETH.toString());
+    // console.log("Dollar price", dollarPriceOfETH.toString());
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    console.log("priceInETH", priceInETH);
+    // console.log("priceInETH", priceInETH);
 
     let oneETHInUSD = 1 / priceInETH;
-    console.log("oneETHInUSD", oneETHInUSD);
+    // console.log("oneETHInUSD", oneETHInUSD);
     let priceInUSD = 1.3;
-    console.log("1.3 ETH in USD", oneETHInUSD * priceInUSD);
+    // console.log("1.3 ETH in USD", oneETHInUSD * priceInUSD);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     console.log("mintedTokens", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
+
+    console.log("PO");
+    const metaDataa = await nftContract.tokenURI(1);
+    console.log("metadataa", metaDataa);
+    // let ametaData0 = await nftContract.tokenURI(0);
+    // let ametaData1 = await nftContract.tokenURI(1);
+    // console.log("ametaData0", ametaData0);
+    // console.log("ametaData1", ametaData1);
+
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
 
+      // consoole.log("minted tokens no of"m)
+
       const metaData = await nftContract.tokenURI(id);
+      console.log("metadata", metaData);
+      console.log("id", id);
 
       let auctionData = await marketplaceContract._idToAuction(id);
-      console.log("metadata", metaData);
+
+      console.log("auctionData", auctionData);
+      console.log("CHECK1");
+
       axios
         .get(metaData)
         .then((response) => {
           const meta = response.data;
+          // console.log("DATA2", meta);
           let data = JSON.stringify(meta);
 
           data = data.slice(2, -5);
           data = data.replace(/\\/g, "");
-
+          // console.log("DATACLEANED", data);
           data = JSON.parse(data);
 
-          console.log("Data", data);
+          console.log("Dataa", data);
           // Extracting values using dot notation
           const price = data.price;
           activeMethod = data.activeMethod;
@@ -119,6 +136,8 @@ const LandingPage = ({ search, setSearch }) => {
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
+          console.log("activeMethod", activeMethod);
+          console.log("CHECK2");
 
           if (activeMethod === 0) {
             const nftData = {
@@ -131,12 +150,14 @@ const LandingPage = ({ search, setSearch }) => {
               description: description,
               collection: collection,
             };
+            console.log("CHECK3");
 
             console.log(nftData);
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
             console.log("myNFTs in function", myNFTs);
           } else if (activeMethod === 1) {
+            console.log("IN ELSE");
             const nftData = {
               id: id, //
               title: title,
@@ -152,6 +173,8 @@ const LandingPage = ({ search, setSearch }) => {
               seller: auctionData.seller.toString(),
               startTime: auctionData.startTime.toString(),
             };
+
+            console.log("CHECK5 ");
 
             myAuctions.push(nftData);
             console.log("auction in function", myAuctions);
@@ -170,7 +193,7 @@ const LandingPage = ({ search, setSearch }) => {
       method: "eth_requestAccounts",
     });
     setUserAddress(accounts[0]);
-    console.log("getAddress", accounts[0]);
+    // console.log("getAddress", accounts[0]);
   };
 
   useEffect(() => {

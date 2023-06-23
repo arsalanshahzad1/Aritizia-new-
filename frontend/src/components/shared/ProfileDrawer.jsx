@@ -443,7 +443,7 @@ function ProfileDrawer({
     );
     console.log("USER", userAddress);
     let bal = await USDTContract.balanceOf(
-      "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
     );
     console.log("Balance Of", bal.toString());
     // get the price of dollar from smartcontract and convert this value
@@ -454,14 +454,14 @@ function ProfileDrawer({
     let amountInWei = 22 * 10 ** 6;
     console.log("amountInWei", amountInWei);
 
-    if (paymentMethod == 1) {
-      const appprove = await USDTContract.approve(
-        MARKETPLACE_CONTRACT_ADDRESS.address,
-        amountInWei
-      );
+    // if (paymentMethod == 1) {
+    const appprove = await USDTContract.approve(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      amountInWei
+    );
 
-      appprove.wait();
-    }
+    appprove.wait();
+    // }
 
     // console.log("paymentmethod", paymentMethod);
     console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
@@ -473,7 +473,8 @@ function ProfileDrawer({
         "0x245e77E56b1514D77910c9303e4b44dDb44B788c",
         paymentMethod,
         id,
-        amountInWei
+        amountInWei,
+        { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();
   };
