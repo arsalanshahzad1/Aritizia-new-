@@ -438,8 +438,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _endTime,
         uint256 _paymentMethod
     ) public payable nonReentrant isUserBanned isUserDeleted {
-     
-
         // require(_price > 0, "Price must be at least 1 wei");
         // require(msg.value == LISTING_FEE, "Not enough ether for listing fee");
 
@@ -514,13 +512,17 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     }
 
     function getLatestUSDTPrice() public view returns (uint256) {
-        //0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46 USDt/ETH Ethereum mainnet
+        // Commenting for testing
+
+        // 0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46 USDt/ETH Ethereum mainnet
         AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
             0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
         ); // Mainnet contract address for USDT price feed
         (, int256 price, , , ) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
         require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
         return uint256(price);
+
+        // return 531391650000000;
     }
 
     function buyWithUSDT(
@@ -540,6 +542,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             "The owner of this nft is permanantly banned on this platform."
         );
         require(nft.price >= _amountInETH, "Send more!");
+        require(
+            nft.listingType == ListingType.FixedPrice,
+            "This NFT is not at auction"
+        );
 
         bool check = false;
 
@@ -547,8 +553,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         uint256 _amountAfterRoyalty;
         uint256 _amountToBePaid;
-
-        if (nft.owner == nft.firstOwner) {
+        require(nft.seller == nft.firstOwner, "Seller and first owner");
+        if (nft.seller == nft.firstOwner) {
             // approve from frontend
             USDTtoken.transferFrom(msg.sender, address(this), _amount);
             _amountToBePaid = _amount - platformFeeCalculate(_amount);
@@ -599,6 +605,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 nft.tokenId
             );
             nft.owner = buyer;
+            nft.seller = payable(address(0));
             nft.listed = false;
             _nftsSold.increment();
             emit NFTSold(
@@ -630,6 +637,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             msg.value >= nft.price,
             "Not enough ether to cover asking price"
         );
+        require(
+            nft.listingType == ListingType.FixedPrice,
+            "This NFT is not at auction"
+        );
 
         bool check = false;
         address payable buyer = payable(msg.sender);
@@ -637,7 +648,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _amountAfterRoyalty;
         uint256 _amountToBePaid;
 
-        if (nft.owner == nft.firstOwner) {
+        if (nft.seller == nft.firstOwner) {
             _amountToBePaid = msg.value - platformFeeCalculate(msg.value);
             if (_paymentMethod == 0) {
                 payable(nft.seller).transfer(_amountToBePaid);
@@ -683,6 +694,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 nft.tokenId
             );
             nft.owner = buyer;
+            nft.seller = payable(address(0));
             nft.listed = false;
             _nftsSold.increment();
             emit NFTSold(
@@ -705,12 +717,16 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _endTime,
         uint256 _paymentMethod
     ) public isUserBanned isUserDeleted nonReentrant {
+        NFT storage nft = _idToNFT[_tokenId];
+
         require(_price > 0, "Price must be at least 1 wei");
-        // require(msg.value == LISTING_FEE, "Not enough ether for listing fee");
+        require(
+            nft.owner == msg.sender,
+            "Only the owner of an nft can list the nft."
+        );
 
         IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
 
-        NFT storage nft = _idToNFT[_tokenId];
         nft.seller = payable(msg.sender);
         nft.owner = payable(address(this));
         nft.price = _price;
@@ -749,7 +765,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     function bidInETH(
         uint256 _tokenId,
         uint256 _bidCurrency
-     ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
+    ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
         require(
             msg.value >= _idToAuction[_tokenId].basePrice,
             "Minimum bid has to be higher"
@@ -757,6 +773,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         require(
             msg.value >= _idToAuction[_tokenId].highestBid,
             "You have to bid higher than the highest bid to make an offer"
+        );
+        require(
+            _idToNFT[_tokenId].listingType == ListingType.Auction,
+            "This NFT is at at auction"
         );
 
         Auction storage auction = _idToAuction[_tokenId];
@@ -783,7 +803,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _tokenId,
         uint256 _amount,
         uint256 _bidCurrency
-        ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
+    ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
         uint256 ethPriceInUsdt = getLatestUSDTPrice();
         uint256 _amountInETH = _amount / ethPriceInUsdt;
         require(
@@ -793,6 +813,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         require(
             _amount >= _idToAuction[_tokenId].highestBid,
             "You have to bid higher than the highest bid to make an offer"
+        );
+        require(
+            _idToNFT[_tokenId].listingType == ListingType.Auction,
+            "This NFT is at at auction"
         );
 
         Auction storage auction = _idToAuction[_tokenId];
@@ -815,10 +839,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         }
     }
 
-     function closeAuction(
+    function closeAuction(
         address _nftContract,
         uint256 _tokenId
-        ) public payable {
+    ) public payable {
         require(
             block.timestamp > _idToAuction[_tokenId].endTime,
             "Auction has not ended yet"
@@ -831,21 +855,21 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         NFT storage nft = _idToNFT[_tokenId];
         Auction storage auction = _idToAuction[_tokenId];
 
-
         // if there are no bids on an auction end the function there
-        if(_idToAuction[_tokenId].highestBidder == address(0)){
-            
-             IERC721(_nftContract).transferFrom(
-            address(this),
-            auction.seller,
-            nft.tokenId
-        );
+        if (_idToAuction[_tokenId].highestBidder == address(0)) {
+            IERC721(_nftContract).transferFrom(
+                address(this),
+                auction.seller,
+                nft.tokenId
+            );
 
             nft.owner = nft.seller;
             auction.isLive = false;
-            nft.listed = false; 
-            require(_idToAuction[_tokenId].highestBidder != address(0),
-            "Nothing to claim. You have got 0 bids on your auction. Returning your NFT.");
+            nft.listed = false;
+            require(
+                _idToAuction[_tokenId].highestBidder != address(0),
+                "Nothing to claim. You have got 0 bids on your auction. Returning your NFT."
+            );
         }
 
         auction.isLive = false;
@@ -929,21 +953,18 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         );
     }
 
-
     function royaltyCalculate(
         uint256 _amount,
         uint256 _royaltyPercent
-        ) internal pure returns (uint256) {
+    ) internal pure returns (uint256) {
         return (_amount * _royaltyPercent) / 100;
     }
 
     function platformFeeCalculate(
         uint256 _amount
-        ) internal pure returns (uint256) {
+    ) internal pure returns (uint256) {
         return (_amount * 3) / 100;
     }
-
-   
 
     // function cancelAuction(){
 

@@ -288,7 +288,7 @@ const Profile = ({ search, setSearch }) => {
                       {nftListFP.map((item) => (
                         <BuyNow
                           onOpen={onOpen}
-                          onClose={onClose}
+                          // onClose={onClose}
                           key={item?.id}
                           id={item?.id}
                           title={item?.title}

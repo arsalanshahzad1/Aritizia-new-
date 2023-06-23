@@ -441,13 +441,17 @@ function ProfileDrawer({
       TETHER_CONTRACT_ABI.abi,
       signer
     );
-
+    console.log("USER", userAddress);
+    let bal = await USDTContract.balanceOf(
+      "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    );
+    console.log("Balance Of", bal.toString());
     // get the price of dollar from smartcontract and convert this value
 
     console.log("Amount", amountUSD);
     console.log("price", price);
 
-    let amountInWei = amountUSD * 10 ** 6;
+    let amountInWei = 22 * 10 ** 6;
     console.log("amountInWei", amountInWei);
 
     if (paymentMethod == 1) {
@@ -460,14 +464,9 @@ function ProfileDrawer({
     }
 
     // console.log("paymentmethod", paymentMethod);
-    console.log(
-      "Data",
-      NFT_CONTRACT_ADDRESS.address,
-      paymentMethod,
-      id,
-      amountInWei
-    );
+    console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
 
+    // console.log("Check", check);
     await (
       await marketplaceContract.buyWithUSDT(
         // NFT_CONTRACT_ADDRESS.address,

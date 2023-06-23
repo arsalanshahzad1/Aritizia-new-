@@ -27,6 +27,8 @@ const BuyNow = ({
     setIsVisible(false);
   }, []);
 
+  console.log("USER in buy now", userAddress);
+
   const openDrawer = () => {
     if (showLinks === true) {
       return onOpen(false);
@@ -142,7 +144,7 @@ const BuyNow = ({
         royalty={royalty}
         description={description}
         collection={collection}
-        userAddress
+        userAddress={userAddress}
       />
     </>
   );

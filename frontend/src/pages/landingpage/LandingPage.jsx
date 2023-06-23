@@ -72,8 +72,10 @@ const LandingPage = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    let activeMethod;
 
+    let activeMethod;
+    console.log("Active Method", activeMethod);
+    console.log("time", Date.now());
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     console.log("Dollar price", dollarPriceOfETH.toString());
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
@@ -95,7 +97,7 @@ const LandingPage = ({ search, setSearch }) => {
       const metaData = await nftContract.tokenURI(id);
 
       let auctionData = await marketplaceContract._idToAuction(id);
-      // console.log("metadata", meta);
+      console.log("metadata", metaData);
       axios
         .get(metaData)
         .then((response) => {
@@ -282,7 +284,7 @@ const LandingPage = ({ search, setSearch }) => {
                     royalty={item?.royalty}
                     description={item?.description}
                     collection={item?.collection}
-                    userAddress
+                    userAddress={userAddress}
                   />
                 ))}
               </div>
