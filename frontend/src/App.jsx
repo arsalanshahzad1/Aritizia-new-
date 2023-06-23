@@ -14,6 +14,7 @@ import Multiple from "./pages/createComponents/Multiple";
 import UserProfile from "./pages/UserProfile";
 import BuyNow from "./components/cards/BuyNow";
 import { GlobalProvider } from "./Context/GlobalContext";
+import DashboardMain from "./Dashboard/DashboardScreens/DashboardMain";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -79,6 +80,10 @@ function App() {
           <Route
             path="/buy"
             element={<BuyNow search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/dashboard"
+            element={<DashboardMain search={search} setSearch={setSearch} />}
           />
         </Routes>
       </GlobalProvider>
