@@ -18,8 +18,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
-import Duck from '../../../public/assets/images/duck.png'
-
+import Duck from "../../../public/assets/images/duck.png";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -320,8 +319,8 @@ const Multiple = ({ search, setSearch }) => {
   const [royalty, setRoyalty] = useState(0);
   const handleSliderChange = (value) => {
     // Update the value or perform any other actions
-    console.log('Slider value:', value);
-    setRoyalty(value)
+    console.log("Slider value:", value);
+    setRoyalty(value);
     // ...
   };
   // const handleSliderChange = (value) => {
@@ -335,7 +334,7 @@ const Multiple = ({ search, setSearch }) => {
   //   }
   // };
 
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     price,
     title,
     description,
@@ -457,24 +456,22 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
-
-  const [CreateCollection, setCreateCollection] = useState('')
-  const [showCreateCollection, setshowCreateCollection] = useState(false)
-  const [showProfileNFT, setshowProfileNFT] = useState(false)
-  const [ShowMore, setShowMore] = useState(false)
+  const [CreateCollection, setCreateCollection] = useState("");
+  const [showCreateCollection, setshowCreateCollection] = useState(false);
+  const [showProfileNFT, setshowProfileNFT] = useState(false);
+  const [ShowMore, setShowMore] = useState(false);
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
-      alert("Input Collection Name to Create")
+      alert("Input Collection Name to Create");
+    } else {
+      hideCreateCollection();
+      setshowProfileNFT(true);
     }
-    else {
-      hideCreateCollection()
-      setshowProfileNFT(true)
-    }
-  }
+  };
   const hideCreateCollection = () => {
     // setCreateCollection('')
-    setshowCreateCollection(false)
-  }
+    setshowCreateCollection(false);
+  };
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -489,10 +486,7 @@ const Multiple = ({ search, setSearch }) => {
     fileInputRef.current.click();
   };
 
-
-
-
-  const [selectedImagesNFT, setSelectedImagesNFT] = useState('');
+  const [selectedImagesNFT, setSelectedImagesNFT] = useState("");
 
   const fileInputRef2 = useRef(null);
 
@@ -502,23 +496,18 @@ const Multiple = ({ search, setSearch }) => {
 
   const handleFileUpload = (event) => {
     const files = event.target.files;
-    const imageUrls = Array.from(files).map((file) => URL.createObjectURL(file));
+    const imageUrls = Array.from(files).map((file) =>
+      URL.createObjectURL(file)
+    );
     setSelectedImagesNFT(imageUrls);
   };
 
-
-
   return (
     <>
-      <Header
-
-        search={search}
-        setSearch={setSearch}
-      />
+      <Header search={search} setSearch={setSearch} />
       <div className="create-single">
         <PageTopSection title={"Create Multiple Collectible"} />
         <div className="create-single-section-wrap">
-
           <div className="container">
             <div className="row">
               <div className="col-lg-8 mx-auto">
@@ -533,8 +522,9 @@ const Multiple = ({ search, setSearch }) => {
                           onClick={() => {
                             setActiveMethod(0);
                           }}
-                          className={` create-single-card ${activeMethod === 0 ? "active" : ""
-                            }`}
+                          className={` create-single-card ${
+                            activeMethod === 0 ? "active" : ""
+                          }`}
                         >
                           <AiFillTag />
                           <h3>Fixed Price</h3>
@@ -545,20 +535,22 @@ const Multiple = ({ search, setSearch }) => {
                           onClick={() => {
                             setActiveMethod(1);
                           }}
-                          className={` create-single-card ${activeMethod === 1 ? "active" : ""
-                            }`}
+                          className={` create-single-card ${
+                            activeMethod === 1 ? "active" : ""
+                          }`}
                         >
                           <BsFillClockFill />
                           <h3>Timed Auction</h3>
                         </div>
                       </div>
                     </div>
-                    <br /><br />
+                    <br />
+                    <br />
                     {!showProfileNFT ? (
                       <div>
                         <h2>Create</h2>
                         <div className="Create-Collection-div">
-                          <p>Create Collection</p >
+                          <p>Create Collection</p>
                           <br />
                           <button
                             onClick={() => setshowCreateCollection(true)}
@@ -568,38 +560,47 @@ const Multiple = ({ search, setSearch }) => {
                           </button>
                         </div>
                       </div>
-                    ) :
-
-
+                    ) : (
                       <div>
                         <h2>Profile NFT</h2>
                         <div className="profile-nft-row1">
                           <div className="NFT-image-holder">
-                            <input ref={fileInputRef}
+                            <input
+                              ref={fileInputRef}
                               type="file"
-                              style={{ display: 'none' }}
-                              onChange={handleImageUpload} />
-                            {selectedImage ? <img src={selectedImage} alt="Uploaded" />
-                              :
+                              style={{ display: "none" }}
+                              onChange={handleImageUpload}
+                            />
+                            {selectedImage ? (
+                              <img src={selectedImage} alt="Uploaded" />
+                            ) : (
                               <img src={Duck} alt="" />
-                            }
+                            )}
                           </div>
                           <div className="NFT-image-upload-txt">
                             <p>
                               PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
                             </p>
-                            <button onClick={handleButtonClick} className="button-styling browse-btn">Browse</button>
+                            <button
+                              onClick={handleButtonClick}
+                              className="button-styling browse-btn"
+                            >
+                              Browse
+                            </button>
                           </div>
                         </div>
                         <br />
                         <br />
                         <div className="row">
                           <div className="col-lg-9 col-md-9 col-7">
-
                             <p>Collection Name</p>
-                            <input type="text" value={CreateCollection} disabled />
+                            <input
+                              type="text"
+                              value={CreateCollection}
+                              disabled
+                            />
                           </div>
-                          {!ShowMore ?
+                          {!ShowMore ? (
                             <div className="col-lg-3 col-md-3 col-5">
                               <p>Crypto</p>
                               <Dropdown
@@ -610,18 +611,12 @@ const Multiple = ({ search, setSearch }) => {
                                 value={defaultCrypto.value}
                               />
                             </div>
-                            :
+                          ) : (
                             <div className="col-lg-3 col-md-3 col-5">
                               <p>Crypto</p>
-                              <input
-                                type="text"
-                                value={crypto.label}
-                              />
+                              <input type="text" value={crypto.label} />
                             </div>
-
-                          }
-
-
+                          )}
                         </div>
                         <br />
                         <div className="line-six">
@@ -642,19 +637,19 @@ const Multiple = ({ search, setSearch }) => {
                             </div>
                           </div>
                         </div>
-                        <br /><br />
+                        <br />
+                        <br />
                         <div>
                           <div>
                             <h2>Upload NFT</h2>
-                            {selectedImagesNFT.length < 1 ?
-
+                            {selectedImagesNFT.length < 1 ? (
                               <div className="Create-Collection-div">
-                                <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p >
+                                <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
                                 <br />
                                 <input
                                   ref={fileInputRef2}
                                   type="file"
-                                  style={{ display: 'none' }}
+                                  style={{ display: "none" }}
                                   multiple
                                   onChange={handleFileUpload}
                                 />
@@ -665,11 +660,9 @@ const Multiple = ({ search, setSearch }) => {
                                   Browse
                                 </button>
                               </div>
-                              :
-
+                            ) : (
                               <div className="NFT-thumbnail-holder">
                                 <div className="NFT-inner">
-
                                   {selectedImagesNFT.map((image) => (
                                     <div>
                                       <img src={image} alt="" />
@@ -683,65 +676,63 @@ const Multiple = ({ search, setSearch }) => {
                                   >
                                     Add More
                                   </button>
-
                                 </div>
                               </div>
-                            }
+                            )}
                           </div>
                         </div>
-                        <br /><br />
+                        <br />
+                        <br />
 
-                        {ShowMore &&
-                          (
-                            <div>
-                              <div className="line-two">
-                                <div className="row">
-                                  <div className="col-lg-9 col-md-9 col-7">
-                                    <h2>Price</h2>
-                                    <input
-                                      type="text"
-                                      value={inputValue}
-                                      onChange={handleInputChange}
+                        {ShowMore && (
+                          <div>
+                            <div className="line-two">
+                              <div className="row">
+                                <div className="col-lg-9 col-md-9 col-7">
+                                  <h2>Price</h2>
+                                  <input
+                                    type="text"
+                                    value={inputValue}
+                                    onChange={handleInputChange}
                                     // type="number"
                                     // placeholder="0.00"
                                     // ref={price}
-                                    />
-                                    {showWarning && (
-                                      <p style={{ color: "red" }}>
-                                        Please enter a valid positive number.
-                                      </p>
-                                    )}
-                                  </div>
-
+                                  />
+                                  {showWarning && (
+                                    <p style={{ color: "red" }}>
+                                      Please enter a valid positive number.
+                                    </p>
+                                  )}
                                 </div>
                               </div>
-                              <div className="line-four">
-                                <div className="row">
-                                  <div className="col-lg-9">
-                                    <h2>Title</h2>
-                                    <input
-                                      type="text"
-                                      placeholder="e.g. ‘Crypto Funk"
-                                      // defaultValue={title.current.value}
-                                      ref={title}
+                            </div>
+                            <div className="line-four">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Title</h2>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. ‘Crypto Funk"
+                                    // defaultValue={title.current.value}
+                                    ref={title}
                                     // onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                  </div>
+                                  />
                                 </div>
                               </div>
-                              <div className="line-five">
-                                <div className="row">
-                                  <div className="col-lg-9">
-                                    <h2>Description</h2>
-                                    <input
-                                      type="text"
-                                      placeholder="e.g. ‘This is very limited item’"
-                                      ref={description}
-                                    />
-                                  </div>
+                            </div>
+                            <div className="line-five">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Description</h2>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. ‘This is very limited item’"
+                                    ref={description}
+                                  />
                                 </div>
                               </div>
-                              {/* <div className="line-seven">
+                            </div>
+                            {/* <div className="line-seven">
                                 <div className="row">
                                   <div className="col-lg-8">
                                     <button type="submit" className="button-styling">
@@ -750,58 +741,59 @@ const Multiple = ({ search, setSearch }) => {
                                   </div>
                                 </div>
                               </div> */}
-                            </div>
-                          )}
-                        {!ShowMore ?
+                          </div>
+                        )}
+                        {!ShowMore ? (
                           <div className="Button-holding-div">
-                            <button className="button-styling" onClick={() => setShowMore(true)} >
+                            <button
+                              className="button-styling"
+                              onClick={() => setShowMore(true)}
+                            >
                               Done
                             </button>
                             <button className="button-styling-outline">
-                              <div>
-                                Add More
-                              </div>
+                              <div>Add More</div>
                             </button>
                           </div>
-                          :
+                        ) : (
                           <div className="Button-holding-div">
-                            <button className="button-styling"  >
-                              Save
-                            </button>
+                            <button className="button-styling">Save</button>
                             <button className="button-styling-outline">
-                              <div>
-                                Done
-                              </div>
+                              <div>Done</div>
                             </button>
                           </div>
-                        }
-
-
-
+                        )}
                       </div>
-                    }
-
+                    )}
                   </div>
-                  {showCreateCollection &&
+                  {showCreateCollection && (
                     <div className="Create-collection-popup">
                       <div className="Create-collection-popup-inner">
                         <p>Collection Name</p>
-                        <input value={CreateCollection} onChange={(e) => setCreateCollection(e.target.value)} type="text" placeholder="Enter collection name" />
+                        <input
+                          value={CreateCollection}
+                          onChange={(e) => setCreateCollection(e.target.value)}
+                          type="text"
+                          placeholder="Enter collection name"
+                        />
                         <div className="popUp-btn-group">
-                          <button className="button-styling" onClick={() => AddCollection()}>
+                          <button
+                            className="button-styling"
+                            onClick={() => AddCollection()}
+                          >
                             Next
                           </button>
-                          <button onClick={hideCreateCollection} className="button-styling-outline">
-                            <div>
-                              Cancel
-                            </div>
+                          <button
+                            onClick={hideCreateCollection}
+                            className="button-styling-outline"
+                          >
+                            <div>Cancel</div>
                           </button>
                         </div>
                       </div>
                     </div>
-                  }
-                  <div className="line-one">
-                  </div>
+                  )}
+                  <div className="line-one"></div>
                 </div>
               </div>
             </div>

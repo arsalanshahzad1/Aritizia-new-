@@ -441,40 +441,40 @@ function ProfileDrawer({
       TETHER_CONTRACT_ABI.abi,
       signer
     );
-
+    console.log("USER", userAddress);
+    let bal = await USDTContract.balanceOf(
+      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+    );
+    console.log("Balance Of", bal.toString());
     // get the price of dollar from smartcontract and convert this value
 
     console.log("Amount", amountUSD);
     console.log("price", price);
 
-    let amountInWei = amountUSD * 10 ** 6;
+    let amountInWei = 22 * 10 ** 6;
     console.log("amountInWei", amountInWei);
 
-    if (paymentMethod == 1) {
-      const appprove = await USDTContract.approve(
-        MARKETPLACE_CONTRACT_ADDRESS.address,
-        amountInWei
-      );
-
-      appprove.wait();
-    }
-
-    // console.log("paymentmethod", paymentMethod);
-    console.log(
-      "Data",
-      NFT_CONTRACT_ADDRESS.address,
-      paymentMethod,
-      id,
+    // if (paymentMethod == 1) {
+    const appprove = await USDTContract.approve(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
       amountInWei
     );
 
+    appprove.wait();
+    // }
+
+    // console.log("paymentmethod", paymentMethod);
+    console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
+
+    // console.log("Check", check);
     await (
       await marketplaceContract.buyWithUSDT(
         // NFT_CONTRACT_ADDRESS.address,
         "0x245e77E56b1514D77910c9303e4b44dDb44B788c",
         paymentMethod,
         id,
-        amountInWei
+        amountInWei,
+        { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();
   };
