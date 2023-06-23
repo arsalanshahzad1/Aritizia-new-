@@ -229,7 +229,7 @@ const LandingPage = ({ search, setSearch }) => {
                 <p className="para">
                   The World's first all-in-one marketplace, where AI-generated
                   Art Meets the Exciting World of Non-Fungible Tokens (NFTs).
-                  Create, Showcase, Sell, and Engage with Your{" "}
+                  Create, Showcase, Sell, and Engage with Your Audience{" "}
                 </p>
                 <div className="row">
                   <div className="col-lg-10 mx-auto">

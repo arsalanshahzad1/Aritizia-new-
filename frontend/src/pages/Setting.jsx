@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PageTopSection from '../components/shared/PageTopSection'
 import Header from './landingpage/Header'
 import Footer from './landingpage/Footer'
@@ -9,12 +9,25 @@ import EditProfile from './settingFolder/EditProfile'
 import Earnings from './settingFolder/Earnings'
 import Appearance from './settingFolder/Appearance'
 import Notification from './settingFolder/Notification'
+import { useContext } from 'react'
+import { GlobalContext } from '../Context/GlobalContext'
+import Search from "../components/shared/Search";
 
-const Setting = () => {
-    const [activeTabs, setActiveTabs] = useState('Notification')
+
+const Setting = ({ search, setSearch }) => {
+    const { activeTabsSetting } = useContext(GlobalContext)
+    const [activeTabs, setActiveTabs] = useState(activeTabsSetting)
+    useEffect(() => {
+        setActiveTabs(activeTabsSetting)
+
+    }, [activeTabsSetting])
     return (
         <>
-            <Header />
+            <Header
+
+                search={search}
+                setSearch={setSearch}
+            />
             <div className='edit-profile'>
                 <PageTopSection title={activeTabs} />
                 <section className='setting-first-section'>
@@ -39,7 +52,8 @@ const Setting = () => {
                         </div>
                     </div>
                 </section>
-                <Footer/>
+                <Search search={search} setSearch={setSearch} />
+                <Footer />
             </div>
         </>
     )

@@ -17,10 +17,12 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
+import Search from "../../components/shared/Search";
+
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
-const Single = () => {
+const Single = ({ search, setSearch }) => {
   // const [image, setImage] = useState("");
   let image = "";
   // const [price, setPrice] = useState(null);
@@ -32,7 +34,7 @@ const Single = () => {
   const [loading, setLoading] = useState(false);
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
-
+  
   var startTime = useRef(0);
   var endTime = useRef(0);
   const [inputValue, setInputValue] = useState("");
@@ -229,11 +231,10 @@ const Single = () => {
     { value: 1, label: "USDT" },
   ];
 
-  const collectionOptions = [
+  const [collectionOptions, setcollectionOptions] = useState([
     { value: "", label: "Select Collection" },
     { value: "usdt", label: "USDT" },
-    // { value: "usdc", label: "USDC" },
-  ];
+  ]);
 
   const defaultOption = collectionOptions[0];
   const defaultCrypto = cryptoOptions[0];
@@ -249,7 +250,7 @@ const Single = () => {
     }
   };
 
-  useEffect(() => {}, [price, title, description]);
+  useEffect(() => { }, [price, title, description]);
 
   function createItem(e) {
     e.preventDefault();
@@ -366,10 +367,32 @@ const Single = () => {
       console.error(err);
     }
   };
+  const [CreateCollection, setCreateCollection] = useState('')
+  const [showCreateCollection, setshowCreateCollection] = useState(false)
+
+  const AddCollection = () => {
+    if (CreateCollection.length < 1) {
+
+      alert("Input Collection Name to Create")
+    }
+    else {
+      setcollectionOptions((previousOptions) => [...previousOptions, { value: CreateCollection.toLowerCase(), label: CreateCollection }])
+      console.log(collectionOptions, "collection updated")
+      hideCreateCollection()
+    }
+  }
+  const hideCreateCollection = () => {
+    setCreateCollection('')
+    setshowCreateCollection(false)
+  }
 
   return (
     <>
-      <Header />
+      <Header
+
+        search={search}
+        setSearch={setSearch}
+      />
       <div className="create-single">
         <PageTopSection title={"Create Single Collectible"} />
         <div className="create-single-section-wrap">
@@ -405,9 +428,8 @@ const Single = () => {
                             onClick={() => {
                               setActiveMethod(0);
                             }}
-                            className={` create-single-card ${
-                              activeMethod === 0 ? "active" : ""
-                            }`}
+                            className={` create-single-card ${activeMethod === 0 ? "active" : ""
+                              }`}
                           >
                             <AiFillTag />
                             <h3>Fixed Price</h3>
@@ -418,9 +440,8 @@ const Single = () => {
                             onClick={() => {
                               setActiveMethod(1);
                             }}
-                            className={` create-single-card ${
-                              activeMethod === 1 ? "active" : ""
-                            }`}
+                            className={` create-single-card ${activeMethod === 1 ? "active" : ""
+                              }`}
                           >
                             <BsFillClockFill />
                             <h3>Timed Auction</h3>
@@ -437,9 +458,9 @@ const Single = () => {
                               type="text"
                               value={inputValue}
                               onChange={handleInputChange}
-                              // type="number"
-                              // placeholder="0.00"
-                              // ref={price}
+                            // type="number"
+                            // placeholder="0.00"
+                            // ref={price}
                             />
                             {showWarning && (
                               <p style={{ color: "red" }}>
@@ -469,9 +490,9 @@ const Single = () => {
                                 type="text"
                                 value={inputValue}
                                 onChange={handleInputChange}
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
+                              // type="number"
+                              // placeholder="0.00"
+                              // ref={price}
                               />
                               {showWarning && (
                                 <p style={{ color: "red" }}>
@@ -536,6 +557,29 @@ const Single = () => {
                             }}
                             value={defaultOption.value}
                           />
+                          <div className="create-collection-btn" onClick={() => setshowCreateCollection(true)}>
+                            <svg enable-background="new 0 0 50 50" height="25px" id="Layer_1" version="1.1" viewBox="0 0 50 50" width="25px" xml: space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns: xlink="http://www.w3.org/1999/xlink"><rect fill="none" height="50" width="50" /><line fill="#2638CC" stroke="#2638CC" stroke-miterlimit="10" stroke-width="4" x1="9" x2="41" y1="25" y2="25" /><line fill="#2638CC" stroke="#2638CC" stroke-miterlimit="10" stroke-width="4" x1="25" x2="25" y1="9" y2="41" /></svg>
+                            Create Collection
+                          </div>
+                          {showCreateCollection &&
+                            <div className="Create-collection-popup">
+                              <div className="Create-collection-popup-inner">
+                                <p>Collection Name</p>
+                                <input value={CreateCollection} onChange={(e) => setCreateCollection(e.target.value)} type="text" placeholder="Enter collection name" />
+                                <div className="popUp-btn-group">
+                                  <button className="button-styling" onClick={() => AddCollection()}>
+                                    Next
+                                  </button>
+                                  <button onClick={hideCreateCollection} className="button-styling-outline">
+                                    <div>
+                                      Cancel
+                                    </div>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          }
+
                         </div>
                       </div>
                     </div>
@@ -548,7 +592,7 @@ const Single = () => {
                             placeholder="e.g. ‘Crypto Funk"
                             // defaultValue={title.current.value}
                             ref={title}
-                            // onChange={(e) => setTitle(e.target.value)}
+                          // onChange={(e) => setTitle(e.target.value)}
                           />
                         </div>
                       </div>
@@ -598,6 +642,7 @@ const Single = () => {
             Get NFTS data
           </button> */}
         </div>
+        <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
     </>

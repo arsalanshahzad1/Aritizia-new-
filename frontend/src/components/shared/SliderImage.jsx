@@ -16,7 +16,7 @@ const SliderImage = () => {
           
                         <div className="home-first-wrap">
                             <h1>CREATE YOUR OWN NFT</h1>
-                            <div className="search">
+                            <div className="search" id='prompt'>
                                 <button>Prompt</button>
                                 <input type="text" placeholder="A cinematic wide shot of a hamster in a space suit, HD, 2:3" />
                             </div>

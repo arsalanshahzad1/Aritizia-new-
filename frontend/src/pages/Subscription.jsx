@@ -3,11 +3,16 @@ import Header from './landingpage/Header'
 import PageTopSection from '../components/shared/PageTopSection'
 import Footer from './landingpage/Footer'
 import SubscriptionCard from '../components/cards/SubscriptionCard'
+import Search from "../components/shared/Search";
 
-const Subscription = () => {
+const Subscription = ({ search, setSearch }) => {
     return (
         <>
-            <Header />
+            <Header
+
+                search={search}
+                setSearch={setSearch}
+            />
             <div className='subscription'>
                 <PageTopSection title={'Subscription'} />
                 <div className="subscription-wrap">
@@ -17,7 +22,7 @@ const Subscription = () => {
                         </div>
                     </div>
                 </div>
-
+                <Search search={search} setSearch={setSearch} />
                 <Footer />
             </div>
         </>

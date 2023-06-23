@@ -4,11 +4,16 @@ import Header from './landingpage/Header'
 import PageTopSection from '../components/shared/PageTopSection'
 import MetaMaskWalletCard from '../components/cards/MetaMaskWalletCard'
 import CoinBaseWalletCard from '../components/cards/CoinBaseWalletCard'
+import Search from "../components/shared/Search";
 
-const Wallet = () => {
+const Wallet = ({ search, setSearch }) => {
     return (
         <>
-            <Header />
+            <Header
+                
+                search={search}
+                setSearch={setSearch}
+            />
             <div className='wallet'>
                 <PageTopSection title={'Wallet'} />
                 <div className="wallet-card-wrap">
@@ -26,6 +31,7 @@ const Wallet = () => {
                         </div>
                     </div>
                 </div>
+                <Search search={search} setSearch={setSearch} />
                 <Footer />
             </div>
         </>
