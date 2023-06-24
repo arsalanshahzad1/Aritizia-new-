@@ -2,6 +2,7 @@ import React from 'react'
 import DashboardFront from './DashboardFront'
 import { Routes, Route } from 'react-router-dom'
 import UserManagement from './UserManagement'
+import User from './User'
 function DashboardArea({ search, setSearch }) {
     return (
         <div>
@@ -12,6 +13,10 @@ function DashboardArea({ search, setSearch }) {
                 } />
                 <Route path='/user-management' element={
                     <UserManagement search={search} setSearch={setSearch} />
+
+                } />
+                <Route path='/user-management/:id' element={
+                    <User search={search} setSearch={setSearch} />
 
                 } />
                 <Route path='/control-content' element={
