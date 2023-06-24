@@ -1006,7 +1006,10 @@ footer h1 {
   padding: 0px 45px;
   margin-top: 107px;
 }
-
+.margin-top-35px{
+  margin-top: 35px !important;
+  padding: 0 0 !important;
+}
 .profile-first-section .user-pic {
   border-radius: 50%;
   background: #fff;
@@ -1176,7 +1179,7 @@ footer h1 {
 }
 
 .profile-first-section .profile-tabs button.active {
-  border: 2px solid var(--primary);
+  border: 2/px solid var(--primary);
   color: var(--primary);
 }
 
@@ -1193,6 +1196,21 @@ footer h1 {
   top: 50px;
   width: 185px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.action-drop-down {
+  top: 10px !important;
+  /* right: 20px !important; */
+  left: -80px !important;
+  position: absolute;
+}
+
+.action-drop-down ul li:nth-last-child(1) {
+  border-radius: 0 0 10px 10px !important;
+}
+
+.pos-rel {
+  position: relative;
 }
 
 .user-login-dropdown ul {
@@ -3815,12 +3833,13 @@ footer h1 {
 }
 
 .NFT-thumbnail-holder {
-  
-  
+
+
   padding: 20px;
   border: 2px dashed #CBCBCB;
 }
-.NFT-inner{
+
+.NFT-inner {
   display: flex;
   justify-content: start;
   flex-wrap: wrap;
@@ -3828,7 +3847,7 @@ footer h1 {
 
 .NFT-inner div {
   width: 18% !important;
-  
+
   align-items: center;
   margin: 5px;
 }
