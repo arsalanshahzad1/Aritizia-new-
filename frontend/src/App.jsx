@@ -85,6 +85,10 @@ function App() {
             path="/dashboard"
             element={<DashboardMain search={search} setSearch={setSearch} />}
           />
+          <Route
+            path="/dashboard/*"
+            element={<DashboardMain search={search} setSearch={setSearch} />}
+          />
         </Routes>
       </GlobalProvider>
     </Router>

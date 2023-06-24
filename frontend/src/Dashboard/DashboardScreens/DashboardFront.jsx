@@ -1,6 +1,8 @@
 import React from 'react'
 import Header from '../../pages/landingpage/Header'
 import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
+import SalesHistoryChart from './SalesHistoryChart';
+
 
 function DashboardFront({ search, setSearch }) {
 
@@ -340,6 +342,7 @@ function DashboardFront({ search, setSearch }) {
                         </div>
                     </div>
                 </div>
+                <br />
                 <div className='dashboard-front-section-2'>
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
@@ -363,6 +366,29 @@ function DashboardFront({ search, setSearch }) {
                 <div className='df-row-3'>
                     <ChartForEarning data={Monthly_data} />
                 </div>
+                <br /><br /><br /><br /> <br /> <br />
+                <div className='dashboard-front-section-2'>
+                    <div className='dashboard-front-section-2-row-1'>
+                        <div className='df-s2-r1-c1'>
+                            <div>Sales History</div>
+
+                        </div>
+                        <div>
+                            <div className='dashboard-drop-down'>
+                                Monthly
+                                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.98009 9C6.83131 8.98977 6.68991 8.92162 6.57886 8.80668L5.74292 7.84011L0.334397 1.56713C0.252801 1.46609 0.179994 1.35599 0.117044 1.23847L0 1.04514L0 0.70687C0.14211 0.262251 0.376164 0.0592894 0.668743 0.0592894C0.790901 0.0633694 0.911057 0.0963116 1.02176 0.156158C1.13247 0.216005 1.23139 0.301472 1.31244 0.407238C2.7001 2.03106 4.09334 3.642 5.49215 5.24005L6.99683 6.98953L12.7397 0.329896C12.8838 0.143929 13.0845 0.0296689 13.2998 0.010973C13.3717 -0.00365766 13.4453 -0.00365766 13.5172 0.010973C13.6237 0.0483471 13.7207 0.115497 13.7994 0.206539C13.8782 0.297582 13.9363 0.409686 13.9686 0.532896C14.0021 0.657133 14.0089 0.788914 13.9885 0.91689C13.9681 1.04487 13.9211 1.16521 13.8516 1.26749L13.7345 1.40283L12.8986 2.36939L7.53185 8.58438C7.40778 8.71781 7.25914 8.81694 7.09714 8.87434L6.98009 9Z" fill="#929292" />
+                                </svg>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className='df-row-3'>
+                    {/* <ChartForEarning data={Monthly_data} /> */}
+                    <SalesHistoryChart/>
+                </div>
+
             </div>
         </div>
     )
