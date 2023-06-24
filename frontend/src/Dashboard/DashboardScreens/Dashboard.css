@@ -210,3 +210,98 @@
     position: relative;
     padding: 10px 40px;
 }
+
+
+.user-management {
+    position: relative;
+}
+
+.user-management-after-header {
+    position: relative;
+    top: 120px;
+}
+
+.User-management-txt {
+    font-family: 'Jost';
+    font-weight: 600;
+    font-size: 26px;
+}
+
+.search-div-small {
+    color: #C0C0C0;
+    background-color: #EFEFEF;
+    padding: 5px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 5px;
+}
+
+.search-div-small svg {
+    margin-right: 5px;
+}
+
+.controls-for-user-management {
+    display: flex;
+    width: 20%;
+    justify-content: space-between;
+}
+
+.table-for-user-management {
+    position: relative;
+    top: 120px;
+}
+
+.data-table {
+    width: 100%;
+}
+
+.data-table thead tr td {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ABABAB;
+    padding: 5px 20px;
+}
+
+.data-table tbody tr td {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ABABAB;
+    padding: 6px 20px;
+}
+
+.data-table tbody tr {
+    background-color: #F4F4F4;
+    margin: 5px !important;
+}
+
+.data-table tbody tr td:nth-child(1) {
+    color: #000000;
+}
+
+.data-table tbody tr td:nth-child(2) {
+    color: #B600D1;
+}
+
+.data-table tbody tr td:nth-child(3) {
+    color: #B600D1;
+}
+
+.data-table tbody tr td:nth-child(4) {
+    color: black;
+}
+
+.data-table tbody tr td:nth-child(5) {
+    color: black;
+}
+
+.data-table tbody tr td:nth-child(6) {
+    color: black;
+}
+
+.space-between-rows {
+    margin: 4px 0;
+    color: transparent;
+}
