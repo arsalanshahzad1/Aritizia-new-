@@ -403,10 +403,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     modifier auctionIsLive(uint256 _tokenId) {
         require(
-            _idToAuction[_tokenId].isLive,
-            "This NFT is not on auction at the moment."
-        );
-        require(
             block.timestamp > _idToAuction[_tokenId].startTime &&
                 block.timestamp < _idToAuction[_tokenId].endTime,
             "This NFT is not on auction at the moment."
@@ -766,12 +762,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _tokenId,
         uint256 _bidCurrency
     ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
+        if (_idToAuction[_tokenId].highestBidder == address(0)) {
+            require(
+                msg.value >= _idToAuction[_tokenId].basePrice,
+                "Minimum bid has to be higher"
+            );
+        }
         require(
-            msg.value >= _idToAuction[_tokenId].basePrice,
-            "Minimum bid has to be higher"
-        );
-        require(
-            msg.value >= _idToAuction[_tokenId].highestBid,
+            msg.value > _idToAuction[_tokenId].highestBid,
             "You have to bid higher than the highest bid to make an offer"
         );
         require(
@@ -806,12 +804,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
         uint256 ethPriceInUsdt = getLatestUSDTPrice();
         uint256 _amountInETH = _amount / ethPriceInUsdt;
+        _amountInETH = _amountInETH * 10 ** 18;
+        if (_idToAuction[_tokenId].highestBidder == address(0)) {
+            require(
+                _amountInETH >= _idToAuction[_tokenId].basePrice,
+                "Minimum bid has to be higher"
+            );
+        }
         require(
-            _amountInETH >= _idToAuction[_tokenId].basePrice,
-            "Minimum bid has to be higher"
-        );
-        require(
-            _amount >= _idToAuction[_tokenId].highestBid,
+            _amountInETH >= _idToAuction[_tokenId].highestBid,
             "You have to bid higher than the highest bid to make an offer"
         );
         require(

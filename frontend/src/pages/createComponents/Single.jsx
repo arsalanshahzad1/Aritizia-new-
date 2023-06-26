@@ -161,7 +161,7 @@ const Single = ({ search, setSearch }) => {
         const result = await uploadJSONToIPFS(dataInJSON);
 
         console.log("RESULT", result);
-        mintThenList(result);
+        mintThenList(result.pinataURL);
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
       }
@@ -271,6 +271,9 @@ const Single = ({ search, setSearch }) => {
       const startDate = new Date(startingDate);
       const endDate = new Date(endingDate);
 
+      console.log("startDate", startDate.getTime());
+      console.log("endDate", endDate.getTime());
+
       const startTimestamp = Math.floor(startDate.getTime() / 1000);
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
@@ -280,7 +283,7 @@ const Single = ({ search, setSearch }) => {
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;
-      endTime = startTimestamp;
+      endTime = endTimestamp;
     }
 
     console.log("CHECK startingDate", startTime);

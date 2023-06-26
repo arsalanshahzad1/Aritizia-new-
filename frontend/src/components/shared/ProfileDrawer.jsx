@@ -470,7 +470,7 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithUSDT(
         // NFT_CONTRACT_ADDRESS.address,
-        "0x245e77E56b1514D77910c9303e4b44dDb44B788c",
+        "0xFf658343244c0475b9305859F1b7CDAB9784762f",
         paymentMethod,
         id,
         amountInWei,

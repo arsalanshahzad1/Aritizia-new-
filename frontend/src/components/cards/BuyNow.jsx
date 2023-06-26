@@ -27,7 +27,7 @@ const BuyNow = ({
     setIsVisible(false);
   }, []);
 
-  console.log("USER in buy now", userAddress);
+  // console.log("USER in buy now", userAddress);
 
   const openDrawer = () => {
     if (showLinks === true) {

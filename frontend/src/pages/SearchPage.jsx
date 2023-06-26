@@ -37,11 +37,21 @@ const SearchPage = ({ search, setSearch }) => {
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
+  const [searchedNfts, setSearchedNfts] = useState([]);
+
+  let searchedNft = useRef([]);
+  const [searchText, setSearchText] = useState("");
+  let searchTexts = useRef();
+  const handleSearchChange = (event) => {
+    setSearchText(event.target.value);
+    searchTexts = event.target.value;
+    getSearchedNfts();
+  };
 
   const web3ModalRef = useRef();
 
   const connectWallet = async () => {
-    console.log("Connect wallet");
+    // console.log("Connect wallet");
     try {
       await getProviderOrSigner();
       setWalletConnected(true);
@@ -63,6 +73,96 @@ const SearchPage = ({ search, setSearch }) => {
       return signer;
     }
     return web3Provider;
+  };
+
+  const getSearchedNfts = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
+    let priceETH = 0.00000002;
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+
+    let oneETHInUSD = 1 / priceInETH;
+    let priceInUSD = priceETH;
+    priceInUSD = oneETHInUSD * priceInUSD;
+
+    console.log("priceInUSD", priceInUSD);
+
+    let title;
+    let searched;
+    let nfts = [];
+    setSearchedNfts(nfts);
+
+    //////////////////
+    // demo variables///
+    //////////////////
+
+    // Fix front end then call those functions
+
+    let listingCheck = false;
+    let priceCheck = false;
+    let selectedListingType = 0;
+    let minRange = 100;
+    let maxRange = 1000;
+
+    for (let i = 0; i < nftListFP.length; i++) {
+      title = nftListFP[i].title.toLowerCase();
+      let priceOfNft = Number(nftListFP[i].price);
+
+      let priceETH = priceOfNft;
+      let priceInETH = dollarPriceOfETH.toString() / 1e18;
+
+      let oneETHInUSD = 1 / priceInETH;
+      let priceInUSD = priceETH;
+
+      priceInUSD = oneETHInUSD * priceInUSD;
+      // console.log("searchTextas", typeof searchTexts);
+      // console.log("searchText", searchTexts.toString());
+      // console.log("searchText", searchTexts);
+      // searched = searchTexts.toLowerCase();
+      // console.log("Title", title);
+      // console.log("searched", searched);
+
+      if (searched == "") {
+        nfts.push(nftListFP[i]);
+        // console.log("Found", title);
+      } else if (title.includes(searchTexts.toLowerCase())) {
+        console.log("nftListFP", nftListFP[i]);
+        console.log("price", Number(nftListFP[i].price));
+
+        // listing block
+        if (selectedListingType == 100) {
+          // true
+          listingCheck = true;
+        } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
+          listingCheck = true;
+        } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
+          listingCheck = true;
+        }
+
+        if (priceInUSD >= minRange && priceInUSD <= maxRange) {
+          priceCheck = true;
+        }
+
+        if (priceCheck && listingCheck) {
+          nfts.push(nftListFP[i]);
+        }
+      }
+
+      // price block
+    }
+
+    setSearchedNfts(nfts);
+    // searchedNft = nfts;
+
+    // if (title.toLowerCase().includes(searchText.toLowerCase())) {
+    //   console.log("Name of nft", title);
   };
 
   const getListedNfts = async () => {
@@ -113,7 +213,7 @@ const SearchPage = ({ search, setSearch }) => {
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
-          const paymentMethod = data.paymentMethod;
+          const paymentMethod = data.crypto;
 
           const nftData = {
             id: id, //
@@ -125,13 +225,14 @@ const SearchPage = ({ search, setSearch }) => {
             description: description,
             collection: collection,
             paymentMethod: paymentMethod,
-
+            listingType: activeMethod,
           };
 
-          console.log(nftData);
+          // console.log(nftData);
           myNFTs.push(nftData);
           setNftListFP(myNFTs);
-          console.log("myNFTs in function", myNFTs);
+          // console.log("myNFTs in function", myNFTs);
+
           // if (activeMethod === 0) {
           //   const nftData = {
           //     id: id, //
@@ -148,8 +249,9 @@ const SearchPage = ({ search, setSearch }) => {
           //   myNFTs.push(nftData);
           //   setNftListFP(myNFTs);
           //   console.log("myNFTs in function", myNFTs);
-          // } else if (activeMethod === 1) {
-          //   const nftData = {
+          // } else
+          // if (activeMethod === 1) {
+          //   const nftAuctionData = {
           //     id: id, //
           //     title: title,
           //     image: image,
@@ -163,7 +265,7 @@ const SearchPage = ({ search, setSearch }) => {
           //     startTime: auctionData.startTime.toString(),
           //   };
 
-          //   myAuctions.push(nftData);
+          //   myAuctions.push(nftAuctionData);
           //   console.log("auction in function", myAuctions);
           //   setNftListAuction(myAuctions);
           // }
@@ -180,7 +282,7 @@ const SearchPage = ({ search, setSearch }) => {
       method: "eth_requestAccounts",
     });
     setUserAddress(accounts[0]);
-    console.log("getAddress", accounts[0]);
+    // console.log("getAddress", accounts[0]);
   };
 
   useEffect(() => {
@@ -191,11 +293,12 @@ const SearchPage = ({ search, setSearch }) => {
         disableInjectedProvider: false,
       });
     }
-  }, [walletConnected]);
+  }, [walletConnected, searchedNfts]);
 
   useEffect(() => {
     connectWallet();
     getListedNfts();
+    getSearchedNfts();
     getAddress();
   }, [userAddress]);
 
@@ -264,10 +367,16 @@ const SearchPage = ({ search, setSearch }) => {
                     <span>Filter</span>
                   </div>
                 </div>
-                <input type="search" placeholder="Search for nft item" />
+                <input
+                  type="search"
+                  placeholder="Search for nft item"
+                  value={searchText}
+                  onChange={handleSearchChange}
+                />
               </div>
             </div>
           </div>
+          <div></div>
           <div className="filter-card-wrap">
             <div className="row">
               <div className="col-lg-3 hide-on-desktop-screen-app">
@@ -367,7 +476,7 @@ const SearchPage = ({ search, setSearch }) => {
               </div>
               <div className="col-lg-9 col-md-12">
                 <div className="row">
-                  {nftListFP.map((item) => (
+                  {searchedNfts.map((item) => (
                     <SearchNftCards
                       key={item?.id}
                       id={item?.id}

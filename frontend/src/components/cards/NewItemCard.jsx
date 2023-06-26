@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import "./Cards.css";
 import PlaceABidDrawer from "../shared/PlaceABidDrawer";
@@ -10,10 +10,32 @@ const NewItemCard = ({
   price,
   highestBid,
   isLive,
+  startTime,
   endTime,
+  description,
+  userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [endDate, setEndDate] = useState("");
+
+  function convertTimestampToCustomFormat() {
+    const date = new Date(endTime * 1000);
+
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    const formattedTimestamp = `${day} ${year} ${hours}:${minutes}`;
+    setEndDate(formattedTimestamp);
+  }
+
+  useEffect(() => {
+    // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+    convertTimestampToCustomFormat();
+  }, [endDate]);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
@@ -34,7 +56,7 @@ const NewItemCard = ({
         <div className="sec-five-wrap">
           <div className="image">
             <img src={image} alt="" width={"100%"} />
-            <span>{endTime}</span>
+            <span>{endDate}</span>
             {showLinks && (
               <div className="social-links">
                 <ul>
@@ -92,9 +114,13 @@ const NewItemCard = ({
         price={price}
         crypto={crypto}
         // royalty={royalty}
-        // description={description}
+        description={description}
         // collection={collection}
-        userAddress
+        userAddress={userAddress}
+        startTime={startTime}
+        endTime={endTime}
+        isLive={isLive}
+        highestBid={highestBid}
       />
     </>
   );
