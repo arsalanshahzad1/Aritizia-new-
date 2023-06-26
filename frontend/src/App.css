@@ -1006,10 +1006,12 @@ footer h1 {
   padding: 0px 45px;
   margin-top: 107px;
 }
-.margin-top-35px{
+
+.margin-top-35px {
   margin-top: 35px !important;
   padding: 0 0 !important;
 }
+
 .profile-first-section .user-pic {
   border-radius: 50%;
   background: #fff;
@@ -1157,7 +1159,7 @@ footer h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 95px;
+  gap: 35px;
   padding-top: 50px;
 }
 
@@ -3861,4 +3863,114 @@ footer h1 {
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
+}
+
+.pos-rel {
+  position: relative;
+}
+
+.Edit-nft {
+  width: 94%;
+  min-height: 100vh !important;
+  background-color: #00000033;
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* z-index:  !important; */
+  z-index: 99999;
+  overflow-y: scroll;
+}
+
+.Edit-nft-inner {
+  width: 27%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #282828;
+  height: auto;
+  z-index: 999999;
+  padding: 10px 20px;
+}
+
+.close-btn-edit-nft {
+  width: max-content;
+  margin-left: auto;
+}
+
+.edit-nft-image {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.edit-nft-image img {
+  width: 100%;
+  border-radius: 100px;
+}
+
+.edit-nft-items {
+  margin-top: 25px;
+  color: #656565;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.edit-nft-items input {
+  background-color: #3D3D3D;
+  border-radius: 5px;
+  padding: 7px 10px;
+  color: white;
+  outline: none;
+  border: none;
+  font-weight: 400 !important;
+  font-size: 18px;
+  width: 100%;
+}
+
+.edit-sidebar-sub-content {
+  font-size: 12px;
+  margin-bottom: 10px !important;
+}
+
+.desc-input {
+  background-color: #3D3D3D;
+  border-radius: 5px;
+  padding: 7px 10px;
+  color: white;
+  outline: none;
+  border: none;
+  font-weight: 400 !important;
+  font-size: 18px;
+  width: 100%;
+}
+
+.Btns-edit-nft-sidebar {
+  display: flex;
+  justify-content: space-around;
+  width: 60%;
+  align-items: center;
+  margin: 50px auto;
+}
+
+.Btns-edit-nft-sidebar button:nth-child(1) {
+  background-color: #E7E7E7;
+  color: #6C6C6C;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
+}
+.Btns-edit-nft-sidebar button:nth-child(2) {
+  background-color: #B600D1;
+  color: white;
+  padding: 5px 20px;
+  border-radius: 5px;
+  border: none;
+  font-size: 18px;
+  font-weight: 500;
 }

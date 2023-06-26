@@ -106,7 +106,10 @@ const Profile = ({ search, setSearch }) => {
 
     let activeMethod;
 
-    let mintedTokens = await marketplaceContract.getMyNfts(address);
+    let mintedTokens = await marketplaceContract.getListedNfts();
+
+
+    ;
 
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);
@@ -265,7 +268,7 @@ const Profile = ({ search, setSearch }) => {
                     className={`${tabs === 0 ? "active" : ""}`}
                     onClick={() => setTabs(0)}
                   >
-                    Fixed Price
+                    On Sale
                   </button>
                   <button
                     className={`${tabs === 1 ? "active" : ""}`}
@@ -277,7 +280,19 @@ const Profile = ({ search, setSearch }) => {
                     className={`${tabs === 2 ? "active" : ""}`}
                     onClick={() => setTabs(2)}
                   >
+                    My NFT
+                  </button>
+                  <button
+                    className={`${tabs === 3 ? "active" : ""}`}
+                    onClick={() => setTabs(3)}
+                  >
                     Liked
+                  </button>
+                  <button
+                    className={`${tabs === 4 ? "active" : ""}`}
+                    onClick={() => setTabs(4)}
+                  >
+                    Followers
                   </button>
                 </div>
               </div>

@@ -78,7 +78,7 @@
     width: 80%;
     height: 100vh;
     background-color: white !important;
-    border-radius: 30px 0 0 0;
+    border-radius: 30px 0 0 30px;
     padding: 0 20px;
     overflow-y: scroll;
 
@@ -97,6 +97,22 @@
     display: flex;
     flex-wrap: wrap;
 
+}
+
+.data-table-3 td {
+    color: #111111 !important;
+}
+
+.nft-thumbnail-holder {
+    width: 40px;
+}
+
+.nft-thumbnail-holder img {
+    width: 100%;
+}
+
+.dashboard-front-section-2 {
+    justify-content: space-around;
 }
 
 .position-absolute-top {
@@ -258,6 +274,23 @@
 .data-table {
     width: 100%;
 }
+
+.data-table .data-table-2 tr td:nth-child(2) {
+    color: black !important;
+}
+
+.data-table .data-table-2 tr td:nth-child(4) {
+    color: #B600D1 !important;
+}
+
+.data-table .data-table-2 tr:hover td:nth-child(3) {
+    color: #B600D1 !important;
+}
+
+.data-table .data-table-2 tr td:nth-child(3) {
+    color: black !important;
+}
+
 
 .data-table thead tr td {
     font-size: 16px;

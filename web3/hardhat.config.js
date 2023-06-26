@@ -26,10 +26,10 @@ module.exports = {
         // url : "https://wiser-wider-valley.bsc.discover.quiknode.pro/050ea5d25ccade9d764fac15bd4709b810d543a1/"
       },
     },
-    sepolia: {
-      url: QUICKNODE_HTTP_URL,
-      accounts: [PRIVATE_KEY],
-      gasPrice: "auto",
-    },
+    // sepolia: {
+    //   url: QUICKNODE_HTTP_URL,
+    //   accounts: [PRIVATE_KEY],
+    //   gasPrice: "auto",
+    // },
   },
 };
