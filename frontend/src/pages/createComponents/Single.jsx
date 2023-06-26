@@ -161,7 +161,7 @@ const Single = ({ search, setSearch }) => {
         const result = await uploadJSONToIPFS(dataInJSON);
 
         console.log("RESULT", result);
-        mintThenList(result);
+        mintThenList(result.pinataURL);
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
       }

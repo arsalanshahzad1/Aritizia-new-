@@ -7,7 +7,8 @@ import NewItemCard from '../../components/cards/NewItemCard'
 import BuyNow from '../../components/cards/BuyNow'
 import nft from '../../../public/assets/images/nft-big.png'
 import DashboardCard from '../DashboardComponents/DashboardCard'
-function User({ search, setSearch }) {
+import DashboardCard2 from './DashboardCard2.jsx'
+function User2({ search, setSearch }) {
     const navigate = useNavigate()
     const [tabs, setTabs] = useState(0);
     return (
@@ -77,7 +78,7 @@ function User({ search, setSearch }) {
                                         </div>
                                     </div> */}
                                 </div>
-                                <div className="row">
+                                {/* <div className="row">
                                     <div className="profile-tabs">
                                         <button
                                             className={`${tabs === 0 ? "active" : ""}`}
@@ -98,14 +99,14 @@ function User({ search, setSearch }) {
                                             Liked
                                         </button>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="profile-buy-card">
                                     {tabs === 0 && (
                                         <>
                                             <div className="row">
                                                 {/* {nftListFP.map((item) => ( */}
 
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -116,7 +117,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -127,7 +128,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -138,7 +139,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -149,7 +150,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -160,7 +161,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -171,7 +172,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -182,7 +183,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -202,7 +203,7 @@ function User({ search, setSearch }) {
                                         <>
 
                                             <div className="row">
-                                            <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -213,7 +214,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -224,7 +225,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -235,7 +236,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -252,7 +253,7 @@ function User({ search, setSearch }) {
                                     {tabs === 2 && (
                                         <>
                                             <div className="row">
-                                            <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -263,7 +264,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -274,7 +275,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -285,7 +286,7 @@ function User({ search, setSearch }) {
                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
                                                     collection={"item?.collection"}
                                                 />
-                                                <DashboardCard
+                                                <DashboardCard2
                                                     key={'2'}
                                                     id={'2'}
                                                     title={'Bull BTC Club'}
@@ -297,7 +298,7 @@ function User({ search, setSearch }) {
                                                     collection={"item?.collection"}
                                                 />
                                             </div>
-                                            
+
                                         </>
                                     )}
                                 </div>
@@ -309,9 +310,9 @@ function User({ search, setSearch }) {
 
                 </div>
             </div>
-            
+
         </div>
     )
 }
 
-export default User
+export default User2
