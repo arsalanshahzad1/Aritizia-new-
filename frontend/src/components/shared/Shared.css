@@ -538,6 +538,11 @@ p {
   left: 5vw !important;
 }
 
+.nft-drawer-wrapper{
+  width: 100vw !important;
+  left: 0vw !important;
+}
+
 .profile-drawer-wrapper__content {
   max-height: calc(85vh - 25px) !important;
 }

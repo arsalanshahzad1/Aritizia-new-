@@ -14,7 +14,7 @@ function ControllingDataRows() {
 
     return (
 
-        <tr onClick={NavigateToUser}>
+        <tr>
             <td>01</td>
             <td>
                 <div className='nft-thumbnail-holder'>
