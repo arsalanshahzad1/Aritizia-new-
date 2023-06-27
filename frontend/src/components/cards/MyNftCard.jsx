@@ -61,7 +61,7 @@ const DashboardCard = ({
 
 
 
-
+    const [timedAuction, setTimedAuction] = useState(false)
 
     return (
         <>
@@ -86,10 +86,16 @@ const DashboardCard = ({
                                             {showLinks && (
                                                 <div className="social-links1">
                                                     <ul>
-                                                        <li onClick={() => setIsVisible(true)}>
+                                                        <li onClick={() => {
+                                                            setIsVisible(true),
+                                                                setTimedAuction(false)
+                                                        }}>
                                                             <a href="">Fix Price</a>
                                                         </li>
-                                                        <li onClick={() => setshowEditSidebar(true)}>
+                                                        <li onClick={() => {
+                                                            setIsVisible(true),
+                                                                setTimedAuction(true)
+                                                        }}>
                                                             <a href="">On Auction</a>
                                                         </li>
 
@@ -140,6 +146,7 @@ const DashboardCard = ({
             <NftDrawer
                 isVisible={isVisible}
                 onClose={onClose}
+                timedAuction={timedAuction}
 
             />
         </>

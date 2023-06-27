@@ -4021,3 +4021,125 @@ footer h1 {
 .nft-drawer-dp .img-holder img {
   width: 100%;
 }
+
+.followers-tab {
+  margin: 0% auto;
+}
+
+.Follow-row {
+  margin: 25px auto;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Follow-row .left {
+  display: flex;
+  align-items: center;
+}
+
+.Follow-row .left .img-holder {
+  width: 70px;
+  display: flex;
+  align-items: center;
+}
+
+.Follow-row .left .txt {
+  margin-left: 10px;
+}
+
+.Follow-row .left .txt p:nth-child(1) {
+  font-size: 26px;
+  font-weight: 500;
+  color: #121212;
+  font-family: 'Jost';
+  margin: 0;
+  padding: 0;
+  line-height: 20px;
+}
+
+
+
+.Follow-row .left .txt p:nth-child(2) {
+  font-size: 20px;
+  padding: 0;
+  margin: 0;
+  font-weight: 400;
+  color: #787878;
+}
+
+.Follow-row .left .img-holder img {
+  width: 100%;
+}
+
+.Follow-row .right {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+}
+
+.Follow-row .right button {
+  width: max-content;
+  border-radius: 30px;
+  padding: 10px 25px;
+  border: none;
+  background-color: #B600D1;
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  margin-right: 15px;
+}
+
+.Follow-row .right .unfollow {
+  width: max-content;
+  border-radius: 30px;
+  padding: 10px 25px;
+  border: #B600D1 2px solid;
+  background-color: transparent;
+  color: #B600D1;
+  font-size: 20px;
+  font-weight: 500;
+  margin-right: 15px;
+}
+
+.Follow-row .right span {
+  cursor: pointer;
+}
+
+.Follow-row .right .options {
+  position: absolute;
+  background-color: white;
+  border-radius: 15px;
+  width: 150px;
+  top: 40px;
+  right: 0;
+  z-index: 9999;
+  box-shadow: 6px 3px 15px rgba(0, 0, 0, 0.178);
+}
+
+.Follow-row .right .options div:nth-child(1) {
+  border-radius: 15px 15px 0 0;
+  text-align: center;
+  color: #121212;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.Follow-row .right .options div:nth-child(2) {
+  border-radius: 0 0 15px 15px;
+  text-align: center;
+  color: #121212;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.Follow-row .right .options div:hover {
+  background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+  color: white;
+}

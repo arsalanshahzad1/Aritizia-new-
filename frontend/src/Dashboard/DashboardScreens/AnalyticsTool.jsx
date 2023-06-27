@@ -4,6 +4,7 @@ import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
 import SalesHistoryChart from './SalesHistoryChart';
 import ControllingDataRows from './ContollingDataRows';
 import ChartAnalytics from './ChartAnalytics';
+import TransactionRows from './TransactionRows';
 
 
 function AnalyticsTool({ search, setSearch }) {
@@ -387,7 +388,7 @@ function AnalyticsTool({ search, setSearch }) {
                     {/* <SalesHistoryChart /> */}
                     <ChartAnalytics />
                 </div>
-                
+
                 <div className='table-for-user-management'>
                     <table className='data-table'>
                         <thead>
@@ -405,37 +406,37 @@ function AnalyticsTool({ search, setSearch }) {
                         </thead>
                         <tbody className='data-table-2 data-table-3'>
 
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
+                            <TransactionRows />
                             <hr className='space-between-rows'></hr>
 
 

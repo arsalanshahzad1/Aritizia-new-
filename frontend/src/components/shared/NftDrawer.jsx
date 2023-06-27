@@ -298,7 +298,7 @@ const Daily_data = [
     },
 ];
 
-const ProfileDrawer = ({ isVisible, onClose }) => {
+const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
 
 
 
@@ -697,7 +697,7 @@ const ProfileDrawer = ({ isVisible, onClose }) => {
                                             <div className="row">
 
 
-                                                {activeMethod === 0 ? (
+                                                {!timedAuction ? (
                                                     <div className="line-two">
                                                         <div className="row">
                                                             <div className="col-lg-9 col-md-9 col-7">

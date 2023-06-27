@@ -524,7 +524,7 @@ img {
     padding: 5px 10px;
     border-radius: 10px;
     position: relative;
-    margin-top: 15px;
+    margin-top: 25px;
 }
 
 .J-buynow .button p {
@@ -680,7 +680,7 @@ img {
 
 @media only screen and (max-width: 1399px) {
     .css-vurnku {
-        height: 345px !important;
+        height: 340px !important;
     }
 }
 
