@@ -18,6 +18,8 @@ import nft from '../../public/assets/images/NFTImage.png'
 import bird from '../../public/assets/images/bird.png'
 import SimpleCard from "../components/cards/SimpleCard";
 import MyNftCard from "../components/cards/MyNftCard";
+import nftimage2 from '../../public/assets/images/nftimage2.png'
+import Follow from "./settingFolder/Follow";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -25,6 +27,7 @@ const { ethereum } = window;
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
   const [collectionTabs, setCollectionTabs] = useState(0)
+  const [FollowersTab, setFollowersTab] = useState(0)
   const [isVisible, setIsVisible] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
@@ -300,30 +303,11 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 0 && (
                   <>
                     <div className="row">
-
                       <div className="Collection-tabs">
                         <div onClick={() => setCollectionTabs(0)} className={`${collectionTabs === 0 && 'active-tab'}`}>On Sale</div>
                         <div onClick={() => setCollectionTabs(1)} className={`${collectionTabs === 1 && 'active-tab'}`}>Auction</div>
 
                       </div>
-
-
-                      {/* {nftListFP.map((item) => (
-                        <SimpleCard
-                          onOpen={onOpen}
-                          // onClose={onClose}
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                          crypto={item?.crypto}
-                          royalty={item?.royalty}
-                          description={item?.description}
-                          collection={item?.collection}
-                          userAddress
-                        />
-                      ))} */}
                       {collectionTabs === 0 &&
                         (
                           <>
@@ -543,12 +527,7 @@ const Profile = ({ search, setSearch }) => {
                 )}
                 {tabs === 1 && (
                   <>
-                    {/* <div className="row">
-                      <BuyNow onOpen={onOpen} onClose={onClose} />
-                      <BuyNow onOpen={onOpen} onClose={onClose} />
-                      <BuyNow onOpen={onOpen} onClose={onClose} />
-                      <BuyNow onOpen={onOpen} onClose={onClose} />
-                    </div> */}
+
                     <div className="row">
                       {/* {nftListAuction.map((item) => (
                         <NewItemCard
@@ -689,65 +668,149 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-
-
-
-
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {/* <BuyNow onOpen={onOpen} onClose={onClose} />
-                      <BuyNow onOpen={onOpen} onClose={onClose} />
-                      <BuyNow onOpen={onOpen} onClose={onClose} />
-                      <BuyNow onOpen={onOpen} onClose={onClose} /> */}
+                      <NewItemCard
+                        key={"2"}
+                        id={"2"}
+                        title={"Pinky Ocean"}
+                        image={bird}
+                        price={"320"}
+                        highestBid={"qqw"}
+                        isLive={true}
+                        endTime={"46d 18h 40m 10s"}
+                        userAddress
+                      />
+                      <BuyNow
+                        onOpen={onOpen}
+                        // onClose={onClose}
+                        key={"3"}
+                        id={"3"}
+                        title={"abcefg"}
+                        image={nftimage2}
+                        price={"1010"}
+                        crypto={"ETH"}
+                        royalty={"10%"}
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
+                        collection={"abc def ghi"}
+                        userAddress
+                      />
+                      <NewItemCard
+                        key={"2"}
+                        id={"2"}
+                        title={"Pinky Ocean"}
+                        image={bird}
+                        price={"320"}
+                        highestBid={"qqw"}
+                        isLive={true}
+                        endTime={"46d 18h 40m 10s"}
+                        userAddress
+                      />
+                      <BuyNow
+                        onOpen={onOpen}
+                        // onClose={onClose}
+                        key={"3"}
+                        id={"3"}
+                        title={"abcefg"}
+                        image={nftimage2}
+                        price={"1010"}
+                        crypto={"ETH"}
+                        royalty={"10%"}
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
+                        collection={"abc def ghi"}
+                        userAddress
+                      />
+                      <NewItemCard
+                        key={"2"}
+                        id={"2"}
+                        title={"Pinky Ocean"}
+                        image={bird}
+                        price={"320"}
+                        highestBid={"qqw"}
+                        isLive={true}
+                        endTime={"46d 18h 40m 10s"}
+                        userAddress
+                      />
+                      <BuyNow
+                        onOpen={onOpen}
+                        // onClose={onClose}
+                        key={"3"}
+                        id={"3"}
+                        title={"abcefg"}
+                        image={nftimage2}
+                        price={"1010"}
+                        crypto={"ETH"}
+                        royalty={"10%"}
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
+                        collection={"abc def ghi"}
+                        userAddress
+                      />
+                      <NewItemCard
+                        key={"2"}
+                        id={"2"}
+                        title={"Pinky Ocean"}
+                        image={bird}
+                        price={"320"}
+                        highestBid={"qqw"}
+                        isLive={true}
+                        endTime={"46d 18h 40m 10s"}
+                        userAddress
+                      />
+                      <BuyNow
+                        onOpen={onOpen}
+                        // onClose={onClose}
+                        key={"3"}
+                        id={"3"}
+                        title={"abcefg"}
+                        image={nftimage2}
+                        price={"1010"}
+                        crypto={"ETH"}
+                        royalty={"10%"}
+                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
+                        collection={"abc def ghi"}
+                        userAddress
+                      />
                     </div>
-                    <div className="row">
-                      {/* <NewItemCard
-                        key={"1"}
-                        id={"1"}
-                        title={"Cryto"}
-                        image={nft}
-                        price={"500"}
-                        highestBid={"650"}
-                        isLive={true}
-                        endTime={"5555"}
-                        userAddress
-                      />
-                      <NewItemCard
-                        key={"1"}
-                        id={"1"}
-                        title={"Cryto"}
-                        image={nft}
-                        price={"500"}
-                        highestBid={"650"}
-                        isLive={true}
-                        endTime={"5555"}
-                        userAddress
-                      />
-                      <NewItemCard
-                        key={"1"}
-                        id={"1"}
-                        title={"Cryto"}
-                        image={nft}
-                        price={"500"}
-                        highestBid={"650"}
-                        isLive={true}
-                        endTime={"5555"}
-                        userAddress
-                      />
-                      <NewItemCard
-                        key={"1"}
-                        id={"1"}
-                        title={"Cryto"}
-                        image={nft}
-                        price={"500"}
-                        highestBid={"650"}
-                        isLive={true}
-                        endTime={"5555"}
-                        userAddress
-                      /> */}
 
+                  </>
+                )}
+                {tabs === 3 && (
+                  <>
+                    <div className="row">
+                      <div className="Collection-tabs">
+                        <div onClick={() => setFollowersTab(0)} className={`${FollowersTab === 0 && 'active-tab'}`}>Followers</div>
+                        <div onClick={() => setFollowersTab(1)} className={`${FollowersTab === 1 && 'active-tab'}`}>Following</div>
+                      </div>
+                      <div className="followers-tab">
+                        {FollowersTab === 0 ? (
+                          <>
+                            <Follow followed={true} />
+                            <Follow followed={true} />
+                            <Follow followed={true} />
+                            <Follow followed={true} />
+                            <Follow followed={true} />
+                          </>
+
+                        ) : (
+                          <>
+
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                            <Follow />
+                          </>
+                        )}
+                      </div>
                     </div>
+
                   </>
                 )}
               </div>
