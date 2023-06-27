@@ -311,6 +311,7 @@ function ProfileDrawer({
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
+  const [platformFee, setPlatformFee] = useState("");
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
@@ -356,15 +357,12 @@ function ProfileDrawer({
 
     if (needSigner) {
       const signer = web3Provider.getSigner();
-      // console.log("getSigner");
 
       return signer;
     }
-    // console.log("getProvider");
     return web3Provider;
   };
 
-  // return the price of NFT in usd
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
 
@@ -376,19 +374,15 @@ function ProfileDrawer({
 
     let priceETH = price;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    // console.log("Dollar price", dollarPriceOfETH.toString());
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    // console.log("priceInETH", priceInETH);
 
     let oneETHInUSD = 1 / priceInETH;
-    // console.log("oneETHInUSD", oneETHInUSD);
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
-    // console.log("Amount in USD", priceInUSD);
-    // console.log("Amount in USD", typeof priceInUSD);
-    // USDAmount = priceInUSD.toString();
-    priceInUSD = priceInUSD.toFixed(2);
+    priceInUSD = Math.ceil(priceInUSD);
     setAmountUSD(priceInUSD.toString());
+    let fee = Math.ceil((priceInUSD * 3) / 100);
+    setPlatformFee(fee);
   };
 
   const buyWithETH = async () => {
@@ -399,18 +393,32 @@ function ProfileDrawer({
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    let aamount = amount;
-    console.log("aamount", aamount);
+    
+    console.log("price", price);
+    let fee = Number((price * 3) / 100);
+    console.log("fee", fee);
+
+    let amount = Number(price) + fee;
     console.log("amount", amount);
-    let amountInWei = aamount * 10 ** 18;
+
+    let value = amount.toString();
+    console.log("value", value);
+    console.log("id", id);
+    console.log("id typeof", typeof id);
+
+    console.log("paymentMethod", paymentMethod);
+    console.log("paymentMethod typeof", typeof paymentMethod);
+
+    console.log(" NFT_CONTRACT_ADDRESS.address,", NFT_CONTRACT_ADDRESS.address);
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
+        // "0x38628490c3043e5d0bbb26d5a0a62fc77342e9d5",
         paymentMethod,
         id,
         {
-          value: ethers.utils.parseEther("100"),
+          value: ethers.utils.parseEther(value),
           gasLimit: ethers.BigNumber.from("500000"),
         }
       )
@@ -429,11 +437,13 @@ function ProfileDrawer({
       signer
     );
 
+    let fee = Number(platformFee);
+
     console.log(
       "TETHER_CONTRACT_ADDRESS.address",
       TETHER_CONTRACT_ADDRESS.address
     );
-    console.log("TETHER_CONTRACT_ADDRESS.abi", TETHER_CONTRACT_ADDRESS.abi);
+    console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
     console.log("signer", signer);
 
     const USDTContract = new Contract(
@@ -442,16 +452,14 @@ function ProfileDrawer({
       signer
     );
     console.log("USER", userAddress);
-    let bal = await USDTContract.balanceOf(
-      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-    );
-    console.log("Balance Of", bal.toString());
-    // get the price of dollar from smartcontract and convert this value
 
-    console.log("Amount", amountUSD);
+    console.log("amountUSD", amountUSD);
     console.log("price", price);
 
-    let amountInWei = 22 * 10 ** 6;
+    let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
+    console.log("amount", amount);
+
+    let amountInWei = amount * 10 ** 6;
     console.log("amountInWei", amountInWei);
 
     // if (paymentMethod == 1) {
@@ -465,15 +473,16 @@ function ProfileDrawer({
 
     // console.log("paymentmethod", paymentMethod);
     console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
+    console.log("amountUSD", amountUSD);
+    console.log("amountUSD typeof", typeof amountUSD);
 
     // console.log("Check", check);
     await (
       await marketplaceContract.buyWithUSDT(
-        // NFT_CONTRACT_ADDRESS.address,
-        "0xFf658343244c0475b9305859F1b7CDAB9784762f",
+        NFT_CONTRACT_ADDRESS.address,
         paymentMethod,
         id,
-        amountInWei,
+        amount,
         { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();
@@ -645,7 +654,10 @@ function ProfileDrawer({
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH<span>${amountUSD}</span>
+                          {price} ETH
+                          <span>
+                            ${amountUSD} + Platform Fee ${platformFee}
+                          </span>
                           {/* {console.log("USDAmount", amountUSD)} */}
                           {/* {price} ETH<span>$234</span>   */}
                         </p>

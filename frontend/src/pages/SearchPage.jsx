@@ -135,24 +135,30 @@ const SearchPage = ({ search, setSearch }) => {
       } else if (title.includes(searchTexts.toLowerCase())) {
         console.log("nftListFP", nftListFP[i]);
         console.log("price", Number(nftListFP[i].price));
+        nfts.push(nftListFP[i]);
+
+        /////////////////////////
+        /////////////////////////
+        /////////////////////////  Uncomment the below comments to add the logics
+        /////////////////////////
 
         // listing block
-        if (selectedListingType == 100) {
-          // true
-          listingCheck = true;
-        } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
-          listingCheck = true;
-        } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
-          listingCheck = true;
-        }
+        // if (selectedListingType == 100) {
+        //   // true
+        //   listingCheck = true;
+        // } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
+        //   listingCheck = true;
+        // } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
+        //   listingCheck = true;
+        // }
 
-        if (priceInUSD >= minRange && priceInUSD <= maxRange) {
-          priceCheck = true;
-        }
+        // if (priceInUSD >= minRange && priceInUSD <= maxRange) {
+        //   priceCheck = true;
+        // }
 
-        if (priceCheck && listingCheck) {
-          nfts.push(nftListFP[i]);
-        }
+        // if (priceCheck && listingCheck) {
+        //   nfts.push(nftListFP[i]);
+        // }
       }
 
       // price block
@@ -179,7 +185,7 @@ const SearchPage = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    let activeMethod;
+    let listingType;
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     let myNFTs = [];
@@ -206,7 +212,7 @@ const SearchPage = ({ search, setSearch }) => {
           data = JSON.parse(data);
           // Extracting values using dot notation
           const price = data.price;
-          activeMethod = data.activeMethod;
+          listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -225,7 +231,7 @@ const SearchPage = ({ search, setSearch }) => {
             description: description,
             collection: collection,
             paymentMethod: paymentMethod,
-            listingType: activeMethod,
+            listingType: listingType,
           };
 
           // console.log(nftData);
@@ -233,7 +239,7 @@ const SearchPage = ({ search, setSearch }) => {
           setNftListFP(myNFTs);
           // console.log("myNFTs in function", myNFTs);
 
-          // if (activeMethod === 0) {
+          // if (listingType === 0) {
           //   const nftData = {
           //     id: id, //
           //     title: title,
@@ -250,7 +256,7 @@ const SearchPage = ({ search, setSearch }) => {
           //   setNftListFP(myNFTs);
           //   console.log("myNFTs in function", myNFTs);
           // } else
-          // if (activeMethod === 1) {
+          // if (listingType === 1) {
           //   const nftAuctionData = {
           //     id: id, //
           //     title: title,

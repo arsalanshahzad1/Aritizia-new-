@@ -25,7 +25,7 @@
 //     label: "Select Collection",
 //   });
 
-//   const [activeMethod, setActiveMethod] = useState("fixedPrice");
+//   const [listingType, setListingType] = useState("fixedPrice");
 
 //   const cryptoOptions = [
 //     { value: "eth", label: "ETH" },
@@ -79,10 +79,10 @@
 //                       <div className="col-lg-3 col-md-4 col-6">
 //                         <div
 //                           onClick={() => {
-//                             setActiveMethod("fixedPrice");
+//                             setListingType("fixedPrice");
 //                           }}
 //                           className={` create-single-card ${
-//                             activeMethod === "fixedPrice" ? "active" : ""
+//                             listingType === "fixedPrice" ? "active" : ""
 //                           }`}
 //                         >
 //                           <AiFillTag />
@@ -92,10 +92,10 @@
 //                       <div className="col-lg-3 col-md-4 col-6">
 //                         <div
 //                           onClick={() => {
-//                             setActiveMethod("timedAuction");
+//                             setListingType("timedAuction");
 //                           }}
 //                           className={` create-single-card ${
-//                             activeMethod === "timedAuction" ? "active" : ""
+//                             listingType === "timedAuction" ? "active" : ""
 //                           }`}
 //                         >
 //                           <BsFillClockFill />

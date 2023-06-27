@@ -39,8 +39,6 @@ const LandingPage = ({ search, setSearch }) => {
 
   // Helper function to fetch a Provider/Signer instance from Metamask
   const getProviderOrSigner = async (needSigner = false) => {
-    // Connect to Metamask
-    // Since we store `web3Modal` as a reference, we need to access the `current` value to get access to the underlying object
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
 
@@ -73,7 +71,7 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
-    let activeMethod;
+    let listingType;
 
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
@@ -107,17 +105,17 @@ const LandingPage = ({ search, setSearch }) => {
           // console.log("Dataa", data);
           // Extracting values using dot notation
           const price = data.price;
-          activeMethod = data.activeMethod;
+          listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
-          // console.log("activeMethod", activeMethod);
+          // console.log("listingType", listingType);
           // console.log("CHECK2");
 
-          if (activeMethod === 0) {
+          if (listingType === 0) {
             const nftData = {
               id: id, //
               title: title,
@@ -134,7 +132,7 @@ const LandingPage = ({ search, setSearch }) => {
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
             // console.log("myNFTs in function", myNFTs);
-          } else if (activeMethod === 1) {
+          } else if (listingType === 1) {
             // console.log("IN ELSE");
             const nftData = {
               id: id, //
@@ -147,7 +145,7 @@ const LandingPage = ({ search, setSearch }) => {
               endTime: auctionData.endTime.toString(),
               highestBid: auctionData.highestBid.toString(),
               highestBidder: auctionData.highestBidder.toString(),
-              isLive: auctionData.isLive.toString(),
+              // isLive: auctionData.isLive.toString(),
               seller: auctionData.seller.toString(),
             };
 
@@ -171,6 +169,30 @@ const LandingPage = ({ search, setSearch }) => {
     });
     setUserAddress(accounts[0]);
     // console.log("getAddress", accounts[0]);
+  };
+
+  const swapUSDTForETH = async () => {
+    const signer = await getProviderOrSigner(true);
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+
+    await marketplaceContract.swapUSDTForETH(20);
+  };
+
+  const swapETHForUSDT = async () => {
+    const signer = await getProviderOrSigner(true);
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+
+    await marketplaceContract.swapETHForUSDT(20);
   };
 
   useEffect(() => {
@@ -333,6 +355,10 @@ const LandingPage = ({ search, setSearch }) => {
             </div>
           </div>
         </section>
+        <div>
+          <button onClick={swapUSDTForETH}>swapUSDTForETH</button>
+          <button onClick={swapETHForUSDT}>swapETHForUSDT</button>
+        </div>
         <section className="home-six-sec"></section>
         <Search search={search} setSearch={setSearch} />
         <Footer />

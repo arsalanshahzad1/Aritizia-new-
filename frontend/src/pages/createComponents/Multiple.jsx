@@ -30,7 +30,7 @@ const Multiple = ({ search, setSearch }) => {
   // const [minimumBid, setMinimumBid] = useState("");
   // const [startingTime, setStartingTime] = useState("");
   // const [endTime, setEndTime] = useState("");
-  const [activeMethod, setActiveMethod] = useState(0);
+  const [listingType, setListingType] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
   // const [imageList, setImageList] = useState([]);
   // const [ipfsList, setIPFSList] = useState([]);
@@ -170,14 +170,14 @@ const Multiple = ({ search, setSearch }) => {
       let collection = item.collection;
       let title = item.title;
       let description = item.description;
-      // console.log("activeMethod", activeMethod);
-      if (activeMethod == 0) {
+      // console.log("listingType", listingType);
+      if (listingType == 0) {
         try {
           console.log("image", image);
 
           const dataInJSON = JSON.stringify({
             image,
-            activeMethod,
+            listingType,
             price,
             crypto,
             collection,
@@ -197,7 +197,7 @@ const Multiple = ({ search, setSearch }) => {
         try {
           const dataInJSON = JSON.stringify({
             image,
-            activeMethod,
+            listingType,
             price,
             startingDate,
             endingDate,
@@ -268,12 +268,12 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("startTimestamp in if", startingDate);
     // console.log("endTimestamp in if", startingDate);
 
-    // if (activeMethod == 0) {
+    // if (listingType == 0) {
     //   console.log("startTimestamp in if", startingDate);
     //   console.log("endTimestamp in if", startingDate);
     //   setStartingDate(0);
     //   setEndingDate(0);
-    // } else if (activeMethod == 1) {
+    // } else if (listingType == 1) {
     //   const startDate = new Date(startingDate);
     //   const endDate = new Date(endingDate);
 
@@ -290,7 +290,7 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("mintedTokens", mintedTokens);
     // console.log("item.price", item.price);
     // console.log("royalty", royalty);
-    // console.log("activeMethod", activeMethod);
+    // console.log("listingType", listingType);
     // console.log("item.crypto", crypto);
 
     // UNCOMMENT this
@@ -301,7 +301,7 @@ const Multiple = ({ search, setSearch }) => {
         multi ? mintedTokens : [mintedTokens],
         ethers.utils.parseEther(item.price),
         royalty,
-        activeMethod,
+        listingType,
         startTime,
         endTime,
         crypto
@@ -354,14 +354,14 @@ const Multiple = ({ search, setSearch }) => {
     console.log("startTimestamp in if", startingDate);
     console.log("endTimestamp in if", endingDate);
 
-    if (activeMethod == 0) {
+    if (listingType == 0) {
       console.log("startTimestamp in if", startingDate);
       console.log("endTimestamp in if", endingDate);
       setStartingDate(0);
       setEndingDate(0);
       startTime = 0;
       endTime = 0;
-    } else if (activeMethod == 1) {
+    } else if (listingType == 1) {
       const startDate = new Date(startingDate);
       const endDate = new Date(endingDate);
 
@@ -520,10 +520,10 @@ const Multiple = ({ search, setSearch }) => {
                       <div className="col-lg-3 col-md-4 col-6">
                         <div
                           onClick={() => {
-                            setActiveMethod(0);
+                            setListingType(0);
                           }}
                           className={` create-single-card ${
-                            activeMethod === 0 ? "active" : ""
+                            listingType === 0 ? "active" : ""
                           }`}
                         >
                           <AiFillTag />
@@ -533,10 +533,10 @@ const Multiple = ({ search, setSearch }) => {
                       <div className="col-lg-3 col-md-4 col-6">
                         <div
                           onClick={() => {
-                            setActiveMethod(1);
+                            setListingType(1);
                           }}
                           className={` create-single-card ${
-                            activeMethod === 1 ? "active" : ""
+                            listingType === 1 ? "active" : ""
                           }`}
                         >
                           <BsFillClockFill />

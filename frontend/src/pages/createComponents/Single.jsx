@@ -28,7 +28,7 @@ const Single = ({ search, setSearch }) => {
   // const [title, setTitle] = useState("");
   // const [description, setDescription] = useState("");
   // const [minimumBid, setMinimumBid] = useState("");
-  const [activeMethod, setActiveMethod] = useState(0);
+  const [listingType, setListingType] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [startingDate, setStartingDate] = useState("");
@@ -109,7 +109,7 @@ const Single = ({ search, setSearch }) => {
 
   // Upload image and data to IPFS
   const createNFT = async () => {
-    if (activeMethod == 0) {
+    if (listingType == 0) {
       let price = item.price;
       let crypto = item.crypto;
       let collection = item.collection;
@@ -119,7 +119,7 @@ const Single = ({ search, setSearch }) => {
       try {
         const dataInJSON = JSON.stringify({
           image,
-          activeMethod,
+          listingType,
           price,
           crypto,
           collection,
@@ -146,7 +146,7 @@ const Single = ({ search, setSearch }) => {
       try {
         const dataInJSON = JSON.stringify({
           image,
-          activeMethod,
+          listingType,
           price,
           // crypto, uncommment this after fixing frontend
           startTime,
@@ -202,7 +202,7 @@ const Single = ({ search, setSearch }) => {
         [mintedTokens],
         ethers.utils.parseEther(item.price),
         royalty,
-        activeMethod,
+        listingType,
         startTime,
         endTime,
         crypto
@@ -260,14 +260,14 @@ const Single = ({ search, setSearch }) => {
     console.log("startTimestamp in if", startingDate);
     console.log("endTimestamp in if", endingDate);
 
-    if (activeMethod == 0) {
+    if (listingType == 0) {
       console.log("startTimestamp in if", startingDate);
       console.log("endTimestamp in if", endingDate);
       setStartingDate(0);
       setEndingDate(0);
       startTime = 0;
       endTime = 0;
-    } else if (activeMethod == 1) {
+    } else if (listingType == 1) {
       const startDate = new Date(startingDate);
       const endDate = new Date(endingDate);
 
@@ -425,10 +425,10 @@ const Single = ({ search, setSearch }) => {
                         <div className="col-lg-3 col-md-4 col-6">
                           <div
                             onClick={() => {
-                              setActiveMethod(0);
+                              setListingType(0);
                             }}
                             className={` create-single-card ${
-                              activeMethod === 0 ? "active" : ""
+                              listingType === 0 ? "active" : ""
                             }`}
                           >
                             <AiFillTag />
@@ -438,10 +438,10 @@ const Single = ({ search, setSearch }) => {
                         <div className="col-lg-3 col-md-4 col-6">
                           <div
                             onClick={() => {
-                              setActiveMethod(1);
+                              setListingType(1);
                             }}
                             className={` create-single-card ${
-                              activeMethod === 1 ? "active" : ""
+                              listingType === 1 ? "active" : ""
                             }`}
                           >
                             <BsFillClockFill />
@@ -450,7 +450,7 @@ const Single = ({ search, setSearch }) => {
                         </div>
                       </div>
                     </div>
-                    {activeMethod === 0 ? (
+                    {listingType === 0 ? (
                       <div className="line-two">
                         <div className="row">
                           <div className="col-lg-9 col-md-9 col-7">

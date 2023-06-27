@@ -464,7 +464,9 @@ const PlaceABidDrawer = ({
     // console.log("paymentmethod", paymentMethod);
     // console.log("amount", amount);
 
-    const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, {
+    const tx = await marketplaceContract.bidInUSDT(
+      id, 
+      1000, 1, {
       gasLimit: ethers.BigNumber.from("500000"),
     });
 
