@@ -431,6 +431,10 @@ img {
   padding-bottom: 60px;
 }
 
+.css-118gt74:hover .J-bottom-1 {
+  margin-top: 0px !important;
+}
+
 .css-118gt74:hover .social-links ul li:last-child {
   padding-bottom: 85px;
   transition: .5s ease-in-out;
@@ -668,13 +672,13 @@ img {
 
 @media only screen and (min-width: 1399px) {
   .css-vurnku {
-    height: 340px !important;
+    height: 330px !important;
   }
 }
 
 @media only screen and (max-width: 1399px) {
   .css-vurnku {
-    height: 310px !important;
+    height: 330px !important;
   }
 }
 

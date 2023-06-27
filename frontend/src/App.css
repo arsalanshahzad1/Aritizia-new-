@@ -1173,6 +1173,8 @@ footer h1 {
   border: 2px solid #9D9D9D;
   color: #9D9D9D;
   padding: 5px 32px;
+  background-color: transparent;
+
 }
 
 .profile-first-section .profile-tabs button:hover {
@@ -1181,7 +1183,7 @@ footer h1 {
 }
 
 .profile-first-section .profile-tabs button.active {
-  border: 2/px solid var(--primary);
+  border: 2px solid var(--primary);
   color: var(--primary);
 }
 
@@ -3965,6 +3967,7 @@ footer h1 {
   font-size: 18px;
   font-weight: 500;
 }
+
 .Btns-edit-nft-sidebar button:nth-child(2) {
   background-color: #B600D1;
   color: white;
@@ -3973,4 +3976,48 @@ footer h1 {
   border: none;
   font-size: 18px;
   font-weight: 500;
+}
+
+
+
+.Collection-tabs {
+  display: flex;
+  justify-content: center;
+  border-bottom: #E7E7E7 1px solid;
+  width: 100%;
+  margin: 0% auto 4% auto;
+}
+
+.Collection-tabs div {
+  margin-inline: 25px;
+  font-size: 22px;
+  font-weight: 600;
+  color: #9D9D9D;
+  cursor: pointer;
+  width: 130px;
+  text-align: center;
+}
+
+.Collection-tabs .active-tab {
+  color: #B600D1 !important;
+  border-bottom: #B600D1 2px solid !important;
+}
+
+.nft-drawer-dp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nft-drawer-dp h2 {
+  text-align: center;
+}
+
+.nft-drawer-dp .img-holder {
+  width: 60%;
+  margin: 5% auto;
+}
+
+.nft-drawer-dp .img-holder img {
+  width: 100%;
 }
