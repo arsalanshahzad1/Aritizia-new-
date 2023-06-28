@@ -171,6 +171,9 @@ const LandingPage = ({ search, setSearch }) => {
     // console.log("getAddress", accounts[0]);
   };
 
+
+
+
   const swapUSDTForETH = async () => {
     const signer = await getProviderOrSigner(true);
 
@@ -182,6 +185,11 @@ const LandingPage = ({ search, setSearch }) => {
 
     await marketplaceContract.swapUSDTForETH(20);
   };
+
+
+
+
+  
 
   const swapETHForUSDT = async () => {
     const signer = await getProviderOrSigner(true);
