@@ -250,7 +250,6 @@ const CollectionProfile = ({ search, setSearch }) => {
                                 <div className="col-lg-4 col-md-4 col-12 followers-div">
                                     <div>Following</div>
                                     <div>Followers 50k+</div>
-
                                 </div>
                                 <div className="col-lg-4 col-md-4 col-6">
                                     <h2 className="user-name">The land of the Dead by DR</h2>
@@ -261,19 +260,15 @@ const CollectionProfile = ({ search, setSearch }) => {
                                     />
                                 </div>
                             </div>
-
                             <div className="row neg-margin">
                                 <div className="col-lg-3 col-md-3 col-12">
-
                                     <p className="user-email user-email2">@monicaaa</p>
                                     <div className="copy-url copy-url2">
                                         <span>{userAddress}</span>
                                         <button>Copy</button>
                                     </div>
-
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-12">
-
                                 </div>
                                 <div className="col-lg-3 col-md-3 col-12">
                                     <div className="message-btn">
@@ -307,7 +302,6 @@ const CollectionProfile = ({ search, setSearch }) => {
                                             <div className="Collection-tabs">
                                                 <div onClick={() => setCollectionTabs(0)} className={`${collectionTabs === 0 && 'active-tab'}`}>On Sale</div>
                                                 <div onClick={() => setCollectionTabs(1)} className={`${collectionTabs === 1 && 'active-tab'}`}>Auction</div>
-
                                             </div>
                                             {collectionTabs === 0 &&
                                                 (
@@ -523,15 +517,11 @@ const CollectionProfile = ({ search, setSearch }) => {
                                                 )
                                             }
                                         </div>
-
                                     </>
                                 )}
                                 {tabs === 1 && (
                                     <>
-
                                         <div className="row">
-
-
                                             <CollectionCard image={liked1} />
                                             <CollectionCard image={liked2} />
                                             <CollectionCard image={liked3} />
@@ -540,8 +530,6 @@ const CollectionProfile = ({ search, setSearch }) => {
                                             <CollectionCard image={liked2} />
                                             <CollectionCard image={liked3} />
                                             <CollectionCard image={liked4} />
-
-
                                         </div>
                                     </>
                                 )}
