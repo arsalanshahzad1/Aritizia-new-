@@ -315,9 +315,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -329,9 +329,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -343,9 +343,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -357,9 +357,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -371,9 +371,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -385,9 +385,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -399,9 +399,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -413,9 +413,9 @@ const Profile = ({ search, setSearch }) => {
                               onOpen={onOpen}
                               // onClose={onClose}
                               key={"3"}
-                              id={"3"}
-                              title={"abcefg"}
-                              image={nft}
+                              id={"#9840"}
+                              title={"TUD NFT"}
+                              image={nftimage2}
                               price={"1010"}
                               crypto={"ETH"}
                               royalty={"10%"}
@@ -548,7 +548,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -562,7 +562,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -576,7 +576,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -590,7 +590,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -604,7 +604,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -618,7 +618,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -632,7 +632,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -646,7 +646,7 @@ const Profile = ({ search, setSearch }) => {
                         key={"3"}
                         id={"3"}
                         title={"TUD NFT"}
-                        image={nft}
+                        image={nftimage2}
                         price={"1010"}
                         crypto={"ETH"}
                         royalty={"10%"}
@@ -654,17 +654,7 @@ const Profile = ({ search, setSearch }) => {
                         collection={"abc def ghi"}
                         userAddress
                       />
-                      {/* <NewItemCard
-                        key={"2"}
-                        id={"2"}
-                        title={"ok"}
-                        image={nft}
-                        price={"320"}
-                        highestBid={"qqw"}
-                        isLive={true}
-                        endTime={"zzz"}
-                        userAddress
-                      /> */}
+
                     </div>
                   </>
                 )}
@@ -682,18 +672,15 @@ const Profile = ({ search, setSearch }) => {
                         endTime={"46d 18h 40m 10s"}
                         userAddress
                       />
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                        collection={"abc def ghi"}
+                      <NewItemCard
+                        key={"2"}
+                        id={"2"}
+                        title={"Pinky Ocean"}
+                        image={bird}
+                        price={"320"}
+                        highestBid={"qqw"}
+                        isLive={true}
+                        endTime={"46d 18h 40m 10s"}
                         userAddress
                       />
                       <NewItemCard
@@ -707,20 +694,6 @@ const Profile = ({ search, setSearch }) => {
                         endTime={"46d 18h 40m 10s"}
                         userAddress
                       />
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                        collection={"abc def ghi"}
-                        userAddress
-                      />
                       <NewItemCard
                         key={"2"}
                         id={"2"}
@@ -730,45 +703,6 @@ const Profile = ({ search, setSearch }) => {
                         highestBid={"qqw"}
                         isLive={true}
                         endTime={"46d 18h 40m 10s"}
-                        userAddress
-                      />
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                        collection={"abc def ghi"}
-                        userAddress
-                      />
-                      <NewItemCard
-                        key={"2"}
-                        id={"2"}
-                        title={"Pinky Ocean"}
-                        image={bird}
-                        price={"320"}
-                        highestBid={"qqw"}
-                        isLive={true}
-                        endTime={"46d 18h 40m 10s"}
-                        userAddress
-                      />
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                        collection={"abc def ghi"}
                         userAddress
                       />
                     </div>
@@ -790,22 +724,17 @@ const Profile = ({ search, setSearch }) => {
                             <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
+                            <Follow followed={true} />
+                            <Follow followed={true} />
                           </>
-
                         ) : (
                           <>
-
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
-                            <Follow />
+                            <Follow followed={false} />
+                            <Follow followed={false} />
+                            <Follow followed={false} />
+                            <Follow followed={false} />
+                            <Follow followed={false} />
+                            <Follow followed={false} />
                           </>
                         )}
                       </div>

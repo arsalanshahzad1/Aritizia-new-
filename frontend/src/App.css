@@ -370,11 +370,11 @@ header .left button.black-color {
   letter-spacing: 0em;
   text-align: left;
   color: var(--white);
-  margin: 0px 20px 0px 36px;
+  margin: 0px 20px;
   position: relative;
 }
 
-.header-connect-wallet.white-color::before {
+.header-message.white-color::before {
   content: '';
   height: 55%;
   width: 2px;
@@ -385,7 +385,15 @@ header .left button.black-color {
   transform: translateY(-50%);
 }
 
-.header-connect-wallet.black-color::before {
+.icon-for-header {
+  margin-inline: 10px;
+}
+
+.icon-for-header:nth-last-child(0) {
+  margin: 0;
+}
+
+.header-message.black-color::before {
   content: '';
   height: 55%;
   width: 2px;
@@ -396,6 +404,10 @@ header .left button.black-color {
   transform: translateY(-50%);
 }
 
+.black-svgs svg path,
+.black-svgs svg rect {
+  fill: #000;
+}
 
 header .left .black-color {
   color: var(--black);
@@ -780,8 +792,16 @@ header .left img {
 }
 
 .sec-five-wrap {
-  padding-bottom: 35px;
-  padding: 20px 0px 35px 20px;
+  border-radius: 10px;
+  margin: 10% 1%;
+  transition: all 0.3s ease-in-out;
+  /* padding-bottom: 35px;
+  padding: 20px 0px 35px 20px; */
+}
+
+.sec-five-wrap:hover {
+  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.363);
+
 }
 
 .sec-five-wrap .image {
@@ -1100,6 +1120,19 @@ footer h1 {
   justify-content: center;
   align-items: center;
   padding-top: 10px;
+}
+
+.copy-url2 {
+  padding-top: 0 !important;
+}
+
+.user-email2 {
+  text-align: left !important;
+}
+
+.neg-margin {
+  margin-top: -50px;
+  color: #ffffff;
 }
 
 .profile-first-section .copy-url span {
@@ -4142,4 +4175,88 @@ footer h1 {
 .Follow-row .right .options div:hover {
   background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
   color: white;
+}
+
+.followers-div {
+  display: flex;
+}
+
+.followers-div div:nth-child(1) {
+  color: #B600D1;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Jost';
+  padding: 4px 25px;
+  height: max-content;
+  border: #B600D1 2px solid;
+}
+
+.followers-div div:nth-child(2) {
+  color: #747474;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Jost';
+  padding: 4px 20px;
+  height: max-content;
+  border: 2px solid transparent;
+}
+
+.CollectionCard {
+  margin: 2% 1%;
+  width: 260px;
+  height: auto;
+  border-radius: 10px;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.CollectionCard:hover {
+  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.274);
+}
+
+.CollectionCard .image-div {
+  width: 100%;
+  border-radius: 10px;
+  margin: 0;
+}
+
+.CollectionCard .image-div img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.CollectionCard .bottom {
+  padding: 15px;
+}
+
+.CollectionCard .bottom .title {
+  font-family: 'Jost';
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.CollectionCard .bottom .title span {
+  margin-left: 10px;
+}
+
+.CollectionCard .bottom .details {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.CollectionCard .bottom .details div p:nth-child(1) {
+  color: #4A4949;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.CollectionCard .bottom .details div p:nth-child(2) {
+  color: #000000;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 18px;
 }

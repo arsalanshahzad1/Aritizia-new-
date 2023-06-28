@@ -359,7 +359,6 @@ a {
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 100%;
 }
 
 .css-15xcape {
@@ -409,7 +408,8 @@ img {
 
 .css-118gt74:hover {
   /* transform: translateY(-4px); */
-  box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
+  /* box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px; */
+  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.26) !important;
   height: 104%;
 }
 
@@ -743,3 +743,148 @@ img {
 @media only screen and (max-width: 768px) {}
 
 @media only screen and (max-width: 568px) {}
+
+
+
+/* New Cards */
+
+.simple-card-main {
+  margin: 10% 1%;
+  padding-bottom: 15px;
+  background-color: white;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.simple-card-main:hover {
+  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.438);
+}
+.nft-fix-price{
+  border: 2px solid white;
+  padding: 3px 10px !important;
+}
+
+.simple-card-main .top {
+  border-radius: 10px;
+  position: relative;
+}
+
+.simple-card-main .top .share-icon {
+  top: 10px;
+  left: 10px;
+  position: absolute;
+  z-index: 6;
+}
+
+.simple-card-main .top .social-media {
+  top: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #B600D180;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.simple-card-main .top .social-media p {
+  color: #FFFFFFB2;
+  transition: all 0.2s ease-in-out;
+  font-family: 'Jost';
+  font-size: 18px;
+  font-weight: 500;
+  margin: 7px auto !important;
+}
+
+.simple-card-main .top .social-media p:hover {
+  color: white;
+}
+
+
+.simple-card-main .top .image-holder {
+  border-radius: 10px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.simple-card-main .top .image-holder img {
+  width: 100%;
+  height: auto;
+}
+
+.simple-card-main .bottom .nft-icon {
+  width: 60px;
+  margin: -30px auto -10px auto;
+  border-radius: 35px;
+  border: 5px solid white;
+  position: relative;
+  z-index: 2;
+}
+
+.simple-card-main .bottom .nft-icon img {
+  width: 100%;
+}
+
+.simple-card-main .bottom .nft-icon .checked-icon {
+  position: absolute;
+  z-index: 3;
+  top: -10px;
+  right: -2px;
+  width: 20px;
+}
+
+.simple-card-main .bottom .text-area {
+  margin: 0px auto;
+  padding: 0 15px;
+}
+
+.simple-card-main .bottom .text-area .line-1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.simple-card-main .bottom .text-area .line-1:nth-child(1) div:nth-child(1) {
+  color: #2636D9;
+  font-size: 18px;
+  font-weight: 500;
+  font-family: 'Jost';
+}
+
+.simple-card-main .bottom .text-area .line-1:nth-child(1) div:nth-child(2) {
+  color: #4A4949;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Jost';
+}
+
+.simple-card-main .bottom .text-area .line-1:nth-child(2) div:nth-child(1) {
+  color: #4A4949;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Jost';
+}
+
+.simple-card-main .bottom .text-area .line-1:nth-child(2) div:nth-child(2) {
+  color: #2636D9;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'Jost';
+  margin-right: 10px;
+
+}
+
+.simple-card-main .bottom .text-area .line-1:nth-child(2) div:nth-child(2) svg {
+  margin-right: 5px;
+
+}
+
+.simple-card-main .bottom .text-area .line-1:nth-child(2) {
+  margin-top: 5px;
+
+}
