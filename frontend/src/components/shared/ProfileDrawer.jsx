@@ -33,6 +33,7 @@ import {
   Label,
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
+import { Link } from "react-router-dom";
 const Monthly_data = [
   {
     data: "Jan",
@@ -568,7 +569,9 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by <span>Enotic11daday</span>
+                    
+                      Owned by <span>Enotic11daday</span>
+                    
                   </p>
                 </div>
                 <div className="three-line">
