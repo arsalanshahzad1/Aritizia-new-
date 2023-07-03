@@ -19,6 +19,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
 import Duck from "../../../public/assets/images/duck.png";
+import NftCard from "./NftCard";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -334,7 +335,7 @@ const Multiple = ({ search, setSearch }) => {
   //   }
   // };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     price,
     title,
     description,
@@ -499,8 +500,63 @@ const Multiple = ({ search, setSearch }) => {
     const imageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
     );
-    setSelectedImagesNFT(imageUrls);
+    setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);
+    console.log("image urls", imageUrls)
+    console.log(selectedImagesNFT[0], "Selected images nft")
   };
+
+  const handleRemoveImage = (index) => {
+    const newArray = [...selectedImagesNFT];
+    newArray.splice(index, 1);
+    setSelectedImagesNFT(newArray);
+  };
+  const handleRemoveCompletedNft = (index) => {
+    const newArray = [...completedNFTs];
+    newArray.splice(index, 1);
+    setcompletedNFTs(newArray);
+  };
+
+  const [completedNFTs, setcompletedNFTs] = useState([
+
+  ])
+
+  const [currentNFT, setCurrentNFT] = useState(completedNFTs.length)
+  const [nftForm, setnftForm] = useState({
+    "price": 0,
+    "title": "",
+    "desc": ""
+  })
+  const handleNftForm = (e) => {
+    setnftForm({ ...nftForm, [e.target.name]: e.target.value });
+  }
+  const [NFTData, setNFTData] = useState([])
+  const saveNFT = () => {
+    const Data = {
+      "price": nftForm.price,
+      "title": nftForm.title,
+      "desc": nftForm.desc,
+      "image": selectedImagesNFT[currentNFT]
+    }
+    console.log("current NFT ", Data)
+    // setNFTData([...NFTData, [Data]])
+    console.log("current NFT completed", NFTData)
+    updateCompleted(Data)
+
+  }
+  const updateCompleted = (Data) => {
+    setcompletedNFTs([...completedNFTs, Data])
+    setnftForm({
+      "price": 0,
+      "title": "",
+      "desc": ""
+    })
+    const newArray = [...selectedImagesNFT];
+    newArray.splice(currentNFT, 1);
+    setSelectedImagesNFT(newArray);
+    // setCurrentNFT(currentNFT + 1)
+    console.log(completedNFTs, "completed NFTS")
+  }
+  const [tabIndex, setTabIndex] = useState(0)
 
   return (
     <>
@@ -522,9 +578,8 @@ const Multiple = ({ search, setSearch }) => {
                           onClick={() => {
                             setActiveMethod(0);
                           }}
-                          className={` create-single-card ${
-                            activeMethod === 0 ? "active" : ""
-                          }`}
+                          className={` create-single-card ${activeMethod === 0 ? "active" : ""
+                            }`}
                         >
                           <AiFillTag />
                           <h3>Fixed Price</h3>
@@ -535,9 +590,8 @@ const Multiple = ({ search, setSearch }) => {
                           onClick={() => {
                             setActiveMethod(1);
                           }}
-                          className={` create-single-card ${
-                            activeMethod === 1 ? "active" : ""
-                          }`}
+                          className={` create-single-card ${activeMethod === 1 ? "active" : ""
+                            }`}
                         >
                           <BsFillClockFill />
                           <h3>Timed Auction</h3>
@@ -632,8 +686,11 @@ const Multiple = ({ search, setSearch }) => {
                                 value={royalty}
                               />
                             </div>
-                            <div className="col-lg-3 royality-value">
-                              {royalty} %
+                            <div className="col-lg-3 ">
+                              <div className="royality-value">
+
+                                {royalty} %
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -642,7 +699,7 @@ const Multiple = ({ search, setSearch }) => {
                         <div>
                           <div>
                             <h2>Upload NFT</h2>
-                            {selectedImagesNFT.length < 1 ? (
+                            {selectedImagesNFT.length < 1 && completedNFTs.length < 1 ? (
                               <div className="Create-Collection-div">
                                 <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
                                 <br />
@@ -663,19 +720,51 @@ const Multiple = ({ search, setSearch }) => {
                             ) : (
                               <div className="NFT-thumbnail-holder">
                                 <div className="NFT-inner">
-                                  {selectedImagesNFT.map((image) => (
-                                    <div>
-                                      <img src={image} alt="" />
-                                    </div>
+
+                                  {completedNFTs.map((nft, index) => (
+                                    <>
+                                      {console.log("I GOT IT", nft)}
+                                      <NftCard isCompleted="true" isClicked="false" index={index} img={nft.image} handleRemoveImage={handleRemoveCompletedNft} />
+                                    </>
+                                  ))}
+                                  {selectedImagesNFT.map((image, index) => (
+                                    <>
+                                      {console.log("index is", index)}
+                                      <NftCard isCompleted={`${currentNFT > index ? true : false}`} isClicked={`${currentNFT === index ? true : false}`} index={index} img={image} handleRemoveImage={handleRemoveImage} />
+                                    </>
                                   ))}
                                 </div>
                                 <div className="control-main-div">
+                                  <input
+                                    ref={fileInputRef2}
+                                    type="file"
+                                    style={{ display: "none" }}
+                                    multiple
+                                    onChange={handleFileUpload}
+                                  />
                                   <button
                                     onClick={handleButtonClick2}
                                     className="button-styling "
                                   >
                                     Add More
                                   </button>
+                                  {(Number(completedNFTs.length) + Number(selectedImagesNFT.length)) >= Number(10) &&
+
+                                    <div className="controlsDiv">
+                                      <svg onClick={() => setTabIndex(0)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="7" cy="7" r="7" fill={`${tabIndex === 0 ? '#B601D1' : '#D9D9D9'}`} />
+                                      </svg>
+                                      <svg onClick={() => setTabIndex(1)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="7" cy="7" r="7" fill={`${tabIndex === 1 ? '#B601D1' : '#D9D9D9'}`} />
+                                      </svg>
+                                      <svg onClick={() => setTabIndex(2)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="7" cy="7" r="7" fill={`${tabIndex === 2 ? '#B601D1' : '#D9D9D9'}`} />
+                                      </svg>
+                                      <svg onClick={() => setTabIndex(3)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="7" cy="7" r="7" fill={`${tabIndex === 3 ? '#B601D1' : '#D9D9D9'}`} />
+                                      </svg>
+                                    </div>
+                                  }
                                 </div>
                               </div>
                             )}
@@ -684,19 +773,21 @@ const Multiple = ({ search, setSearch }) => {
                         <br />
                         <br />
 
-                        {ShowMore && (
+                        {ShowMore && selectedImagesNFT.length > 0 && (
                           <div>
+
                             <div className="line-two">
                               <div className="row">
                                 <div className="col-lg-9 col-md-9 col-7">
                                   <h2>Price</h2>
                                   <input
                                     type="text"
-                                    value={inputValue}
-                                    onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
+                                    value={nftForm.price}
+                                    onChange={handleNftForm}
+                                    name="price"
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -714,8 +805,10 @@ const Multiple = ({ search, setSearch }) => {
                                     type="text"
                                     placeholder="e.g. ‘Crypto Funk"
                                     // defaultValue={title.current.value}
-                                    ref={title}
-                                    // onChange={(e) => setTitle(e.target.value)}
+                                    value={nftForm.title}
+                                    onChange={handleNftForm}
+                                    name="title"
+                                  // onChange={(e) => setTitle(e.target.value)}
                                   />
                                 </div>
                               </div>
@@ -727,7 +820,9 @@ const Multiple = ({ search, setSearch }) => {
                                   <input
                                     type="text"
                                     placeholder="e.g. ‘This is very limited item’"
-                                    ref={description}
+                                    value={nftForm.desc}
+                                    onChange={handleNftForm}
+                                    name="desc"
                                   />
                                 </div>
                               </div>
@@ -751,13 +846,15 @@ const Multiple = ({ search, setSearch }) => {
                             >
                               Done
                             </button>
-                            <button className="button-styling-outline">
+                            {/* <button className="button-styling-outline">
                               <div>Add More</div>
-                            </button>
+                            </button> */}
                           </div>
                         ) : (
                           <div className="Button-holding-div">
-                            <button className="button-styling">Save</button>
+                            {selectedImagesNFT.length > 0 &&
+                              <button onClick={saveNFT} className="button-styling">Save</button>
+                            }
                             <button className="button-styling-outline">
                               <div>Done</div>
                             </button>
