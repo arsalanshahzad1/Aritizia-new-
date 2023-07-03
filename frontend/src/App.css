@@ -387,6 +387,7 @@ header .left button.black-color {
 
 .icon-for-header {
   margin-inline: 10px;
+  cursor: pointer;
 }
 
 .icon-for-header:nth-last-child(0) {
@@ -4259,4 +4260,69 @@ footer h1 {
   font-weight: 600;
   font-size: 16px;
   line-height: 18px;
+}
+
+.notification-card {
+  position: absolute;
+  border-radius: 20px;
+  top: 50px;
+  left: 25%;
+  z-index: 999999;
+  background-color: white;
+  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.541);
+}
+
+.notification-card .Notification-in-header:nth-child(1) {
+  border-radius: 20px 20px 0 0;
+}
+
+.notification-card .Notification-in-header:nth-last-child(1) {
+  border-radius: 0 0 20px 20px;
+}
+
+.Notification-in-header {
+  padding: 10px 15px;
+  display: flex;
+  font-family: 'Jost';
+  color: #121212;
+}
+
+.Notification-in-header:hover {
+  background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+  color: white !important;
+  cursor: pointer;
+}
+
+.Notification-in-header .image-holder {
+  width: 40px;
+  align-items: center;
+  display: flex;
+}
+
+.Notification-in-header .image-holder img {
+  width: 100%;
+}
+
+.Notification-in-header .text-area {
+  margin-left: 10px;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Notification-in-header .text-area .name-txt span {
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.Notification-in-header .text-area .name-txt {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.Notification-in-header .text-area .msg-txt {
+  font-size: 16px;
+  font-weight: 500;
 }
