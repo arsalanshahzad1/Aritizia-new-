@@ -17,6 +17,7 @@ import { GlobalProvider } from "./Context/GlobalContext";
 import DashboardMain from "./Dashboard/DashboardScreens/DashboardMain";
 import OtherProfile from "./pages/OtherProfile";
 import CollectionProfile from "./pages/CollectionProfile";
+import ChatPage from "./Chat/ChatPage";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -98,6 +99,10 @@ function App() {
           <Route
             path="/dashboard/*"
             element={<DashboardMain search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/chat"
+            element={<ChatPage search={search} setSearch={setSearch} />}
           />
         </Routes>
       </GlobalProvider>
