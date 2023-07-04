@@ -112,7 +112,7 @@ const Profile = ({ search, setSearch }) => {
 
     console.log("MYADDRESS", address);
 
-    let activeMethod;
+    let listingType;
 
     let mintedTokens = await marketplaceContract.getListedNfts();
 
@@ -146,7 +146,7 @@ const Profile = ({ search, setSearch }) => {
           data = JSON.parse(data);
           // Extracting values using dot notation
           const price = data.price;
-          activeMethod = data.activeMethod;
+          listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -154,7 +154,7 @@ const Profile = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
 
-          if (activeMethod === 0) {
+          if (listingType === 0) {
             const nftData = {
               id: id, //
               title: title,
@@ -170,7 +170,7 @@ const Profile = ({ search, setSearch }) => {
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
             console.log("myNFTs in function", myNFTs);
-          } else if (activeMethod === 1) {
+          } else if (listingType === 1) {
             const nftData = {
               id: id, //
               title: title,

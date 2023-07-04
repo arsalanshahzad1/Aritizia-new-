@@ -308,7 +308,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
     // const [title, setTitle] = useState("");
     // const [description, setDescription] = useState("");
     // const [minimumBid, setMinimumBid] = useState("");
-    const [activeMethod, setActiveMethod] = useState(0);
+    const [listingType, setlistingType] = useState(0);
     const [walletConnected, setWalletConnected] = useState(false);
     const [loading, setLoading] = useState(false);
     const [startingDate, setStartingDate] = useState("");
@@ -389,7 +389,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
 
     // Upload image and data to IPFS
     const createNFT = async () => {
-        if (activeMethod == 0) {
+        if (listingType == 0) {
             let price = item.price;
             let crypto = item.crypto;
             let collection = item.collection;
@@ -399,7 +399,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
             try {
                 const dataInJSON = JSON.stringify({
                     image,
-                    activeMethod,
+                    listingType,
                     price,
                     crypto,
                     collection,
@@ -426,7 +426,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
             try {
                 const dataInJSON = JSON.stringify({
                     image,
-                    activeMethod,
+                    listingType,
                     price,
                     // crypto, uncommment this after fixing frontend
                     startTime,
@@ -482,7 +482,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                 [mintedTokens],
                 ethers.utils.parseEther(item.price),
                 royalty,
-                activeMethod,
+                listingType,
                 startTime,
                 endTime,
                 crypto
@@ -545,14 +545,14 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
         console.log("startTimestamp in if", startingDate);
         console.log("endTimestamp in if", endingDate);
 
-        if (activeMethod == 0) {
+        if (listingType == 0) {
             console.log("startTimestamp in if", startingDate);
             console.log("endTimestamp in if", endingDate);
             setStartingDate(0);
             setEndingDate(0);
             startTime = 0;
             endTime = 0;
-        } else if (activeMethod == 1) {
+        } else if (listingType == 1) {
             const startDate = new Date(startingDate);
             const endDate = new Date(endingDate);
 

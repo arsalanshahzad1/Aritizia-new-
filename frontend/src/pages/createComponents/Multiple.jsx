@@ -31,7 +31,7 @@ const Multiple = ({ search, setSearch }) => {
   // const [minimumBid, setMinimumBid] = useState("");
   // const [startingTime, setStartingTime] = useState("");
   // const [endTime, setEndTime] = useState("");
-  const [activeMethod, setActiveMethod] = useState(0);
+  const [listingType, setlistingType] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
   // const [imageList, setImageList] = useState([]);
   // const [ipfsList, setIPFSList] = useState([]);
@@ -172,14 +172,14 @@ const Multiple = ({ search, setSearch }) => {
       let collection = item.collection;
       let title = item.title;
       let description = item.description;
-      // console.log("activeMethod", activeMethod);
-      if (activeMethod == 0) {
+      // console.log("listingType", listingType);
+      if (listingType == 0) {
         try {
           console.log("image", image);
 
           const dataInJSON = JSON.stringify({
             image,
-            activeMethod,
+            listingType,
             price,
             crypto,
             collection,
@@ -199,7 +199,7 @@ const Multiple = ({ search, setSearch }) => {
         try {
           const dataInJSON = JSON.stringify({
             image,
-            activeMethod,
+            listingType,
             price,
             startingDate,
             endingDate,
@@ -270,12 +270,12 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("startTimestamp in if", startingDate);
     // console.log("endTimestamp in if", startingDate);
 
-    // if (activeMethod == 0) {
+    // if (listingType == 0) {
     //   console.log("startTimestamp in if", startingDate);
     //   console.log("endTimestamp in if", startingDate);
     //   setStartingDate(0);
     //   setEndingDate(0);
-    // } else if (activeMethod == 1) {
+    // } else if (listingType == 1) {
     //   const startDate = new Date(startingDate);
     //   const endDate = new Date(endingDate);
 
@@ -292,7 +292,7 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("mintedTokens", mintedTokens);
     // console.log("item.price", item.price);
     // console.log("royalty", royalty);
-    // console.log("activeMethod", activeMethod);
+    // console.log("listingType", listingType);
     // console.log("item.crypto", crypto);
 
     // UNCOMMENT this
@@ -303,7 +303,7 @@ const Multiple = ({ search, setSearch }) => {
         multi ? mintedTokens : [mintedTokens],
         ethers.utils.parseEther(item.price),
         royalty,
-        activeMethod,
+        listingType,
         startTime,
         endTime,
         crypto
@@ -356,14 +356,14 @@ const Multiple = ({ search, setSearch }) => {
     console.log("startTimestamp in if", startingDate);
     console.log("endTimestamp in if", endingDate);
 
-    if (activeMethod == 0) {
+    if (listingType == 0) {
       console.log("startTimestamp in if", startingDate);
       console.log("endTimestamp in if", endingDate);
       setStartingDate(0);
       setEndingDate(0);
       startTime = 0;
       endTime = 0;
-    } else if (activeMethod == 1) {
+    } else if (listingType == 1) {
       const startDate = new Date(startingDate);
       const endDate = new Date(endingDate);
 
@@ -524,7 +524,7 @@ const Multiple = ({ search, setSearch }) => {
 
   useEffect(() => {
     if (selectedImagesNFT.length > 0) {
-      if (activeMethod === 0) {
+      if (listingType === 0) {
 
         const newNFTs = selectedImagesNFT.map((image, index) => ({
           image,
@@ -534,7 +534,7 @@ const Multiple = ({ search, setSearch }) => {
         }));
         setNfts((prevNFTs) => [...prevNFTs, ...newNFTs.slice(prevNFTs.length)]);
       }
-      else if (activeMethod === 1) {
+      else if (listingType === 1) {
         const newNFTs = selectedImagesNFT.map((image, index) => ({
           image,
           bid: '',
@@ -558,13 +558,13 @@ const Multiple = ({ search, setSearch }) => {
 
   const [nftForm, setnftForm] = useState('')
   useEffect(() => {
-    if (activeMethod === 0) {
+    if (listingType === 0) {
       setnftForm({
         "price": "",
         "desc": "",
       })
     }
-    else if (activeMethod === 1) {
+    else if (listingType === 1) {
       setnftForm({
         "desc": "",
         'bid': "",
@@ -572,7 +572,7 @@ const Multiple = ({ search, setSearch }) => {
         'endDate': ""
       })
     }
-  }, [activeMethod])
+  }, [listingType])
 
 
   const handleNftForm = (e) => {
@@ -580,7 +580,7 @@ const Multiple = ({ search, setSearch }) => {
     setnftForm({ ...nftForm, [e.target.name]: e.target.value });
   }
   const saveNFT = () => {
-    if (activeMethod === 0) {
+    if (listingType === 0) {
       if (!nftForm.price || !nftForm.desc) {
         alert("Fill all fields to save a NFT")
       }
@@ -600,7 +600,7 @@ const Multiple = ({ search, setSearch }) => {
       }
     }
 
-    else if (activeMethod === 1) {
+    else if (listingType === 1) {
       if (!nftForm.bid || !nftForm.desc || !nftForm.startDate || !nftForm.endDate) {
         alert("Fill all fields to save a NFT")
       }
@@ -673,7 +673,7 @@ const Multiple = ({ search, setSearch }) => {
 
 
   useEffect(() => {
-    if (activeMethod === 1) {
+    if (listingType === 1) {
       if (nftForm.startDate && nftForm.endDate && nftForm.endDate < nftForm.startDate) {
         alert("End date should be after start date");
         setnftForm(prevForm => ({
@@ -685,9 +685,32 @@ const Multiple = ({ search, setSearch }) => {
 
   }, [nftForm.startDate, nftForm.endDate]);
 
+  useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
+    const selectedStartDate = new Date(nftForm.startDate);
 
+    if (selectedStartDate < today) {
+      alert("Start date should not be before today's date");
+      setnftForm(prevForm => ({
+        ...prevForm,
+        startDate: '' // Replace with your desired start date value
+      }));
+    }
+  }, [nftForm.startDate]);
 
+  const [choosenCollection, setChoosenCollection] = useState("")
+  useEffect(() => {
+    setChoosenCollection(collection)
+    console.log("choosen", choosenCollection)
+  }, [collection])
 
+  const [selectedImage2, setSelectedImage2] = useState(null);
+  const handleInputChange2 = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage2(file);
+  };
+  const [collectionFinalized, setcollectionFinalized] = useState(false)
 
   return (
     <>
@@ -699,43 +722,140 @@ const Multiple = ({ search, setSearch }) => {
             <div className="row">
               <div className="col-lg-8 mx-auto">
                 <div className="row">
-                  <div className="col-lg-12">
-                    {!showProfileNFT &&
-                      <>
+                  {!collectionFinalized &&
+                    <>
+
+                      <div className="line-three">
                         <div className="row">
                           <div className="col-lg-12">
-                            <h2>Select method</h2>
-                          </div>
-                          <div className="col-lg-3 col-md-4 col-6">
-                            <div
-                              onClick={() => {
-                                setActiveMethod(0);
+                            <h2>Choose collection</h2>
+                            <p>
+                              This is the collection where your item will appear.
+                            </p>
+                            <Dropdown
+                              options={collectionOptions}
+                              onChange={(e) => {
+                                console.log("important", e)
+                                setCollection(e);
                               }}
-                              className={` create-single-card ${activeMethod === 0 ? "active" : ""
-                                }`}
-                            >
-                              <AiFillTag />
-                              <h3>Fixed Price</h3>
-                            </div>
-                          </div>
-                          <div className="col-lg-3 col-md-4 col-6">
+                              value={collection.value}
+                            />
                             <div
-                              onClick={() => {
-                                setActiveMethod(1);
-                              }}
-                              className={` create-single-card ${activeMethod === 1 ? "active" : ""
-                                }`}
+                              className="create-collection-btn"
+                              onClick={() => setshowCreateCollection(true)}
                             >
-                              <BsFillClockFill />
-                              <h3>Timed Auction</h3>
+                              <svg
+                                enable-background="new 0 0 50 50"
+                                height="25px"
+                                id="Layer_1"
+                                version="1.1"
+                                viewBox="0 0 50 50"
+                                width="25px"
+                                xml: space="preserve"
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns: xlink="http://www.w3.org/1999/xlink"
+                              >
+                                <rect fill="none" height="50" width="50" />
+                                <line
+                                  fill="#2638CC"
+                                  stroke="#2638CC"
+                                  stroke-miterlimit="10"
+                                  stroke-width="4"
+                                  x1="9"
+                                  x2="41"
+                                  y1="25"
+                                  y2="25"
+                                />
+                                <line
+                                  fill="#2638CC"
+                                  stroke="#2638CC"
+                                  stroke-miterlimit="10"
+                                  stroke-width="4"
+                                  x1="25"
+                                  x2="25"
+                                  y1="9"
+                                  y2="41"
+                                />
+                              </svg>
+                              Create Collection
                             </div>
+                            {showCreateCollection && (
+                              <div className="Create-collection-popup">
+                                <div className="Create-collection-popup-inner">
+                                  <p>Collection Name</p>
+                                  <input
+                                    value={CreateCollection}
+                                    onChange={(e) =>
+                                      setCreateCollection(e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="Enter collection name"
+                                  />
+                                  <p className="txt-2">Upload image</p>
+                                  <input type="file" accept="image/*" onChange={handleInputChange2} />
+
+                                  <div className="popUp-btn-group">
+                                    <div
+                                      className="button-styling btnCC"
+                                      onClick={() => AddCollection()}
+                                    >
+                                      Next
+                                    </div>
+                                    <div
+                                      onClick={hideCreateCollection}
+                                      className="button-styling-outline btnCC"
+                                    >
+                                      <div className="btnCCin">Cancel</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            <div onClick={() => setcollectionFinalized(true)} className="browse-btn my-5 button-styling">Next</div>
                           </div>
                         </div>
-                        <br />
-                        <br />
+                      </div>
+                    </>}
+                  {collectionFinalized &&
+                    <>
+
+                      <div className="col-lg-12">
+                        {!showProfileNFT &&
+                          <>
+                            <div className="row">
+                              <div className="col-lg-12">
+                                <h2>Select method</h2>
+                              </div>
+                              <div className="col-lg-3 col-md-4 col-6">
+                                <div
+                                  onClick={() => {
+                                    setlistingType(0);
+                                  }}
+                                  className={` create-single-card ${listingType === 0 ? "active" : ""
+                                    }`}
+                                >
+                                  <AiFillTag />
+                                  <h3>Fixed Price</h3>
+                                </div>
+                              </div>
+                              <div className="col-lg-3 col-md-4 col-6">
+                                <div
+                                  onClick={() => {
+                                    setlistingType(1);
+                                  }}
+                                  className={` create-single-card ${listingType === 1 ? "active" : ""
+                                    }`}
+                                >
+                                  <BsFillClockFill />
+                                  <h3>Timed Auction</h3>
+                                </div>
+                              </div>
+                            </div>
+                            <br />
+                            <br />
 
 
-                        <div className="line-three">
+                            {/* <div className="line-three">
                           <div className="row">
                             <div className="col-lg-12">
                               <h2>Choose collection</h2>
@@ -836,85 +956,85 @@ const Multiple = ({ search, setSearch }) => {
                             </div>
 
                           </div>
-                        </div>
-                        <div className="line-four">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Title</h2>
-                              <input
-                                type="text"
-                                placeholder="e.g. ‘Crypto Funk"
-                                // defaultValue={title.current.value}
-                                ref={title}
-                              // onChange={(e) => setTitle(e.target.value)}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="line-six">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Royalties</h2>
-                              <Slider
-                                min={0}
-                                max={15}
-                                defaultValue={0}
-                                // step={null}
-                                onChange={handleSliderChange}
-                                value={royalty}
-                              />
-                            </div>
-                            <div className="col-lg-3 ">
-                              <div className="royality-value">
-
-                                {royalty} %
+                        </div> */}
+                            <div className="line-four">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Title</h2>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. ‘Crypto Funk"
+                                    // defaultValue={title.current.value}
+                                    ref={title}
+                                  // onChange={(e) => setTitle(e.target.value)}
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
+                            <div className="line-six">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Royalties</h2>
+                                  <Slider
+                                    min={0}
+                                    max={15}
+                                    defaultValue={0}
+                                    // step={null}
+                                    onChange={handleSliderChange}
+                                    value={royalty}
+                                  />
+                                </div>
+                                <div className="col-lg-3 ">
+                                  <div className="royality-value">
 
-                        <button
-                          className="button-styling"
-                          onClick={() => setshowProfileNFT(true)}
-                        >
-                          Next
-                        </button>
-                      </>
-                    }
-                    {showProfileNFT &&
+                                    {royalty} %
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
 
-                      <div>
-                        <h2>Profile NFT</h2>
-                        <div className="profile-nft-row1">
-                          <div className="NFT-image-holder">
-                            <input
-                              ref={fileInputRef}
-                              type="file"
-                              style={{ display: "none" }}
-                              onChange={handleImageUpload}
-                            />
-                            {selectedImage ? (
-                              <img src={selectedImage} alt="Uploaded" />
-                            ) : (
-                              <img src={Duck} alt="" />
-                            )}
-                          </div>
-                          <div className="NFT-image-upload-txt">
-                            <p>
-                              PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
-                            </p>
                             <button
-                              onClick={handleButtonClick}
-                              className="button-styling browse-btn"
+                              className="button-styling"
+                              onClick={() => setshowProfileNFT(true)}
                             >
-                              Browse
+                              Next
                             </button>
-                          </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div className="row">
-                          {/* <div className="col-lg-9 col-md-9 col-7">
+                          </>
+                        }
+                        {showProfileNFT &&
+
+                          <div>
+                            <h2>Profile NFT</h2>
+                            <div className="profile-nft-row1">
+                              <div className="NFT-image-holder">
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={handleImageUpload}
+                                />
+                                {selectedImage ? (
+                                  <img src={selectedImage} alt="Uploaded" />
+                                ) : (
+                                  <img src={Duck} alt="" />
+                                )}
+                              </div>
+                              <div className="NFT-image-upload-txt">
+                                <p>
+                                  PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
+                                </p>
+                                <button
+                                  onClick={handleButtonClick}
+                                  className="button-styling browse-btn"
+                                >
+                                  Browse
+                                </button>
+                              </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div className="row">
+                              {/* <div className="col-lg-9 col-md-9 col-7">
                             <p>Collection Name</p>
                             <input
                               type="text"
@@ -922,7 +1042,7 @@ const Multiple = ({ search, setSearch }) => {
                               disabled
                             />
                           </div> */}
-                          {/* {!ShowMore ? (
+                              {/* {!ShowMore ? (
                             <div className="col-lg-3 col-md-3 col-5">
                               <p>Crypto</p>
                               <Dropdown
@@ -939,9 +1059,9 @@ const Multiple = ({ search, setSearch }) => {
                               <input type="text" value={crypto.label} />
                             </div>
                           )} */}
-                        </div>
-                        <br />
-                        {/* <div className="line-six">
+                            </div>
+                            <br />
+                            {/* <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
                               <h2>Royalties</h2>
@@ -963,227 +1083,227 @@ const Multiple = ({ search, setSearch }) => {
                           </div>
                         </div> */}
 
-                        <div>
-                          <div>
-                            <h2>Upload NFT</h2>
-                            {NFts.length < 1 ? (
-                              <div className="Create-Collection-div">
-                                <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
-                                <br />
-                                <input
-                                  ref={fileInputRef2}
-                                  type="file"
-                                  style={{ display: "none" }}
-                                  multiple
-                                  onChange={handleFileUpload}
-                                />
-                                <button
-                                  onClick={handleButtonClick2}
-                                  className="button-styling "
-                                >
-                                  Browse
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="NFT-thumbnail-holder">
-                                <div className="NFT-inner">
-                                  {NFts.length > 0 &&
-                                    NFts.map((nft, index) => {
-                                      if (index >= tabIndex && index < Number(tabIndex + (10))) {
-                                        return (
-                                          < NftCard
-                                            isCompleted={nft.status === "completed" ? "true" : "false"}
-                                            isClicked={currentNFT === index ? "true" : "false"}
-                                            index={index}
-                                            img={nft.image}
-                                            handleRemoveImage={handleRemoveCompletedNft}
-                                          />
-                                        )
-                                      }
-
-                                    })}
-
-                                </div>
-                                <div className="control-main-div">
-                                  <input
-                                    ref={fileInputRef2}
-                                    type="file"
-                                    style={{ display: "none" }}
-                                    multiple
-                                    onChange={handleFileUpload}
-                                  />
-                                  <button
-                                    onClick={handleButtonClick2}
-                                    className="button-styling "
-                                  >
-                                    Add More
-                                  </button>
-                                  {NFts.length > Number(10) &&
-                                    <div className="controlsDiv">
-                                      {NFts.length > Number(10)
-                                        &&
-                                        <>
-                                          <svg onClick={() => setTabIndex(0)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="7" cy="7" r="7" fill={`${tabIndex === 0 ? '#B601D1' : '#D9D9D9'}`} />
-                                          </svg>
-                                          <svg onClick={() => setTabIndex(10)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="7" cy="7" r="7" fill={`${tabIndex === 10 ? '#B601D1' : '#D9D9D9'}`} />
-                                          </svg>
-                                        </>
-                                      }
-
-
-                                      {NFts.length > Number(20)
-                                        &&
-                                        <svg onClick={() => setTabIndex(20)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 20 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(30)
-                                        &&
-                                        <svg onClick={() => setTabIndex(30)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 30 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(40)
-                                        &&
-                                        <svg onClick={() => setTabIndex(40)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 40 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(50)
-                                        &&
-                                        <svg onClick={() => setTabIndex(50)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 50 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(60)
-                                        &&
-                                        <svg onClick={() => setTabIndex(60)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 60 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(70)
-                                        &&
-                                        <svg onClick={() => setTabIndex(70)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 70 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(80)
-                                        &&
-                                        <svg onClick={() => setTabIndex(80)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 80 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(90)
-                                        &&
-                                        <svg onClick={() => setTabIndex(90)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 90 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                      {NFts.length > Number(100)
-                                        &&
-                                        <svg onClick={() => setTabIndex(100)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <circle cx="7" cy="7" r="7" fill={`${tabIndex === 100 ? '#B601D1' : '#D9D9D9'}`} />
-                                        </svg>
-                                      }
-                                    </div>
-                                  }
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <br />
-
-                        {ShowMore &&
-                          NFts.length > 0 &&
-                          NFts[NFts.length - 1].status !== "completed" && (
                             <div>
-                              {activeMethod === 0 ?
-                                <div className="line-two">
-                                  <div className="row">
-                                    <div className="col-lg-9 col-md-9 col-7">
-                                      <h2>Price</h2>
+                              <div>
+                                <h2>Upload NFT</h2>
+                                {NFts.length < 1 ? (
+                                  <div className="Create-Collection-div">
+                                    <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                                    <br />
+                                    <input
+                                      ref={fileInputRef2}
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      multiple
+                                      onChange={handleFileUpload}
+                                    />
+                                    <button
+                                      onClick={handleButtonClick2}
+                                      className="button-styling "
+                                    >
+                                      Browse
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="NFT-thumbnail-holder">
+                                    <div className="NFT-inner">
+                                      {NFts.length > 0 &&
+                                        NFts.map((nft, index) => {
+                                          if (index >= tabIndex && index < Number(tabIndex + (10))) {
+                                            return (
+                                              < NftCard
+                                                isCompleted={nft.status === "completed" ? "true" : "false"}
+                                                isClicked={currentNFT === index ? "true" : "false"}
+                                                index={index}
+                                                img={nft.image}
+                                                handleRemoveImage={handleRemoveCompletedNft}
+                                              />
+                                            )
+                                          }
+
+                                        })}
+
+                                    </div>
+                                    <div className="control-main-div">
                                       <input
-                                        type="text"
-                                        value={nftForm.price}
-                                        onChange={handleNftForm}
-                                        name="price"
-                                      // type="number"
-                                      // placeholder="0.00"
-                                      // ref={price}
+                                        ref={fileInputRef2}
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        multiple
+                                        onChange={handleFileUpload}
                                       />
-                                      {showWarning && (
-                                        <p style={{ color: "red" }}>
-                                          Please enter a valid positive number.
-                                        </p>
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                                :
-                                <>
-                                  <div className="line-two">
-                                    <div className="row">
-                                      <div className="col-lg-9">
-                                        <h2>Minimum bid</h2>
-                                        <input
-                                          type="text"
-                                          value={nftForm.bid}
-                                          name="bid"
-                                          onChange={handleNftForm}
-                                        // type="number"
-                                        // placeholder="0.00"
-                                        // ref={price}
-                                        />
-                                        {showWarning && (
-                                          <p style={{ color: "red" }}>
-                                            Please enter a valid positive number.
-                                          </p>
-                                        )}
-                                      </div>
-                                      <div className="col-lg-3 col-md-3 col-5">
+                                      <button
+                                        onClick={handleButtonClick2}
+                                        className="button-styling "
+                                      >
+                                        Add More
+                                      </button>
+                                      {NFts.length > Number(10) &&
+                                        <div className="controlsDiv">
+                                          {NFts.length > Number(10)
+                                            &&
+                                            <>
+                                              <svg onClick={() => setTabIndex(0)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="7" cy="7" r="7" fill={`${tabIndex === 0 ? '#B601D1' : '#D9D9D9'}`} />
+                                              </svg>
+                                              <svg onClick={() => setTabIndex(10)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="7" cy="7" r="7" fill={`${tabIndex === 10 ? '#B601D1' : '#D9D9D9'}`} />
+                                              </svg>
+                                            </>
+                                          }
 
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="line-two">
-                                    <div className="row">
-                                      <div className="col-lg-6 col-md-6 col-6">
-                                        <h2>Starting date</h2>
-                                        <input
-                                          id="startingTime"
-                                          type="date"
-                                          name="startDate"
-                                          placeholder="mm/dd/yyyy"
-                                          style={{ padding: "6px 10px 6px 15px" }}
-                                          value={nftForm.startDate}
-                                          // onChange={(e) =>
-                                          //   setStartingDate(e.target.value)
-                                          // }
-                                          onChange={handleNftForm}
-                                        />
-                                      </div>
-                                      <div className="col-lg-6 col-md-6 col-6">
-                                        <h2>Expiration date</h2>
-                                        <input
-                                          id="endTime"
-                                          type="date"
-                                          name="endDate"
-                                          placeholder="mm/dd/yyyy"
-                                          style={{ padding: "6px 10px 6px 15px" }}
-                                          value={nftForm.endDate}
-                                          // onChange={(e) => setEndingDate(e.target.value)}
-                                          onChange={handleNftForm}
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </>}
 
-                              {/* <div className="line-four">
+                                          {NFts.length > Number(20)
+                                            &&
+                                            <svg onClick={() => setTabIndex(20)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 20 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(30)
+                                            &&
+                                            <svg onClick={() => setTabIndex(30)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 30 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(40)
+                                            &&
+                                            <svg onClick={() => setTabIndex(40)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 40 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(50)
+                                            &&
+                                            <svg onClick={() => setTabIndex(50)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 50 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(60)
+                                            &&
+                                            <svg onClick={() => setTabIndex(60)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 60 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(70)
+                                            &&
+                                            <svg onClick={() => setTabIndex(70)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 70 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(80)
+                                            &&
+                                            <svg onClick={() => setTabIndex(80)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 80 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(90)
+                                            &&
+                                            <svg onClick={() => setTabIndex(90)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 90 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(100)
+                                            &&
+                                            <svg onClick={() => setTabIndex(100)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 100 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                        </div>
+                                      }
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <br />
+                            <br />
+
+                            {ShowMore &&
+                              NFts.length > 0 &&
+                              NFts[NFts.length - 1].status !== "completed" && (
+                                <div>
+                                  {listingType === 0 ?
+                                    <div className="line-two">
+                                      <div className="row">
+                                        <div className="col-lg-9 col-md-9 col-7">
+                                          <h2>Price</h2>
+                                          <input
+                                            type="text"
+                                            value={nftForm.price}
+                                            onChange={handleNftForm}
+                                            name="price"
+                                          // type="number"
+                                          // placeholder="0.00"
+                                          // ref={price}
+                                          />
+                                          {showWarning && (
+                                            <p style={{ color: "red" }}>
+                                              Please enter a valid positive number.
+                                            </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    :
+                                    <>
+                                      <div className="line-two">
+                                        <div className="row">
+                                          <div className="col-lg-9">
+                                            <h2>Minimum bid</h2>
+                                            <input
+                                              type="text"
+                                              value={nftForm.bid}
+                                              name="bid"
+                                              onChange={handleNftForm}
+                                            // type="number"
+                                            // placeholder="0.00"
+                                            // ref={price}
+                                            />
+                                            {showWarning && (
+                                              <p style={{ color: "red" }}>
+                                                Please enter a valid positive number.
+                                              </p>
+                                            )}
+                                          </div>
+                                          <div className="col-lg-3 col-md-3 col-5">
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="line-two">
+                                        <div className="row">
+                                          <div className="col-lg-6 col-md-6 col-6">
+                                            <h2>Starting date</h2>
+                                            <input
+                                              id="startingTime"
+                                              type="date"
+                                              name="startDate"
+                                              placeholder="mm/dd/yyyy"
+                                              style={{ padding: "6px 10px 6px 15px" }}
+                                              value={nftForm.startDate}
+                                              // onChange={(e) =>
+                                              //   setStartingDate(e.target.value)
+                                              // }
+                                              onChange={handleNftForm}
+                                            />
+                                          </div>
+                                          <div className="col-lg-6 col-md-6 col-6">
+                                            <h2>Expiration date</h2>
+                                            <input
+                                              id="endTime"
+                                              type="date"
+                                              name="endDate"
+                                              placeholder="mm/dd/yyyy"
+                                              style={{ padding: "6px 10px 6px 15px" }}
+                                              value={nftForm.endDate}
+                                              // onChange={(e) => setEndingDate(e.target.value)}
+                                              onChange={handleNftForm}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </>}
+
+                                  {/* <div className="line-four">
                                 <div className="row">
                                   <div className="col-lg-9">
                                     <h2>Title</h2>
@@ -1199,21 +1319,21 @@ const Multiple = ({ search, setSearch }) => {
                                   </div>
                                 </div>
                               </div> */}
-                              <div className="line-five">
-                                <div className="row">
-                                  <div className="col-lg-9">
-                                    <h2>Description</h2>
-                                    <input
-                                      type="text"
-                                      placeholder="e.g. ‘This is very limited item’"
-                                      value={nftForm.desc}
-                                      onChange={handleNftForm}
-                                      name="desc"
-                                    />
+                                  <div className="line-five">
+                                    <div className="row">
+                                      <div className="col-lg-9">
+                                        <h2>Description</h2>
+                                        <input
+                                          type="text"
+                                          placeholder="e.g. ‘This is very limited item’"
+                                          value={nftForm.desc}
+                                          onChange={handleNftForm}
+                                          name="desc"
+                                        />
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
-                              {/* <div className="line-seven">
+                                  {/* <div className="line-seven">
                                 <div className="row">
                                   <div className="col-lg-8">
                                     <button type="submit" className="button-styling">
@@ -1222,37 +1342,46 @@ const Multiple = ({ search, setSearch }) => {
                                   </div>
                                 </div>
                               </div> */}
-                            </div>
-                          )}
-                        {!ShowMore ? (
-                          <div className="Button-holding-div">
-                            <button
-                              className="button-styling"
-                              onClick={() => setShowMore(true)}
-                            >
-                              Done
-                            </button>
-                            {/* <button className="button-styling-outline">
+                                </div>
+                              )}
+                            {!ShowMore ? (
+                              <div className="Button-holding-div">
+                                <button
+                                  className="button-styling"
+                                  onClick={() => setShowMore(true)}
+                                >
+                                  Done
+                                </button>
+                                {/* <button className="button-styling-outline">
                               <div>Add More</div>
                             </button> */}
-                          </div>
-                        ) : (
-                          <div className="Button-holding-div">
-                            {
-                              NFts.length > 0 &&
+                              </div>
+                            ) : (
+                              <div className="Button-holding-div">
+                                {
+                                  NFts.length > 0 &&
 
-                              NFts[NFts.length - 1].status !== "completed" &&
-                              <button onClick={saveNFT} className="button-styling">Save</button>
-
-                            }
-                            <button className="button-styling-outline">
-                              <div>Done</div>
-                            </button>
+                                    NFts[NFts.length - 1].status !== "completed" ?
+                                    <button onClick={saveNFT} className="button-styling">Next</button>
+                                    :
+                                    <button className="disabledButton">
+                                      Next
+                                    </button>
+                                }
+                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ?
+                                  <button className="button-styling-outline ml-auto">
+                                    <div>List</div>
+                                  </button>
+                                  :
+                                  <button className="disabledButton">List</button>
+                                }
+                              </div>
+                            )}
                           </div>
-                        )}
+                        }
                       </div>
-                    }
-                  </div>
+                    </>
+                  }
 
                   <div className="line-one"></div>
                 </div>
