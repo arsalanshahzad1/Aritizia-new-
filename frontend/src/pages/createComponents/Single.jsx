@@ -249,7 +249,7 @@ const Single = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {}, [price, title, description]);
+  useEffect(() => { }, [price, title, description]);
 
   function createItem(e) {
     e.preventDefault();
@@ -386,6 +386,17 @@ const Single = ({ search, setSearch }) => {
     setshowCreateCollection(false);
   };
 
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    setSelectedImage(URL.createObjectURL(file));
+  };
+  const fileInputRef = useRef(null);
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -400,18 +411,32 @@ const Single = ({ search, setSearch }) => {
                     <div className="col-lg-12">
                       <div className="upload-file">
                         <h2>Upload file</h2>
-                        <FileUploader
+                        {/* <FileUploader
                           handleChange={(e) => handlechange(e)}
                           name="file"
                           types={fileTypes}
                           label="PNG, JPG, GIF, WEBP or MP4. Max 200mb."
-                        />
-                        <button
-                          handleChange={(e) => handlechange(e)}
-                          className="button-styling single-button"
-                        >
-                          Browse
-                        </button>
+                        /> */}
+                        <div className="browseforSingle">
+                          {!selectedImage ?
+                            <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                            :
+                            <p>Uploaded successfully, want to upload another?</p>
+                          }
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            style={{ display: "none" }}
+                            onChange={handleImageUpload}
+                          />
+                          <div
+                            onClick={handleButtonClick}
+                            className="button-styling browse-btn"
+                          >
+                            Browse
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                     <div className="line-one">
@@ -424,9 +449,8 @@ const Single = ({ search, setSearch }) => {
                             onClick={() => {
                               setActiveMethod(0);
                             }}
-                            className={` create-single-card ${
-                              activeMethod === 0 ? "active" : ""
-                            }`}
+                            className={` create-single-card ${activeMethod === 0 ? "active" : ""
+                              }`}
                           >
                             <AiFillTag />
                             <h3>Fixed Price</h3>
@@ -437,9 +461,8 @@ const Single = ({ search, setSearch }) => {
                             onClick={() => {
                               setActiveMethod(1);
                             }}
-                            className={` create-single-card ${
-                              activeMethod === 1 ? "active" : ""
-                            }`}
+                            className={` create-single-card ${activeMethod === 1 ? "active" : ""
+                              }`}
                           >
                             <BsFillClockFill />
                             <h3>Timed Auction</h3>
@@ -456,9 +479,9 @@ const Single = ({ search, setSearch }) => {
                               type="text"
                               value={inputValue}
                               onChange={handleInputChange}
-                              // type="number"
-                              // placeholder="0.00"
-                              // ref={price}
+                            // type="number"
+                            // placeholder="0.00"
+                            // ref={price}
                             />
                             {showWarning && (
                               <p style={{ color: "red" }}>
@@ -488,9 +511,9 @@ const Single = ({ search, setSearch }) => {
                                 type="text"
                                 value={inputValue}
                                 onChange={handleInputChange}
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
+                              // type="number"
+                              // placeholder="0.00"
+                              // ref={price}
                               />
                               {showWarning && (
                                 <p style={{ color: "red" }}>
@@ -566,9 +589,9 @@ const Single = ({ search, setSearch }) => {
                               version="1.1"
                               viewBox="0 0 50 50"
                               width="25px"
-                              xml:space="preserve"
+                              xml: space="preserve"
                               xmlns="http://www.w3.org/2000/svg"
-                              xmlns:xlink="http://www.w3.org/1999/xlink"
+                              xmlns: xlink="http://www.w3.org/1999/xlink"
                             >
                               <rect fill="none" height="50" width="50" />
                               <line
@@ -635,7 +658,7 @@ const Single = ({ search, setSearch }) => {
                             placeholder="e.g. ‘Crypto Funk"
                             // defaultValue={title.current.value}
                             ref={title}
-                            // onChange={(e) => setTitle(e.target.value)}
+                          // onChange={(e) => setTitle(e.target.value)}
                           />
                         </div>
                       </div>
