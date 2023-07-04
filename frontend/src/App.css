@@ -3767,6 +3767,10 @@ footer h1 {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.281);
 }
 
+.Create-collection-popup-inner .txt-2 {
+  margin-top: 20px !important;
+}
+
 @media (max-width:767px) {
   .Create-collection-popup-inner {
     width: 95%;
@@ -3796,10 +3800,10 @@ footer h1 {
   align-items: center;
 }
 
-.button-styling-outline div {
+.button-styling-outline .btnCCin {
   background-color: white;
   padding: 9px 32px;
-  margin: 1px -4px;
+  margin: 1px 3px;
   border-radius: 60px;
   font-weight: 500;
 
@@ -3807,9 +3811,14 @@ footer h1 {
 
 .popUp-btn-group {
   margin: 30px auto 0 auto;
-  width: 55%;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+.popUp-btn-group .btnCC {
+  margin-inline: 10px;
+
 }
 
 .Create-Collection-div {
@@ -3861,7 +3870,7 @@ footer h1 {
   margin-top: 7%;
   display: flex;
   justify-content: space-between;
-  width: 35%;
+  width: 100%;
 }
 
 .royality-value {
@@ -4401,4 +4410,45 @@ footer h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.disabledButton {
+  color: #7E7E7E;
+  border-radius: 25px;
+  padding: 10px 25px;
+  border: #7E7E7E 2px solid;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-weight: 600;
+  pointer-events: none;
+
+}
+
+.collectionDivPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.collectionDivPreview .img-holder {
+  width: 100px !important;
+}
+
+.collectionDivPreview .title {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Jost';
+  color: #A5A5A5;
+}
+
+.collectionDivPreview .title-txt {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 10px;
+  font-family: 'Jost';
+  color: #121212;
+}
+
+.collectionDivPreview .img-holder img {
+  width: 100% !important;
 }

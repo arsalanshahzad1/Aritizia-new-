@@ -73,8 +73,8 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
-    let activeMethod;
-    // console.log("Active Method", activeMethod);
+    let listingType;
+    // console.log("Active Method", listingType);
     // console.log("time", Date.now());
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     // console.log("Dollar price", dollarPriceOfETH.toString());
@@ -129,17 +129,17 @@ const LandingPage = ({ search, setSearch }) => {
           console.log("Dataa", data);
           // Extracting values using dot notation
           const price = data.price;
-          activeMethod = data.activeMethod;
+          listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
-          console.log("activeMethod", activeMethod);
+          console.log("listingType", listingType);
           console.log("CHECK2");
 
-          if (activeMethod === 0) {
+          if (listingType === 0) {
             const nftData = {
               id: id, //
               title: title,
@@ -156,7 +156,7 @@ const LandingPage = ({ search, setSearch }) => {
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
             console.log("myNFTs in function", myNFTs);
-          } else if (activeMethod === 1) {
+          } else if (listingType === 1) {
             console.log("IN ELSE");
             const nftData = {
               id: id, //
