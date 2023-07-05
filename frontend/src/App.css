@@ -4403,7 +4403,7 @@ footer h1 {
 }
 
 .browseforSingle {
-  width: 90%;
+  width: 100%;
   border: 2px dashed #CBCBCB;
   padding: 5%;
   display: flex;

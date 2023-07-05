@@ -555,10 +555,10 @@ const Single = ({ search, setSearch }) => {
 
                           </div> */}
                           <div className="title-txt">
-                          {choosenCollection.value}
+                            {choosenCollection.value}
 
                           </div>
-                          
+
                         </div>
                         <div className="col-lg-12">
                           <div className="upload-file">
@@ -689,6 +689,7 @@ const Single = ({ search, setSearch }) => {
                               <div className="row">
                                 <div className="col-lg-6 col-md-6 col-6">
                                   <h2>Starting date</h2>
+
                                   <input
                                     id="startingTime"
                                     type="date"
@@ -698,6 +699,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setStartingDate(e.target.value)
                                     }
+                                    min={new Date().toISOString().split('T')[0]}
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -709,6 +711,7 @@ const Single = ({ search, setSearch }) => {
                                     style={{ padding: "6px 10px 6px 15px" }}
                                     value={endingDate}
                                     onChange={(e) => setEndingDate(e.target.value)}
+                                    min={startingDate}
                                   />
                                 </div>
                               </div>
