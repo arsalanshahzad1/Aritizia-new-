@@ -173,6 +173,7 @@ const Single = ({ search, setSearch }) => {
     console.log("In mintThenList");
 
     const signer = await getProviderOrSigner(true);
+    console.log("In mintThenList");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -180,12 +181,14 @@ const Single = ({ search, setSearch }) => {
       signer
     );
 
-    console.log("In mintThenList");
+    console.log("In result", result);
 
-    await (await nftContract.mint([result])).wait();
+    await nftContract.mint([result]);
+    console.log("In mintThenList");
 
     let mintedTokens = await nftContract.getMintedTokensList();
 
+    console.log("In mintThenList");
     mintedTokens = Number(mintedTokens);
 
     console.log("mintedTokens", mintedTokens);

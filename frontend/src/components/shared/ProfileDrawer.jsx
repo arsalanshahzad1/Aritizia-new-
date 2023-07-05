@@ -393,7 +393,7 @@ function ProfileDrawer({
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    
+
     console.log("price", price);
     let fee = Number((price * 3) / 100);
     console.log("fee", fee);
@@ -443,8 +443,16 @@ function ProfileDrawer({
       "TETHER_CONTRACT_ADDRESS.address",
       TETHER_CONTRACT_ADDRESS.address
     );
+
     console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
+
     console.log("signer", signer);
+
+    console.log(
+      "TETHER_CONTRACT_ADDRESS.address",
+      TETHER_CONTRACT_ADDRESS.address
+    );
+    console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
 
     const USDTContract = new Contract(
       TETHER_CONTRACT_ADDRESS.address,
@@ -461,6 +469,8 @@ function ProfileDrawer({
 
     let amountInWei = amount * 10 ** 6;
     console.log("amountInWei", amountInWei);
+    amountInWei = amountInWei.toString();
+    console.log("amountInWei", typeof amountInWei);
 
     // if (paymentMethod == 1) {
     const appprove = await USDTContract.approve(
@@ -477,12 +487,13 @@ function ProfileDrawer({
     console.log("amountUSD typeof", typeof amountUSD);
 
     // console.log("Check", check);
+
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
         paymentMethod,
         id,
-        amount,
+        amountInWei,
         { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();

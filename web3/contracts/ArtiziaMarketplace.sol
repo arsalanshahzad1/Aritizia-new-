@@ -229,7 +229,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     // uint256 public LISTING_FEE = 0.0001 ether;
     address payable private _marketOwner;
 
-
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
     ///////////////    MAPPINGS    ////////////////
@@ -288,6 +287,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         ListingType listingType;
         PaymentMethod paymentMethod;
         bool approve;
+        // uint256 collectionId;
     }
 
     struct Bid {
@@ -389,7 +389,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         return amountsOut[1];
     }
- 
+
     // Function to swap ETH for USDT
     function swapETHForUSDT(uint256 usdtAmountOut) public payable {
         // Specify the desired USDT output amount
@@ -454,6 +454,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         _;
     }
 
+    // mapping(uint256 => uint256[]) public collection;
+
     // List the NFT on the marketplace
     function listNft(
         address _nftContract,
@@ -464,7 +466,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _startTime,
         uint256 _endTime,
         uint256 _paymentMethod
-    ) public payable nonReentrant isUserBanned isUserDeleted {
+    )
+        public
+        payable
+        // uint256 _collectionId
+        nonReentrant
+        isUserBanned
+        isUserDeleted
+    {
         // require(_price > 0, "Price must be at least 1 wei");
         // require(msg.value == LISTING_FEE, "Not enough ether for listing fee");
 
@@ -496,6 +505,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 _nftCount.increment();
                 console.log("this is 4");
 
+                // collection[_collectionId].push(_tokenId[i]);
+
                 _idToNFT[_tokenId[i]] = NFT(
                     _nftContract,
                     _tokenId[i],
@@ -508,6 +519,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     ListingType(_listingType),
                     PaymentMethod(_paymentMethod),
                     false
+                    // _collectionId
                 );
                 console.log("this is 5");
 
@@ -559,7 +571,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _tokenId,
         uint256 _amount
     ) public payable isUserBanned isUserDeleted nonReentrant {
-         
         NFT storage nft = _idToNFT[_tokenId];
 
         uint256 _amountInETHInWei = _amount * getLatestUSDTPrice();
@@ -601,8 +612,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             if (_paymentMethod == 1) {
                 console.log("Check4");
 
-                uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaid * 1*10**6;
-                
+                uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaid *
+                    1 *
+                    10 ** 6;
+
                 USDTtoken.transfer(nft.seller, _amountToBePaid);
                 check = true;
             } else {
@@ -625,19 +638,16 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 _amount -
                 platformFeeCalculate(_amountAfterRoyalty);
 
-            uint256 _royaltyInUSDTInDecimals = _royaltyFee * 1*10**6;
-
+            uint256 _royaltyInUSDTInDecimals = _royaltyFee * 10 ** 6;
 
             USDTtoken.transfer(nft.firstOwner, _royaltyFee);
             console.log("Check7");
             if (_paymentMethod == 1) {
                 console.log("Check8");
 
-            uint256 _amountInUSDTInDecimals = _amountToBePaid * 1*10**6;
+                uint256 _amountInUSDTInDecimals = _amountToBePaid * 10 ** 6;
 
-
-                
-                USDTtoken.transfer(nft.seller, _amountToBePaid);
+                USDTtoken.transfer(nft.seller, _amountInUSDTInDecimals);
                 check = true;
                 console.log("Check9");
             } else {
@@ -724,14 +734,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     getLatestUSDTPrice();
                 // send USDT to nft.seller
 
+                uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaidInUSDT *
+                        10 ** 6;
 
-                uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaidInUSDT * 1*10**6;
-
-
-                USDTtoken.transfer(nft.seller, _amountToBePaidInUSDT);
+                USDTtoken.transfer(nft.seller, _amountToBePaidInUSDTInDecimals);
                 check = true;
             }
-            } else {
+        } else {
             uint256 _amount = msg.value;
             uint256 _royaltyFee = royaltyCalculate(_amount, nft.royaltyPrice);
             // _amountAfterRoyalty = _amount - _royaltyFee;
@@ -751,12 +760,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     getLatestUSDTPrice();
                 // send USDT to nft.seller
 
-                uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaidInUSDT * 1*10**6;
+                uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaidInUSDT *
+                        10 ** 6;
 
-
-                USDTtoken.transfer(nft.seller, _amountToBePaidInUSDT);
+                USDTtoken.transfer(nft.seller, _amountToBePaidInUSDTInDecimals);
                 check = true;
-
             }
         }
 
@@ -864,19 +872,19 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 prevBid = auction.highestBid;
 
         // handle previous highest bidder
-         if (auction.highestBidder != address(0)) {
-
-            if( auction.highestBidCurrency == PaymentMethod.USDT){
-
+        if (auction.highestBidder != address(0)) {
+            if (auction.highestBidCurrency == PaymentMethod.USDT) {
                 // converting eth into usdt .... this will discard the decimal though
-                uint256 usdtToReturn = prevBid / (getLatestUSDTPrice() * 10**12);
-                
+                uint256 usdtToReturn = prevBid / (getLatestUSDTPrice());
+
+                // in wei
+                usdtToReturn = usdtToReturn * 10 ** 6;
+
                 USDTtoken.transfer(prevBidder, usdtToReturn);
-            }
-            else if (auction.highestBidCurrency == PaymentMethod.ETHER){
+            } else if (auction.highestBidCurrency == PaymentMethod.ETHER) {
                 payable(prevBidder).transfer(prevBid);
+            }
         }
-         }
         auction.highestBid = msg.value;
         auction.highestBidder = payable(msg.sender);
         auction.highestBidCurrency = PaymentMethod(_bidCurrency);
@@ -886,8 +894,12 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             emit auctionEndTimeIncreased(auction.endTime);
         }
 
-        emit receivedABid(_tokenId, auction.seller , auction.highestBidder, auction.highestBid);
-
+        emit receivedABid(
+            _tokenId,
+            auction.seller,
+            auction.highestBidder,
+            auction.highestBid
+        );
     }
 
     function bidInUSDT(
@@ -934,18 +946,19 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         console.log("Check5");
 
         // handle previous highest bidder
-     
-         if (auction.highestBidder != address(0)) {
 
-            if( auction.highestBidCurrency == PaymentMethod.USDT){
-                USDTtoken.transfer(prevBidder, prevBid);
-            }
-            else if (auction.highestBidCurrency == PaymentMethod.ETHER){
+        if (auction.highestBidder != address(0)) {
+            if (auction.highestBidCurrency == PaymentMethod.USDT) {
+                uint256 usdtToReturn = prevBid / (getLatestUSDTPrice());
+
+                // in wei
+                usdtToReturn = usdtToReturn * 10 ** 6;
+
+                USDTtoken.transfer(prevBidder, usdtToReturn);
+            } else if (auction.highestBidCurrency == PaymentMethod.ETHER) {
                 payable(prevBidder).transfer(prevBid);
+            }
         }
-         }
-
-
 
         auction.highestBid = _amountInETHInWei;
         auction.highestBidder = payable(msg.sender);
@@ -959,8 +972,12 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             console.log("Check9");
         }
 
-        emit receivedABid(_tokenId, auction.seller , auction.highestBidder, auction.highestBid);
-
+        emit receivedABid(
+            _tokenId,
+            auction.seller,
+            auction.highestBidder,
+            auction.highestBid
+        );
     }
 
     function closeAuction(
@@ -971,10 +988,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             block.timestamp > _idToAuction[_tokenId].endTime,
             "Auction has not ended yet"
         );
-        require(
-            _idToAuction[_tokenId].highestBidder != address(0),
-            "Auction has not ended yet"
-        );
+        // require(
+        //     _idToAuction[_tokenId].highestBidder != address(0),
+        //     "Auction has not ended yet"
+        // );
 
         NFT storage nft = _idToNFT[_tokenId];
         Auction storage auction = _idToAuction[_tokenId];
@@ -1001,7 +1018,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _royaltyFee;
         uint256 _amountAfterRoyalty;
         uint256 _amountToBePaid;
-        uint256 _amount = auction.highestBid; // alreay saving all bids in ether 
+        uint256 _amount = auction.highestBid; // alreay saving all bids in ether
         nft.owner = auction.highestBidder;
 
         // if the seller wants to be paid in ether
@@ -1035,11 +1052,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
             // if the seller wants to be paid in USDT
         } else if (nft.paymentMethod == PaymentMethod.USDT) {
-
             if (auction.highestBidCurrency == PaymentMethod.ETHER) {
                 uint256 _amountOfUSDT = _amount / getLatestUSDTPrice();
                 swapETHForUSDT(_amount);
-                _amount = _amountOfUSDT;
+                _amount = _amountOfUSDT * 10 ** 6;
             }
             if (nft.owner == nft.firstOwner) {
                 // USDTtoken.transferFrom(msg.sender, address(this), _amount);

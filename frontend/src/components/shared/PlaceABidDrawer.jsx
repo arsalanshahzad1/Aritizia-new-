@@ -312,7 +312,6 @@ const PlaceABidDrawer = ({
   const [sucess, setSucess] = useState(false);
   const [dollarPrice, setDollarPrice] = useState("");
   const [highestBid, setHighestBid] = useState("");
-
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
@@ -372,13 +371,17 @@ const PlaceABidDrawer = ({
     );
 
     let priceETH = Number(highestBid);
+
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
+    console.log("priceInUSD", priceInUSD);
     priceInUSD = priceInUSD.toFixed(2);
+
     setDollarPrice(priceInUSD.toString());
+    console.log("priceInUSD", priceInUSD);
 
     let highBid = await marketplaceContract.getHighestBid(id);
     highBid = Number(highBid.toString()) / 1e18;
@@ -394,6 +397,7 @@ const PlaceABidDrawer = ({
   const bidWithFIAT = async () => {
     console.log("startTime", startTime);
     console.log("endTime", endTime);
+    console.log("price", price);
     console.log("isLive", isLive);
 
     // const provider = await getProviderOrSigner();
@@ -422,7 +426,7 @@ const PlaceABidDrawer = ({
 
     // console.log("Make payment");
     await marketplaceContract.bidInETH(id, 0, {
-      value: ethers.utils.parseEther("0.3"),
+      value: ethers.utils.parseEther("1"),
     });
     // console.log("Payment made");
   };
@@ -447,9 +451,12 @@ const PlaceABidDrawer = ({
     // console.log("paymentmethod", paymentMethod);
     console.log("highestBid", highestBid);
 
+    console.log("id", id);
+    console.log("id", typeof id);
+
     // get the price of dollar from smartcontract and convert this value
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    let USDPriceInWei = 1000 * 10 ** 6;
+    let USDPriceInWei = 3000 * 10 ** 6;
     // if (paymentMethod == 1) {
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -461,12 +468,12 @@ const PlaceABidDrawer = ({
 
     console.log("Approved");
 
-    // console.log("paymentmethod", paymentMethod);
-    // console.log("amount", amount);
+    USDPriceInWei = USDPriceInWei.toString();
 
-    const tx = await marketplaceContract.bidInUSDT(
-      id, 
-      1000, 1, {
+    // console.log("paymentmethod", paymentMethod);
+  
+
+    const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, {
       gasLimit: ethers.BigNumber.from("500000"),
     });
 

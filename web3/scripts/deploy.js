@@ -65,7 +65,7 @@ async function main() {
   let account2 = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
   await usdToken.connect(signer).transfer(account2, usdctoken);
 
-  saveFrontendFiles(usd, "TetherToken");
+  // saveFrontendFiles(usd, "TetherToken");
   saveFrontendFiles(deployedMarketplaceContract, "ArtiziaMarketplace");
   saveFrontendFiles(deployedNFTContract, "ArtiziaNFT");
 }

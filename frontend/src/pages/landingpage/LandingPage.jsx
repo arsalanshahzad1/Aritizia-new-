@@ -37,10 +37,23 @@ const LandingPage = ({ search, setSearch }) => {
     }
   };
 
+  async function getProvider() {
+    // Create a provider using any Ethereum node URL
+    const provider = new ethers.providers.JsonRpcProvider(
+      "https://rpc2.sepolia.org"
+    );
+
+    return provider;
+  }
+
   // Helper function to fetch a Provider/Signer instance from Metamask
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("In get provider or signer");
+
+    console.log("In try");
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
+    console.log("In get provider or signer");
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
@@ -48,11 +61,14 @@ const LandingPage = ({ search, setSearch }) => {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
+    console.log("In get provider or signer");
 
     if (needSigner) {
       const signer = web3Provider.getSigner();
       return signer;
     }
+    console.log("In get provider or signer");
+
     return web3Provider;
   };
 
@@ -71,6 +87,8 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
+    console.log("provider", provider);
+
     let listingType;
 
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
@@ -80,7 +98,7 @@ const LandingPage = ({ search, setSearch }) => {
     let priceInUSD = 1.3;
 
     let mintedTokens = await marketplaceContract.getListedNfts();
-    // console.log("mintedTokens", mintedTokens);
+    console.log("mintedTokens", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
 
@@ -89,6 +107,8 @@ const LandingPage = ({ search, setSearch }) => {
       id = +mintedTokens[i].tokenId.toString();
 
       const metaData = await nftContract.tokenURI(id);
+
+      console.log("metaData", metaData);
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
@@ -102,7 +122,7 @@ const LandingPage = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
           data = JSON.parse(data);
 
-          // console.log("Dataa", data);
+          console.log("Dataa", data);
           // Extracting values using dot notation
           const price = data.price;
           listingType = data.listingType;
@@ -112,7 +132,7 @@ const LandingPage = ({ search, setSearch }) => {
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
-          // console.log("listingType", listingType);
+          console.log("listingType", listingType);
           // console.log("CHECK2");
 
           if (listingType === 0) {
@@ -128,7 +148,6 @@ const LandingPage = ({ search, setSearch }) => {
             };
             // console.log("CHECK3");
 
-            // console.log(nftData);
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
             // console.log("myNFTs in function", myNFTs);
@@ -171,37 +190,29 @@ const LandingPage = ({ search, setSearch }) => {
     // console.log("getAddress", accounts[0]);
   };
 
+  // const swapUSDTForETH = async () => {
+  //   const signer = await getProviderOrSigner(true);
 
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
 
+  //   await marketplaceContract.swapUSDTForETH(20);
+  // };
 
-  const swapUSDTForETH = async () => {
-    const signer = await getProviderOrSigner(true);
+  // const swapETHForUSDT = async () => {
+  //   const signer = await getProviderOrSigner(true);
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
 
-    await marketplaceContract.swapUSDTForETH(20);
-  };
-
-
-
-
-  
-
-  const swapETHForUSDT = async () => {
-    const signer = await getProviderOrSigner(true);
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
-
-    await marketplaceContract.swapETHForUSDT(20);
-  };
+  //   await marketplaceContract.swapETHForUSDT(20);
+  // };
 
   useEffect(() => {
     if (!walletConnected) {
@@ -215,6 +226,8 @@ const LandingPage = ({ search, setSearch }) => {
 
   useEffect(() => {
     connectWallet();
+    getProviderOrSigner();
+    // getProviderOrSigner();
     getListedNfts();
     getAddress();
   }, [userAddress]);
@@ -364,8 +377,8 @@ const LandingPage = ({ search, setSearch }) => {
           </div>
         </section>
         <div>
-          <button onClick={swapUSDTForETH}>swapUSDTForETH</button>
-          <button onClick={swapETHForUSDT}>swapETHForUSDT</button>
+          {/* <button onClick={swapUSDTForETH}>swapUSDTForETH</button>
+          <button onClick={swapETHForUSDT}>swapETHForUSDT</button> */}
         </div>
         <section className="home-six-sec"></section>
         <Search search={search} setSearch={setSearch} />

@@ -7,7 +7,7 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import Web3Modal from "web3modal";
 import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-address.json";
@@ -26,12 +26,9 @@ const SearchPage = ({ search, setSearch }) => {
   const [currency, setCurrency] = useState({ value: "eth", label: "ETH" });
   const [slider, setSlider] = useState(false);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const dataFromQuery = searchParams.get("data");
 
   // Receiving data from URL parameters
-  const { data } = useParams();
+  // const { data } = useParams();
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
@@ -39,14 +36,30 @@ const SearchPage = ({ search, setSearch }) => {
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [searchedNfts, setSearchedNfts] = useState([]);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location.search);
+  const [name, setName] = useState("");
+
   let searchedNft = useRef([]);
+
   const [searchText, setSearchText] = useState("");
+
   let searchTexts = useRef();
+
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
     searchTexts = event.target.value;
     getSearchedNfts();
   };
+
+  useEffect(() => {
+    if (searchParams.get("name") || searchParams.get("name") == "") {
+      setSearchText(searchParams.get("name"));
+      console.log(searchParams.get("name"), "call");
+      navigate("/search");
+    }
+  }, []);
 
   const web3ModalRef = useRef();
 
@@ -110,13 +123,19 @@ const SearchPage = ({ search, setSearch }) => {
     let selectedListingType = 0;
     let minRange = 100;
     let maxRange = 1000;
+    console.log("searchText", searchText);
+
+    console.log("Check1");
+    console.log("nftListFP.length", nftListFP.length);
 
     for (let i = 0; i < nftListFP.length; i++) {
       title = nftListFP[i].title.toLowerCase();
       let priceOfNft = Number(nftListFP[i].price);
+      console.log("Check2");
 
       let priceETH = priceOfNft;
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
+      console.log("Check3");
 
       let oneETHInUSD = 1 / priceInETH;
       let priceInUSD = priceETH;
@@ -124,14 +143,14 @@ const SearchPage = ({ search, setSearch }) => {
       priceInUSD = oneETHInUSD * priceInUSD;
       // console.log("searchTextas", typeof searchTexts);
       // console.log("searchText", searchTexts.toString());
-      // console.log("searchText", searchTexts);
+      console.log("searchText", searchText);
       // searched = searchTexts.toLowerCase();
       // console.log("Title", title);
       // console.log("searched", searched);
 
-      if (searched == "") {
+      if (searchedNfts == "") {
         nfts.push(nftListFP[i]);
-        // console.log("Found", title);
+        console.log("Found khaali", title);
       } else if (title.includes(searchTexts.toLowerCase())) {
         console.log("nftListFP", nftListFP[i]);
         console.log("price", Number(nftListFP[i].price));
@@ -172,6 +191,7 @@ const SearchPage = ({ search, setSearch }) => {
   };
 
   const getListedNfts = async () => {
+    console.log("in getListedNfts");
     const provider = await getProviderOrSigner();
 
     const marketplaceContract = new Contract(
@@ -185,7 +205,9 @@ const SearchPage = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
+
     let listingType;
+    console.log("nftListFP.length2", nftListFP.length);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     let myNFTs = [];
@@ -195,10 +217,9 @@ const SearchPage = ({ search, setSearch }) => {
       id = +mintedTokens[i].tokenId.toString();
 
       const metaData = await nftContract.tokenURI(id);
+      console.log("in getListedNfts");
 
       let auctionData = await marketplaceContract._idToAuction(id);
-
-      //   console.log()
 
       axios
         .get(metaData)
@@ -220,6 +241,7 @@ const SearchPage = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
           const paymentMethod = data.crypto;
+          console.log("in getListedNfts");
 
           const nftData = {
             id: id, //
@@ -234,47 +256,11 @@ const SearchPage = ({ search, setSearch }) => {
             listingType: listingType,
           };
 
+          console.log("in getListedNfts");
           // console.log(nftData);
           myNFTs.push(nftData);
+          console.log("Setting list");
           setNftListFP(myNFTs);
-          // console.log("myNFTs in function", myNFTs);
-
-          // if (listingType === 0) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     crypto: crypto,
-          //     royalty: royalty,
-          //     description: description,
-          //     collection: collection,
-          //   };
-
-          //   console.log(nftData);
-          //   myNFTs.push(nftData);
-          //   setNftListFP(myNFTs);
-          //   console.log("myNFTs in function", myNFTs);
-          // } else
-          // if (listingType === 1) {
-          //   const nftAuctionData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     basePrice: auctionData.basePrice.toString(),
-          //     endTime: auctionData.endTime.toString(),
-          //     highestBid: auctionData.highestBid.toString(),
-          //     highestBidder: auctionData.highestBidder.toString(),
-          //     isLive: auctionData.isLive.toString(),
-          //     seller: auctionData.seller.toString(),
-          //     startTime: auctionData.startTime.toString(),
-          //   };
-
-          //   myAuctions.push(nftAuctionData);
-          //   console.log("auction in function", myAuctions);
-          //   setNftListAuction(myAuctions);
-          // }
         })
 
         .catch((error) => {
@@ -299,13 +285,13 @@ const SearchPage = ({ search, setSearch }) => {
         disableInjectedProvider: false,
       });
     }
-  }, [walletConnected, searchedNfts]);
+  }, [walletConnected, searchedNfts, nftListFP]);
 
   useEffect(() => {
     connectWallet();
     getListedNfts();
-    getSearchedNfts();
     getAddress();
+    getSearchedNfts();
   }, [userAddress]);
 
   const statusOptions = [

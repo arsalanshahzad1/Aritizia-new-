@@ -28,7 +28,7 @@ const Search = ({ search, setSearch }) => {
                   />
                   <button type="submit" className="search-submit">
                     <Link
-                      to={`/search/${searchText}`}
+                      to={`/search?name=${searchText}`}
                       onClick={() => setSearch(false)}
                       style={{ color: "#fff" }}
                     >
