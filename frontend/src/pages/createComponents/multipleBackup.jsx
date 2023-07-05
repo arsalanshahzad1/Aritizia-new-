@@ -83,6 +83,7 @@
 //                           }}
 //                           className={` create-single-card ${
 //                             listingType === "fixedPrice" ? "active" : ""
+//                             listingType === "fixedPrice" ? "active" : ""
 //                           }`}
 //                         >
 //                           <AiFillTag />
@@ -95,6 +96,7 @@
 //                             setListingType("timedAuction");
 //                           }}
 //                           className={` create-single-card ${
+//                             listingType === "timedAuction" ? "active" : ""
 //                             listingType === "timedAuction" ? "active" : ""
 //                           }`}
 //                         >

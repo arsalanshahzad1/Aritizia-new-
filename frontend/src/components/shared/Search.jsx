@@ -4,6 +4,7 @@ import { RxCross2 } from "react-icons/rx";
 import { FaSearch } from "react-icons/fa";
 
 const Search = ({ search, setSearch }) => {
+
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (event) => {

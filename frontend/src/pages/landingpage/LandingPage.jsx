@@ -87,10 +87,9 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
-    console.log("provider", provider);
-
     let listingType;
-
+    // console.log("Active Method", listingType);
+    // console.log("time", Date.now());
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
@@ -133,7 +132,7 @@ const LandingPage = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
           console.log("listingType", listingType);
-          // console.log("CHECK2");
+          console.log("CHECK2");
 
           if (listingType === 0) {
             const nftData = {

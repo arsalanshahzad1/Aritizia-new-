@@ -19,6 +19,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
 import Duck from "../../../public/assets/images/duck.png";
+import NftCard from "./NftCard";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -91,10 +92,11 @@ const Multiple = ({ search, setSearch }) => {
     { value: 1, label: "USDT" },
   ];
 
-  const collectionOptions = [
+  const [collectionOptions, setcollectionOptions] = useState([
     { value: "", label: "Select Collection" },
     { value: "usdt", label: "USDT" },
-  ];
+  ]);
+
   const defaultOption = collectionOptions[0];
   const defaultCrypto = cryptoOptions[0];
 
@@ -334,7 +336,7 @@ const Multiple = ({ search, setSearch }) => {
   //   }
   // };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     price,
     title,
     description,
@@ -455,21 +457,30 @@ const Multiple = ({ search, setSearch }) => {
       console.error(err);
     }
   };
+  // const [collectionOptions, setcollectionOptions] = useState([
+  //   { value: "", label: "Select Collection" },
+  //   { value: "usdt", label: "USDT" },
+  // ]);
 
-  const [CreateCollection, setCreateCollection] = useState("");
-  const [showCreateCollection, setshowCreateCollection] = useState(false);
   const [showProfileNFT, setshowProfileNFT] = useState(false);
   const [ShowMore, setShowMore] = useState(false);
+  const [CreateCollection, setCreateCollection] = useState("");
+  const [showCreateCollection, setshowCreateCollection] = useState(false);
+
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
       alert("Input Collection Name to Create");
     } else {
+      setcollectionOptions((previousOptions) => [
+        ...previousOptions,
+        { value: CreateCollection.toLowerCase(), label: CreateCollection },
+      ]);
+      console.log(collectionOptions, "collection updated");
       hideCreateCollection();
-      setshowProfileNFT(true);
     }
   };
   const hideCreateCollection = () => {
-    // setCreateCollection('')
+    setCreateCollection("");
     setshowCreateCollection(false);
   };
 
@@ -499,8 +510,207 @@ const Multiple = ({ search, setSearch }) => {
     const imageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
     );
-    setSelectedImagesNFT(imageUrls);
+    setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);
+
   };
+
+  const handleRemoveImage = (index) => {
+    const newArray = [...selectedImagesNFT];
+    newArray.splice(index, 1);
+    setSelectedImagesNFT(newArray);
+  };
+
+  const [NFts, setNfts] = useState('');
+
+  useEffect(() => {
+    if (selectedImagesNFT.length > 0) {
+      if (listingType === 0) {
+
+        const newNFTs = selectedImagesNFT.map((image, index) => ({
+          image,
+          price: '',
+          desc: '',
+          status: ''
+        }));
+        setNfts((prevNFTs) => [...prevNFTs, ...newNFTs.slice(prevNFTs.length)]);
+      }
+      else if (listingType === 1) {
+        const newNFTs = selectedImagesNFT.map((image, index) => ({
+          image,
+          bid: '',
+          startDate: '',
+          endDate: '',
+          desc: '',
+          status: ''
+        }));
+        setNfts((prevNFTs) => [...prevNFTs, ...newNFTs.slice(prevNFTs.length)]);
+      }
+    }
+  }, [selectedImagesNFT]);
+
+  const handleRemoveCompletedNft = (index) => {
+    handleRemoveImage(index)
+    const newArray = [...NFts];
+    newArray.splice(index, 1);
+    setNfts(newArray);
+  };
+  const [currentNFT, setCurrentNFT] = useState(0)
+
+  const [nftForm, setnftForm] = useState('')
+  useEffect(() => {
+    if (listingType === 0) {
+      setnftForm({
+        "price": "",
+        "desc": "",
+      })
+    }
+    else if (listingType === 1) {
+      setnftForm({
+        "desc": "",
+        'bid': "",
+        'startDate': "",
+        'endDate': ""
+      })
+    }
+  }, [listingType])
+
+
+  const handleNftForm = (e) => {
+    console.log("handling", e.target.name, e.target.value)
+    setnftForm({ ...nftForm, [e.target.name]: e.target.value });
+  }
+  const saveNFT = () => {
+    if (listingType === 0) {
+      if (!nftForm.price || !nftForm.desc) {
+        alert("Fill all fields to save a NFT")
+      }
+      else {
+
+        const Data = {
+          "price": nftForm.price,
+          "desc": nftForm.desc,
+          "image": NFts[currentNFT].image,
+          "status": "completed"
+        }
+        setnftForm({
+          "price": "",
+          "desc": ""
+        })
+        updateCompleted(currentNFT, Data)
+      }
+    }
+
+    else if (listingType === 1) {
+      if (!nftForm.bid || !nftForm.desc || !nftForm.startDate || !nftForm.endDate) {
+        alert("Fill all fields to save a NFT")
+      }
+      else {
+        const Data = {
+          "bid": nftForm.bid,
+          "startDate": nftForm.startDate,
+          "endDate": nftForm.endDate,
+          "desc": nftForm.desc,
+          "image": NFts[currentNFT].image,
+          "status": "completed"
+        }
+        setnftForm({
+          "bid": "",
+          "desc": "",
+          "startDate": "",
+          "endDate": "",
+          "image": "",
+          "status": ""
+        })
+        updateCompleted(currentNFT, Data)
+      }
+
+    }
+
+  }
+
+  useEffect(() => {
+
+    console.log(NFts, "final data")
+    console.log(currentNFT, "Current NFT")
+  }, [currentNFT, NFts])
+
+
+  const updateCompleted = (index, updatedData) => {
+    setNfts((prevNFTs) => {
+      const updatedNFTs = [...prevNFTs];
+      updatedNFTs[index] = { ...updatedNFTs[index], ...updatedData };
+      return updatedNFTs;
+    });
+
+
+  };
+
+  const [tabIndex, setTabIndex] = useState(0)
+  useEffect(() => {
+    if (NFts.length > 0) {
+
+      if (NFts[0].status !== "completed") {
+        setCurrentNFT(0);
+      }
+    }
+    if (NFts.length > 0) {
+      for (let i = 1; i < NFts.length; i++) {
+
+        if (NFts[i - 1].status === "completed" && NFts[i].status !== "completed") {
+          setCurrentNFT(i);
+          break;
+        }
+      }
+    }
+    console.log("curent nft is", currentNFT)
+  }, [NFts]);
+
+
+
+  const tabs = Math.floor(NFts.length / 10);
+
+  // Create an array of the desired length
+
+
+  useEffect(() => {
+    if (listingType === 1) {
+      if (nftForm.startDate && nftForm.endDate && nftForm.endDate < nftForm.startDate) {
+        alert("End date should be after start date");
+        setnftForm(prevForm => ({
+          ...prevForm,
+          endDate: "" // Replace with your desired end date value
+        }));
+      }
+    }
+
+  }, [nftForm.startDate, nftForm.endDate]);
+
+  useEffect(() => {
+    const today = new Date();
+    today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
+    const selectedStartDate = new Date(nftForm.startDate);
+
+    if (selectedStartDate < today) {
+      alert("Start date should not be before today's date");
+      setnftForm(prevForm => ({
+        ...prevForm,
+        startDate: '' // Replace with your desired start date value
+      }));
+    }
+  }, [nftForm.startDate]);
+
+  const [choosenCollection, setChoosenCollection] = useState("")
+  useEffect(() => {
+    setChoosenCollection(collection)
+    console.log("choosen", choosenCollection)
+  }, [collection])
+
+  const [selectedImage2, setSelectedImage2] = useState(null);
+  const handleInputChange2 = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage2(file);
+  };
+  const [collectionFinalized, setcollectionFinalized] = useState(false)
 
   return (
     <>
@@ -512,95 +722,327 @@ const Multiple = ({ search, setSearch }) => {
             <div className="row">
               <div className="col-lg-8 mx-auto">
                 <div className="row">
-                  <div className="col-lg-12">
-                    <div className="row">
-                      <div className="col-lg-12">
-                        <h2>Select method</h2>
-                      </div>
-                      <div className="col-lg-3 col-md-4 col-6">
-                        <div
-                          onClick={() => {
-                            setListingType(0);
-                          }}
-                          className={` create-single-card ${
-                            listingType === 0 ? "active" : ""
-                          }`}
-                        >
-                          <AiFillTag />
-                          <h3>Fixed Price</h3>
-                        </div>
-                      </div>
-                      <div className="col-lg-3 col-md-4 col-6">
-                        <div
-                          onClick={() => {
-                            setListingType(1);
-                          }}
-                          className={` create-single-card ${
-                            listingType === 1 ? "active" : ""
-                          }`}
-                        >
-                          <BsFillClockFill />
-                          <h3>Timed Auction</h3>
-                        </div>
-                      </div>
-                    </div>
-                    <br />
-                    <br />
-                    {!showProfileNFT ? (
-                      <div>
-                        <h2>Create</h2>
-                        <div className="Create-Collection-div">
-                          <p>Create Collection</p>
-                          <br />
-                          <button
-                            onClick={() => setshowCreateCollection(true)}
-                            className="button-styling "
-                          >
-                            Create
-                          </button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        <h2>Profile NFT</h2>
-                        <div className="profile-nft-row1">
-                          <div className="NFT-image-holder">
-                            <input
-                              ref={fileInputRef}
-                              type="file"
-                              style={{ display: "none" }}
-                              onChange={handleImageUpload}
-                            />
-                            {selectedImage ? (
-                              <img src={selectedImage} alt="Uploaded" />
-                            ) : (
-                              <img src={Duck} alt="" />
-                            )}
-                          </div>
-                          <div className="NFT-image-upload-txt">
-                            <p>
-                              PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
-                            </p>
-                            <button
-                              onClick={handleButtonClick}
-                              className="button-styling browse-btn"
-                            >
-                              Browse
-                            </button>
-                          </div>
-                        </div>
-                        <br />
-                        <br />
+                  {!collectionFinalized &&
+                    <>
+
+                      <div className="line-three">
                         <div className="row">
-                          <div className="col-lg-9 col-md-9 col-7">
+                          <div className="col-lg-12">
+                            <h2>Choose collection</h2>
+                            <p>
+                              This is the collection where your item will appear.
+                            </p>
+                            <Dropdown
+                              options={collectionOptions}
+                              onChange={(e) => {
+                                console.log("important", e)
+                                setCollection(e);
+                              }}
+                              value={collection.value}
+                            />
+                            <div
+                              className="create-collection-btn"
+                              onClick={() => setshowCreateCollection(true)}
+                            >
+                              <svg
+                                enable-background="new 0 0 50 50"
+                                height="25px"
+                                id="Layer_1"
+                                version="1.1"
+                                viewBox="0 0 50 50"
+                                width="25px"
+                                xml: space="preserve"
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns: xlink="http://www.w3.org/1999/xlink"
+                              >
+                                <rect fill="none" height="50" width="50" />
+                                <line
+                                  fill="#2638CC"
+                                  stroke="#2638CC"
+                                  stroke-miterlimit="10"
+                                  stroke-width="4"
+                                  x1="9"
+                                  x2="41"
+                                  y1="25"
+                                  y2="25"
+                                />
+                                <line
+                                  fill="#2638CC"
+                                  stroke="#2638CC"
+                                  stroke-miterlimit="10"
+                                  stroke-width="4"
+                                  x1="25"
+                                  x2="25"
+                                  y1="9"
+                                  y2="41"
+                                />
+                              </svg>
+                              Create Collection
+                            </div>
+                            {showCreateCollection && (
+                              <div className="Create-collection-popup">
+                                <div className="Create-collection-popup-inner">
+                                  <p>Collection Name</p>
+                                  <input
+                                    value={CreateCollection}
+                                    onChange={(e) =>
+                                      setCreateCollection(e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="Enter collection name"
+                                  />
+                                  <p className="txt-2">Upload image</p>
+                                  <input type="file" accept="image/*" onChange={handleInputChange2} />
+
+                                  <div className="popUp-btn-group">
+                                    <div
+                                      className="button-styling btnCC"
+                                      onClick={() => AddCollection()}
+                                    >
+                                      Next
+                                    </div>
+                                    <div
+                                      onClick={hideCreateCollection}
+                                      className="button-styling-outline btnCC"
+                                    >
+                                      <div className="btnCCin">Cancel</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                            <div onClick={() => setcollectionFinalized(true)} className="browse-btn my-5 button-styling">Next</div>
+                          </div>
+                        </div>
+                      </div>
+                    </>}
+                  {collectionFinalized &&
+                    <>
+
+                      <div className="col-lg-12">
+                        {!showProfileNFT &&
+                          <>
+                            <div className="row">
+                              <div className="col-lg-12">
+                                <h2>Select method</h2>
+                              </div>
+                              <div className="col-lg-3 col-md-4 col-6">
+                                <div
+                                  onClick={() => {
+                                    setlistingType(0);
+                                  }}
+                                  className={` create-single-card ${listingType === 0 ? "active" : ""
+                                    }`}
+                                >
+                                  <AiFillTag />
+                                  <h3>Fixed Price</h3>
+                                </div>
+                              </div>
+                              <div className="col-lg-3 col-md-4 col-6">
+                                <div
+                                  onClick={() => {
+                                    setlistingType(1);
+                                  }}
+                                  className={` create-single-card ${listingType === 1 ? "active" : ""
+                                    }`}
+                                >
+                                  <BsFillClockFill />
+                                  <h3>Timed Auction</h3>
+                                </div>
+                              </div>
+                            </div>
+                            <br />
+                            <br />
+
+
+                            {/* <div className="line-three">
+                          <div className="row">
+                            <div className="col-lg-12">
+                              <h2>Choose collection</h2>
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <p>
+                                    This is the collection where your item will appear.
+                                  </p>
+                                  <Dropdown
+                                    options={collectionOptions}
+                                    onChange={(e) => {
+                                      setCollection(e.value);
+                                    }}
+                                    value={defaultOption.value}
+                                  />
+                                  <div
+                                    className="create-collection-btn"
+                                    onClick={() => setshowCreateCollection(true)}
+                                  >
+                                    <svg
+                                      enable-background="new 0 0 50 50"
+                                      height="25px"
+                                      id="Layer_1"
+                                      version="1.1"
+                                      viewBox="0 0 50 50"
+                                      width="25px"
+                                      xml: space="preserve"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      xmlns: xlink="http://www.w3.org/1999/xlink"
+                                    >
+                                      <rect fill="none" height="50" width="50" />
+                                      <line
+                                        fill="#2638CC"
+                                        stroke="#2638CC"
+                                        stroke-miterlimit="10"
+                                        stroke-width="4"
+                                        x1="9"
+                                        x2="41"
+                                        y1="25"
+                                        y2="25"
+                                      />
+                                      <line
+                                        fill="#2638CC"
+                                        stroke="#2638CC"
+                                        stroke-miterlimit="10"
+                                        stroke-width="4"
+                                        x1="25"
+                                        x2="25"
+                                        y1="9"
+                                        y2="41"
+                                      />
+                                    </svg>
+                                    Create Collection
+                                  </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-5">
+                                  <p>Crypto</p>
+                                  <Dropdown
+                                    options={cryptoOptions}
+                                    onChange={(e) => {
+                                      setCrypto(e.value);
+                                    }}
+                                    value={defaultCrypto.value}
+                                  />
+                                </div>
+                              </div>
+
+
+                              {showCreateCollection && (
+                                <div className="Create-collection-popup">
+                                  <div className="Create-collection-popup-inner">
+                                    <p>Collection Name</p>
+                                    <input
+                                      value={CreateCollection}
+                                      onChange={(e) =>
+                                        setCreateCollection(e.target.value)
+                                      }
+                                      type="text"
+                                      placeholder="Enter collection name"
+                                    />
+                                    <div className="popUp-btn-group">
+                                      <button
+                                        className="button-styling"
+                                        onClick={() => AddCollection()}
+                                      >
+                                        Next
+                                      </button>
+                                      <button
+                                        onClick={hideCreateCollection}
+                                        className="button-styling-outline"
+                                      >
+                                        <div>Cancel</div>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                          </div>
+                        </div> */}
+                            <div className="line-four">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Title</h2>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. ‘Crypto Funk"
+                                    // defaultValue={title.current.value}
+                                    ref={title}
+                                  // onChange={(e) => setTitle(e.target.value)}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="line-six">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Royalties</h2>
+                                  <Slider
+                                    min={0}
+                                    max={15}
+                                    defaultValue={0}
+                                    // step={null}
+                                    onChange={handleSliderChange}
+                                    value={royalty}
+                                  />
+                                </div>
+                                <div className="col-lg-3 ">
+                                  <div className="royality-value">
+
+                                    {royalty} %
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <button
+                              className="button-styling"
+                              onClick={() => setshowProfileNFT(true)}
+                            >
+                              Next
+                            </button>
+                          </>
+                        }
+                        {showProfileNFT &&
+
+                          <div>
+                            <h2>Profile NFT</h2>
+                            <div className="profile-nft-row1">
+                              <div className="NFT-image-holder">
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={handleImageUpload}
+                                />
+                                {selectedImage ? (
+                                  <img src={selectedImage} alt="Uploaded" />
+                                ) : (
+                                  <img src={Duck} alt="" />
+                                )}
+                              </div>
+                              <div className="NFT-image-upload-txt">
+                                <p>
+                                  PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
+                                </p>
+                                <button
+                                  onClick={handleButtonClick}
+                                  className="button-styling browse-btn"
+                                >
+                                  Browse
+                                </button>
+                              </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div className="row">
+                              {/* <div className="col-lg-9 col-md-9 col-7">
                             <p>Collection Name</p>
                             <input
                               type="text"
                               value={CreateCollection}
                               disabled
                             />
-                          </div>
-                          {!ShowMore ? (
+                          </div> */}
+                              {/* {!ShowMore ? (
                             <div className="col-lg-3 col-md-3 col-5">
                               <p>Crypto</p>
                               <Dropdown
@@ -616,10 +1058,10 @@ const Multiple = ({ search, setSearch }) => {
                               <p>Crypto</p>
                               <input type="text" value={crypto.label} />
                             </div>
-                          )}
-                        </div>
-                        <br />
-                        <div className="line-six">
+                          )} */}
+                            </div>
+                            <br />
+                            {/* <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
                               <h2>Royalties</h2>
@@ -632,107 +1074,266 @@ const Multiple = ({ search, setSearch }) => {
                                 value={royalty}
                               />
                             </div>
-                            <div className="col-lg-3 royality-value">
-                              {royalty} %
-                            </div>
-                          </div>
-                        </div>
-                        <br />
-                        <br />
-                        <div>
-                          <div>
-                            <h2>Upload NFT</h2>
-                            {selectedImagesNFT.length < 1 ? (
-                              <div className="Create-Collection-div">
-                                <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
-                                <br />
-                                <input
-                                  ref={fileInputRef2}
-                                  type="file"
-                                  style={{ display: "none" }}
-                                  multiple
-                                  onChange={handleFileUpload}
-                                />
-                                <button
-                                  onClick={handleButtonClick2}
-                                  className="button-styling "
-                                >
-                                  Browse
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="NFT-thumbnail-holder">
-                                <div className="NFT-inner">
-                                  {selectedImagesNFT.map((image) => (
-                                    <div>
-                                      <img src={image} alt="" />
-                                    </div>
-                                  ))}
-                                </div>
-                                <div className="control-main-div">
-                                  <button
-                                    onClick={handleButtonClick2}
-                                    className="button-styling "
-                                  >
-                                    Add More
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <br />
+                            <div className="col-lg-3 ">
+                              <div className="royality-value">
 
-                        {ShowMore && (
-                          <div>
-                            <div className="line-two">
-                              <div className="row">
-                                <div className="col-lg-9 col-md-9 col-7">
-                                  <h2>Price</h2>
-                                  <input
-                                    type="text"
-                                    value={inputValue}
-                                    onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
-                                  />
-                                  {showWarning && (
-                                    <p style={{ color: "red" }}>
-                                      Please enter a valid positive number.
-                                    </p>
-                                  )}
-                                </div>
+                                {royalty} %
                               </div>
                             </div>
-                            <div className="line-four">
-                              <div className="row">
-                                <div className="col-lg-9">
-                                  <h2>Title</h2>
-                                  <input
-                                    type="text"
-                                    placeholder="e.g. ‘Crypto Funk"
-                                    // defaultValue={title.current.value}
-                                    ref={title}
+                          </div>
+                        </div> */}
+
+                            <div>
+                              <div>
+                                <h2>Upload NFT</h2>
+                                {NFts.length < 1 ? (
+                                  <div className="Create-Collection-div">
+                                    <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                                    <br />
+                                    <input
+                                      ref={fileInputRef2}
+                                      type="file"
+                                      style={{ display: "none" }}
+                                      multiple
+                                      onChange={handleFileUpload}
+                                    />
+                                    <button
+                                      onClick={handleButtonClick2}
+                                      className="button-styling "
+                                    >
+                                      Browse
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="NFT-thumbnail-holder">
+                                    <div className="NFT-inner">
+                                      {NFts.length > 0 &&
+                                        NFts.map((nft, index) => {
+                                          if (index >= tabIndex && index < Number(tabIndex + (10))) {
+                                            return (
+                                              < NftCard
+                                                isCompleted={nft.status === "completed" ? "true" : "false"}
+                                                isClicked={currentNFT === index ? "true" : "false"}
+                                                index={index}
+                                                img={nft.image}
+                                                handleRemoveImage={handleRemoveCompletedNft}
+                                              />
+                                            )
+                                          }
+
+                                        })}
+
+                                    </div>
+                                    <div className="control-main-div">
+                                      <input
+                                        ref={fileInputRef2}
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        multiple
+                                        onChange={handleFileUpload}
+                                      />
+                                      <button
+                                        onClick={handleButtonClick2}
+                                        className="button-styling "
+                                      >
+                                        Add More
+                                      </button>
+                                      {NFts.length > Number(10) &&
+                                        <div className="controlsDiv">
+                                          {NFts.length > Number(10)
+                                            &&
+                                            <>
+                                              <svg onClick={() => setTabIndex(0)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="7" cy="7" r="7" fill={`${tabIndex === 0 ? '#B601D1' : '#D9D9D9'}`} />
+                                              </svg>
+                                              <svg onClick={() => setTabIndex(10)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="7" cy="7" r="7" fill={`${tabIndex === 10 ? '#B601D1' : '#D9D9D9'}`} />
+                                              </svg>
+                                            </>
+                                          }
+
+
+                                          {NFts.length > Number(20)
+                                            &&
+                                            <svg onClick={() => setTabIndex(20)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 20 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(30)
+                                            &&
+                                            <svg onClick={() => setTabIndex(30)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 30 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(40)
+                                            &&
+                                            <svg onClick={() => setTabIndex(40)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 40 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(50)
+                                            &&
+                                            <svg onClick={() => setTabIndex(50)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 50 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(60)
+                                            &&
+                                            <svg onClick={() => setTabIndex(60)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 60 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(70)
+                                            &&
+                                            <svg onClick={() => setTabIndex(70)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 70 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(80)
+                                            &&
+                                            <svg onClick={() => setTabIndex(80)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 80 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(90)
+                                            &&
+                                            <svg onClick={() => setTabIndex(90)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 90 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                          {NFts.length > Number(100)
+                                            &&
+                                            <svg onClick={() => setTabIndex(100)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 100 ? '#B601D1' : '#D9D9D9'}`} />
+                                            </svg>
+                                          }
+                                        </div>
+                                      }
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <br />
+                            <br />
+
+                            {ShowMore &&
+                              NFts.length > 0 &&
+                              NFts[NFts.length - 1].status !== "completed" && (
+                                <div>
+                                  {listingType === 0 ?
+                                    <div className="line-two">
+                                      <div className="row">
+                                        <div className="col-lg-9 col-md-9 col-7">
+                                          <h2>Price</h2>
+                                          <input
+                                            type="text"
+                                            value={nftForm.price}
+                                            onChange={handleNftForm}
+                                            name="price"
+                                          // type="number"
+                                          // placeholder="0.00"
+                                          // ref={price}
+                                          />
+                                          {showWarning && (
+                                            <p style={{ color: "red" }}>
+                                              Please enter a valid positive number.
+                                            </p>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    :
+                                    <>
+                                      <div className="line-two">
+                                        <div className="row">
+                                          <div className="col-lg-9">
+                                            <h2>Minimum bid</h2>
+                                            <input
+                                              type="text"
+                                              value={nftForm.bid}
+                                              name="bid"
+                                              onChange={handleNftForm}
+                                            // type="number"
+                                            // placeholder="0.00"
+                                            // ref={price}
+                                            />
+                                            {showWarning && (
+                                              <p style={{ color: "red" }}>
+                                                Please enter a valid positive number.
+                                              </p>
+                                            )}
+                                          </div>
+                                          <div className="col-lg-3 col-md-3 col-5">
+
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="line-two">
+                                        <div className="row">
+                                          <div className="col-lg-6 col-md-6 col-6">
+                                            <h2>Starting date</h2>
+                                            <input
+                                              id="startingTime"
+                                              type="date"
+                                              name="startDate"
+                                              placeholder="mm/dd/yyyy"
+                                              style={{ padding: "6px 10px 6px 15px" }}
+                                              value={nftForm.startDate}
+                                              // onChange={(e) =>
+                                              //   setStartingDate(e.target.value)
+                                              // }
+                                              onChange={handleNftForm}
+                                            />
+                                          </div>
+                                          <div className="col-lg-6 col-md-6 col-6">
+                                            <h2>Expiration date</h2>
+                                            <input
+                                              id="endTime"
+                                              type="date"
+                                              name="endDate"
+                                              placeholder="mm/dd/yyyy"
+                                              style={{ padding: "6px 10px 6px 15px" }}
+                                              value={nftForm.endDate}
+                                              // onChange={(e) => setEndingDate(e.target.value)}
+                                              onChange={handleNftForm}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </>}
+
+                                  {/* <div className="line-four">
+                                <div className="row">
+                                  <div className="col-lg-9">
+                                    <h2>Title</h2>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. ‘Crypto Funk"
+                                      // defaultValue={title.current.value}
+                                      value={nftForm.title}
+                                      onChange={handleNftForm}
+                                      name="title"
                                     // onChange={(e) => setTitle(e.target.value)}
-                                  />
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div className="line-five">
-                              <div className="row">
-                                <div className="col-lg-9">
-                                  <h2>Description</h2>
-                                  <input
-                                    type="text"
-                                    placeholder="e.g. ‘This is very limited item’"
-                                    ref={description}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            {/* <div className="line-seven">
+                              </div> */}
+                                  <div className="line-five">
+                                    <div className="row">
+                                      <div className="col-lg-9">
+                                        <h2>Description</h2>
+                                        <input
+                                          type="text"
+                                          placeholder="e.g. ‘This is very limited item’"
+                                          value={nftForm.desc}
+                                          onChange={handleNftForm}
+                                          name="desc"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {/* <div className="line-seven">
                                 <div className="row">
                                   <div className="col-lg-8">
                                     <button type="submit" className="button-styling">
@@ -741,58 +1342,47 @@ const Multiple = ({ search, setSearch }) => {
                                   </div>
                                 </div>
                               </div> */}
-                          </div>
-                        )}
-                        {!ShowMore ? (
-                          <div className="Button-holding-div">
-                            <button
-                              className="button-styling"
-                              onClick={() => setShowMore(true)}
-                            >
-                              Done
-                            </button>
-                            <button className="button-styling-outline">
+                                </div>
+                              )}
+                            {!ShowMore ? (
+                              <div className="Button-holding-div">
+                                <button
+                                  className="button-styling"
+                                  onClick={() => setShowMore(true)}
+                                >
+                                  Done
+                                </button>
+                                {/* <button className="button-styling-outline">
                               <div>Add More</div>
-                            </button>
+                            </button> */}
+                              </div>
+                            ) : (
+                              <div className="Button-holding-div">
+                                {
+                                  NFts.length > 0 &&
+
+                                    NFts[NFts.length - 1].status !== "completed" ?
+                                    <button onClick={saveNFT} className="button-styling">Next</button>
+                                    :
+                                    <button className="disabledButton">
+                                      Next
+                                    </button>
+                                }
+                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ?
+                                  <button className="button-styling-outline ml-auto">
+                                    <div>List</div>
+                                  </button>
+                                  :
+                                  <button className="disabledButton">List</button>
+                                }
+                              </div>
+                            )}
                           </div>
-                        ) : (
-                          <div className="Button-holding-div">
-                            <button className="button-styling">Save</button>
-                            <button className="button-styling-outline">
-                              <div>Done</div>
-                            </button>
-                          </div>
-                        )}
+                        }
                       </div>
-                    )}
-                  </div>
-                  {showCreateCollection && (
-                    <div className="Create-collection-popup">
-                      <div className="Create-collection-popup-inner">
-                        <p>Collection Name</p>
-                        <input
-                          value={CreateCollection}
-                          onChange={(e) => setCreateCollection(e.target.value)}
-                          type="text"
-                          placeholder="Enter collection name"
-                        />
-                        <div className="popUp-btn-group">
-                          <button
-                            className="button-styling"
-                            onClick={() => AddCollection()}
-                          >
-                            Next
-                          </button>
-                          <button
-                            onClick={hideCreateCollection}
-                            className="button-styling-outline"
-                          >
-                            <div>Cancel</div>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                    </>
+                  }
+
                   <div className="line-one"></div>
                 </div>
               </div>

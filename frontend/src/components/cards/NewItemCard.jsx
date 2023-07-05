@@ -87,7 +87,7 @@ const NewItemCard = ({
               </div>
               <div
                 className="right"
-                style={{ padding: "15px 0px 15px 20px" }}
+                style={{ cursor: "pointer", padding: "15px 0px 15px 20px" }}
                 onClick={() => setShowLinks(!showLinks)}
               >
                 <p>...</p>

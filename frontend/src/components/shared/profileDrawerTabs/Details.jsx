@@ -1,14 +1,17 @@
 import React from 'react'
 import './ProfileDrawerTabs.css'
+import { Link } from 'react-router-dom'
 
 const Details = () => {
     return (
         <div className="tab-data">
             <h3 className='owner'>Owner</h3>
-            <div className='one'>
-                <img src="/assets/images/owner.png" alt="" />
-                <span>Stacy Long</span>
-            </div>
+            <Link to="/other-profile">
+                <div className='one'>
+                    <img src="/assets/images/owner.png" alt="" />
+                    <span>Stacy Long</span>
+                </div>
+            </Link>
             <h3 className='properties'>Properties</h3>
             <div className="wrap">
                 <div className="row">
