@@ -533,12 +533,17 @@ p {
   display: none;
 }
 
-.profile-drawer-wrapper{
+.profile-drawer-wrapper {
   width: 90vw !important;
   left: 5vw !important;
 }
 
-.profile-drawer-wrapper__content{
+.nft-drawer-wrapper{
+  width: 100vw !important;
+  left: 0vw !important;
+}
+
+.profile-drawer-wrapper__content {
   max-height: calc(85vh - 25px) !important;
 }
 
@@ -677,4 +682,21 @@ p {
     text-align: center;
     border-radius: 15px;
   }
+}
+
+.stock-div {
+  width: max-content;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  color: #121212;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.stock-div span {
+  margin-left: 10px;
+  color: #6F6F6F;
+  font-weight: 500;
+  font-size: 18px
 }

@@ -25,7 +25,9 @@
 //     label: "Select Collection",
 //   });
 
+
 //   const [listingType, setListingType] = useState("fixedPrice");
+
 
 //   const cryptoOptions = [
 //     { value: "eth", label: "ETH" },
@@ -79,7 +81,9 @@
 //                       <div className="col-lg-3 col-md-4 col-6">
 //                         <div
 //                           onClick={() => {
+
 //                             setListingType("fixedPrice");
+
 //                           }}
 //                           className={` create-single-card ${
 //                             listingType === "fixedPrice" ? "active" : ""
@@ -92,7 +96,9 @@
 //                       <div className="col-lg-3 col-md-4 col-6">
 //                         <div
 //                           onClick={() => {
+
 //                             setListingType("timedAuction");
+
 //                           }}
 //                           className={` create-single-card ${
 //                             listingType === "timedAuction" ? "active" : ""

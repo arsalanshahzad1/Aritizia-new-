@@ -206,8 +206,10 @@ const SearchPage = ({ search, setSearch }) => {
       provider
     );
 
+
     let listingType;
     console.log("nftListFP.length2", nftListFP.length);
+
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     let myNFTs = [];
@@ -261,6 +263,44 @@ const SearchPage = ({ search, setSearch }) => {
           myNFTs.push(nftData);
           console.log("Setting list");
           setNftListFP(myNFTs);
+
+          console.log("myNFTs in function", myNFTs);
+          // if (listingType === 0) {
+          //   const nftData = {
+          //     id: id, //
+          //     title: title,
+          //     image: image,
+          //     price: price,
+          //     crypto: crypto,
+          //     royalty: royalty,
+          //     description: description,
+          //     collection: collection,
+          //   };
+
+          //   console.log(nftData);
+          //   myNFTs.push(nftData);
+          //   setNftListFP(myNFTs);
+          //   console.log("myNFTs in function", myNFTs);
+          // } else if (listingType === 1) {
+          //   const nftData = {
+          //     id: id, //
+          //     title: title,
+          //     image: image,
+          //     price: price,
+          //     basePrice: auctionData.basePrice.toString(),
+          //     endTime: auctionData.endTime.toString(),
+          //     highestBid: auctionData.highestBid.toString(),
+          //     highestBidder: auctionData.highestBidder.toString(),
+          //     isLive: auctionData.isLive.toString(),
+          //     seller: auctionData.seller.toString(),
+          //     startTime: auctionData.startTime.toString(),
+          //   };
+
+          //   myAuctions.push(nftData);
+          //   console.log("auction in function", myAuctions);
+          //   setNftListAuction(myAuctions);
+          // }
+
         })
 
         .catch((error) => {

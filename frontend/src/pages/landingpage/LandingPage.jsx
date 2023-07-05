@@ -87,9 +87,9 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
-    console.log("provider", provider);
 
     let listingType;
+
 
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
@@ -133,7 +133,7 @@ const LandingPage = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
           console.log("listingType", listingType);
-          // console.log("CHECK2");
+
 
           if (listingType === 0) {
             const nftData = {
@@ -150,9 +150,11 @@ const LandingPage = ({ search, setSearch }) => {
 
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
+
             // console.log("myNFTs in function", myNFTs);
           } else if (listingType === 1) {
             // console.log("IN ELSE");
+
             const nftData = {
               id: id, //
               title: title,

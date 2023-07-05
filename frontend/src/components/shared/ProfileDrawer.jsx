@@ -33,6 +33,7 @@ import {
   Label,
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
+import { Link } from "react-router-dom";
 const Monthly_data = [
   {
     data: "Jan",
@@ -304,6 +305,8 @@ function ProfileDrawer({
   description,
   collection,
   userAddress,
+  showBuyNow,
+  ShowAcceptbtn
 }) {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -586,7 +589,9 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by <span>Enotic11daday</span>
+                    
+                      Owned by <span>Enotic11daday</span>
+                    
                   </p>
                 </div>
                 <div className="three-line">
@@ -674,6 +679,12 @@ function ProfileDrawer({
                         </p>
                       </div>
                     </div>
+                    {!showBuyNow &&
+                      <div className="col-lg-6 col-md-8 col-8">
+
+                        <div className="stock-div">13 <span>in stock</span> </div>
+                      </div>
+                    }
                     <div className="col-lg-6 col-md-4 col-4">
                       <div className="right">
                         <p>{/* 13<span>in stock</span> */}</p>
@@ -688,21 +699,34 @@ function ProfileDrawer({
                     style={{ marginTop: "20px", marginBottom: "20px" }}
                   />
                 </div>
-                <div className="seven-line" onClick={() => setChack(!chack)}>
-                  <span>
-                    <BsCheck className={`${chack ? "red" : "black"}`} />
-                  </span>{" "}
-                  <span>I agree all Terms & Conditions.</span>
-                </div>
-                <div className="eight-line">
-                  <button
-                    onClick={() => {
-                      setSucess(true);
-                    }}
-                  >
-                    Buy Now
-                  </button>
-                </div>
+                {ShowAcceptbtn &&
+                  <div className="drawer-inner-accept-btn">
+                    <div className="nft-card-btn-holder">
+                      <button>Accept</button>
+                      <button>Decline</button>
+                    </div>
+                  </div>
+                }
+                {showBuyNow &&
+                  <>
+
+                    <div className="seven-line" onClick={() => setChack(!chack)}>
+                      <span>
+                        <BsCheck className={`${chack ? "red" : "black"}`} />
+                      </span>{" "}
+                      <span>I agree all Terms & Conditions.</span>
+                    </div>
+                    <div className="eight-line">
+                      <button
+                        onClick={() => {
+                          setSucess(true);
+                        }}
+                      >
+                        Buy Now
+                      </button>
+                    </div>
+                  </>
+                }
               </div>
             </div>
           </div>
