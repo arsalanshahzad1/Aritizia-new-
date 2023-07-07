@@ -17,6 +17,8 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
+import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
+import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
 import {
@@ -297,17 +299,19 @@ const PlaceABidDrawer = ({
   image,
   price,
   crypto,
-  royalty,
   description,
-  collection,
+  // collection,
   userAddress,
+  isLive,
+  startTime,
+  endTime,
 }) => {
-
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
   const [sucess, setSucess] = useState(false);
-
+  const [dollarPrice, setDollarPrice] = useState("");
+  const [highestBid, setHighestBid] = useState("");
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
@@ -336,8 +340,6 @@ const PlaceABidDrawer = ({
 
   const connectWallet = async () => {
     try {
-      // Get the provider from web3Modal, which in our case is MetaMask
-      // When used for the first time, it prompts the user to connect their wallet
       await getProviderOrSigner();
       setWalletConnected(true);
     } catch (err) {
@@ -348,18 +350,49 @@ const PlaceABidDrawer = ({
   useEffect(() => {
     // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
     if (!walletConnected) {
-      // Assign the Web3Modal class to the reference object by setting it's `current` value
-      // The `current` value is persisted throughout as long as this page is open
       web3ModalRef.current = new Web3Modal({
         network: "hardhat",
         providerOptions: {},
         disableInjectedProvider: false,
       });
       connectWallet();
-      // numberOFICOTokens();
+      getAuctionData();
     }
   }, [walletConnected]);
 
+  // // return the price of NFT in usd
+  const getAuctionData = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let priceETH = Number(highestBid);
+
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    let oneETHInUSD = 1 / priceInETH;
+    let priceInUSD = priceETH;
+    priceInUSD = oneETHInUSD * priceInUSD;
+    console.log("priceInUSD", priceInUSD);
+    priceInUSD = priceInUSD.toFixed(2);
+
+    setDollarPrice(priceInUSD.toString());
+    console.log("priceInUSD", priceInUSD);
+
+    let highBid = await marketplaceContract.getHighestBid(id);
+    highBid = Number(highBid.toString()) / 1e18;
+    console.log("HighestBid", highBid);
+
+    if (highBid == 0) {
+      setHighestBid(price);
+    } else {
+      setHighestBid(highBid);
+    }
+  };
 
   // return the price of NFT in usd
   const getPriceInUSD = async () => {
@@ -371,22 +404,50 @@ const PlaceABidDrawer = ({
       provider
     );
 
-    let priceETH = price;
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    console.log("Dollar price", dollarPriceOfETH.toString());
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    console.log("priceInETH", priceInETH);
+    let priceETH = Number(highestBid);
 
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
-    console.log("oneETHInUSD", oneETHInUSD);
     let priceInUSD = priceETH;
-    console.log("1.3 ETH in USD", oneETHInUSD * priceInUSD);
     priceInUSD = oneETHInUSD * priceInUSD;
-    return priceInUSD;
+    console.log("priceInUSD", priceInUSD);
+    priceInUSD = priceInUSD.toFixed(2);
+
+    setDollarPrice(priceInUSD.toString());
+    console.log("priceInUSD", priceInUSD);
+
+    let highBid = await marketplaceContract.getHighestBid(id);
+    highBid = Number(highBid.toString()) / 1e18;
+    console.log("HighestBid", highBid);
+
+    if (highBid == 0) {
+      setHighestBid(price);
+    } else {
+      setHighestBid(highBid);
+    }
   };
 
+  const bidWithFIAT = async () => {
+    console.log("startTime", startTime);
+    console.log("endTime", endTime);
+    console.log("price", price);
+    console.log("isLive", isLive);
 
-  const buyWithETH = async () => {
+    // const provider = await getProviderOrSigner();
+
+    // const marketplaceContract = new Contract(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   MARKETPLACE_CONTRACT_ABI.abi,
+    //   provider
+    // );
+
+    // let highBid = await marketplaceContract.getHighestBid(id);
+    // highBid = Number(highBid.toString()) / 1e18;
+    // console.log("HighestBid", highBid);
+  };
+
+  const bidWithETH = async () => {
     // window.alert("KHAREED");
 
     const signer = await getProviderOrSigner(true);
@@ -397,15 +458,14 @@ const PlaceABidDrawer = ({
       signer
     );
 
-    console.log("Make payment");
-    await marketplaceContract.buyWithETH(NFT_CONTRACT_ADDRESS.address, id, {
-      value: ethers.utils.parseEther("0.001"),
+    // console.log("Make payment");
+    await marketplaceContract.bidInETH(id, 0, {
+      value: ethers.utils.parseEther("1"),
     });
-    console.log("Payment made");
+    // console.log("Payment made");
   };
 
-
-  const buyWithUSDT = async () => {
+  const bidWithUSDT = async () => {
     const signer = await getProviderOrSigner(true);
 
     const marketplaceContract = new Contract(
@@ -416,34 +476,58 @@ const PlaceABidDrawer = ({
 
     const USDTContract = new Contract(
       TETHER_CONTRACT_ADDRESS.address,
-      TETHER_CONTRACT_ADDRESS.abi,
+      TETHER_CONTRACT_ABI.abi,
       signer
     );
 
     // need approval
 
-    console.log("paymentmethod", paymentMethod);
-    console.log("amount", amount);
+    // console.log("paymentmethod", paymentMethod);
+    console.log("highestBid", highestBid);
+
+    console.log("id", id);
+    console.log("id", typeof id);
 
     // get the price of dollar from smartcontract and convert this value
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    console.log("HEre");
 
-    if (paymentMethod == 1) {
-      const appprove = await USDTContract.approve(
-        MARKETPLACE_CONTRACT_ADDRESS.address,
-        amount
-      );
+    let USDPrice = 300;
+    let USDPriceInWei = USDPrice * 10 ** 6;
+    USDPrice = USDPrice.toString();
+    // if (paymentMethod == 1) {
 
-      appprove.wait();
-    }
+    // console.log("asdasd");
+    // const appprove = await USDTContract.approve(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   USDPriceInWei
+    // );
+    // console.log("555");
 
-    console.log("paymentmethod", paymentMethod);
-    console.log("amount", amount);
+    // appprove.wait();
+    // }
 
-    // await (
-    //   await marketplaceContract.buyWithUSDT(NFT_CONTRACT_ADDRESS, paymentMethod, id, amount)
-    // ).wait();
+    console.log("Approved");
 
+    USDPriceInWei = USDPriceInWei.toString();
+    console.log("USDPriceInWei", USDPriceInWei);
+
+    // console.log("paymentmethod", paymentMethod);
+
+    const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, {
+      gasLimit: ethers.BigNumber.from("500000"),
+    });
+
+    // Wait for the transaction to be mined
+    await tx.wait();
+
+    // appprove = await USDTContract.approve(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   0
+    // );
+    // console.log("555");
+
+    // appprove.wait();
   };
 
   const statusOptions = [
@@ -615,7 +699,7 @@ const PlaceABidDrawer = ({
                         style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
-                    <div className="col-lg-8 col-md-8 col-12">
+                    {/* <div className="col-lg-8 col-md-8 col-12">
                       <button
                         className={`${propertyTabs === 0 ? "active" : ""}`}
                         onClick={() => setPropertyTabs(0)}
@@ -634,7 +718,7 @@ const PlaceABidDrawer = ({
                       >
                         History
                       </button>
-                    </div>
+                    </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -642,19 +726,20 @@ const PlaceABidDrawer = ({
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   {propertyTabs === 0 && <Details />}
                   {propertyTabs === 1 && <Bids />}
                   {propertyTabs === 2 && <History />}
-                </div>
+                </div> */}
                 <div className="six-line">
                   <h3>Current Bid</h3>
                   <div className="row">
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH<span>${getPriceInUSD()}</span>
+                          {price} ETH<span>${dollarPrice}</span>
                         </p>
+                        <p>Last bid {highestBid}</p>
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-4 col-4">
@@ -680,7 +765,6 @@ const PlaceABidDrawer = ({
                 <div className="eight-line">
                   <button
                     onClick={() => {
-                      buyWithETH();
                       setSucess(true);
                     }}
                   >
@@ -706,11 +790,11 @@ const PlaceABidDrawer = ({
             <AiOutlineClose />
           </span>
           <div className="mobal-button-1">
-            <button>Bid with ETH</button>
-            <button>Bid with USDT</button>
+            <button onClick={bidWithETH}>Bid with ETH</button>
+            <button onClick={bidWithUSDT}>Bid with USDT</button>
           </div>
           <div className="mobal-button-2">
-            <button>Bid with FIAT</button>
+            <button onClick={bidWithFIAT}>Bid with FIAT</button>
           </div>
         </div>
       </Modal> */}
@@ -731,8 +815,10 @@ const PlaceABidDrawer = ({
             !showBuyOptionsStep2 ?
               <>
                 <div className="mobal-button-1">
-                  <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
-                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
+                  {/* <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
+                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button> */}
+                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
+                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
                 </div>
                 <div className="mobal-button-2">
                   <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with FIAT</button>

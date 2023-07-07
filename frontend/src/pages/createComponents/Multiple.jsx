@@ -72,9 +72,17 @@ const Multiple = ({ search, setSearch }) => {
 
   var item = {};
 
-  let imageList = useRef([]);
   let ipfsList = useRef([]);
   let urlList = useRef([]);
+
+  let ipfsImageList = useRef([]);
+  let imageList = useRef([]);
+  let priceList = useRef([]);
+  let titleList = useRef([]);
+  let descriptionList = useRef([]);
+  let royaltyList = useRef([]);
+  let startingDateList = useRef([]);
+  let endingDateList = useRef([]);
 
   const [crypto, setCrypto] = useState({
     value: 0,
@@ -110,17 +118,19 @@ const Multiple = ({ search, setSearch }) => {
 
   // let tempImageList = [];
   const addImageIPFSInList = (newValue) => {
-    imageList.push(newValue);
+    ipfsImageList.push(newValue);
   };
 
   // let tempIPFSList = [];
   const addDataIPFSInList = (newValue) => {
-    ipfsList.push(newValue);
+    ipfsList.current.push(newValue);
   };
 
   const web3ModalRef = useRef();
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("test1qq");
     const provider = await web3ModalRef.current.connect();
+    console.log("test1qq");
 
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
@@ -140,39 +150,49 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   // Upload image to IPFS
-  const uploadToIPFS = async (event) => {
+  const uploadToIPFS = async () => {
     // console.log("file in uploadTOIpfs", file);
-    if (typeof file !== "undefined") {
-      for (let i = 0; i < file.length; i++) {
+    if (typeof imageList !== "undefined") {
+      console.log("uploadToIPFS1");
+      for (let i = 0; i < imageList.length; i++) {
         try {
-          // console.log("this is image file no", i, file[i]);
-          const resut = await uploadFileToIPFS(file[i]);
-          console.log("resut.pinataURL", resut.pinataURL);
-          addImageIPFSInList(resut.pinataURL);
+          console.log("uploadToIPFS2");
+
+          console.log("this is imageList", i, imageList[i]);
+          const result = await uploadFileToIPFS(imageList[i]);
+          console.log("resut", result);
+          console.log("resut.pinataURL", result.pinataURL);
+          addImageIPFSInList(result.pinataURL);
+          console.log("uploadToIPFS3");
         } catch (error) {
           console.log("ipfs image upload error: ", error);
         }
       }
 
-      // console.log("imageList", imageList);
-      if (imageList.length != 0) {
-        createNFT();
-      } else {
-        window.alert("imageList list is empty");
-      }
+      console.log("ipfsImageList", ipfsImageList);
+
+      createNFT();
+
+      // if (imageList.length != 0) {
+      // createNFT();
+      // } else {
+      //   window.alert("imageList list is empty");
+      // }
     }
   };
 
   // Upload image and data to IPFS
   const createNFT = async () => {
-    // console.log("CreateNFT");
     for (let i = 0; i < imageList.length; i++) {
-      let image = imageList[i];
-      let price = item.price;
+      console.log(" ipfsImageList[i] in createNFT", ipfsImageList[i]);
+      let image = ipfsImageList[i];
+      let price = priceList[i];
+      console.log("priceList in createa", priceList);
       let crypto = 0;
-      let collection = item.collection;
-      let title = item.title;
-      let description = item.description;
+      let collection = 0;
+      let title = titleList[i];
+      let description = descriptionList[i];
+
       // console.log("listingType", listingType);
       if (listingType == 0) {
         try {
@@ -190,13 +210,17 @@ const Multiple = ({ search, setSearch }) => {
           });
           console.log("dataInJSON", dataInJSON);
           const result = await uploadJSONToIPFS(dataInJSON);
+          console.log("result", result);
           addDataIPFSInList(result.pinataURL);
+          console.log("ipfsList. from fun", ipfsList);
 
           console.log("result.pinataURL", result.pinataURL);
         } catch (error) {
           console.log("ipfs uri upload error: ", error);
         }
       } else {
+        let startingDate = startingDateList[i];
+        let endingDate = endingDateList[i];
         try {
           const dataInJSON = JSON.stringify({
             image,
@@ -222,7 +246,10 @@ const Multiple = ({ search, setSearch }) => {
       }
     }
 
+    console.log("test1");
+
     if (ipfsList.length != 0) {
+      console.log("test2");
       mintThenList();
     } else {
       window.alert("IPFS list is empty");
@@ -231,8 +258,11 @@ const Multiple = ({ search, setSearch }) => {
 
   // mint the NFT then list
   const mintThenList = async () => {
+    console.log("test1");
+
     const signer = await getProviderOrSigner(true);
     // console.log("Get the signer", signer);
+    console.log("test3");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -245,12 +275,18 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("ipfsList", ipfsList);
     console.log("ipfsList", ipfsList);
 
-    await (await nftContract.mint(ipfsList)).wait();
+    await (await nftContract.mint(ipfsList.current)).wait();
+    console.log("minAndList 1");
 
     let mintedTokens = await nftContract.getMintedTokensList();
-    // console.log("mintedTokens before", mintedTokens);
+    console.log("mintedTokens ", mintedTokens);
+    console.log("mintedTokens.length ", mintedTokens.length);
+    console.log("minAndList 2");
+
     let multi = false;
     if (mintedTokens.length > 1) {
+      console.log("minAndList 3");
+
       multi = true;
       let listOfTokens = [];
       for (let i = 0; i < mintedTokens.length; i++) {
@@ -258,15 +294,18 @@ const Multiple = ({ search, setSearch }) => {
         listOfTokens.push(Number(mintedTokens[i].toString()));
       }
       mintedTokens = listOfTokens;
+      console.log("listOfTokens", listOfTokens);
     } else {
       mintedTokens = Number(mintedTokens);
     }
 
+    console.log("Yahoo1");
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
+    console.log("Yahoo2");
 
     console.log("startTimestamp in if", startingDate);
     console.log("endTimestamp in if", startingDate);
@@ -296,17 +335,37 @@ const Multiple = ({ search, setSearch }) => {
     console.log("listingType", listingType);
     console.log("item.crypto", crypto);
 
-    // UNCOMMENT this
+    // // UNCOMMENT this
+    let ethParsedList = [];
+    console.log("Yahoo3");
+
+    for (let i = 0; i < priceList.length; i++) {
+      console.log("Yahoo4");
+      console.log("priceList[i]", priceList[i]);
+      let ethPrice = ethers.utils.parseEther(priceList[i]);
+      ethParsedList.push(ethPrice);
+    }
+
+    console.log("nftContract.address", nftContract.address);
+    console.log("mintedTokens", mintedTokens);
+    console.log("priceList", priceList);
+    console.log("ethParsedList", ethParsedList);
+    console.log("royaltyList", royaltyList);
+    console.log("listingType", listingType);
+    console.log("startingDateList", startingDateList);
+    console.log("endingDateList", endingDateList);
+    console.log("crypto", crypto);
 
     await (
       await marketplaceContract.listNft(
         nftContract.address,
         multi ? mintedTokens : [mintedTokens],
-        ethers.utils.parseEther(item.price),
-        royalty,
+        ethParsedList,
+        royaltyList,
         listingType,
-        startTime,
-        endTime,
+        startingDateList,
+        endingDateList,
+        0,
         crypto
       )
     ).wait();
@@ -337,7 +396,7 @@ const Multiple = ({ search, setSearch }) => {
   //   }
   // };
 
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     price,
     title,
     description,
@@ -348,42 +407,115 @@ const Multiple = ({ search, setSearch }) => {
   ]);
 
   const createItem = (e) => {
+    ipfsImageList = [];
+    ipfsList.current = [];
+    imageList = [];
+    priceList = [];
+    titleList = [];
+    descriptionList = [];
+    royaltyList = [];
+    startingDateList = [];
+    endingDateList = [];
+
+    console.log("NFts", NFts);
+    console.log("listingType", listingType);
+
+    for (let i = 0; i < NFts.length; i++) {
+      if (listingType === 0) {
+        console.log("Iterating nfts image", NFts[i].image); // diff
+        console.log("Iterating nfts listingType", NFts[i].listingType);
+        console.log("Iterating nfts price", NFts[i].price); // diff
+        console.log("Iterating nfts crypto", NFts[i].crypto);
+        console.log("Iterating nfts collection", NFts[i].collection);
+        console.log("Iterating nfts title", NFts[i].title); // diff
+        console.log("Iterating nfts description", NFts[i].description); // diff
+        console.log("Iterating nfts royalty", NFts[i].royalty); // diff
+
+        let imageFile = new File([NFts[i].image], `image${i}.jpg`, {
+          type: "image/jpeg",
+        });
+
+        imageList.push(imageFile);
+        priceList.push(NFts[i].price);
+        titleList.push(NFts[i].title);
+        descriptionList.push(NFts[i].description);
+        royaltyList.push(NFts[i].royalty);
+
+        startingDateList.push(0);
+        endingDateList.push(0);
+      } else {
+        // listingType
+        console.log("Iterating nfts startingDate", NFts[i].startingDate);
+        console.log("Iterating nfts endingDate", NFts[i].endingDate);
+        console.log("Iterating nfts image", NFts[i].image); // diff
+        console.log("Iterating nfts listingType", NFts[i].listingType);
+        console.log("Iterating nfts price", NFts[i].price); // diff
+        console.log("Iterating nfts crypto", NFts[i].crypto);
+        console.log("Iterating nfts collection", NFts[i].collection);
+        console.log("Iterating nfts title", NFts[i].title); // diff
+        console.log("Iterating nfts description", NFts[i].description); // diff
+        console.log("Iterating nfts royalty", NFts[i].royalty); // diff
+
+        let imageFile = new File([NFts[i].image], "image.jpg", {
+          type: "image/jpeg",
+        });
+
+        imageList.push(imageFile);
+        priceList.push(NFts[i].price);
+        titleList.push(NFts[i].title);
+        descriptionList.push(NFts[i].description);
+        royaltyList.push(NFts[i].royalty);
+        startingDateList.push(NFts[i].startingDate);
+        endingDateList.push(NFts[i].endingDate);
+      }
+    }
+
+    console.log("imageList", imageList);
+    console.log("priceList", priceList);
+    console.log("titleList", titleList);
+    console.log("descriptionList", descriptionList);
+    console.log("royaltyList", royaltyList);
+
+    uploadToIPFS();
+  };
+
+  const createItemOld = (e) => {
     setLoading(true);
     e.preventDefault();
     price = inputValue;
 
-    console.log("crypto in check", crypto);
+    // console.log("crypto in check", crypto);
 
-    console.log("startTimestamp in if", startingDate);
-    console.log("endTimestamp in if", endingDate);
+    // console.log("startTimestamp in if", startingDate);
+    // console.log("endTimestamp in if", endingDate);
 
-    if (listingType == 0) {
-      console.log("startTimestamp in if", startingDate);
-      console.log("endTimestamp in if", endingDate);
-      setStartingDate(0);
-      setEndingDate(0);
-      startTime = 0;
-      endTime = 0;
-    } else if (listingType == 1) {
-      const startDate = new Date(startingDate);
-      const endDate = new Date(endingDate);
+    // if (listingType == 0) {
+    //   console.log("startTimestamp in if", startingDate);
+    //   console.log("endTimestamp in if", endingDate);
+    //   setStartingDate(0);
+    //   setEndingDate(0);
+    //   startTime = 0;
+    //   endTime = 0;
+    // } else if (listingType == 1) {
+    //   const startDate = new Date(startingDate);
+    //   const endDate = new Date(endingDate);
 
-      // Convert start date to Unix timestamp (seconds)
-      const startTimestamp = Math.floor(startDate.getTime() / 1000);
+    //   // Convert start date to Unix timestamp (seconds)
+    //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
 
-      // Convert end date to Unix timestamp (seconds)
-      const endTimestamp = Math.floor(endDate.getTime() / 1000);
+    //   // Convert end date to Unix timestamp (seconds)
+    //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
 
-      console.log("startTimestamp in else", startTimestamp);
-      console.log("endTimestamp in else", endTimestamp);
-      setStartingDate(startTimestamp);
-      setEndingDate(endTimestamp);
-      startTime = startTimestamp;
-      endTime = startTimestamp;
-    }
+    //   console.log("startTimestamp in else", startTimestamp);
+    //   console.log("endTimestamp in else", endTimestamp);
+    //   setStartingDate(startTimestamp);
+    //   setEndingDate(endTimestamp);
+    //   startTime = startTimestamp;
+    //   endTime = startTimestamp;
+    // }
 
-    console.log("CHECK startingDate", startTime);
-    console.log("CHECK endingDate", endTime);
+    // console.log("CHECK startingDate", startTime);
+    // console.log("CHECK endingDate", endTime);
 
     imageList = [];
     ipfsList = [];
@@ -398,19 +530,7 @@ const Multiple = ({ search, setSearch }) => {
       collection: collection,
     };
 
-    // console.log("file", file);
-    if (
-      item.title != null &&
-      item.price != null &&
-      item.description != null &&
-      item.crypto != null &&
-      item.file != null &&
-      item.collection != null
-    ) {
-      uploadToIPFS(file);
-    } else {
-      window.alert("Fill all the fields to continue");
-    }
+    uploadToIPFS(file);
   };
 
   const connectWallet = async () => {
@@ -512,7 +632,6 @@ const Multiple = ({ search, setSearch }) => {
       URL.createObjectURL(file)
     );
     setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);
-
   };
 
   const handleRemoveImage = (index) => {
@@ -521,7 +640,7 @@ const Multiple = ({ search, setSearch }) => {
     setSelectedImagesNFT(newArray);
   };
 
-  const [NFts, setNfts] = useState('');
+  const [NFts, setNfts] = useState("");
 
   useEffect(() => {
     if (selectedImagesNFT.length > 0) {
@@ -538,8 +657,7 @@ const Multiple = ({ search, setSearch }) => {
           listingType: listingType
         }));
         setNfts((prevNFTs) => [...prevNFTs, ...newNFTs.slice(prevNFTs.length)]);
-      }
-      else if (listingType === 1) {
+      } else if (listingType === 1) {
         const newNFTs = selectedImagesNFT.map((image, index) => ({
           image,
           price: '',
@@ -559,14 +677,14 @@ const Multiple = ({ search, setSearch }) => {
   }, [selectedImagesNFT]);
 
   const handleRemoveCompletedNft = (index) => {
-    handleRemoveImage(index)
+    handleRemoveImage(index);
     const newArray = [...NFts];
     newArray.splice(index, 1);
     setNfts(newArray);
   };
-  const [currentNFT, setCurrentNFT] = useState(0)
+  const [currentNFT, setCurrentNFT] = useState(0);
 
-  const [nftForm, setnftForm] = useState('')
+  const [nftForm, setnftForm] = useState("");
   useEffect(() => {
     if (listingType === 0) {
       setnftForm({
@@ -584,13 +702,12 @@ const Multiple = ({ search, setSearch }) => {
         'endDate': ""
       })
     }
-  }, [listingType])
-
+  }, [listingType]);
 
   const handleNftForm = (e) => {
-    console.log("handling", e.target.name, e.target.value)
+    console.log("handling", e.target.name, e.target.value);
     setnftForm({ ...nftForm, [e.target.name]: e.target.value });
-  }
+  };
   const saveNFT = () => {
     if (listingType === 0) {
       if (!nftForm.price || !nftForm.desc) {
@@ -644,17 +761,13 @@ const Multiple = ({ search, setSearch }) => {
         })
         updateCompleted(currentNFT, Data)
       }
-
     }
-
-  }
+  };
 
   useEffect(() => {
-
-    console.log(NFts, "final data")
-    console.log(currentNFT, "Current NFT")
-  }, [currentNFT, NFts])
-
+    console.log(NFts, "final data");
+    console.log(currentNFT, "Current NFT");
+  }, [currentNFT, NFts]);
 
   const updateCompleted = (index, updatedData) => {
     setNfts((prevNFTs) => {
@@ -662,48 +775,45 @@ const Multiple = ({ search, setSearch }) => {
       updatedNFTs[index] = { ...updatedNFTs[index], ...updatedData };
       return updatedNFTs;
     });
-
-
   };
 
-  const [tabIndex, setTabIndex] = useState(0)
+  const [tabIndex, setTabIndex] = useState(0);
   useEffect(() => {
     if (NFts.length > 0) {
-
       if (NFts[0].status !== "completed") {
         setCurrentNFT(0);
       }
     }
     if (NFts.length > 0) {
       for (let i = 1; i < NFts.length; i++) {
-
-        if (NFts[i - 1].status === "completed" && NFts[i].status !== "completed") {
+        if (
+          NFts[i - 1].status === "completed" &&
+          NFts[i].status !== "completed"
+        ) {
           setCurrentNFT(i);
           break;
         }
       }
     }
-    console.log("curent nft is", currentNFT)
+    console.log("curent nft is", currentNFT);
   }, [NFts]);
-
-
-
-
 
   // Create an array of the desired length
 
-
   useEffect(() => {
     if (listingType === 1) {
-      if (nftForm.startDate && nftForm.endDate && nftForm.endDate < nftForm.startDate) {
+      if (
+        nftForm.startDate &&
+        nftForm.endDate &&
+        nftForm.endDate < nftForm.startDate
+      ) {
         alert("End date should be after start date");
-        setnftForm(prevForm => ({
+        setnftForm((prevForm) => ({
           ...prevForm,
-          endDate: "" // Replace with your desired end date value
+          endDate: "", // Replace with your desired end date value
         }));
       }
     }
-
   }, [nftForm.startDate, nftForm.endDate]);
 
   useEffect(() => {
@@ -713,25 +823,25 @@ const Multiple = ({ search, setSearch }) => {
 
     if (selectedStartDate < today) {
       alert("Start date should not be before today's date");
-      setnftForm(prevForm => ({
+      setnftForm((prevForm) => ({
         ...prevForm,
-        startDate: '' // Replace with your desired start date value
+        startDate: "", // Replace with your desired start date value
       }));
     }
   }, [nftForm.startDate]);
 
   const [choosenCollection, setChoosenCollection] = useState({})
   useEffect(() => {
-    setChoosenCollection(collection)
-    console.log("choosen", choosenCollection)
-  }, [collection])
+    setChoosenCollection(collection);
+    console.log("choosen", choosenCollection);
+  }, [collection]);
 
   const [selectedImage2, setSelectedImage2] = useState(null);
   const handleInputChange2 = (e) => {
     const file = e.target.files[0];
     setSelectedImage2(file);
   };
-  const [collectionFinalized, setcollectionFinalized] = useState(false)
+  const [collectionFinalized, setcollectionFinalized] = useState(false);
 
   return (
     <>
@@ -743,19 +853,20 @@ const Multiple = ({ search, setSearch }) => {
             <div className="row">
               <div className="col-lg-8 mx-auto">
                 <div className="row">
-                  {!collectionFinalized &&
+                  {!collectionFinalized && (
                     <>
                       <div className="line-three">
                         <div className="row">
                           <div className="col-lg-12">
                             <h2>Choose collection</h2>
                             <p>
-                              This is the collection where your item will appear.
+                              This is the collection where your item will
+                              appear.
                             </p>
                             <Dropdown
                               options={collectionOptions}
                               onChange={(e) => {
-                                console.log("important", e)
+                                console.log("important", e);
                                 setCollection(e);
                               }}
                               value={collection.value}
@@ -771,9 +882,9 @@ const Multiple = ({ search, setSearch }) => {
                                 version="1.1"
                                 viewBox="0 0 50 50"
                                 width="25px"
-                                xml: space="preserve"
+                                xml:space="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns: xlink="http://www.w3.org/1999/xlink"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
                               >
                                 <rect fill="none" height="50" width="50" />
                                 <line
@@ -812,7 +923,11 @@ const Multiple = ({ search, setSearch }) => {
                                     placeholder="Enter collection name"
                                   />
                                   <p className="txt-2">Upload image</p>
-                                  <input type="file" accept="image/*" onChange={handleInputChange2} />
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleInputChange2}
+                                  />
 
                                   <div className="popUp-btn-group">
                                     <div
@@ -831,16 +946,21 @@ const Multiple = ({ search, setSearch }) => {
                                 </div>
                               </div>
                             )}
-                            <div onClick={() => setcollectionFinalized(true)} className="browse-btn my-5 button-styling">Next</div>
+                            <div
+                              onClick={() => setcollectionFinalized(true)}
+                              className="browse-btn my-5 button-styling"
+                            >
+                              Next
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </>}
-                  {collectionFinalized &&
+                    </>
+                  )}
+                  {collectionFinalized && (
                     <>
-
                       <div className="col-lg-12">
-                        {!showProfileNFT &&
+                        {!showProfileNFT && (
                           <>
                             <div className="row">
                               <div className="col-lg-12">
@@ -851,8 +971,9 @@ const Multiple = ({ search, setSearch }) => {
                                   onClick={() => {
                                     setlistingType(0);
                                   }}
-                                  className={` create-single-card ${listingType === 0 ? "active" : ""
-                                    }`}
+                                  className={` create-single-card ${
+                                    listingType === 0 ? "active" : ""
+                                  }`}
                                 >
                                   <AiFillTag />
                                   <h3>Fixed Price</h3>
@@ -863,8 +984,9 @@ const Multiple = ({ search, setSearch }) => {
                                   onClick={() => {
                                     setlistingType(1);
                                   }}
-                                  className={` create-single-card ${listingType === 1 ? "active" : ""
-                                    }`}
+                                  className={` create-single-card ${
+                                    listingType === 1 ? "active" : ""
+                                  }`}
                                 >
                                   <BsFillClockFill />
                                   <h3>Timed Auction</h3>
@@ -873,7 +995,6 @@ const Multiple = ({ search, setSearch }) => {
                             </div>
                             <br />
                             <br />
-
 
                             {/* <div className="line-three">
                           <div className="row">
@@ -1006,7 +1127,6 @@ const Multiple = ({ search, setSearch }) => {
                                 </div>
                                 <div className="col-lg-3 ">
                                   <div className="royality-value">
-
                                     {royalty} %
                                   </div>
                                 </div>
@@ -1030,9 +1150,8 @@ const Multiple = ({ search, setSearch }) => {
                               Next
                             </button>
                           </>
-                        }
-                        {showProfileNFT &&
-
+                        )}
+                        {showProfileNFT && (
                           <div>
 
                             {/* <h2>Profile NFT</h2> */}
@@ -1081,7 +1200,9 @@ const Multiple = ({ search, setSearch }) => {
                                 <h2>Upload NFT</h2>
                                 {NFts.length < 1 ? (
                                   <div className="Create-Collection-div">
-                                    <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                                    <p>
+                                      PNG, JPG, GIF, WEBP or MP4. Max 200mb.
+                                    </p>
                                     <br />
                                     <input
                                       ref={fileInputRef2}
@@ -1134,77 +1255,242 @@ const Multiple = ({ search, setSearch }) => {
                                       >
                                         Add More
                                       </button>
-                                      {NFts.length > Number(10) &&
+                                      {NFts.length > Number(10) && (
                                         <div className="controlsDiv">
-                                          {NFts.length > Number(10)
-                                            &&
+                                          {NFts.length > Number(10) && (
                                             <>
-                                              <svg onClick={() => setTabIndex(0)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="7" cy="7" r="7" fill={`${tabIndex === 0 ? '#B601D1' : '#D9D9D9'}`} />
+                                              <svg
+                                                onClick={() => setTabIndex(0)}
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 14 14"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <circle
+                                                  cx="7"
+                                                  cy="7"
+                                                  r="7"
+                                                  fill={`${
+                                                    tabIndex === 0
+                                                      ? "#B601D1"
+                                                      : "#D9D9D9"
+                                                  }`}
+                                                />
                                               </svg>
-                                              <svg onClick={() => setTabIndex(10)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="7" cy="7" r="7" fill={`${tabIndex === 10 ? '#B601D1' : '#D9D9D9'}`} />
+                                              <svg
+                                                onClick={() => setTabIndex(10)}
+                                                width="14"
+                                                height="14"
+                                                viewBox="0 0 14 14"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <circle
+                                                  cx="7"
+                                                  cy="7"
+                                                  r="7"
+                                                  fill={`${
+                                                    tabIndex === 10
+                                                      ? "#B601D1"
+                                                      : "#D9D9D9"
+                                                  }`}
+                                                />
                                               </svg>
                                             </>
-                                          }
+                                          )}
 
-
-                                          {NFts.length > Number(20)
-                                            &&
-                                            <svg onClick={() => setTabIndex(20)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 20 ? '#B601D1' : '#D9D9D9'}`} />
+                                          {NFts.length > Number(20) && (
+                                            <svg
+                                              onClick={() => setTabIndex(20)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 20
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(30)
-                                            &&
-                                            <svg onClick={() => setTabIndex(30)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 30 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(30) && (
+                                            <svg
+                                              onClick={() => setTabIndex(30)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 30
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(40)
-                                            &&
-                                            <svg onClick={() => setTabIndex(40)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 40 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(40) && (
+                                            <svg
+                                              onClick={() => setTabIndex(40)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 40
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(50)
-                                            &&
-                                            <svg onClick={() => setTabIndex(50)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 50 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(50) && (
+                                            <svg
+                                              onClick={() => setTabIndex(50)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 50
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(60)
-                                            &&
-                                            <svg onClick={() => setTabIndex(60)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 60 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(60) && (
+                                            <svg
+                                              onClick={() => setTabIndex(60)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 60
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(70)
-                                            &&
-                                            <svg onClick={() => setTabIndex(70)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 70 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(70) && (
+                                            <svg
+                                              onClick={() => setTabIndex(70)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 70
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(80)
-                                            &&
-                                            <svg onClick={() => setTabIndex(80)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 80 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(80) && (
+                                            <svg
+                                              onClick={() => setTabIndex(80)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 80
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(90)
-                                            &&
-                                            <svg onClick={() => setTabIndex(90)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 90 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(90) && (
+                                            <svg
+                                              onClick={() => setTabIndex(90)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 90
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
-                                          {NFts.length > Number(100)
-                                            &&
-                                            <svg onClick={() => setTabIndex(100)} width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                              <circle cx="7" cy="7" r="7" fill={`${tabIndex === 100 ? '#B601D1' : '#D9D9D9'}`} />
+                                          )}
+                                          {NFts.length > Number(100) && (
+                                            <svg
+                                              onClick={() => setTabIndex(100)}
+                                              width="14"
+                                              height="14"
+                                              viewBox="0 0 14 14"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle
+                                                cx="7"
+                                                cy="7"
+                                                r="7"
+                                                fill={`${
+                                                  tabIndex === 100
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                }`}
+                                              />
                                             </svg>
-                                          }
+                                          )}
                                         </div>
-                                      }
+                                      )}
                                     </div>
                                   </>
                                 )}
@@ -1249,7 +1535,7 @@ const Multiple = ({ search, setSearch }) => {
                                       </div>
                                     </div>
                                   </div>
-                                  {listingType === 0 ?
+                                  {listingType === 0 ?(
                                     <div className="line-two">
                                       <div className="row">
                                         <div className="col-lg-9 col-md-9 col-7">
@@ -1259,19 +1545,20 @@ const Multiple = ({ search, setSearch }) => {
                                             value={nftForm.price}
                                             onChange={handleNftForm}
                                             name="price"
-                                          // type="number"
-                                          // placeholder="0.00"
-                                          // ref={price}
+                                            // type="number"
+                                            // placeholder="0.00"
+                                            // ref={price}
                                           />
                                           {showWarning && (
                                             <p style={{ color: "red" }}>
-                                              Please enter a valid positive number.
+                                              Please enter a valid positive
+                                              number.
                                             </p>
                                           )}
                                         </div>
                                       </div>
                                     </div>
-                                    :
+                                  ) : (
                                     <>
                                       <div className="line-two">
                                         <div className="row">
@@ -1282,19 +1569,18 @@ const Multiple = ({ search, setSearch }) => {
                                               value={nftForm.bid}
                                               name="bid"
                                               onChange={handleNftForm}
-                                            // type="number"
-                                            // placeholder="0.00"
-                                            // ref={price}
+                                              // type="number"
+                                              // placeholder="0.00"
+                                              // ref={price}
                                             />
                                             {showWarning && (
                                               <p style={{ color: "red" }}>
-                                                Please enter a valid positive number.
+                                                Please enter a valid positive
+                                                number.
                                               </p>
                                             )}
                                           </div>
-                                          <div className="col-lg-3 col-md-3 col-5">
-
-                                          </div>
+                                          <div className="col-lg-3 col-md-3 col-5"></div>
                                         </div>
                                       </div>
                                       <div className="line-two">
@@ -1306,7 +1592,9 @@ const Multiple = ({ search, setSearch }) => {
                                               type="date"
                                               name="startDate"
                                               placeholder="mm/dd/yyyy"
-                                              style={{ padding: "6px 10px 6px 15px" }}
+                                              style={{
+                                                padding: "6px 10px 6px 15px",
+                                              }}
                                               value={nftForm.startDate}
                                               min={new Date().toISOString().split('T')[0]}
                                               // onChange={(e) =>
@@ -1322,7 +1610,9 @@ const Multiple = ({ search, setSearch }) => {
                                               type="date"
                                               name="endDate"
                                               placeholder="mm/dd/yyyy"
-                                              style={{ padding: "6px 10px 6px 15px" }}
+                                              style={{
+                                                padding: "6px 10px 6px 15px",
+                                              }}
                                               value={nftForm.endDate}
                                               // onChange={(e) => setEndingDate(e.target.value)}
                                               onChange={handleNftForm}
@@ -1331,7 +1621,8 @@ const Multiple = ({ search, setSearch }) => {
                                           </div>
                                         </div>
                                       </div>
-                                    </>}
+                                    </>
+                                   ) }
                                   {/* <div className="line-seven">
                                 <div className="row">
                                   <div className="col-lg-8">
@@ -1367,20 +1658,25 @@ const Multiple = ({ search, setSearch }) => {
                                       Next
                                     </button>
                                 }
-                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ?
-                                  <button className="button-styling ml-auto">
+                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ? (
+                                  <button className="button-styling-outline ml-auto">
                                     <div>List</div>
                                   </button>
-                                  :
-                                  <button className="disabledButton">List</button>
-                                }
+                                ) : (
+                                  <button
+                                    className="disabledButton"
+                                    // onClick={createItem}
+                                  >
+                                    List
+                                  </button>
+                                )}
                               </div>
                             )}
                           </div>
-                        }
+                        )}
                       </div>
                     </>
-                  }
+                  )}
 
                   <div className="line-one"></div>
                 </div>

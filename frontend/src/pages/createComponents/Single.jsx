@@ -111,13 +111,14 @@ const Single = ({ search, setSearch }) => {
         const resut = await uploadFileToIPFS(item.file);
         //const result = await client.add(file)
         console.log("!!!!!!!!!!!!!!!!!!", resut);
+        console.log("Result.pinata", resut.pinataURL);
         // setImage(resut.pinataURL);
         image = resut.pinataURL;
         setLoading(false);
         // create nft using image IPFS and other data
         console.log("Calling the createNFT function");
         createNFT();
-      } catch (error) {
+      } catch (error) { 
         setLoading(false);
         console.log("ipfs image upload error: ", error);
       }
@@ -223,7 +224,7 @@ const Single = ({ search, setSearch }) => {
       await marketplaceContract.listNft(
         nftContract.address,
         [mintedTokens],
-        [ethers.utils.parseEther(item.price)], // list  
+        [ethers.utils.parseEther(item.price)], // list
         royalty,
         listingType,
         [startTime], // list
@@ -270,7 +271,7 @@ const Single = ({ search, setSearch }) => {
     // ...
   };
 
-  useEffect(() => { }, [price, title, description]);
+  useEffect(() => {}, [price, title, description]);
 
   function createItem(e) {
     e.preventDefault();
@@ -484,9 +485,9 @@ const Single = ({ search, setSearch }) => {
                                   version="1.1"
                                   viewBox="0 0 50 50"
                                   width="25px"
-                                  xml: space="preserve"
+                                  xml:space="preserve"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  xmlns: xlink="http://www.w3.org/1999/xlink"
+                                  xmlns:xlink="http://www.w3.org/1999/xlink"
                                 >
                                   <rect fill="none" height="50" width="50" />
                                   <line
@@ -609,8 +610,9 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(0);
                                 }}
-                                className={` create-single-card ${listingType === 0 ? "active" : ""
-                                  }`}
+                                className={` create-single-card ${
+                                  listingType === 0 ? "active" : ""
+                                }`}
                               >
                                 <AiFillTag />
                                 <h3>Fixed Price</h3>
@@ -621,8 +623,9 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(1);
                                 }}
-                                className={` create-single-card ${listingType === 1 ? "active" : ""
-                                  }`}
+                                className={` create-single-card ${
+                                  listingType === 1 ? "active" : ""
+                                }`}
                               >
                                 <BsFillClockFill />
                                 <h3>Timed Auction</h3>
@@ -639,9 +642,9 @@ const Single = ({ search, setSearch }) => {
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -671,9 +674,9 @@ const Single = ({ search, setSearch }) => {
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
+                                    // type="number"
+                                    // placeholder="0.00"
+                                    // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -737,7 +740,7 @@ const Single = ({ search, setSearch }) => {
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                              // onChange={(e) => setTitle(e.target.value)}
+                                // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
