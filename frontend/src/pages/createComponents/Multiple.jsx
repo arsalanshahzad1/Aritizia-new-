@@ -1535,7 +1535,7 @@ const Multiple = ({ search, setSearch }) => {
                                       </div>
                                     </div>
                                   </div>
-                                  {listingType === 0 ?
+                                  {listingType === 0 ?(
                                     <div className="line-two">
                                       <div className="row">
                                         <div className="col-lg-9 col-md-9 col-7">
@@ -1621,7 +1621,8 @@ const Multiple = ({ search, setSearch }) => {
                                           </div>
                                         </div>
                                       </div>
-                                    </>}
+                                    </>
+                                   ) }
                                   {/* <div className="line-seven">
                                 <div className="row">
                                   <div className="col-lg-8">
@@ -1657,7 +1658,7 @@ const Multiple = ({ search, setSearch }) => {
                                       Next
                                     </button>
                                 }
-                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ?
+                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ? (
                                   <button className="button-styling-outline ml-auto">
                                     <div>List</div>
                                   </button>

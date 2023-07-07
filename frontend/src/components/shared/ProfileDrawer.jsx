@@ -702,7 +702,7 @@ function ProfileDrawer({
                     style={{ marginTop: "20px", marginBottom: "20px" }}
                   />
                 </div>
-                {ShowAcceptbtn && (
+                {ShowAcceptbtn && 
                   <div className="drawer-inner-accept-btn">
                     <div className="nft-card-btn-holder">
                       <button>Accept</button>
@@ -731,7 +731,7 @@ function ProfileDrawer({
                       </button>
                     </div>
                   </>
-                )}
+                }
               </div>
             </div>
           </div>
