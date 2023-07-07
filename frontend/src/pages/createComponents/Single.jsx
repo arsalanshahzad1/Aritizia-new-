@@ -265,14 +265,10 @@ const Single = ({ search, setSearch }) => {
   const defaultCrypto = cryptoOptions[0];
 
   const handleSliderChange = (value) => {
-    // setRoyalty(value);
-    if (value === 33) {
-      setRoyalty(5);
-    } else if (value === 66) {
-      setRoyalty(10);
-    } else if (value === 100) {
-      setRoyalty(15);
-    }
+    // Update the value or perform any other actions
+    console.log("Slider value:", value);
+    setRoyalty(value);
+    // ...
   };
 
   useEffect(() => {}, [price, title, description]);
@@ -713,6 +709,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setStartingDate(e.target.value)
                                     }
+                                    min={new Date().toISOString().split('T')[0]}
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -726,6 +723,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setEndingDate(e.target.value)
                                     }
+                                    min={startingDate}
                                   />
                                 </div>
                               </div>
@@ -759,7 +757,7 @@ const Single = ({ search, setSearch }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="line-six">
+                        {/* <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
                               <h2>Royalties</h2>
@@ -776,6 +774,28 @@ const Single = ({ search, setSearch }) => {
                                 onChange={handleSliderChange}
                               />
                             </div>
+                          </div>
+                        </div> */}
+                        <div className="line-six">
+                          <div className="row">
+                            <div className="col-lg-9">
+                              <h2>Royalties</h2>
+                              <Slider
+                                min={0}
+                                max={15}
+                                defaultValue={0}
+                                // step={null}
+                                onChange={handleSliderChange}
+                                value={royalty}
+                              />
+                            </div>
+                            <div className="col-lg-3 ">
+                              <div className="royality-value">
+
+                                {royalty} %
+                              </div>
+                            </div>
+                            
                           </div>
                         </div>
                         <div className="line-seven">

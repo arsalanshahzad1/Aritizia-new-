@@ -507,7 +507,9 @@ function ProfileDrawer({
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
+  const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false)
 
+  const [buyNowPrice, setBuyNowPrice] = useState("")
   return (
     <>
       <Drawer
@@ -589,7 +591,9 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
+
                     Owned by <span>Enotic11daday</span>
+
                   </p>
                 </div>
                 <div className="three-line">
@@ -705,8 +709,8 @@ function ProfileDrawer({
                       <button>Decline</button>
                     </div>
                   </div>
-                )}
-                {!showBuyNow && (
+                }
+                {!showBuyNow &&
                   <>
                     <div
                       className="seven-line"
@@ -743,16 +747,45 @@ function ProfileDrawer({
         keyboard={false}
       >
         <div className="modal-body" style={{ position: "relative" }}>
-          <span onClick={() => setSucess(false)}>
+          <span onClick={() => {setSucess(false),setShowBuyOptionsStep2(false)}}>
             <AiOutlineClose />
           </span>
-          <div className="mobal-button-1">
-            <button onClick={buyWithETH}>Buy with ETH</button>
-            <button onClick={buyWithUSDT}>Buy with USDT</button>
-          </div>
-          <div className="mobal-button-2">
-            <button>Buy with FIAT</button>
-          </div>
+          {
+            !showBuyOptionsStep2 ?
+              <>
+                <div className="mobal-button-1">
+                  <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
+                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
+                </div>
+                <div className="mobal-button-2">
+                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with FIAT</button>
+                </div>
+              </>
+              :
+              <>
+                <div className="showBuyNow-step2">
+                  <input type="text" placeholder="Enter Price" value={buyNowPrice} onChange={(e) => setBuyNowPrice(e.target.value)} />
+                  <div className="btn-holder-for-showBuyNow">
+                    <div className="popUp-btn-group">
+                      <div
+
+                        className="button-styling-outline btnCC"
+                      >
+                        <div onClick={() => { setShowBuyOptionsStep2(false), setBuyNowPrice("") }} className="btnCCin">Cancel</div>
+                      </div>
+                      <div
+                        className="button-styling btnCC"
+                      >
+                        Send
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </>
+          }
+
         </div>
       </Modal>
     </>
