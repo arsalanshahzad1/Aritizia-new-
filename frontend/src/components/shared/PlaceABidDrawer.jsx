@@ -815,8 +815,10 @@ const PlaceABidDrawer = ({
             !showBuyOptionsStep2 ?
               <>
                 <div className="mobal-button-1">
-                  <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
-                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
+                  {/* <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
+                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button> */}
+                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
+                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
                 </div>
                 <div className="mobal-button-2">
                   <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with FIAT</button>

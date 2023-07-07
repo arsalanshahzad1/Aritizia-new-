@@ -4453,3 +4453,28 @@ footer h1 {
 .collectionDivPreview .img-holder img {
   width: 100% !important;
 }
+
+.showBuyNow-step2{
+  padding: 10% 3% 2% 3%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.showBuyNow-step2 input{
+  width: 100%;
+    font-family: 'Jost';
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 35px;
+    letter-spacing: 0em;
+    text-align: left;
+    background: #EBEBEB;
+    border: none;
+    outline: none;
+    padding: 6px 0px 6px 15px;
+}
+.btn-holder-for-showBuyNow{
+  margin:10px auto 0px auto;
+}
