@@ -97,7 +97,6 @@ const MyNftCard = ({
                             <div className="image-holder">
                                 <img src={nftImg} alt="" />
                             </div>
-
                             {showLinks &&
                                 <div className="social-media">
                                     <p onClick={() => {
