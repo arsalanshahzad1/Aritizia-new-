@@ -18,7 +18,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
-import duck from '../../../public/assets/images/duck.png'
+import duck from "../../../public/assets/images/duck.png";
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Single = ({ search, setSearch }) => {
@@ -28,7 +28,7 @@ const Single = ({ search, setSearch }) => {
   // const [title, setTitle] = useState("");
   // const [description, setDescription] = useState("");
   // const [minimumBid, setMinimumBid] = useState("");
-  const [listingType, setlistingType] = useState(0);
+  const [listingType, setListingType] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [startingDate, setStartingDate] = useState("");
@@ -38,6 +38,7 @@ const Single = ({ search, setSearch }) => {
   var endTime = useRef(0);
   const [inputValue, setInputValue] = useState("");
   const [showWarning, setShowWarning] = useState(false);
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value) || value === "") {
@@ -51,29 +52,26 @@ const Single = ({ search, setSearch }) => {
   };
 
   useEffect(() => {
-    if (startingDate && endingDate && endingDate < startingDate) {
-      alert("End date should be after start date");
-      setEndingDate("");
+    if (listingType == 1) {
+      if (startingDate && endingDate && endingDate < startingDate) {
+        alert("End date should be after start date");
+        setEndingDate("");
+      }
     }
   }, [startingDate, endingDate]);
 
   useEffect(() => {
-    const today = new Date();
-    today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
-    const selectedStartDate = new Date(startingDate);
+    if (listingType == 1) {
+      const today = new Date();
+      today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
+      const selectedStartDate = new Date(startingDate);
 
-    if (selectedStartDate < today) {
-      alert("Start date should not be before today's date");
-      setStartingDate("")
+      if (selectedStartDate < today) {
+        alert("Start date should not be before today's date");
+        setStartingDate("");
+      }
     }
   }, [startingDate]);
-
-
-
-
-
-
-
 
   const web3ModalRef = useRef();
 
@@ -105,10 +103,11 @@ const Single = ({ search, setSearch }) => {
 
   // Upload image to IPFS
   const uploadToIPFS = async (event) => {
-    if (typeof file !== "undefined") {
+    if (typeof selectedImage !== "undefined") {
       try {
         setLoading(true);
-        console.log("this is image file ", file);
+        console.log("this is image selectedImage ", selectedImage);
+        console.log("this is image item.file ", item.file);
         const resut = await uploadFileToIPFS(item.file);
         //const result = await client.add(file)
         console.log("!!!!!!!!!!!!!!!!!!", resut);
@@ -130,9 +129,11 @@ const Single = ({ search, setSearch }) => {
     if (listingType == 0) {
       let price = item.price;
       let crypto = item.crypto;
-      let collection = item.collection;
+      let collection = 0; // collection id hardcoded dey hrey hn
       let title = item.title;
       let description = item.description;
+
+      console.log("collection", collection);
 
       try {
         const dataInJSON = JSON.stringify({
@@ -157,7 +158,7 @@ const Single = ({ search, setSearch }) => {
     } else {
       let price = item.price;
       let crypto = item.crypto;
-      let collection = item.collection;
+      let collection = 0;
       let title = item.title;
       let description = item.description;
 
@@ -191,6 +192,7 @@ const Single = ({ search, setSearch }) => {
     console.log("In mintThenList");
 
     const signer = await getProviderOrSigner(true);
+    console.log("In mintThenList");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -198,12 +200,14 @@ const Single = ({ search, setSearch }) => {
       signer
     );
 
-    console.log("In mintThenList");
+    console.log("In result", result);
 
-    await (await nftContract.mint([result])).wait();
+    await nftContract.mint([result]);
+    console.log("In mintThenList");
 
     let mintedTokens = await nftContract.getMintedTokensList();
 
+    console.log("In mintThenList");
     mintedTokens = Number(mintedTokens);
 
     console.log("mintedTokens", mintedTokens);
@@ -214,15 +218,17 @@ const Single = ({ search, setSearch }) => {
       signer
     );
 
+    // List hn y tou list me kro
     await (
       await marketplaceContract.listNft(
         nftContract.address,
         [mintedTokens],
-        ethers.utils.parseEther(item.price),
+        [ethers.utils.parseEther(item.price)], // list  
         royalty,
         listingType,
-        startTime,
-        endTime,
+        [startTime], // list
+        [endTime], // list
+        0, // collection number
         crypto
       )
     ).wait();
@@ -234,7 +240,7 @@ const Single = ({ search, setSearch }) => {
   const [collection, setCollection] = useState({
     value: "USDT",
     label: "Select Collection",
-    image: { duck }
+    image: { duck },
   });
 
   const handlechange = (file) => {
@@ -258,14 +264,10 @@ const Single = ({ search, setSearch }) => {
   const defaultCrypto = cryptoOptions[0];
 
   const handleSliderChange = (value) => {
-    // setRoyalty(value);
-    if (value === 33) {
-      setRoyalty(5);
-    } else if (value === 66) {
-      setRoyalty(10);
-    } else if (value === 100) {
-      setRoyalty(15);
-    }
+    // Update the value or perform any other actions
+    console.log("Slider value:", value);
+    setRoyalty(value);
+    // ...
   };
 
   useEffect(() => { }, [price, title, description]);
@@ -290,6 +292,9 @@ const Single = ({ search, setSearch }) => {
       const startDate = new Date(startingDate);
       const endDate = new Date(endingDate);
 
+      console.log("startDate", startDate.getTime());
+      console.log("endDate", endDate.getTime());
+
       const startTimestamp = Math.floor(startDate.getTime() / 1000);
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
@@ -299,7 +304,7 @@ const Single = ({ search, setSearch }) => {
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;
-      endTime = startTimestamp;
+      endTime = endTimestamp;
     }
 
     console.log("CHECK startingDate", startTime);
@@ -314,17 +319,17 @@ const Single = ({ search, setSearch }) => {
     console.log("collection", collection);
 
     console.log("crypto", crypto);
+    console.log("selectedImage", selectedImage);
+    // setSelectedImage(null);
     console.log("file", file);
-    setFile(null);
-    console.log("file", file);
-
+    let demoCollection = 0;
     item = {
       title: title.current.value,
       price: price,
       description: description.current.value,
       crypto: crypto,
-      file: file,
-      collection: collection,
+      file: selectedImage,
+      collection: demoCollection,
     };
 
     console.log("item", item);
@@ -394,16 +399,19 @@ const Single = ({ search, setSearch }) => {
     } else {
       setcollectionOptions((previousOptions) => [
         ...previousOptions,
-        { value: CreateCollection.toLowerCase(), label: CreateCollection, image: selectedImage2 },
+        {
+          value: CreateCollection.toLowerCase(),
+          label: CreateCollection,
+          image: selectedImage2,
+        },
       ]);
       console.log(collectionOptions, "collection updated");
       hideCreateCollection();
     }
   };
   useEffect(() => {
-    console.log("collection updated", collectionOptions)
-  }, [collectionOptions])
-
+    console.log("collection updated", collectionOptions);
+  }, [collectionOptions]);
 
   const hideCreateCollection = () => {
     setCreateCollection("");
@@ -414,7 +422,8 @@ const Single = ({ search, setSearch }) => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    setSelectedImage(URL.createObjectURL(file));
+    // setSelectedImage(URL.createObjectURL(file));
+    setSelectedImage(file);
   };
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
@@ -427,16 +436,13 @@ const Single = ({ search, setSearch }) => {
     setSelectedImage2(file);
   };
 
-
-
-  const [choosenCollection, setChoosenCollection] = useState("")
+  const [choosenCollection, setChoosenCollection] = useState("");
   useEffect(() => {
-    setChoosenCollection(collection)
-    console.log("choosen", choosenCollection)
-  }, [collection])
+    setChoosenCollection(collection);
+    console.log("choosen", choosenCollection);
+  }, [collection]);
 
-  const [collectionFinalized, setcollectionFinalized] = useState(false)
-
+  const [collectionFinalized, setcollectionFinalized] = useState(false);
 
   return (
     <>
@@ -449,20 +455,20 @@ const Single = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-8 mx-auto">
                   <div className="row">
-                    {!collectionFinalized &&
+                    {!collectionFinalized && (
                       <>
-
                         <div className="line-three">
                           <div className="row">
                             <div className="col-lg-12">
                               <h2>Choose collection</h2>
                               <p>
-                                This is the collection where your item will appear.
+                                This is the collection where your item will
+                                appear.
                               </p>
                               <Dropdown
                                 options={collectionOptions}
                                 onChange={(e) => {
-                                  console.log("important", e)
+                                  console.log("important", e);
                                   setCollection(e);
                                 }}
                                 value={collection.value}
@@ -519,7 +525,11 @@ const Single = ({ search, setSearch }) => {
                                       placeholder="Enter collection name"
                                     />
                                     <p className="txt-2">Upload image</p>
-                                    <input type="file" accept="image/*" onChange={handleInputChange2} />
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      onChange={handleInputChange2}
+                                    />
 
                                     <div className="popUp-btn-group">
                                       <div
@@ -538,16 +548,21 @@ const Single = ({ search, setSearch }) => {
                                   </div>
                                 </div>
                               )}
-                              <div onClick={() => setcollectionFinalized(true)} className="browse-btn my-5 button-styling">Next</div>
+                              <div
+                                onClick={() => setcollectionFinalized(true)}
+                                className="browse-btn my-5 button-styling"
+                              >
+                                Next
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </>}
-                    {collectionFinalized &&
+                      </>
+                    )}
+                    {collectionFinalized && (
                       <>
                         <div className="col-lg-8 mx-auto collectionDivPreview">
                           <div className="img-holder">
-
                             <img src={duck} alt="" />
                           </div>
                           {/* <div className="title">
@@ -555,26 +570,20 @@ const Single = ({ search, setSearch }) => {
 
                           </div> */}
                           <div className="title-txt">
-                          {choosenCollection.value}
-
+                            {choosenCollection.value}
                           </div>
-                          
                         </div>
                         <div className="col-lg-12">
                           <div className="upload-file">
                             <h2>Upload file</h2>
-                            {/* <FileUploader
-                          handleChange={(e) => handlechange(e)}
-                          name="file"
-                          types={fileTypes}
-                          label="PNG, JPG, GIF, WEBP or MP4. Max 200mb."
-                        /> */}
                             <div className="browseforSingle">
-                              {!selectedImage ?
+                              {!selectedImage ? (
                                 <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
-                                :
-                                <p>Uploaded successfully, want to upload another?</p>
-                              }
+                              ) : (
+                                <p>
+                                  Uploaded successfully, want to upload another?
+                                </p>
+                              )}
                               <input
                                 ref={fileInputRef}
                                 type="file"
@@ -588,7 +597,6 @@ const Single = ({ search, setSearch }) => {
                                 Browse
                               </div>
                             </div>
-
                           </div>
                         </div>
                         <div className="line-one">
@@ -599,7 +607,7 @@ const Single = ({ search, setSearch }) => {
                             <div className="col-lg-3 col-md-4 col-6">
                               <div
                                 onClick={() => {
-                                  setlistingType(0);
+                                  setListingType(0);
                                 }}
                                 className={` create-single-card ${listingType === 0 ? "active" : ""
                                   }`}
@@ -611,7 +619,7 @@ const Single = ({ search, setSearch }) => {
                             <div className="col-lg-3 col-md-4 col-6">
                               <div
                                 onClick={() => {
-                                  setlistingType(1);
+                                  setListingType(1);
                                 }}
                                 className={` create-single-card ${listingType === 1 ? "active" : ""
                                   }`}
@@ -698,6 +706,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setStartingDate(e.target.value)
                                     }
+                                    min={new Date().toISOString().split('T')[0]}
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -708,14 +717,16 @@ const Single = ({ search, setSearch }) => {
                                     placeholder="mm/dd/yyyy"
                                     style={{ padding: "6px 10px 6px 15px" }}
                                     value={endingDate}
-                                    onChange={(e) => setEndingDate(e.target.value)}
+                                    onChange={(e) =>
+                                      setEndingDate(e.target.value)
+                                    }
+                                    min={startingDate}
                                   />
                                 </div>
                               </div>
                             </div>
                           </>
                         )}
-
 
                         <div className="line-four">
                           <div className="row">
@@ -743,18 +754,45 @@ const Single = ({ search, setSearch }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="line-six">
+                        {/* <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
                               <h2>Royalties</h2>
                               <Slider
                                 min={0}
                                 defaultValue={0}
-                                marks={{ 0: "0%", 33: "5%", 66: "10%", 100: "15%" }}
+                                marks={{
+                                  0: "0%",
+                                  33: "5%",
+                                  66: "10%",
+                                  100: "15%",
+                                }}
                                 step={null}
                                 onChange={handleSliderChange}
                               />
                             </div>
+                          </div>
+                        </div> */}
+                        <div className="line-six">
+                          <div className="row">
+                            <div className="col-lg-9">
+                              <h2>Royalties</h2>
+                              <Slider
+                                min={0}
+                                max={15}
+                                defaultValue={0}
+                                // step={null}
+                                onChange={handleSliderChange}
+                                value={royalty}
+                              />
+                            </div>
+                            <div className="col-lg-3 ">
+                              <div className="royality-value">
+
+                                {royalty} %
+                              </div>
+                            </div>
+                            
                           </div>
                         </div>
                         <div className="line-seven">
@@ -767,7 +805,7 @@ const Single = ({ search, setSearch }) => {
                           </div>
                         </div>
                       </>
-                    }
+                    )}
                   </div>
                 </div>
               </div>

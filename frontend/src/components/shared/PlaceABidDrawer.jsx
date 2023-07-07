@@ -302,7 +302,7 @@ const PlaceABidDrawer = ({
   collection,
   userAddress,
 }) => {
-  
+
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
@@ -358,10 +358,10 @@ const PlaceABidDrawer = ({
       connectWallet();
       // numberOFICOTokens();
     }
-    } , [walletConnected]);
+  }, [walletConnected]);
 
 
-    // return the price of NFT in usd
+  // return the price of NFT in usd
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
 
@@ -443,6 +443,7 @@ const PlaceABidDrawer = ({
     // await (
     //   await marketplaceContract.buyWithUSDT(NFT_CONTRACT_ADDRESS, paymentMethod, id, amount)
     // ).wait();
+
   };
 
   const statusOptions = [
@@ -450,6 +451,11 @@ const PlaceABidDrawer = ({
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
+
+
+  const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false)
+
+  const [buyNowPrice, setBuyNowPrice] = useState("")
   return (
     <>
       <Drawer
@@ -686,7 +692,7 @@ const PlaceABidDrawer = ({
           </div>
         </div>
       </Drawer>
-      <Modal
+      {/* <Modal
         show={sucess}
         onHide={() => setSucess(false)}
         centered
@@ -706,6 +712,57 @@ const PlaceABidDrawer = ({
           <div className="mobal-button-2">
             <button>Bid with FIAT</button>
           </div>
+        </div>
+      </Modal> */}
+      <Modal
+        show={sucess}
+        onHide={() => setSucess(false)}
+        centered
+        size="lg"
+        className="succes-modal-wrap"
+        backdrop="static"
+        keyboard={false}
+      >
+        <div className="modal-body" style={{ position: "relative" }}>
+          <span onClick={() => { setSucess(false), setShowBuyOptionsStep2(false) }}>
+            <AiOutlineClose />
+          </span>
+          {
+            !showBuyOptionsStep2 ?
+              <>
+                <div className="mobal-button-1">
+                  <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
+                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
+                </div>
+                <div className="mobal-button-2">
+                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with FIAT</button>
+                </div>
+              </>
+              :
+              <>
+                <div className="showBuyNow-step2">
+                  <input type="text" placeholder="Enter Price" value={buyNowPrice} onChange={(e) => setBuyNowPrice(e.target.value)} />
+                  <div className="btn-holder-for-showBuyNow">
+                    <div className="popUp-btn-group">
+                      <div
+
+                        className="button-styling-outline btnCC"
+                      >
+                        <div onClick={() => { setShowBuyOptionsStep2(false), setBuyNowPrice("") }} className="btnCCin">Cancel</div>
+                      </div>
+                      <div
+                        className="button-styling btnCC"
+                      >
+                        Send
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+              </>
+          }
+
         </div>
       </Modal>
     </>

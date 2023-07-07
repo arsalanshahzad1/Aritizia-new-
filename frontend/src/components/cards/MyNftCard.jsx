@@ -66,6 +66,28 @@ const MyNftCard = ({
 
     const [timedAuction, setTimedAuction] = useState(false)
 
+    const [nftImg, setNftImg] = useState('')
+    useEffect(() => {
+        if (typeof image === 'string' && image.startsWith('https://ipfs.io/ipfs/')) {
+            // Fetch the blob URL and convert it to a File object
+            fetch(image)
+                .then((response) => response.blob())
+                .then((blob) => {
+                    const convertedFile = new File([blob], 'convertedImage.jpg', {
+                        type: 'image/jpeg',
+                        lastModified: Date.now(),
+                    });
+                    setNftImg(convertedFile);
+                })
+                .catch((error) => {
+                    console.error('Error fetching or converting the blob:', error);
+                    setNftImg(null);
+                });
+        } else {
+            setNftImg(image);
+        }
+    }, [image]);
+
     return (
         <>
             <div className="col-lg-3 col-md-4">
@@ -73,9 +95,8 @@ const MyNftCard = ({
                     <div onMouseEnter={() => { setShowLinks(true) }} onMouseLeave={() => { setShowLinks(false) }} className="simple-card-main" style={{ position: "relative" }}>
                         <div className="top">
                             <div className="image-holder">
-                                <img src={image} alt="" />
+                                <img src={nftImg} alt="" />
                             </div>
-
                             {showLinks &&
                                 <div className="social-media">
                                     <p onClick={() => {
