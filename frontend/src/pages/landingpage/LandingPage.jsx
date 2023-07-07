@@ -12,6 +12,8 @@ import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import Web3Modal from "web3modal";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
+import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
+import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
@@ -70,6 +72,25 @@ const LandingPage = ({ search, setSearch }) => {
     console.log("In get provider or signer");
 
     return web3Provider;
+  };
+
+  const approveUSDT = async () => {
+    const signer = await getProviderOrSigner(true);
+
+    let amountInWei = 100000 * 10 ** 6;
+
+    const USDTContract = new Contract(
+      TETHER_CONTRACT_ADDRESS.address,
+      TETHER_CONTRACT_ABI.abi,
+      signer
+    );
+
+    const appprove = await USDTContract.approve(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      amountInWei
+    );
+
+    appprove.wait();
   };
 
   const getListedNfts = async () => {
@@ -132,7 +153,6 @@ const LandingPage = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
           console.log("listingType", listingType);
-          console.log("CHECK2");
 
           if (listingType === 0) {
             const nftData = {
@@ -167,7 +187,8 @@ const LandingPage = ({ search, setSearch }) => {
               seller: auctionData.seller.toString(),
             };
 
-            // console.log("CHECK5 ");
+            console.log("nftData ", nftData);
+            console.log("nftListFP ", nftListFP);
 
             myAuctions.push(nftData);
             // console.log("auction in function", myAuctions);
@@ -313,6 +334,9 @@ const LandingPage = ({ search, setSearch }) => {
                     <div className="right">View more</div>
                   </div>
                 </div>
+                {/* <div>
+                  <button onClick={approveUSDT}>Approve</button>
+                </div> */}
                 {nftListFP.map((item) => (
                   <BuyNow
                     // onOpen={onOpen}

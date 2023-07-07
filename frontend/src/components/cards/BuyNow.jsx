@@ -37,6 +37,32 @@ const BuyNow = ({
     }
   };
 
+  const [nftImg, setNftImg] = useState("");
+
+  useEffect(() => {
+    if (
+      typeof image === "string" &&
+      image.startsWith("https://ipfs.io/ipfs/")
+    ) {
+      // Fetch the blob URL and convert it to a File object
+      fetch(image)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const convertedFile = new File([blob], "convertedImage.jpg", {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          });
+          setNftImg(URL.createObjectURL(convertedFile));
+        })
+        .catch((error) => {
+          console.error("Error fetching or converting the blob:", error);
+          setNftImg(null);
+        });
+    } else {
+      setNftImg(image);
+    }
+  }, [image]);
+
   return (
     <>
       <div className="col-lg-3 col-md-4">
@@ -55,8 +81,8 @@ const BuyNow = ({
                         borderRadius: "8px 8px 0px 0px",
                       }}
                     >
-                      <img src={image} className="J-image" />
-
+                      <img src={nftImg} className="J-image" />
+                      {/* {console.log(nftImg, "its image")} */}
                       {showLinks && (
                         <div className="social-links">
                           <ul>

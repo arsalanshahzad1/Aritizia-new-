@@ -1,8 +1,8 @@
 import axios from "axios";
 import FormData from "form-data";
-const key = "f8d8947de1a1117fc89f";
+const key = "9c115815d7cb3001413a";
 const secret =
-  "25c39fd49cc383e00cecc68875cc751294d731d2510c00c467fe13c6d979495f";
+  "78c18f5c1ca213784b9754ed521fb18792627645601e965b23a21170f3cfe8a7";
 
 export const uploadJSONToIPFS = async (JSONBody) => {
   const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
@@ -17,8 +17,7 @@ export const uploadJSONToIPFS = async (JSONBody) => {
     .then(function (response) {
       return {
         success: true,
-        pinataURL:
-          "https://ipfs.io/ipfs/" + response.data.IpfsHash,
+        pinataURL: "https://ipfs.io/ipfs/" + response.data.IpfsHash,
       };
     })
     .catch(function (error) {

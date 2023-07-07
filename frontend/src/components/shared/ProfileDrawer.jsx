@@ -306,7 +306,7 @@ function ProfileDrawer({
   collection,
   userAddress,
   showBuyNow,
-  ShowAcceptbtn
+  ShowAcceptbtn,
 }) {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -421,7 +421,7 @@ function ProfileDrawer({
         paymentMethod,
         id,
         {
-          value: ethers.utils.parseEther(value),
+          value: ethers.utils.parseEther("1"),
           gasLimit: ethers.BigNumber.from("500000"),
         }
       )
@@ -470,18 +470,18 @@ function ProfileDrawer({
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
     console.log("amount", amount);
 
-    let amountInWei = amount * 10 ** 6;
+    let amountInWei = 25 * 10 ** 6;
     console.log("amountInWei", amountInWei);
     amountInWei = amountInWei.toString();
     console.log("amountInWei", typeof amountInWei);
 
     // if (paymentMethod == 1) {
-    const appprove = await USDTContract.approve(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      amountInWei
-    );
+    // const appprove = await USDTContract.approve(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   amountInWei
+    // );
 
-    appprove.wait();
+    // appprove.wait();
     // }
 
     // console.log("paymentmethod", paymentMethod);
@@ -589,9 +589,7 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    
-                      Owned by <span>Enotic11daday</span>
-                    
+                    Owned by <span>Enotic11daday</span>
                   </p>
                 </div>
                 <div className="three-line">
@@ -632,7 +630,7 @@ function ProfileDrawer({
                         style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
-                    <div className="col-lg-8 col-md-8 col-12">
+                    {/* <div className="col-lg-8 col-md-8 col-12">
                       <button
                         className={`${propertyTabs === 0 ? "active" : ""}`}
                         onClick={() => setPropertyTabs(0)}
@@ -651,7 +649,7 @@ function ProfileDrawer({
                       >
                         History
                       </button>
-                    </div>
+                    </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -659,11 +657,11 @@ function ProfileDrawer({
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   {propertyTabs === 0 && <Details />}
                   {propertyTabs === 1 && <Bids />}
                   {propertyTabs === 2 && <History />}
-                </div>
+                </div> */}
                 <div className="six-line">
                   <h3>Current Price</h3>
                   <div className="row">
@@ -679,12 +677,13 @@ function ProfileDrawer({
                         </p>
                       </div>
                     </div>
-                    {!showBuyNow &&
+                    {!showBuyNow && (
                       <div className="col-lg-6 col-md-8 col-8">
-
-                        <div className="stock-div">13 <span>in stock</span> </div>
+                        <div className="stock-div">
+                          13 <span>in stock</span>{" "}
+                        </div>
                       </div>
-                    }
+                    )}
                     <div className="col-lg-6 col-md-4 col-4">
                       <div className="right">
                         <p>{/* 13<span>in stock</span> */}</p>
@@ -699,18 +698,20 @@ function ProfileDrawer({
                     style={{ marginTop: "20px", marginBottom: "20px" }}
                   />
                 </div>
-                {ShowAcceptbtn &&
+                {ShowAcceptbtn && (
                   <div className="drawer-inner-accept-btn">
                     <div className="nft-card-btn-holder">
                       <button>Accept</button>
                       <button>Decline</button>
                     </div>
                   </div>
-                }
-                {showBuyNow &&
+                )}
+                {!showBuyNow && (
                   <>
-
-                    <div className="seven-line" onClick={() => setChack(!chack)}>
+                    <div
+                      className="seven-line"
+                      onClick={() => setChack(!chack)}
+                    >
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}
@@ -726,7 +727,7 @@ function ProfileDrawer({
                       </button>
                     </div>
                   </>
-                }
+                )}
               </div>
             </div>
           </div>

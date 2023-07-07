@@ -456,22 +456,29 @@ const PlaceABidDrawer = ({
 
     // get the price of dollar from smartcontract and convert this value
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    let USDPriceInWei = 3000 * 10 ** 6;
-    // if (paymentMethod == 1) {
-    const appprove = await USDTContract.approve(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      USDPriceInWei
-    );
+    console.log("HEre");
 
-    appprove.wait();
+    let USDPrice = 300;
+    let USDPriceInWei = USDPrice * 10 ** 6;
+    USDPrice = USDPrice.toString();
+    // if (paymentMethod == 1) {
+
+    // console.log("asdasd");
+    // const appprove = await USDTContract.approve(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   USDPriceInWei
+    // );
+    // console.log("555");
+
+    // appprove.wait();
     // }
 
     console.log("Approved");
 
     USDPriceInWei = USDPriceInWei.toString();
+    console.log("USDPriceInWei", USDPriceInWei);
 
     // console.log("paymentmethod", paymentMethod);
-  
 
     const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, {
       gasLimit: ethers.BigNumber.from("500000"),
@@ -479,6 +486,14 @@ const PlaceABidDrawer = ({
 
     // Wait for the transaction to be mined
     await tx.wait();
+
+    // appprove = await USDTContract.approve(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   0
+    // );
+    // console.log("555");
+
+    // appprove.wait();
   };
 
   const statusOptions = [
@@ -645,7 +660,7 @@ const PlaceABidDrawer = ({
                         style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
-                    <div className="col-lg-8 col-md-8 col-12">
+                    {/* <div className="col-lg-8 col-md-8 col-12">
                       <button
                         className={`${propertyTabs === 0 ? "active" : ""}`}
                         onClick={() => setPropertyTabs(0)}
@@ -664,7 +679,7 @@ const PlaceABidDrawer = ({
                       >
                         History
                       </button>
-                    </div>
+                    </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -672,11 +687,11 @@ const PlaceABidDrawer = ({
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   {propertyTabs === 0 && <Details />}
                   {propertyTabs === 1 && <Bids />}
                   {propertyTabs === 2 && <History />}
-                </div>
+                </div> */}
                 <div className="six-line">
                   <h3>Current Bid</h3>
                   <div className="row">
