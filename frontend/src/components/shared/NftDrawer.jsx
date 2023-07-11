@@ -857,19 +857,18 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                             placeholder="Enter collection name"
                                                                         />
                                                                         <div className="popUp-btn-group">
-                                                                            
-                                                                            <div
-                                                                             onClick={() => AddCollection()}
-                                                                                className="button-styling btnCC"
+                                                                            <button
+                                                                                className="button-styling"
+                                                                                onClick={() => AddCollection()}
                                                                             >
                                                                                 Next
-                                                                            </div>
-                                                                            <div
-
-                                                                                className="button-styling-outline btnCC"
+                                                                            </button>
+                                                                            <button
+                                                                                onClick={hideCreateCollection}
+                                                                                className="button-styling-outline"
                                                                             >
-                                                                                <div  onClick={hideCreateCollection} className="btnCCin">Cancel</div>
-                                                                            </div>
+                                                                                <div>Cancel</div>
+                                                                            </button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -916,10 +915,8 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                 value={royalty}
                                                             />
                                                         </div>
-                                                        <div className="col-lg-2">
-                                                            <div className="royality-value">
-                                                                {royalty} %
-                                                            </div>
+                                                        <div className="col-lg-3 royality-value">
+                                                            {royalty} %
                                                         </div>
                                                     </div>
                                                 </div>

@@ -179,7 +179,7 @@ const CollectionProfile = ({ search, setSearch }) => {
                         console.log("myNFTs in function", myNFTs);
                     } else if (listingType === 1) {
                         const nftData = {
-                            id: id, //
+                            id: id, 
                             title: title,
                             image: image,
                             price: price,
@@ -320,104 +320,7 @@ const CollectionProfile = ({ search, setSearch }) => {
                                                             collection={"abc def ghi"}
                                                             userAddress
                                                         />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
-                                                        <SimpleCard
-                                                            onOpen={onOpen}
-                                                            // onClose={onClose}
-                                                            key={"3"}
-                                                            id={"3"}
-                                                            title={"abcefg"}
-                                                            image={nftimage2}
-                                                            price={"1010"}
-                                                            crypto={"ETH"}
-                                                            royalty={"10%"}
-                                                            description={"lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"}
-                                                            collection={"abc def ghi"}
-                                                            userAddress
-                                                        />
+                                                      
                                                     </>
                                                 )
                                             }
@@ -435,84 +338,7 @@ const CollectionProfile = ({ search, setSearch }) => {
                                                             endTime={"46d 18h 40m 10s"}
                                                             userAddress
                                                         />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-                                                        <NewItemCard
-                                                            key={"2"}
-                                                            id={"2"}
-                                                            title={"Pinky Ocean"}
-                                                            image={bird}
-                                                            price={"320"}
-                                                            highestBid={"qqw"}
-                                                            isLive={true}
-                                                            endTime={"46d 18h 40m 10s"}
-                                                            userAddress
-                                                        />
-
+                                                      
                                                     </>
                                                 )
                                             }

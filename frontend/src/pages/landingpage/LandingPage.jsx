@@ -22,10 +22,10 @@ const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
-  const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
+  const [walletConnected, setWalletConnected] = useState(false);
 
   const web3ModalRef = useRef();
 
@@ -42,7 +42,8 @@ const LandingPage = ({ search, setSearch }) => {
   async function getProvider() {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
-      "https://rpc2.sepolia.org"
+      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
+      "http://localhost:8545"
     );
 
     return provider;
@@ -94,8 +95,11 @@ const LandingPage = ({ search, setSearch }) => {
   };
 
   const getListedNfts = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = await getProvider();
+    // const provider = await getProviderOrSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
 
+    console.log("Provider", provider);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -108,14 +112,21 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
+    console.log("nftContract", nftContract);
+    // console.log("zayyan", await (await nftContract.mintedTokensList()).wait());
+
     let listingType;
     // console.log("Active Method", listingType);
     // console.log("time", Date.now());
+    // let dollarPriceOfETH = 123123;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = 1.3;
+
+    let demo = await marketplaceContract.owner();
+    console.log("demo", demo);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     console.log("mintedTokens", mintedTokens);
@@ -247,7 +258,6 @@ const LandingPage = ({ search, setSearch }) => {
   useEffect(() => {
     connectWallet();
     getProviderOrSigner();
-    // getProviderOrSigner();
     getListedNfts();
     getAddress();
   }, [userAddress]);

@@ -34,6 +34,7 @@ import {
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link } from "react-router-dom";
+
 const Monthly_data = [
   {
     data: "Jan",
@@ -366,6 +367,19 @@ function ProfileDrawer({
     return web3Provider;
   };
 
+  const handleNFTSoldEvent = async(nftContract, tokenId, seller, owner, price) =>{
+  
+    let soldData = {
+      nftContract: nftContract.toString(),
+      tokenId: tokenId.toString(),
+      seller: seller.toString(),
+      owner: owner.toString(),
+      price: price.toString(),
+    }
+
+    console.log("soldData", soldData);
+  }
+
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
 
@@ -387,6 +401,8 @@ function ProfileDrawer({
     let fee = Math.ceil((priceInUSD * 3) / 100);
     setPlatformFee(fee);
   };
+
+  
 
   const buyWithETH = async () => {
     const signer = await getProviderOrSigner(true);
@@ -426,6 +442,10 @@ function ProfileDrawer({
         }
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+
+    console.log("Response of bid even", response);
   };
 
   const buyWithUSDT = async () => {
@@ -500,6 +520,11 @@ function ProfileDrawer({
         { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+
+    console.log("Response of bid even", response);
+    
   };
 
   const statusOptions = [
@@ -507,9 +532,7 @@ function ProfileDrawer({
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
-  // const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false);
 
-  const [buyNowPrice, setBuyNowPrice] = useState("");
   return (
     <>
       <Drawer
@@ -745,22 +768,16 @@ function ProfileDrawer({
         keyboard={false}
       >
         <div className="modal-body" style={{ position: "relative" }}>
-          <span
-            onClick={() => {
-              setSucess(false), setShowBuyOptionsStep2(false);
-            }}
-          >
+          <span onClick={() => setSucess(false)}>
             <AiOutlineClose />
           </span>
-          <>
-            <div className="mobal-button-1">
-              <button onClick={buyWithETH}>Buy with ETH</button>
-              <button onClick={buyWithUSDT}>Buy with USDT</button>
-            </div>
-            <div className="mobal-button-2">
-              <button>Buy with FIAT</button>
-            </div>
-          </>
+          <div className="mobal-button-1">
+            <button onClick={buyWithETH}>Buy with ETH</button>
+            <button onClick={buyWithUSDT}>Buy with USDT</button>
+          </div>
+          <div className="mobal-button-2">
+            <button>Buy with FIAT</button>
+          </div>
         </div>
       </Modal>
     </>

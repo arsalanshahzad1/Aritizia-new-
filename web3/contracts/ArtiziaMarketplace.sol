@@ -29,6 +29,7 @@ interface IUniswapV2Router01 {
         payable
         returns (uint amountToken, uint amountETH, uint liquidity);
 
+    
     function removeLiquidity(
         address tokenA,
         address tokenB,
@@ -302,7 +303,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
-    event auctionEndTimeIncreased(uint256 newTime);
+    event auctionEndTimeIncreased(
+        uint256 tokenId,
+        address seller,
+        uint256 newTime
+    );
 
     event receivedABid(
         uint256 tokenId,
@@ -886,7 +891,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         if (auction.endTime < block.timestamp + 10 minutes) {
             auction.endTime += 5 minutes;
-            emit auctionEndTimeIncreased(auction.endTime);
+            emit auctionEndTimeIncreased(
+                _tokenId,
+                auction.seller,
+                auction.endTime
+            );
         }
 
         emit receivedABid(
@@ -966,7 +975,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         if (auction.endTime < block.timestamp + 10 minutes) {
             console.log("Check8");
             auction.endTime += 5 minutes;
-            emit auctionEndTimeIncreased(auction.endTime);
+            emit auctionEndTimeIncreased(
+                _tokenId,
+                auction.seller,
+                auction.endTime
+            );
             console.log("Check9");
         }
 
@@ -1012,12 +1025,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         }
 
         // auction.isLive = false;
-        nft.listed = false;
         uint256 _royaltyFee;
         uint256 _amountAfterRoyalty;
         uint256 _amountToBePaid;
         uint256 _amount = auction.highestBid; // alreay saving all bids in ether
-        nft.owner = auction.highestBidder;
 
         // if the seller wants to be paid in ether
         if (nft.paymentMethod == PaymentMethod.ETHER) {
@@ -1078,11 +1089,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 // payable(nft.seller).transfer(_amountToBePaid);
             }
         }
+
         IERC721(_nftContract).transferFrom(
             address(this),
             auction.highestBidder,
             nft.tokenId
         );
+
+        nft.owner = auction.highestBidder;
+        nft.listed = false;
 
         _nftsSold.increment();
         emit NFTSold(
@@ -1186,10 +1201,36 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ////////////    GETTER FUNCTIONS    ///////////
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////// 
 
     function getFans() public view isUserDeleted returns (address[] memory) {
         return fanLists[msg.sender];
+    }
+
+    function getCollectionNfts(
+        uint256 _collectionId
+    ) public view returns (NFT[] memory) {
+        uint256 nftCount = _nftCount.current();
+        uint256 unsoldNftsCount = nftCount - _nftsSold.current();
+
+        console.log("nftCount", nftCount);
+        console.log("unsoldNftsCount", unsoldNftsCount);
+
+        NFT[] memory nfts = new NFT[](unsoldNftsCount);
+        uint nftsIndex = 0;
+
+        console.log("_collectionId");
+
+        for (uint i = 0; i < nftCount; i++) {
+            if (
+                _idToNFT[i].listed && _idToNFT[i].collectionId == _collectionId
+                // && _idToAuction[id].approve
+            ) {
+                nfts[nftsIndex] = _idToNFT[i];
+                nftsIndex++;
+            }
+        }
+        return nfts;
     }
 
     function getListedNfts() public view isUserDeleted returns (NFT[] memory) {

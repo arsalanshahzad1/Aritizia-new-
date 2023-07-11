@@ -20,7 +20,7 @@ import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
 import Duck from "../../../public/assets/images/duck.png";
 import NftCard from "./NftCard";
-import duck from '../../../public/assets/images/duck.png'
+import duck from "../../../public/assets/images/duck.png";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -307,33 +307,33 @@ const Multiple = ({ search, setSearch }) => {
     );
     console.log("Yahoo2");
 
-    console.log("startTimestamp in if", startingDate);
-    console.log("endTimestamp in if", startingDate);
+    // console.log("startTimestamp in if", startingDate);
+    // console.log("endTimestamp in if", startingDate);
 
-    if (listingType == 0) {
-      console.log("startTimestamp in if", startingDate);
-      console.log("endTimestamp in if", startingDate);
-      setStartingDate(0);
-      setEndingDate(0);
-    } else if (listingType == 1) {
-      const startDate = new Date(startingDate);
-      const endDate = new Date(endingDate);
+    // if (listingType == 0) {
+    //   console.log("startTimestamp in if", startingDate);
+    //   console.log("endTimestamp in if", startingDate);
+    //   setStartingDate(0);
+    //   setEndingDate(0);
+    // } else if (listingType == 1) {
+    //   const startDate = new Date(startingDate);
+    //   const endDate = new Date(endingDate);
 
-      // Convert start date to Unix timestamp (seconds)
-      const startTimestamp = Math.floor(startDate.getTime() / 1000);
+    //   // Convert start date to Unix timestamp (seconds)
+    //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
 
-      // Convert end date to Unix timestamp (seconds)
-      const endTimestamp = Math.floor(endDate.getTime() / 1000);
+    //   // Convert end date to Unix timestamp (seconds)
+    //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
 
-      console.log("startTimestamp in else", startTimestamp);
-      console.log("endTimestamp in else", endTimestamp);
-    }
+    //   console.log("startTimestamp in else", startTimestamp);
+    //   console.log("endTimestamp in else", endTimestamp);
+    // }
 
-    console.log("mintedTokens", mintedTokens);
-    console.log("item.price", item.price);
-    console.log("royalty", royalty);
-    console.log("listingType", listingType);
-    console.log("item.crypto", crypto);
+    // console.log("mintedTokens", mintedTokens);
+    // console.log("item.price", item.price);
+    // console.log("royalty", royalty);
+    // console.log("listingType", listingType);
+    // console.log("item.crypto", crypto);
 
     // // UNCOMMENT this
     let ethParsedList = [];
@@ -355,6 +355,7 @@ const Multiple = ({ search, setSearch }) => {
     console.log("startingDateList", startingDateList);
     console.log("endingDateList", endingDateList);
     console.log("crypto", crypto);
+    console.log("PAyment method", crypto);
 
     await (
       await marketplaceContract.listNft(
@@ -370,6 +371,31 @@ const Multiple = ({ search, setSearch }) => {
       )
     ).wait();
     setLoading(false);
+
+    let response = await marketplaceContract.on(
+      "NFTListed",
+      handleNFTListedEvent
+    );
+
+    console.log("Response of bid even", response);
+  };
+
+  const handleNFTListedEvent = async (
+    nftContract,
+    tokenId,
+    seller,
+    owner,
+    price
+  ) => {
+    let listedData = {
+      nftContract: nftContract.toString(),
+      tokenId: tokenId.toString(),
+      seller: seller.toString(),
+      owner: owner.toString(),
+      price: price.toString(),
+    };
+
+    console.log("listedData", listedData);
   };
 
   const [file, setFile] = useState(null);
@@ -434,7 +460,7 @@ const Multiple = ({ search, setSearch }) => {
         let imageFile = new File([NFts[i].image], `image${i}.jpg`, {
           type: "image/jpeg",
         });
-
+        console.log("new image", imageFile);
         imageList.push(imageFile);
         priceList.push(NFts[i].price);
         titleList.push(NFts[i].title);
@@ -459,6 +485,7 @@ const Multiple = ({ search, setSearch }) => {
         let imageFile = new File([NFts[i].image], "image.jpg", {
           type: "image/jpeg",
         });
+        console.log("new image", imageFile);
 
         imageList.push(imageFile);
         priceList.push(NFts[i].price);
@@ -647,29 +674,29 @@ const Multiple = ({ search, setSearch }) => {
       if (listingType === 0) {
         const newNFTs = selectedImagesNFT.map((image, index) => ({
           image,
-          price: '',
-          description: '',
-          status: '',
-          title: '',
+          price: "",
+          description: "",
+          status: "",
+          title: "",
           royalty: royalty,
           collection: choosenCollection.value,
           crypto: crypto,
-          listingType: listingType
+          listingType: listingType,
         }));
         setNfts((prevNFTs) => [...prevNFTs, ...newNFTs.slice(prevNFTs.length)]);
       } else if (listingType === 1) {
         const newNFTs = selectedImagesNFT.map((image, index) => ({
           image,
-          price: '',
-          startingDate: '',
-          endingDate: '',
-          description: '',
-          status: '',
-          title: '',
+          price: "",
+          startingDate: "",
+          endingDate: "",
+          description: "",
+          status: "",
+          title: "",
           royalty: royalty,
           collection: choosenCollection.value,
           crypto: crypto,
-          listingType: listingType
+          listingType: listingType,
         }));
         setNfts((prevNFTs) => [...prevNFTs, ...newNFTs.slice(prevNFTs.length)]);
       }
@@ -688,19 +715,18 @@ const Multiple = ({ search, setSearch }) => {
   useEffect(() => {
     if (listingType === 0) {
       setnftForm({
-        "price": "",
-        "desc": "",
-        "title": "",
-      })
-    }
-    else if (listingType === 1) {
+        price: "",
+        desc: "",
+        title: "",
+      });
+    } else if (listingType === 1) {
       setnftForm({
-        "desc": "",
-        "title": "",
-        'bid': "",
-        'startDate': "",
-        'endDate': ""
-      })
+        desc: "",
+        title: "",
+        bid: "",
+        startDate: "",
+        endDate: "",
+      });
     }
   }, [listingType]);
 
@@ -711,55 +737,57 @@ const Multiple = ({ search, setSearch }) => {
   const saveNFT = () => {
     if (listingType === 0) {
       if (!nftForm.price || !nftForm.desc) {
-        alert("Fill all fields to save a NFT")
-      }
-      else {
-        const imageFile = new File([NFts[currentNFT].image], 'image.jpg', { type: 'image/jpeg' });
+        alert("Fill all fields to save a NFT");
+      } else {
+        // const imageFile = new File([NFts[currentNFT].image], "image.jpg", {
+        //   type: "image/jpeg",
+        // });
         const Data = {
-          "price": nftForm.price,
-          "description": nftForm.desc,
-          "image": imageFile,
-          "status": "completed",
-          "title": nftForm.title
-        }
+          price: nftForm.price,
+          description: nftForm.desc,
+          image: NFts[currentNFT].image,
+          status: "completed",
+          title: nftForm.title,
+        };
         setnftForm({
-          "price": "",
-          "desc": "",
-          "title": ""
-        })
-        updateCompleted(currentNFT, Data)
+          price: "",
+          desc: "",
+          title: "",
+        });
+        updateCompleted(currentNFT, Data);
       }
-    }
-
-    else if (listingType === 1) {
-      if (!nftForm.bid || !nftForm.desc || !nftForm.startDate || !nftForm.endDate) {
-        alert("Fill all fields to save a NFT")
-      }
-      else {
-        
+    } else if (listingType === 1) {
+      if (
+        !nftForm.bid ||
+        !nftForm.desc ||
+        !nftForm.startDate ||
+        !nftForm.endDate
+      ) {
+        alert("Fill all fields to save a NFT");
+      } else {
         const startDate = new Date(nftForm.startDate);
         const endDate = new Date(nftForm.endDate);
         const startTimestamp = Math.floor(startDate.getTime() / 1000);
         const endTimestamp = Math.floor(endDate.getTime() / 1000);
         const Data = {
-          "title": nftForm.title,
-          "price": nftForm.bid,
-          "startingDate": startTimestamp,
-          "endingDate": endTimestamp,
-          "description": nftForm.desc,
-          "image": NFts[currentNFT].image,
-          "status": "completed"
-        }
+          title: nftForm.title,
+          price: nftForm.bid,
+          startingDate: startTimestamp,
+          endingDate: endTimestamp,
+          description: nftForm.desc,
+          image: NFts[currentNFT].image,
+          status: "completed",
+        };
         setnftForm({
-          "bid": "",
-          "desc": "",
-          "startDate": "",
-          "endDate": "",
-          "image": "",
-          "status": "",
-          "title": ''
-        })
-        updateCompleted(currentNFT, Data)
+          bid: "",
+          desc: "",
+          startDate: "",
+          endDate: "",
+          image: "",
+          status: "",
+          title: "",
+        });
+        updateCompleted(currentNFT, Data);
       }
     }
   };
@@ -830,7 +858,7 @@ const Multiple = ({ search, setSearch }) => {
     }
   }, [nftForm.startDate]);
 
-  const [choosenCollection, setChoosenCollection] = useState({})
+  const [choosenCollection, setChoosenCollection] = useState({});
   useEffect(() => {
     setChoosenCollection(collection);
     console.log("choosen", choosenCollection);
@@ -1153,7 +1181,6 @@ const Multiple = ({ search, setSearch }) => {
                         )}
                         {showProfileNFT && (
                           <div>
-
                             {/* <h2>Profile NFT</h2> */}
                             {/* <div className="profile-nft-row1">
                               <div className="NFT-image-holder">
@@ -1181,7 +1208,6 @@ const Multiple = ({ search, setSearch }) => {
                                 </button>
                               </div>
                             </div> */}
-
 
                             <div className="col-lg-8 mx-auto collectionDivPreview">
                               <div className="img-holder">
@@ -1224,22 +1250,32 @@ const Multiple = ({ search, setSearch }) => {
                                       <div className="NFT-inner">
                                         {NFts.length > 0 &&
                                           NFts.map((nft, index) => {
-                                            if (index >= tabIndex && index < Number(tabIndex + (10))) {
+                                            if (
+                                              index >= tabIndex &&
+                                              index < Number(tabIndex + 10)
+                                            ) {
                                               return (
-                                                < NftCard
-                                                  isCompleted={nft.status === "completed" ? "true" : "false"}
-                                                  isClicked={currentNFT === index ? "true" : "false"}
+                                                <NftCard
+                                                  isCompleted={
+                                                    nft.status === "completed"
+                                                      ? "true"
+                                                      : "false"
+                                                  }
+                                                  isClicked={
+                                                    currentNFT === index
+                                                      ? "true"
+                                                      : "false"
+                                                  }
                                                   index={index}
                                                   img={nft.image}
-                                                  handleRemoveImage={handleRemoveCompletedNft}
+                                                  handleRemoveImage={
+                                                    handleRemoveCompletedNft
+                                                  }
                                                 />
-                                              )
+                                              );
                                             }
-
                                           })}
-
                                       </div>
-
                                     </div>
                                     <div className="control-main-div">
                                       <input
@@ -1503,8 +1539,6 @@ const Multiple = ({ search, setSearch }) => {
                               NFts.length > 0 &&
                               NFts[NFts.length - 1].status !== "completed" && (
                                 <div>
-
-
                                   <div className="line-four">
                                     <div className="row">
                                       <div className="col-lg-9">
@@ -1516,7 +1550,7 @@ const Multiple = ({ search, setSearch }) => {
                                           value={nftForm.title}
                                           onChange={handleNftForm}
                                           name="title"
-                                        // onChange={(e) => setTitle(e.target.value)}
+                                          // onChange={(e) => setTitle(e.target.value)}
                                         />
                                       </div>
                                     </div>
@@ -1535,7 +1569,7 @@ const Multiple = ({ search, setSearch }) => {
                                       </div>
                                     </div>
                                   </div>
-                                  {listingType === 0 ?(
+                                  {listingType === 0 ? (
                                     <div className="line-two">
                                       <div className="row">
                                         <div className="col-lg-9 col-md-9 col-7">
@@ -1596,7 +1630,11 @@ const Multiple = ({ search, setSearch }) => {
                                                 padding: "6px 10px 6px 15px",
                                               }}
                                               value={nftForm.startDate}
-                                              min={new Date().toISOString().split('T')[0]}
+                                              min={
+                                                new Date()
+                                                  .toISOString()
+                                                  .split("T")[0]
+                                              }
                                               // onChange={(e) =>
                                               //   setStartingDate(e.target.value)
                                               // }
@@ -1622,7 +1660,7 @@ const Multiple = ({ search, setSearch }) => {
                                         </div>
                                       </div>
                                     </>
-                                   ) }
+                                  )}
                                   {/* <div className="line-seven">
                                 <div className="row">
                                   <div className="col-lg-8">
@@ -1648,18 +1686,25 @@ const Multiple = ({ search, setSearch }) => {
                               </div>
                             ) : (
                               <div className="Button-holding-div">
-                                {
-                                  NFts.length > 0 &&
-
-                                    NFts[NFts.length - 1].status !== "completed" ?
-                                    <button onClick={saveNFT} className="button-styling">Next</button>
-                                    :
-                                    <button className="disabledButton">
-                                      Next
-                                    </button>
-                                }
-                                {NFts.length > 0 && NFts[NFts.length - 1].status === "completed" ? (
-                                  <button className="button-styling-outline ml-auto">
+                                {NFts.length > 0 &&
+                                NFts[NFts.length - 1].status !== "completed" ? (
+                                  <button
+                                    onClick={saveNFT}
+                                    className="button-styling"
+                                  >
+                                    Next
+                                  </button>
+                                ) : (
+                                  <button className="disabledButton">
+                                    Next
+                                  </button>
+                                )}
+                                {NFts.length > 0 &&
+                                NFts[NFts.length - 1].status === "completed" ? (
+                                  <button
+                                    onClick={createItem}
+                                    className="button-styling ml-auto"
+                                  >
                                     <div>List</div>
                                   </button>
                                 ) : (
