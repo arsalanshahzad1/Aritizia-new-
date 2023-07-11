@@ -8,6 +8,7 @@ import duck from '../../../public/assets/images/duck.png'
 import chack from '../../../public/assets/images/chack.png'
 import NftDrawer from "../../components/shared/NftDrawer";
 import nft from '../../../public/assets/images/nft-big.png'
+import ProfileDrawer from "../shared/ProfileDrawer";
 const MyNftCard = ({
     onOpen,
     path,
@@ -24,20 +25,26 @@ const MyNftCard = ({
     const [showLinks, setShowLinks] = useState(false);
     // const [walletConnected, setWalletConnected] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [isVisible2, setIsVisible2] = useState(false);
 
     const onClose = useCallback(() => {
         console.log("calling close")
         setIsVisible(false);
     }, []);
+    const onClose2 = useCallback(() => {
+        console.log("calling close")
+        setIsVisible2(false);
+    }, []);
 
 
     console.log("USER in buy now", userAddress);
 
-    const openDrawer = () => {
+    const openDrawer2 = () => {
         if (showLinks === true) {
-            return onOpen(false);
+            onOpen(false);
+            setIsVisible2(true);
         } else {
-            setIsVisible(true);
+            setIsVisible2(true);
         }
     };
 
@@ -90,7 +97,7 @@ const MyNftCard = ({
                                 </div>
                             }
                         </div>
-                        <div onClick={openDrawer} className="bottom">
+                        <div onClick={openDrawer2} className="bottom">
                             <div className="nft-icon">
                                 <img src={duck} alt="" />
                                 <span className="checked-icon">
@@ -124,7 +131,19 @@ const MyNftCard = ({
                 isVisible={isVisible}
                 onClose={onClose}
                 timedAuction={timedAuction}
-
+            />
+            <ProfileDrawer
+                isVisible={isVisible2}
+                onClose={onClose2}
+                id={id}
+                title={title}
+                image={image}
+                price={price}
+                paymentMethod={crypto}
+                royalty={royalty}
+                description={description}
+                collection={collection}
+                userAddress={userAddress}
             />
         </>
     );

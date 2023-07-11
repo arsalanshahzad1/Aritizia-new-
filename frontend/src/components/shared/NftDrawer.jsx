@@ -773,6 +773,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                         onChange={(e) =>
                                                                             setStartingDate(e.target.value)
                                                                         }
+                                                                        min={new Date().toISOString().split("T")[0]}
                                                                     />
                                                                 </div>
                                                                 <div className="col-lg-6 col-md-6 col-6">
@@ -784,6 +785,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                         style={{ padding: "6px 10px 6px 15px" }}
                                                                         value={endingDate}
                                                                         onChange={(e) => setEndingDate(e.target.value)}
+                                                                        min={startingDate}
                                                                     />
                                                                 </div>
                                                             </div>
