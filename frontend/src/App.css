@@ -4454,7 +4454,7 @@ footer h1 {
   width: 100% !important;
 }
 
-.showBuyNow-step2{
+.showBuyNow-step2 {
   padding: 10% 3% 2% 3%;
   display: flex;
   align-items: center;
@@ -4462,19 +4462,111 @@ footer h1 {
   justify-content: center;
 }
 
-.showBuyNow-step2 input{
+.showBuyNow-step2 input {
   width: 100%;
-    font-family: 'Jost';
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 35px;
-    letter-spacing: 0em;
-    text-align: left;
-    background: #EBEBEB;
-    border: none;
-    outline: none;
-    padding: 6px 0px 6px 15px;
+  font-family: 'Jost';
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 35px;
+  letter-spacing: 0em;
+  text-align: left;
+  background: #EBEBEB;
+  border: none;
+  outline: none;
+  padding: 6px 0px 6px 15px;
 }
-.btn-holder-for-showBuyNow{
-  margin:10px auto 0px auto;
+
+.btn-holder-for-showBuyNow {
+  margin: 10px auto 0px auto;
+}
+
+.discount-popup {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.233);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.discount-popup-inner {
+  border-radius: 10px;
+  padding: 20px 30px;
+  background-color: white;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.39);
+  width: 300px;
+  text-align: center;
+}
+
+.discount-popup-inner h3 {
+  font-family: 'Jost';
+  font-weight: 600;
+  font-size: 26px;
+  margin: 15px auto 30px auto;
+}
+
+.discount-popup-inner .line-2 {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  align-items: center;
+}
+
+.discount-text {
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #000000;
+  width: 40%;
+  text-align: left;
+}
+
+.total-value-div {
+  background-color: #2438CB;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: white;
+  width: 40%;
+}
+.percentage-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #EBEBEB;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #AFAFAF;
+  width: 40%;
+}
+.value-div {
+  display: flex;
+  
+  background-color: transparent;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #000000;
+  width: 40%;
+}
+.input-percent{
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #000000;
 }

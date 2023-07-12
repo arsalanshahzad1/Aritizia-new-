@@ -123,6 +123,7 @@ const Multiple = ({ search, setSearch }) => {
 
   // let tempIPFSList = [];
   const addDataIPFSInList = (newValue) => {
+    // console.log("newValue",newValue)
     ipfsList.current.push(newValue);
   };
 
@@ -155,14 +156,36 @@ const Multiple = ({ search, setSearch }) => {
     if (typeof imageList !== "undefined") {
       console.log("uploadToIPFS1");
       for (let i = 0; i < imageList.length; i++) {
+        // try {
+        //   console.log("uploadToIPFS2");
+
+        //   console.log("this is imageList", i, imageList[i]);
+        //   const result = await uploadFileToIPFS(imageList[i]);
+        //   console.log("resut", result);
+        //   console.log("resut.pinataURL image", result.pinataURL);
+
+        //   addImageIPFSInList(result.pinataURL);
+        //   console.log("uploadToIPFS3");
+        // } catch (error) {
+        //   console.log("ipfs image upload error: ", error);
+        // }
         try {
           console.log("uploadToIPFS2");
-
           console.log("this is imageList", i, imageList[i]);
+
           const result = await uploadFileToIPFS(imageList[i]);
-          console.log("resut", result);
-          console.log("resut.pinataURL", result.pinataURL);
-          addImageIPFSInList(result.pinataURL);
+          console.log("result", result);
+
+          // Extract the IPFS hash from the pinataURL
+          const ipfsHash = result.pinataURL.split('/').pop();
+
+          // Construct a new URL that directly points to the image
+          const imageUrl = `https://ipfs.io/ipfs/${ipfsHash}`;
+          console.log("imageUrl new final", ipfsHash);
+
+          // Update your logic to use the imageUrl as needed
+          addImageIPFSInList(imageUrl);
+
           console.log("uploadToIPFS3");
         } catch (error) {
           console.log("ipfs image upload error: ", error);
@@ -422,7 +445,7 @@ const Multiple = ({ search, setSearch }) => {
   //   }
   // };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     price,
     title,
     description,
@@ -910,9 +933,9 @@ const Multiple = ({ search, setSearch }) => {
                                 version="1.1"
                                 viewBox="0 0 50 50"
                                 width="25px"
-                                xml:space="preserve"
+                                xml: space="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xmlns: xlink="http://www.w3.org/1999/xlink"
                               >
                                 <rect fill="none" height="50" width="50" />
                                 <line
@@ -999,9 +1022,8 @@ const Multiple = ({ search, setSearch }) => {
                                   onClick={() => {
                                     setlistingType(0);
                                   }}
-                                  className={` create-single-card ${
-                                    listingType === 0 ? "active" : ""
-                                  }`}
+                                  className={` create-single-card ${listingType === 0 ? "active" : ""
+                                    }`}
                                 >
                                   <AiFillTag />
                                   <h3>Fixed Price</h3>
@@ -1012,9 +1034,8 @@ const Multiple = ({ search, setSearch }) => {
                                   onClick={() => {
                                     setlistingType(1);
                                   }}
-                                  className={` create-single-card ${
-                                    listingType === 1 ? "active" : ""
-                                  }`}
+                                  className={` create-single-card ${listingType === 1 ? "active" : ""
+                                    }`}
                                 >
                                   <BsFillClockFill />
                                   <h3>Timed Auction</h3>
@@ -1158,7 +1179,7 @@ const Multiple = ({ search, setSearch }) => {
                                     {royalty} %
                                   </div>
                                 </div>
-                                <div className="col-lg-3 col-md-3 col-5 mt-5">
+                                <div className="col-lg-4 col-md-4 col-5 mt-5">
                                   <p>Crypto</p>
                                   <Dropdown
                                     options={cryptoOptions}
@@ -1307,11 +1328,10 @@ const Multiple = ({ search, setSearch }) => {
                                                   cx="7"
                                                   cy="7"
                                                   r="7"
-                                                  fill={`${
-                                                    tabIndex === 0
+                                                  fill={`${tabIndex === 0
                                                       ? "#B601D1"
                                                       : "#D9D9D9"
-                                                  }`}
+                                                    }`}
                                                 />
                                               </svg>
                                               <svg
@@ -1326,11 +1346,10 @@ const Multiple = ({ search, setSearch }) => {
                                                   cx="7"
                                                   cy="7"
                                                   r="7"
-                                                  fill={`${
-                                                    tabIndex === 10
+                                                  fill={`${tabIndex === 10
                                                       ? "#B601D1"
                                                       : "#D9D9D9"
-                                                  }`}
+                                                    }`}
                                                 />
                                               </svg>
                                             </>
@@ -1349,11 +1368,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 20
+                                                fill={`${tabIndex === 20
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1370,11 +1388,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 30
+                                                fill={`${tabIndex === 30
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1391,11 +1408,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 40
+                                                fill={`${tabIndex === 40
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1412,11 +1428,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 50
+                                                fill={`${tabIndex === 50
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1433,11 +1448,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 60
+                                                fill={`${tabIndex === 60
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1454,11 +1468,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 70
+                                                fill={`${tabIndex === 70
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1475,11 +1488,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 80
+                                                fill={`${tabIndex === 80
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1496,11 +1508,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 90
+                                                fill={`${tabIndex === 90
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1517,11 +1528,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 100
+                                                fill={`${tabIndex === 100
                                                     ? "#B601D1"
                                                     : "#D9D9D9"
-                                                }`}
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1550,7 +1560,7 @@ const Multiple = ({ search, setSearch }) => {
                                           value={nftForm.title}
                                           onChange={handleNftForm}
                                           name="title"
-                                          // onChange={(e) => setTitle(e.target.value)}
+                                        // onChange={(e) => setTitle(e.target.value)}
                                         />
                                       </div>
                                     </div>
@@ -1579,9 +1589,9 @@ const Multiple = ({ search, setSearch }) => {
                                             value={nftForm.price}
                                             onChange={handleNftForm}
                                             name="price"
-                                            // type="number"
-                                            // placeholder="0.00"
-                                            // ref={price}
+                                          // type="number"
+                                          // placeholder="0.00"
+                                          // ref={price}
                                           />
                                           {showWarning && (
                                             <p style={{ color: "red" }}>
@@ -1603,9 +1613,9 @@ const Multiple = ({ search, setSearch }) => {
                                               value={nftForm.bid}
                                               name="bid"
                                               onChange={handleNftForm}
-                                              // type="number"
-                                              // placeholder="0.00"
-                                              // ref={price}
+                                            // type="number"
+                                            // placeholder="0.00"
+                                            // ref={price}
                                             />
                                             {showWarning && (
                                               <p style={{ color: "red" }}>
@@ -1687,7 +1697,7 @@ const Multiple = ({ search, setSearch }) => {
                             ) : (
                               <div className="Button-holding-div">
                                 {NFts.length > 0 &&
-                                NFts[NFts.length - 1].status !== "completed" ? (
+                                  NFts[NFts.length - 1].status !== "completed" ? (
                                   <button
                                     onClick={saveNFT}
                                     className="button-styling"
@@ -1700,7 +1710,7 @@ const Multiple = ({ search, setSearch }) => {
                                   </button>
                                 )}
                                 {NFts.length > 0 &&
-                                NFts[NFts.length - 1].status === "completed" ? (
+                                  NFts[NFts.length - 1].status === "completed" ? (
                                   <button
                                     onClick={createItem}
                                     className="button-styling ml-auto"
@@ -1710,7 +1720,7 @@ const Multiple = ({ search, setSearch }) => {
                                 ) : (
                                   <button
                                     className="disabledButton"
-                                    // onClick={createItem}
+                                  // onClick={createItem}
                                   >
                                     List
                                   </button>

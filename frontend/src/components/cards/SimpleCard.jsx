@@ -39,6 +39,27 @@ const SimpleCard = ({
         }
     };
 
+    const [showDiscountPopUp, setshowDiscountPopUp] = useState(false)
+    const [discountPercentage, setdiscountPercentage] = useState('')
+    const value = 5000
+    const [discountedValue, setdiscountedValue] = useState(value)
+    useEffect(() => {
+        if (discountPercentage < 0 || discountPercentage > 100) {
+            alert("Discount percentage should be between 1 - 100")
+            setdiscountPercentage(0)
+        }
+        else {
+
+            handleDiscount()
+        }
+
+    }, [discountPercentage])
+
+    const handleDiscount = () => {
+        console.log("i am ruunign")
+        const discountvalue = (value / 100) * discountPercentage
+        setdiscountedValue(value - discountvalue)
+    }
     return (
         <>
             <div className="col-lg-3 col-md-4">
@@ -87,10 +108,56 @@ const SimpleCard = ({
                                 </div>
                             </div>
                         </div>
+                        <div onClick={() => { setshowDiscountPopUp(true) }} className="add-discount-text">
+                            Add Discount
+
+                        </div>
                     </div>
                 </Link>
             </div>
+            {
+                showDiscountPopUp && (
+                    <>
+                        <div className="discount-popup">
+                            <div className="discount-popup-inner">
+                                <h3>DISCOUNT</h3>
+                                <div className="line-2">
+                                    <div className="discount-text">Total Value</div>
+                                    <div className="total-value-div">${value}</div>
+                                </div>
+                                <div className="line-2">
+                                    <div className="discount-text">Percent</div>
+                                    <div className="percentage-div">
+                                        <input placeholder="0" value={discountPercentage} onChange={(e) => { setdiscountPercentage(e.target.value) }} type="number" className="input-percent" />
+                                        <div>%</div>
+                                    </div>
 
+                                </div>
+                                <div className="line-2">
+                                    <div className="discount-text">Value</div>
+                                    <div className="value-div">${discountedValue}</div>
+                                </div>
+
+                                <div className="popUp-btn-group">
+                                    <div
+                                        className="button-styling btnCC"
+
+                                    >
+                                        Add
+                                    </div>
+                                    <div
+                                        onClick={() => { setshowDiscountPopUp(false), setdiscountPercentage(0) }}
+                                        className="button-styling-outline btnCC"
+                                    >
+                                        <div className="btnCCin">Cancel</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </>
+                )
+            }
 
             <ProfileDrawer
                 isVisible={isVisible}

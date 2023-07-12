@@ -111,7 +111,7 @@ const Single = ({ search, setSearch }) => {
         const resut = await uploadFileToIPFS(item.file);
         //const result = await client.add(file)
         console.log("!!!!!!!!!!!!!!!!!!", resut);
-        console.log("Result.pinata", resut.pinataURL);
+        console.log("Result.pinata image", resut.pinataURL);
         // setImage(resut.pinataURL);
         image = resut.pinataURL;
         setLoading(false);
