@@ -110,7 +110,6 @@ const SimpleCard = ({
                         </div>
                         <div onClick={() => { setshowDiscountPopUp(true) }} className="add-discount-text">
                             Add Discount
-
                         </div>
                     </div>
                 </Link>
@@ -139,18 +138,14 @@ const SimpleCard = ({
                                 </div>
 
                                 <div className="popUp-btn-group">
-                                    <div
-                                        className="button-styling btnCC"
-
-                                    >
-                                        Add
-                                    </div>
-                                    <div
-                                        onClick={() => { setshowDiscountPopUp(false), setdiscountPercentage(0) }}
-                                        className="button-styling-outline btnCC"
-                                    >
+                                    <div onClick={() => { setshowDiscountPopUp(false), setdiscountPercentage(0) }}
+                                        className="button-styling-outline btnCC" >
                                         <div className="btnCCin">Cancel</div>
                                     </div>
+                                    <div className="button-styling btnCC">
+                                        Add
+                                    </div>
+
                                 </div>
 
                             </div>

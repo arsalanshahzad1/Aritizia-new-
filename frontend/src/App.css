@@ -4767,12 +4767,30 @@ footer h1 {
 .disabled-input-only-view .rc-slider-disabled {
   background-color: transparent !important;
 }
-.disabled-input-only-view  .rc-slider-handle {
+
+.disabled-input-only-view .rc-slider-handle {
   background-color: #B1B1B1 !important;
 }
-.disabled-input-only-view  .rc-slider-track {
+
+.disabled-input-only-view .rc-slider-track {
   background-color: #B1B1B1 !important;
 }
-.disabled-input-only-view  .rc-slider-rail {
+
+.disabled-input-only-view .rc-slider-rail {
   background-color: #DADADA !important;
+}
+
+.confirmation-pop-up {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.445);
+}
+
+.weight-600 {
+  font-weight: 600;
+}
+.btn-right{
+  display: flex;
+  justify-content: end;
 }

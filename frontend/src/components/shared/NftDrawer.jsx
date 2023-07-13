@@ -811,7 +811,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 </div>
                                                 <div className="line-four">
                                                     <div className="row">
-                                                        <div className="col-lg-9 disabled-input-only-view">
+                                                        <div className="col-lg-12 disabled-input-only-view">
                                                             <h2>Title</h2>
                                                             <input
                                                                 disabled
@@ -826,7 +826,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 </div>
                                                 <div className="line-five">
                                                     <div className="row">
-                                                        <div className="col-lg-9 disabled-input-only-view">
+                                                        <div className="col-lg-12 disabled-input-only-view">
                                                             <h2>Description</h2>
                                                             <input
                                                                 disabled
@@ -839,7 +839,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 </div>
                                                 <div className="line-six">
                                                     <div className="row">
-                                                        <div className="col-lg-9 disabled-input-only-view">
+                                                        <div className="col-lg-10 disabled-input-only-view">
                                                             <h2>Royalties</h2>
                                                             <Slider
                                                                 disabled
@@ -851,19 +851,18 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                 value={royalty}
                                                             />
                                                         </div>
-                                                        <div className="col-lg-3 ">
+                                                        <div className="col-lg-2 ">
                                                             <div className="royality-value">
-                                                            {royalty} %
-
+                                                                {royalty} %
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="line-seven">
                                                     <div className="row">
-                                                        <div className="col-lg-8">
+                                                        <div className="col-lg-12 btn-right">
                                                             <button type="submit" className="button-styling">
-                                                                Done
+                                                                List
                                                             </button>
                                                         </div>
                                                     </div>

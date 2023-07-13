@@ -35,7 +35,7 @@ const Header = ({ search, setSearch }) => {
       console.error(error);
     }
   };
-  
+
 
   useEffect(() => {
     if (!walletConnected) {
@@ -140,15 +140,13 @@ const Header = ({ search, setSearch }) => {
                 {path === "/" ? (
                   <>
                     <FiSearch
-                      className={`search ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`search ${scrolled ? "black-color" : "white-color"
+                        }`}
                       onClick={() => setSearch(true)}
                     />
                     <span
-                      className={`icon-for-header ${
-                        scrolled ? "black-svgs" : ""
-                      }`}
+                      className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                        }`}
                     >
                       <svg
                         width="1"
@@ -165,9 +163,8 @@ const Header = ({ search, setSearch }) => {
                         setshowMessage(!showMessage),
                           setShowNotification(false);
                       }}
-                      className={`icon-for-header ${
-                        scrolled ? "black-svgs" : ""
-                      }`}
+                      className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                        }`}
                     >
                       <svg
                         width="36"
@@ -220,9 +217,8 @@ const Header = ({ search, setSearch }) => {
                         setShowNotification(!showNotification),
                           setshowMessage(false);
                       }}
-                      className={`icon-for-header ${
-                        scrolled ? "black-svgs" : ""
-                      }`}
+                      className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                        }`}
                     >
                       <svg
                         width="24"
@@ -270,9 +266,8 @@ const Header = ({ search, setSearch }) => {
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                     >
                       Connect Wallet
                     </button>
@@ -416,24 +411,22 @@ const Header = ({ search, setSearch }) => {
                   />
                   {toggleUserDropdown && (
                     <div
-                      className={`user-login-dropdown ${
-                        scrolled ? "active" : ""
-                      }`}
+                      className={`user-login-dropdown ${scrolled ? "active" : ""
+                        }`}
                     >
                       <ul>
                         <li>
-                          <Link to={"/profile"}>My Profile</Link>
+                          <Link to={"/profile"} onClick={() => setToggleUserDropdown(false)} >  My Profile</Link>
                         </li>
                         <li>
-                          <Link to={"/wallet"}>Wallet</Link>
+                          <Link to={"/wallet"} onClick={() => setToggleUserDropdown(false)} >Wallet</Link>
                         </li>
                         <li>
-                          <Link to={"/create"}>Create</Link>
+                          <Link to={"/create"} onClick={() => setToggleUserDropdown(false)} >Create</Link>
                         </li>
                         <li
-                          className={`setting ${
-                            toggleSettingDropdown ? "seeting-active" : ""
-                          }`}
+                          className={`setting ${toggleSettingDropdown ? "seeting-active" : ""
+                            }`}
                           onClick={() =>
                             setToggleSettingDropdown(!toggleSettingDropdown)
                           }
@@ -483,7 +476,7 @@ const Header = ({ search, setSearch }) => {
                           )}
                         </li>
                         <li>
-                          <Link to={"/subscription"}>Subscription</Link>
+                          <Link to={"/subscription"} onClick={() => setToggleUserDropdown(false)} >Subscription</Link>
                         </li>
                       </ul>
                     </div>
