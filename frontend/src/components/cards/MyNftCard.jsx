@@ -100,6 +100,7 @@ const MyNftCard = ({
                         <div onClick={openDrawer2} className="bottom">
                             <div className="nft-icon">
                                 <img src={duck} alt="" />
+                    
                                 <span className="checked-icon">
                                     <img src={chack} alt="" />
                                 </span>
