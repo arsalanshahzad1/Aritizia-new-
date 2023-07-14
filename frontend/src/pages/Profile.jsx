@@ -596,7 +596,7 @@ const Profile = ({ search, setSearch }) => {
                               <div
                                 className="button-styling-outline btnCC"
                               >
-                                <div onClick={() => setshowRemoveMultiple(false)} className="btnCCin">Cancel</div>
+                                <div onClick={() => { setselectAllCheckboxStatus2(false), setshowRemoveMultiple(false) }} className="btnCCin">Cancel</div>
                               </div>
                               <div className="button-styling btnCC">
                                 Remove
@@ -688,7 +688,6 @@ const Profile = ({ search, setSearch }) => {
                               <div>Select All <input onClick={() => setselectAllCheckboxStatus(!selectAllCheckboxStatus)} className="check-all-fans" type="checkbox" /> </div>
                             </div>
                             <div className="Address-holder">
-
                               {checkboxes.map((checkbox, Index) => (
                                 <div key={checkbox.id} className="follower-in-fan-list">
                                   <div className="inner">
