@@ -4183,7 +4183,8 @@ footer h1 {
   border-radius: 30px;
   padding: 10px 25px;
   border: none;
-  background-color: #B600D1;
+  background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+
   color: white;
   font-size: 20px;
   font-weight: 500;
@@ -4200,6 +4201,8 @@ footer h1 {
   font-size: 20px;
   font-weight: 500;
   margin-right: 15px;
+  background: none;
+
 }
 
 .Follow-row .right span {
@@ -4790,7 +4793,48 @@ footer h1 {
 .weight-600 {
   font-weight: 600;
 }
-.btn-right{
+
+.btn-right {
   display: flex;
   justify-content: end;
+}
+
+.FanListPage {}
+
+.remove-multiple-btn-holder {
+  width: 90%;
+  justify-content: end;
+  display: flex;
+  margin: 10px 0;
+}
+
+.no-margin {
+  margin-right: 0px !important;
+}
+
+.remove-multiple-btn {
+  color: #777777;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: none;
+  border: none;
+  background: none;
+  font-family: 'Jost';
+  transition: all 0.3s ease-in-out;
+
+  border: 2px transparent solid;
+}
+
+.remove-multiple-btn:hover {
+  color: #B600D1;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: none;
+  border: none;
+  background: none;
+  font-family: 'Jost';
+  border: 2px #B600D1 solid;
+  background-color: white;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.205);
+
 }

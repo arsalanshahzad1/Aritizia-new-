@@ -22,6 +22,7 @@ import nftimage2 from "../../public/assets/images/nftimage2.png";
 import Follow from "./settingFolder/Follow";
 import Fan from "./settingFolder/Fan";
 import followerImg from '../../public/assets/images/user-pic.png'
+import Followers from "./Followers";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -236,7 +237,6 @@ const Profile = ({ search, setSearch }) => {
   ];
 
   const [checkboxes, setCheckboxes] = useState(initialCheckboxData);
-
   const handleCheckboxChange = (id) => {
     setCheckboxes((prevCheckboxes) => {
       const updatedCheckboxes = prevCheckboxes.map((checkbox) => {
@@ -252,7 +252,6 @@ const Profile = ({ search, setSearch }) => {
       return updatedCheckboxes;
     });
   };
-
   const checkAllCheckboxes = () => {
     setCheckboxes((prevCheckboxes) => {
       const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
@@ -263,6 +262,54 @@ const Profile = ({ search, setSearch }) => {
       return updatedCheckboxes;
     });
   };
+
+
+  const [checkboxes2, setCheckboxes2] = useState(initialCheckboxData);
+  const [selectAllCheckboxStatus, setselectAllCheckboxStatus] = useState(false)
+  const [selectAllCheckboxStatus2, setselectAllCheckboxStatus2] = useState(false)
+
+  const handleCheckboxChange2 = (id) => {
+    setCheckboxes2((prevCheckboxes) => {
+      const updatedCheckboxes = prevCheckboxes.map((checkbox) => {
+        if (checkbox.id === id) {
+          return {
+            ...checkbox,
+            checked: !checkbox.checked,
+          };
+        }
+        return checkbox;
+      });
+
+      return updatedCheckboxes;
+    });
+  };
+
+  const checkAllCheckboxes2 = () => {
+    setCheckboxes2((prevCheckboxes) => {
+      const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
+        ...checkbox,
+        checked: true,
+      }));
+
+      return updatedCheckboxes;
+    });
+  };
+
+  useEffect(() => {
+    if (selectAllCheckboxStatus === true) {
+      checkAllCheckboxes()
+    }
+  }, [selectAllCheckboxStatus])
+  useEffect(() => {
+    if (selectAllCheckboxStatus2 === true) {
+      checkAllCheckboxes2()
+    }
+  }, [selectAllCheckboxStatus2])
+
+
+
+
+  const [showRemoveMultiple, setshowRemoveMultiple] = useState(false)
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -485,13 +532,21 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+                            <Followers />
+
                           </>
                         ) : (
                           <>
@@ -510,121 +565,161 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 4 && (<>
                   <div className="FanListPage">
 
-                  </div>
-                  <Fan />
-                  <Fan />
-                  <Fan />
-                  <Fan />
-                  <Fan />
-                  <Fan />
-                  <Fan />
-                  <Fan />
-                  <Fan />
-
-                  <div onClick={() => setshowAddFanPopUp(1)} className="Add-Fan-btn">
-                    <svg width="30" height="31" viewBox="0 0 44 45" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M25.3432 25.6915V26.7529C25.3432 31.3246 25.3432 35.8964 25.3432 40.4681C25.3758 40.9526 25.3063 41.4385 25.1392 41.8945C24.9721 42.3504 24.711 42.7662 24.3731 43.115C24.0352 43.4637 23.6279 43.7377 23.1775 43.9191C22.727 44.1005 22.2434 44.1853 21.7581 44.1681C21.2728 44.1509 20.7966 44.0319 20.3602 43.8191C19.9237 43.6062 19.5369 43.3041 19.2246 42.9322C18.9123 42.5604 18.6813 42.127 18.5469 41.6604C18.4126 41.1937 18.378 40.7041 18.4448 40.2231V25.6915H3.70893C3.13241 25.7106 2.56045 25.5839 2.04592 25.3232C1.53138 25.0624 1.09092 24.6761 0.765339 24.1999C0.439761 23.7238 0.23962 23.1732 0.183349 22.5991C0.127079 22.025 0.216526 21.4461 0.443451 20.9158C0.705285 20.2337 1.1806 19.6545 1.79852 19.2646C2.41644 18.8747 3.14397 18.695 3.87236 18.7524H18.4448V17.7319C18.4448 13.1601 18.4448 8.58835 18.4448 4.01662C18.4296 3.43826 18.5609 2.86551 18.8267 2.35162C19.0925 1.83773 19.484 1.3995 19.9648 1.07764C20.4456 0.755776 20.9998 0.560789 21.5762 0.510847C22.1526 0.460904 22.7325 0.557625 23.2614 0.792001C23.9218 1.05643 24.4822 1.52201 24.8631 2.12278C25.2441 2.72355 25.4262 3.42895 25.3838 4.13907C25.3838 8.66998 25.3838 13.1601 25.3838 17.691V18.7524H40.0788C40.6501 18.7398 41.2156 18.8686 41.7252 19.1272C42.2347 19.3858 42.6724 19.7663 42.9995 20.2347C43.3266 20.7032 43.5329 21.2452 43.6002 21.8127C43.6674 22.3801 43.5937 22.9554 43.3852 23.4874C43.1268 24.1663 42.6594 24.7456 42.0505 25.1418C41.4416 25.538 40.7225 25.7304 39.9971 25.6915H25.3838H25.3432Z" fill="white" />
-                    </svg>
-
-                  </div>
-
-                  {showAddFanPopUp === 1 && (
-                    <>
-                      <div className="BackScreen-dark">
-                        <div className="choose-add-fan-method">
-                          <div onClick={() => setshowAddFanPopUp(0)} className="close-btn">
-                            <svg width="20" height="20" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M25.0157 0H25.3602C25.637 0.0762734 25.8902 0.220569 26.097 0.419655C26.3038 0.61874 26.4575 0.866292 26.544 1.13987C26.6306 1.41346 26.6474 1.70429 26.5928 1.98598C26.5381 2.26766 26.4139 2.53122 26.2313 2.75265L25.9679 3.03604C22.6257 6.35545 19.3037 9.69508 15.9818 13.0145L15.6779 13.217L15.9818 13.4598C19.3442 16.7995 22.6864 20.1594 26.1096 23.58C26.3425 23.7813 26.5165 24.0419 26.6128 24.3342C26.7091 24.6265 26.7242 24.9395 26.6566 25.2397C26.5969 25.5247 26.4659 25.7899 26.2758 26.0104C26.0856 26.231 25.8423 26.3998 25.5691 26.5009C25.2959 26.602 25.0014 26.6322 24.7133 26.5886C24.4252 26.545 24.1531 26.4291 23.9221 26.2517L23.6182 25.9683L13.6523 15.9899C13.5683 15.9109 13.4936 15.8226 13.4295 15.7267L13.1662 15.9696L3.03835 26.0898C2.81125 26.3346 2.52056 26.5116 2.19865 26.601C1.87674 26.6903 1.53624 26.6885 1.21529 26.5958C0.95016 26.5202 0.708757 26.3783 0.51381 26.1835C0.318863 25.9887 0.176967 25.7475 0.101377 25.4826L0 25.2397V24.6729C0.141895 24.1796 0.431818 23.7416 0.830552 23.418L10.6545 13.6015C10.7459 13.5203 10.8482 13.4521 10.9584 13.3991L10.6342 13.1359C7.37307 9.87724 4.11197 6.59838 0.830552 3.3397C0.441664 3.00729 0.153859 2.57252 0 2.08481V1.51802C0.0491955 1.27542 0.148531 1.04576 0.291522 0.843633C0.434513 0.641507 0.618089 0.471322 0.830552 0.34405C1.08222 0.219853 1.34729 0.124876 1.62055 0.0607802H1.82306C2.41002 0.177363 2.93912 0.491743 3.32196 0.951358L13.1054 10.7273L13.3687 10.9702C13.4176 10.8748 13.4791 10.7864 13.5512 10.7071L23.294 0.951358C23.6786 0.483773 24.2171 0.1681 24.8132 0.0607802L25.0157 0Z" fill="#6A6A6A" />
-                            </svg>
-                          </div>
-                          <div className="main-holder">
-                            <h2>SELECT</h2>
-                            <div className="method-holder">
-                              <div onClick={() => setshowAddFanPopUp(2)}>
-                                Add Custom
-                              </div>
-                              <div onClick={() => setshowAddFanPopUp(3)}>
-                                Add from <br /> Followers
-                              </div>
+                    <div className="remove-multiple-btn-holder">
+                      <button onClick={() => setshowRemoveMultiple(true)} className="remove-multiple-btn">Remove Multiple</button>
+                    </div>
+                    {showRemoveMultiple && (
+                      <>
+                        <div className="BackScreen-dark">
+                          <div className="Custom-add-fan">
+                            <h3 className="center-align">REMOVE FROM FAN LIST</h3>
+                            <div className="line-1-selector">
+                              <div>No.</div>
+                              <div>Select All <input onClick={() => setselectAllCheckboxStatus2(!selectAllCheckboxStatus2)} checked={selectAllCheckboxStatus2} className="check-all-fans" type="checkbox" /> </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )
-                  }
-
-                  {showAddFanPopUp === 2 && (
-                    <>
-                      <div className="BackScreen-dark">
-                        <div className="Custom-add-fan">
-                          <h3 className="center-align">ADD FAN</h3>
-                          <p className="wallet-text">Wallet address</p>
-                          <div className="Address-holder">
-                            {FansAddress.map((address, Index) => (
-                              <input key={Index} onChange={(e) => handleChangeAddressInput(e, Index)} value={address} type="text" placeholder="Enter Wallet Address" />
-                            ))}
-                          </div>
-                          <p onClick={() => setFansAddress([...FansAddress, ""])} className="add-more-fan">Add More Fan</p>
-                          <div className="popUp-btn-group">
-                            <div
-                              onClick={() => setshowAddFanPopUp(0)}
-                              className="button-styling-outline btnCC"
-                            >
-                              <div onClick={() => setFansAddress([''])} className="btnCCin">Cancel</div>
-                            </div>
-                            <div className="button-styling btnCC">
-                              Add
-                            </div>
-
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                  {showAddFanPopUp === 3 && (
-                    <>
-                      <div className="BackScreen-dark">
-                        <div className="Custom-add-fan">
-                          <h3 className="center-align">ADD TO FAN LIST</h3>
-                          <div className="line-1-selector">
-                            <div>No.</div>
-                            <div>Select All <input onClick={checkAllCheckboxes} className="check-all-fans" type="checkbox" /> </div>
-                          </div>
-                          <div className="Address-holder">
-
-                            {checkboxes.map((checkbox, Index) => (
-                              <div key={checkbox.id} className="follower-in-fan-list">
-                                <div className="inner">
-                                  <div className="num">{Index + 1}</div>
-                                  <div className="inner2">
-                                    <div className="img-holder"><img src={checkbox.FollowerImg} alt="" /></div>
-                                    <div className="Text-follower-fan">{checkbox.FollowerName} <br /> <span> {checkbox.FollowersCount} Followers </span></div>
+                            <div className="Address-holder">
+                              {checkboxes2.map((checkbox, Index) => (
+                                <div key={checkbox.id} className="follower-in-fan-list">
+                                  <div className="inner">
+                                    <div className="num">{Index + 1}</div>
+                                    <div className="inner2">
+                                      <div className="img-holder"><img src={checkbox.FollowerImg} alt="" /></div>
+                                      <div className="Text-follower-fan">{checkbox.FollowerName} <br /> <span> {checkbox.FollowersCount} Followers </span></div>
+                                    </div>
                                   </div>
+                                  <div><input checked={checkbox.checked}
+                                    onChange={() => handleCheckboxChange2(checkbox.id)} className="separate-checkbox-follower" type="checkbox" name="" id="" /></div>
                                 </div>
-                                <div><input checked={checkbox.checked}
-                                  onChange={() => handleCheckboxChange(checkbox.id)} className="separate-checkbox-follower" type="checkbox" name="" id="" /></div>
+                              ))}
+                            </div>
+                            <div className="popUp-btn-group">
+                              <div
+                                className="button-styling-outline btnCC"
+                              >
+                                <div onClick={() => setshowRemoveMultiple(false)} className="btnCCin">Cancel</div>
+                              </div>
+                              <div className="button-styling btnCC">
+                                Remove
                               </div>
 
-                            ))}
-                          </div>
-                          <div className="popUp-btn-group">
-                            <div
-                              onClick={() => setshowAddFanPopUp(0)}
-                              className="button-styling-outline btnCC"
-                            >
-                              <div onClick={() => setFansAddress([''])} className="btnCCin">Cancel</div>
                             </div>
-                            <div className="button-styling btnCC">
-                              Add
-                            </div>
-
                           </div>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    )}
+                    <Fan />
+                    <Fan />
+                    <Fan />
+                    <Fan />
+                    <Fan />
+                    <Fan />
+                    <Fan />
+                    <Fan />
+                    <Fan />
 
+                    <div onClick={() => setshowAddFanPopUp(1)} className="Add-Fan-btn">
+                      <svg width="30" height="31" viewBox="0 0 44 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25.3432 25.6915V26.7529C25.3432 31.3246 25.3432 35.8964 25.3432 40.4681C25.3758 40.9526 25.3063 41.4385 25.1392 41.8945C24.9721 42.3504 24.711 42.7662 24.3731 43.115C24.0352 43.4637 23.6279 43.7377 23.1775 43.9191C22.727 44.1005 22.2434 44.1853 21.7581 44.1681C21.2728 44.1509 20.7966 44.0319 20.3602 43.8191C19.9237 43.6062 19.5369 43.3041 19.2246 42.9322C18.9123 42.5604 18.6813 42.127 18.5469 41.6604C18.4126 41.1937 18.378 40.7041 18.4448 40.2231V25.6915H3.70893C3.13241 25.7106 2.56045 25.5839 2.04592 25.3232C1.53138 25.0624 1.09092 24.6761 0.765339 24.1999C0.439761 23.7238 0.23962 23.1732 0.183349 22.5991C0.127079 22.025 0.216526 21.4461 0.443451 20.9158C0.705285 20.2337 1.1806 19.6545 1.79852 19.2646C2.41644 18.8747 3.14397 18.695 3.87236 18.7524H18.4448V17.7319C18.4448 13.1601 18.4448 8.58835 18.4448 4.01662C18.4296 3.43826 18.5609 2.86551 18.8267 2.35162C19.0925 1.83773 19.484 1.3995 19.9648 1.07764C20.4456 0.755776 20.9998 0.560789 21.5762 0.510847C22.1526 0.460904 22.7325 0.557625 23.2614 0.792001C23.9218 1.05643 24.4822 1.52201 24.8631 2.12278C25.2441 2.72355 25.4262 3.42895 25.3838 4.13907C25.3838 8.66998 25.3838 13.1601 25.3838 17.691V18.7524H40.0788C40.6501 18.7398 41.2156 18.8686 41.7252 19.1272C42.2347 19.3858 42.6724 19.7663 42.9995 20.2347C43.3266 20.7032 43.5329 21.2452 43.6002 21.8127C43.6674 22.3801 43.5937 22.9554 43.3852 23.4874C43.1268 24.1663 42.6594 24.7456 42.0505 25.1418C41.4416 25.538 40.7225 25.7304 39.9971 25.6915H25.3838H25.3432Z" fill="white" />
+                      </svg>
+
+                    </div>
+
+                    {showAddFanPopUp === 1 && (
+                      <>
+                        <div className="BackScreen-dark">
+                          <div className="choose-add-fan-method">
+                            <div onClick={() => setshowAddFanPopUp(0)} className="close-btn">
+                              <svg width="20" height="20" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M25.0157 0H25.3602C25.637 0.0762734 25.8902 0.220569 26.097 0.419655C26.3038 0.61874 26.4575 0.866292 26.544 1.13987C26.6306 1.41346 26.6474 1.70429 26.5928 1.98598C26.5381 2.26766 26.4139 2.53122 26.2313 2.75265L25.9679 3.03604C22.6257 6.35545 19.3037 9.69508 15.9818 13.0145L15.6779 13.217L15.9818 13.4598C19.3442 16.7995 22.6864 20.1594 26.1096 23.58C26.3425 23.7813 26.5165 24.0419 26.6128 24.3342C26.7091 24.6265 26.7242 24.9395 26.6566 25.2397C26.5969 25.5247 26.4659 25.7899 26.2758 26.0104C26.0856 26.231 25.8423 26.3998 25.5691 26.5009C25.2959 26.602 25.0014 26.6322 24.7133 26.5886C24.4252 26.545 24.1531 26.4291 23.9221 26.2517L23.6182 25.9683L13.6523 15.9899C13.5683 15.9109 13.4936 15.8226 13.4295 15.7267L13.1662 15.9696L3.03835 26.0898C2.81125 26.3346 2.52056 26.5116 2.19865 26.601C1.87674 26.6903 1.53624 26.6885 1.21529 26.5958C0.95016 26.5202 0.708757 26.3783 0.51381 26.1835C0.318863 25.9887 0.176967 25.7475 0.101377 25.4826L0 25.2397V24.6729C0.141895 24.1796 0.431818 23.7416 0.830552 23.418L10.6545 13.6015C10.7459 13.5203 10.8482 13.4521 10.9584 13.3991L10.6342 13.1359C7.37307 9.87724 4.11197 6.59838 0.830552 3.3397C0.441664 3.00729 0.153859 2.57252 0 2.08481V1.51802C0.0491955 1.27542 0.148531 1.04576 0.291522 0.843633C0.434513 0.641507 0.618089 0.471322 0.830552 0.34405C1.08222 0.219853 1.34729 0.124876 1.62055 0.0607802H1.82306C2.41002 0.177363 2.93912 0.491743 3.32196 0.951358L13.1054 10.7273L13.3687 10.9702C13.4176 10.8748 13.4791 10.7864 13.5512 10.7071L23.294 0.951358C23.6786 0.483773 24.2171 0.1681 24.8132 0.0607802L25.0157 0Z" fill="#6A6A6A" />
+                              </svg>
+                            </div>
+                            <div className="main-holder">
+                              <h2>SELECT</h2>
+                              <div className="method-holder">
+                                <div onClick={() => setshowAddFanPopUp(2)}>
+                                  Add Custom
+                                </div>
+                                <div onClick={() => setshowAddFanPopUp(3)}>
+                                  Add from <br /> Followers
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )
+                    }
+
+                    {showAddFanPopUp === 2 && (
+                      <>
+                        <div className="BackScreen-dark">
+                          <div className="Custom-add-fan">
+                            <h3 className="center-align">ADD FAN</h3>
+                            <p className="wallet-text">Wallet address</p>
+                            <div className="Address-holder">
+                              {FansAddress.map((address, Index) => (
+                                <input key={Index} onChange={(e) => handleChangeAddressInput(e, Index)} value={address} type="text" placeholder="Enter Wallet Address" />
+                              ))}
+                            </div>
+                            <p onClick={() => setFansAddress([...FansAddress, ""])} className="add-more-fan">Add More Fan</p>
+                            <div className="popUp-btn-group">
+                              <div
+                                onClick={() => setshowAddFanPopUp(0)}
+                                className="button-styling-outline btnCC"
+                              >
+                                <div onClick={() => setFansAddress([''])} className="btnCCin">Cancel</div>
+                              </div>
+                              <div className="button-styling btnCC">
+                                Add
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {showAddFanPopUp === 3 && (
+                      <>
+                        <div className="BackScreen-dark">
+                          <div className="Custom-add-fan">
+                            <h3 className="center-align">ADD TO FAN LIST</h3>
+                            <div className="line-1-selector">
+                              <div>No.</div>
+                              <div>Select All <input onClick={() => setselectAllCheckboxStatus(!selectAllCheckboxStatus)} className="check-all-fans" type="checkbox" /> </div>
+                            </div>
+                            <div className="Address-holder">
+
+                              {checkboxes.map((checkbox, Index) => (
+                                <div key={checkbox.id} className="follower-in-fan-list">
+                                  <div className="inner">
+                                    <div className="num">{Index + 1}</div>
+                                    <div className="inner2">
+                                      <div className="img-holder"><img src={checkbox.FollowerImg} alt="" /></div>
+                                      <div className="Text-follower-fan">{checkbox.FollowerName} <br /> <span> {checkbox.FollowersCount} Followers </span></div>
+                                    </div>
+                                  </div>
+                                  <div><input checked={checkbox.checked}
+                                    onChange={() => handleCheckboxChange(checkbox.id)} className="separate-checkbox-follower" type="checkbox" name="" id="" /></div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="popUp-btn-group">
+                              <div
+                                onClick={() => setshowAddFanPopUp(0)}
+                                className="button-styling-outline btnCC"
+                              >
+                                <div onClick={() => setFansAddress([''])} className="btnCCin">Cancel</div>
+                              </div>
+                              <div className="button-styling btnCC">
+                                Add
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
 
                 </>)}
               </div>

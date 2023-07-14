@@ -15,7 +15,7 @@ function Fan() {
                     </div>
                 </div>
                 <div className='right'>
-                    <button onClick={() => setshowConfirmation(true)} className='unfollow'>Remove</button>
+                    <button onClick={() => setshowConfirmation(true)} className='unfollow no-margin'>Remove</button>
                 </div>
             </div>
             {showConfirmation && (
