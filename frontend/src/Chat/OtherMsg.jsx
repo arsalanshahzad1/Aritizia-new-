@@ -1,16 +1,16 @@
 import React from 'react'
 
-const OtherMsg = ({ img, time, msg }) => {
+const OtherMsg = ({ img, time, msg , data }) => {
     return (
         <div className='other-msg'>
             <div className='img-holder'>
                 <img src={img} alt="" />
             </div>
             <div className='msg'>
-                {msg}
+                {data.text}
             </div>
             <div className='time'>
-                {time}
+                {data.date}
             </div>
         </div>
     )

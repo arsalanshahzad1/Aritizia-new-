@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../pages/landingpage/Header'
 import './Chat.css'
 import ChatItem from './ChatItem'
 import chatIcon from '../../public/assets/images/notificationIcon.png'
 import MyMsg from './MyMsg'
 import OtherMsg from './OtherMsg'
+import apis from '../service'
 function ChatPage({ search, setSearch }) {
+    const [userMessagesListing, setUserMessagesListing] = useState('')
+    const [userMessagesDetails, setUserMessagesDetails] = useState('')
+
+    const ChatUsers = async () => {
+        const response = await apis.getChatUsers()
+        setUserMessagesListing(response.data.data)
+        console.log(response.data.data);
+    }
+    const ChatMessage = async (id) => {
+        console.log(id);
+        const response = await apis.getChatMessages(id)
+        setUserMessagesDetails(response.data.data)
+        console.log(response.data.data);
+    }
+    useEffect(() => {
+        ChatUsers()
+    }, [])
     return (
         <div>
             <Header
@@ -18,13 +36,26 @@ function ChatPage({ search, setSearch }) {
                 <div className='chat-sidebar'>
                     <h2 className='chat-title'>Chat</h2>
                     <div className='chat-item-holder'>
+                        <>
+                            {userMessagesListing ?
+                                <>
+                                    {userMessagesListing.map((data, index) => {
+                                        return (
+                                            <ChatItem ChatMessage={ChatMessage} data={data} image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
+                                        )
+                                    })}
+                                </>
+                                :
+                                'Loading...'
+                            }
+                        </>
+
+                        {/* <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
                         <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
                         <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
                         <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
                         <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
-                        <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
-                        <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
-                        <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} />
+                        <ChatItem image={chatIcon} name={'FAHAD'} msg={'Hi this is fahad. Can you give me some.....'} /> */}
                     </div>
                 </div>
                 <div className='chat-area'>
@@ -48,14 +79,24 @@ function ChatPage({ search, setSearch }) {
                         </div>
                     </div>
                     <div className='chat-canvas'>
-                        <MyMsg time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts'} />
-                        <OtherMsg img={chatIcon} time={'2 mints'} msg={'yes maybe'} />
+                        {userMessagesDetails.map((data, index) =>{
+                            if(data.chat_by === 3){
+                                return(
+                                    <MyMsg data={data} time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts'} />
+                                )   
+                            }else{
+                                return(
+                                    <OtherMsg data={data} img={chatIcon} time={'2 mints'} msg={'yes maybe'} /> 
+                                )
+                            }
+                        })}
+                        {/* <OtherMsg img={chatIcon} time={'2 mints'} msg={'yes maybe'} />
                         <MyMsg time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts'} />
                         <OtherMsg img={chatIcon} time={'2 mints'} msg={'Sure why not'} />
                         <OtherMsg img={chatIcon} time={'2 mints'} msg={'Good Job'} />
                         <MyMsg time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts'} />
                         <MyMsg time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts'} />
-                        <MyMsg time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts'} />
+                        <MyMsg time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts'} /> */}
                     </div>
 
                     <div className='foot'>

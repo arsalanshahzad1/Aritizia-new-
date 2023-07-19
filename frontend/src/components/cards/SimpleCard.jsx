@@ -29,8 +29,6 @@ const SimpleCard = ({
         setIsVisible(false);
     }, []);
 
-    console.log("USER in buy now", userAddress);
-
     const openDrawer = () => {
         if (showLinks === true) {
             return onOpen(false);

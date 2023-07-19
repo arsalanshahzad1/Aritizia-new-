@@ -322,7 +322,6 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
         const value = event.target.value;
         if (/^\d*\.?\d*$/.test(value) || value === "") {
             price = Number(value);
-            console.log("Price", price);
             setInputValue(value);
             setShowWarning(false);
         } else {
@@ -350,18 +349,16 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
         const provider = await web3ModalRef.current.connect();
         const web3Provider = new providers.Web3Provider(provider);
         const { chainId } = await web3Provider.getNetwork();
-        if (chainId !== 31337) {
+        if (chainId !== 11155111 ) {
             window.alert("Change the network to Sepolia");
             throw new Error("Change network to Sepolia");
         }
 
         if (needSigner) {
             const signer = web3Provider.getSigner();
-            // console.log("getSigner");
 
             return signer;
         }
-        // console.log("getProvider");
         return web3Provider;
     };
 
@@ -370,19 +367,12 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
         if (typeof file !== "undefined") {
             try {
                 setLoading(true);
-                console.log("this is image file ", file);
                 const resut = await uploadFileToIPFS(item.file);
-                //const result = await client.add(file)
-                console.log("!!!!!!!!!!!!!!!!!!", resut);
-                // setImage(resut.pinataURL);
                 image = resut.pinataURL;
                 setLoading(false);
-                // create nft using image IPFS and other data
-                console.log("Calling the createNFT function");
                 createNFT();
             } catch (error) {
                 setLoading(false);
-                console.log("ipfs image upload error: ", error);
             }
         }
     };
@@ -407,9 +397,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                     description,
                     royalty,
                 });
-                console.log("dataInJSON", dataInJSON);
                 const result = await uploadJSONToIPFS(dataInJSON);
-                console.log("uploadJSONToIPFS", result.pinataURL);
                 mintThenList(result.pinataURL);
 
                 //   }
@@ -437,10 +425,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                     royalty,
                 });
 
-                console.log("dataInJSON", dataInJSON);
                 const result = await uploadJSONToIPFS(dataInJSON);
-
-                console.log("RESULT", result);
                 mintThenList(result.pinataURL);
             } catch (error) {
                 console.log("ipfs uri upload error: ", error);
@@ -450,25 +435,18 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
 
     // mint the NFT then list
     const mintThenList = async (result) => {
-        console.log("In mintThenList");
-
         const signer = await getProviderOrSigner(true);
-
         const nftContract = new Contract(
             NFT_CONTRACT_ADDRESS.address,
             NFT_CONTRACT_ABI.abi,
             signer
         );
 
-        console.log("In mintThenList");
-
         await (await nftContract.mint([result])).wait();
 
         let mintedTokens = await nftContract.getMintedTokensList();
 
         mintedTokens = Number(mintedTokens);
-
-        console.log("mintedTokens", mintedTokens);
 
         const marketplaceContract = new Contract(
             MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -519,7 +497,6 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
     const defaultCrypto = cryptoOptions[0];
     const handleSliderChange = (value) => {
         // Update the value or perform any other actions
-        console.log("Slider value:", value);
         setRoyalty(value);
         // ...
     };
@@ -540,14 +517,8 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
         e.preventDefault();
         price = inputValue;
 
-        console.log("crypto in check", crypto);
-
-        console.log("startTimestamp in if", startingDate);
-        console.log("endTimestamp in if", endingDate);
 
         if (listingType == 0) {
-            console.log("startTimestamp in if", startingDate);
-            console.log("endTimestamp in if", endingDate);
             setStartingDate(0);
             setEndingDate(0);
             startTime = 0;
@@ -560,8 +531,6 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
 
             const endTimestamp = Math.floor(endDate.getTime() / 1000);
 
-            console.log("startTimestamp in else", startTimestamp);
-            console.log("endTimestamp in else", endTimestamp);
             setStartingDate(startTimestamp);
             setEndingDate(endTimestamp);
             startTime = startTimestamp;

@@ -353,7 +353,7 @@ function ProfileDrawer({
 
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
+    if (chainId !== 11155111 ) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }

@@ -49,7 +49,6 @@ const NewItemCard = ({
     }
   };
 
-  // console.log("Image in auction box", image);
   return (
     <>
       <div className="col-lg-3 col-md-4 col-12 new-item-card">

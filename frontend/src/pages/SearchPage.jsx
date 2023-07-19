@@ -15,6 +15,7 @@ import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
+import apis from "../service";
 
 const SearchPage = ({ search, setSearch }) => {
   const [status, setStatus] = useState({ value: "one", label: "New" });
@@ -76,7 +77,7 @@ const SearchPage = ({ search, setSearch }) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
+    if (chainId !== 11155111 ) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -309,6 +310,35 @@ const SearchPage = ({ search, setSearch }) => {
     });
     setUserAddress(accounts[0]);
     // console.log("getAddress", accounts[0]);
+    postWalletAddress(accounts[0]);
+    
+
+  };
+
+  const postWalletAddress  = async (address) => {
+    if (localStorage.getItem("data")) {
+      return console.log("data is avaliable");
+    } else {
+    const response = await apis.postWalletAddress({wallet_address:  address})
+    localStorage.setItem("data", JSON.stringify(response.data.data));
+    window.location.reload();
+    }
+    // if (localStorage.getItem("data")) {
+    //   return console.log("data is avaliable");
+    // } else {
+    //   const postData = {
+    //     wallet_address: address,
+    //   };
+
+    //   axios
+    //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+    //     .then((response) => {
+    //       localStorage.setItem("data", JSON.stringify(response.data.data));
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
   };
 
   useEffect(() => {

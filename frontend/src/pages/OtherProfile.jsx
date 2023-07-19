@@ -27,6 +27,7 @@ import CollectionCard from "../components/cards/CollectionCard";
 import liked1 from '../../public/assets/images/liked1.png'
 import liked2 from '../../public/assets/images/liked2.png'
 import collection from '../../public/assets/images/Collection-card-image.png'
+import apis from "../service";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -47,7 +48,7 @@ const OtherProfile = ({ search, setSearch }) => {
         const web3Provider = new providers.Web3Provider(provider);
         const { chainId } = await web3Provider.getNetwork();
 
-        if (chainId !== 31337) {
+        if (chainId !== 11155111) {
             window.alert("Change the network to Sepolia");
             throw new Error("Change network to Sepolia");
         }
@@ -77,8 +78,36 @@ const OtherProfile = ({ search, setSearch }) => {
             method: "eth_requestAccounts",
         });
         setUserAddress(accounts[0]);
-        console.log("getAddress", accounts[0]);
+        // console.log("getAddress", accounts[0]);
+        postWalletAddress(accounts[0]);
+       
     };
+
+    const postWalletAddress  = async (address) => {
+        if (localStorage.getItem("data")) {
+          return console.log("data is avaliable");
+        } else {
+        const response = await apis.postWalletAddress({wallet_address:  address})
+        localStorage.setItem("data", JSON.stringify(response.data.data));
+        window.location.reload();
+        }
+        // if (localStorage.getItem("data")) {
+        //   return console.log("data is avaliable");
+        // } else {
+        //   const postData = {
+        //     wallet_address: address,
+        //   };
+    
+        //   axios
+        //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+        //     .then((response) => {
+        //       localStorage.setItem("data", JSON.stringify(response.data.data));
+        //     })
+        //     .catch((error) => {
+        //       console.error(error);
+        //     });
+        // }
+      };
 
     useEffect(() => {
         // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet

@@ -1,13 +1,13 @@
 import React from 'react'
 import './Chat.css'
-const MyMsg = ({ time, msg }) => {
+const MyMsg = ({ time, msg , data }) => {
     return (
         <div className='My-message'>
             <div className='time'>
-                {time}
+                {data.date}
             </div>
             <div className='msg'>
-                {msg}
+                {data.text}
             </div>
         </div>
     )

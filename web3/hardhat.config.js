@@ -17,7 +17,7 @@ module.exports = {
 
   networks: {
     hardhat: {
-      chainId: 31337,
+      chainId: 11155111 ,
       gasPrice: "auto",
       forking: {
         // url: `https://polygon-mainnet.g.alchemy.com/v2/8JkHo3qUxg6xK4OpBBG7XrfND3pZL0ig`,

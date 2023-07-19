@@ -1,18 +1,20 @@
 import React from 'react'
 
 const ChatItem = (props) => {
-    const { image, name, msg } = props
+    
+    const { image, name, msg, data , ChatMessage } = props
     return (
-        <div className='chat-item'>
-            <div className='image-holder'><img src={image} alt="" /></div>
+        <div className='chat-item' onClick={()=>ChatMessage(data.id)}>
+            <div className='image-holder'>
+                <img src={data.profile_image} alt="" /></div>
             <div className='text-area'>
                 <div className='name-txt'>
                     <span>
-                        {name}
+                        {data.first_name}
                     </span>
                 </div>
                 <div className='msg-txt'>
-                    {msg}
+                    {data.last_message}
                 </div>
             </div>
         </div>

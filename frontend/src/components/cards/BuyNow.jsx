@@ -27,7 +27,6 @@ const BuyNow = ({
     setIsVisible(false);
   }, []);
 
-  // console.log("USER in buy now", userAddress);
 
   const openDrawer = () => {
     if (showLinks === true) {
@@ -82,7 +81,6 @@ const BuyNow = ({
                       }}
                     >
                       <img src={nftImg} className="J-image" />
-                      {/* {console.log(nftImg, "its image")} */}
                       {showLinks && (
                         <div className="social-links">
                           <ul>

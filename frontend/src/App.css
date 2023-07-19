@@ -312,7 +312,8 @@ header {
 }
 
 header#active {
-  padding: 20px 30px;
+  padding: 15px;
+  /* padding: 20px 30px; */
   position: fixed;
   width: 85%;
   z-index: 9;
@@ -1781,6 +1782,20 @@ footer h1 {
   color: var(--white);
   position: relative;
 }
+.update-profile-wrap button {
+  background: var(--bg-gradient);
+  padding: 12px 32px;
+  border-radius: 66px;
+  border: none;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  position: relative;
+}
 
 .inputfield-edit-profile div div {
   display: flex;
@@ -1847,6 +1862,14 @@ footer h1 {
   width: 218px;
   height: 218px;
   border-radius: 50%;
+  object-fit: contain;
+}
+
+.upload-img svg {
+  font-size: 200px;
+  border: 6px solid #000;
+  border-radius: 130px;
+  padding: 25px;
 }
 
 .upload-img button {
@@ -4328,20 +4351,23 @@ footer h1 {
 
 .notification-card {
   position: absolute;
-  border-radius: 20px;
+  border-radius: 10px;
   top: 50px;
   left: 25%;
   z-index: 999999;
   background-color: white;
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.541);
+  height: 284px;
+  overflow: auto;
+  width: 270px;
 }
 
 .notification-card .Notification-in-header:nth-child(1) {
-  border-radius: 20px 20px 0 0;
+  border-radius: 10px 10px 0 0;
 }
 
 .notification-card .Notification-in-header:nth-last-child(1) {
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 10px 10px;
 }
 
 .Notification-in-header {
@@ -4379,11 +4405,13 @@ footer h1 {
   font-size: 18px;
   font-weight: 600;
   margin-right: 5px;
+  text-transform: capitalize;
 }
 
 .Notification-in-header .text-area .name-txt {
   font-size: 16px;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .Notification-in-header .text-area .msg-txt {
@@ -4454,7 +4482,7 @@ footer h1 {
   width: 100% !important;
 }
 
-.showBuyNow-step2{
+.showBuyNow-step2 {
   padding: 10% 3% 2% 3%;
   display: flex;
   align-items: center;
@@ -4462,19 +4490,74 @@ footer h1 {
   justify-content: center;
 }
 
-.showBuyNow-step2 input{
+.showBuyNow-step2 input {
   width: 100%;
-    font-family: 'Jost';
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 35px;
-    letter-spacing: 0em;
-    text-align: left;
-    background: #EBEBEB;
-    border: none;
-    outline: none;
-    padding: 6px 0px 6px 15px;
+  font-family: 'Jost';
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 35px;
+  letter-spacing: 0em;
+  text-align: left;
+  background: #EBEBEB;
+  border: none;
+  outline: none;
+  padding: 6px 0px 6px 15px;
 }
-.btn-holder-for-showBuyNow{
-  margin:10px auto 0px auto;
+
+.btn-holder-for-showBuyNow {
+  margin: 10px auto 0px auto;
+}
+
+.sec-loading {
+  height: 100%;
+    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sec-loading .one {
+  height: 80px;
+  width: 80px;
+  border: 7px solid #B600D1;
+  transform: rotate(45deg);
+  border-radius: 0 50% 50% 50%;
+  position: relative;
+  animation: move 0.5s linear infinite alternate-reverse;
+}
+.sec-loading .one::before {
+  content: "";
+  position: absolute;
+  height: 55%;
+  width: 55%;
+  border-radius: 50%;
+  border: 7px solid transparent;
+  border-top-color: #B600D1;
+  border-bottom-color: #B600D1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes move {
+  to {
+    transform: translateY(15px) rotate(45deg);
+  }
+}
+
+.loadmore-mgs-notofication{
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  padding: 15px 0px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #B600D1;
 }

@@ -26,12 +26,8 @@ const MyNftCard = ({
     const [isVisible, setIsVisible] = useState(false);
 
     const onClose = useCallback(() => {
-        console.log("calling close")
         setIsVisible(false);
     }, []);
-
-
-    console.log("USER in buy now", userAddress);
 
     const openDrawer = () => {
         if (showLinks === true) {
@@ -53,7 +49,6 @@ const MyNftCard = ({
                 ...previousOptions,
                 { value: CreateCollection.toLowerCase(), label: CreateCollection },
             ]);
-            console.log(collectionOptions, "collection updated");
             hideCreateCollection();
         }
     };
