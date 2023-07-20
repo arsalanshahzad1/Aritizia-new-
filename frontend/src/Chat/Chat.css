@@ -7,7 +7,7 @@
 
 .chat-sidebar {
     width: 30%;
-    border-radius: 20px;
+    border-radius: 20px 0px 0px 20px;
     background-color: #EFEFEF;
     /* padding: 15px; */
     font-family: 'Jost';
@@ -55,6 +55,10 @@
     cursor: pointer;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.452);
 }
+.chat-item.active {
+    cursor: pointer;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.452);
+}
 
 .chat-item .image-holder {
     width: 40px;
@@ -78,6 +82,7 @@
     font-size: 18px;
     font-weight: 600;
     margin-right: 5px;
+    text-transform: capitalize;
 }
 
 .chat-item .text-area .name-txt {
@@ -88,11 +93,16 @@
 .chat-item .text-area .msg-txt {
     font-size: 16px;
     font-weight: 500;
+    
+}
+
+.chat-item .text-area .msg-txt::first-letter{
+    text-transform: capitalize;
 }
 
 .chat-area .head {
     width: 100%;
-    border-radius: 20px 20px 0 0;
+    border-radius: 0px 20px 0 0;
     background-color: #EFEFEF;
     padding: 10px 20px;
 
@@ -111,6 +121,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-transform: capitalize;
+}
+
+.chat-area .head .user .username::first-letter{
+    text-transform: capitalize;
 }
 
 .chat-area .head .user .username div {
@@ -134,14 +149,57 @@
 }
 
 .chat-area .foot {
+}
+.chat-area .foot .foot-wrap{
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 20px 0px;
     background-color: #EFEFEF;
     align-items: center;
     padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.display-images-List{
+    width: 100%;
+    display: flex;
+}
+
+.display-images-List img{
+    height: 100px;
+    width: 100px;
+    margin-right: 10px;
+    background-color: gray;
+    border-radius: 6px;
+    object-fit: contain;
+    cursor: pointer;
+}
+.display-images-List p{
+    height: 100px;
+    width: 150px;
+    background-color: gray;
+    border-radius: 6px;
+    padding: 5px !important;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px !important;
+    text-align: center;
+    color: #fff;
+}
+
+.foot-wrap-input{
+    width: 100%;
+    display: flex;
+    gap: 10px;
 }
 
 .chat-area .foot input {
@@ -162,8 +220,11 @@
 }
 
 .chat-area .foot span {
-    width: 5%;
     cursor: pointer;
+}
+.chat-area .foot .upload-file svg{
+    font-size: 30px;
+    color: #2636d9;
 }
 
 .chat-canvas {
@@ -191,6 +252,7 @@
     align-items: start;
     justify-content: end;
     margin: 5px 0;
+    align-items: center;
 }
 
 .My-message .time {
@@ -198,19 +260,21 @@
     font-size: 12px;
     font-weight: 400;
     font-family: 'Jost';
-    margin-right: 10px;
-    margin-top: 10px;
+    margin-right: 0px;
+    margin-top: 0px;
+    text-align: right;
+    margin-bottom: 5px;
 }
 
 .My-message .msg {
-    border-radius: 25px;
+    border-radius: 6px;
     padding: 10px;
     background-color: #B600D1;
     color: white;
     font-size: 14px;
     font-weight: 400;
     font-family: 'Jost';
-    max-width: 60% !important;
+    max-width: 500px !important;
 }
 
 
@@ -218,6 +282,8 @@
     display: flex;
     align-items: start;
     margin: 5px 0;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .other-msg .img-holder {
@@ -229,14 +295,14 @@
 }
 
 .other-msg .msg {
-    border-radius: 25px;
+    border-radius: 6px;
     padding: 10px;
     background-color: #2636D9;
     color: white;
     font-size: 14px;
     font-weight: 400;
     font-family: 'Jost';
-    max-width: 60% !important;
+    max-width: 500px !important;
     margin-inline: 8px;
 }
 
@@ -247,4 +313,67 @@
     font-family: 'Jost';
     margin-right: 10px;
     margin-top: 10px;
+}
+
+.msg-document{
+    background: #EFEFEF;
+    padding: 5px 10px;
+    border-radius: 6px;
+    width: 350px;
+}
+.msg-document .wrap{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.msg-document .wrap .left{
+    position: relative;
+}
+.msg-document .wrap .left svg{
+    font-size: 42px;
+}
+.msg-document .wrap .left span{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50% , -50%);
+    font-size: 7px;
+    font-weight: 700;
+}
+.msg-document .wrap .center{
+    width: 100%;
+}
+.msg-document .wrap .center div:nth-child(1){
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Jost';
+    line-height: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    text-transform: capitalize;
+    
+}
+.msg-document .wrap .center div:nth-child(2){
+    font-size: 12px;
+    font-weight: 400;
+    font-family: 'Jost';
+    line-height: 15px;
+    text-transform: capitalize;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+.msg-document .wrap .center div:nth-child(2) svg{
+    font-size: 4px;
+}
+
+.msg-document .wrap .right{
+   
+}
+.msg-document .wrap .right svg{
+   font-size: 28px;
 }

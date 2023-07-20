@@ -34,7 +34,7 @@ const createBackendServer = (baseURL) => {
     const getChatNotification = async (count) => await api.get(`view-chat-notifications/${userId}?last_count=${count}`);
     const getChatUsers = async () => await api.get(`view-chat-users/3`);
     const getChatMessages = async (id) => await api.get(`view-chat-messages/3/${id}`);
-    const postChatMessages = async (body) => await api.post(`send-chat-message`);
+    const postChatMessages = async (body) => await api.post(`send-chat-message` , body , headers);
    
     //Returning all the API
     return {
