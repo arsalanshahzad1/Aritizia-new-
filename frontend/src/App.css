@@ -4561,3 +4561,13 @@ footer h1 {
   font-weight: 600;
   color: #B600D1;
 }
+
+.no-message-selected{
+  position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: 600;
+    color: #B600D1;
+}
