@@ -1,0 +1,263 @@
+[33mcommit 636b641ce5dda2d380eed224784bb124391a1325[m[33m ([m[1;36mHEAD -> [m[1;32mnameer[m[33m)[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Fri Jul 21 03:09:27 2023 -0700
+
+    maybe there are some issue in code merge
+
+[33mcommit e79766707a2eb6e52b50fc7e4ca58d94faadd977[m[33m ([m[1;31morigin/nameer[m[33m)[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Thu Jul 20 22:37:57 2023 -0700
+
+    ethereum logo picture
+
+[33mcommit e4b1c7836c466e6ef74fb945e0357a06e10842a5[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Fri Jul 14 07:00:41 2023 -0700
+
+    update
+
+[33mcommit f115076c82745790bb9061c4bb302d1b44d56947[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Fri Jul 14 06:42:21 2023 -0700
+
+    Remove multiple Fans from list pop up added
+
+[33mcommit 0f89e82e07c0a5549ddca1eb7731beb408b8f4b6[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Thu Jul 13 05:07:36 2023 -0700
+
+    some changes in resale
+
+[33mcommit 91a08e3b8ac6fc778d7c22e257426c3122c6c16a[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Thu Jul 13 02:33:44 2023 -0700
+
+    resale updated and Fan List screens added
+
+[33mcommit 91d37200a9ba9ee8621689ff4bac5021ecfc5367[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Wed Jul 12 04:51:31 2023 -0700
+
+    discount popup added on profile -> collection -> NFT's
+
+[33mcommit 40a5385610130c5feb4581a8887be772add903ab[m[33m ([m[1;32mzayyan[m[33m)[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Mon Jul 10 23:30:57 2023 -0700
+
+    presale section added
+
+[33mcommit ef09848579a4da2b472e11df6fb07e4905a3f425[m
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Tue Jul 11 10:52:12 2023 +0500
+
+    update
+
+[33mcommit 7201f88df10ae2f878cb6e9bbf2c458637d3a01a[m
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Fri Jul 7 14:28:01 2023 +0500
+
+    merged successfully
+
+[33mcommit c4c96b0a0f4d054ea4395a63c408a069a519ccde[m
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Fri Jul 7 13:27:44 2023 +0500
+
+    merged
+
+[33mcommit fbc60d4222e3da93df58431002bebbb70f1d4984[m
+Merge: 5491aac 4e6e2d0
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Fri Jul 7 13:27:22 2023 +0500
+
+    Merge branch 'Zayyan' of https://github.com/arsalanshahzad1/Aritizia-new- into Zayyan
+
+[33mcommit 5491aac38805640818fa393b67089c7cbf358386[m[33m ([m[1;31morigin/Zayyan[m[33m)[m
+Merge: 642d69f 1734c6f
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Fri Jul 7 12:49:55 2023 +0500
+
+    changes
+
+[33mcommit 4e6e2d07e72b4933ec50ab976949bb1ea5270ffc[m
+Merge: 154062f d50eebe
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Fri Jul 7 00:48:59 2023 -0700
+
+    Merge pull request #16 from arsalanshahzad1/nameer
+    
+    Nameer
+
+[33mcommit d50eebe44bd6c1da52bc8c9d83d6502afd99d038[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Fri Jul 7 00:48:22 2023 -0700
+
+    last commit before merging with mainh
+
+[33mcommit 3cf3da80f15a64fb0c1f38baee7c477fbad92e27[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Thu Jul 6 09:48:58 2023 -0700
+
+    nftCard updated
+
+[33mcommit 54e205402af0e4e23214b5ab31606ff54add984f[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Thu Jul 6 05:22:11 2023 -0700
+
+    changes made in create single page and popup buy options updated in drawer
+
+[33mcommit 3cec73e2e28e371e55768a4c9efb6a123e084962[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Wed Jul 5 08:11:46 2023 -0700
+
+    final changes done as per Zayyan requirements
+
+[33mcommit 642d69fd975ccf78a4d07205cad64beecb703ec4[m
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Wed Jul 5 11:32:28 2023 +0500
+
+    changes
+
+[33mcommit 8cf0a598cb0e835bea07f49bef206101a9333f46[m
+Merge: 2612553 154062f
+Author: Zayyan <zayyan.pluton@gmail.com>
+Date:   Wed Jul 5 11:31:14 2023 +0500
+
+    update
+
+[33mcommit 1734c6f27c1635c4acc5c3de32808531c3401188[m
+Merge: 2612553 154062f
+Author: ZayyanInPluton <133196601+ZayyanInPluton@users.noreply.github.com>
+Date:   Wed Jul 5 10:58:11 2023 +0500
+
+    Merge branch 'main' into Zayyan
+
+[33mcommit 261255336f21f00150310f151ab36a6d2861c844[m
+Author: Rabeebaqdas <96619105+fahadwahid@users.noreply.github.com>
+Date:   Wed Jul 5 10:31:22 2023 +0500
+
+    changes
+
+[33mcommit 154062ffd8713ede8b03a501199c96bd286867a1[m[33m ([m[1;32mmain[m[33m)[m
+Merge: bfc397c 9032edb
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Tue Jul 4 07:34:51 2023 -0700
+
+    Merge pull request #14 from arsalanshahzad1/nameer
+    
+    changes done as per zayyan requirements
+
+[33mcommit 9032edb03e5736804b2377b930d5a0defa8e0a97[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Tue Jul 4 07:34:18 2023 -0700
+
+    changes done as per zayyan requirements
+
+[33mcommit bfc397c208a103f85414d037e19775c5199f4444[m
+Merge: cd6ca6d d4d0832
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Tue Jul 4 04:33:21 2023 -0700
+
+    Merge pull request #13 from arsalanshahzad1/nameer
+    
+    multiple nft updated
+
+[33mcommit d4d0832cbd26cbf38d8052becf430b9951eb2c00[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Tue Jul 4 04:32:43 2023 -0700
+
+    multiple nft updated
+
+[33mcommit cd6ca6d68014ec41aee8570240575b140f6fd936[m
+Merge: f92a560 36537b2
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Tue Jul 4 01:12:20 2023 -0700
+
+    Merge pull request #12 from arsalanshahzad1/nameer
+    
+    functionality of tabs added in multiple nft creation
+
+[33mcommit 36537b2ae2f5c8d6354db86b7ecc71a383764c5c[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Tue Jul 4 01:12:00 2023 -0700
+
+    functionality of tabs added in multiple nft creation
+
+[33mcommit f92a560fa8b7c863bdbeb4833d2dc7ed4133093f[m
+Merge: e14bf84 c4ae426
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Mon Jul 3 07:19:36 2023 -0700
+
+    Merge pull request #11 from arsalanshahzad1/nameer
+    
+    multiple nft creation added
+
+[33mcommit c4ae426af281654aebb3344cd4c2ce2590d358d0[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Mon Jul 3 07:18:54 2023 -0700
+
+    multiple nft creation added
+
+[33mcommit e14bf8410b519c1e8b80515dfb920ae120235815[m
+Merge: 8d8098b bba340a
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Mon Jul 3 02:07:10 2023 -0700
+
+    Merge pull request #10 from arsalanshahzad1/nameer
+    
+    header fixed
+
+[33mcommit bba340af4de36f756dd0a4e15d8856f43c9a029c[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Mon Jul 3 02:04:40 2023 -0700
+
+    header fixed
+
+[33mcommit 8d8098be19c045dbe07deab081ec4e6fc7aabae4[m
+Merge: d3ec9a9 e816f88
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Mon Jul 3 01:57:11 2023 -0700
+
+    Merge pull request #9 from arsalanshahzad1/nameer
+    
+    User chat screen added
+
+[33mcommit e816f88e34342eacb59cd25bd88e14add23e7b17[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Mon Jul 3 01:55:49 2023 -0700
+
+    user chat screen added
+
+[33mcommit e632fc4cf5d7072b554f2a486ce8c15afb7b7e0a[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Wed Jun 28 07:11:11 2023 -0700
+
+    changes
+
+[33mcommit d3ec9a9d359d37c48327836a91b5b7b7d503d034[m
+Merge: 74a865c 2131186
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Wed Jun 28 06:44:41 2023 -0700
+
+    Merge pull request #8 from arsalanshahzad1/nameer
+    
+    Profile and other user profile UI Done
+
+[33mcommit 2131186c167a04bbc2eeb2eda84d451ebba2c440[m
+Author: Muhammadnameer <nameerfarooquit@gmail.com>
+Date:   Wed Jun 28 06:43:29 2023 -0700
+
+    Profile and other user profile UI Done
+
+[33mcommit b745b0569fcc841db5b453dd48185bcce4573268[m
+Author: Rabeebaqdas <96619105+fahadwahid@users.noreply.github.com>
+Date:   Wed Jun 28 18:33:00 2023 +0500
+
+    update
+
+[33mcommit 74a865ce0e5181c92136f57dcf10bedb1c6487cb[m
+Merge: a47e938 a6adc41
+Author: Muhammad Nameer <61945782+nameerfarooq@users.noreply.github.com>
+Date:   Tue Jun 27 13:19:23 2023 -0700
+
+    Merge pull request #7 from arsalanshahzad1/nameer
+    
