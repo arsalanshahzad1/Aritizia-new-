@@ -4838,3 +4838,12 @@ footer h1 {
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.205);
 
 }
+
+.coin-img-holder {
+  width: 20px;
+  margin-right: 5px;
+}
+
+.coin-img-holder img {
+  width: 100%;
+}
