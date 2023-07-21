@@ -1,41 +1,34 @@
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../../App.css'
 
-function Notification(props) {
+function UserNotification(props) {
     const { link, image, name, desc, msg, data } = props
     console.log(data);
     const navigate = useNavigate()
     const navigateToChat = () => {
-        // if (link) {
-            navigate('/chat')
-        // }
+        if (link) {
+            navigate(link)
+        }
     }
     return (
         <>
-            {data.map((res, id) => {
+            {data?.map((res, id) => {
                 return (
                     <div onClick={navigateToChat} className='Notification-in-header'>
-                        <div className='image-holder'><img src={res.user.profile_image} alt="" /></div>
+                        <div className='image-holder'><img src={res?.user?.profile_image} alt="" /></div>
                         <div className='text-area'>
                             <div className='name-txt'>
                                 <span>
-                                    {res.user.first_name}
+                                {res?.user?.first_name}
                                 </span>
                                 {desc}
                             </div>
-
-                            {res.text == null ?
+                            {msg &&
                                 <div className='msg-txt'>
-                                {res?.media?.at(-1)?.file_name}
-                            </div>
-                                :
-                                <div className='msg-txt'>
-                                    {res.text}
+                                    {res?.message}
                                 </div>
                             }
-
-
-
                         </div>
                     </div>
                 )
@@ -45,4 +38,4 @@ function Notification(props) {
     )
 }
 
-export default Notification
+export default UserNotification

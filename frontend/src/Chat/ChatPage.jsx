@@ -31,37 +31,12 @@ function ChatPage({ search, setSearch }) {
         console.log(response.data.data);
     }
 
-    const sendChat = async (e) => {
-        e.preventDefault()
-
-        data.sender_id = 3;
-        data.receiver_id = activeUserId;
-        data.message = textMessage.current.value;
-        data.media_file = fileMessages;
-
-        console.log(data);
-        // const sendData = new FormData();
-
-        // for (const [key, value] of Object.entries(data)) {
-        //     sendData.append(key, value);
-        // }
-
-        // const response = await apis.postChatMessages(sendData)
-        // if (response.data.status) {
-        //     setUserMessagesDetails((prevState) => [response?.data?.data, ...prevState])
-        //     textMessage.current.value = ''
-        // }
-    }
-
-    useEffect(() => {
-        ChatUsers()
-    }, [userMessagesDetails, showFileMessages])
-
     const handleImageUpload = (event) => {
         const files = event.target.files;
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
-    
+          
+            setFileMessages((prevState) => [...prevState, file])
           // Check if the file is an image based on its MIME type
           if (file.type.startsWith('image/')) {
             const imageUrl = URL.createObjectURL(file);
@@ -89,6 +64,44 @@ function ChatPage({ search, setSearch }) {
         setShowFileMessages(newShowMessages);
         setFileMessages(newFileMessages);
       };
+
+      const sendChat = async (e) => {
+        e.preventDefault()
+
+        data.sender_id = 3;
+        data.receiver_id = activeUserId;
+        data.message = textMessage.current.value;
+        data.media_file = fileMessages;
+
+        console.log(data);
+        console.log(fileMessages);
+        const sendData = new FormData();
+        sendData.append('sender_id', data.sender_id);
+        sendData.append('receiver_id', data.receiver_id);
+        sendData.append('message', data.message);
+
+        for (let i = 0; i < fileMessages.length; i++) {
+            sendData.append('media_file[]', fileMessages[i]);
+          }
+        // sendData.append('media_file[]', fileMessages);
+        // for (const [key, value] of Object.entries(data.media_file)) {
+        //     sendData.append(key, value);
+        // }
+
+        console.log(sendData.toString());
+
+        const response = await apis.postChatMessages(sendData)
+        if (response.data.status) {
+            setUserMessagesDetails((prevState) => [response?.data?.data, ...prevState])
+            textMessage.current.value = ''
+            setShowFileMessages('')
+            setFileMessages('')
+        }
+    }
+
+    useEffect(() => {
+        ChatUsers()
+    }, [userMessagesDetails, showFileMessages , fileMessages])
     return (
         <div>
             <Header
