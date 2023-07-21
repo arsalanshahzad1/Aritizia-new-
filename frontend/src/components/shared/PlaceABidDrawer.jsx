@@ -318,13 +318,89 @@ const PlaceABidDrawer = ({
   };
 
   const web3ModalRef = useRef();
+  let _sellerPercentFromDB = 1.5;
+  let _buyerPercentFromDB = 1.5;
+
+  let sellerPercent = _sellerPercentFromDB * 10;
+  let buyerPercent = _buyerPercentFromDB * 10;
+
+  const [amountUSD, setAmountUSD] = useState("");
+  const [platformFee, setPlatformFee] = useState("");
+
+  const getPriceInUSD = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let auctionData = await marketplaceContract._idToAuction(id);
+
+    let highestBid = ethers.utils.formatEther(
+      auctionData.highestBid.toString()
+    );
+
+    let startTime = ethers.utils.formatEther(auctionData.startTime.toString());
+
+    let endTime = ethers.utils.formatEther(auctionData.endTime.toString());
+
+    console.log("startTime", startTime);
+    console.log("endTime", endTime);
+
+    let basePrice = ethers.utils.formatEther(auctionData.basePrice.toString());
+
+    let priceETH = Number(highestBid);
+    console.log("priceETH", priceETH);
+
+    let currBid;
+    if (highestBid == 0) {
+      setHighestBid(basePrice);
+      currBid = basePrice;
+    } else {
+      currBid = highestBid;
+      setHighestBid(highestBid);
+    }
+
+    priceETH = currBid;
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+
+    let oneETHInUSD = 1 / priceInETH;
+    let priceInUSD = priceETH;
+    priceInUSD = oneETHInUSD * priceInUSD;
+    priceInUSD = Math.ceil(priceInUSD);
+    setAmountUSD(priceInUSD.toString());
+    let fee = Math.ceil((priceInUSD * 3) / 100);
+    setPlatformFee(fee);
+  };
+
+  const claimAuction = async () => {
+    const signer = await getProviderOrSigner(true);
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+
+    await (
+      await marketplaceContract.closeAuction(
+        NFT_CONTRACT_ADDRESS.address,
+        id,
+        sellerPercent,
+        buyerPercent
+      )
+    ).wait();
+  };
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
 
-    if (chainId !== 11155111 ) {
+    if (chainId !== 31337 ) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -336,6 +412,17 @@ const PlaceABidDrawer = ({
     }
 
     return web3Provider;
+  };
+
+  const handleBidEvent = async (tokenId, seller, highestBidder, highestBid) => {
+    let bidData = {
+      tokenId: tokenId.toString(),
+      seller: seller.toString(),
+      highestBidder: highestBidder.toString(),
+      highestBid: highestBid.toString(),
+    };
+
+    console.log("bidData", bidData);
   };
 
   const connectWallet = async () => {
@@ -356,9 +443,13 @@ const PlaceABidDrawer = ({
         disableInjectedProvider: false,
       });
       connectWallet();
-      getAuctionData();
+      getPriceInUSD();
     }
   }, [walletConnected]);
+
+  useEffect(() => {
+    getAuctionData();
+  }, [highestBid]);
 
   // // return the price of NFT in usd
   const getAuctionData = async () => {
@@ -370,62 +461,42 @@ const PlaceABidDrawer = ({
       provider
     );
 
-    let priceETH = Number(highestBid);
+    let auctionData = await marketplaceContract._idToAuction(id);
 
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    let oneETHInUSD = 1 / priceInETH;
-    let priceInUSD = priceETH;
-    priceInUSD = oneETHInUSD * priceInUSD;
-    console.log("priceInUSD", priceInUSD);
-    priceInUSD = priceInUSD.toFixed(2);
-
-    setDollarPrice(priceInUSD.toString());
-    console.log("priceInUSD", priceInUSD);
-
-    let highBid = await marketplaceContract.getHighestBid(id);
-    highBid = Number(highBid.toString()) / 1e18;
-    console.log("HighestBid", highBid);
-
-    if (highBid == 0) {
-      setHighestBid(price);
-    } else {
-      setHighestBid(highBid);
-    }
-  };
-
-  // return the price of NFT in usd
-  const getPriceInUSD = async () => {
-    const provider = await getProviderOrSigner();
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
+    let highestBid = ethers.utils.formatEther(
+      auctionData.highestBid.toString()
     );
 
+    let basePrice = ethers.utils.formatEther(auctionData.basePrice.toString());
+
     let priceETH = Number(highestBid);
+    console.log("priceETH", priceETH);
+
+    if (highestBid == 0) {
+      setHighestBid(basePrice);
+    } else {
+      setHighestBid(highestBid);
+    }
 
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
-    console.log("priceInUSD", priceInUSD);
+    // console.log("priceInUSD", priceInUSD);
     priceInUSD = priceInUSD.toFixed(2);
 
     setDollarPrice(priceInUSD.toString());
-    console.log("priceInUSD", priceInUSD);
+    // console.log("priceInUSD", priceInUSD);
 
-    let highBid = await marketplaceContract.getHighestBid(id);
-    highBid = Number(highBid.toString()) / 1e18;
-    console.log("HighestBid", highBid);
+    // let highBid = await marketplaceContract.getHighestBid(id);
 
-    if (highBid == 0) {
-      setHighestBid(price);
-    } else {
-      setHighestBid(highBid);
-    }
+    // let highBid = Number(highestBid.toString()) / 1e18;
+    // console.log("HighestBidaaa", highBid);
+  };
+
+  const getValues = async () => {
+    console.log(buyNowPrice, "buyNowPrice");
   };
 
   const bidWithFIAT = async () => {
@@ -459,10 +530,15 @@ const PlaceABidDrawer = ({
     );
 
     // console.log("Make payment");
+    let price = buyNowPrice.toString();
     await marketplaceContract.bidInETH(id, 0, {
-      value: ethers.utils.parseEther("1"),
+      value: ethers.utils.parseEther(price),
     });
     // console.log("Payment made");
+
+    let response = await marketplaceContract.on("receivedABid", handleBidEvent);
+
+    console.log("Response of bid even", response);
   };
 
   const bidWithUSDT = async () => {
@@ -492,20 +568,16 @@ const PlaceABidDrawer = ({
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     console.log("HEre");
 
-    let USDPrice = 300;
+    let USDPrice = buyNowPrice;
     let USDPriceInWei = USDPrice * 10 ** 6;
     USDPrice = USDPrice.toString();
-    // if (paymentMethod == 1) {
 
-    // console.log("asdasd");
-    // const appprove = await USDTContract.approve(
-    //   MARKETPLACE_CONTRACT_ADDRESS.address,
-    //   USDPriceInWei
-    // );
-    // console.log("555");
+    const appprove = await USDTContract.approve(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      USDPriceInWei
+    );
 
-    // appprove.wait();
-    // }
+    appprove.wait();
 
     console.log("Approved");
 
@@ -521,6 +593,9 @@ const PlaceABidDrawer = ({
     // Wait for the transaction to be mined
     await tx.wait();
 
+    let response = await marketplaceContract.on("receivedABid", handleBidEvent);
+
+    console.log("Response of bid even", response);
     // appprove = await USDTContract.approve(
     //   MARKETPLACE_CONTRACT_ADDRESS.address,
     //   0
@@ -536,10 +611,29 @@ const PlaceABidDrawer = ({
     { value: "Daily", label: "Daily" },
   ];
 
+  const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false);
 
-  const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false)
+  const [buyNowPrice, setBuyNowPrice] = useState("");
 
-  const [buyNowPrice, setBuyNowPrice] = useState("")
+  const [bidFunction, setBidFunction] = useState("");
+
+  const bid = () => {
+    console.log("ETH za", bidFunction);
+    console.log("USDT za", buyNowPrice);
+    if (bidFunction == 0) {
+      console.log("bidding with ETH");
+      bidWithETH();
+    } else if (bidFunction == 1) {
+      console.log("bidding with USDT");
+      bidWithUSDT();
+    } else if (bidFunction == 2) {
+      console.log("bidding with FIAT");
+      bidWithFIAT();
+    } else {
+      console.log("please select a bid method first");
+    }
+  };
+
   return (
     <>
       <Drawer
@@ -732,14 +826,18 @@ const PlaceABidDrawer = ({
                   {propertyTabs === 2 && <History />}
                 </div> */}
                 <div className="six-line">
-                  <h3>Current Bid</h3>
+                  <h3>Base Price</h3>
                   <div className="row">
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH<span>${dollarPrice}</span>
+                          {price} ETH
+                          <p>Last bid {highestBid} ETH</p>
+                          <span>
+                            Amount is USD ${amountUSD} + Platform Fee ${" "}
+                            {platformFee}
+                          </span>
                         </p>
-                        <p>Last bid {highestBid}</p>
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-4 col-4">
@@ -808,47 +906,75 @@ const PlaceABidDrawer = ({
         keyboard={false}
       >
         <div className="modal-body" style={{ position: "relative" }}>
-          <span onClick={() => { setSucess(false), setShowBuyOptionsStep2(false) }}>
+          <span
+            onClick={() => {
+              setSucess(false), setShowBuyOptionsStep2(false);
+            }}
+          >
             <AiOutlineClose />
           </span>
-          {
-            !showBuyOptionsStep2 ?
-              <>
-                <div className="mobal-button-1">
-                  {/* <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
-                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button> */}
-                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
-                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
-                </div>
-                <div className="mobal-button-2">
-                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with FIAT</button>
-                </div>
-              </>
-              :
-              <>
-                <div className="showBuyNow-step2">
-                  <input type="text" placeholder="Enter Price" value={buyNowPrice} onChange={(e) => setBuyNowPrice(e.target.value)} />
-                  <div className="btn-holder-for-showBuyNow">
-                    <div className="popUp-btn-group">
+          {!showBuyOptionsStep2 ? (
+            <>
+              <div className="mobal-button-1">
+                <button
+                  onClick={() => {
+                    setBidFunction(0), setShowBuyOptionsStep2(true);
+                  }}
+                >
+                  Bid with ETH
+                </button>
+                <button
+                  onClick={() => {
+                    setBidFunction(1), setShowBuyOptionsStep2(true);
+                  }}
+                >
+                  Bid with USDT
+                </button>
+              </div>
+              <div className="mobal-button-2">
+                <button
+                  onClick={() => {
+                    setBidFunction(2), setShowBuyOptionsStep2(true);
+                  }}
+                >
+                  Bid with FIAT
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="showBuyNow-step2">
+                <input
+                  type="text"
+                  placeholder="Enter Price"
+                  value={buyNowPrice}
+                  onChange={(e) => setBuyNowPrice(e.target.value)}
+                />
+                <div className="btn-holder-for-showBuyNow">
+                  <div className="popUp-btn-group">
+                    <div className="button-styling-outline btnCC">
                       <div
-
-                        className="button-styling-outline btnCC"
+                        onClick={() => {
+                          setShowBuyOptionsStep2(false), setBuyNowPrice("");
+                        }}
+                        className="btnCCin"
                       >
-                        <div onClick={() => { setShowBuyOptionsStep2(false), setBuyNowPrice("") }} className="btnCCin">Cancel</div>
+                        Cancel
                       </div>
-                      <div
-                        className="button-styling btnCC"
-                      >
-                        Send
-                      </div>
-
+                    </div>
+                    <div
+                      onClick={() => {
+                        getValues, bid();
+                      }}
+                      className="button-styling btnCC"
+                    >
+                      Send
                     </div>
                   </div>
                 </div>
-
-              </>
-          }
-
+              </div>
+            </>
+          )}
         </div>
       </Modal>
     </>

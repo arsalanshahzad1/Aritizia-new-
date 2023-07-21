@@ -36,6 +36,7 @@ const SearchPage = ({ search, setSearch }) => {
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [searchedNfts, setSearchedNfts] = useState([]);
+  const [discountPrice, setDiscountPrice] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const SearchPage = ({ search, setSearch }) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 11155111 ) {
+    if (chainId !== 31337 ) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -220,6 +221,22 @@ const SearchPage = ({ search, setSearch }) => {
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
+      const structData = await marketplaceContract._idToNFT(id);
+
+      const fanNftData = await marketplaceContract._idToNFT2(id);
+
+      const price = ethers.utils.formatEther(structData.price.toString());
+
+      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+
+      listingType = structData.listingType;
+
+      setDiscountPrice(discountOnNFT);
+
+      let highestBid = ethers.utils.formatEther(
+        auctionData.highestBid.toString()
+      );
+
       axios
         .get(metaData)
         .then((response) => {
@@ -231,8 +248,8 @@ const SearchPage = ({ search, setSearch }) => {
 
           data = JSON.parse(data);
           // Extracting values using dot notation
-          const price = data.price;
-          listingType = data.listingType;
+          // const price = data.price;
+          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -309,6 +326,7 @@ const SearchPage = ({ search, setSearch }) => {
       method: "eth_requestAccounts",
     });
     setUserAddress(accounts[0]);
+    localStorage.setItem("walletAddress", accounts[0]);
     // console.log("getAddress", accounts[0]);
     postWalletAddress(accounts[0]);
     
@@ -349,7 +367,9 @@ const SearchPage = ({ search, setSearch }) => {
         disableInjectedProvider: false,
       });
     }
-  }, [walletConnected, searchedNfts, nftListFP]);
+  }, [walletConnected]);
+
+  useEffect(() => {}, [searchedNfts, nftListFP]);
 
   useEffect(() => {
     connectWallet();

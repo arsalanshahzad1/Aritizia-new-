@@ -19,6 +19,8 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
 import duck from "../../../public/assets/images/duck.png";
+import { useNavigate } from "react-router-dom";
+
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Single = ({ search, setSearch }) => {
@@ -38,6 +40,7 @@ const Single = ({ search, setSearch }) => {
   var endTime = useRef(0);
   const [inputValue, setInputValue] = useState("");
   const [showWarning, setShowWarning] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -81,12 +84,18 @@ const Single = ({ search, setSearch }) => {
   const title = useRef("");
   const description = useRef("");
 
+  let mintcounter = 0;
+  let listcounter = 0;
+
   // Helper function to fetch a Provider/Signer instance from Metamask
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("In provider");
     const provider = await web3ModalRef.current.connect();
+    console.log("In provider2");
     const web3Provider = new providers.Web3Provider(provider);
+    console.log("In provider3");
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 11155111 ) {
+    if (chainId !== 31337 ) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -118,7 +127,7 @@ const Single = ({ search, setSearch }) => {
         // create nft using image IPFS and other data
         console.log("Calling the createNFT function");
         createNFT();
-      } catch (error) { 
+      } catch (error) {
         setLoading(false);
         console.log("ipfs image upload error: ", error);
       }
@@ -188,6 +197,169 @@ const Single = ({ search, setSearch }) => {
     }
   };
 
+  const [listedEvents, setListed] = useState([]);
+  const [isMinted, setIsMinted] = useState(false);
+
+  const mintNFT = async (result, nftContract) => {
+    mintcounter += 1;
+    console.log("mintcounter", mintcounter);
+    try {
+      console.log("result", result);
+      await (await nftContract.mint([result])).wait();
+      console.log("NFT minting is complete!");
+
+      let response = await nftContract.on(
+        "NFTMinted",
+        singleMinting ? handleNFTMintedEvent2 : null
+      );
+
+      console.log("Response of mint event", response);
+    } catch (error) {
+      console.error("Error while minting NFT:", error);
+      throw error; // Rethrow the error to be caught in the higher level function if necessary
+    }
+  };
+  const [getMintedTokens, setMintedTokensList] = useState();
+  let marketplaceContractGlobal;
+  let nftContractGlobal;
+  // let listedToken;
+  // let getMintedTokens = useRef(0);
+
+  const handleNFTMintedEvent2 = async (mintedTokens) => {
+    let tokenId = +mintedTokens[0].toString();
+    // console.log("mintedTokens returned", tokenId);
+    // console.log("mintedTokens", typeof tokenId);
+    // listedToken = tokenId;
+    setMintedTokensList(tokenId);
+    // getMintedTokens = tokenId;
+    // setIsMinted(true);
+    // singleMinting? console.log("listedData", listedData): null;
+
+    singleMinting
+      ? listNFT(marketplaceContractGlobal, nftContractGlobal, tokenId)
+      : null;
+  };
+
+  // async function fetchMintedTokens() {
+  //   const signer = await getProviderOrSigner(true);
+  //   console.log("In mintThenList");
+
+  //   const nftContract = new Contract(
+  //     NFT_CONTRACT_ADDRESS.address,
+  //     NFT_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+  //   let mintedTokens = await nftContract.getMintedTokensList();
+  //   let tokens = [];
+  //   for (let i = 0; i < mintedTokens.length; i++) {
+  //     let id;
+  //     id = +mintedTokens[i].toString();
+  //     console.log("id", id);
+  //     tokens.push(id);
+  //   }
+  //   setMintedTokensList(tokens);
+  // }
+
+  async function listNFT(marketplaceContract, nftContract, listedToken) {
+    console.log("in ListNFT");
+    listcounter += 1;
+    console.log("listcounter", listcounter);
+    try {
+      console.log("nftContract", nftContract);
+
+      let mintedTokens = listedToken;
+
+      console.log("listedToken", listedToken);
+      console.log("getMintedTokens", mintedTokens);
+
+      console.log("In mintThenList");
+
+      await (
+        await marketplaceContract.listNft(
+          nftContract.address,
+          [mintedTokens],
+          [ethers.utils.parseEther(item.price)], // list
+          royalty,
+          listingType,
+          [startTime], // list
+          [endTime], // list
+          0, // collection number
+          crypto,
+          {
+            gasLimit: ethers.BigNumber.from("500000"),
+          }
+        )
+      ).wait();
+      console.log("NFT listing is complete!");
+    } catch (error) {
+      console.error("Error while listing NFT:", error);
+      throw error; // Rethrow the error to be caught in the higher level function if necessary
+    }
+    console.log("singleMinting", singleMinting);
+
+    let response = await marketplaceContract.on(
+      "NFTListed",
+      singleMinting ? handleNFTListedEvent2 : null
+    );
+
+    console.log("Response of list event", response);
+
+    //  else {
+    //   setTimeout(listNFT(marketplaceContract, nftContract), 5000);
+    // }
+  }
+
+  // async function listNFT(marketplaceContract, nftContract) {
+  //   try {
+  //     const mintedTokens = await new Promise((resolve, reject) => {
+  //       nftContract
+  //         .getMintedTokensList()
+  //         .then((tokens) => {
+  //           resolve(tokens);
+  //         })
+  //         .catch((error) => {
+  //           reject(error);
+  //         });
+  //     });
+
+  //     console.log("In mintThenList");
+  //     const mintedTokensNumber = Number(mintedTokens);
+
+  //     console.log("mintedTokens", mintedTokensNumber);
+  //     console.log("mintedTokens", typeof mintedTokensNumber);
+
+  //     console.log("Payment method", crypto);
+
+  //     await (
+  //       await marketplaceContract.listNft(
+  //         nftContract.address,
+  //         [mintedTokensNumber],
+  //         [ethers.utils.parseEther(item.price)], // list
+  //         royalty,
+  //         listingType,
+  //         [startTime], // list
+  //         [endTime], // list
+  //         0, // collection number
+  //         crypto,
+  //         {
+  //           gasLimit: ethers.BigNumber.from("500000"),
+  //         }
+  //       )
+  //     ).wait();
+  //     console.log("NFT listing is complete!");
+  //   } catch (error) {
+  //     console.error("Error while listing NFT:", error);
+  //     throw error; // Rethrow the error to be caught in the higher level function if necessary
+  //   }
+
+  //   let response = await marketplaceContract.on(
+  //     "NFTListed",
+  //     handleNFTListedEvent
+  //   );
+
+  //   console.log("Response of list event", response);
+  // }
+
   // mint the NFT then list
   const mintThenList = async (result) => {
     console.log("In mintThenList");
@@ -203,15 +375,16 @@ const Single = ({ search, setSearch }) => {
 
     console.log("In result", result);
 
-    await nftContract.mint([result]);
-    console.log("In mintThenList");
+    // await (await nftContract.mint([result])).wait();
 
-    let mintedTokens = await nftContract.getMintedTokensList();
+    // console.log("In mintThenList");
 
-    console.log("In mintThenList");
-    mintedTokens = Number(mintedTokens);
+    // let mintedTokens = await nftContract.getMintedTokensList();
 
-    console.log("mintedTokens", mintedTokens);
+    // console.log("In mintThenList");
+    // mintedTokens = Number(mintedTokens);
+
+    // console.log("mintedTokens", mintedTokens);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -219,21 +392,75 @@ const Single = ({ search, setSearch }) => {
       signer
     );
 
-    // List hn y tou list me kro
-    await (
-      await marketplaceContract.listNft(
-        nftContract.address,
-        [mintedTokens],
-        [ethers.utils.parseEther(item.price)], // list
-        royalty,
-        listingType,
-        [startTime], // list
-        [endTime], // list
-        0, // collection number
-        crypto
-      )
-    ).wait();
+    // console.log("PAyment method", crypto);
+
+    // // List hn y tou list me kro
+    // await (
+    //   await marketplaceContract.listNft(
+    //     nftContract.address,
+    //     [mintedTokens],
+    //     [ethers.utils.parseEther(item.price)], // list
+    //     royalty,
+    //     listingType,
+    //     [startTime], // list
+    //     [endTime], // list
+    //     0, // collection number
+    //     crypto
+    //   )
+    // ).wait();
+
+    marketplaceContractGlobal = marketplaceContract;
+    nftContractGlobal = nftContract;
+    await mintNFT(result, nftContract);
+    // try {
+    //   // Use Promise.race to wait for either minting or listing to complete
+    //   await Promise.race([
+    //     await mintNFT(result, nftContract),
+    //     // await listNFT(marketplaceContract, nftContract),
+    //   ]);
+
+    //   console.log("NFT minting and listing completed!");
+    // } catch (error) {
+    //   console.error("Error while minting and listing NFT:", error);
+    // }
+
+    // let response = await marketplaceContract.on(
+    //   "NFTListed",
+    //   handleNFTListedEvent
+    // );
+
+    // console.log("Response of bid even", response);
   };
+
+  const handleNFTListedEvent2 = async (
+    nftContract,
+    tokenId,
+    seller,
+    owner,
+    price
+  ) => {
+    if (singleMinting) {
+      let listedData = {
+        nftContract: nftContract.toString(),
+        tokenId: tokenId.toString(),
+        seller: seller.toString(),
+        owner: owner.toString(),
+        price: ethers.utils.formatEther(price.toString()),
+      };
+      console.log("singleMinting", singleMinting);
+
+        console.log("listedData", listedData);
+        singleMinting = false;
+        console.log("singleMinting", singleMinting);
+        alert("Nft listed");
+        navigate("/profile");
+    }
+  };
+
+  // useEffect(() => {
+  //   getProviderOrSigner();
+  //   fetchMintedTokens();
+  // }, []);
 
   const [file, setFile] = useState(null);
   const [crypto, setCrypto] = useState({ value: 0, label: "ETH" });
@@ -272,10 +499,11 @@ const Single = ({ search, setSearch }) => {
   };
 
   useEffect(() => {}, [price, title, description]);
-
+  let singleMinting = false;
   function createItem(e) {
     e.preventDefault();
     price = inputValue;
+    singleMinting = true;
 
     console.log("crypto in check", crypto);
 
@@ -709,7 +937,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setStartingDate(e.target.value)
                                     }
-                                    min={new Date().toISOString().split('T')[0]}
+                                    min={new Date().toISOString().split("T")[0]}
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -757,25 +985,6 @@ const Single = ({ search, setSearch }) => {
                             </div>
                           </div>
                         </div>
-                        {/* <div className="line-six">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Royalties</h2>
-                              <Slider
-                                min={0}
-                                defaultValue={0}
-                                marks={{
-                                  0: "0%",
-                                  33: "5%",
-                                  66: "10%",
-                                  100: "15%",
-                                }}
-                                step={null}
-                                onChange={handleSliderChange}
-                              />
-                            </div>
-                          </div>
-                        </div> */}
                         <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
@@ -790,12 +999,8 @@ const Single = ({ search, setSearch }) => {
                               />
                             </div>
                             <div className="col-lg-3 ">
-                              <div className="royality-value">
-
-                                {royalty} %
-                              </div>
+                              <div className="royality-value">{royalty} %</div>
                             </div>
-                            
                           </div>
                         </div>
                         <div className="line-seven">
