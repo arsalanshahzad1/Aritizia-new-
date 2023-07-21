@@ -8,6 +8,7 @@ import duck from '../../../public/assets/images/duck.png'
 import chack from '../../../public/assets/images/chack.png'
 import NftDrawer from "../../components/shared/NftDrawer";
 import nft from '../../../public/assets/images/nft-big.png'
+import ProfileDrawer from "../shared/ProfileDrawer";
 const MyNftCard = ({
     onOpen,
     path,
@@ -24,20 +25,26 @@ const MyNftCard = ({
     const [showLinks, setShowLinks] = useState(false);
     // const [walletConnected, setWalletConnected] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+    const [isVisible2, setIsVisible2] = useState(false);
 
     const onClose = useCallback(() => {
         console.log("calling close")
         setIsVisible(false);
     }, []);
+    const onClose2 = useCallback(() => {
+        console.log("calling close")
+        setIsVisible2(false);
+    }, []);
 
 
     console.log("USER in buy now", userAddress);
 
-    const openDrawer = () => {
+    const openDrawer2 = () => {
         if (showLinks === true) {
-            return onOpen(false);
+            onOpen(false);
+            setIsVisible2(true);
         } else {
-            setIsVisible(true);
+            setIsVisible2(true);
         }
     };
 
@@ -66,28 +73,6 @@ const MyNftCard = ({
 
     const [timedAuction, setTimedAuction] = useState(false)
 
-    const [nftImg, setNftImg] = useState('')
-    useEffect(() => {
-        if (typeof image === 'string' && image.startsWith('https://ipfs.io/ipfs/')) {
-            // Fetch the blob URL and convert it to a File object
-            fetch(image)
-                .then((response) => response.blob())
-                .then((blob) => {
-                    const convertedFile = new File([blob], 'convertedImage.jpg', {
-                        type: 'image/jpeg',
-                        lastModified: Date.now(),
-                    });
-                    setNftImg(convertedFile);
-                })
-                .catch((error) => {
-                    console.error('Error fetching or converting the blob:', error);
-                    setNftImg(null);
-                });
-        } else {
-            setNftImg(image);
-        }
-    }, [image]);
-
     return (
         <>
             <div className="col-lg-3 col-md-4">
@@ -95,7 +80,7 @@ const MyNftCard = ({
                     <div onMouseEnter={() => { setShowLinks(true) }} onMouseLeave={() => { setShowLinks(false) }} className="simple-card-main" style={{ position: "relative" }}>
                         <div className="top">
                             <div className="image-holder">
-                                <img src={nftImg} alt="" />
+                                <img src={image} alt="" />
                             </div>
 
                             {showLinks &&
@@ -112,9 +97,10 @@ const MyNftCard = ({
                                 </div>
                             }
                         </div>
-                        <div onClick={openDrawer} className="bottom">
+                        <div onClick={openDrawer2} className="bottom">
                             <div className="nft-icon">
                                 <img src={duck} alt="" />
+                    
                                 <span className="checked-icon">
                                     <img src={chack} alt="" />
                                 </span>
@@ -146,7 +132,19 @@ const MyNftCard = ({
                 isVisible={isVisible}
                 onClose={onClose}
                 timedAuction={timedAuction}
-
+            />
+            <ProfileDrawer
+                isVisible={isVisible2}
+                onClose={onClose2}
+                id={id}
+                title={title}
+                image={image}
+                price={price}
+                paymentMethod={crypto}
+                royalty={royalty}
+                description={description}
+                collection={collection}
+                userAddress={userAddress}
             />
         </>
     );

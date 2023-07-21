@@ -34,6 +34,7 @@ import {
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link } from "react-router-dom";
+
 const Monthly_data = [
   {
     data: "Jan",
@@ -306,7 +307,7 @@ function ProfileDrawer({
   collection,
   userAddress,
   showBuyNow,
-  ShowAcceptbtn
+  ShowAcceptbtn,
 }) {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -314,6 +315,7 @@ function ProfileDrawer({
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
+  const [platformFee, setPlatformFee] = useState("");
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
@@ -359,15 +361,25 @@ function ProfileDrawer({
 
     if (needSigner) {
       const signer = web3Provider.getSigner();
-      // console.log("getSigner");
 
       return signer;
     }
-    // console.log("getProvider");
     return web3Provider;
   };
 
-  // return the price of NFT in usd
+  const handleNFTSoldEvent = async(nftContract, tokenId, seller, owner, price) =>{
+  
+    let soldData = {
+      nftContract: nftContract.toString(),
+      tokenId: tokenId.toString(),
+      seller: seller.toString(),
+      owner: owner.toString(),
+      price: price.toString(),
+    }
+
+    console.log("soldData", soldData);
+  }
+
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
 
@@ -379,20 +391,18 @@ function ProfileDrawer({
 
     let priceETH = price;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    // console.log("Dollar price", dollarPriceOfETH.toString());
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    // console.log("priceInETH", priceInETH);
 
     let oneETHInUSD = 1 / priceInETH;
-    // console.log("oneETHInUSD", oneETHInUSD);
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
-    // console.log("Amount in USD", priceInUSD);
-    // console.log("Amount in USD", typeof priceInUSD);
-    // USDAmount = priceInUSD.toString();
-    priceInUSD = priceInUSD.toFixed(2);
+    priceInUSD = Math.ceil(priceInUSD);
     setAmountUSD(priceInUSD.toString());
+    let fee = Math.ceil((priceInUSD * 3) / 100);
+    setPlatformFee(fee);
   };
+
+  
 
   const buyWithETH = async () => {
     const signer = await getProviderOrSigner(true);
@@ -402,22 +412,40 @@ function ProfileDrawer({
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    let aamount = amount;
-    console.log("aamount", aamount);
+
+    console.log("price", price);
+    let fee = Number((price * 3) / 100);
+    console.log("fee", fee);
+
+    let amount = Number(price) + fee;
     console.log("amount", amount);
-    let amountInWei = aamount * 10 ** 18;
+
+    let value = amount.toString();
+    console.log("value", value);
+    console.log("id", id);
+    console.log("id typeof", typeof id);
+
+    console.log("paymentMethod", paymentMethod);
+    console.log("paymentMethod typeof", typeof paymentMethod);
+
+    console.log(" NFT_CONTRACT_ADDRESS.address,", NFT_CONTRACT_ADDRESS.address);
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
+        // "0x38628490c3043e5d0bbb26d5a0a62fc77342e9d5",
         paymentMethod,
         id,
         {
-          value: ethers.utils.parseEther("100"),
+          value: ethers.utils.parseEther("1"),
           gasLimit: ethers.BigNumber.from("500000"),
         }
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+
+    console.log("Response of bid even", response);
   };
 
   const buyWithUSDT = async () => {
@@ -432,12 +460,22 @@ function ProfileDrawer({
       signer
     );
 
+    let fee = Number(platformFee);
+
     console.log(
       "TETHER_CONTRACT_ADDRESS.address",
       TETHER_CONTRACT_ADDRESS.address
     );
-    console.log("TETHER_CONTRACT_ADDRESS.abi", TETHER_CONTRACT_ADDRESS.abi);
+
+    console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
+
     console.log("signer", signer);
+
+    console.log(
+      "TETHER_CONTRACT_ADDRESS.address",
+      TETHER_CONTRACT_ADDRESS.address
+    );
+    console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
 
     const USDTContract = new Contract(
       TETHER_CONTRACT_ADDRESS.address,
@@ -445,41 +483,48 @@ function ProfileDrawer({
       signer
     );
     console.log("USER", userAddress);
-    let bal = await USDTContract.balanceOf(
-      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-    );
-    console.log("Balance Of", bal.toString());
-    // get the price of dollar from smartcontract and convert this value
 
-    console.log("Amount", amountUSD);
+    console.log("amountUSD", amountUSD);
     console.log("price", price);
 
-    let amountInWei = 22 * 10 ** 6;
+    let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
+    console.log("amount", amount);
+
+    let amountInWei = 25 * 10 ** 6;
     console.log("amountInWei", amountInWei);
+    amountInWei = amountInWei.toString();
+    console.log("amountInWei", typeof amountInWei);
 
     // if (paymentMethod == 1) {
-    const appprove = await USDTContract.approve(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      amountInWei
-    );
+    // const appprove = await USDTContract.approve(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   amountInWei
+    // );
 
-    appprove.wait();
+    // appprove.wait();
     // }
 
     // console.log("paymentmethod", paymentMethod);
     console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
+    console.log("amountUSD", amountUSD);
+    console.log("amountUSD typeof", typeof amountUSD);
 
     // console.log("Check", check);
+
     await (
       await marketplaceContract.buyWithUSDT(
-        // NFT_CONTRACT_ADDRESS.address,
-        "0x245e77E56b1514D77910c9303e4b44dDb44B788c",
+        NFT_CONTRACT_ADDRESS.address,
         paymentMethod,
         id,
         amountInWei,
         { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+
+    console.log("Response of bid even", response);
+    
   };
 
   const statusOptions = [
@@ -487,9 +532,7 @@ function ProfileDrawer({
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
-  const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false)
 
-  const [buyNowPrice, setBuyNowPrice] = useState("")
   return (
     <>
       <Drawer
@@ -571,9 +614,7 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-
                     Owned by <span>Enotic11daday</span>
-
                   </p>
                 </div>
                 <div className="three-line">
@@ -614,7 +655,7 @@ function ProfileDrawer({
                         style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
-                    <div className="col-lg-8 col-md-8 col-12">
+                    {/* <div className="col-lg-8 col-md-8 col-12">
                       <button
                         className={`${propertyTabs === 0 ? "active" : ""}`}
                         onClick={() => setPropertyTabs(0)}
@@ -633,7 +674,7 @@ function ProfileDrawer({
                       >
                         History
                       </button>
-                    </div>
+                    </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -641,29 +682,33 @@ function ProfileDrawer({
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   {propertyTabs === 0 && <Details />}
                   {propertyTabs === 1 && <Bids />}
                   {propertyTabs === 2 && <History />}
-                </div>
+                </div> */}
                 <div className="six-line">
                   <h3>Current Price</h3>
                   <div className="row">
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH<span>${amountUSD}</span>
+                          {price} ETH
+                          <span>
+                            ${amountUSD} + Platform Fee ${platformFee}
+                          </span>
                           {/* {console.log("USDAmount", amountUSD)} */}
                           {/* {price} ETH<span>$234</span>   */}
                         </p>
                       </div>
                     </div>
-                    {!showBuyNow &&
+                    {!showBuyNow && (
                       <div className="col-lg-6 col-md-8 col-8">
-
-                        <div className="stock-div">13 <span>in stock</span> </div>
+                        <div className="stock-div">
+                          13 <span>in stock</span>{" "}
+                        </div>
                       </div>
-                    }
+                    )}
                     <div className="col-lg-6 col-md-4 col-4">
                       <div className="right">
                         <p>{/* 13<span>in stock</span> */}</p>
@@ -678,18 +723,20 @@ function ProfileDrawer({
                     style={{ marginTop: "20px", marginBottom: "20px" }}
                   />
                 </div>
-                {ShowAcceptbtn &&
+                {ShowAcceptbtn && (
                   <div className="drawer-inner-accept-btn">
                     <div className="nft-card-btn-holder">
                       <button>Accept</button>
                       <button>Decline</button>
                     </div>
                   </div>
-                }
-                {!showBuyNow &&
+                )}
+                {!showBuyNow && (
                   <>
-
-                    <div className="seven-line" onClick={() => setChack(!chack)}>
+                    <div
+                      className="seven-line"
+                      onClick={() => setChack(!chack)}
+                    >
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}
@@ -705,7 +752,7 @@ function ProfileDrawer({
                       </button>
                     </div>
                   </>
-                }
+                )}
               </div>
             </div>
           </div>
@@ -721,45 +768,16 @@ function ProfileDrawer({
         keyboard={false}
       >
         <div className="modal-body" style={{ position: "relative" }}>
-          <span onClick={() => {setSucess(false),setShowBuyOptionsStep2(false)}}>
+          <span onClick={() => setSucess(false)}>
             <AiOutlineClose />
           </span>
-          {
-            !showBuyOptionsStep2 ?
-              <>
-                <div className="mobal-button-1">
-                  <button onClick={() => { buyWithETH, setShowBuyOptionsStep2(true) }}>Buy with ETH</button>
-                  <button onClick={() => { buyWithUSDT, setShowBuyOptionsStep2(true) }}>Buy with USDT</button>
-                </div>
-                <div className="mobal-button-2">
-                  <button onClick={() => { setShowBuyOptionsStep2(true) }}>Buy with FIAT</button>
-                </div>
-              </>
-              :
-              <>
-                <div className="showBuyNow-step2">
-                  <input type="text" placeholder="Enter Price" value={buyNowPrice} onChange={(e) => setBuyNowPrice(e.target.value)} />
-                  <div className="btn-holder-for-showBuyNow">
-                    <div className="popUp-btn-group">
-                      <div
-
-                        className="button-styling-outline btnCC"
-                      >
-                        <div onClick={() => { setShowBuyOptionsStep2(false), setBuyNowPrice("") }} className="btnCCin">Cancel</div>
-                      </div>
-                      <div
-                        className="button-styling btnCC"
-                      >
-                        Send
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-
-              </>
-          }
-
+          <div className="mobal-button-1">
+            <button onClick={buyWithETH}>Buy with ETH</button>
+            <button onClick={buyWithUSDT}>Buy with USDT</button>
+          </div>
+          <div className="mobal-button-2">
+            <button>Buy with FIAT</button>
+          </div>
         </div>
       </Modal>
     </>

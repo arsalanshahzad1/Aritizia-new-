@@ -700,7 +700,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 {!timedAuction ? (
                                                     <div className="line-two">
                                                         <div className="row">
-                                                            <div className="col-lg-9 col-md-9 col-7">
+                                                            <div className="col-lg-12 col-md-12 col-7">
                                                                 <h2>Price</h2>
                                                                 <input
                                                                     type="text"
@@ -716,7 +716,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                     </p>
                                                                 )}
                                                             </div>
-                                                            <div className="col-lg-3 col-md-3 col-5">
+                                                            {/* <div className="col-lg-3 col-md-3 col-5">
                                                                 <h2>Crypto</h2>
                                                                 <Dropdown
                                                                     options={cryptoOptions}
@@ -725,14 +725,14 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                     }}
                                                                     value={defaultCrypto.value}
                                                                 />
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
                                                 ) : (
                                                     <>
                                                         <div className="line-two">
                                                             <div className="row">
-                                                                <div className="col-lg-9">
+                                                                <div className="col-lg-12">
                                                                     <h2>Minimum bid</h2>
                                                                     <input
                                                                         type="text"
@@ -748,7 +748,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                         </p>
                                                                     )}
                                                                 </div>
-                                                                <div className="col-lg-3 col-md-3 col-5">
+                                                                {/* <div className="col-lg-3 col-md-3 col-5">
                                                                     <h2>Crypto</h2>
                                                                     <Dropdown
                                                                         options={cryptoOptions}
@@ -757,7 +757,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                         }}
                                                                         value={defaultCrypto.value}
                                                                     />
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                         </div>
                                                         <div className="line-two">
@@ -773,6 +773,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                         onChange={(e) =>
                                                                             setStartingDate(e.target.value)
                                                                         }
+                                                                        min={new Date().toISOString().split("T")[0]}
                                                                     />
                                                                 </div>
                                                                 <div className="col-lg-6 col-md-6 col-6">
@@ -784,6 +785,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                         style={{ padding: "6px 10px 6px 15px" }}
                                                                         value={endingDate}
                                                                         onChange={(e) => setEndingDate(e.target.value)}
+                                                                        min={startingDate}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -793,95 +795,26 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
 
                                                 <div className="line-three">
                                                     <div className="row">
-                                                        <div className="col-lg-12">
-                                                            <h2>Choose collection</h2>
-                                                            <p>
-                                                                This is the collection where your item will appear.
-                                                            </p>
-                                                            <Dropdown
-                                                                options={collectionOptions}
-                                                                onChange={(e) => {
-                                                                    setCollection(e.value);
-                                                                }}
-                                                                value={defaultOption.value}
-                                                            />
-                                                            <div
-                                                                className="create-collection-btn"
-                                                                onClick={() => setshowCreateCollection(true)}
-                                                            >
-                                                                <svg
-                                                                    enable-background="new 0 0 50 50"
-                                                                    height="25px"
-                                                                    id="Layer_1"
-                                                                    version="1.1"
-                                                                    viewBox="0 0 50 50"
-                                                                    width="25px"
-                                                                    xml: space="preserve"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    xmlns: xlink="http://www.w3.org/1999/xlink"
-                                                                >
-                                                                    <rect fill="none" height="50" width="50" />
-                                                                    <line
-                                                                        fill="#2638CC"
-                                                                        stroke="#2638CC"
-                                                                        stroke-miterlimit="10"
-                                                                        stroke-width="4"
-                                                                        x1="9"
-                                                                        x2="41"
-                                                                        y1="25"
-                                                                        y2="25"
-                                                                    />
-                                                                    <line
-                                                                        fill="#2638CC"
-                                                                        stroke="#2638CC"
-                                                                        stroke-miterlimit="10"
-                                                                        stroke-width="4"
-                                                                        x1="25"
-                                                                        x2="25"
-                                                                        y1="9"
-                                                                        y2="41"
-                                                                    />
-                                                                </svg>
-                                                                Create Collection
-                                                            </div>
-                                                            {showCreateCollection && (
-                                                                <div className="Create-collection-popup">
-                                                                    <div className="Create-collection-popup-inner">
-                                                                        <p>Collection Name</p>
-                                                                        <input
-                                                                            value={CreateCollection}
-                                                                            onChange={(e) =>
-                                                                                setCreateCollection(e.target.value)
-                                                                            }
-                                                                            type="text"
-                                                                            placeholder="Enter collection name"
-                                                                        />
-                                                                        <div className="popUp-btn-group">
-                                                                            
-                                                                            <div
-                                                                             onClick={() => AddCollection()}
-                                                                                className="button-styling btnCC"
-                                                                            >
-                                                                                Next
-                                                                            </div>
-                                                                            <div
+                                                        <div className="col-lg-12 disabled-input-only-view">
+                                                            <h2>Collection Name</h2>
+                                                            <input
+                                                                type="text"
+                                                                value={'Monkey'}
+                                                                disabled
 
-                                                                                className="button-styling-outline btnCC"
-                                                                            >
-                                                                                <div  onClick={hideCreateCollection} className="btnCCin">Cancel</div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            )}
+                                                            // type="number"
+                                                            // placeholder="0.00"
+                                                            // ref={price}
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="line-four">
                                                     <div className="row">
-                                                        <div className="col-lg-9">
+                                                        <div className="col-lg-12 disabled-input-only-view">
                                                             <h2>Title</h2>
                                                             <input
+                                                                disabled
                                                                 type="text"
                                                                 placeholder="e.g. ‘Crypto Funk"
                                                                 // defaultValue={title.current.value}
@@ -893,9 +826,10 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 </div>
                                                 <div className="line-five">
                                                     <div className="row">
-                                                        <div className="col-lg-9">
+                                                        <div className="col-lg-12 disabled-input-only-view">
                                                             <h2>Description</h2>
                                                             <input
+                                                                disabled
                                                                 type="text"
                                                                 placeholder="e.g. ‘This is very limited item’"
                                                                 ref={description}
@@ -905,9 +839,10 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 </div>
                                                 <div className="line-six">
                                                     <div className="row">
-                                                        <div className="col-lg-9">
+                                                        <div className="col-lg-10 disabled-input-only-view">
                                                             <h2>Royalties</h2>
                                                             <Slider
+                                                                disabled
                                                                 min={0}
                                                                 max={15}
                                                                 defaultValue={0}
@@ -916,7 +851,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                                 value={royalty}
                                                             />
                                                         </div>
-                                                        <div className="col-lg-2">
+                                                        <div className="col-lg-2 ">
                                                             <div className="royality-value">
                                                                 {royalty} %
                                                             </div>
@@ -925,9 +860,9 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction }) => {
                                                 </div>
                                                 <div className="line-seven">
                                                     <div className="row">
-                                                        <div className="col-lg-8">
+                                                        <div className="col-lg-12 btn-right">
                                                             <button type="submit" className="button-styling">
-                                                                Done
+                                                                List
                                                             </button>
                                                         </div>
                                                     </div>

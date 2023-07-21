@@ -111,6 +111,7 @@ const Single = ({ search, setSearch }) => {
         const resut = await uploadFileToIPFS(item.file);
         //const result = await client.add(file)
         console.log("!!!!!!!!!!!!!!!!!!", resut);
+        console.log("Result.pinata image", resut.pinataURL);
         // setImage(resut.pinataURL);
         image = resut.pinataURL;
         setLoading(false);
@@ -187,6 +188,8 @@ const Single = ({ search, setSearch }) => {
     }
   };
 
+  const [listedEvents, setListedEvents] = useState([]);
+
   // mint the NFT then list
   const mintThenList = async (result) => {
     console.log("In mintThenList");
@@ -218,12 +221,14 @@ const Single = ({ search, setSearch }) => {
       signer
     );
 
+    console.log("PAyment method", crypto);
+
     // List hn y tou list me kro
     await (
       await marketplaceContract.listNft(
         nftContract.address,
         [mintedTokens],
-        [ethers.utils.parseEther(item.price)], // list  
+        [ethers.utils.parseEther(item.price)], // list
         royalty,
         listingType,
         [startTime], // list
@@ -232,7 +237,33 @@ const Single = ({ search, setSearch }) => {
         crypto
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTListed", handleNFTListedEvent);
+
+    console.log("Response of bid even", response);
   };
+
+  const handleNFTListedEvent = async (
+    nftContract,
+    tokenId,
+    seller,
+    owner,
+    price
+  ) => {
+    let listedData = {
+      nftContract: nftContract.toString(),
+      tokenId: tokenId.toString(),
+      seller: seller.toString(),
+      owner: owner.toString(),
+      price: price.toString(),
+    };
+
+    console.log("listedData", listedData);
+  };
+
+  // useEffect(() => {
+  //   listenForNFTListedEvents();
+  // }, []);
 
   const [file, setFile] = useState(null);
   const [crypto, setCrypto] = useState({ value: 0, label: "ETH" });
@@ -270,7 +301,7 @@ const Single = ({ search, setSearch }) => {
     // ...
   };
 
-  useEffect(() => { }, [price, title, description]);
+  useEffect(() => {}, [price, title, description]);
 
   function createItem(e) {
     e.preventDefault();
@@ -484,9 +515,9 @@ const Single = ({ search, setSearch }) => {
                                   version="1.1"
                                   viewBox="0 0 50 50"
                                   width="25px"
-                                  xml: space="preserve"
+                                  xml:space="preserve"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  xmlns: xlink="http://www.w3.org/1999/xlink"
+                                  xmlns:xlink="http://www.w3.org/1999/xlink"
                                 >
                                   <rect fill="none" height="50" width="50" />
                                   <line
@@ -609,8 +640,9 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(0);
                                 }}
-                                className={` create-single-card ${listingType === 0 ? "active" : ""
-                                  }`}
+                                className={` create-single-card ${
+                                  listingType === 0 ? "active" : ""
+                                }`}
                               >
                                 <AiFillTag />
                                 <h3>Fixed Price</h3>
@@ -621,8 +653,9 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(1);
                                 }}
-                                className={` create-single-card ${listingType === 1 ? "active" : ""
-                                  }`}
+                                className={` create-single-card ${
+                                  listingType === 1 ? "active" : ""
+                                }`}
                               >
                                 <BsFillClockFill />
                                 <h3>Timed Auction</h3>
@@ -639,9 +672,9 @@ const Single = ({ search, setSearch }) => {
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -671,9 +704,9 @@ const Single = ({ search, setSearch }) => {
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
+                                    // type="number"
+                                    // placeholder="0.00"
+                                    // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -706,7 +739,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setStartingDate(e.target.value)
                                     }
-                                    min={new Date().toISOString().split('T')[0]}
+                                    min={new Date().toISOString().split("T")[0]}
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -737,7 +770,7 @@ const Single = ({ search, setSearch }) => {
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                              // onChange={(e) => setTitle(e.target.value)}
+                                // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
@@ -754,25 +787,6 @@ const Single = ({ search, setSearch }) => {
                             </div>
                           </div>
                         </div>
-                        {/* <div className="line-six">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Royalties</h2>
-                              <Slider
-                                min={0}
-                                defaultValue={0}
-                                marks={{
-                                  0: "0%",
-                                  33: "5%",
-                                  66: "10%",
-                                  100: "15%",
-                                }}
-                                step={null}
-                                onChange={handleSliderChange}
-                              />
-                            </div>
-                          </div>
-                        </div> */}
                         <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
@@ -787,12 +801,8 @@ const Single = ({ search, setSearch }) => {
                               />
                             </div>
                             <div className="col-lg-3 ">
-                              <div className="royality-value">
-
-                                {royalty} %
-                              </div>
+                              <div className="royality-value">{royalty} %</div>
                             </div>
-                            
                           </div>
                         </div>
                         <div className="line-seven">

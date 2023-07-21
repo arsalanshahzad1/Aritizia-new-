@@ -759,7 +759,8 @@ img {
 .simple-card-main:hover {
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.438);
 }
-.nft-fix-price{
+
+.nft-fix-price {
   border: 2px solid white;
   padding: 3px 10px !important;
 }
@@ -887,4 +888,29 @@ img {
 .simple-card-main .bottom .text-area .line-1:nth-child(2) {
   margin-top: 5px;
 
+}
+
+.simple-card-main  .add-discount-text {
+  margin: 10px auto 0 auto;
+  text-align: center;
+  background: linear-gradient(92.94deg, #2438CB 2.4%, #B600D1 97.52%);
+  width: max-content;
+  padding: 5px 20px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-family: 'Jost';
+  color: white;
+  /* z-index: 99999; */
+  
+}
+
+
+.input-percent[type="number"]::-webkit-inner-spin-button,
+.input-percent[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-percent[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
 }

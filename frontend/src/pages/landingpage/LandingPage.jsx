@@ -12,6 +12,8 @@ import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import Web3Modal from "web3modal";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
+import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
+import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
@@ -20,10 +22,10 @@ const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
-  const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
+  const [walletConnected, setWalletConnected] = useState(false);
 
   const web3ModalRef = useRef();
 
@@ -37,12 +39,24 @@ const LandingPage = ({ search, setSearch }) => {
     }
   };
 
+  async function getProvider() {
+    // Create a provider using any Ethereum node URL
+    const provider = new ethers.providers.JsonRpcProvider(
+      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
+      "http://localhost:8545"
+    );
+
+    return provider;
+  }
+
   // Helper function to fetch a Provider/Signer instance from Metamask
   const getProviderOrSigner = async (needSigner = false) => {
-    // Connect to Metamask
-    // Since we store `web3Modal` as a reference, we need to access the `current` value to get access to the underlying object
+    console.log("In get provider or signer");
+
+    console.log("In try");
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
+    console.log("In get provider or signer");
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
@@ -50,17 +64,42 @@ const LandingPage = ({ search, setSearch }) => {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
+    console.log("In get provider or signer");
 
     if (needSigner) {
       const signer = web3Provider.getSigner();
       return signer;
     }
+    console.log("In get provider or signer");
+
     return web3Provider;
   };
 
-  const getListedNfts = async () => {
-    const provider = await getProviderOrSigner();
+  const approveUSDT = async () => {
+    const signer = await getProviderOrSigner(true);
 
+    let amountInWei = 100000 * 10 ** 6;
+
+    const USDTContract = new Contract(
+      TETHER_CONTRACT_ADDRESS.address,
+      TETHER_CONTRACT_ABI.abi,
+      signer
+    );
+
+    const appprove = await USDTContract.approve(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      amountInWei
+    );
+
+    appprove.wait();
+  };
+
+  const getListedNfts = async () => {
+    const provider = await getProvider();
+    // const provider = await getProviderOrSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    console.log("Provider", provider);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -73,57 +112,45 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
+    console.log("nftContract", nftContract);
+    // console.log("zayyan", await (await nftContract.mintedTokensList()).wait());
+
     let listingType;
     // console.log("Active Method", listingType);
     // console.log("time", Date.now());
+    // let dollarPriceOfETH = 123123;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    // console.log("Dollar price", dollarPriceOfETH.toString());
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    // console.log("priceInETH", priceInETH);
 
     let oneETHInUSD = 1 / priceInETH;
-    // console.log("oneETHInUSD", oneETHInUSD);
     let priceInUSD = 1.3;
-    // console.log("1.3 ETH in USD", oneETHInUSD * priceInUSD);
+
+    let demo = await marketplaceContract.owner();
+    console.log("demo", demo);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     console.log("mintedTokens", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
 
-    console.log("PO");
-    const metaDataa = await nftContract.tokenURI(1);
-    console.log("metadataa", metaDataa);
-    // let ametaData0 = await nftContract.tokenURI(0);
-    // let ametaData1 = await nftContract.tokenURI(1);
-    // console.log("ametaData0", ametaData0);
-    // console.log("ametaData1", ametaData1);
-
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
 
-      // consoole.log("minted tokens no of"m)
-
       const metaData = await nftContract.tokenURI(id);
-      console.log("metadata", metaData);
-      console.log("id", id);
+
+      console.log("metaData", metaData);
 
       let auctionData = await marketplaceContract._idToAuction(id);
-
-      console.log("auctionData", auctionData);
-      console.log("CHECK1");
 
       axios
         .get(metaData)
         .then((response) => {
           const meta = response.data;
-          // console.log("DATA2", meta);
           let data = JSON.stringify(meta);
 
           data = data.slice(2, -5);
           data = data.replace(/\\/g, "");
-          // console.log("DATACLEANED", data);
           data = JSON.parse(data);
 
           console.log("Dataa", data);
@@ -137,7 +164,6 @@ const LandingPage = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
           console.log("listingType", listingType);
-          console.log("CHECK2");
 
           if (listingType === 0) {
             const nftData = {
@@ -150,34 +176,33 @@ const LandingPage = ({ search, setSearch }) => {
               description: description,
               collection: collection,
             };
-            console.log("CHECK3");
+            // console.log("CHECK3");
 
-            console.log(nftData);
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
-            console.log("myNFTs in function", myNFTs);
+            // console.log("myNFTs in function", myNFTs);
           } else if (listingType === 1) {
-            console.log("IN ELSE");
+            // console.log("IN ELSE");
             const nftData = {
               id: id, //
               title: title,
               image: image,
               price: price,
-              crypto: crypto,
-              paymentMethod: paymentMethod,
+              paymentMethod: crypto,
               basePrice: auctionData.basePrice.toString(),
+              startTime: auctionData.startTime.toString(),
               endTime: auctionData.endTime.toString(),
               highestBid: auctionData.highestBid.toString(),
               highestBidder: auctionData.highestBidder.toString(),
-              isLive: auctionData.isLive.toString(),
+              // isLive: auctionData.isLive.toString(),
               seller: auctionData.seller.toString(),
-              startTime: auctionData.startTime.toString(),
             };
 
-            console.log("CHECK5 ");
+            console.log("nftData ", nftData);
+            console.log("nftListFP ", nftListFP);
 
             myAuctions.push(nftData);
-            console.log("auction in function", myAuctions);
+            // console.log("auction in function", myAuctions);
             setNftListAuction(myAuctions);
           }
         })
@@ -196,6 +221,30 @@ const LandingPage = ({ search, setSearch }) => {
     // console.log("getAddress", accounts[0]);
   };
 
+  // const swapUSDTForETH = async () => {
+  //   const signer = await getProviderOrSigner(true);
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+
+  //   await marketplaceContract.swapUSDTForETH(20);
+  // };
+
+  // const swapETHForUSDT = async () => {
+  //   const signer = await getProviderOrSigner(true);
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+
+  //   await marketplaceContract.swapETHForUSDT(20);
+  // };
+
   useEffect(() => {
     if (!walletConnected) {
       web3ModalRef.current = new Web3Modal({
@@ -208,6 +257,7 @@ const LandingPage = ({ search, setSearch }) => {
 
   useEffect(() => {
     connectWallet();
+    getProviderOrSigner();
     getListedNfts();
     getAddress();
   }, [userAddress]);
@@ -294,6 +344,9 @@ const LandingPage = ({ search, setSearch }) => {
                     <div className="right">View more</div>
                   </div>
                 </div>
+                {/* <div>
+                  <button onClick={approveUSDT}>Approve</button>
+                </div> */}
                 {nftListFP.map((item) => (
                   <BuyNow
                     // onOpen={onOpen}
@@ -348,12 +401,18 @@ const LandingPage = ({ search, setSearch }) => {
                   highestBid={item?.highestBid}
                   isLive={item?.isLive}
                   endTime={item?.endTime}
-                  userAddress
+                  startTime={item?.startTime}
+                  description={item?.description}
+                  userAddress={userAddress}
                 />
               ))}
             </div>
           </div>
         </section>
+        <div>
+          {/* <button onClick={swapUSDTForETH}>swapUSDTForETH</button>
+          <button onClick={swapETHForUSDT}>swapETHForUSDT</button> */}
+        </div>
         <section className="home-six-sec"></section>
         <Search search={search} setSearch={setSearch} />
         <Footer />

@@ -5,6 +5,11 @@ import { FaSearch } from "react-icons/fa";
 
 const Search = ({ search, setSearch }) => {
 
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchText(event.target.value);
+  };
 
   return (
     <>
@@ -20,11 +25,11 @@ const Search = ({ search, setSearch }) => {
                     id="9953"
                     className="search-field"
                     placeholder="Search"
+                    onChange={handleSearchChange}
                   />
                   <button type="submit" className="search-submit">
                     <Link
-                      to={"/search"}
-                      //   to={`/search/${encodeURIComponent("asdasd")}`}
+                      to={`/search?name=${searchText}`}
                       onClick={() => setSearch(false)}
                       style={{ color: "#fff" }}
                     >
