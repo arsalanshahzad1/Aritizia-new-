@@ -4478,6 +4478,363 @@ footer h1 {
   outline: none;
   padding: 6px 0px 6px 15px;
 }
-.btn-holder-for-showBuyNow{
-  margin:10px auto 0px auto;
+
+.btn-holder-for-showBuyNow {
+  margin: 10px auto 0px auto;
+}
+
+.discount-popup {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.233);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+}
+
+.discount-popup-inner {
+  border-radius: 10px;
+  padding: 20px 30px;
+  background-color: white;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.39);
+  width: 300px;
+  text-align: center;
+}
+
+.discount-popup-inner h3 {
+  font-family: 'Jost';
+  font-weight: 600;
+  font-size: 26px;
+  margin: 15px auto 30px auto;
+}
+
+.discount-popup-inner .line-2 {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+  align-items: center;
+}
+
+.discount-text {
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #000000;
+  width: 40%;
+  text-align: left;
+}
+
+.total-value-div {
+  background-color: #2438CB;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: white;
+  width: 40%;
+}
+
+.percentage-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #EBEBEB;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #AFAFAF;
+  width: 40%;
+}
+
+.value-div {
+  display: flex;
+
+  background-color: transparent;
+  padding: 5px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #000000;
+  width: 40%;
+}
+
+.input-percent {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-weight: 500;
+  font-family: 'Jost';
+  font-size: 18px;
+  color: #000000;
+}
+
+
+
+.Add-Fan-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(180deg, #2538CB 0%, #B501D1 100%);
+  border-radius: 50px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+.BackScreen-dark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.459);
+}
+
+.choose-add-fan-method {
+  border-radius: 20px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.404);
+  padding: 20px 40px;
+  background-color: white;
+  position: relative;
+  font-family: 'Jost';
+}
+
+.choose-add-fan-method .close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: max-content;
+  cursor: pointer;
+}
+
+.choose-add-fan-method .main-holder {
+  text-align: center;
+}
+
+.choose-add-fan-method .method-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 35px 0 25px 0;
+}
+
+.choose-add-fan-method .method-holder div {
+  color: #A5A5A5;
+  font-size: 18px;
+  font-weight: 500;
+  border: #A5A5A5 2px solid;
+  border-radius: 10px;
+  width: 140px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-inline: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.choose-add-fan-method .method-holder div:hover {
+  color: #2636D9;
+  border: #2636D9 2px solid;
+  box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.349);
+}
+
+.Custom-add-fan {
+  background-color: white;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.404);
+  border-radius: 10px;
+  padding: 25px 0;
+  font-family: 'Jost';
+}
+
+.Custom-add-fan .Address-holder {
+  height: 300px;
+  width: 400px;
+  overflow: scroll;
+}
+
+.center-align {
+  text-align: center;
+
+}
+
+.wallet-text {
+  padding: 20px 10px !important;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.add-more-fan {
+  font-weight: 500;
+  color: #2636D9;
+  padding: 10px !important;
+  cursor: pointer;
+}
+
+.Address-holder {
+  padding-left: 10px;
+}
+
+.Address-holder input {
+  width: 95%;
+  padding: 10px;
+  background-color: #EBEBEB;
+  outline: none;
+  border: none;
+  color: #000;
+  font-weight: 500;
+  margin: 5px 0;
+}
+
+.Address-holder::-webkit-scrollbar {
+  width: 5px;
+}
+
+.line-1-selector {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 30px;
+  align-items: center;
+  color: #777777;
+}
+
+.follower-in-fan-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  margin: 15px 0;
+}
+
+.follower-in-fan-list .inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.follower-in-fan-list .inner .inner2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.follower-in-fan-list .inner .num {
+  font-weight: 600;
+}
+
+.follower-in-fan-list .inner .inner2 .img-holder {
+  width: 50px;
+  margin: 0 15px 0 25px;
+}
+
+.follower-in-fan-list .inner .inner2 .img-holder img {
+  width: 100%;
+}
+
+.Text-follower-fan {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.Text-follower-fan span {
+  font-size: 16px;
+  font-weight: 500;
+  color: #777777;
+}
+
+.separate-checkbox-follower {}
+
+.disabled-input-only-view h2 {
+  color: #B1B1B1 !important;
+}
+
+.disabled-input-only-view input {
+  color: #B1B1B1 !important;
+  background-color: #F3F3F3;
+}
+
+.disabled-input-only-view .rc-slider-disabled {
+  background-color: transparent !important;
+}
+
+.disabled-input-only-view .rc-slider-handle {
+  background-color: #B1B1B1 !important;
+}
+
+.disabled-input-only-view .rc-slider-track {
+  background-color: #B1B1B1 !important;
+}
+
+.disabled-input-only-view .rc-slider-rail {
+  background-color: #DADADA !important;
+}
+
+.confirmation-pop-up {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.445);
+}
+
+.weight-600 {
+  font-weight: 600;
+}
+
+.btn-right {
+  display: flex;
+  justify-content: end;
+}
+
+.FanListPage {}
+
+.remove-multiple-btn-holder {
+  width: 90%;
+  justify-content: end;
+  display: flex;
+  margin: 10px 0;
+}
+
+.no-margin {
+  margin-right: 0px !important;
+}
+
+.remove-multiple-btn {
+  color: #777777;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: none;
+  border: none;
+  background: none;
+  font-family: 'Jost';
+  transition: all 0.3s ease-in-out;
+
+  border: 2px transparent solid;
+}
+
+.remove-multiple-btn:hover {
+  color: #B600D1;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: none;
+  border: none;
+  background: none;
+  font-family: 'Jost';
+  border: 2px #B600D1 solid;
+  background-color: white;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.205);
+
 }
