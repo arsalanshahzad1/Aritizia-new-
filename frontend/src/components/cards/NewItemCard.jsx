@@ -83,7 +83,9 @@ const NewItemCard = ({
             <div className="topsection">
               <div className="left">
                 <p>{title}</p>
-                <span>{price} ETH</span>
+                <span>
+                  {highestBid === 0 ? `${price} ETH` : `${highestBid} ETH`}
+                </span> 
               </div>
               <div
                 className="right"

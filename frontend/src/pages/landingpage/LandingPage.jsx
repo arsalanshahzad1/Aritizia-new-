@@ -9,7 +9,7 @@ import TableData from "../../components/cards/TableData";
 import Search from "../../components/shared/Search";
 import SliderImage from "../../components/shared/SliderImage";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import Web3Modal from "web3modal";
+import Web3Modal, { local } from "web3modal";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
@@ -22,10 +22,11 @@ const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
-  const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
+  const [walletConnected, setWalletConnected] = useState(false);
+  const [discountPrice, setDiscountPrice] = useState(0);
 
   const web3ModalRef = useRef();
 
@@ -42,7 +43,8 @@ const LandingPage = ({ search, setSearch }) => {
   async function getProvider() {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
-      "https://rpc2.sepolia.org"
+      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
+      "http://localhost:8545"
     );
 
     return provider;
@@ -50,12 +52,12 @@ const LandingPage = ({ search, setSearch }) => {
 
   // Helper function to fetch a Provider/Signer instance from Metamask
   const getProviderOrSigner = async (needSigner = false) => {
-    console.log("In get provider or signer");
+    // console.log("In get provider or signer");
 
-    console.log("In try");
+    // console.log("In try");
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
-    console.log("In get provider or signer");
+    // console.log("In get provider or signer");
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
@@ -63,13 +65,13 @@ const LandingPage = ({ search, setSearch }) => {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
-    console.log("In get provider or signer");
+    // console.log("In get provider or signer");
 
     if (needSigner) {
       const signer = web3Provider.getSigner();
       return signer;
     }
-    console.log("In get provider or signer");
+    // console.log("In get provider or signer");
 
     return web3Provider;
   };
@@ -94,7 +96,11 @@ const LandingPage = ({ search, setSearch }) => {
   };
 
   const getListedNfts = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = await getProvider();
+    // const provider = await getProviderOrSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    console.log("Provider", provider);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -108,29 +114,58 @@ const LandingPage = ({ search, setSearch }) => {
       provider
     );
 
+    console.log("nftContract", nftContract);
+    // console.log("zayyan", await (await nftContract.mintedTokensList()).wait());
+
     let listingType;
     // console.log("Active Method", listingType);
-    // console.log("time", Date.now());
+    console.log("time", Date.now());
+    // let dollarPriceOfETH = 123123;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = 1.3;
 
+    let demo = await marketplaceContract.owner();
+    console.log("demo", demo);
+
     let mintedTokens = await marketplaceContract.getListedNfts();
-    console.log("mintedTokens", mintedTokens);
+    console.log("mintedTokens", mintedTokens.length);
+    console.log("mintedTokens2", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-
+      console.log("id", id);
       const metaData = await nftContract.tokenURI(id);
 
-      console.log("metaData", metaData);
+      const structData = await marketplaceContract._idToNFT(id);
+
+      const fanNftData = await marketplaceContract._idToNFT2(id);
+
+      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+
+      setDiscountPrice(discountOnNFT);
+
+      console.log("discountOnNFT", discountOnNFT);
+      console.log("discountOnNFT", typeof discountOnNFT);
 
       let auctionData = await marketplaceContract._idToAuction(id);
+
+      let highestBid = ethers.utils.formatEther(
+        auctionData.highestBid.toString()
+      );
+
+      listingType = structData.listingType;
+      let listed = structData.listed;
+
+      console.log("listed", listed);
+
+      const price = ethers.utils.formatEther(structData.price.toString());
+      console.log("222222");
 
       axios
         .get(metaData)
@@ -142,17 +177,19 @@ const LandingPage = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
           data = JSON.parse(data);
 
-          console.log("Dataa", data);
+          // console.log("Dataa", data);
           // Extracting values using dot notation
-          const price = data.price;
-          listingType = data.listingType;
+          // const price = data.price;
+          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
-          console.log("listingType", listingType);
+          // console.log("data.listingType", typeof data.listingType);
+
+          // console.log("listingType", listingType);
 
           if (listingType === 0) {
             const nftData = {
@@ -165,30 +202,29 @@ const LandingPage = ({ search, setSearch }) => {
               description: description,
               collection: collection,
             };
-            // console.log("CHECK3");
 
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
-            // console.log("myNFTs in function", myNFTs);
+            console.log("myNFTs", myNFTs);
           } else if (listingType === 1) {
-            // console.log("IN ELSE");
             const nftData = {
               id: id, //
               title: title,
               image: image,
               price: price,
               paymentMethod: crypto,
-              basePrice: auctionData.basePrice.toString(),
+              basePrice: price,
               startTime: auctionData.startTime.toString(),
               endTime: auctionData.endTime.toString(),
-              highestBid: auctionData.highestBid.toString(),
+              highestBid: highestBid,
               highestBidder: auctionData.highestBidder.toString(),
               // isLive: auctionData.isLive.toString(),
               seller: auctionData.seller.toString(),
             };
+            console.log("id ", id);
 
-            console.log("nftData ", nftData);
-            console.log("nftListFP ", nftListFP);
+            console.log("Auction  ", nftData);
+            // console.log("nftListFP ", nftListFP);
 
             myAuctions.push(nftData);
             // console.log("auction in function", myAuctions);
@@ -200,6 +236,8 @@ const LandingPage = ({ search, setSearch }) => {
           console.error("Error fetching metadata:", error);
         });
     }
+    // console.log("nftListFPmain", myNFTs);
+    // console.log("nftListAuctionmain", myAuctions);
   };
 
   const getAddress = async () => {
@@ -207,7 +245,33 @@ const LandingPage = ({ search, setSearch }) => {
       method: "eth_requestAccounts",
     });
     setUserAddress(accounts[0]);
+    localStorage.setItem("walletAddress", accounts[0]);
+
+    postWalletAddress(accounts[0]);
     // console.log("getAddress", accounts[0]);
+  };
+
+  const postWalletAddress = (address) => {
+    // localStorage.clear();
+    if (localStorage.getItem("data")) {
+      return console.log("data is avaliable");
+    } else {
+      console.log("in post wallet");
+      const postData = {
+        wallet_address: address,
+      };
+
+      axios
+        .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+        .then((response) => {
+          console.log(JSON.stringify(response.data.data));
+          localStorage.setItem("data", JSON.stringify(response.data.data));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      console.log("in post wallet 1");
+    }
   };
 
   // const swapUSDTForETH = async () => {
@@ -247,7 +311,6 @@ const LandingPage = ({ search, setSearch }) => {
   useEffect(() => {
     connectWallet();
     getProviderOrSigner();
-    // getProviderOrSigner();
     getListedNfts();
     getAddress();
   }, [userAddress]);
@@ -334,9 +397,9 @@ const LandingPage = ({ search, setSearch }) => {
                     <div className="right">View more</div>
                   </div>
                 </div>
-                {/* <div>
-                  <button onClick={approveUSDT}>Approve</button>
-                </div> */}
+                <div>
+                  {/* <button onClick={approveUSDT}>Approve</button> */}
+                </div>
                 {nftListFP.map((item) => (
                   <BuyNow
                     // onOpen={onOpen}

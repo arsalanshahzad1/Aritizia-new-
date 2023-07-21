@@ -34,6 +34,8 @@ import {
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 const Monthly_data = [
   {
     data: "Jan",
@@ -323,7 +325,14 @@ function ProfileDrawer({
 
   let priceInETH = price;
 
+  let _sellerPercentFromDB = 1.5;
+  let _buyerPercentFromDB = 1.5;
+
+  let sellerPercent = _sellerPercentFromDB * 10;
+  let buyerPercent = _buyerPercentFromDB * 10;
+
   const web3ModalRef = useRef();
+  const navigate = useNavigate();
 
   const connectWallet = async () => {
     try {
@@ -364,6 +373,29 @@ function ProfileDrawer({
       return signer;
     }
     return web3Provider;
+  };
+
+  const handleNFTSoldEvent = async (
+    nftContract,
+    tokenId,
+    seller,
+    owner,
+    price
+  ) => {
+    let soldData = {
+      nftContract: nftContract.toString(),
+      tokenId: tokenId.toString(),
+      seller: seller.toString(),
+      owner: owner.toString(),
+      price: ethers.utils.formatEther(price.toString()),
+    };
+
+    console.log("soldData", soldData);
+    // setSucess(false);
+    // onClose(false);
+    // alert("NFT bought");
+    // setTimeout(2000);
+    // navigate("/profile");
   };
 
   const getPriceInUSD = async () => {
@@ -420,12 +452,18 @@ function ProfileDrawer({
         // "0x38628490c3043e5d0bbb26d5a0a62fc77342e9d5",
         paymentMethod,
         id,
+        sellerPercent, //  must be multiple of 10 of the users percent
+        buyerPercent, // must be multiple of 10 of the users percent
         {
-          value: ethers.utils.parseEther("1"),
+          value: ethers.utils.parseEther(value),
           gasLimit: ethers.BigNumber.from("500000"),
         }
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+
+    console.log("Response of bid even", response);
   };
 
   const buyWithUSDT = async () => {
@@ -455,6 +493,9 @@ function ProfileDrawer({
       "TETHER_CONTRACT_ADDRESS.address",
       TETHER_CONTRACT_ADDRESS.address
     );
+
+    console.log("USER", userAddress);
+
     console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
 
     const USDTContract = new Contract(
@@ -470,24 +511,43 @@ function ProfileDrawer({
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
     console.log("amount", amount);
 
-    let amountInWei = 25 * 10 ** 6;
+    let amountInWei = amount * 10 ** 6;
     console.log("amountInWei", amountInWei);
     amountInWei = amountInWei.toString();
     console.log("amountInWei", typeof amountInWei);
 
     // if (paymentMethod == 1) {
-    // const appprove = await USDTContract.approve(
-    //   MARKETPLACE_CONTRACT_ADDRESS.address,
-    //   amountInWei
+
+    // let allowance = await USDTContract.allowance(
+    //   userAddress,
+    //   MARKETPLACE_CONTRACT_ADDRESS.address
     // );
 
-    // appprove.wait();
+    // console.log("Allowance before", allowance.toString());
+
+    const appprove = await USDTContract.approve(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      amountInWei,
+      { gasLimit: ethers.BigNumber.from("500000") }
+    );
+
+    appprove.wait();
+
+    // allowance = await USDTContract.allowance(
+    //   userAddress,
+    //   MARKETPLACE_CONTRACT_ADDRESS.address
+    // );
+
+    // console.log("Allowance after", allowance.toString());
+
     // }
 
     // console.log("paymentmethod", paymentMethod);
     console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
-    console.log("amountUSD", amountUSD);
     console.log("amountUSD typeof", typeof amountUSD);
+    console.log("amountUSD", amountUSD);
+    console.log("amount", amount);
+    console.log("amountInWei typeof", amountInWei);
 
     // console.log("Check", check);
 
@@ -497,9 +557,15 @@ function ProfileDrawer({
         paymentMethod,
         id,
         amountInWei,
+        sellerPercent, // must be multiple of 10 of the users percent
+        buyerPercent, // must be multiple of 10 of the users percent
         { gasLimit: ethers.BigNumber.from("500000") }
       )
     ).wait();
+
+    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+
+    console.log("Response of bid even", response);
   };
 
   const statusOptions = [
@@ -507,9 +573,7 @@ function ProfileDrawer({
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
-  // const [showBuyOptionsStep2, setShowBuyOptionsStep2] = useState(false);
 
-  const [buyNowPrice, setBuyNowPrice] = useState("");
   return (
     <>
       <Drawer
@@ -745,22 +809,16 @@ function ProfileDrawer({
         keyboard={false}
       >
         <div className="modal-body" style={{ position: "relative" }}>
-          <span
-            onClick={() => {
-              setSucess(false), setShowBuyOptionsStep2(false);
-            }}
-          >
+          <span onClick={() => setSucess(false)}>
             <AiOutlineClose />
           </span>
-          <>
-            <div className="mobal-button-1">
-              <button onClick={buyWithETH}>Buy with ETH</button>
-              <button onClick={buyWithUSDT}>Buy with USDT</button>
-            </div>
-            <div className="mobal-button-2">
-              <button>Buy with FIAT</button>
-            </div>
-          </>
+          <div className="mobal-button-1">
+            <button onClick={buyWithETH}>Buy with ETH</button>
+            <button onClick={buyWithUSDT}>Buy with USDT</button>
+          </div>
+          <div className="mobal-button-2">
+            <button>Buy with FIAT</button>
+          </div>
         </div>
       </Modal>
     </>

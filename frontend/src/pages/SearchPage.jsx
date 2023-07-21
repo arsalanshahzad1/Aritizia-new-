@@ -35,6 +35,7 @@ const SearchPage = ({ search, setSearch }) => {
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [searchedNfts, setSearchedNfts] = useState([]);
+  const [discountPrice, setDiscountPrice] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -219,6 +220,22 @@ const SearchPage = ({ search, setSearch }) => {
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
+      const structData = await marketplaceContract._idToNFT(id);
+
+      const fanNftData = await marketplaceContract._idToNFT2(id);
+
+      const price = ethers.utils.formatEther(structData.price.toString());
+
+      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+
+      listingType = structData.listingType;
+
+      setDiscountPrice(discountOnNFT);
+
+      let highestBid = ethers.utils.formatEther(
+        auctionData.highestBid.toString()
+      );
+
       axios
         .get(metaData)
         .then((response) => {
@@ -230,8 +247,8 @@ const SearchPage = ({ search, setSearch }) => {
 
           data = JSON.parse(data);
           // Extracting values using dot notation
-          const price = data.price;
-          listingType = data.listingType;
+          // const price = data.price;
+          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -308,7 +325,31 @@ const SearchPage = ({ search, setSearch }) => {
       method: "eth_requestAccounts",
     });
     setUserAddress(accounts[0]);
+    localStorage.setItem("walletAddress", accounts[0]);
     // console.log("getAddress", accounts[0]);
+    postWalletAddress(accounts[0]);
+  };
+
+  const postWalletAddress = (address) => {
+    console.log("in post wallet");
+
+    const postData = {
+      // Specify the data you want to send in the POST request
+      // For example:
+      walletAddress: address,
+    };
+
+    axios
+      .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+      .then((response) => {
+        // Handle the response from the server/API
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the request
+        console.error(error);
+      });
+    console.log("in post wallet 1");
   };
 
   useEffect(() => {
@@ -319,7 +360,9 @@ const SearchPage = ({ search, setSearch }) => {
         disableInjectedProvider: false,
       });
     }
-  }, [walletConnected, searchedNfts, nftListFP]);
+  }, [walletConnected]);
+
+  useEffect(() => {}, [searchedNfts, nftListFP]);
 
   useEffect(() => {
     connectWallet();
