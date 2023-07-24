@@ -42,6 +42,8 @@ const Profile = ({ search, setSearch }) => {
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
 
+  let likedNftsFromDB = [];
+
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
