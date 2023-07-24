@@ -14,6 +14,7 @@ const NewItemCard = ({
   endTime,
   description,
   userAddress,
+  collectionImage
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -75,7 +76,7 @@ const NewItemCard = ({
           <div className="detail-wrap">
             <div className="center-icon">
               <div className="icon">
-                <img src="/assets/images/duck.png" alt="" />
+                <img src={collectionImage} alt="" />
                 <img src="/assets/images/chack.png" alt="" />
               </div>
             </div>

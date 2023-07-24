@@ -565,7 +565,8 @@ const Multiple = ({ search, setSearch }) => {
     tokenId,
     seller,
     owner,
-    price
+    price,
+    collectionId
   ) => {
     if (multiListing) {
       let listedData = {
@@ -574,6 +575,7 @@ const Multiple = ({ search, setSearch }) => {
         seller: seller.toString(),
         owner: owner.toString(),
         price: ethers.utils.formatEther(price.toString()),
+        collectionId: collectionId.toString(),
       };
       console.log("multiListing", multiListing);
       console.log("listedData", listedData);

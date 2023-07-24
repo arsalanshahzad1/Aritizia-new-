@@ -76,10 +76,10 @@ const Header = ({ search, setSearch }) => {
     const id = JSON.parse(localStorage.getItem('data'))
     const user_id = id.id;
     const channel = laravelEcho.channel("chat-channel-" + user_id);
-
+    console.log('user_id' , user_id);
     channel.listen(".chat-event", (data) => {
       // Handle the received event data
-      console.log(data);
+      console.log(data,'data');
       setMessageArrive(true);
     });
 
@@ -220,6 +220,8 @@ const Header = ({ search, setSearch }) => {
                           setshowMessage(!showMessage),
                           setShowNotification(false),
                           getChatnotification("message", 0);
+                          setMessageArrive(false)
+                          
                         }}
                         className={`icon-for-header ${scrolled ? "black-svgs" : ""
                           }`}

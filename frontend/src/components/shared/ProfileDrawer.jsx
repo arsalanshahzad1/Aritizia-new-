@@ -343,16 +343,19 @@ function ProfileDrawer({
     console.log(response.data , 'postNFTLike');
     getNFTLike()
   }
-  // const postNFTView = async () =>{
-  //   var temp = JSON.parse(localStorage.getItem('data'));
-  //   var address = temp.id;
-  //   const response = await apis.postViewNFT({view_by :address , nft_token : id})
-  //   console.log(response.data , 'postNFTView');
-  // }
+  const postNFTView = async () =>{
+    var temp = JSON.parse(localStorage.getItem('data'));
+    var address = temp.id;
+    console.log(address , 'address');
+    console.log(id , 'nft_token');
+    const response = await apis.postViewNFT({view_by :address , nft_token : id})
+    console.log(response.data , 'postNFTView');
+    getNFTLike()
+  }
 
   useEffect(() =>{
   if(isVisible){
-    getNFTLike()
+    postNFTView()
   }
   } , [isVisible])
 

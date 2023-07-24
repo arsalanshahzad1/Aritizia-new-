@@ -6,6 +6,8 @@ import MyMsg from './MyMsg'
 import OtherMsg from './OtherMsg'
 import apis from '../service'
 import { HiOutlinePaperClip } from 'react-icons/hi'
+import laravelEcho from "../socket/index";
+import { BiUserCircle } from 'react-icons/bi'
 function ChatPage({ search, setSearch }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
@@ -89,8 +91,8 @@ function ChatPage({ search, setSearch }) {
                 textMessage.current.value = ''
                 setShowFileMessages('')
                 setFileMessages('')
-            } 
-        }else {
+            }
+        } else {
             alert('Data can no be empty')
         }
 
@@ -100,6 +102,37 @@ function ChatPage({ search, setSearch }) {
     useEffect(() => {
         ChatUsers()
     }, [userMessagesDetails, showFileMessages, fileMessages])
+
+    useEffect(() => {
+        const id = JSON.parse(localStorage.getItem('data'))
+        const user_id = id.id;
+        const channel = laravelEcho.channel("chat-channel-" + user_id);
+        console.log('user_id', user_id);
+        channel.listen(".chat-event", (data) => {
+            // Handle the received event data
+            console.log('data socket', data);
+            console.log('activeId', activeUserId);
+            console.log('data.data.sender_id', data.data.sender_id);
+            console.log(data.data.sender_id == activeUserId, "condituion")
+
+            if (data.data.sender_id == activeUserId) {
+                console.log('true', data);
+                setUserMessagesDetails((prevState) => [data?.data, ...prevState])
+            }
+            else {
+                ChatUsers()
+            }
+
+            console.log(activeUserId, 'activeUserId');
+
+            console.log(data.data.sender_id, 'data');
+            //   setMessageArrive(true);
+        });
+
+        return () => {
+            channel.stopListening(".chat-event");
+        };
+    }, [userMessagesDetails, userMessagesListing]);
     return (
         <div>
             <Header
@@ -134,11 +167,21 @@ function ChatPage({ search, setSearch }) {
                             <div className='head'>
                                 <div className='user'>
                                     <div className='img-holder'>
-                                        <img src={userMessagesListing[chatIndex]?.profile_image} alt="" />
+                                        {userMessagesListing[chatIndex]?.profile_image == null ?
+                                            <BiUserCircle style={{fontSize : '40px'}}/>
+
+                                            :
+                                            <img src={userMessagesListing[chatIndex]?.profile_image} alt="" />
+
+                                        }
                                     </div>
                                     <div className='username'>
                                         {/* FAHAD */}
-                                        {userMessagesListing[chatIndex]?.first_name}
+                                        {userMessagesListing[chatIndex]?.first_name == null ?
+                                            'User'+ activeUserId
+                                            :
+                                            userMessagesListing[chatIndex]?.first_name
+                                        }
                                         <div>
                                             Active
                                             <span>

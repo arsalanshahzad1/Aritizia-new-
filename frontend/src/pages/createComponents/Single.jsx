@@ -437,7 +437,8 @@ const Single = ({ search, setSearch }) => {
     tokenId,
     seller,
     owner,
-    price
+    price,
+    collectionId
   ) => {
     if (singleMinting) {
       let listedData = {
@@ -446,14 +447,15 @@ const Single = ({ search, setSearch }) => {
         seller: seller.toString(),
         owner: owner.toString(),
         price: ethers.utils.formatEther(price.toString()),
+        collectionId: collectionId.toString(),
       };
       console.log("singleMinting", singleMinting);
 
-        console.log("listedData", listedData);
-        singleMinting = false;
-        console.log("singleMinting", singleMinting);
-        alert("Nft listed");
-        navigate("/profile");
+      console.log("listedData", listedData);
+      singleMinting = false;
+      console.log("singleMinting", singleMinting);
+      alert("Nft listed");
+      navigate("/profile");
     }
   };
 

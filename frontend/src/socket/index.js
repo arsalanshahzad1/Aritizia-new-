@@ -10,7 +10,7 @@ const laravelEcho = new Echo({
     forceTLS: false,
     disableStats: true,
     cluster: 'ap1',
-    // enabledTransports: ['ws', 'wss'],
+    enabledTransports: ['ws', 'wss'],
   });
 
   export default laravelEcho;

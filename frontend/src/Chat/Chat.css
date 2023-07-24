@@ -69,6 +69,9 @@
 .chat-item .image-holder img {
     width: 100%;
 }
+.chat-item .image-holder svg {
+    font-size: 40px;
+}
 
 .chat-item .text-area {
     margin-left: 10px;

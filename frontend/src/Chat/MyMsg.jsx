@@ -16,22 +16,7 @@ const MyMsg = ({ data }) => {
 
         return `${size.toFixed(2)} ${units[unitIndex]}`;
     }
-    const downloadFile = (url , name) => {
-        // Replace 'file_url' with the actual URL of the file you want to download
-        const fileUrl = 'https://example.com/path/to/your/file.pdf';
-        triggerDownload(url , name);
-      };
-    
-      const triggerDownload = (url , name) => {
-        const link = document.createElement('a');
-        link.style.display = 'none';
-        link.href = url;
-        link.setAttribute('download', name);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link)
-    ;
-      };
+   
     return (
         <div className='My-message' style={{ flexDirection: 'column' }}>
             {!data.media?.length ?
@@ -67,7 +52,7 @@ const MyMsg = ({ data }) => {
                                                 <div>{formatFileSize(res.size)} <BsCircleFill /> {res.file_name.split('.').pop()}</div>
                                             </div>
                                             <div className='right'>
-                                                <button onClick={downloadFile(res.original_url , res.file_name)}>
+                                                <button >
                                                     <BsDownload />
                                                 </button>
 

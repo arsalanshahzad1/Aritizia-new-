@@ -418,12 +418,13 @@ img {
 }
 
 .css-vurnku .J-image {
-  height: 100%;
+  height: 180px;
   width: 100%;
   object-fit: contain;
-  border-radius: 8px 8px 0px 0px;
+  border-radius: 8px 8px 0px 0px !important;
   background: none 0% 0% / contain;
-  position: relative
+  position: relative;
+  object-fit: cover;
 }
 
 .css-118gt74:hover .J-bottom {
@@ -815,7 +816,8 @@ img {
 
 .simple-card-main .top .image-holder img {
   width: 100%;
-  height: auto;
+  height: 180px;
+  object-fit: cover;
 }
 
 .simple-card-main .bottom .nft-icon {
