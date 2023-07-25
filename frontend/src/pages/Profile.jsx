@@ -45,8 +45,8 @@ const Profile = ({ search, setSearch }) => {
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
-  const [following, setFollwing] = useState("");
-  const [followers, setFollwers] = useState("");
+  const [following, setFollwing] = useState([]);
+  const [followers, setFollwers] = useState([]);
   const navigate = useNavigate();
 
   let likedNftsFromDB = [];
@@ -670,10 +670,10 @@ const Profile = ({ search, setSearch }) => {
     const user_id = id.id;
     const response = await apis.postCheckChatMessage({
       sender_id: user_id,
-      receiver_id: "14",
+      receiver_id: "5",
     });
     if (response.status) {
-      window.location.replace("http://127.0.0.1:5173/chat");
+      window.location.replace("http://localhost:5173/chat/5");
     }
   };
 
@@ -747,30 +747,36 @@ const Profile = ({ search, setSearch }) => {
                     className={`${tabs === 0 ? "active" : ""}`}
                     onClick={() => setTabs(0)}
                   >
-                    Collection
+                    Gallery
                   </button>
-
                   <button
                     className={`${tabs === 1 ? "active" : ""}`}
                     onClick={() => setTabs(1)}
                   >
-                    My NFT
+                    Collection
                   </button>
+
                   <button
                     className={`${tabs === 2 ? "active" : ""}`}
                     onClick={() => setTabs(2)}
                   >
-                    Liked
+                    My NFT
                   </button>
                   <button
                     className={`${tabs === 3 ? "active" : ""}`}
                     onClick={() => setTabs(3)}
                   >
-                    Followers
+                    Liked
                   </button>
                   <button
                     className={`${tabs === 4 ? "active" : ""}`}
                     onClick={() => setTabs(4)}
+                  >
+                    Followers
+                  </button>
+                  <button
+                    className={`${tabs === 5 ? "active" : ""}`}
+                    onClick={() => setTabs(5)}
                   >
                     Fan List
                   </button>
@@ -779,6 +785,11 @@ const Profile = ({ search, setSearch }) => {
               <button onClick={testFans}>Test Fans</button>
               <div className="profile-buy-card">
                 {tabs === 0 && (
+                  <>
+                    Gallery Tab
+                  </>
+                )}
+                {tabs === 1 && (
                   <>
                     <div className="row">
                       <div className="Collection-tabs">
@@ -837,7 +848,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 1 && (
+                {tabs === 2 && (
                   <>
                     <div className="row">
                       {/* {nftListAuction.map((item) => (
@@ -872,7 +883,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 2 && (
+                {tabs === 3 && (
                   <>
                     <div className="row">
                       {likedNfts?.map((item) => (
@@ -893,7 +904,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 3 && (
+                {tabs === 4 && (
                   <>
                     <div className="row">
                       <div className="Collection-tabs">
@@ -936,7 +947,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 4 && (
+                {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
                     <Fan />

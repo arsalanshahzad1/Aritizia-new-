@@ -267,7 +267,7 @@ const Header = ({ search, setSearch }) => {
                               <div class="one"></div>
                             </section>
                           )}
-                          {chatNotificationRes.length < countLength &&
+                          {chatNotificationRes.length <= countLength &&
                             chatNotificationRes ? (
                             <button
                               className="loadmore-mgs-notofication"
@@ -318,10 +318,10 @@ const Header = ({ search, setSearch }) => {
                     {showNotification && (
                       <div className="notification-card" style={{ left: '11%' }}>
                         {notificationRes ?
-                        (<UserNotification data={notificationRes} />)
-                      :
-                        (<section class="sec-loading"><div class="one"></div></section>)
-                      }
+                          (<UserNotification data={notificationRes} />)
+                          :
+                          (<section class="sec-loading"><div class="one"></div></section>)
+                        }
                       </div>
                     )}
                     <button
@@ -388,7 +388,7 @@ const Header = ({ search, setSearch }) => {
                       >
                         <>
                           {chatNotificationRes ? (
-                            <Notification data={chatNotificationRes}/>
+                            <Notification data={chatNotificationRes} />
                           ) : (
                             <section class="sec-loading"><div class="one"></div></section>
                           )}
@@ -437,12 +437,12 @@ const Header = ({ search, setSearch }) => {
                     </span>
 
                     {showNotification && (
-                      <div className="notification-card" style={{left: '11%'}}>
+                      <div className="notification-card" style={{ left: '11%' }}>
                         {notificationRes ?
-                        <UserNotification data={notificationRes} />
-                        :
-                        <section class="sec-loading"><div class="one"></div></section>
-                      }
+                          <UserNotification data={notificationRes} />
+                          :
+                          <section class="sec-loading"><div class="one"></div></section>
+                        }
 
                       </div>
                     )}
@@ -450,9 +450,9 @@ const Header = ({ search, setSearch }) => {
                       onClick={connectWallet}
                       className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
                         }`}
-                        style={{
-                          margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
-                        }}
+                      style={{
+                        margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
+                      }}
                     >
                       {user ? "Connected" : "Connect Wallet"}
                     </button>

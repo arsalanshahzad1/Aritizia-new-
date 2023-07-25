@@ -11,7 +11,8 @@ const Following = ({ data }) => {
     const [showOptions, setshowOptions] = useState(false)
     return (
         <>
-            {data.map((data, i) => {
+        
+            {data?.map((data, i) => {
                 return (
                     <div className='Follow-row' key={i}>
                         <div className='left'>
