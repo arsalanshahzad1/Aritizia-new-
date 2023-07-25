@@ -418,6 +418,8 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction, image }) => {
     );
     await tx.wait();
     console.log("userAddress", userAddress);
+    console.log("item.startTime", item.startTime);
+    console.log("item.endTime", item.endTime);
 
     await (
       await marketplaceContract.resellNft(
@@ -426,7 +428,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction, image }) => {
         ethers.utils.parseEther(item.price),
         item.listingType,
         item.startTime,
-        item.endTime,
+        item.endTime, 
         userAddress
         // crypto
       )

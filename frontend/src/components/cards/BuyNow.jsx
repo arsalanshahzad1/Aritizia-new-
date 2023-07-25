@@ -13,6 +13,7 @@ const BuyNow = ({
   title,
   image,
   price,
+  discountPrice,
   crypto,
   royalty,
   description,
@@ -164,6 +165,7 @@ const BuyNow = ({
         title={title}
         image={image}
         price={price}
+        discountPrice={discountPrice}
         paymentMethod={crypto}
         royalty={royalty}
         description={description}

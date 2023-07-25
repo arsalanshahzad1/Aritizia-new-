@@ -61,7 +61,7 @@ const LandingPage = ({ search, setSearch }) => {
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337 ) {
+    if (chainId !== 31337) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -158,11 +158,14 @@ const LandingPage = ({ search, setSearch }) => {
 
       listingType = structData.listingType;
       let listed = structData.listed;
-
+      console.log("auctionData.owner", auctionData.owner);
+      console.log("auctionData.seller", auctionData.seller);
+      console.log("structData.seller", structData.seller);
+      console.log("structData.owner", structData.owner);
       console.log("listed", listed);
 
       const price = ethers.utils.formatEther(structData.price.toString());
-      console.log("222222");
+      console.log("2222s22");
 
       axios
         .get(metaData)
@@ -174,7 +177,7 @@ const LandingPage = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
           data = JSON.parse(data);
 
-          // console.log("Dataa", data);
+          console.log("Dataa", data);
           // Extracting values using dot notation
           // const price = data.price;
           // listingType = data.listingType;
@@ -199,7 +202,6 @@ const LandingPage = ({ search, setSearch }) => {
               description: description,
               collection: collection,
             };
-            
 
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
@@ -218,7 +220,6 @@ const LandingPage = ({ search, setSearch }) => {
               // isLive: auctionData.isLive.toString(),
               seller: auctionData.seller.toString(),
             };
-            
 
             myAuctions.push(nftData);
             setNftListAuction(myAuctions);
@@ -238,16 +239,18 @@ const LandingPage = ({ search, setSearch }) => {
       method: "eth_requestAccounts",
     });
     setUserAddress(accounts[0]);
-    postWalletAddress(accounts[0])
+    postWalletAddress(accounts[0]);
   };
 
-  const postWalletAddress  = async (address) => {
+  const postWalletAddress = async (address) => {
     if (localStorage.getItem("data")) {
       return console.log("data is avaliable");
     } else {
-    const response = await apis.postWalletAddress({wallet_address:  address})
-    localStorage.setItem("data", JSON.stringify(response.data.data));
-    window.location.reload();
+      const response = await apis.postWalletAddress({
+        wallet_address: address,
+      });
+      localStorage.setItem("data", JSON.stringify(response.data.data));
+      window.location.reload();
     }
     // if (localStorage.getItem("data")) {
     //   return console.log("data is avaliable");
@@ -266,8 +269,6 @@ const LandingPage = ({ search, setSearch }) => {
     //     });
     // }
   };
-
-
 
   // const swapUSDTForETH = async () => {
   //   const signer = await getProviderOrSigner(true);
@@ -404,6 +405,7 @@ const LandingPage = ({ search, setSearch }) => {
                     title={item?.title}
                     image={item?.image}
                     price={item?.price}
+                    discountPrice={item?.discountPrice}
                     crypto={item?.crypto}
                     royalty={item?.royalty}
                     description={item?.description}

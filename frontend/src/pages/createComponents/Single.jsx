@@ -95,7 +95,7 @@ const Single = ({ search, setSearch }) => {
     const web3Provider = new providers.Web3Provider(provider);
     console.log("In provider3");
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337 ) {
+    if (chainId !== 31337) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -272,7 +272,17 @@ const Single = ({ search, setSearch }) => {
       console.log("listedToken", listedToken);
       console.log("getMintedTokens", mintedTokens);
 
-      console.log("In mintThenList");
+      console.log("qqq startTime", startTime);
+      console.log("startTime typeof", typeof startTime);
+      console.log("qqq endTime", endTime);
+      let currentTime = Date.now();
+      console.log("aaa f currentTime:", currentTime);
+      // let addedTime = currentTime + 300000;
+
+      currentTime = Math.floor(currentTime / 1000);
+      console.log("aaa currentTime:", currentTime);
+      let addedTime = currentTime + 500000;
+      console.log("aaa addedTime:", addedTime);
 
       await (
         await marketplaceContract.listNft(
@@ -281,6 +291,8 @@ const Single = ({ search, setSearch }) => {
           [ethers.utils.parseEther(item.price)], // list
           royalty,
           listingType,
+          // [currentTime],
+          // [addedTime],
           [startTime], // list
           [endTime], // list
           0, // collection number
@@ -303,62 +315,7 @@ const Single = ({ search, setSearch }) => {
     );
 
     console.log("Response of list event", response);
-
-    //  else {
-    //   setTimeout(listNFT(marketplaceContract, nftContract), 5000);
-    // }
   }
-
-  // async function listNFT(marketplaceContract, nftContract) {
-  //   try {
-  //     const mintedTokens = await new Promise((resolve, reject) => {
-  //       nftContract
-  //         .getMintedTokensList()
-  //         .then((tokens) => {
-  //           resolve(tokens);
-  //         })
-  //         .catch((error) => {
-  //           reject(error);
-  //         });
-  //     });
-
-  //     console.log("In mintThenList");
-  //     const mintedTokensNumber = Number(mintedTokens);
-
-  //     console.log("mintedTokens", mintedTokensNumber);
-  //     console.log("mintedTokens", typeof mintedTokensNumber);
-
-  //     console.log("Payment method", crypto);
-
-  //     await (
-  //       await marketplaceContract.listNft(
-  //         nftContract.address,
-  //         [mintedTokensNumber],
-  //         [ethers.utils.parseEther(item.price)], // list
-  //         royalty,
-  //         listingType,
-  //         [startTime], // list
-  //         [endTime], // list
-  //         0, // collection number
-  //         crypto,
-  //         {
-  //           gasLimit: ethers.BigNumber.from("500000"),
-  //         }
-  //       )
-  //     ).wait();
-  //     console.log("NFT listing is complete!");
-  //   } catch (error) {
-  //     console.error("Error while listing NFT:", error);
-  //     throw error; // Rethrow the error to be caught in the higher level function if necessary
-  //   }
-
-  //   let response = await marketplaceContract.on(
-  //     "NFTListed",
-  //     handleNFTListedEvent
-  //   );
-
-  //   console.log("Response of list event", response);
-  // }
 
   // mint the NFT then list
   const mintThenList = async (result) => {
@@ -437,7 +394,8 @@ const Single = ({ search, setSearch }) => {
     tokenId,
     seller,
     owner,
-    price
+    price,
+    collectionId
   ) => {
     if (singleMinting) {
       let listedData = {
@@ -446,14 +404,16 @@ const Single = ({ search, setSearch }) => {
         seller: seller.toString(),
         owner: owner.toString(),
         price: ethers.utils.formatEther(price.toString()),
+        collectionId: collectionId.toString(),
       };
       console.log("singleMinting", singleMinting);
+      console.log("collectionId", collectionId.toString());
 
-        console.log("listedData", listedData);
-        singleMinting = false;
-        console.log("singleMinting", singleMinting);
-        alert("Nft listed");
-        navigate("/profile");
+      console.log("listedData", listedData);
+      singleMinting = false;
+      console.log("singleMinting", singleMinting);
+      alert("Nft listed");
+      navigate("/profile");
     }
   };
 
@@ -500,6 +460,7 @@ const Single = ({ search, setSearch }) => {
 
   useEffect(() => {}, [price, title, description]);
   let singleMinting = false;
+
   function createItem(e) {
     e.preventDefault();
     price = inputValue;
@@ -518,8 +479,11 @@ const Single = ({ search, setSearch }) => {
       startTime = 0;
       endTime = 0;
     } else if (listingType == 1) {
-      const startDate = new Date(startingDate);
-      const endDate = new Date(endingDate);
+      // const startDate = new Date(startingDate);
+      // const endDate = new Date(endingDate);
+
+      const startDate = new Date("2023-05-21");
+      const endDate = new Date("2023-06-21");
 
       console.log("startDate", startDate.getTime());
       console.log("endDate", endDate.getTime());
@@ -528,8 +492,8 @@ const Single = ({ search, setSearch }) => {
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
 
-      console.log("startTimestamp in else", startTimestamp);
-      console.log("endTimestamp in else", endTimestamp);
+      console.log("startTimestamp qqq", startTimestamp);
+      console.log("endTimestamp qqq", endTimestamp);
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;
@@ -571,6 +535,7 @@ const Single = ({ search, setSearch }) => {
       item.file != null &&
       item.collection != null
     ) {
+      //  UNCOMMENT THIS
       uploadToIPFS(file);
     } else {
       window.alert("Fill all the fields to continue");

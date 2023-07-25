@@ -342,12 +342,12 @@ const PlaceABidDrawer = ({
       auctionData.highestBid.toString()
     );
 
-    let startTime = ethers.utils.formatEther(auctionData.startTime.toString());
+    // let startTime = auctionData.startTime.toString();
 
-    let endTime = ethers.utils.formatEther(auctionData.endTime.toString());
+    // let endTime = auctionData.endTime.toString();
 
-    console.log("startTime", startTime);
-    console.log("endTime", endTime);
+    // console.log("startTime", startTime);
+    // console.log("endTime", endTime);
 
     let basePrice = ethers.utils.formatEther(auctionData.basePrice.toString());
 
@@ -379,6 +379,8 @@ const PlaceABidDrawer = ({
   const claimAuction = async () => {
     const signer = await getProviderOrSigner(true);
 
+    console.log("Claim auction");
+
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -400,7 +402,7 @@ const PlaceABidDrawer = ({
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
 
-    if (chainId !== 31337 ) {
+    if (chainId !== 31337) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -419,10 +421,12 @@ const PlaceABidDrawer = ({
       tokenId: tokenId.toString(),
       seller: seller.toString(),
       highestBidder: highestBidder.toString(),
-      highestBid: highestBid.toString(),
+      highestBid: ethers.utils.formatEther(highestBid.toString()),
     };
 
     console.log("bidData", bidData);
+    ethBid = false;
+    usdtBid = false;
   };
 
   const connectWallet = async () => {
@@ -463,6 +467,9 @@ const PlaceABidDrawer = ({
 
     let auctionData = await marketplaceContract._idToAuction(id);
 
+    console.log("auctionData.startTime  ", auctionData.startTime.toString());
+    console.log("auctionData.endTime  ", auctionData.endTime.toString());
+
     let highestBid = ethers.utils.formatEther(
       auctionData.highestBid.toString()
     );
@@ -489,8 +496,6 @@ const PlaceABidDrawer = ({
     setDollarPrice(priceInUSD.toString());
     // console.log("priceInUSD", priceInUSD);
 
-    // let highBid = await marketplaceContract.getHighestBid(id);
-
     // let highBid = Number(highestBid.toString()) / 1e18;
     // console.log("HighestBidaaa", highBid);
   };
@@ -500,26 +505,65 @@ const PlaceABidDrawer = ({
   };
 
   const bidWithFIAT = async () => {
-    console.log("startTime", startTime);
-    console.log("endTime", endTime);
-    console.log("price", price);
-    console.log("isLive", isLive);
+    // console.log("startTime", startTime);
+    // console.log("endTime", endTime);
+    // console.log("price", price);
+    // console.log("isLive", isLive);
+    const provider = await getProviderOrSigner();
 
-    // const provider = await getProviderOrSigner();
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
 
-    // const marketplaceContract = new Contract(
-    //   MARKETPLACE_CONTRACT_ADDRESS.address,
-    //   MARKETPLACE_CONTRACT_ABI.abi,
-    //   provider
-    // );
+    let auctionData = await marketplaceContract._idToAuction(id);
 
-    // let highBid = await marketplaceContract.getHighestBid(id);
-    // highBid = Number(highBid.toString()) / 1e18;
-    // console.log("HighestBid", highBid);
+    const structData = await marketplaceContract._idToNFT(id);
+
+    const getStatusOfAuction = await marketplaceContract.getStatusOfAuction(id);
+    console.log("getStatusOfAuction", getStatusOfAuction);
+
+    let highestBid = ethers.utils.formatEther(
+      auctionData.highestBid.toString()
+    );
+
+    let startTime = auctionData.startTime.toString();
+
+    let endTime = auctionData.endTime.toString();
+
+    console.log("aaa startTime", startTime);
+    console.log("aaa endTime", endTime);
+    console.log("aaa highestBid", highestBid);
+    console.log("aaa highestBidder", auctionData.highestBidder);
+    console.log("aaa seller", auctionData.seller);
+
+    console.log("auctionData.seller", auctionData.seller);
+    console.log("structData.seller", structData.seller);
+    console.log("structData.owner", structData.owner);
+
+    const unixTimestamp = Date.now();
+
+    const currentDate = new Date(unixTimestamp);
+
+    // Get the current time in hours, minutes, and seconds
+    const hours = currentDate.getHours();
+    const minutes = currentDate.getMinutes();
+    const seconds = currentDate.getSeconds();
+
+    // Format the time with leading zeros if necessary
+    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
+      minutes
+    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+    console.log("Formatted time:", formattedTime);
   };
 
+  let ethBid = false;
   const bidWithETH = async () => {
     // window.alert("KHAREED");
+
+    ethBid = true;
 
     const signer = await getProviderOrSigner(true);
 
@@ -536,14 +580,20 @@ const PlaceABidDrawer = ({
     });
     // console.log("Payment made");
 
-    let response = await marketplaceContract.on("receivedABid", handleBidEvent);
+    let response = marketplaceContract.on(
+      "receivedABid",
+      ethBid ? handleBidEvent : null
+    );
 
     console.log("Response of bid even", response);
+    ethBid = false;
   };
 
+  let usdtBid = false;
   const bidWithUSDT = async () => {
     const signer = await getProviderOrSigner(true);
 
+    usdtBid = true;
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -593,16 +643,14 @@ const PlaceABidDrawer = ({
     // Wait for the transaction to be mined
     await tx.wait();
 
-    let response = await marketplaceContract.on("receivedABid", handleBidEvent);
+    let response = marketplaceContract.on(
+      "receivedABid",
+      usdtBid ? handleBidEvent : null
+    );
 
     console.log("Response of bid even", response);
-    // appprove = await USDTContract.approve(
-    //   MARKETPLACE_CONTRACT_ADDRESS.address,
-    //   0
-    // );
-    // console.log("555");
 
-    // appprove.wait();
+    usdtBid = false;
   };
 
   const statusOptions = [
@@ -832,7 +880,7 @@ const PlaceABidDrawer = ({
                       <div className="left">
                         <p>
                           {price} ETH
-                          <p>Last bid {highestBid} ETH</p>
+                          <p>Last bid {Number(highestBid).toFixed(3)} ETH</p>
                           <span>
                             Amount is USD ${amountUSD} + Platform Fee ${" "}
                             {platformFee}
@@ -868,6 +916,8 @@ const PlaceABidDrawer = ({
                   >
                     Bid Now
                   </button>
+
+                  <button onClick={claimAuction}>Claim</button>
                 </div>
               </div>
             </div>

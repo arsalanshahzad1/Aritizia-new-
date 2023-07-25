@@ -36,11 +36,11 @@ const SimpleCard = ({
     const { chainId } = await web3Provider.getNetwork();
 
     const openDrawer = () => {
-        if (showLinks === true) {
-            return onOpen(false);
-        } else {
-            setIsVisible(true);
-        }
+      if (showLinks === true) {
+        return onOpen(false);
+      } else {
+        setIsVisible(true);
+      }
     };
     if (chainId !== 31337) {
       window.alert("Change the network to Sepolia");
@@ -97,7 +97,7 @@ const SimpleCard = ({
 
   const [showDiscountPopUp, setshowDiscountPopUp] = useState(false);
   const [discountPercentage, setdiscountPercentage] = useState("");
-  const value = 5000;
+  const value = price;
   const [discountedValue, setdiscountedValue] = useState(value);
 
   useEffect(() => {
@@ -223,7 +223,7 @@ const SimpleCard = ({
               <h3>DISCOUNT</h3>
               <div className="line-2">
                 <div className="discount-text">Total Value</div>
-                <div className="total-value-div">${value}</div>
+                <div className="total-value-div">{value} ETH</div>
               </div>
               <div className="line-2">
                 <div className="discount-text">Percent</div>
@@ -242,7 +242,7 @@ const SimpleCard = ({
               </div>
               <div className="line-2">
                 <div className="discount-text">Value</div>
-                <div className="value-div">${discountedValue}</div>
+                <div className="value-div">{discountedValue} ETH</div>
               </div>
 
               <div className="popUp-btn-group">

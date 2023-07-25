@@ -41,6 +41,7 @@ const Profile = ({ search, setSearch }) => {
   const [likedNfts, setLikedNfts] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
+  const [addedFans, setAddedFans] = useState({});
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -107,6 +108,7 @@ const Profile = ({ search, setSearch }) => {
     //     });
     // }
   };
+  let likedNftsFromDB = [];
 
   const getLikedNfts = async () => {
     const provider = await getProviderOrSigner();
@@ -202,12 +204,13 @@ const Profile = ({ search, setSearch }) => {
     console.log("FansAddress", FansAddress);
 
     await (await marketplaceContract.addFans(FansAddress)).wait();
+    console.log("asdasdasd");
 
-    const fans = await marketplaceContract.getFans();
+    // const fans = await marketplaceContract.getFans();
 
-    console.log("fans", fans);
+    // console.log("fans", fans);
 
-    let response = await marketplaceContract.on(
+    let response = marketplaceContract.on(
       "addedFans",
       handleAddedFansEvent
     );
@@ -216,11 +219,32 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const handleAddedFansEvent = async (fanList) => {
-    fanList = {
-      fanList: fanList.toString(),
-    };
+    // let fanList2 = {
+    //   fanList: fanList.toString(),
+    // };
 
+    // fansTesting = fanList.toString();
+    setAddedFans(fanList);
     console.log("fanList", fanList);
+    // console.log("fanList2", fanList2);
+  };
+
+  const testFans = async () => {
+    console.log("testFans");
+    console.log("addedFans hook ", addedFans);
+    console.log("addedFans hook ", addedFans[0]);
+    console.log("userAddress", userAddress);
+
+    postFanList();
+  };
+
+  const postFanList = async () => {
+    const response = await apis.postAddFans({
+      fan_by_wallet: userAddress,
+      fan_to_array_wallet: addedFans,
+    });
+
+    console.log("DATA", response);
   };
 
   const getMyListedNfts = async () => {
@@ -266,16 +290,20 @@ const Profile = ({ search, setSearch }) => {
       console.log("YESS");
 
       const metaData = await nftContract.tokenURI(id);
+      console.log("1111");
 
       const structData = await marketplaceContract._idToNFT(id);
+      console.log("222");
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
       let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+      console.log("333");
 
       setDiscountPrice(discountOnNFT);
 
       let auctionData = await marketplaceContract._idToAuction(id);
+      console.log("444");
 
       listingType = structData.listingType;
 
@@ -385,7 +413,8 @@ const Profile = ({ search, setSearch }) => {
       let id;
       id = +mintedTokens[i].tokenId.toString();
       // id = mintedTokens[i];
-      // console.log("YESS");
+      console.log("YESS", id);
+      console.log("mintedTokens[i].tokenId", mintedTokens[i].tokenId);
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
@@ -688,6 +717,7 @@ const Profile = ({ search, setSearch }) => {
                   </button>
                 </div>
               </div>
+              <button onClick={testFans}>Test Fans</button>
               <div className="profile-buy-card">
                 {tabs === 0 && (
                   <>

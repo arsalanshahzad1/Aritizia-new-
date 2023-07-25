@@ -19,6 +19,11 @@ const NewItemCard = ({
   const [isVisible, setIsVisible] = useState(false);
   const [endDate, setEndDate] = useState("");
 
+  highestBid = Number(highestBid).toFixed(2);
+
+  console.log("highestBiddd", highestBid);
+  console.log("highestBiddd", typeof highestBid);
+
   function convertTimestampToCustomFormat() {
     const date = new Date(endTime * 1000);
 
@@ -84,7 +89,7 @@ const NewItemCard = ({
                 <p>{title}</p>
                 <span>
                   {highestBid === 0 ? `${price} ETH` : `${highestBid} ETH`}
-                </span> 
+                </span>
               </div>
               <div
                 className="right"

@@ -315,15 +315,24 @@ function ProfileDrawer({
   const [walletConnected, setWalletConnected] = useState(false);
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
-  const [amountUSD, setAmountUSD] = useState("");
   const [platformFee, setPlatformFee] = useState("");
+  const [discountedEth, setDiscountedEth] = useState("");
+  const [discountedAmountUSD, setDiscountedAmountUSD] = useState("");
+  const [platformFeeUSDT, setPlatformFeeUSDT] = useState("");
+  const [platformFeeETH, setPlatformFeeETH] = useState("");
+  const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState("");
+  const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] =
+    useState("");
+
+  const [priceETH, setPriceETH] = useState("");
+  const [amountUSD, setAmountUSD] = useState("");
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
   };
 
-  let priceInETH = price;
+  // let priceInETH = price;
 
   let _sellerPercentFromDB = 1.5;
   let _buyerPercentFromDB = 1.5;
@@ -398,6 +407,12 @@ function ProfileDrawer({
     // navigate("/profile");
   };
 
+  const platformFeeCalculate = async (_amount, _buyerPercent) => {
+    let _amountToDeduct;
+    _amountToDeduct = (_amount * _buyerPercent) / 100;
+    return _amountToDeduct;
+  };
+
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
 
@@ -407,7 +422,18 @@ function ProfileDrawer({
       provider
     );
 
-    let priceETH = price;
+    const structData = await marketplaceContract._idToNFT(id);
+    const structData2 = await marketplaceContract._idToNFT2(id);
+
+    let discount = +structData2.fanDiscountPercent.toString();
+    console.log("fanDiscountPercent", discount);
+
+    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    setPriceETH(nftEthPrice);
+    let priceETH = nftEthPrice;
+    let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
+    setPlatformFeeETH(feeETH);
+
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
@@ -416,8 +442,68 @@ function ProfileDrawer({
     priceInUSD = oneETHInUSD * priceInUSD;
     priceInUSD = Math.ceil(priceInUSD);
     setAmountUSD(priceInUSD.toString());
-    let fee = Math.ceil((priceInUSD * 3) / 100);
-    setPlatformFee(fee);
+
+    let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+    setPlatformFeeUSDT(feeUSD);
+
+    // let fee = Math.ceil((priceInUSD * 3) / 100);
+    // setPlatformFee(fee);
+
+    if (discount != 0) {
+      let discountedEthPrice = (nftEthPrice * discount) / 100;
+      // let discountedEthPrice = (nftEthPrice * discount) / 100;
+      let priceETH = discountedEthPrice;
+      setDiscountedEth(discountedEthPrice);
+      console.log("discountedEthPrice", discountedEthPrice);
+      let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+      let priceInETH = dollarPriceOfETH.toString() / 1e18;
+      let feeETH = Math.ceil((priceInETH * 3) / 100);
+      setDiscountedPlatformFeeETH(feeETH);
+      let oneETHInUSD = 1 / priceInETH;
+      let priceInUSD = priceETH;
+      priceInUSD = oneETHInUSD * priceInUSD;
+      priceInUSD = Math.ceil(priceInUSD);
+      setDiscountedAmountUSD(priceInUSD.toString());
+      let feeUSD = Math.ceil((priceInUSD * 3) / 100);
+      setDiscountedPlatformFeeUSDT(feeUSD);
+    }
+  };
+
+  const buyWithFIAT = async () => {
+    const signer = await getProviderOrSigner(true);
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+    console.log("discountedAmountUSD ooo", discountedAmountUSD);
+    console.log("discountedPlatformFee ooo", discountedPlatformFee);
+    console.log("discountedEth ooo", discountedEth);
+
+    const structData = await marketplaceContract._idToNFT(id);
+    console.log("id", id);
+    console.log("structData.seller", structData.seller);
+    console.log("userAddress", userAddress);
+
+    let checkFan = await marketplaceContract.checkFan(id);
+
+    console.log("checkFan", checkFan);
+
+    let fanlist = await marketplaceContract.getFans(
+      "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    );
+    console.log("fanlist", fanlist);
+
+    let fanlist2 = await marketplaceContract.getFans(
+      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
+    );
+    console.log("fanlist2", fanlist2);
+
+    console.log("fanlist2", fanlist2);
+    console.log("fanlist2", fanlist2);
+    console.log("fanlist2", fanlist2);
+    console.log("fanlist2", fanlist2);
   };
 
   const buyWithETH = async () => {
@@ -428,28 +514,30 @@ function ProfileDrawer({
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
+    const structData = await marketplaceContract._idToNFT(id);
 
-    console.log("price", price);
-    let fee = Number((price * 3) / 100);
-    console.log("fee", fee);
+    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
 
-    let amount = Number(price) + fee;
-    console.log("amount", amount);
-
+    let fee = +platformFeeETH;
+    let amount = +priceETH + fee;
     let value = amount.toString();
-    console.log("value", value);
-    console.log("id", id);
-    console.log("id typeof", typeof id);
 
-    console.log("paymentMethod", paymentMethod);
-    console.log("paymentMethod typeof", typeof paymentMethod);
+    let checkFan = await marketplaceContract.checkFan(id);
+    console.log("checkFan  ", checkFan);
 
-    console.log(" NFT_CONTRACT_ADDRESS.address,", NFT_CONTRACT_ADDRESS.address);
+    if (checkFan) {
+      fee = +discountedPlatformFeeETH;
+      amount = +discountedEth + fee;
+      value = amount.toString();
+
+      console.log("discouted fee", fee);
+      console.log("discouted amount", amount);
+      console.log("discouted value", value);
+    }
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        // "0x38628490c3043e5d0bbb26d5a0a62fc77342e9d5",
         paymentMethod,
         id,
         sellerPercent, //  must be multiple of 10 of the users percent
@@ -467,8 +555,8 @@ function ProfileDrawer({
   };
 
   const buyWithUSDT = async () => {
-    console.log("Amount", amountUSD);
-    console.log("price", price);
+    // console.log("Amount", amountUSD);
+    // console.log("price", price);
 
     const signer = await getProviderOrSigner(true);
 
@@ -478,52 +566,32 @@ function ProfileDrawer({
       signer
     );
 
-    let fee = Number(platformFee);
-
-    console.log(
-      "TETHER_CONTRACT_ADDRESS.address",
-      TETHER_CONTRACT_ADDRESS.address
-    );
-
-    console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
-
-    console.log("signer", signer);
-
-    console.log(
-      "TETHER_CONTRACT_ADDRESS.address",
-      TETHER_CONTRACT_ADDRESS.address
-    );
-
-    console.log("USER", userAddress);
-
-    console.log("TETHER_CONTRACT_ABI.abi", TETHER_CONTRACT_ABI.abi);
-
     const USDTContract = new Contract(
       TETHER_CONTRACT_ADDRESS.address,
       TETHER_CONTRACT_ABI.abi,
       signer
     );
-    console.log("USER", userAddress);
 
-    console.log("amountUSD", amountUSD);
-    console.log("price", price);
-
+    let fee = +platformFeeUSDT;
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
-    console.log("amount", amount);
 
     let amountInWei = amount * 10 ** 6;
-    console.log("amountInWei", amountInWei);
+    // console.log("amountInWei", amountInWei);
     amountInWei = amountInWei.toString();
-    console.log("amountInWei", typeof amountInWei);
+    // console.log("amountInWei", typeof amountInWei);
 
-    // if (paymentMethod == 1) {
+    let checkFan = await marketplaceContract.checkFan(id);
+    console.log("checkFan  ", checkFan);
 
-    // let allowance = await USDTContract.allowance(
-    //   userAddress,
-    //   MARKETPLACE_CONTRACT_ADDRESS.address
-    // );
+    if (checkFan) {
+      fee = +discountedPlatformFeeUSDT;
+      amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
+      value = amount.toString();
 
-    // console.log("Allowance before", allowance.toString());
+      console.log("discouted fee", fee);
+      console.log("discouted amount", amount);
+      console.log("discouted value", value);
+    }
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -543,11 +611,11 @@ function ProfileDrawer({
     // }
 
     // console.log("paymentmethod", paymentMethod);
-    console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
-    console.log("amountUSD typeof", typeof amountUSD);
-    console.log("amountUSD", amountUSD);
-    console.log("amount", amount);
-    console.log("amountInWei typeof", amountInWei);
+    // console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
+    // console.log("amountUSD typeof", typeof amountUSD);
+    // console.log("amountUSD", amountUSD);
+    // console.log("amount", amount);
+    // console.log("amountInWei typeof", amountInWei);
 
     // console.log("Check", check);
 
@@ -817,7 +885,7 @@ function ProfileDrawer({
             <button onClick={buyWithUSDT}>Buy with USDT</button>
           </div>
           <div className="mobal-button-2">
-            <button>Buy with FIAT</button>
+            <button onClick={buyWithFIAT}>Buy with FIAT</button>
           </div>
         </div>
       </Modal>
