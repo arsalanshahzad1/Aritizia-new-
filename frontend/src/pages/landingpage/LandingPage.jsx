@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -18,8 +18,11 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../../service";
+import { GlobalContext } from "../../Context/GlobalContext";
 
 const LandingPage = ({ search, setSearch }) => {
+
+  const { prompt, setprompt } = useContext(GlobalContext)
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
