@@ -34,7 +34,9 @@ function ChatPage({ search, setSearch }) {
         // setChatIndex(index)
         setActiveUserId(id)
         const response = await apis.getChatMessages(id)
-        setUserMessagesDetails(response.data)
+
+        console.log(response?.data?.data,"RESPOINSE ASDASD")
+        setUserMessagesDetails(response?.data?.data)
         console.log(userMessagesDetails.user.id, 'userMessagesDetails');
     }
 
@@ -89,10 +91,14 @@ function ChatPage({ search, setSearch }) {
             for (let i = 0; i < fileMessages.length; i++) {
                 sendData.append('media_file[]', fileMessages[i]);
             }
-
+            console.log(userMessagesDetails,"userMessagesDetails before")
+                
             const response = await apis.postChatMessages(sendData)
             if (response.data.status) {
-                setUserMessagesDetails((prevState) => [response?.data?.data, ...prevState])
+
+                console.log(response.data.data,"data")
+               
+                setUserMessagesDetails((prevState) =>[response?.data?.data, ...prevState])
                 textMessage.current.value = ''
                 setShowFileMessages('')
                 setFileMessages('')
@@ -103,7 +109,8 @@ function ChatPage({ search, setSearch }) {
 
 
     }
-
+    console.log(userMessagesDetails,"userMessagesDetails after")
+                
     useEffect(() => {
         ChatUsers()
     }, [userMessagesDetails, showFileMessages, fileMessages])
@@ -180,7 +187,7 @@ function ChatPage({ search, setSearch }) {
                                 <div className='user'>
                                     <div className='img-holder'>
                                         {userMessagesDetails?.user?.profile_image == null ?
-                                            <BiUserCircle style={{ fontSize: '40px' }} />
+                                            <img src='../public/assets/images/user-none.png' alt="" />
                                             :
                                             <img src={userMessagesDetails?.user?.profile_image} alt="" />
                                         }
@@ -205,7 +212,7 @@ function ChatPage({ search, setSearch }) {
                                 </div>
                             </div>
                             <div className='chat-canvas'>
-                                {userMessagesDetails?.data?.map((data, index) => {
+                                {userMessagesDetails?.map((data, index) => {
                                     if (data?.chat_by === 8) {
                                         return (
                                             <MyMsg data={data} time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts'} />

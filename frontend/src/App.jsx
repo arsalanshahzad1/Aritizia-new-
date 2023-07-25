@@ -49,7 +49,7 @@ function App() {
             element={<Profile search={search} setSearch={setSearch} />}
           />
           <Route
-            path="/other-profile"
+            path="/profile/:id"
             element={<OtherProfile search={search} setSearch={setSearch} />}
           />
           <Route

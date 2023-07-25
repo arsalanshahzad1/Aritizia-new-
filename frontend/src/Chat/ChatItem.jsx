@@ -18,7 +18,7 @@ const ChatItem = ({ data, activeUserId }) => {
         >
             <div className='image-holder'>
                 {data?.profile_image == null ?
-                    <BiUserCircle />
+                    <img src='../public/assets/images/user-none.png' alt="" />
                     :
                     <img src={data?.profile_image} alt="" />
                 }
