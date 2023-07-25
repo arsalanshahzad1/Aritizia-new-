@@ -122,7 +122,7 @@ const MyNftCard = ({
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </Link>
             </div>
