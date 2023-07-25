@@ -101,7 +101,7 @@ function App() {
             element={<DashboardMain search={search} setSearch={setSearch} />}
           />
           <Route
-            path="/chat"
+            path="/chat/:id"
             element={<ChatPage search={search} setSearch={setSearch} />}
           />
         </Routes>

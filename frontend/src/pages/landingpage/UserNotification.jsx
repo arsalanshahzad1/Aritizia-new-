@@ -2,9 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../../App.css'
 
-function UserNotification(props) {
-    const { link, image, name, desc, msg, data } = props
-    console.log(data);
+function UserNotification(data) {
+    // console.log(data.data);
     const navigate = useNavigate()
     const navigateToChat = () => {
         if (link) {
@@ -13,7 +12,7 @@ function UserNotification(props) {
     }
     return (
         <>
-            {data?.map((res, id) => {
+            {/* {data?.map((res, id) => {
                 return (
                     <div onClick={navigateToChat} className='Notification-in-header'>
                         <div className='image-holder'><img src={res?.user?.profile_image} alt="" /></div>
@@ -32,7 +31,7 @@ function UserNotification(props) {
                         </div>
                     </div>
                 )
-            })}
+            })} */}
         </>
 
     )

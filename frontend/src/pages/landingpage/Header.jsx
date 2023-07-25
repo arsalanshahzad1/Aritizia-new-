@@ -137,8 +137,9 @@ const Header = ({ search, setSearch }) => {
     const response = await apis.viewNotification(count);
     setNotificationRes((prevState) => [
       ...prevState,
-      ...response?.data?.data,
+      ...response?.data?.data
     ]);
+    console.log(notificationRes);
   }
   return (
     <>
@@ -309,10 +310,7 @@ const Header = ({ search, setSearch }) => {
 
                     {showNotification && (
                       <div className="notification-card" style={{left : '11%'}}>
-                        <UserNotification image={monica} name={'Monica Lucas'} desc={'Followed You'} />
-                        <UserNotification image={monica} name={'Monica Lucas'} desc={'Followed You'} />
-                        <UserNotification image={NotificationIcon} name={'FAHAD'} desc={'mentioned'} msg={'you in a comment'} />
-                        <UserNotification image={NotificationIcon} name={'FAHAD'} desc={'mentioned'} msg={'you in a comment'} />
+                        <UserNotification data={notificationRes}/>
                       </div>
                     )}
                     <button

@@ -8,29 +8,34 @@ import apis from '../service'
 import { HiOutlinePaperClip } from 'react-icons/hi'
 import laravelEcho from "../socket/index";
 import { BiUserCircle } from 'react-icons/bi'
+import { useParams } from "react-router-dom";
+
 function ChatPage({ search, setSearch }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRef = useRef(null);
     const [userMessagesListing, setUserMessagesListing] = useState('')
     const [userMessagesDetails, setUserMessagesDetails] = useState('')
     const [chatIndex, setChatIndex] = useState(null)
-    const [activeUserId, setActiveUserId] = useState(null)
     const textMessage = useRef('')
     const [fileMessages, setFileMessages] = useState('')
     const [showFileMessages, setShowFileMessages] = useState('')
     const data = { sender_id: '', receiver_id: '', message: '', media_file: '' }
-
+    const params = useParams();
+    const [activeUserId, setActiveUserId] = useState(params.id)
+    console.log(activeUserId);
 
     const ChatUsers = async () => {
         const response = await apis.getChatUsers()
-        setUserMessagesListing(response.data.data)
+        setUserMessagesListing(response.data)
     }
-    const ChatMessage = async (id, index) => {
-        setChatIndex(index)
+
+    const ChatMessage = async (id) => {
+        console.log('ChatMessage' , id);
+        // setChatIndex(index)
         setActiveUserId(id)
         const response = await apis.getChatMessages(id)
-        setUserMessagesDetails(response.data.data)
-        console.log(response.data.data);
+        setUserMessagesDetails(response.data)
+        console.log(userMessagesDetails.user.id, 'userMessagesDetails');
     }
 
     const handleImageUpload = (event) => {
@@ -70,7 +75,7 @@ function ChatPage({ search, setSearch }) {
     const sendChat = async (e) => {
         e.preventDefault()
 
-        data.sender_id = 3;
+        data.sender_id = 8;
         data.receiver_id = activeUserId;
         data.message = textMessage.current.value;
         data.media_file = fileMessages;
@@ -102,6 +107,13 @@ function ChatPage({ search, setSearch }) {
     useEffect(() => {
         ChatUsers()
     }, [userMessagesDetails, showFileMessages, fileMessages])
+
+    useEffect(() => {
+        ChatMessage(params.id)
+    }, [params, userMessagesDetails])
+
+    useEffect(() => {
+    }, [userMessagesDetails])
 
     useEffect(() => {
         const id = JSON.parse(localStorage.getItem('data'))
@@ -148,9 +160,9 @@ function ChatPage({ search, setSearch }) {
                         <>
                             {userMessagesListing ?
                                 <>
-                                    {userMessagesListing.map((data, index) => {
+                                    {userMessagesListing.data.map((data, index) => {
                                         return (
-                                            <ChatItem ChatMessage={ChatMessage} data={data} index={index} chatIndex={chatIndex} />
+                                            <ChatItem ChatMessage={ChatMessage} data={data} index={index} activeUserId={activeUserId} />
                                         )
                                     })}
                                 </>
@@ -167,20 +179,18 @@ function ChatPage({ search, setSearch }) {
                             <div className='head'>
                                 <div className='user'>
                                     <div className='img-holder'>
-                                        {userMessagesListing[chatIndex]?.profile_image == null ?
-                                            <BiUserCircle style={{fontSize : '40px'}}/>
-
+                                        {userMessagesDetails?.user?.profile_image == null ?
+                                            <BiUserCircle style={{ fontSize: '40px' }} />
                                             :
-                                            <img src={userMessagesListing[chatIndex]?.profile_image} alt="" />
-
+                                            <img src={userMessagesDetails?.user?.profile_image} alt="" />
                                         }
                                     </div>
                                     <div className='username'>
                                         {/* FAHAD */}
-                                        {userMessagesListing[chatIndex]?.first_name == null ?
-                                            'User'+ activeUserId
+                                        {userMessagesDetails?.user?.first_name == null ?
+                                            'User' + activeUserId
                                             :
-                                            userMessagesListing[chatIndex]?.first_name
+                                            userMessagesDetails?.user?.first_name
                                         }
                                         <div>
                                             Active
@@ -195,8 +205,8 @@ function ChatPage({ search, setSearch }) {
                                 </div>
                             </div>
                             <div className='chat-canvas'>
-                                {userMessagesDetails?.map((data, index) => {
-                                    if (data?.chat_by === 3) {
+                                {userMessagesDetails?.data?.map((data, index) => {
+                                    if (data?.chat_by === 8) {
                                         return (
                                             <MyMsg data={data} time={'2 mints'} msg={'Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts Hi this is fahad. Can you give me some nfts'} />
                                         )

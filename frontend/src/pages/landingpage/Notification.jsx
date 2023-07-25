@@ -5,21 +5,21 @@ function Notification(props) {
     const { link, image, name, desc, msg, data } = props
     console.log(data);
     const navigate = useNavigate()
-    const navigateToChat = () => {
+    const navigateToChat = (id) => {
         // if (link) {
-            navigate('/chat')
+            navigate(`/chat/${id}`)
         // }
     }
     return (
         <>
             {data.map((res, id) => {
                 return (
-                    <div onClick={navigateToChat} className='Notification-in-header'>
-                        <div className='image-holder'><img src={res.user.profile_image} alt="" /></div>
+                    <div onClick={() => navigateToChat(res?.chat_by)} className={`Notification-in-header ${res?.is_seen == 0 ? 'is_seen' : ''}`} >
+                        <div className='image-holder'><img src={res?.user?.profile_image} alt="" /></div>
                         <div className='text-area'>
                             <div className='name-txt'>
                                 <span>
-                                    {res.user.first_name}
+                                    {res?.user?.first_name}
                                 </span>
                                 {desc}
                             </div>
@@ -30,7 +30,7 @@ function Notification(props) {
                             </div>
                                 :
                                 <div className='msg-txt'>
-                                    {res.text}
+                                    {res?.text}
                                 </div>
                             }
 

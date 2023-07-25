@@ -4389,10 +4389,15 @@ footer h1 {
 }
 
 .Notification-in-header {
-  padding: 10px 15px;
+  padding: 3.5px 10px;
   display: flex;
   font-family: 'Jost';
   color: #121212;
+  background: #fff;
+}
+
+.Notification-in-header.is_seen{
+  background: rgba(112,181,249,0.2);
 }
 
 .Notification-in-header:hover {
@@ -4420,7 +4425,7 @@ footer h1 {
 }
 
 .Notification-in-header .text-area .name-txt span {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin-right: 5px;
   text-transform: capitalize;
@@ -4433,7 +4438,7 @@ footer h1 {
 }
 
 .Notification-in-header .text-area .msg-txt {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -4575,7 +4580,7 @@ footer h1 {
   outline: none;
   background: transparent;
   width: 100%;
-  padding: 15px 0px;
+  padding: 10px 0px;
   font-size: 18px;
   font-weight: 600;
   color: #B600D1;
