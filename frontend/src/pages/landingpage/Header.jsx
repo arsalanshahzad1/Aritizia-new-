@@ -19,8 +19,9 @@ const Header = ({ search, setSearch }) => {
   const [user, setUser] = useState(localStorage.getItem("data"));
   const [messageArrive, setMessageArrive] = useState(false);
   const [notificationArrive, setNotificationArrive] = useState(false);
-  const [chatNotificationRes, setChatNotificationRes] = useState("");
-  const [notificationRes, setNotificationRes] = useState("");
+  const [chatNotificationRes, setChatNotificationRes] = useState([]);
+  const [notificationRes, setNotificationRes] = useState([]);
+  const [loader, setloader] = useState(false)
   const location = useLocation();
   const path = location.pathname;
   let countLength = 13;
@@ -51,7 +52,7 @@ const Header = ({ search, setSearch }) => {
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
-    console.log("In get provider or signer");
+    
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
@@ -74,7 +75,6 @@ const Header = ({ search, setSearch }) => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
       // Handle the received event data
-      console.log(data, 'data');
       setMessageArrive(true);
     });
 
@@ -87,10 +87,9 @@ const Header = ({ search, setSearch }) => {
     const id = JSON.parse(localStorage.getItem('data'))
     const user_id = id.id;
     const channel = laravelEcho.channel("notification-channel-" + user_id);
-    channel.listen("notification-event", (data) => {
+    channel.listen(".notification-event", (data) => {
       // Handle the received event data
-      console.log(data, 'data');
-      setMessageArrive(true);
+      setNotificationArrive(true);
     });
 
     return () => {
@@ -122,30 +121,39 @@ const Header = ({ search, setSearch }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [messageArrive]);
+  }, [messageArrive , notificationArrive]);
 
   const getChatnotification = async (name, count) => {
     if (name == "message") {
       setChatNotificationRes("");
+      setloader(true)
     }
     const response = await apis.getChatNotification(count);
-    setChatNotificationRes((prevState) => [
-      ...prevState,
-      ...response?.data?.data,
-    ]);
+    if (response.status) {
+      setChatNotificationRes((prevState) => [...prevState, ...response?.data?.data,]);
+      setloader(false)
+    } else {
+      setloader(false)
+      setChatNotificationRes([])
+    }
   };
 
   const viewNotification = async (name, count) => {
-    console.log('notification working');
     if (name == "notification") {
       setNotificationRes("");
+      setloader(true)
     }
     const response = await apis.viewNotification(count);
-    setNotificationRes((prevState) => [
-      ...prevState,
-      ...response?.data?.data
-    ]);
-    console.log(notificationRes);
+    if (response.status) {
+      setloader(false)
+      setNotificationRes((prevState) => [
+        ...prevState,
+        ...response?.data?.data,
+      ]);
+    } else {
+      setloader(false)
+      setNotificationRes([])
+    }
   }
   return (
     <>
@@ -258,39 +266,34 @@ const Header = ({ search, setSearch }) => {
                     {showMessage && (
                       <div className="notification-card" style={{ left: '2%' }}>
                         <>
-                          {chatNotificationRes ? (
-                            <Notification
-                              data={chatNotificationRes}
-                            />
-                          ) : (
-                            <section class="sec-loading">
-                              <div class="one"></div>
-                            </section>
-                          )}
-                          {chatNotificationRes.length < countLength &&
-                            chatNotificationRes ? (
-                            <button
-                              className="loadmore-mgs-notofication"
-                              onClick={() =>
-                                getChatnotification(
-                                  "loadmore",
-                                  chatNotificationRes.length
-                                )
+                          {loader ?
+                            (<section class="sec-loading"><div class="one"></div></section>)
+                            :
+                            <>
+                              {chatNotificationRes?.length > 0 ?
+                                (<Notification data={chatNotificationRes} />)
+                                :
+                                (<section >No record found </section>)
                               }
-                            >
-                              load more
-                            </button>
-                          ) : null}
+                              {chatNotificationRes.length < countLength && chatNotificationRes.length > 0 ? (
+                                <button
+                                  className="loadmore-mgs-notofication"
+                                  onClick={() => getChatnotification("loadmore", chatNotificationRes.length)}>
+                                  load more
+                                </button>
+                              ) : null}
+                            </>
+                          }
                         </>
                       </div>
                     )}
                     {user && (
                       <span
                         onClick={() => {
-                          setShowNotification(!showNotification),
-                            setshowMessage(false);
-                          viewNotification('notification', 0),
-                            setNotificationArrive(false)
+                          setShowNotification(!showNotification);
+                          setshowMessage(false);
+                          viewNotification('notification', 0);
+                          setNotificationArrive(false);
                         }}
                         className={`icon-for-header ${scrolled ? "black-svgs" : ""
                           }`}
@@ -310,18 +313,33 @@ const Header = ({ search, setSearch }) => {
                             d="M14.2053 38C13.333 37.9938 12.4747 37.7794 11.7018 37.3749C10.929 36.9704 10.2638 36.3873 9.76158 35.6741C9.64789 35.5518 9.56067 35.4073 9.5057 35.2496C9.45074 35.0919 9.42914 34.9246 9.44216 34.7582C9.45518 34.5917 9.50252 34.4296 9.58133 34.2824C9.66015 34.1352 9.7687 34.006 9.90003 33.9028C10.034 33.793 10.1898 33.7128 10.3569 33.6675C10.5241 33.6222 10.6991 33.6126 10.8701 33.6397C11.0412 33.6668 11.2045 33.73 11.3495 33.8248C11.4945 33.9195 11.6178 34.0438 11.7112 34.1896C13.265 35.9908 15.2049 36.0007 16.7389 34.1896C16.8275 34.0407 16.9465 33.9122 17.0883 33.8127C17.2301 33.7131 17.3915 33.6449 17.5616 33.6121C17.7318 33.5794 17.9069 33.5832 18.0756 33.623C18.2442 33.6629 18.4024 33.738 18.54 33.8434C18.6752 33.9513 18.7871 34.0856 18.8683 34.2384C18.9496 34.3912 18.9987 34.5591 19.0126 34.7316C19.0265 34.9041 19.0048 35.0776 18.949 35.2414C18.8933 35.4052 18.8048 35.5558 18.6886 35.6841C18.1802 36.3997 17.508 36.9834 16.728 37.3863C15.9481 37.7892 15.0831 37.9996 14.2053 38Z"
                             fill="#ffffff"
                           />
-                          <circle cx="20.5" cy="5.5" r="5.5" fill="#2636D9" />
+                        {notificationArrive && <circle cx="20.5" cy="5.5" r="5.5" fill="#2636D9"/>}
                         </svg>
                       </span>
                     )}
 
                     {showNotification && (
                       <div className="notification-card" style={{ left: '11%' }}>
-                        {notificationRes ?
-                        (<UserNotification data={notificationRes} />)
-                      :
-                        (<section class="sec-loading"><div class="one"></div></section>)
-                      }
+                        <>
+                          {loader ?
+                            (<section class="sec-loading"><div class="one"></div></section>)
+                            :
+                            <>
+                              {notificationRes?.length > 0 ?
+                                (<UserNotification data={notificationRes} />)
+                                :
+                                (<section >No record found </section>)
+                              }
+                              {notificationRes.length < countLength && notificationRes.length > 0 ? (
+                                <button
+                                  className="loadmore-mgs-notofication"
+                                  onClick={() => viewNotification("loadmore", notificationRes.length)}>
+                                  load more
+                                </button>
+                              ) : null}
+                            </>
+                          }
+                        </>
                       </div>
                     )}
                     <button
@@ -382,30 +400,26 @@ const Header = ({ search, setSearch }) => {
                       </span>
                     )}
                     {showMessage && (
-                      <div
-                        className="notification-card"
-                        style={{ left: "2%" }}
-                      >
+                      <div className="notification-card" style={{ left: '2%' }}>
                         <>
-                          {chatNotificationRes ? (
-                            <Notification data={chatNotificationRes}/>
-                          ) : (
-                            <section class="sec-loading"><div class="one"></div></section>
-                          )}
-                          {chatNotificationRes.length < countLength &&
-                            chatNotificationRes ? (
-                            <button
-                              className="loadmore-mgs-notofication"
-                              onClick={() =>
-                                getChatnotification(
-                                  "loadmore",
-                                  chatNotificationRes.length
-                                )
+                          {loader ?
+                            (<section class="sec-loading"><div class="one"></div></section>)
+                            :
+                            <>
+                              {chatNotificationRes?.length > 0 ?
+                                (<Notification data={chatNotificationRes} />)
+                                :
+                                (<section >No record found </section>)
                               }
-                            >
-                              load more
-                            </button>
-                          ) : null}
+                              {chatNotificationRes.length < countLength && chatNotificationRes.length > 0 ? (
+                                <button
+                                  className="loadmore-mgs-notofication"
+                                  onClick={() => getChatnotification("loadmore", chatNotificationRes.length)}>
+                                  load more
+                                </button>
+                              ) : null}
+                            </>
+                          }
                         </>
                       </div>
                     )}
@@ -432,27 +446,41 @@ const Header = ({ search, setSearch }) => {
                           d="M14.2053 38C13.333 37.9938 12.4747 37.7794 11.7018 37.3749C10.929 36.9704 10.2638 36.3873 9.76158 35.6741C9.64789 35.5518 9.56067 35.4073 9.5057 35.2496C9.45074 35.0919 9.42914 34.9246 9.44216 34.7582C9.45518 34.5917 9.50252 34.4296 9.58133 34.2824C9.66015 34.1352 9.7687 34.006 9.90003 33.9028C10.034 33.793 10.1898 33.7128 10.3569 33.6675C10.5241 33.6222 10.6991 33.6126 10.8701 33.6397C11.0412 33.6668 11.2045 33.73 11.3495 33.8248C11.4945 33.9195 11.6178 34.0438 11.7112 34.1896C13.265 35.9908 15.2049 36.0007 16.7389 34.1896C16.8275 34.0407 16.9465 33.9122 17.0883 33.8127C17.2301 33.7131 17.3915 33.6449 17.5616 33.6121C17.7318 33.5794 17.9069 33.5832 18.0756 33.623C18.2442 33.6629 18.4024 33.738 18.54 33.8434C18.6752 33.9513 18.7871 34.0856 18.8683 34.2384C18.9496 34.3912 18.9987 34.5591 19.0126 34.7316C19.0265 34.9041 19.0048 35.0776 18.949 35.2414C18.8933 35.4052 18.8048 35.5558 18.6886 35.6841C18.1802 36.3997 17.508 36.9834 16.728 37.3863C15.9481 37.7892 15.0831 37.9996 14.2053 38Z"
                           fill="#111111"
                         />
-                        {/* <circle cx="20.5" cy="5.5" r="5.5" fill="#2636D9" /> */}
+                        {notificationArrive && <circle cx="20.5" cy="5.5" r="5.5" fill="#2636D9"/>}
                       </svg>
                     </span>
 
                     {showNotification && (
-                      <div className="notification-card" style={{left: '11%'}}>
-                        {notificationRes ?
-                        <UserNotification data={notificationRes} />
-                        :
-                        <section class="sec-loading"><div class="one"></div></section>
-                      }
-
+                      <div className="notification-card" style={{ left: '11%' }}>
+                        <>
+                          {loader ?
+                            (<section class="sec-loading"><div class="one"></div></section>)
+                            :
+                            <>
+                              {notificationRes?.length > 0 ?
+                                (<UserNotification data={notificationRes} />)
+                                :
+                                (<section >No record found </section>)
+                              }
+                              {notificationRes.length < countLength && notificationRes.length > 0 ? (
+                                <button
+                                  className="loadmore-mgs-notofication"
+                                  onClick={() => viewNotification("loadmore", notificationRes.length)}>
+                                  load more
+                                </button>
+                              ) : null}
+                            </>
+                          }
+                        </>
                       </div>
                     )}
                     <button
                       onClick={connectWallet}
                       className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
                         }`}
-                        style={{
-                          margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
-                        }}
+                      style={{
+                        margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
+                      }}
                     >
                       {user ? "Connected" : "Connect Wallet"}
                     </button>

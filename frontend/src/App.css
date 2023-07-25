@@ -4413,7 +4413,9 @@ footer h1 {
 }
 
 .Notification-in-header .image-holder img {
-  width: 100%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
 }
 
 .Notification-in-header .text-area {

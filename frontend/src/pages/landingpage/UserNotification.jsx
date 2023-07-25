@@ -4,7 +4,6 @@ import '../../App.css';
 
 function UserNotification(props) {
     const { data } = props;
-    console.log(data);
 
     const navigate = useNavigate();
     const navigateToProfile = (id) => {

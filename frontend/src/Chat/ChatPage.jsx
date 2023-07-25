@@ -22,7 +22,6 @@ function ChatPage({ search, setSearch }) {
     const data = { sender_id: '', receiver_id: '', message: '', media_file: '' }
     const params = useParams();
     const [activeUserId, setActiveUserId] = useState(params.id)
-    console.log(activeUserId);
 
     const ChatUsers = async () => {
         const response = await apis.getChatUsers()
@@ -30,14 +29,11 @@ function ChatPage({ search, setSearch }) {
     }
 
     const ChatMessage = async (id) => {
-        console.log('ChatMessage' , id);
         // setChatIndex(index)
         setActiveUserId(id)
         const response = await apis.getChatMessages(id)
 
-        console.log(response?.data?.data,"RESPOINSE ASDASD")
         setUserMessagesDetails(response?.data?.data)
-        console.log(userMessagesDetails.user.id, 'userMessagesDetails');
     }
 
     const handleImageUpload = (event) => {
@@ -60,12 +56,9 @@ function ChatPage({ search, setSearch }) {
 
     const handleButtonClick = () => {
         fileInputRef.current.click();
-        // console.log(fileMessages);
-        console.log(showFileMessages);
     };
 
     const removeImage = (index) => {
-        console.log(index);
         const newShowMessages = [...showFileMessages];
         const newFileMessages = [...fileMessages];
         newShowMessages.splice(index, 1);
@@ -91,12 +84,9 @@ function ChatPage({ search, setSearch }) {
             for (let i = 0; i < fileMessages.length; i++) {
                 sendData.append('media_file[]', fileMessages[i]);
             }
-            console.log(userMessagesDetails,"userMessagesDetails before")
                 
             const response = await apis.postChatMessages(sendData)
             if (response.data.status) {
-
-                console.log(response.data.data,"data")
                
                 setUserMessagesDetails((prevState) =>[response?.data?.data, ...prevState])
                 textMessage.current.value = ''
@@ -109,7 +99,6 @@ function ChatPage({ search, setSearch }) {
 
 
     }
-    console.log(userMessagesDetails,"userMessagesDetails after")
                 
     useEffect(() => {
         ChatUsers()
@@ -126,25 +115,15 @@ function ChatPage({ search, setSearch }) {
         const id = JSON.parse(localStorage.getItem('data'))
         const user_id = id.id;
         const channel = laravelEcho.channel("chat-channel-" + user_id);
-        console.log('user_id', user_id);
         channel.listen(".chat-event", (data) => {
             // Handle the received event data
-            console.log('data socket', data);
-            console.log('activeId', activeUserId);
-            console.log('data.data.sender_id', data.data.sender_id);
-            console.log(data.data.sender_id == activeUserId, "condituion")
 
             if (data.data.sender_id == activeUserId) {
-                console.log('true', data);
                 setUserMessagesDetails((prevState) => [data?.data, ...prevState])
             }
             else {
                 ChatUsers()
             }
-
-            console.log(activeUserId, 'activeUserId');
-
-            console.log(data.data.sender_id, 'data');
             //   setMessageArrive(true);
         });
 
