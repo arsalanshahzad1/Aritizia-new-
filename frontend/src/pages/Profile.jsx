@@ -25,7 +25,7 @@ import followerImg from "../../public/assets/images/user-pic.png";
 import Followers from "./settingFolder/Followers";
 import apis from "../service";
 import { Navigate } from "react-router-dom";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -45,9 +45,9 @@ const Profile = ({ search, setSearch }) => {
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
-  const [following , setFollwing] = useState('')
-  const [followers , setFollwers] = useState('')
-  const navigate  = useNavigate()
+  const [following, setFollwing] = useState("");
+  const [followers, setFollwers] = useState("");
+  const navigate = useNavigate();
 
   let likedNftsFromDB = [];
 
@@ -116,7 +116,6 @@ const Profile = ({ search, setSearch }) => {
     //     });
     // }
   };
-  let likedNftsFromDB = [];
 
   const getLikedNfts = async () => {
     const provider = await getProviderOrSigner();
@@ -132,28 +131,27 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    let NFTId = await getLikedNftsList()
+    let NFTId = await getLikedNftsList();
 
-      let liked = []
+    let liked = [];
 
-    console.log("NFTId" , NFTId);
+    console.log("NFTId", NFTId);
 
     console.log("Running");
 
     for (let i = 0; i < NFTId.length; i++) {
       let id;
-      let collectionImage = NFTId[i].collection_image
-      id = +(NFTId[i].token_id);
+      let collectionImage = NFTId[i].collection_image;
+      id = +NFTId[i].token_id;
       // id =i;
-      
 
-      console.log("zayyan",id);
+      console.log("zayyan", id);
 
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
 
-      console.log("structData",structData)
+      console.log("structData", structData);
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -197,23 +195,19 @@ const Profile = ({ search, setSearch }) => {
             royalty: royalty,
             description: description,
             collection: collection,
-            collectionImage:collectionImage
+            collectionImage: collectionImage,
           };
-          console.log("nftData",nftData);
+          console.log("nftData", nftData);
           liked.push(nftData);
           setLikedNfts(liked);
 
           // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
-          
-
         })
 
         .catch((error) => {
           console.error("Error fetching metadata:", error);
         });
     }
-    
-
   };
 
   const addFanList = async () => {
@@ -239,10 +233,7 @@ const Profile = ({ search, setSearch }) => {
 
     // console.log("fans", fans);
 
-    let response = marketplaceContract.on(
-      "addedFans",
-      handleAddedFansEvent
-    );
+    let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
 
     console.log("Response of addedFans event", response);
   };
@@ -545,27 +536,25 @@ const Profile = ({ search, setSearch }) => {
 
   const getLikedNftsList = async () => {
     const response = await apis.getLikeNFTList();
-    return(
-      response.data.data
-    )
-  }
+    return response.data.data;
+  };
 
-  const getFollowingList = async () =>{
+  const getFollowingList = async () => {
     const response = await apis.getFollowingList();
-    console.log(response.data.data , 'following');
-    setFollwing(response.data.data)
-  }
-  const getFollowersList = async () =>{
+    console.log(response.data.data, "following");
+    setFollwing(response.data.data);
+  };
+  const getFollowersList = async () => {
     const response = await apis.getFollowersList();
-    console.log(response.data.data , 'followers');
-    setFollwers(response.data.data)
-  }
+    console.log(response.data.data, "followers");
+    setFollwers(response.data.data);
+  };
 
-  useEffect(() =>{
-    getLikedNfts()
-    getFollowingList()
-    getFollowersList()
-  } , [])
+  useEffect(() => {
+    getLikedNfts();
+    getFollowingList();
+    getFollowersList();
+  }, []);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
@@ -675,17 +664,18 @@ const Profile = ({ search, setSearch }) => {
     });
   };
 
-  const postChatMeaage = async () =>{
-    console.log(('clicking'));
-    const id = JSON.parse(localStorage.getItem('data'))
+  const postChatMeaage = async () => {
+    console.log("clicking");
+    const id = JSON.parse(localStorage.getItem("data"));
     const user_id = id.id;
-    const response = await apis.postCheckChatMessage({sender_id : user_id , receiver_id : '14' })
-    if(response.status){
-      window.location.replace("http://127.0.0.1:5173/chat")
+    const response = await apis.postCheckChatMessage({
+      sender_id: user_id,
+      receiver_id: "14",
+    });
+    if (response.status) {
+      window.location.replace("http://127.0.0.1:5173/chat");
     }
-  }
-
- 
+  };
 
   return (
     <>
@@ -738,8 +728,13 @@ const Profile = ({ search, setSearch }) => {
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
-                  <div className="message-btn" onClick={() =>{postChatMeaage()}}>
-                    <button >
+                  <div
+                    className="message-btn"
+                    onClick={() => {
+                      postChatMeaage();
+                    }}
+                  >
+                    <button>
                       <BsFillEnvelopeFill />
                       MESSAGE
                     </button>
@@ -918,7 +913,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                          <Followers data={followers}/>
+                            <Followers data={followers} />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
