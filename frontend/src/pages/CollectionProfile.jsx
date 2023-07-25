@@ -19,7 +19,7 @@ import bird from "../../public/assets/images/bird.png";
 import SimpleCard from "../components/cards/SimpleCard";
 import MyNftCard from "../components/cards/MyNftCard";
 import nftimage2 from "../../public/assets/images/nftimage2.png";
-import Follow from "./settingFolder/Follow";
+import Following from "./settingFolder/Following";
 import collectionback from "../../public/assets/images/Collection-background.png";
 import collectionDp from "../../public/assets/images/collectionDp.png";
 import CollectionCard from "../components/cards/CollectionCard";

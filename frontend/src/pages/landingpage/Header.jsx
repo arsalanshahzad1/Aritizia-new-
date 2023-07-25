@@ -11,6 +11,7 @@ import laravelEcho from "../../socket/index";
 import apis from "../../service";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import Web3Modal from "web3modal";
+import UserNotification from "./UserNotification";
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -22,6 +23,7 @@ const Header = ({ search, setSearch }) => {
   const [user, setUser] = useState(localStorage.getItem("data"));
   const [messageArrive, setMessageArrive] = useState(false);
   const [chatNotificationRes, setChatNotificationRes] = useState("");
+  const [notificationRes, setNotificationRes] = useState("");
   const location = useLocation();
   const path = location.pathname;
   let countLength = 13;
@@ -71,12 +73,13 @@ const Header = ({ search, setSearch }) => {
   };
 
   useEffect(() => {
-    const user_id = 4;
+    const id = JSON.parse(localStorage.getItem('data'))
+    const user_id = id.id;
     const channel = laravelEcho.channel("chat-channel-" + user_id);
-
+    console.log('user_id' , user_id);
     channel.listen(".chat-event", (data) => {
       // Handle the received event data
-      console.log(data);
+      console.log(data,'data');
       setMessageArrive(true);
     });
 
@@ -125,6 +128,19 @@ const Header = ({ search, setSearch }) => {
     console.log(chatNotificationRes.length);
     console.log(countLength);
   };
+
+  const viewNotification = async (name , count) => {
+    console.log('notification working');
+    if (name == "notification") {
+      setNotificationRes("");
+    }
+    const response = await apis.viewNotification(count);
+    setNotificationRes((prevState) => [
+      ...prevState,
+      ...response?.data?.data
+    ]);
+    console.log(notificationRes);
+  }
   return (
     <>
       <header id={`${scrolled ? "active" : ""}`}>
@@ -180,16 +196,14 @@ const Header = ({ search, setSearch }) => {
                 {path === "/" ? (
                   <>
                     <FiSearch
-                      className={`search ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`search ${scrolled ? "black-color" : "white-color"
+                        }`}
                       onClick={() => setSearch(true)}
                     />
 
                     <span
-                      className={`icon-for-header ${
-                        scrolled ? "black-svgs" : ""
-                      }`}
+                      className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                        }`}
                     >
                       <svg
                         width="1"
@@ -205,12 +219,13 @@ const Header = ({ search, setSearch }) => {
                       <span
                         onClick={() => {
                           setshowMessage(!showMessage),
-                            setShowNotification(false),
-                            getChatnotification("message", 0);
+                          setShowNotification(false),
+                          getChatnotification("message", 0);
+                          setMessageArrive(false)
+                          
                         }}
-                        className={`icon-for-header ${
-                          scrolled ? "black-svgs" : ""
-                        }`}
+                        className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                          }`}
                       >
                         <svg
                           width="36"
@@ -235,16 +250,11 @@ const Header = ({ search, setSearch }) => {
                       </span>
                     )}
                     {showMessage && (
-                      <div className="notification-card">
+                      <div className="notification-card" style={{left : '2%'}}>
                         <>
                           {chatNotificationRes ? (
                             <Notification
                               data={chatNotificationRes}
-                              link={"/chat"}
-                              image={NotificationIcon}
-                              name={"FAHAD"}
-                              desc={"sent you message"}
-                              msg={"Hi this is fahad...."}
                             />
                           ) : (
                             <section class="sec-loading">
@@ -252,7 +262,7 @@ const Header = ({ search, setSearch }) => {
                             </section>
                           )}
                           {chatNotificationRes.length < countLength &&
-                          chatNotificationRes ? (
+                            chatNotificationRes ? (
                             <button
                               className="loadmore-mgs-notofication"
                               onClick={() =>
@@ -272,11 +282,11 @@ const Header = ({ search, setSearch }) => {
                       <span
                         onClick={() => {
                           setShowNotification(!showNotification),
-                            setshowMessage(false);
+                          setshowMessage(false);
+                          viewNotification('notification' , 0)
                         }}
-                        className={`icon-for-header ${
-                          scrolled ? "black-svgs" : ""
-                        }`}
+                        className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                          }`}
                       >
                         <svg
                           width="24"
@@ -299,18 +309,14 @@ const Header = ({ search, setSearch }) => {
                     )}
 
                     {showNotification && (
-                      <div className="notification-card">
-                        {/* <Notification image={monica} name={'Monica Lucas'} desc={'Followed You'} />
-                        <Notification image={monica} name={'Monica Lucas'} desc={'Followed You'} />
-                        <Notification image={NotificationIcon} name={'FAHAD'} desc={'mentioned'} msg={'you in a comment'} />
-                        <Notification image={NotificationIcon} name={'FAHAD'} desc={'mentioned'} msg={'you in a comment'} /> */}
+                      <div className="notification-card" style={{left : '11%'}}>
+                        <UserNotification data={notificationRes}/>
                       </div>
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                       style={{
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
@@ -385,7 +391,7 @@ const Header = ({ search, setSearch }) => {
                             </section>
                           )}
                           {chatNotificationRes.length < countLength &&
-                          chatNotificationRes ? (
+                            chatNotificationRes ? (
                             <button
                               className="loadmore-mgs-notofication"
                               onClick={() =>
@@ -428,23 +434,23 @@ const Header = ({ search, setSearch }) => {
 
                     {showNotification && (
                       <div className="notification-card">
-                        <Notification
+                        <UserNotification
                           image={monica}
                           name={"Monica Lucas"}
                           desc={"Followed You"}
                         />
-                        <Notification
+                        <UserNotification
                           image={monica}
                           name={"Monica Lucas"}
                           desc={"Followed You"}
                         />
-                        <Notification
+                        <UserNotification
                           image={NotificationIcon}
                           name={"FAHAD"}
                           desc={"mentioned"}
                           msg={"you in a comment"}
                         />
-                        <Notification
+                        <UserNotification
                           image={NotificationIcon}
                           name={"FAHAD"}
                           desc={"mentioned"}
@@ -454,9 +460,8 @@ const Header = ({ search, setSearch }) => {
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                     >
                       Connect Wallet
                     </button>
@@ -476,9 +481,8 @@ const Header = ({ search, setSearch }) => {
                     />
                     {toggleUserDropdown && (
                       <div
-                        className={`user-login-dropdown ${
-                          scrolled ? "active" : ""
-                        }`}
+                        className={`user-login-dropdown ${scrolled ? "active" : ""
+                          }`}
                       >
                         <ul>
                           <li>
@@ -491,9 +495,8 @@ const Header = ({ search, setSearch }) => {
                             <Link to={"/create"}>Create</Link>
                           </li>
                           <li
-                            className={`setting ${
-                              toggleSettingDropdown ? "seeting-active" : ""
-                            }`}
+                            className={`setting ${toggleSettingDropdown ? "seeting-active" : ""
+                              }`}
                             onClick={() =>
                               setToggleSettingDropdown(!toggleSettingDropdown)
                             }

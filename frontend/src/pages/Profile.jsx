@@ -19,10 +19,13 @@ import bird from "../../public/assets/images/bird.png";
 import SimpleCard from "../components/cards/SimpleCard";
 import MyNftCard from "../components/cards/MyNftCard";
 import nftimage2 from "../../public/assets/images/nftimage2.png";
-import Follow from "./settingFolder/Follow";
-import apis from "../service";
+import Following from "./settingFolder/Following";
 import Fan from "./settingFolder/Fan";
 import followerImg from "../../public/assets/images/user-pic.png";
+import Followers from "./settingFolder/Followers";
+import apis from "../service";
+import { Navigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -42,6 +45,11 @@ const Profile = ({ search, setSearch }) => {
   const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
+  const [following , setFollwing] = useState('')
+  const [followers , setFollwers] = useState('')
+  const navigate  = useNavigate()
+
+  let likedNftsFromDB = [];
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -124,15 +132,28 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
+    let NFTId = await getLikedNftsList()
 
-    for (let i = 0; i < likedNftsFromDB.length; i++) {
+      let liked = []
+
+    console.log("NFTId" , NFTId);
+
+    console.log("Running");
+
+    for (let i = 0; i < NFTId.length; i++) {
       let id;
+      let collectionImage = NFTId[i].collection_image
+      id = +(NFTId[i].token_id);
+      // id =i;
+      
 
-      id = +mintedTokens[i].tokenId.toString();
+      console.log("zayyan",id);
 
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
+
+      console.log("structData",structData)
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -140,9 +161,9 @@ const Profile = ({ search, setSearch }) => {
 
       setDiscountPrice(discountOnNFT);
 
-      let auctionData = await marketplaceContract._idToAuction(id);
+      // let auctionData = await marketplaceContract._idToAuction(id);
 
-      listingType = structData.listingType;
+      // let listingType = structData.listingType;
 
       const price = ethers.utils.formatEther(structData.price.toString());
 
@@ -176,15 +197,23 @@ const Profile = ({ search, setSearch }) => {
             royalty: royalty,
             description: description,
             collection: collection,
+            collectionImage:collectionImage
           };
-          // console.log(nftData);
-          setLikedNfts(nftData);
+          console.log("nftData",nftData);
+          liked.push(nftData);
+          setLikedNfts(liked);
+
+          // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
+          
+
         })
 
         .catch((error) => {
           console.error("Error fetching metadata:", error);
         });
     }
+    
+
   };
 
   const addFanList = async () => {
@@ -514,6 +543,30 @@ const Profile = ({ search, setSearch }) => {
     getLikedNfts();
   }, [userAddress]);
 
+  const getLikedNftsList = async () => {
+    const response = await apis.getLikeNFTList();
+    return(
+      response.data.data
+    )
+  }
+
+  const getFollowingList = async () =>{
+    const response = await apis.getFollowingList();
+    console.log(response.data.data , 'following');
+    setFollwing(response.data.data)
+  }
+  const getFollowersList = async () =>{
+    const response = await apis.getFollowersList();
+    console.log(response.data.data , 'followers');
+    setFollwers(response.data.data)
+  }
+
+  useEffect(() =>{
+    getLikedNfts()
+    getFollowingList()
+    getFollowersList()
+  } , [])
+
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
@@ -523,7 +576,6 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const [FansAddress, setFansAddress] = useState([""]);
-
   const [showAddFanPopUp, setshowAddFanPopUp] = useState(0);
 
   const handleChangeAddressInput = (e, index) => {
@@ -623,6 +675,18 @@ const Profile = ({ search, setSearch }) => {
     });
   };
 
+  const postChatMeaage = async () =>{
+    console.log(('clicking'));
+    const id = JSON.parse(localStorage.getItem('data'))
+    const user_id = id.id;
+    const response = await apis.postCheckChatMessage({sender_id : user_id , receiver_id : '14' })
+    if(response.status){
+      window.location.replace("http://127.0.0.1:5173/chat")
+    }
+  }
+
+ 
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -674,8 +738,8 @@ const Profile = ({ search, setSearch }) => {
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
-                  <div className="message-btn">
-                    <button>
+                  <div className="message-btn" onClick={() =>{postChatMeaage()}}>
+                    <button >
                       <BsFillEnvelopeFill />
                       MESSAGE
                     </button>
@@ -816,10 +880,10 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {likedNfts.map((item) => (
+                      {likedNfts?.map((item) => (
                         <NewItemCard
-                          key={item.id}
-                          id={item.id}
+                          key={item?.id}
+                          id={item?.id}
                           title={item?.title}
                           image={item?.image}
                           price={item?.price}
@@ -827,6 +891,7 @@ const Profile = ({ search, setSearch }) => {
                           royalty={item?.royalty}
                           description={item?.description}
                           collection={item?.collection}
+                          collectionImage={item?.collectionImage}
                           userAddress
                         />
                       ))}
@@ -853,22 +918,23 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
+                          <Followers data={followers}/>
+                            {/* <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
+                            <Follow followed={true} /> */}
                           </>
                         ) : (
                           <>
+                            <Following data={following} />
+                            {/* <Follow followed={false} />
                             <Follow followed={false} />
                             <Follow followed={false} />
                             <Follow followed={false} />
-                            <Follow followed={false} />
-                            <Follow followed={false} />
-                            <Follow followed={false} />
+                            <Follow followed={false} /> */}
                           </>
                         )}
                       </div>

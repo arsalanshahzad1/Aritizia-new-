@@ -19,7 +19,6 @@ import bird from "../../public/assets/images/bird.png";
 import SimpleCard from "../components/cards/SimpleCard";
 import MyNftCard from "../components/cards/MyNftCard";
 import nftimage2 from "../../public/assets/images/nftimage2.png";
-import Follow from "./settingFolder/Follow";
 
 import OtherUser from "../../public/assets/images/OtherUser.png";
 import OtherUserBackground from "../../public/assets/images/OtherUserBackground.png";
@@ -269,7 +268,8 @@ const getMyListedNfts = async () => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  <div>Following</div>
+                  <div>Follow</div>
+                  {/* <div>Following</div> */}
                   <div>Followers 50k+</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">

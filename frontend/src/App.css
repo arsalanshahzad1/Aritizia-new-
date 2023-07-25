@@ -810,6 +810,11 @@ header .left img {
   position: relative;
   z-index: 5;
 }
+.sec-five-wrap .image img{
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
 
 .sec-five-wrap .image span {
   position: absolute;
@@ -4271,6 +4276,17 @@ footer h1 {
 }
 
 .followers-div div:nth-child(1) {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: 'Jost';
+  padding: 4px 25px;
+  height: max-content;
+  border: #B600D1 2px solid;
+  background-color: #B600D1;
+  border-radius: 6px;
+}
+.followers-div div:nth-child(1).active {
   color: #B600D1;
   font-size: 18px;
   font-weight: 600;
@@ -4278,6 +4294,7 @@ footer h1 {
   padding: 4px 25px;
   height: max-content;
   border: #B600D1 2px solid;
+  border-radius: 6px;
 }
 
 .followers-div div:nth-child(2) {
@@ -4372,10 +4389,15 @@ footer h1 {
 }
 
 .Notification-in-header {
-  padding: 10px 15px;
+  padding: 3.5px 10px;
   display: flex;
   font-family: 'Jost';
   color: #121212;
+  background: #fff;
+}
+
+.Notification-in-header.is_seen{
+  background: rgba(112,181,249,0.2);
 }
 
 .Notification-in-header:hover {
@@ -4403,7 +4425,7 @@ footer h1 {
 }
 
 .Notification-in-header .text-area .name-txt span {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin-right: 5px;
   text-transform: capitalize;
@@ -4416,7 +4438,7 @@ footer h1 {
 }
 
 .Notification-in-header .text-area .msg-txt {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -4558,7 +4580,7 @@ footer h1 {
   outline: none;
   background: transparent;
   width: 100%;
-  padding: 15px 0px;
+  padding: 10px 0px;
   font-size: 18px;
   font-weight: 600;
   color: #B600D1;

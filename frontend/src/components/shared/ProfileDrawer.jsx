@@ -2,6 +2,7 @@ import React, { useRef, useCallback, useState, useEffect } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 import { BsCheck } from "react-icons/bs";
 import "./Shared.css";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
@@ -21,6 +22,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
+import apis from '../../service'
 import {
   Area,
   AreaChart,
@@ -35,6 +37,7 @@ import {
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
 
 const Monthly_data = [
   {
@@ -326,14 +329,49 @@ function ProfileDrawer({
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
+  const [likeAndViewData, setLikeAndViewData] = useState("");
+  
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
   };
 
-  // let priceInETH = price;
+  const getNFTLike = async () =>{
+    var temp = JSON.parse(localStorage.getItem('data'));
+    var address = temp.id;
+    const response = await apis.getLikeNFT(address , id)
+    console.log(response.data , 'getNFTLike');
+    setLikeAndViewData(response.data.data)
+  }
 
+  const postNFTLike = async () =>{
+    var temp = JSON.parse(localStorage.getItem('data'));
+    var address = temp.id;
+    const response = await apis.postLikeNFT({like_by :address , nft_token : id})
+    console.log(response.data , 'postNFTLike');
+    getNFTLike()
+  }
+  const postNFTView = async () =>{
+    var temp = JSON.parse(localStorage.getItem('data'));
+    var address = temp.id;
+    console.log(address , 'address');
+    console.log(id , 'nft_token');
+    const response = await apis.postViewNFT({view_by :address , nft_token : id})
+    console.log(response.data , 'postNFTView');
+    getNFTLike()
+  }
+
+  useEffect(() =>{
+  if(isVisible){
+    postNFTView()
+  }
+  } , [isVisible])
+
+
+
+  
+  let priceInETH = price;
   let _sellerPercentFromDB = 1.5;
   let _buyerPercentFromDB = 1.5;
 
@@ -729,11 +767,14 @@ function ProfileDrawer({
                 <div className="three-line">
                   <div>
                     <TfiEye />
-                    <span>2 View</span>
+                    <span>{likeAndViewData?.view_count} View</span>
                   </div>
-                  <div>
-                    <AiOutlineHeart />
-                    <span>5 Favorite</span>
+                  <div onClick={()=>postNFTLike()}>
+                    {likeAndViewData.is_liked == 0 ?
+                    <AiOutlineHeart /> :
+                    <AiFillHeart style={{fill: '#2636d9'}} />
+                  }
+                    <span>{likeAndViewData?.like_count} Favorite</span>
                   </div>
                 </div>
                 <div className="four-line">

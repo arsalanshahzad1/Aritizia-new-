@@ -343,6 +343,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         address owner,
         uint256 price,
         uint256 collectionId
+        uint256 price,
+        uint256 collectionId
     );
 
     event NFTSold(
@@ -545,6 +547,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     console.log("this is 6");
                     console.log("_startTime[i]", _startTime[i]);
                     console.log("_endTime[i]", _endTime[i]);
+                    console.log("_startTime[i]", _startTime[i]);
+                    console.log("_endTime[i]", _endTime[i]);
 
                     _idToAuction[_tokenId[i]] = Auction(
                         _tokenId[i], //tokenId
@@ -565,6 +569,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     _tokenId[i],
                     msg.sender,
                     address(this),
+                    _price[i],
+                    _collectionId
                     _price[i],
                     _collectionId
                 );
@@ -1145,6 +1151,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         bool transferred = false;
 
+        bool transferred = false;
+
         // if there are no bids on an auction end the function there
         if (_idToAuction[_tokenId].highestBidder == address(0)) {
             nft.owner = nft.seller;
@@ -1165,7 +1173,23 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             uint256 _royaltyFee;
             uint256 _amountToBePaid;
             uint256 _amount = auction.highestBid; // alreay saving all bids in ether
+            IERC721(_nftContract).transferFrom(
+                address(this),
+                auction.seller,
+                nft.tokenId
+            );
+            transferred = true;
+        } else {
+            // auction.isLive = false;
+            uint256 _royaltyFee;
+            uint256 _amountToBePaid;
+            uint256 _amount = auction.highestBid; // alreay saving all bids in ether
 
+            // if the seller wants to be paid in ether
+            if (nft.paymentMethod == PaymentMethod.ETHER) {
+                ////////////////////////////
+                /////////////SWAP///////////
+                ////////////////////////////
             // if the seller wants to be paid in ether
             if (nft.paymentMethod == PaymentMethod.ETHER) {
                 ////////////////////////////
@@ -1176,7 +1200,17 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 if (auction.highestBidCurrency == PaymentMethod.USDT) {
                     // swap USDT to ETH and update _amount
                     // _amount =
+                // if last bid is in USDT swap and update amount
+                if (auction.highestBidCurrency == PaymentMethod.USDT) {
+                    // swap USDT to ETH and update _amount
+                    // _amount =
 
+                    // usdt ki 6 decimal me price chahye yha
+                    uint256 _amountOfUSDT = _amount / getLatestUSDTPrice();
+                    _amountOfUSDT * 10 ** 6;
+                    swapUSDTForETH(_amountOfUSDT);
+                    _amount = _amount;
+                }
                     // usdt ki 6 decimal me price chahye yha
                     uint256 _amountOfUSDT = _amount / getLatestUSDTPrice();
                     _amountOfUSDT * 10 ** 6;
@@ -1209,7 +1243,37 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     payable(nft.firstOwner).transfer(_royaltyFee);
                     payable(nft.seller).transfer(_amountToBePaid);
                 }
+                if (nft.owner == nft.firstOwner) {
+                    _amountToBePaid =
+                        _amount -
+                        platformFeeCalculate(
+                            _amount,
+                            _sellerPercent,
+                            _buyerPercent
+                        );
+                    payable(nft.seller).transfer(_amountToBePaid);
+                } else {
+                    _royaltyFee = royaltyCalculate(
+                        auction.highestBid,
+                        nft.royaltyPrice
+                    );
+                    _amountToBePaid =
+                        _amount -
+                        _royaltyFee -
+                        platformFeeCalculate(
+                            _amount,
+                            _sellerPercent,
+                            _buyerPercent
+                        );
+                    payable(nft.firstOwner).transfer(_royaltyFee);
+                    payable(nft.seller).transfer(_amountToBePaid);
+                }
 
+                // if the seller wants to be paid in USDT
+            } else if (nft.paymentMethod == PaymentMethod.USDT) {
+                ////////////////////////////
+                /////////////SWAP///////////
+                ////////////////////////////
                 // if the seller wants to be paid in USDT
             } else if (nft.paymentMethod == PaymentMethod.USDT) {
                 ////////////////////////////
@@ -1248,7 +1312,42 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                             _sellerPercent,
                             _buyerPercent
                         );
+                if (auction.highestBidCurrency == PaymentMethod.ETHER) {
+                    // uint256 _amountOfUSDT = _amount / getLatestUSDTPrice();
+                    // uint256 _amountInETHInWei = _amount * 10 ** 12;
+                    // _amountInETHInWei = _amountInETHInWei * getLatestUSDTPrice();
+                    // _amountInETHInWei = _amountInETHInWei / 10 ** 18;
+                    _amount = swapETHForUSDT(_amount);
+                    // _amount = _amountOfUSDT * 10 ** 6;
+                }
+                if (nft.owner == nft.firstOwner) {
+                    // USDTtoken.transferFrom(msg.sender, address(this), _amount);
+                    _amountToBePaid =
+                        _amount -
+                        platformFeeCalculate(
+                            _amount,
+                            _sellerPercent,
+                            _buyerPercent
+                        );
+                    USDTtoken.transfer(nft.seller, _amountToBePaid);
+                    // payable(nft.seller).transfer(_amountToBePaid);
+                } else {
+                    _royaltyFee = royaltyCalculate(
+                        auction.highestBid,
+                        nft.royaltyPrice
+                    );
+                    _amountToBePaid =
+                        _amount -
+                        _royaltyFee -
+                        platformFeeCalculate(
+                            _amount,
+                            _sellerPercent,
+                            _buyerPercent
+                        );
 
+                    // USDTtoken.transferFrom(msg.sender,address(this),_amount);
+                    USDTtoken.transfer(nft.seller, _amountToBePaid);
+                    USDTtoken.transfer(nft.firstOwner, _royaltyFee);
                     // USDTtoken.transferFrom(msg.sender,address(this),_amount);
                     USDTtoken.transfer(nft.seller, _amountToBePaid);
                     USDTtoken.transfer(nft.firstOwner, _royaltyFee);
@@ -1257,7 +1356,22 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     // payable(nft.seller).transfer(_amountToBePaid);
                 }
             }
+                    // payable(nft.firstOwner).transfer(_royaltyFee);
+                    // payable(nft.seller).transfer(_amountToBePaid);
+                }
+            }
 
+            if (!transferred) {
+                IERC721(_nftContract).transferFrom(
+                    address(this),
+                    auction.highestBidder,
+                    nft.tokenId
+                );
+            }
+            nft.owner = auction.highestBidder;
+            nft.listed = false;
+            _nftsSold.increment();
+        }
             if (!transferred) {
                 IERC721(_nftContract).transferFrom(
                     address(this),
