@@ -173,6 +173,11 @@ const MyNftCard = ({
         onClose={onClose}
         timedAuction={timedAuction}
         image={image}
+        title={title}
+        royalty={royalty}
+        description={description}
+        collection={collection}
+
       />
       <ProfileDrawer
         isVisible={isVisible2}

@@ -408,7 +408,7 @@ const Single = ({ search, setSearch }) => {
   ) => {
     if (singleMinting) {
       let listedData = {
-        // nftContract: nftContract.toString(),
+        title: item.title,
         token_id: tokenId.toString(),
         seller: seller.toString(),
         owner: owner.toString(),
@@ -425,7 +425,7 @@ const Single = ({ search, setSearch }) => {
       console.log("singleMinting", singleMinting);
 
       nftDataPost();
-      alert("Nft listed");
+      // alert("Nft listed");
     }
   };
 
@@ -435,7 +435,7 @@ const Single = ({ search, setSearch }) => {
 
     const response = await apis.postListNft(listToPost.current[0]);
     console.log("response", response);
-    navigate("/profile");
+    // navigate("/profile");
   };
 
   // useEffect(() => {

@@ -42,8 +42,10 @@ const createBackendServer = (baseURL) => {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
-
+  
   const postListNft = async (body) => await api.post("list-nft", body);
+
+  const postNftSold = async (body) => await api.post("sold-nft", body);
 
   const postWalletAddress = async (body) =>
     await api.post(`connect-wallet`, body);
@@ -96,6 +98,7 @@ const createBackendServer = (baseURL) => {
   return {
     editProfile,
     postListNft,
+    postNftSold, 
     postWalletAddress,
     postAddFans,
     getChatNotification,

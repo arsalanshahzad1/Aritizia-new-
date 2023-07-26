@@ -398,6 +398,7 @@ const Multiple = ({ search, setSearch }) => {
       console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
+
     console.log("multiListing", multiListing);
 
     let response = await marketplaceContract.on(
@@ -453,7 +454,8 @@ const Multiple = ({ search, setSearch }) => {
   // const [listToPost, setListToPost] = useState([]);
 
   let listToPost = useRef([]);
-  let testVariable;
+  let count = 0;
+
   const handleNFTListedEvent = async (
     nftContract,
     tokenId,
@@ -462,20 +464,27 @@ const Multiple = ({ search, setSearch }) => {
     price,
     collectionId
   ) => {
+    console.log("in multi list handler");
+    console.log("count", count);
+    console.log(" titleList.current[count]", titleList[count]);
+
     if (multiListing) {
       let listedData = {
         // nftContract: nftContract.toString(),
+        title: titleList[count],
         token_id: tokenId.toString(),
         seller: seller.toString(),
         owner: owner.toString(),
         price: ethers.utils.formatEther(price.toString()),
         collection_id: collectionId.toString(),
-        listing_type: listingType.toString(),
+        listing_type: listingType.toString(), // add [i]
       };
+      count += 1;
+
       console.log("multiListing", multiListing);
       console.log("listedData", listedData);
-      console.log("listedData", listedData);
-      console.log("listedData", listedData);
+      console.log("count after", count);
+
       // testVariable =
       listOfListedTokens.push(listedData);
       addListToPost(listedData);

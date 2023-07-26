@@ -3,10 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import Web3Modal from "web3modal";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 
-const MetaMaskWalletCard = () => {
+const connect = async () => {
+    
   const [walletConnected, setWalletConnected] = useState(false);
-
   const web3ModalRef = useRef();
+
   const getProviderOrSigner = async (needSigner = false) => {
     console.log("test1QWER");
     const provider = await web3ModalRef.current.connect();
@@ -53,19 +54,9 @@ const MetaMaskWalletCard = () => {
     }
   }, [walletConnected]);
 
-  return (
-    <div onClick={connectWallet} className="col-lg-3 col-md-6">
-      <div className="metamask-waller-card">
-        <img src="/assets/images/metamask-wallet.png" alt="" />
-        <h2>Metamask</h2>
-        <p>
-          Start exploring blockchain applications in seconds. Trusted by over 1
-          million users worldwide.
-        </p>
-        <span>Most Popular</span>
-      </div>
-    </div>
-  );
+  return {
+    connectWallet,
+  };
 };
 
-export default MetaMaskWalletCard;
+export default connect;

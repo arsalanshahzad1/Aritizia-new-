@@ -427,25 +427,36 @@ function ProfileDrawer({
   };
 
   const handleNFTSoldEvent = async (
-    nftContract,
+    // nftContract,
     tokenId,
     seller,
     owner,
     price
   ) => {
     let soldData = {
-      nftContract: nftContract.toString(),
-      tokenId: tokenId.toString(),
+      // nftContract: nftContract.toString(),
+      token_id: tokenId.toString(),
       seller: seller.toString(),
-      owner: owner.toString(),
+      buyer: owner.toString(),
       price: ethers.utils.formatEther(price.toString()),
     };
 
     console.log("soldData", soldData);
+
+    nftSoldPost(soldData);
     // setSucess(false);
     // onClose(false);
-    // alert("NFT bought");
     // setTimeout(2000);
+    // navigate("/profile");
+  };
+
+  const nftSoldPost = async (value) => {
+    console.log("nftSoldPost");
+    console.log("nftSoldPost", value);
+
+    const response = await apis.postNftSold(value);
+    console.log("response", response);
+    alert("NFT bought");
     // navigate("/profile");
   };
 
@@ -616,7 +627,7 @@ function ProfileDrawer({
     ).wait();
     console.log("buyWithETH");
 
-    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+    let response = marketplaceContract.on("NFTSold", handleNFTSoldEvent);
 
     console.log("Response of bid even", response);
   };

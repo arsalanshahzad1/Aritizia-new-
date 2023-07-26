@@ -37,6 +37,13 @@ import {
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import Slider from "rc-slider";
 import { useNavigate } from "react-router-dom";
+import apis from "../../service/index";
+
+//
+//
+// /
+//
+//
 
 const Monthly_data = [
   {
@@ -441,14 +448,21 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
       )
     ).wait();
 
+    console.log("relist", relist);
+
     let response = marketplaceContract.on(
       "NFTListed",
       relist ? handleNFTListedEvent : null
     );
 
     console.log("Response of list event", response);
+  };
 
-    relist = false;
+  let listToPost = useRef([]);
+
+  const addListToPost = (newValue) => {
+    // console.log("newValue",newValue)
+    listToPost.current.push(newValue);
   };
 
   const handleNFTListedEvent = async (
@@ -456,21 +470,38 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
     tokenId,
     seller,
     owner,
-    price
+    price,
+    collectionId,
+    listingType
   ) => {
-    let listedData = {
-      nftContract: nftContract.toString(),
-      tokenId: tokenId.toString(),
-      seller: seller.toString(),
-      owner: owner.toString(),
-      price: ethers.utils.formatEther(price.toString()),
-    };
-    console.log("relist", relist);
+    if (relist) {
+      let listedData = {
+        // nftContract: nftContract.toString(),
+        token_id: tokenId.toString(),
+        seller: seller.toString(),
+        owner: owner.toString(),
+        price: ethers.utils.formatEther(price.toString()),
+        collection_id: collectionId.toString(),
+        listing_type: listingType.toString(),
+      };
 
-    console.log("listedData", listedData);
+      addListToPost(listedData);
+
+      console.log("listedData", listedData);
+
+      nftDataPost();
+      alert("Nft listed");
+    }
+  };
+
+  const nftDataPost = async () => {
+    console.log("postListNft");
+    console.log("listToPost.current[0]", listToPost.current[0]);
+
+    const response = await apis.postListNft(listToPost.current[0]);
+    console.log("2222222222222222");
+    console.log("response", response);
     relist = false;
-    console.log("relist", relist);
-    alert("Nft listed");
     navigate("/profile");
   };
 
