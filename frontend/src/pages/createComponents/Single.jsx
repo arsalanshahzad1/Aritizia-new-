@@ -46,7 +46,13 @@ const Single = ({ search, setSearch }) => {
   var endTime = useRef(0);
   const [inputValue, setInputValue] = useState("");
   const [showWarning, setShowWarning] = useState(false);
+  const [collectionImage , setCollectionImage] = useState('');
+  const [collectionCrypto , setCollectionCrypto] = useState('');
+  const id = JSON.parse(localStorage.getItem('data'))
+  const user_id = id.id;
   const navigate = useNavigate();
+
+
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -444,7 +450,7 @@ const Single = ({ search, setSearch }) => {
         position: toast.POSITION.TOP_CENTER,
       });
       // alert("Nft listed");
-      setTimeout(() =>{
+      setTimeout(() => {
         navigate("/profile");
       }, 3000)
 
@@ -630,11 +636,11 @@ const Single = ({ search, setSearch }) => {
       console.error(err);
     }
   };
-  const [CreateCollection, setCreateCollection] = useState("");
+  const [collectionName, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
   const AddCollection = () => {
-    if (CreateCollection.length < 1 || !selectedImage2) {
+    if (collectionName.length < 1 || !selectedImage2) {
       toast.warning("Input Collection Name and image to Create", {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -643,8 +649,8 @@ const Single = ({ search, setSearch }) => {
       setcollectionOptions((previousOptions) => [
         ...previousOptions,
         {
-          value: CreateCollection.toLowerCase(),
-          label: CreateCollection,
+          value: collectionName.toLowerCase(),
+          label: collectionName,
           image: selectedImage2,
         },
       ]);
@@ -687,6 +693,18 @@ const Single = ({ search, setSearch }) => {
   }, [collection]);
 
   const [collectionFinalized, setcollectionFinalized] = useState(false);
+
+  const postSingleCollection = async () =>{
+    // const { collectionName , crypto , selectedImage2 } = data
+    console.log(collectionName , crypto , selectedImage2);
+    const sendData = new FormData();
+    sendData.append('user_id' , user_id);
+    sendData.append('name' , collectionName);
+    sendData.append('payment_type' , crypto);
+    sendData.append('image' , selectedImage2);
+    const response = await apis.postNFTCollection(sendData)
+    console.log(response);
+  }
 
   return (
     <>
@@ -759,28 +777,33 @@ const Single = ({ search, setSearch }) => {
                               {showCreateCollection && (
                                 <div className="Create-collection-popup">
                                   <div className="Create-collection-popup-inner">
-                                    <p>Collection Name</p>
-                                    <input
-                                      value={CreateCollection}
-                                      onChange={(e) =>
-                                        setCreateCollection(e.target.value)
-                                      }
-                                      type="text"
-                                      placeholder="Enter collection name"
-                                    />
+                                    <div className="Create-collection-wrap">
+                                      <div className="left">
+                                        <p>Collection Name</p>
+                                        <input
+                                          // value={collectionName} 
+                                          value={collectionName} 
+                                          onChange={(e) =>setCreateCollection(e.target.value)}
+                                          type="text"
+                                          placeholder="Enter collection name"
+                                        />
+                                      </div>
+                                      <div className="right">
+                                        <h2>Crypto</h2>
+                                        <Dropdown options={cryptoOptions} onChange={(e) => { setCrypto(e.value);}}
+                                          value={defaultCrypto.value}
+                                        />
+                                      </div>
+                                    </div>
                                     <p className="txt-2">Upload image</p>
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={handleInputChange2}
-                                    />
+                                    <input type="file" accept="image/*" onChange={handleInputChange2}/>
 
                                     <div className="popUp-btn-group">
                                       <div
                                         className="button-styling btnCC"
-                                        onClick={() => AddCollection()}
+                                        onClick={() => {AddCollection() ;  ; postSingleCollection()}}
                                       >
-                                        Next
+                                        Create
                                       </div>
                                       <div
                                         onClick={hideCreateCollection}
@@ -793,7 +816,7 @@ const Single = ({ search, setSearch }) => {
                                 </div>
                               )}
                               <div
-                                onClick={() =>{ setcollectionFinalized(true) ; notify()}}
+                                onClick={() => { setcollectionFinalized(true); notify() }}
                                 className="browse-btn my-5 button-styling"
                               >
                                 Next
@@ -846,7 +869,7 @@ const Single = ({ search, setSearch }) => {
                               (<div className="single-net-image">
                                 <img src={displayImage} alt="" />
                                 {/* <RxCross2/> */}
-                                <span onClick={() => {setDisplayImage('') ; selectedImage(null)}}>x</span>
+                                <span onClick={() => { setDisplayImage(''); selectedImage(null) }}>x</span>
                               </div>)
                             }
 
@@ -886,7 +909,7 @@ const Single = ({ search, setSearch }) => {
                         {listingType === 0 ? (
                           <div className="line-two">
                             <div className="row">
-                              <div className="col-lg-8 col-md-8 col-6">
+                              <div className="col-lg-12 col-md-12 col-12">
                                 <h2>Price</h2>
                                 <input
                                   type="text"
@@ -902,16 +925,7 @@ const Single = ({ search, setSearch }) => {
                                   </p>
                                 )}
                               </div>
-                              <div className="col-lg-4 col-md-4 col-5">
-                                <h2>Crypto</h2>
-                                <Dropdown
-                                  options={cryptoOptions}
-                                  onChange={(e) => {
-                                    setCrypto(e.value);
-                                  }}
-                                  value={defaultCrypto.value}
-                                />
-                              </div>
+
                             </div>
                           </div>
                         ) : (
