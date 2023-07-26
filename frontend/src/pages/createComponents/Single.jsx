@@ -21,6 +21,9 @@ import Search from "../../components/shared/Search";
 import duck from "../../../public/assets/images/duck.png";
 import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
+import { RxCross2 } from 'react-icons/rx'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -36,6 +39,8 @@ const Single = ({ search, setSearch }) => {
   const [loading, setLoading] = useState(false);
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
+
+
 
   var startTime = useRef(0);
   var endTime = useRef(0);
@@ -58,7 +63,10 @@ const Single = ({ search, setSearch }) => {
   useEffect(() => {
     if (listingType == 1) {
       if (startingDate && endingDate && endingDate < startingDate) {
-        alert("End date should be after start date");
+        toast.warning("End date should be after start date!", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        // alert("End date should be after start date");
         setEndingDate("");
       }
     }
@@ -71,7 +79,10 @@ const Single = ({ search, setSearch }) => {
       const selectedStartDate = new Date(startingDate);
 
       if (selectedStartDate < today) {
-        alert("Start date should not be before today's date");
+        toast.warning("Start date should not be before today's date", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        // alert("Start date should not be before today's date");
         setStartingDate("");
       }
     }
@@ -97,7 +108,10 @@ const Single = ({ search, setSearch }) => {
     console.log("In provider3");
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
+      toast.warning("Change the network to Sepolia", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
 
@@ -305,7 +319,10 @@ const Single = ({ search, setSearch }) => {
       ).wait();
       console.log("NFT listing is complete!");
     } catch (error) {
-      console.error("Error while listing NFT:", error);
+      toast.error(`Error while listing NFT: ${error}`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
     console.log("singleMinting", singleMinting);
@@ -423,9 +440,14 @@ const Single = ({ search, setSearch }) => {
       console.log("listedData", listedData);
       singleMinting = false;
       console.log("singleMinting", singleMinting);
-
-      nftDataPost();
+      toast.success("Nft listed", {
+        position: toast.POSITION.TOP_CENTER,
+      });
       // alert("Nft listed");
+      setTimeout(() =>{
+        navigate("/profile");
+      }, 3000)
+
     }
   };
 
@@ -479,7 +501,7 @@ const Single = ({ search, setSearch }) => {
     // ...
   };
 
-  useEffect(() => {}, [price, title, description]);
+  useEffect(() => { }, [price, title, description]);
   let singleMinting = false;
 
   function createItem(e) {
@@ -559,7 +581,10 @@ const Single = ({ search, setSearch }) => {
       //  UNCOMMENT THIS
       uploadToIPFS(file);
     } else {
-      window.alert("Fill all the fields to continue");
+      toast.warning("Fill all the fields to continue", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // window.alert("Fill all the fields to continue");
     }
   }
 
@@ -610,7 +635,10 @@ const Single = ({ search, setSearch }) => {
 
   const AddCollection = () => {
     if (CreateCollection.length < 1 || !selectedImage2) {
-      alert("Input Collection Name and image to Create");
+      toast.warning("Input Collection Name and image to Create", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // alert("Input Collection Name and image to Create");
     } else {
       setcollectionOptions((previousOptions) => [
         ...previousOptions,
@@ -634,10 +662,11 @@ const Single = ({ search, setSearch }) => {
   };
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [displayImage, setDisplayImage] = useState("");
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    // setSelectedImage(URL.createObjectURL(file));
+    setDisplayImage(URL.createObjectURL(file));
     setSelectedImage(file);
   };
   const fileInputRef = useRef(null);
@@ -699,9 +728,9 @@ const Single = ({ search, setSearch }) => {
                                   version="1.1"
                                   viewBox="0 0 50 50"
                                   width="25px"
-                                  xml:space="preserve"
+                                  xml: space="preserve"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                  xmlns: xlink="http://www.w3.org/1999/xlink"
                                 >
                                   <rect fill="none" height="50" width="50" />
                                   <line
@@ -764,7 +793,7 @@ const Single = ({ search, setSearch }) => {
                                 </div>
                               )}
                               <div
-                                onClick={() => setcollectionFinalized(true)}
+                                onClick={() =>{ setcollectionFinalized(true) ; notify()}}
                                 className="browse-btn my-5 button-styling"
                               >
                                 Next
@@ -791,27 +820,36 @@ const Single = ({ search, setSearch }) => {
                         <div className="col-lg-12">
                           <div className="upload-file">
                             <h2>Upload file</h2>
-                            <div className="browseforSingle">
-                              {!selectedImage ? (
-                                <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
-                              ) : (
-                                <p>
-                                  Uploaded successfully, want to upload another?
-                                </p>
-                              )}
-                              <input
-                                ref={fileInputRef}
-                                type="file"
-                                style={{ display: "none" }}
-                                onChange={handleImageUpload}
-                              />
-                              <div
-                                onClick={handleButtonClick}
-                                className="button-styling browse-btn"
-                              >
-                                Browse
-                              </div>
-                            </div>
+                            {displayImage == "" ?
+                              (<div className="browseforSingle">
+                                {!selectedImage ? (
+                                  <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
+                                ) : (
+                                  <p>
+                                    Uploaded successfully, want to upload another?
+                                  </p>
+                                )}
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={handleImageUpload}
+                                />
+                                <div
+                                  onClick={handleButtonClick}
+                                  className="button-styling browse-btn"
+                                >
+                                  Browse
+                                </div>
+                              </div>)
+                              :
+                              (<div className="single-net-image">
+                                <img src={displayImage} alt="" />
+                                {/* <RxCross2/> */}
+                                <span onClick={() => {setDisplayImage('') ; selectedImage(null)}}>x</span>
+                              </div>)
+                            }
+
                           </div>
                         </div>
                         <div className="line-one">
@@ -824,9 +862,8 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(0);
                                 }}
-                                className={` create-single-card ${
-                                  listingType === 0 ? "active" : ""
-                                }`}
+                                className={` create-single-card ${listingType === 0 ? "active" : ""
+                                  }`}
                               >
                                 <AiFillTag />
                                 <h3>Fixed Price</h3>
@@ -837,9 +874,8 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(1);
                                 }}
-                                className={` create-single-card ${
-                                  listingType === 1 ? "active" : ""
-                                }`}
+                                className={` create-single-card ${listingType === 1 ? "active" : ""
+                                  }`}
                               >
                                 <BsFillClockFill />
                                 <h3>Timed Auction</h3>
@@ -850,15 +886,15 @@ const Single = ({ search, setSearch }) => {
                         {listingType === 0 ? (
                           <div className="line-two">
                             <div className="row">
-                              <div className="col-lg-9 col-md-9 col-7">
+                              <div className="col-lg-8 col-md-8 col-6">
                                 <h2>Price</h2>
                                 <input
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
+                                // type="number"
+                                // placeholder="0.00"
+                                // ref={price}
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -866,7 +902,7 @@ const Single = ({ search, setSearch }) => {
                                   </p>
                                 )}
                               </div>
-                              <div className="col-lg-3 col-md-3 col-5">
+                              <div className="col-lg-4 col-md-4 col-5">
                                 <h2>Crypto</h2>
                                 <Dropdown
                                   options={cryptoOptions}
@@ -882,15 +918,15 @@ const Single = ({ search, setSearch }) => {
                           <>
                             <div className="line-two">
                               <div className="row">
-                                <div className="col-lg-9">
+                                <div className="col-lg-8">
                                   <h2>Minimum bid</h2>
                                   <input
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -898,7 +934,7 @@ const Single = ({ search, setSearch }) => {
                                     </p>
                                   )}
                                 </div>
-                                <div className="col-lg-3 col-md-3 col-5">
+                                <div className="col-lg-4 col-md-4 col-5">
                                   <h2>Crypto</h2>
                                   <Dropdown
                                     options={cryptoOptions}
@@ -954,7 +990,7 @@ const Single = ({ search, setSearch }) => {
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                                // onChange={(e) => setTitle(e.target.value)}
+                              // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
@@ -1014,6 +1050,7 @@ const Single = ({ search, setSearch }) => {
         <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
+      <ToastContainer />
     </>
   );
 };

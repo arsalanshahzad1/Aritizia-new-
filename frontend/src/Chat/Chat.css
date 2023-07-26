@@ -195,6 +195,29 @@
     border-radius: 6px;
     object-fit: contain;
     cursor: pointer;
+    padding: 10px;
+}
+
+.display-images-List .cross{
+    position: absolute;
+    right: 12px;
+    top: 2.8px;
+    padding: 2px;
+    font-size: 18px;
+    color: #fff;
+    background: gray;
+    border-radius: 25px;
+}
+.display-images-List .plus-wrap{
+    display: flex;
+    align-items: center;
+    background: gray;
+    padding-inline: 10px;
+    border-radius: 6px;
+}
+
+.display-images-List .plus-wrap svg{
+    color: #fff;
 }
 .display-images-List p{
     height: 100px;
