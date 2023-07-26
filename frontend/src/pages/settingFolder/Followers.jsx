@@ -10,7 +10,7 @@ const Followers = ({ data }) => {
     }
     return (
         <>
-            {data.map((data, i) => {
+            {data?.map((data, i) => {
                 return (
                     <div className='Follow-row' key={i}>
                         <div className='left'>
