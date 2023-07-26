@@ -4,7 +4,10 @@ import bird from '../../public/assets/images/bird.png'
 import { GlobalContext } from '../Context/GlobalContext'
 import ArtItem from './ArtItem'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 const Art = ({ search, setSearch }) => {
+    const navigate = useNavigate()
+
     const { prompt, setprompt } = useContext(GlobalContext)
     const [generatedArts, setgeneratedArts] = useState([
         {
@@ -43,6 +46,15 @@ const Art = ({ search, setSearch }) => {
         setgeneratedArts(updatedArts);
     };
 
+    const saveToGallery = () => {
+        const readyTobeSaved = generatedArts.filter(item => item.selected).map(item => item.image)
+        console.log(readyTobeSaved, "we are ready to travel to Database")
+        setgeneratedArts([])
+        setprompt('')
+        navigate('/profile')
+
+    }
+
     return (
         < div >
             <Header search={search} setSearch={setSearch} />
@@ -60,7 +72,7 @@ const Art = ({ search, setSearch }) => {
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
 
-                <button className='save-art-btn'>Save to Gallery ({selectCount})</button>
+                <button onClick={saveToGallery} disabled={selectCount < 1} className='save-art-btn'>Save to Gallery ({selectCount})</button>
             </div>
         </ div>
     )

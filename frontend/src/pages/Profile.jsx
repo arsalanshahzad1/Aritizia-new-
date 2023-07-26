@@ -26,6 +26,7 @@ import Followers from "./settingFolder/Followers";
 import apis from "../service";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Gallery from "./Gallery";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -786,7 +787,7 @@ const Profile = ({ search, setSearch }) => {
               <div className="profile-buy-card">
                 {tabs === 0 && (
                   <>
-                    Gallery Tab
+                    <Gallery />
                   </>
                 )}
                 {tabs === 1 && (

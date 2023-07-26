@@ -4908,13 +4908,13 @@ footer h1 {
   margin: 3% 5%;
   display: flex;
   flex-wrap: wrap;
-
+  justify-content: center;
 }
 
 .art-img-div {
-  width: 250px;
+  width: 230px;
   height: 250px;
-  margin: 20px;
+  margin: 10px;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
   position: relative;
@@ -4954,8 +4954,56 @@ footer h1 {
   margin: 2% auto;
   padding: 7px 14px;
   border-radius: 5px;
-  background-color: purple;
+  background-color: #B600D1;
   color: white;
   font-weight: 600;
   border: none;
+}
+
+.save-art-btn:disabled {
+  background-color: #5c5c5c;
+  color: #ffffff;
+}
+
+.show-social-icon-btn {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
+.social-links-for-art {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  background-color: #B600D180;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-links-for-art a {
+  font-family: Jost;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: 0em;
+  color: #FFFFFFB2;
+  margin: 5px auto;
+}
+
+.social-links-for-art a:hover {
+  color: white;
+}
+
+.create-nft-button {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  cursor: pointer;
 }
