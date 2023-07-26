@@ -22,6 +22,7 @@ import Duck from "../../../public/assets/images/duck.png";
 import NftCard from "./NftCard";
 import duck from "../../../public/assets/images/duck.png";
 import { useNavigate } from "react-router-dom";
+import apis from "../../service/index";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -130,6 +131,11 @@ const Multiple = ({ search, setSearch }) => {
     ipfsImageList.push(newValue);
   };
   // let tempIPFSList = [];
+  const addListToPost = (newValue) => {
+    // console.log("newValue",newValue)
+    listToPost.current.push(newValue);
+  };
+
   const addDataIPFSInList = (newValue) => {
     // console.log("newValue",newValue)
     ipfsList.current.push(newValue);
@@ -143,7 +149,7 @@ const Multiple = ({ search, setSearch }) => {
 
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337 ) {
+    if (chainId !== 31337) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -328,14 +334,7 @@ const Multiple = ({ search, setSearch }) => {
     if (list.length == ipfsList.current.length) {
       listNFT(marketplaceContractGlobal, nftContractGlobal, list);
     }
-    // console.log("zayyan", list);
 
-    // let tokenId = +mintedTokens.toString();
-    // console.log("tokenIdHERE", tokenId);
-    // console.log("mintedTokens", typeof tokenId);
-    // listOfMintedTokens.push(tokenId);
-    // console.log("listOfMintedTokens", listOfMintedTokens);
-    // listedddd = list;
     console.log("brrr listOfMintedTokens", listOfMintedTokens.length);
     console.log("brrr imageList", imageList.length);
   };
@@ -379,17 +378,6 @@ const Multiple = ({ search, setSearch }) => {
         ethParsedList.push(ethPrice);
       }
 
-      // console.log("nftContract.address", nftContract.address);
-      // console.log("mintedTokens", mintedTokens);
-      // console.log("priceList", priceList);
-      // console.log("ethParsedList", ethParsedList);
-      // console.log("royaltyList", royaltyList);
-      // console.log("listingType", listingType);
-      // console.log("startingDateList", startingDateList);
-      // console.log("endingDateList", endingDateList);
-      // console.log("crypto", crypto);
-      // console.log("PAyment method", crypto);
-
       await (
         await marketplaceContract.listNft(
           nftContract.address,
@@ -400,7 +388,7 @@ const Multiple = ({ search, setSearch }) => {
           startingDateList,
           endingDateList,
           // [startingDateList[0] + 5 * 60 * 1000],
-          0,
+          1,
           crypto
         )
       ).wait();
@@ -418,10 +406,6 @@ const Multiple = ({ search, setSearch }) => {
     );
 
     console.log("Response of list event", response);
-    // }
-    // else {
-    //   setTimeout(listNFT(marketplaceContract, nftContract), 10000);
-    // }
   }
 
   // mint the NFT then list
@@ -438,104 +422,11 @@ const Multiple = ({ search, setSearch }) => {
       signer
     );
 
-    console.log("ipfsList", ipfsList);
-
-    // await (await nftContract.mint(ipfsList.current)).wait();
-    // console.log("minAndList 1");
-
-    // let mintedTokens = await nftContract.getMintedTokensList();
-    // console.log("mintedTokens ", mintedTokens);
-    // console.log("mintedTokens.length ", mintedTokens.length);
-    // console.log("minAndList 2");
-
-    // let multi = false;
-    // if (mintedTokens.length > 1) {
-    //   console.log("minAndList 3");
-
-    //   multi = true;
-    //   let listOfTokens = [];
-    //   for (let i = 0; i < mintedTokens.length; i++) {
-    //     console.log("mintedTokens[i]", mintedTokens[i].toString());
-    //     listOfTokens.push(Number(mintedTokens[i].toString()));
-    //   }
-    //   mintedTokens = listOfTokens;
-    //   console.log("listOfTokens", listOfTokens);
-    // } else {
-    //   mintedTokens = Number(mintedTokens);
-    // }
-
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    // console.log("Yahoo2");
-
-    // // console.log("startTimestamp in if", startingDate);
-    // // console.log("endTimestamp in if", startingDate);
-
-    // // if (listingType == 0) {
-    // //   console.log("startTimestamp in if", startingDate);
-    // //   console.log("endTimestamp in if", startingDate);
-    // //   setStartingDate(0);
-    // //   setEndingDate(0);
-    // // } else if (listingType == 1) {
-    // //   const startDate = new Date(startingDate);
-    // //   const endDate = new Date(endingDate);
-
-    // //   // Convert start date to Unix timestamp (seconds)
-    // //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
-
-    // //   // Convert end date to Unix timestamp (seconds)
-    // //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
-
-    // //   console.log("startTimestamp in else", startTimestamp);
-    // //   console.log("endTimestamp in else", endTimestamp);
-    // // }
-
-    // // console.log("mintedTokens", mintedTokens);
-    // // console.log("item.price", item.price);
-    // // console.log("royalty", royalty);
-    // // console.log("listingType", listingType);
-    // // console.log("item.crypto", crypto);
-
-    // // // UNCOMMENT this
-    // let ethParsedList = [];
-    // console.log("Yahoo3");
-
-    // for (let i = 0; i < priceList.length; i++) {
-    //   console.log("Yahoo4");
-    //   console.log("priceList[i]", priceList[i]);
-    //   let ethPrice = ethers.utils.parseEther(priceList[i]);
-    //   ethParsedList.push(ethPrice);
-    // }
-
-    // console.log("nftContract.address", nftContract.address);
-    // console.log("mintedTokens", mintedTokens);
-    // console.log("priceList", priceList);
-    // console.log("ethParsedList", ethParsedList);
-    // console.log("royaltyList", royaltyList);
-    // console.log("listingType", listingType);
-    // console.log("startingDateList", startingDateList);
-    // console.log("endingDateList", endingDateList);
-    // console.log("crypto", crypto);
-    // console.log("PAyment method", crypto);
-
-    // await (
-    //   await marketplaceContract.listNft(
-    //     nftContract.address,
-    //     multi ? mintedTokens : [mintedTokens],
-    //     ethParsedList,
-    //     royaltyList,
-    //     listingType,
-    //     startingDateList,
-    //     endingDateList,
-    //     // [startingDateList[0] + 5 * 60 * 1000],
-    //     0,
-    //     crypto
-    //   )
-    // ).wait();
-    // setLoading(false);
 
     marketplaceContractGlobal = marketplaceContract;
     nftContractGlobal = nftContract;
@@ -559,7 +450,10 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("Response of list event", response);
   };
   let listOfListedTokens = [];
+  // const [listToPost, setListToPost] = useState([]);
 
+  let listToPost = useRef([]);
+  let testVariable;
   const handleNFTListedEvent = async (
     nftContract,
     tokenId,
@@ -570,16 +464,21 @@ const Multiple = ({ search, setSearch }) => {
   ) => {
     if (multiListing) {
       let listedData = {
-        nftContract: nftContract.toString(),
-        tokenId: tokenId.toString(),
+        // nftContract: nftContract.toString(),
+        token_id: tokenId.toString(),
         seller: seller.toString(),
         owner: owner.toString(),
         price: ethers.utils.formatEther(price.toString()),
-        collectionId: collectionId.toString(),
+        collection_id: collectionId.toString(),
+        listing_type: listingType.toString(),
       };
       console.log("multiListing", multiListing);
       console.log("listedData", listedData);
+      console.log("listedData", listedData);
+      console.log("listedData", listedData);
+      // testVariable =
       listOfListedTokens.push(listedData);
+      addListToPost(listedData);
 
       // console.log("qqq ipfsList", ipfsList.current.length);
       console.log("qqq listOfListedTokens", listOfListedTokens.length);
@@ -588,13 +487,35 @@ const Multiple = ({ search, setSearch }) => {
       if (ipfsList.current.length == listOfListedTokens.length) {
         console.log("HOGAYI SAME");
         console.log("multiListing", multiListing);
+        // setListToPost(listOfListedTokens);
+        // send api
+        nftDataPost();
+
         multiListing = false;
         alert("NFTs minted");
-        navigate("/profile");
+        // navigate("/profile");
       } else {
         console.log("Nhi mili");
       }
     }
+  };
+
+  // const testPost = async () => {
+  //   console.log("listToPost", listToPost);
+  // };
+
+  const nftDataPost = async () => {
+    console.log("postListNft");
+    console.log("listToPost.current", listToPost.current);
+    console.log("listToPost.current", listToPost.current.length);
+    console.log("listToPost.current.length", listToPost.current.length);
+
+    for (let i = 0; i < listToPost.current.length; i++) {
+      console.log("listToPost.current[i]", listToPost.current[i]);
+      const response = await apis.postListNft(listToPost.current[i]);
+      console.log("response", response);
+    }
+    navigate("/profile");
   };
 
   const [file, setFile] = useState(null);
@@ -1923,6 +1844,7 @@ const Multiple = ({ search, setSearch }) => {
                           </div>
                         )}
                       </div>
+                      {/* <button onClick={nftDataPost}>Test post api</button> */}
                     </>
                   )}
 

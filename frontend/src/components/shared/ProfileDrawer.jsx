@@ -22,7 +22,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import apis from '../../service'
+import apis from "../../service";
 import {
   Area,
   AreaChart,
@@ -37,7 +37,6 @@ import {
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 
 const Monthly_data = [
   {
@@ -319,58 +318,63 @@ function ProfileDrawer({
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
   const [platformFee, setPlatformFee] = useState("");
-  const [discountedEth, setDiscountedEth] = useState("");
-  const [discountedAmountUSD, setDiscountedAmountUSD] = useState("");
-  const [platformFeeUSDT, setPlatformFeeUSDT] = useState("");
-  const [platformFeeETH, setPlatformFeeETH] = useState("");
-  const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState("");
-  const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] =
-    useState("");
+  const [discountedEth, setDiscountedEth] = useState(0);
+  const [discountedAmountUSD, setDiscountedAmountUSD] = useState(0);
+  const [platformFeeUSDT, setPlatformFeeUSDT] = useState(0);
+  const [platformFeeETH, setPlatformFeeETH] = useState(0);
+  const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState(0);
+  const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
+
+  useEffect(() => {
+    getPriceInUSD();
+  }, [isVisible]);
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
   const [likeAndViewData, setLikeAndViewData] = useState("");
-  
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
   };
 
-  const getNFTLike = async () =>{
-    var temp = JSON.parse(localStorage.getItem('data'));
+  const getNFTLike = async () => {
+    var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
-    const response = await apis.getLikeNFT(address , id)
-    console.log(response.data , 'getNFTLike');
-    setLikeAndViewData(response.data.data)
-  }
+    const response = await apis.getLikeNFT(address, id);
+    console.log(response.data, "getNFTLike");
+    setLikeAndViewData(response.data.data);
+  };
 
-  const postNFTLike = async () =>{
-    var temp = JSON.parse(localStorage.getItem('data'));
+  const postNFTLike = async () => {
+    var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
-    const response = await apis.postLikeNFT({like_by :address , nft_token : id})
-    console.log(response.data , 'postNFTLike');
-    getNFTLike()
-  }
-  const postNFTView = async () =>{
-    var temp = JSON.parse(localStorage.getItem('data'));
+    const response = await apis.postLikeNFT({
+      like_by: address,
+      nft_token: id,
+    });
+    console.log(response.data, "postNFTLike");
+    getNFTLike();
+  };
+  const postNFTView = async () => {
+    var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
-    console.log(address , 'address');
-    console.log(id , 'nft_token');
-    const response = await apis.postViewNFT({view_by :address , nft_token : id})
-    console.log(response.data , 'postNFTView');
-    getNFTLike()
-  }
+    console.log(address, "address");
+    console.log(id, "nft_token");
+    const response = await apis.postViewNFT({
+      view_by: address,
+      nft_token: id,
+    });
+    console.log(response.data, "postNFTView");
+    getNFTLike();
+  };
 
-  useEffect(() =>{
-  if(isVisible){
-    postNFTView()
-  }
-  } , [isVisible])
+  useEffect(() => {
+    if (isVisible) {
+      postNFTView();
+    }
+  }, [isVisible]);
 
-
-
-  
   let priceInETH = price;
   let _sellerPercentFromDB = 1.5;
   let _buyerPercentFromDB = 1.5;
@@ -482,7 +486,7 @@ function ProfileDrawer({
     setAmountUSD(priceInUSD.toString());
 
     let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-    setPlatformFeeUSDT(feeUSD);
+    setPlatformFeeUSDT(Math.ceil(feeUSD));
 
     // let fee = Math.ceil((priceInUSD * 3) / 100);
     // setPlatformFee(fee);
@@ -491,18 +495,23 @@ function ProfileDrawer({
       let discountedEthPrice = (nftEthPrice * discount) / 100;
       // let discountedEthPrice = (nftEthPrice * discount) / 100;
       let priceETH = discountedEthPrice;
-      setDiscountedEth(discountedEthPrice);
+      // platformFeeCalculate(priceETH, _buyerPercentFromDB);
+      setDiscountedEth(discountedEthPrice.toFixed(2));
       console.log("discountedEthPrice", discountedEthPrice);
       let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      let feeETH = Math.ceil((priceInETH * 3) / 100);
-      setDiscountedPlatformFeeETH(feeETH);
+      let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
+
+      setDiscountedPlatformFeeETH(Math.ceil(feeETH));
       let oneETHInUSD = 1 / priceInETH;
       let priceInUSD = priceETH;
       priceInUSD = oneETHInUSD * priceInUSD;
       priceInUSD = Math.ceil(priceInUSD);
       setDiscountedAmountUSD(priceInUSD.toString());
-      let feeUSD = Math.ceil((priceInUSD * 3) / 100);
+      // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
+      let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+      feeUSD = Math.ceil(feeUSD);
+      // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
       setDiscountedPlatformFeeUSDT(feeUSD);
     }
   };
@@ -545,33 +554,52 @@ function ProfileDrawer({
   };
 
   const buyWithETH = async () => {
+    console.log("buyWithETH");
     const signer = await getProviderOrSigner(true);
+    console.log("buyWithETH");
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
+    console.log("buyWithETH");
+
     const structData = await marketplaceContract._idToNFT(id);
+    console.log("buyWithETH");
 
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    console.log("buyWithETH");
 
-    let fee = +platformFeeETH;
-    let amount = +priceETH + fee;
-    let value = amount.toString();
+    console.log("platformFeeETH", platformFeeETH);
+    console.log("priceETH", priceETH);
+    console.log("buyWithETH");
 
+    var fee = +platformFeeETH;
+    var amount = +priceETH + fee;
+    var value = amount.toString();
+
+    console.log("fee", fee);
+    console.log("amount", amount);
+    console.log("value", value);
+
+    console.log("22222");
     let checkFan = await marketplaceContract.checkFan(id);
-    console.log("checkFan  ", checkFan);
+    console.log("checkFan ", checkFan);
 
     if (checkFan) {
       fee = +discountedPlatformFeeETH;
+      console.log("discountedEth", discountedEth);
+
       amount = +discountedEth + fee;
       value = amount.toString();
+      console.log("buyWithETH");
 
       console.log("discouted fee", fee);
       console.log("discouted amount", amount);
       console.log("discouted value", value);
     }
+    console.log("buyWithETH1111111");
 
     await (
       await marketplaceContract.buyWithETH(
@@ -586,6 +614,7 @@ function ProfileDrawer({
         }
       )
     ).wait();
+    console.log("buyWithETH");
 
     let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
 
@@ -612,11 +641,8 @@ function ProfileDrawer({
 
     let fee = +platformFeeUSDT;
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
-
     let amountInWei = amount * 10 ** 6;
-    // console.log("amountInWei", amountInWei);
     amountInWei = amountInWei.toString();
-    // console.log("amountInWei", typeof amountInWei);
 
     let checkFan = await marketplaceContract.checkFan(id);
     console.log("checkFan  ", checkFan);
@@ -624,11 +650,12 @@ function ProfileDrawer({
     if (checkFan) {
       fee = +discountedPlatformFeeUSDT;
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
-      value = amount.toString();
+      amountInWei = amount * 10 ** 6;
+      amountInWei = amountInWei.toString();
 
-      console.log("discouted fee", fee);
-      console.log("discouted amount", amount);
-      console.log("discouted value", value);
+      console.log("fee", fee);
+      console.log("amount", amount);
+      console.log("amountInWei", amountInWei);
     }
 
     const appprove = await USDTContract.approve(
@@ -669,7 +696,7 @@ function ProfileDrawer({
       )
     ).wait();
 
-    let response = await marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+    let response = marketplaceContract.on("NFTSold", handleNFTSoldEvent);
 
     console.log("Response of bid even", response);
   };
@@ -769,11 +796,12 @@ function ProfileDrawer({
                     <TfiEye />
                     <span>{likeAndViewData?.view_count} View</span>
                   </div>
-                  <div onClick={()=>postNFTLike()}>
-                    {likeAndViewData.is_liked == 0 ?
-                    <AiOutlineHeart /> :
-                    <AiFillHeart style={{fill: '#2636d9'}} />
-                  }
+                  <div onClick={() => postNFTLike()}>
+                    {likeAndViewData.is_liked == 0 ? (
+                      <AiOutlineHeart />
+                    ) : (
+                      <AiFillHeart style={{ fill: "#2636d9" }} />
+                    )}
                     <span>{likeAndViewData?.like_count} Favorite</span>
                   </div>
                 </div>
@@ -838,20 +866,35 @@ function ProfileDrawer({
                   {propertyTabs === 2 && <History />}
                 </div> */}
                 <div className="six-line">
-                  <h3>Current Price</h3>
                   <div className="row">
                     <div className="col-lg-6 col-md-8 col-8">
+                      <h3>Current Price</h3>
                       <div className="left">
                         <p>
                           {price} ETH
                           <span>
-                            ${amountUSD} + Platform Fee ${platformFee}
+                            ${amountUSD} + Platform Fee ${platformFeeUSDT}
                           </span>
                           {/* {console.log("USDAmount", amountUSD)} */}
                           {/* {price} ETH<span>$234</span>   */}
                         </p>
                       </div>
                     </div>
+                    <div className="col-lg-6 col-md-8 col-8">
+                      <h3>Discounted price for fans</h3>
+                      <div className="left">
+                        <p>
+                          {discountedEth} ETH
+                          <span>
+                            ${discountedAmountUSD} + Platform Fee $
+                            {discountedPlatformFeeUSDT}
+                          </span>
+                          {/* {console.log("USDAmount", amountUSD)} */}
+                          {/* {price} ETH<span>$234</span>   */}
+                        </p>
+                      </div>
+                    </div>
+
                     {!showBuyNow && (
                       <div className="col-lg-6 col-md-8 col-8">
                         <div className="stock-div">

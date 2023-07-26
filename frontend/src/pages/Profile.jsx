@@ -229,9 +229,11 @@ const Profile = ({ search, setSearch }) => {
     await (await marketplaceContract.addFans(FansAddress)).wait();
     console.log("asdasdasd");
 
-    // const fans = await marketplaceContract.getFans();
+    // const fans = await marketplaceContract.getFans(
+    //   "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    // );
 
-    // console.log("fans", fans);
+    // console.log("fanssss", fans);
 
     let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
 
@@ -247,16 +249,17 @@ const Profile = ({ search, setSearch }) => {
     setAddedFans(fanList);
     console.log("fanList", fanList);
     // console.log("fanList2", fanList2);
-  };
-
-  const testFans = async () => {
-    console.log("testFans");
-    console.log("addedFans hook ", addedFans);
-    console.log("addedFans hook ", addedFans[0]);
-    console.log("userAddress", userAddress);
-
     postFanList();
   };
+
+  // const testFans = async () => {
+  //   console.log("testFans");
+  //   console.log("addedFans hook ", addedFans);
+  //   console.log("addedFans hook ", addedFans[0]);
+  //   console.log("userAddress", userAddress);
+
+  //   postFanList();
+  // };
 
   const postFanList = async () => {
     const response = await apis.postAddFans({
@@ -776,7 +779,7 @@ const Profile = ({ search, setSearch }) => {
                   </button>
                 </div>
               </div>
-              <button onClick={testFans}>Test Fans</button>
+              {/* <button onClick={testFans}>Test Fans</button> */}
               <div className="profile-buy-card">
                 {tabs === 0 && (
                   <>

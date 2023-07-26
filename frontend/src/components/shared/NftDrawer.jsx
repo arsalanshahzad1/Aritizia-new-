@@ -297,7 +297,7 @@ const Daily_data = [
   },
 ];
 
-const ProfileDrawer = ({ isVisible, onClose, timedAuction, image }) => {
+const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
   // const [image, setImage] = useState("");
   // let image = "";
   // const [price, setPrice] = useState(null);
@@ -401,17 +401,24 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction, image }) => {
     console.log("item.startTime", item.startTime);
     console.log("item.endTime", item.endTime);
     console.log("userAddress", userAddress);
+    console.log("id", id);
+
+    const structData = await marketplaceContract._idToNFT(id);
+
+    console.log("owner", structData.owner);
+    console.log("seller", structData.seller);
+
+    console.log("userAddress", userAddress);
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
       NFT_CONTRACT_ABI.abi,
       signer
     );
-    console.log("userAddress", userAddress);
 
     const tx = await nftContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
-      item.tokenId,
+      id,
       {
         gasLimit: ethers.BigNumber.from("500000"),
       }
@@ -428,7 +435,7 @@ const ProfileDrawer = ({ isVisible, onClose, timedAuction, image }) => {
         ethers.utils.parseEther(item.price),
         item.listingType,
         item.startTime,
-        item.endTime, 
+        item.endTime,
         userAddress
         // crypto
       )

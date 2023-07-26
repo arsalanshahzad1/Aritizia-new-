@@ -20,6 +20,7 @@ import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
 import duck from "../../../public/assets/images/duck.png";
 import { useNavigate } from "react-router-dom";
+import apis from "../../service/index";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -295,7 +296,7 @@ const Single = ({ search, setSearch }) => {
           // [addedTime],
           [startTime], // list
           [endTime], // list
-          0, // collection number
+          1, // collection number
           crypto,
           {
             gasLimit: ethers.BigNumber.from("500000"),
@@ -389,32 +390,52 @@ const Single = ({ search, setSearch }) => {
     // console.log("Response of bid even", response);
   };
 
+  let listToPost = useRef([]);
+
+  const addListToPost = (newValue) => {
+    // console.log("newValue",newValue)
+    listToPost.current.push(newValue);
+  };
+
   const handleNFTListedEvent2 = async (
     nftContract,
     tokenId,
     seller,
     owner,
     price,
-    collectionId
+    collectionId,
+    listingType
   ) => {
     if (singleMinting) {
       let listedData = {
-        nftContract: nftContract.toString(),
-        tokenId: tokenId.toString(),
+        // nftContract: nftContract.toString(),
+        token_id: tokenId.toString(),
         seller: seller.toString(),
         owner: owner.toString(),
         price: ethers.utils.formatEther(price.toString()),
-        collectionId: collectionId.toString(),
+        collection_id: collectionId.toString(),
+        listing_type: listingType.toString(),
       };
       console.log("singleMinting", singleMinting);
       console.log("collectionId", collectionId.toString());
+      addListToPost(listedData);
 
       console.log("listedData", listedData);
       singleMinting = false;
       console.log("singleMinting", singleMinting);
+
+      nftDataPost();
       alert("Nft listed");
-      navigate("/profile");
     }
+  };
+
+  const nftDataPost = async () => {
+    console.log("postListNft");
+    console.log("listToPost.current[0]", listToPost.current[0]);
+
+    const response = await apis.postListNft(listToPost.current[0]);
+    console.log("response", response);
+    navigate("/profile");
   };
 
   // useEffect(() => {
@@ -984,6 +1005,7 @@ const Single = ({ search, setSearch }) => {
               </div>
             </div>
           </form>
+          <button onClick={nftDataPost}>Test Post</button>
           <br></br>
           {/* <button onClick={getItem} className="button-styling">
             Get NFTS data

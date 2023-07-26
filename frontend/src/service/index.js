@@ -43,6 +43,8 @@ const createBackendServer = (baseURL) => {
     "Content-Type": "multipart/form-data",
   };
 
+  const postListNft = async (body) => await api.post("list-nft", body);
+
   const postWalletAddress = async (body) =>
     await api.post(`connect-wallet`, body);
   const postAddFans = async (body) =>
@@ -78,7 +80,6 @@ const createBackendServer = (baseURL) => {
   const postViewNFT = async (body) => await api.post(`user-view-nft`, body);
 
   //follow
-
   const postFollowAndUnfollow = async (body) =>
     await api.post(`user-follow-unfollow`, body);
   const getCountFollow = async (userId, otherUserId) =>
@@ -94,6 +95,7 @@ const createBackendServer = (baseURL) => {
   //Returning all the API
   return {
     editProfile,
+    postListNft,
     postWalletAddress,
     postAddFans,
     getChatNotification,

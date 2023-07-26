@@ -32,7 +32,6 @@ const MyNftCard = ({
     setIsVisible(false);
   }, []);
 
-  
   const onClose2 = useCallback(() => {
     console.log("calling close");
     setIsVisible2(false);
@@ -71,21 +70,21 @@ const MyNftCard = ({
 
   const [timedAuction, setTimedAuction] = useState(false);
 
-    const AddCollection = () => {
-        if (CreateCollection.length < 1) {
-            alert("Input Collection Name to Create");
-        } else {
-            setcollectionOptions((previousOptions) => [
-                ...previousOptions,
-                { value: CreateCollection.toLowerCase(), label: CreateCollection },
-            ]);
-            hideCreateCollection();
-        }
-    };
-    const hideCreateCollection = () => {
-        setCreateCollection("");
-        setshowCreateCollection(false);
-    };
+  const AddCollection = () => {
+    if (CreateCollection.length < 1) {
+      alert("Input Collection Name to Create");
+    } else {
+      setcollectionOptions((previousOptions) => [
+        ...previousOptions,
+        { value: CreateCollection.toLowerCase(), label: CreateCollection },
+      ]);
+      hideCreateCollection();
+    }
+  };
+  const hideCreateCollection = () => {
+    setCreateCollection("");
+    setshowCreateCollection(false);
+  };
   return (
     <>
       <div className="col-lg-3 col-md-4">
@@ -169,6 +168,7 @@ const MyNftCard = ({
       </div>
 
       <NftDrawer
+        id={id}
         isVisible={isVisible}
         onClose={onClose}
         timedAuction={timedAuction}
