@@ -22,22 +22,15 @@ import Duck from "../../../public/assets/images/duck.png";
 import NftCard from "./NftCard";
 import duck from "../../../public/assets/images/duck.png";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Multiple = ({ search, setSearch }) => {
   const [image, setImage] = useState("");
-  // const [price, setPrice] = useState(0);
-  // const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [minimumBid, setMinimumBid] = useState("");
-  // const [startingTime, setStartingTime] = useState("");
-  // const [endTime, setEndTime] = useState("");
   const [listingType, setlistingType] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
-  // const [imageList, setImageList] = useState([]);
-  // const [ipfsList, setIPFSList] = useState([]);
-  // const [urlList, setURLList] = useState([]);
   // start end date control logic
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
@@ -65,7 +58,10 @@ const Multiple = ({ search, setSearch }) => {
 
   useEffect(() => {
     if (startingDate && endingDate && endingDate < startingDate) {
-      alert("End date should be after start date");
+      toast.warning(`End date should be after start date`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // alert("End date should be after start date");
       setEndingDate("");
     }
   }, [startingDate, endingDate]);
@@ -144,7 +140,10 @@ const Multiple = ({ search, setSearch }) => {
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
     if (chainId !== 31337 ) {
-      window.alert("Change the network to Sepolia");
+      toast.warning(`Change the network to Sepolia`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
 
@@ -283,7 +282,10 @@ const Multiple = ({ search, setSearch }) => {
       console.log("test2");
       mintThenList();
     } else {
-      window.alert("IPFS list is empty");
+      toast.warning(`IPFS list is empty`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // window.alert("IPFS list is empty");
     }
   };
 
@@ -300,7 +302,10 @@ const Multiple = ({ search, setSearch }) => {
       );
       console.log("Response of mint event", response);
     } catch (error) {
-      console.error("Error while minting NFT:", error);
+      toast.error(`Error while minting NFT: ${error}`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
   }
@@ -379,17 +384,6 @@ const Multiple = ({ search, setSearch }) => {
         ethParsedList.push(ethPrice);
       }
 
-      // console.log("nftContract.address", nftContract.address);
-      // console.log("mintedTokens", mintedTokens);
-      // console.log("priceList", priceList);
-      // console.log("ethParsedList", ethParsedList);
-      // console.log("royaltyList", royaltyList);
-      // console.log("listingType", listingType);
-      // console.log("startingDateList", startingDateList);
-      // console.log("endingDateList", endingDateList);
-      // console.log("crypto", crypto);
-      // console.log("PAyment method", crypto);
-
       await (
         await marketplaceContract.listNft(
           nftContract.address,
@@ -407,7 +401,10 @@ const Multiple = ({ search, setSearch }) => {
       setLoading(false);
       console.log("NFT listing is complete!");
     } catch (error) {
-      console.error("Error while listing NFT:", error);
+      toast.error(`Error while minting NFT: ${error}`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
     console.log("multiListing", multiListing);
@@ -444,9 +441,6 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("minAndList 1");
 
     // let mintedTokens = await nftContract.getMintedTokensList();
-    // console.log("mintedTokens ", mintedTokens);
-    // console.log("mintedTokens.length ", mintedTokens.length);
-    // console.log("minAndList 2");
 
     // let multi = false;
     // if (mintedTokens.length > 1) {
@@ -469,10 +463,6 @@ const Multiple = ({ search, setSearch }) => {
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    // console.log("Yahoo2");
-
-    // // console.log("startTimestamp in if", startingDate);
-    // // console.log("endTimestamp in if", startingDate);
 
     // // if (listingType == 0) {
     // //   console.log("startTimestamp in if", startingDate);
@@ -493,12 +483,6 @@ const Multiple = ({ search, setSearch }) => {
     // //   console.log("endTimestamp in else", endTimestamp);
     // // }
 
-    // // console.log("mintedTokens", mintedTokens);
-    // // console.log("item.price", item.price);
-    // // console.log("royalty", royalty);
-    // // console.log("listingType", listingType);
-    // // console.log("item.crypto", crypto);
-
     // // // UNCOMMENT this
     // let ethParsedList = [];
     // console.log("Yahoo3");
@@ -509,17 +493,6 @@ const Multiple = ({ search, setSearch }) => {
     //   let ethPrice = ethers.utils.parseEther(priceList[i]);
     //   ethParsedList.push(ethPrice);
     // }
-
-    // console.log("nftContract.address", nftContract.address);
-    // console.log("mintedTokens", mintedTokens);
-    // console.log("priceList", priceList);
-    // console.log("ethParsedList", ethParsedList);
-    // console.log("royaltyList", royaltyList);
-    // console.log("listingType", listingType);
-    // console.log("startingDateList", startingDateList);
-    // console.log("endingDateList", endingDateList);
-    // console.log("crypto", crypto);
-    // console.log("PAyment method", crypto);
 
     // await (
     //   await marketplaceContract.listNft(
@@ -548,7 +521,10 @@ const Multiple = ({ search, setSearch }) => {
 
       console.log("NFT minting and listing completed!");
     } catch (error) {
-      console.error("Error while minting and listing NFT:", error);
+      toast.error(`Error while minting NFT: ${error}`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // console.error("Error while minting and listing NFT:", error);
     }
 
     // let response = await marketplaceContract.on(
@@ -589,8 +565,14 @@ const Multiple = ({ search, setSearch }) => {
         console.log("HOGAYI SAME");
         console.log("multiListing", multiListing);
         multiListing = false;
-        alert("NFTs minted");
+        toast.success(`NFTs minted`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        // alert("NFTs minted");
+
+        setTimeout(() =>{
         navigate("/profile");
+      }, 3000)
       } else {
         console.log("Nhi mili");
       }
@@ -820,7 +802,10 @@ const Multiple = ({ search, setSearch }) => {
 
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
-      alert("Input Collection Name to Create");
+      toast.warning(`Input Collection Name to Create`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // alert("Input Collection Name to Create");
     } else {
       setcollectionOptions((previousOptions) => [
         ...previousOptions,
@@ -940,7 +925,10 @@ const Multiple = ({ search, setSearch }) => {
   const saveNFT = () => {
     if (listingType === 0) {
       if (!nftForm.price || !nftForm.desc) {
-        alert("Fill all fields to save a NFT");
+        toast.warning(`Fill all fields to save a NFT`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        // alert("Fill all fields to save a NFT");
       } else {
         // const imageFile = new File([NFts[currentNFT].image], "image.jpg", {
         //   type: "image/jpeg",
@@ -966,7 +954,10 @@ const Multiple = ({ search, setSearch }) => {
         !nftForm.startDate ||
         !nftForm.endDate
       ) {
-        alert("Fill all fields to save a NFT");
+        toast.warning(`Fill all fields to save a NFT`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        // alert("Fill all fields to save a NFT");
       } else {
         const startDate = new Date(nftForm.startDate);
         const endDate = new Date(nftForm.endDate);
@@ -1038,7 +1029,10 @@ const Multiple = ({ search, setSearch }) => {
         nftForm.endDate &&
         nftForm.endDate < nftForm.startDate
       ) {
-        alert("End date should be after start date");
+        // alert("End date should be after start date");
+        toast.warning(`End date should be after start date`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         setnftForm((prevForm) => ({
           ...prevForm,
           endDate: "", // Replace with your desired end date value
@@ -1053,7 +1047,10 @@ const Multiple = ({ search, setSearch }) => {
     const selectedStartDate = new Date(nftForm.startDate);
 
     if (selectedStartDate < today) {
-      alert("Start date should not be before today's date");
+      toast.warning(`Start date should not be before today's date`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // alert("Start date should not be before today's date");
       setnftForm((prevForm) => ({
         ...prevForm,
         startDate: "", // Replace with your desired start date value
@@ -1775,7 +1772,7 @@ const Multiple = ({ search, setSearch }) => {
                                   {listingType === 0 ? (
                                     <div className="line-two">
                                       <div className="row">
-                                        <div className="col-lg-9 col-md-9 col-7">
+                                        <div className="col-lg-8 col-md-8 col-6">
                                           <h2>Price</h2>
                                           <input
                                             type="text"
@@ -1799,7 +1796,7 @@ const Multiple = ({ search, setSearch }) => {
                                     <>
                                       <div className="line-two">
                                         <div className="row">
-                                          <div className="col-lg-9">
+                                          <div className="col-lg-8">
                                             <h2>Minimum bid</h2>
                                             <input
                                               type="text"
@@ -1817,7 +1814,7 @@ const Multiple = ({ search, setSearch }) => {
                                               </p>
                                             )}
                                           </div>
-                                          <div className="col-lg-3 col-md-3 col-5"></div>
+                                          <div className="col-lg-4 col-md-4 col-6"></div>
                                         </div>
                                       </div>
                                       <div className="line-two">
@@ -1939,6 +1936,7 @@ const Multiple = ({ search, setSearch }) => {
         <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
+      <ToastContainer />
     </>
   );
 };

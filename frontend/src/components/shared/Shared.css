@@ -303,6 +303,7 @@ p {
   font-size: 26px;
   margin-top: -8px;
   margin-right: 5px;
+  cursor: pointer;
 }
 
 .profile-drawer .three-line span {
@@ -347,7 +348,9 @@ p {
   padding-bottom: 5px;
 }
 
-.profile-drawer .four-line .logo-name {}
+.profile-drawer .four-line .logo-name {
+  cursor: pointer;
+}
 
 .profile-drawer .four-line .logo-name img {
   border-radius: 100%;
@@ -476,6 +479,7 @@ p {
   border: 3px solid #B600D1;
   border-radius: 6px;
   margin-right: 10px;
+  cursor: pointer;
 }
 
 .profile-drawer .seven-line span:nth-child(1) svg {

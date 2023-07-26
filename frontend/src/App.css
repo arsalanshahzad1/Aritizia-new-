@@ -421,6 +421,7 @@ header .left .white-color {
 
 header .left .search {
   font-size: 30px;
+  cursor: pointer;
 }
 
 header .left .user {
@@ -810,7 +811,8 @@ header .left img {
   position: relative;
   z-index: 5;
 }
-.sec-five-wrap .image img{
+
+.sec-five-wrap .image img {
   width: 100%;
   height: 180px;
   object-fit: cover;
@@ -1098,18 +1100,21 @@ footer h1 {
   font-size: 24px;
   color: var(--black);
   margin-left: 10px;
+  cursor: pointer;
 }
 
 .share-links-social svg:nth-child(3) {
   font-size: 28px;
   color: var(--black);
   margin-left: 5px;
+  cursor: pointer;
 }
 
 .share-links-social svg:nth-child(4) {
   font-size: 27px;
   color: var(--black);
   margin-left: 4px;
+  cursor: pointer;
 }
 
 .profile-first-section .user-email {
@@ -1273,6 +1278,7 @@ footer h1 {
   letter-spacing: 0em;
   text-align: center;
   padding: 5px 0px;
+  cursor: pointer;
 }
 
 .user-login-dropdown li.active {}
@@ -1533,6 +1539,10 @@ footer h1 {
   padding: 20px;
 }
 
+.search-filter .Dropdown-root {
+  cursor: pointer;
+}
+
 .search-filter .l-1,
 .search-filter .l-2,
 .search-filter .l-3,
@@ -1788,6 +1798,7 @@ footer h1 {
   color: var(--white);
   position: relative;
 }
+
 .update-profile-wrap button {
   background: var(--bg-gradient);
   padding: 12px 32px;
@@ -1843,6 +1854,7 @@ footer h1 {
   border: none;
   outline: none;
   padding: 5px 20px;
+  cursor: pointer;
 }
 
 .upload-img {
@@ -1920,7 +1932,13 @@ footer h1 {
   color: #121212;
 }
 
-.notification-sec-wrap .form-switch {}
+.notification-sec-wrap .form-switch {
+  cursor: pointer;
+}
+
+.notification-sec-wrap .form-switch input {
+  cursor: pointer;
+}
 
 .notification-sec-wrap .form-switch .form-check-input:focus {
   background-image: url('../public/assets/svg/gray-circle.svg');
@@ -1998,6 +2016,7 @@ footer h1 {
   border: none;
   outline: none;
   padding: 10px 52px 10px 15px;
+  cursor: pointer;
 }
 
 .apperance-section-wrap .Dropdown-placeholder {
@@ -2114,6 +2133,7 @@ footer h1 {
   margin: 15px 10px;
   height: 300px;
   border: 2px solid #F4F4F4;
+  cursor: pointer;
 }
 
 .metamask-waller-card:hover,
@@ -2178,6 +2198,7 @@ footer h1 {
   text-align: center;
   color: #121212;
   padding-bottom: 10px;
+
 }
 
 .subscription .subscription-wrap .subscription-card-wrap {
@@ -2187,6 +2208,36 @@ footer h1 {
   border-radius: 20px;
   border: 2px solid var(--primary);
   margin-bottom: 25px;
+  cursor: pointer;
+}
+.single-net-image{
+  display: inline-block;
+  position: relative;
+}
+.single-net-image img {
+  width: 360px;
+  height: 220px;
+  border: 2px solid var(--secoundary);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  border-radius: 10px;
+}
+
+.single-net-image span{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: #2438CB;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2px 4px 5px 4px;
+  line-height: 10px; 
+  cursor: pointer;
 }
 
 .subscription .subscription-wrap .subscription-card-wrap:hover {
@@ -2406,6 +2457,7 @@ footer h1 {
   border: none;
   outline: none;
   padding: 6px 0px 6px 15px;
+  cursor: pointer;
 }
 
 .create-single .create-single-section-wrap input::-webkit-input-placeholder {
@@ -2427,6 +2479,7 @@ footer h1 {
   text-align: left;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 
 .create-single .create-single-section-wrap .Dropdown-arrow {
@@ -2514,6 +2567,7 @@ footer h1 {
   border: 2px solid #CBCBCB;
   border-radius: 10px;
   padding: 30px 0px;
+  cursor: pointer;
 }
 
 .create-single .create-single-card:hover {
@@ -2529,6 +2583,7 @@ footer h1 {
 .create-single .create-single-card.active {
   border: 2px solid var(--secoundary);
   box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  cursor: pointer;
 }
 
 .create-single .create-single-card.active h3,
@@ -2578,6 +2633,7 @@ footer h1 {
 .create-single .line-six .rc-slider-rail {
   height: 8px;
   background-color: #BEBEBE;
+  cursor: pointer;
 }
 
 .create-single .line-six .rc-slider-step {
@@ -4286,6 +4342,7 @@ footer h1 {
   background-color: #B600D1;
   border-radius: 6px;
 }
+
 .followers-div div:nth-child(1).active {
   color: #B600D1;
   font-size: 18px;
@@ -4396,8 +4453,8 @@ footer h1 {
   background: #fff;
 }
 
-.Notification-in-header.is_seen{
-  background: rgba(112,181,249,0.2);
+.Notification-in-header.is_seen {
+  background: rgba(112, 181, 249, 0.2);
 }
 
 .Notification-in-header:hover {
@@ -4515,7 +4572,7 @@ footer h1 {
   justify-content: center;
 }
 
-.showBuyNow-step2 input  {
+.showBuyNow-step2 input {
   width: 100%;
   font-family: 'Jost';
   font-size: 20px;
@@ -4536,7 +4593,7 @@ footer h1 {
 
 .sec-loading {
   height: 100%;
-    width: 100%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4551,6 +4608,7 @@ footer h1 {
   position: relative;
   animation: move 0.5s linear infinite alternate-reverse;
 }
+
 .sec-loading .one::before {
   content: "";
   position: absolute;
@@ -4571,13 +4629,14 @@ footer h1 {
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+
 @keyframes move {
   to {
     transform: translateY(15px) rotate(45deg);
   }
 }
 
-.loadmore-mgs-notofication{
+.loadmore-mgs-notofication {
   border: none;
   outline: none;
   background: transparent;
@@ -4588,15 +4647,16 @@ footer h1 {
   color: #B600D1;
 }
 
-.no-message-selected{
+.no-message-selected {
   position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 18px;
-    font-weight: 600;
-    color: #B600D1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: 600;
+  color: #B600D1;
 }
+
 .discount-popup {
   width: 100vw;
   height: 100vh;
@@ -4884,12 +4944,15 @@ footer h1 {
 .disabled-input-only-view .rc-slider-disabled {
   background-color: transparent !important;
 }
-.disabled-input-only-view  .rc-slider-handle {
+
+.disabled-input-only-view .rc-slider-handle {
   background-color: #B1B1B1 !important;
 }
-.disabled-input-only-view  .rc-slider-track {
+
+.disabled-input-only-view .rc-slider-track {
   background-color: #B1B1B1 !important;
 }
-.disabled-input-only-view  .rc-slider-rail {
+
+.disabled-input-only-view .rc-slider-rail {
   background-color: #DADADA !important;
 }

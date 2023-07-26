@@ -18,6 +18,7 @@ import DashboardMain from "./Dashboard/DashboardScreens/DashboardMain";
 import OtherProfile from "./pages/OtherProfile";
 import CollectionProfile from "./pages/CollectionProfile";
 import ChatPage from "./Chat/ChatPage";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [search, setSearch] = useState(false);
