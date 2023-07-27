@@ -5,10 +5,29 @@ import { GlobalContext } from '../Context/GlobalContext'
 import ArtItem from './ArtItem'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 const Art = ({ search, setSearch }) => {
+    const { prompt, setprompt } = useContext(GlobalContext)
+
+    // const [apiData, setApiData] = useState('')
+    // const getDataFromAPI = async () => {
+    //     const api = await axios.get(`https://lexica.art/api/v1/search?q=${prompt}`)
+    //         .then((res) => {
+    //             console.log(res, "API RES")
+    //             setApiData(res)
+    //         })
+    //         .catch((err) => {
+    //             console.log(err, "API ERR")
+    //         })
+    // }
+    // useEffect(() => {
+    //     if (prompt) {
+    //         getDataFromAPI()
+    //     }
+    // }, [])
+
     const navigate = useNavigate()
 
-    const { prompt, setprompt } = useContext(GlobalContext)
     const [generatedArts, setgeneratedArts] = useState([
         {
             image: bird,
