@@ -33,6 +33,8 @@ import {
   Label,
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
+import apis from "../../service";
+
 const Monthly_data = [
   {
     data: "Jan",
@@ -312,6 +314,9 @@ const PlaceABidDrawer = ({
   const [sucess, setSucess] = useState(false);
   const [dollarPrice, setDollarPrice] = useState("");
   const [highestBid, setHighestBid] = useState("");
+  const [auctionStatus, setAuctionStatus] = useState(false);
+  const [bidButton, showBidButton] = useState(false);
+
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
     setStatus(e);
@@ -326,6 +331,92 @@ const PlaceABidDrawer = ({
 
   const [amountUSD, setAmountUSD] = useState("");
   const [platformFee, setPlatformFee] = useState("");
+  const [bidDisable, setBidDisable] = useState(false);
+
+  const getStatusOfAuction = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let auctionData = await marketplaceContract._idToAuction(id);
+
+    // console.log("auctionData", auctionData);
+    // console.log("startTime", auctionData.startTime.toString());
+
+    let startTime = auctionData.startTime.toString();
+    let highestBidd = auctionData.highestBid.toString();
+    let endTime = auctionData.endTime.toString();
+    let seller = auctionData.seller.toString();
+    seller = seller.toLowerCase();
+    let highestBidder = auctionData.highestBidder.toString();
+    highestBidder = highestBidder.toLowerCase();
+    userAddress = userAddress.toLowerCase();
+    let currentTime = Date.now();
+
+    console.log("highestBidder:", highestBidder);
+    console.log("highestBidd:", highestBidd);
+    // console.log("currentTime:", currentTime);
+    console.log("seller:", seller);
+    console.log("userAddress:", userAddress);
+
+    currentTime = Math.floor(currentTime / 1000);
+    // console.log("currentTime:", currentTime);
+
+    const auctionLive = await marketplaceContract.getStatusOfAuction(id);
+    // console.log("getStatusOfAuction", auctionLive);
+    // setAuctionStatus(auctionLive);
+
+    // console.log("eee auctionLive", auctionLive);
+    // console.log("eee userAddress != seller", userAddress != seller);
+    // console.log("eee highestBid == 0", highestBid == 0);
+    // console.log("eee userAddress == seller", userAddress == seller);
+    // console.log(
+    //   "eee userAddress == highestBidder",
+    //   userAddress == highestBidder
+    // );
+    console.log(
+      "eee userAddress == seller",
+      userAddress.toString() == seller.toString()
+    );
+    // console.log("eee auctionLive", auctionLive);
+
+    // if (userAddress = seller) {
+    // // which button to show
+    //   showBidButton(true);
+    // } else {
+    //   if(currentTime < startTime){
+    //   showBidButton(false);
+    //   }
+    // }
+
+    if (auctionLive) {
+      if (userAddress != seller) {
+        // show bid button
+        showBidButton(true);
+        console.log("WWW Bid");
+      } else if (highestBid == 0 && userAddress == seller) {
+        console.log("WWW show claim");
+        showBidButton(false);
+        // show claim
+      }
+    } else {
+      // auction is not live
+      if (userAddress == highestBidder || userAddress == seller) {
+        console.log("WWW show claim");
+        showBidButton(false);
+        // show claim
+      } else {
+        console.log("WWWW disabled bid button");
+        showBidButton(true); // Disabled
+        setBidDisable(true);
+        // disabled bid button
+      }
+    }
+  };
 
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
@@ -337,6 +428,10 @@ const PlaceABidDrawer = ({
     );
 
     let auctionData = await marketplaceContract._idToAuction(id);
+
+    const getStatusOfAuction = await marketplaceContract.getStatusOfAuction(id);
+    console.log("getStatusOfAuction", getStatusOfAuction);
+    setAuctionStatus(getStatusOfAuction);
 
     let highestBid = ethers.utils.formatEther(
       auctionData.highestBid.toString()
@@ -376,10 +471,15 @@ const PlaceABidDrawer = ({
     setPlatformFee(fee);
   };
 
+  let auctionPurchase = false;
+
   const claimAuction = async () => {
     const signer = await getProviderOrSigner(true);
 
+    auctionPurchase = true;
+
     console.log("Claim auction");
+    console.log("auctionPurchase", auctionPurchase);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -395,6 +495,51 @@ const PlaceABidDrawer = ({
         buyerPercent
       )
     ).wait();
+
+    let response = marketplaceContract.on(
+      "NFTSold",
+      auctionPurchase ? handleNFTSoldEvent : null
+    );
+    console.log("auctionPurchase", auctionPurchase);
+
+    console.log("Response of bid even", response);
+  };
+
+  const handleNFTSoldEvent = async (
+    nftContract,
+    tokenId,
+    seller,
+    owner,
+    price
+  ) => {
+    let soldData = {
+      // nftContract: nftContract.toString(),
+      token_id: tokenId.toString(),
+      seller: seller.toString(),
+      buyer: owner.toString(),
+      price: ethers.utils.formatEther(price.toString()),
+    };
+    if (auctionPurchase) {
+      console.log("soldData", soldData);
+
+      nftSoldPost(soldData);
+      auctionPurchase = false;
+    }
+
+    // setSucess(false);
+    // onClose(false);
+    // setTimeout(2000);
+    // navigate("/profile");
+  };
+
+  const nftSoldPost = async (value) => {
+    console.log("nftSoldPost");
+    console.log("nftSoldPost", value);
+
+    const response = await apis.postNftSold(value);
+    console.log("response", response);
+    alert("NFT bought");
+    // navigate("/profile");
   };
 
   const getProviderOrSigner = async (needSigner = false) => {
@@ -448,6 +593,7 @@ const PlaceABidDrawer = ({
       });
       connectWallet();
       getPriceInUSD();
+      getStatusOfAuction();
     }
   }, [walletConnected]);
 
@@ -516,13 +662,15 @@ const PlaceABidDrawer = ({
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
+    let time = await marketplaceContract.getCurrentTimestamp();
 
+    // console.log("block.timestamp", time);
     let auctionData = await marketplaceContract._idToAuction(id);
 
     const structData = await marketplaceContract._idToNFT(id);
 
     const getStatusOfAuction = await marketplaceContract.getStatusOfAuction(id);
-    console.log("getStatusOfAuction", getStatusOfAuction);
+    console.log("ooo getStatusOfAuction ", getStatusOfAuction);
 
     let highestBid = ethers.utils.formatEther(
       auctionData.highestBid.toString()
@@ -532,8 +680,11 @@ const PlaceABidDrawer = ({
 
     let endTime = auctionData.endTime.toString();
 
-    console.log("aaa startTime", startTime);
-    console.log("aaa endTime", endTime);
+    console.log("ooo startTime ", startTime);
+    console.log("ooo endTime ", endTime);
+    console.log("ooo block.timestamp ", time.toString());
+    console.log("ooo Time left", +endTime - +time.toString());
+
     console.log("aaa highestBid", highestBid);
     console.log("aaa highestBidder", auctionData.highestBidder);
     console.log("aaa seller", auctionData.seller);
@@ -909,19 +1060,24 @@ const PlaceABidDrawer = ({
                   <span>I agree all Terms & Conditions.</span>
                 </div>
                 <div className="eight-line">
-                  <button
-                    onClick={() => {
-                      setSucess(true);
-                    }}
-                  >
-                    Bid Now
-                  </button>
-
-                  <button onClick={claimAuction}>Claim</button>
+                  {bidButton ? (
+                    <button
+                      onClick={() => {
+                        setSucess(true);
+                      }}
+                    >
+                      Bid Now
+                    </button>
+                  ) : (
+                    <button disabled={bidDisable} onClick={claimAuction}>
+                      Claim
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           </div>
+          <button onClick={getStatusOfAuction}>getStatusOfAuction</button>
         </div>
       </Drawer>
       {/* <Modal

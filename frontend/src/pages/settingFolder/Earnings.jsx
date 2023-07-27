@@ -21,6 +21,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
+import { getAddress } from "../../methods/methods";
 
 const Monthly_data = [
   {
@@ -314,37 +315,37 @@ const Earnings = () => {
     return provider;
   }
 
-  const getAddress = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setUserAddress(accounts[0]);
-    localStorage.setItem("walletAddress", accounts[0]);
+  // const getAddress = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   localStorage.setItem("walletAddress", accounts[0]);
 
-    postWalletAddress(accounts[0]);
-    // console.log("getAddress", accounts[0]);
-  };
+  //   postWalletAddress(accounts[0]);
+  //   // console.log("getAddress", accounts[0]);
+  // };
 
-  const postWalletAddress = (address) => {
-    console.log("in post wallet ");
-    const postData = {
-      // Specify the data you want to send in the POST request
-      // For example:
-      walletAddress: address,
-    };
+  // const postWalletAddress = (address) => {
+  //   console.log("in post wallet ");
+  //   const postData = {
+  //     // Specify the data you want to send in the POST request
+  //     // For example:
+  //     walletAddress: address,
+  //   };
 
-    axios
-      .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
-      .then((response) => {
-        // Handle the response from the server/API
-        console.log(response.data);
-      })
-      .catch((error) => {
-        // Handle any errors that occurred during the request
-        console.error(error);
-      });
-    console.log("in post wallet 1");
-  };
+  //   axios
+  //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+  //     .then((response) => {
+  //       // Handle the response from the server/API
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       // Handle any errors that occurred during the request
+  //       console.error(error);
+  //     });
+  //   console.log("in post wallet 1");
+  // };
 
   //
 

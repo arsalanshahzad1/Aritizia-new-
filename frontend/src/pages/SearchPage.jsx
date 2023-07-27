@@ -16,6 +16,7 @@ import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../service";
+import { getAddress } from "../methods/methods";
 
 const SearchPage = ({ search, setSearch }) => {
   const [status, setStatus] = useState({ value: "one", label: "New" });
@@ -321,43 +322,43 @@ const SearchPage = ({ search, setSearch }) => {
     }
   };
 
-  const getAddress = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setUserAddress(accounts[0]);
-    localStorage.setItem("walletAddress", accounts[0]);
-    // console.log("getAddress", accounts[0]);
-    postWalletAddress(accounts[0]);
+  // const getAddress = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   localStorage.setItem("walletAddress", accounts[0]);
+  //   // console.log("getAddress", accounts[0]);
+  //   postWalletAddress(accounts[0]);
     
 
-  };
+  // };
 
-  const postWalletAddress  = async (address) => {
-    if (localStorage.getItem("data")) {
-      return console.log("data is avaliable");
-    } else {
-    const response = await apis.postWalletAddress({wallet_address:  address})
-    localStorage.setItem("data", JSON.stringify(response.data.data));
-    window.location.reload();
-    }
-    // if (localStorage.getItem("data")) {
-    //   return console.log("data is avaliable");
-    // } else {
-    //   const postData = {
-    //     wallet_address: address,
-    //   };
+  // const postWalletAddress  = async (address) => {
+  //   if (localStorage.getItem("data")) {
+  //     return console.log("data is avaliable");
+  //   } else {
+  //   const response = await apis.postWalletAddress({wallet_address:  address})
+  //   localStorage.setItem("data", JSON.stringify(response.data.data));
+  //   window.location.reload();
+  //   }
+  //   // if (localStorage.getItem("data")) {
+  //   //   return console.log("data is avaliable");
+  //   // } else {
+  //   //   const postData = {
+  //   //     wallet_address: address,
+  //   //   };
 
-    //   axios
-    //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
-    //     .then((response) => {
-    //       localStorage.setItem("data", JSON.stringify(response.data.data));
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-  };
+  //   //   axios
+  //   //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+  //   //     .then((response) => {
+  //   //       localStorage.setItem("data", JSON.stringify(response.data.data));
+  //   //     })
+  //   //     .catch((error) => {
+  //   //       console.error(error);
+  //   //     });
+  //   // }
+  // };
 
   useEffect(() => {
     if (!walletConnected) {

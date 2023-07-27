@@ -18,6 +18,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../../service";
+import { getAddress } from "../../methods/methods";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -75,30 +76,11 @@ const LandingPage = ({ search, setSearch }) => {
     return web3Provider;
   };
 
-  const approveUSDT = async () => {
-    const signer = await getProviderOrSigner(true);
 
-    let amountInWei = 100000 * 10 ** 6;
-
-    const USDTContract = new Contract(
-      TETHER_CONTRACT_ADDRESS.address,
-      TETHER_CONTRACT_ABI.abi,
-      signer
-    );
-
-    const appprove = await USDTContract.approve(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      amountInWei
-    );
-
-    appprove.wait();
-  };
 
   const getListedNfts = async () => {
     const provider = await getProvider();
-    // const provider = await getProviderOrSigner();
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-
+ 
     console.log("Provider", provider);
 
     const marketplaceContract = new Contract(
@@ -234,57 +216,46 @@ const LandingPage = ({ search, setSearch }) => {
     // console.log("nftListAuctionmain", myAuctions);
   };
 
-  const getAddress = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setUserAddress(accounts[0]);
-    postWalletAddress(accounts[0]);
-  };
-
-  const postWalletAddress = async (address) => {
-    if (localStorage.getItem("data")) {
-      return console.log("data is avaliable");
-    } else {
-      const response = await apis.postWalletAddress({
-        wallet_address: address,
-      });
-      localStorage.setItem("data", JSON.stringify(response.data.data));
-      window.location.reload();
-    }
-    // if (localStorage.getItem("data")) {
-    //   return console.log("data is avaliable");
-    // } else {
-    //   const postData = {
-    //     wallet_address: address,
-    //   };
-
-    //   axios
-    //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
-    //     .then((response) => {
-    //       localStorage.setItem("data", JSON.stringify(response.data.data));
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-  };
-
-  // const swapUSDTForETH = async () => {
-  //   const signer = await getProviderOrSigner(true);
-
-  //   const marketplaceContract = new Contract(
-  //     MARKETPLACE_CONTRACT_ADDRESS.address,
-  //     MARKETPLACE_CONTRACT_ABI.abi,
-  //     signer
-  //   );
-
-  //   await marketplaceContract.swapUSDTForETH(20);
+  // const getAddress = async () => {
+  //   const meth = await getAddresss();
+  //   console.log("methods", meth);
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   postWalletAddress(accounts[0]);
   // };
 
-  // const swapETHForUSDT = async () => {
-  //   const signer = await getProviderOrSigner(true);
+  // const postWalletAddress = async (address) => {
+  //   console.log("postWalletAddress");
+  //   if (localStorage.getItem("data")) {
+  //     let storedWallet = JSON.parse(
+  //       localStorage.getItem("data")
+  //     ).wallet_address;
+  //     // console.log("fffbb StoredWallet", storedWallet == address);
+  //     storedWallet = storedWallet.toLowerCase();
+  //     address = address.toLowerCase();
 
+  //     // if (localStorage.getItem("data")) {
+  //     if (storedWallet == address) {
+  //       return console.log("data is avaliable");
+  //     } else {
+  //       const response = await apis.postWalletAddress({
+  //         wallet_address: address,
+  //       });
+  //       localStorage.setItem("data", JSON.stringify(response.data.data));
+  //       window.location.reload();
+  //     }
+  //   } else {
+  //     const response = await apis.postWalletAddress({
+  //       wallet_address: address,
+  //     });
+  //     localStorage.setItem("data", JSON.stringify(response.data.data));
+  //     window.location.reload();
+  //   }
+  // };
+
+  
   //   const marketplaceContract = new Contract(
   //     MARKETPLACE_CONTRACT_ADDRESS.address,
   //     MARKETPLACE_CONTRACT_ABI.abi,

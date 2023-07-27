@@ -262,6 +262,9 @@ const Profile = ({ search, setSearch }) => {
   // };
 
   const postFanList = async () => {
+    console.log("postFanList", postFanList);
+    console.log("userAddress", userAddress);
+    console.log("addedFans", addedFans);
     const response = await apis.postAddFans({
       fan_by_wallet: userAddress,
       fan_to_array_wallet: addedFans,
@@ -544,13 +547,22 @@ const Profile = ({ search, setSearch }) => {
 
   const getFollowingList = async () => {
     const response = await apis.getFollowingList();
-    console.log(response.data.data, "following");
-    setFollwing(response.data.data);
+    if(response.status){
+      console.log(response?.data?.data, "following");
+      setFollwing(response?.data?.data);
+    }
+    else{
+      setFollwing('');
+    }
   };
   const getFollowersList = async () => {
     const response = await apis.getFollowersList();
+    if(response.status){
     console.log(response.data.data, "followers");
     setFollwers(response.data.data);
+    }else{
+      setFollwers('');
+    }
   };
 
   useEffect(() => {

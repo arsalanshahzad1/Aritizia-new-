@@ -427,7 +427,7 @@ function ProfileDrawer({
   };
 
   const handleNFTSoldEvent = async (
-    // nftContract,
+    nftContract,
     tokenId,
     seller,
     owner,
@@ -441,9 +441,12 @@ function ProfileDrawer({
       price: ethers.utils.formatEther(price.toString()),
     };
 
-    console.log("soldData", soldData);
-
-    nftSoldPost(soldData);
+    if (ethPurchase || usdtPurchase) {
+      console.log("soldData", soldData);
+      nftSoldPost(soldData);
+      ethPurchase = false;
+      usdtPurchase = false;
+    }
     // setSucess(false);
     // onClose(false);
     // setTimeout(2000);
@@ -452,7 +455,7 @@ function ProfileDrawer({
 
   const nftSoldPost = async (value) => {
     console.log("nftSoldPost");
-    console.log("nftSoldPost", value);
+    // console.log("nftSoldPost", value);
 
     const response = await apis.postNftSold(value);
     console.log("response", response);
@@ -536,7 +539,6 @@ function ProfileDrawer({
       signer
     );
     console.log("discountedAmountUSD ooo", discountedAmountUSD);
-    console.log("discountedPlatformFee ooo", discountedPlatformFee);
     console.log("discountedEth ooo", discountedEth);
 
     const structData = await marketplaceContract._idToNFT(id);
@@ -564,7 +566,10 @@ function ProfileDrawer({
     console.log("fanlist2", fanlist2);
   };
 
+  let ethPurchase = false;
+
   const buyWithETH = async () => {
+    ethPurchase = true;
     console.log("buyWithETH");
     const signer = await getProviderOrSigner(true);
     console.log("buyWithETH");
@@ -627,15 +632,20 @@ function ProfileDrawer({
     ).wait();
     console.log("buyWithETH");
 
-    let response = marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+    let response = marketplaceContract.on(
+      "NFTSold",
+      ethPurchase ? handleNFTSoldEvent : null
+    );
 
     console.log("Response of bid even", response);
   };
 
+  let usdtPurchase = false;
+
   const buyWithUSDT = async () => {
     // console.log("Amount", amountUSD);
     // console.log("price", price);
-
+    usdtPurchase = true;
     const signer = await getProviderOrSigner(true);
 
     const marketplaceContract = new Contract(
@@ -707,7 +717,10 @@ function ProfileDrawer({
       )
     ).wait();
 
-    let response = marketplaceContract.on("NFTSold", handleNFTSoldEvent);
+    let response = marketplaceContract.on(
+      "NFTSold",
+      usdtPurchase ? handleNFTSoldEvent : null
+    );
 
     console.log("Response of bid even", response);
   };

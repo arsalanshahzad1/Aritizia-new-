@@ -21,9 +21,9 @@ import Search from "../../components/shared/Search";
 import duck from "../../../public/assets/images/duck.png";
 import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
-import { RxCross2 } from 'react-icons/rx'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { RxCross2 } from "react-icons/rx";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -39,8 +39,6 @@ const Single = ({ search, setSearch }) => {
   const [loading, setLoading] = useState(false);
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
-
-
 
   var startTime = useRef(0);
   var endTime = useRef(0);
@@ -154,7 +152,7 @@ const Single = ({ search, setSearch }) => {
     if (listingType == 0) {
       let price = item.price;
       let crypto = item.crypto;
-      let collection = 0; // collection id hardcoded dey hrey hn
+      let collection = 1; // collection id hardcoded dey hrey hn
       let title = item.title;
       let description = item.description;
 
@@ -290,14 +288,17 @@ const Single = ({ search, setSearch }) => {
       console.log("qqq startTime", startTime);
       console.log("startTime typeof", typeof startTime);
       console.log("qqq endTime", endTime);
-      let currentTime = Date.now();
-      console.log("aaa f currentTime:", currentTime);
+      // let currentTime = Date.now();
+      // console.log("aaa f currentTime:", currentTime);
       // let addedTime = currentTime + 300000;
 
-      currentTime = Math.floor(currentTime / 1000);
-      console.log("aaa currentTime:", currentTime);
-      let addedTime = currentTime + 500000;
-      console.log("aaa addedTime:", addedTime);
+      // currentTime = Math.floor(currentTime / 1000);
+      // console.log("aaa currentTime:", currentTime);
+      // let addedTime = currentTime + 500000;
+      // console.log("aaa addedTime:", addedTime);
+
+      let currentTime = 1690440477;
+      let addedTime = currentTime + 400;
 
       await (
         await marketplaceContract.listNft(
@@ -306,10 +307,10 @@ const Single = ({ search, setSearch }) => {
           [ethers.utils.parseEther(item.price)], // list
           royalty,
           listingType,
-          // [currentTime],
-          // [addedTime],
-          [startTime], // list
-          [endTime], // list
+          [currentTime],
+          [addedTime],
+          // [startTime], // list
+          // [endTime], // list
           1, // collection number
           crypto,
           {
@@ -440,14 +441,7 @@ const Single = ({ search, setSearch }) => {
       console.log("listedData", listedData);
       singleMinting = false;
       console.log("singleMinting", singleMinting);
-      toast.success("Nft listed", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      // alert("Nft listed");
-      setTimeout(() =>{
-        navigate("/profile");
-      }, 3000)
-
+      nftDataPost();
     }
   };
 
@@ -457,6 +451,14 @@ const Single = ({ search, setSearch }) => {
 
     const response = await apis.postListNft(listToPost.current[0]);
     console.log("response", response);
+
+    toast.success("Nft listed", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    // alert("Nft listed");
+    setTimeout(() => {
+      navigate("/profile");
+    }, 3000);
     // navigate("/profile");
   };
 
@@ -501,7 +503,7 @@ const Single = ({ search, setSearch }) => {
     // ...
   };
 
-  useEffect(() => { }, [price, title, description]);
+  useEffect(() => {}, [price, title, description]);
   let singleMinting = false;
 
   function createItem(e) {
@@ -525,8 +527,8 @@ const Single = ({ search, setSearch }) => {
       // const startDate = new Date(startingDate);
       // const endDate = new Date(endingDate);
 
-      const startDate = new Date("2023-05-21");
-      const endDate = new Date("2023-06-21");
+      const startDate = new Date(startingDate);
+      const endDate = new Date(endingDate);
 
       console.log("startDate", startDate.getTime());
       console.log("endDate", endDate.getTime());
@@ -680,6 +682,33 @@ const Single = ({ search, setSearch }) => {
     setSelectedImage2(file);
   };
 
+  const getBlockTimestamp = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let time = await marketplaceContract.getCurrentTimestamp();
+
+    // console.log("block.timestamp", time);
+    console.log("block.timestamp", time.toString());
+
+    const startDate = new Date(startingDate);
+    const endDate = new Date(endingDate);
+
+    console.log("startDate", startDate.getTime());
+    console.log("endDate", endDate.getTime());
+
+    const startTimestamp = Math.floor(startDate.getTime() / 1000);
+
+    const endTimestamp = Math.floor(endDate.getTime() / 1000);
+    console.log("startTimestamp", startTimestamp);
+    console.log("endTimestamp", endTimestamp);
+  };
+
   const [choosenCollection, setChoosenCollection] = useState("");
   useEffect(() => {
     setChoosenCollection(collection);
@@ -728,9 +757,9 @@ const Single = ({ search, setSearch }) => {
                                   version="1.1"
                                   viewBox="0 0 50 50"
                                   width="25px"
-                                  xml: space="preserve"
+                                  xml:space="preserve"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  xmlns: xlink="http://www.w3.org/1999/xlink"
+                                  xmlns:xlink="http://www.w3.org/1999/xlink"
                                 >
                                   <rect fill="none" height="50" width="50" />
                                   <line
@@ -793,7 +822,10 @@ const Single = ({ search, setSearch }) => {
                                 </div>
                               )}
                               <div
-                                onClick={() =>{ setcollectionFinalized(true) ; notify()}}
+                                onClick={() => {
+                                  setcollectionFinalized(true);
+                                  notify();
+                                }}
                                 className="browse-btn my-5 button-styling"
                               >
                                 Next
@@ -820,13 +852,14 @@ const Single = ({ search, setSearch }) => {
                         <div className="col-lg-12">
                           <div className="upload-file">
                             <h2>Upload file</h2>
-                            {displayImage == "" ?
-                              (<div className="browseforSingle">
+                            {displayImage == "" ? (
+                              <div className="browseforSingle">
                                 {!selectedImage ? (
                                   <p>PNG, JPG, GIF, WEBP or MP4. Max 200mb.</p>
                                 ) : (
                                   <p>
-                                    Uploaded successfully, want to upload another?
+                                    Uploaded successfully, want to upload
+                                    another?
                                   </p>
                                 )}
                                 <input
@@ -841,15 +874,21 @@ const Single = ({ search, setSearch }) => {
                                 >
                                   Browse
                                 </div>
-                              </div>)
-                              :
-                              (<div className="single-net-image">
+                              </div>
+                            ) : (
+                              <div className="single-net-image">
                                 <img src={displayImage} alt="" />
                                 {/* <RxCross2/> */}
-                                <span onClick={() => {setDisplayImage('') ; selectedImage(null)}}>x</span>
-                              </div>)
-                            }
-
+                                <span
+                                  onClick={() => {
+                                    setDisplayImage("");
+                                    selectedImage(null);
+                                  }}
+                                >
+                                  x
+                                </span>
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="line-one">
@@ -862,8 +901,9 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(0);
                                 }}
-                                className={` create-single-card ${listingType === 0 ? "active" : ""
-                                  }`}
+                                className={` create-single-card ${
+                                  listingType === 0 ? "active" : ""
+                                }`}
                               >
                                 <AiFillTag />
                                 <h3>Fixed Price</h3>
@@ -874,8 +914,9 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(1);
                                 }}
-                                className={` create-single-card ${listingType === 1 ? "active" : ""
-                                  }`}
+                                className={` create-single-card ${
+                                  listingType === 1 ? "active" : ""
+                                }`}
                               >
                                 <BsFillClockFill />
                                 <h3>Timed Auction</h3>
@@ -892,9 +933,9 @@ const Single = ({ search, setSearch }) => {
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -924,9 +965,9 @@ const Single = ({ search, setSearch }) => {
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
+                                    // type="number"
+                                    // placeholder="0.00"
+                                    // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -990,7 +1031,7 @@ const Single = ({ search, setSearch }) => {
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                              // onChange={(e) => setTitle(e.target.value)}
+                                // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
@@ -1041,7 +1082,7 @@ const Single = ({ search, setSearch }) => {
               </div>
             </div>
           </form>
-          <button onClick={nftDataPost}>Test Post</button>
+          <button onClick={getBlockTimestamp}>GetBlockTimestamp</button>
           <br></br>
           {/* <button onClick={getItem} className="button-styling">
             Get NFTS data

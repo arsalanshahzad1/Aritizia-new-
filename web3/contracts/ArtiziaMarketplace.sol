@@ -952,8 +952,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.collectionId,
             _listingType
         );
-
-        
     }
 
     function bidInETH(
@@ -1567,6 +1565,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             return false;
         }
     }
+
+      function getCurrentTimestamp() public view returns (uint256) {
+        return block.timestamp;
+    }
+
 
     receive() external payable {}
 
