@@ -19,6 +19,7 @@ import OtherProfile from "./pages/OtherProfile";
 import CollectionProfile from "./pages/CollectionProfile";
 import ChatPage from "./Chat/ChatPage";
 import 'react-toastify/dist/ReactToastify.css';
+import Art from "./pages/Art";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -100,6 +101,10 @@ function App() {
           <Route
             path="/dashboard/*"
             element={<DashboardMain search={search} setSearch={setSearch} />}
+          />
+          <Route
+            path="/art"
+            element={<Art search={search} setSearch={setSearch} />}
           />
           <Route
             path="/chat/:id"

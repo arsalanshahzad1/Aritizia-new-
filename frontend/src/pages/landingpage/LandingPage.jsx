@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -21,6 +21,8 @@ import apis from "../../service";
 import { getAddress } from "../../methods/methods";
 
 const LandingPage = ({ search, setSearch }) => {
+
+  const { prompt, setprompt } = useContext(GlobalContext)
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 

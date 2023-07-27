@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-
+import { GlobalContext } from "../../Context/GlobalContext";
+import { Link } from "react-router-dom";
 const SliderImage = () => {
+  const { prompt, setprompt } = useContext(GlobalContext)
   const [count, setCount] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
 
@@ -44,10 +46,14 @@ const SliderImage = () => {
       <div className="home-first-wrap">
         <h1>CREATE YOUR OWN NFT</h1>
         <div className="search" id="prompt">
-          <button>Prompt</button>
+          <Link to='/art'>
+            <button>Prompt</button>
+          </Link>
           <input
             type="text"
             placeholder="A cinematic wide shot of a hamster in a space suit, HD, 2:3"
+            defaultValue={prompt}
+            onChange={(e) => setprompt(e.target.value)}
           />
         </div>
         <p>
