@@ -304,7 +304,11 @@ const Daily_data = [
   },
 ];
 
-const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
+const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  , royalty , descriptionn , collectionn }) => {
+  console.log(titlee , 'title');
+  console.log(royalty , 'royalty');
+  console.log(descriptionn , 'description');
+  console.log(collectionn , 'collectionn');
   // const [image, setImage] = useState("");
   // let image = "";
   // const [price, setPrice] = useState(null);
@@ -800,12 +804,8 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
                               <h2>Collection Name</h2>
                               <input
                                 type="text"
-                                value={"Monkey"}
+                                value={collectionn}
                                 disabled
-
-                                // type="number"
-                                // placeholder="0.00"
-                                // ref={price}
                               />
                             </div>
                           </div>
@@ -817,6 +817,7 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
                               <input
                                 disabled
                                 type="text"
+                                value={titlee}
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
@@ -834,6 +835,7 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
                                 type="text"
                                 placeholder="e.g. ‘This is very limited item’"
                                 ref={description}
+                                value={descriptionn}
                               />
                             </div>
                           </div>
@@ -846,14 +848,14 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image }) => {
                                 disabled
                                 min={0}
                                 max={15}
-                                defaultValue={0}
+                                defaultValue={royalty}
                                 // step={null}
                                 // onChange={handleSliderChange}
                                 // value={royalty}
                               />
                             </div>
                             <div className="col-lg-3 ">
-                              <div className="royality-value">royalty %</div>
+                              <div className="royality-value">royalty {royalty}%</div>
                             </div>
                           </div>
                         </div>

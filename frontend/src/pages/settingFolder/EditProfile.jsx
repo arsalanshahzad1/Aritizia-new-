@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { BiUserCircle } from 'react-icons/bi'
 import { CiUser } from 'react-icons/ci'
 import apis from '../../service'
 

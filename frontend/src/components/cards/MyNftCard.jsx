@@ -22,6 +22,7 @@ const MyNftCard = ({
   collection,
   userAddress,
 }) => {
+  console.log(royalty , 'royalty');
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -173,10 +174,10 @@ const MyNftCard = ({
         onClose={onClose}
         timedAuction={timedAuction}
         image={image}
-        title={title}
+        titlee={title}
         royalty={royalty}
-        description={description}
-        collection={collection}
+        descriptionn={description}
+        collectionn={collection}
 
       />
       <ProfileDrawer

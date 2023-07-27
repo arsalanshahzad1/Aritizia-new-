@@ -23,8 +23,9 @@ import NftCard from "./NftCard";
 import duck from "../../../public/assets/images/duck.png";
 import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -39,6 +40,7 @@ const Multiple = ({ search, setSearch }) => {
 
   const [inputValue, setInputValue] = useState("");
   const [showWarning, setShowWarning] = useState(false);
+  const [showCollection, setshowcollection] = useState(false);
 
   const navigate = useNavigate();
 
@@ -90,10 +92,7 @@ const Multiple = ({ search, setSearch }) => {
     label: "ETH",
   });
 
-  const [collection, setCollection] = useState({
-    value: "USDT",
-    label: "Select Collection",
-  });
+  const [collection, setCollection] = useState("");
   // const collection = useRef("");
 
   const cryptoOptions = [
@@ -102,10 +101,7 @@ const Multiple = ({ search, setSearch }) => {
     { value: 1, label: "USDT" },
   ];
 
-  const [collectionOptions, setcollectionOptions] = useState([
-    { value: "", label: "Select Collection" },
-    { value: "usdt", label: "USDT" },
-  ]);
+  const [collectionOptions, setcollectionOptions] = useState([]);
 
   const defaultOption = collectionOptions[0];
   const defaultCrypto = cryptoOptions[0];
@@ -145,7 +141,7 @@ const Multiple = ({ search, setSearch }) => {
 
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337 ) {
+    if (chainId !== 31337) {
       window.alert("Change the network to Sepolia");
       throw new Error("Change network to Sepolia");
     }
@@ -390,8 +386,8 @@ const Multiple = ({ search, setSearch }) => {
           startingDateList,
           endingDateList,
           // [startingDateList[0] + 5 * 60 * 1000],
-          1,
-          crypto
+          collection.value, // collection number
+          collection.crypto
         )
       ).wait();
       setLoading(false);
@@ -607,9 +603,9 @@ const Multiple = ({ search, setSearch }) => {
         });
         // alert("NFTs minted");
 
-        setTimeout(() =>{
-        navigate("/profile");
-      }, 3000)
+        setTimeout(() => {
+          navigate("/profile");
+        }, 3000);
       } else {
         console.log("Nhi mili");
       }
@@ -852,7 +848,7 @@ const Multiple = ({ search, setSearch }) => {
 
   const [showProfileNFT, setshowProfileNFT] = useState(false);
   const [ShowMore, setShowMore] = useState(false);
-  const [CreateCollection, setCreateCollection] = useState("");
+  // const [CreateCollection, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
   const AddCollection = () => {
@@ -1125,6 +1121,79 @@ const Multiple = ({ search, setSearch }) => {
     setSelectedImage2(file);
   };
   const [collectionFinalized, setcollectionFinalized] = useState(false);
+  const [collectionName, setCreateCollection] = useState("");
+  const postSingleCollection = async () => {
+    let cryptoType;
+    console.log(user_id, collectionName, crypto, selectedImage2);
+    if (collectionName.length < 1 || !selectedImage2) {
+      toast.warning("Input Collection Name and image to Create", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } else {
+      if (crypto.value === 0) {
+        cryptoType = "eth";
+      } else if (crypto.value === 1) {
+        cryptoType = "usdt";
+      }
+
+      const sendData = new FormData();
+      sendData.append("user_id", user_id);
+      sendData.append("name", collectionName);
+      sendData.append("payment_type", cryptoType);
+      sendData.append("image", selectedImage2);
+      const response = await apis.postNFTCollection(sendData);
+
+      setcollectionOptions((previousOptions) => [
+        ...previousOptions,
+        {
+          value: response?.data?.data?.id,
+          label: response?.data?.data?.name,
+          image: response?.data?.data?.media[0]?.original_url,
+        },
+      ]);
+
+      setshowCreateCollection(false);
+    }
+  };
+
+  const getCollection = async () => {
+    const response = await apis.getNFTCollection();
+    if (response.status) {
+      setcollectionOptions("");
+
+      for (let i = 0; i < response?.data?.data?.length; i++) {
+        let type = response?.data?.data[i]?.payment_type;
+        console.log(type == "eth", "eth", "TYpe", type);
+
+        if (type == "eth") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 0,
+            },
+          ]);
+        }
+        if (type == "usdt") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 1,
+            },
+          ]);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    getCollection();
+  }, []);
 
   return (
     <>
@@ -1146,14 +1215,53 @@ const Multiple = ({ search, setSearch }) => {
                               This is the collection where your item will
                               appear.
                             </p>
-                            <Dropdown
-                              options={collectionOptions}
-                              onChange={(e) => {
-                                console.log("important", e);
-                                setCollection(e);
-                              }}
-                              value={collection.value}
-                            />
+                            <div
+                              className="custom-drop-down"
+                              onClick={() => setshowcollection(!showCollection)}
+                            >
+                              <div className="drop-down-select">
+                                {collection == "" ? (
+                                  <p>Select collection...</p>
+                                ) : (
+                                  <p>{collection?.label}</p>
+                                )}
+                                {collectionOptions?.length > 0 && (
+                                  <MdOutlineKeyboardArrowDown />
+                                )}
+                              </div>
+                              <div className="dropdown-list-wrap">
+                                {showCollection && (
+                                  <ul>
+                                    {collectionOptions.map((value, index) => {
+                                      return (
+                                        <li
+                                          key={index}
+                                          className={`${
+                                            collection?.label === value?.label
+                                              ? "is-selected"
+                                              : ""
+                                          }`}
+                                          onClick={() => {
+                                            setCollection(
+                                              collectionOptions[index]
+                                            );
+                                            console.log(collection);
+                                          }}
+                                        >
+                                          {value?.label}
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                )}
+                              </div>
+                            </div>
+                            {/* <Dropdown
+                           options={collectionOptions}
+                           onChange={(e) => {
+                           }}
+                           defaultValue={collection.value}
+                         /> */}
                             <div
                               className="create-collection-btn"
                               onClick={() => setshowCreateCollection(true)}
@@ -1196,15 +1304,30 @@ const Multiple = ({ search, setSearch }) => {
                             {showCreateCollection && (
                               <div className="Create-collection-popup">
                                 <div className="Create-collection-popup-inner">
-                                  <p>Collection Name</p>
-                                  <input
-                                    value={CreateCollection}
-                                    onChange={(e) =>
-                                      setCreateCollection(e.target.value)
-                                    }
-                                    type="text"
-                                    placeholder="Enter collection name"
-                                  />
+                                  <div className="Create-collection-wrap">
+                                    <div className="left">
+                                      <p>Collection Name</p>
+                                      <input
+                                        // value={collectionName}
+                                        value={collectionName}
+                                        onChange={(e) =>
+                                          setCreateCollection(e.target.value)
+                                        }
+                                        type="text"
+                                        placeholder="Enter collection name"
+                                      />
+                                    </div>
+                                    <div className="right">
+                                      <h2>Crypto</h2>
+                                      <Dropdown
+                                        options={cryptoOptions}
+                                        onChange={(e) => {
+                                          setCrypto(e);
+                                        }}
+                                        value={defaultCrypto.value}
+                                      />
+                                    </div>
+                                  </div>
                                   <p className="txt-2">Upload image</p>
                                   <input
                                     type="file"
@@ -1214,27 +1337,42 @@ const Multiple = ({ search, setSearch }) => {
 
                                   <div className="popUp-btn-group">
                                     <div
-                                      className="button-styling btnCC"
-                                      onClick={() => AddCollection()}
-                                    >
-                                      Next
-                                    </div>
-                                    <div
                                       onClick={hideCreateCollection}
                                       className="button-styling-outline btnCC"
                                     >
                                       <div className="btnCCin">Cancel</div>
                                     </div>
+                                    <div
+                                      className="button-styling btnCC"
+                                      onClick={() => {
+                                        AddCollection();
+                                        postSingleCollection();
+                                      }}
+                                    >
+                                      Create
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             )}
-                            <div
-                              onClick={() => setcollectionFinalized(true)}
-                              className="browse-btn my-5 button-styling"
-                            >
-                              Next
-                            </div>
+                            {collection == "" ? (
+                              <div
+                                className="browse-btn my-5 button-styling"
+                                style={{ background: "gray" }}
+                              >
+                                Next
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => {
+                                  setcollectionFinalized(true);
+                                  notify();
+                                }}
+                                className="browse-btn my-5 button-styling"
+                              >
+                                Next
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1413,7 +1551,7 @@ const Multiple = ({ search, setSearch }) => {
                                     {royalty} %
                                   </div>
                                 </div>
-                                <div className="col-lg-4 col-md-4 col-5 mt-5">
+                                {/* <div className="col-lg-4 col-md-4 col-5 mt-5">
                                   <p>Crypto</p>
                                   <Dropdown
                                     options={cryptoOptions}
@@ -1422,7 +1560,7 @@ const Multiple = ({ search, setSearch }) => {
                                     }}
                                     value={defaultCrypto.value}
                                   />
-                                </div>
+                                </div> */}
                               </div>
                             </div>
 
@@ -1466,13 +1604,13 @@ const Multiple = ({ search, setSearch }) => {
 
                             <div className="col-lg-8 mx-auto collectionDivPreview">
                               <div className="img-holder">
-                                <img src={duck} alt="" />
+                                <img src={collection.image} alt="" />
                               </div>
                               {/* <div className="title">
                             Collection Name
                           </div> */}
                               <div className="title-txt">
-                                {choosenCollection.value}
+                                {choosenCollection.label}
                               </div>
                             </div>
                             <br />
