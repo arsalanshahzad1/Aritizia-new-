@@ -124,7 +124,7 @@ function ChatPage({ search, setSearch }) {
 
     useEffect(() => {
         const id = JSON.parse(localStorage.getItem('data'))
-        const user_id = id.id;
+        const user_id = id?.id;
         const channel = laravelEcho.channel("chat-channel-" + user_id);
         channel.listen(".chat-event", (data) => {
             // Handle the received event data

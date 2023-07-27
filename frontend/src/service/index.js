@@ -78,7 +78,7 @@ const createBackendServer = (baseURL) => {
 
   const postCheckChatMessage = async (body) => await api.post(`check-chat-message`, body);
 
-  const getNFTCollection = async () => await api.post(`view-nft-collections/${RealUserId}`);
+  const getNFTCollection = async () => await api.get(`view-nft-collections/${RealUserId}`);
   const postNFTCollection = async (body) => await api.post(`add-nft-collection`, body);
 
   //Returning all the API

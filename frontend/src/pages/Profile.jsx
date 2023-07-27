@@ -671,7 +671,7 @@ const Profile = ({ search, setSearch }) => {
   const postChatMeaage = async () => {
     console.log("clicking");
     const id = JSON.parse(localStorage.getItem("data"));
-    const user_id = id.id;
+    const user_id = id?.id;
     const response = await apis.postCheckChatMessage({
       sender_id: user_id,
       receiver_id: "5",

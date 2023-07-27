@@ -3,10 +3,9 @@ import apis from '../../service'
 const Followers = ({ data }) => {
     const [showOptions, setshowOptions] = useState(false)
     const localStoragedata = JSON.parse(localStorage.getItem('data'))
-    const RealUserId = localStoragedata.id;
+    const RealUserId = localStoragedata?.id;
     const followOther = async (id) => {
         const response = await apis.postFollowAndUnfollow({follow_by : RealUserId , follow_to : id})
-        console.log(response.data.data);
     }
     return (
         <>
@@ -15,16 +14,16 @@ const Followers = ({ data }) => {
                     <div className='Follow-row' key={i}>
                         <div className='left'>
                             <div className='img-holder'>
-                                <img src={data.profile_image} alt="" />
+                                <img src={data?.profile_image} alt="" />
                             </div>
                             <div className='txt'>
-                                <p>{data.first_name}</p>
-                                <p>{data.count_follower} Followers</p>
+                                <p>{data?.first_name}</p>
+                                <p>{data?.count_follower} Followers</p>
                             </div>
                         </div>
                         <div className='right'>
 
-                            <button onClick={() => followOther(data.user_id)}>Follow</button>
+                            <button onClick={() => followOther(data?.user_id)}>Follow</button>
 
                             <span onClick={() => { setshowOptions(!showOptions) }}>
                                 <svg width="10" height="38" viewBox="0 0 10 38" fill="none" xmlns="http://www.w3.org/2000/svg">

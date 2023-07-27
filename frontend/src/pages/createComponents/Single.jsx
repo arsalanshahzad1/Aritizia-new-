@@ -19,26 +19,22 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
 import duck from "../../../public/assets/images/duck.png";
-import { useNavigate } from "react-router-dom";
+import { createPath, useNavigate } from "react-router-dom";
 import apis from "../../service/index";
-import { RxCross2 } from 'react-icons/rx'
+import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 const Single = ({ search, setSearch }) => {
-  // const [image, setImage] = useState("");
   let image = "";
-  // const [price, setPrice] = useState(null);
-  // const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [minimumBid, setMinimumBid] = useState("");
   const [listingType, setListingType] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
   const [loading, setLoading] = useState(false);
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
+  const [showCollection, setshowcollection] = useState(false)
 
 
 
@@ -46,10 +42,8 @@ const Single = ({ search, setSearch }) => {
   var endTime = useRef(0);
   const [inputValue, setInputValue] = useState("");
   const [showWarning, setShowWarning] = useState(false);
-  const [collectionImage , setCollectionImage] = useState('');
-  const [collectionCrypto , setCollectionCrypto] = useState('');
   const id = JSON.parse(localStorage.getItem('data'))
-  const user_id = id.id;
+  const user_id = id?.id;
   const navigate = useNavigate();
 
 
@@ -243,67 +237,25 @@ const Single = ({ search, setSearch }) => {
   const [getMintedTokens, setMintedTokensList] = useState();
   let marketplaceContractGlobal;
   let nftContractGlobal;
-  // let listedToken;
-  // let getMintedTokens = useRef(0);
 
   const handleNFTMintedEvent2 = async (mintedTokens) => {
     let tokenId = +mintedTokens[0].toString();
-    // console.log("mintedTokens returned", tokenId);
-    // console.log("mintedTokens", typeof tokenId);
-    // listedToken = tokenId;
     setMintedTokensList(tokenId);
-    // getMintedTokens = tokenId;
-    // setIsMinted(true);
-    // singleMinting? console.log("listedData", listedData): null;
 
     singleMinting
       ? listNFT(marketplaceContractGlobal, nftContractGlobal, tokenId)
       : null;
   };
 
-  // async function fetchMintedTokens() {
-  //   const signer = await getProviderOrSigner(true);
-  //   console.log("In mintThenList");
-
-  //   const nftContract = new Contract(
-  //     NFT_CONTRACT_ADDRESS.address,
-  //     NFT_CONTRACT_ABI.abi,
-  //     signer
-  //   );
-  //   let mintedTokens = await nftContract.getMintedTokensList();
-  //   let tokens = [];
-  //   for (let i = 0; i < mintedTokens.length; i++) {
-  //     let id;
-  //     id = +mintedTokens[i].toString();
-  //     console.log("id", id);
-  //     tokens.push(id);
-  //   }
-  //   setMintedTokensList(tokens);
-  // }
-
   async function listNFT(marketplaceContract, nftContract, listedToken) {
-    console.log("in ListNFT");
     listcounter += 1;
-    console.log("listcounter", listcounter);
     try {
-      console.log("nftContract", nftContract);
 
       let mintedTokens = listedToken;
-
-      console.log("listedToken", listedToken);
-      console.log("getMintedTokens", mintedTokens);
-
-      console.log("qqq startTime", startTime);
-      console.log("startTime typeof", typeof startTime);
-      console.log("qqq endTime", endTime);
       let currentTime = Date.now();
-      console.log("aaa f currentTime:", currentTime);
-      // let addedTime = currentTime + 300000;
 
       currentTime = Math.floor(currentTime / 1000);
-      console.log("aaa currentTime:", currentTime);
       let addedTime = currentTime + 500000;
-      console.log("aaa addedTime:", addedTime);
 
       await (
         await marketplaceContract.listNft(
@@ -312,8 +264,6 @@ const Single = ({ search, setSearch }) => {
           [ethers.utils.parseEther(item.price)], // list
           royalty,
           listingType,
-          // [currentTime],
-          // [addedTime],
           [startTime], // list
           [endTime], // list
           1, // collection number
@@ -337,16 +287,12 @@ const Single = ({ search, setSearch }) => {
       "NFTListed",
       singleMinting ? handleNFTListedEvent2 : null
     );
-
-    console.log("Response of list event", response);
   }
 
   // mint the NFT then list
   const mintThenList = async (result) => {
-    console.log("In mintThenList");
 
     const signer = await getProviderOrSigner(true);
-    console.log("In mintThenList");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -356,67 +302,20 @@ const Single = ({ search, setSearch }) => {
 
     console.log("In result", result);
 
-    // await (await nftContract.mint([result])).wait();
-
-    // console.log("In mintThenList");
-
-    // let mintedTokens = await nftContract.getMintedTokensList();
-
-    // console.log("In mintThenList");
-    // mintedTokens = Number(mintedTokens);
-
-    // console.log("mintedTokens", mintedTokens);
-
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-
-    // console.log("PAyment method", crypto);
-
-    // // List hn y tou list me kro
-    // await (
-    //   await marketplaceContract.listNft(
-    //     nftContract.address,
-    //     [mintedTokens],
-    //     [ethers.utils.parseEther(item.price)], // list
-    //     royalty,
-    //     listingType,
-    //     [startTime], // list
-    //     [endTime], // list
-    //     0, // collection number
-    //     crypto
-    //   )
-    // ).wait();
-
     marketplaceContractGlobal = marketplaceContract;
     nftContractGlobal = nftContract;
     await mintNFT(result, nftContract);
-    // try {
-    //   // Use Promise.race to wait for either minting or listing to complete
-    //   await Promise.race([
-    //     await mintNFT(result, nftContract),
-    //     // await listNFT(marketplaceContract, nftContract),
-    //   ]);
 
-    //   console.log("NFT minting and listing completed!");
-    // } catch (error) {
-    //   console.error("Error while minting and listing NFT:", error);
-    // }
-
-    // let response = await marketplaceContract.on(
-    //   "NFTListed",
-    //   handleNFTListedEvent
-    // );
-
-    // console.log("Response of bid even", response);
   };
 
   let listToPost = useRef([]);
 
   const addListToPost = (newValue) => {
-    // console.log("newValue",newValue)
     listToPost.current.push(newValue);
   };
 
@@ -439,13 +338,8 @@ const Single = ({ search, setSearch }) => {
         collection_id: collectionId.toString(),
         listing_type: listingType.toString(),
       };
-      console.log("singleMinting", singleMinting);
-      console.log("collectionId", collectionId.toString());
       addListToPost(listedData);
-
-      console.log("listedData", listedData);
       singleMinting = false;
-      console.log("singleMinting", singleMinting);
       toast.success("Nft listed", {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -458,32 +352,16 @@ const Single = ({ search, setSearch }) => {
   };
 
   const nftDataPost = async () => {
-    console.log("postListNft");
-    console.log("listToPost.current[0]", listToPost.current[0]);
 
     const response = await apis.postListNft(listToPost.current[0]);
-    console.log("response", response);
     // navigate("/profile");
   };
 
-  // useEffect(() => {
-  //   getProviderOrSigner();
-  //   fetchMintedTokens();
-  // }, []);
+
 
   const [file, setFile] = useState(null);
   const [crypto, setCrypto] = useState({ value: 0, label: "ETH" });
-
-  const [collection, setCollection] = useState({
-    value: "USDT",
-    label: "Select Collection",
-    image: { duck },
-  });
-
-  const handlechange = (file) => {
-    setFile(file);
-  };
-
+  const [collection, setCollection] = useState('');
   const [royalty, setRoyalty] = useState(0);
 
   const cryptoOptions = [
@@ -493,8 +371,6 @@ const Single = ({ search, setSearch }) => {
   ];
 
   const [collectionOptions, setcollectionOptions] = useState([
-    { value: "", label: "Select Collection", image: duck },
-    { value: "usdt", label: "USDT", image: duck },
   ]);
 
   const defaultOption = collectionOptions[0];
@@ -528,42 +404,19 @@ const Single = ({ search, setSearch }) => {
       startTime = 0;
       endTime = 0;
     } else if (listingType == 1) {
-      // const startDate = new Date(startingDate);
-      // const endDate = new Date(endingDate);
 
       const startDate = new Date("2023-05-21");
       const endDate = new Date("2023-06-21");
 
-      console.log("startDate", startDate.getTime());
-      console.log("endDate", endDate.getTime());
-
       const startTimestamp = Math.floor(startDate.getTime() / 1000);
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
-
-      console.log("startTimestamp qqq", startTimestamp);
-      console.log("endTimestamp qqq", endTimestamp);
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;
       endTime = endTimestamp;
     }
 
-    console.log("CHECK startingDate", startTime);
-    console.log("CHECK endingDate", endTime);
-
-    console.log("price", price);
-
-    console.log("title", title.current.value);
-
-    console.log("description", description.current.value);
-
-    console.log("collection", collection);
-
-    console.log("crypto", crypto);
-    console.log("selectedImage", selectedImage);
-    // setSelectedImage(null);
-    console.log("file", file);
     let demoCollection = 0;
     item = {
       title: title.current.value,
@@ -619,7 +472,6 @@ const Single = ({ search, setSearch }) => {
   const getItem = async () => {
     try {
       const provider = await getProviderOrSigner();
-
       const marketplaceContract = new Contract(
         MARKETPLACE_CONTRACT_ADDRESS.address,
         MARKETPLACE_CONTRACT_ABI.abi,
@@ -640,27 +492,27 @@ const Single = ({ search, setSearch }) => {
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
   const AddCollection = () => {
-    if (collectionName.length < 1 || !selectedImage2) {
-      toast.warning("Input Collection Name and image to Create", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      // alert("Input Collection Name and image to Create");
-    } else {
-      setcollectionOptions((previousOptions) => [
-        ...previousOptions,
-        {
-          value: collectionName.toLowerCase(),
-          label: collectionName,
-          image: selectedImage2,
-        },
-      ]);
-      console.log(collectionOptions, "collection updated");
-      hideCreateCollection();
-    }
+    // if (collectionName.length < 1 || !selectedImage2) {
+    //   toast.warning("Input Collection Name and image to Create", {
+    //     position: toast.POSITION.TOP_CENTER,
+    //   });
+
+    // } else {
+    //   setcollectionOptions((previousOptions) => [
+    //     ...previousOptions,
+    //     {
+    //       value: collectionName.toLowerCase(),
+    //       label: collectionName,
+    //       image: selectedImage2,
+    //     },
+    //   ]);
+    //   console.log(collectionOptions, "collection updated");
+    //   hideCreateCollection();
+    // }
   };
-  useEffect(() => {
-    console.log("collection updated", collectionOptions);
-  }, [collectionOptions]);
+  // useEffect(() => {
+  //   console.log("collection updated", collectionOptions);
+  // }, [collectionOptions]);
 
   const hideCreateCollection = () => {
     setCreateCollection("");
@@ -686,25 +538,86 @@ const Single = ({ search, setSearch }) => {
     setSelectedImage2(file);
   };
 
-  const [choosenCollection, setChoosenCollection] = useState("");
-  useEffect(() => {
-    setChoosenCollection(collection);
-    console.log("choosen", choosenCollection);
-  }, [collection]);
+  // const [choosenCollection, setChoosenCollection] = useState("");
+  // useEffect(() => {
+  //   setChoosenCollection(collection);
+  // }, [collection]);
 
   const [collectionFinalized, setcollectionFinalized] = useState(false);
 
-  const postSingleCollection = async () =>{
-    // const { collectionName , crypto , selectedImage2 } = data
-    console.log(collectionName , crypto , selectedImage2);
-    const sendData = new FormData();
-    sendData.append('user_id' , user_id);
-    sendData.append('name' , collectionName);
-    sendData.append('payment_type' , crypto);
-    sendData.append('image' , selectedImage2);
-    const response = await apis.postNFTCollection(sendData)
-    console.log(response);
+  const postSingleCollection = async () => {
+    let cryptoType;
+    console.log(user_id, collectionName, crypto, selectedImage2);
+    if (collectionName.length < 1 || !selectedImage2) {
+      toast.warning("Input Collection Name and image to Create", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+    } else {
+      if (crypto.value === 0) {
+        cryptoType = 'eth';
+      } else if (crypto.value === 1) {
+        cryptoType = 'usdt';
+      }
+
+      const sendData = new FormData();
+      sendData.append('user_id', user_id);
+      sendData.append('name', collectionName);
+      sendData.append('payment_type', cryptoType);
+      sendData.append('image', selectedImage2);
+      const response = await apis.postNFTCollection(sendData)
+
+      setcollectionOptions((previousOptions) => [
+        ...previousOptions,
+        {
+          value: response?.data?.data?.id,
+          label: response?.data?.data?.name,
+          image: response?.data?.data?.media[0]?.original_url,
+        },
+      ]);
+
+      setshowCreateCollection(false);
+    }
   }
+
+  const getCollection = async () => {
+    const response = await apis.getNFTCollection();
+    if (response.status) {
+      setcollectionOptions('')
+
+      for (let i = 0; i < response?.data?.data?.length; i++) {
+        let type = response?.data?.data[i]?.payment_type;
+        console.log(type == "eth", "eth", "TYpe", type)
+
+        if (type == "eth") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 0
+            }
+          ]);
+        }
+        if (type == "usdt") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 1
+            }
+          ]);
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    getCollection()
+  }, [])
 
   return (
     <>
@@ -727,14 +640,46 @@ const Single = ({ search, setSearch }) => {
                                 This is the collection where your item will
                                 appear.
                               </p>
-                              <Dropdown
+                              <div className="custom-drop-down" onClick={() => setshowcollection(!showCollection)}>
+                                <div className="drop-down-select" >
+                                  {collection == '' ?
+                                    <p>Select collection...</p>
+                                    :
+
+                                    <p>{collection?.label}</p>
+
+                                  }
+                                  {collectionOptions?.length > 0 &&
+                                    <MdOutlineKeyboardArrowDown />
+                                  }
+                                </div>
+                                <div className="dropdown-list-wrap">
+                                  {showCollection &&
+                                    <ul>
+                                      {collectionOptions.length > 0 ?
+                                        <>
+                                          {collectionOptions.map((value, index) => {
+                                            return (
+                                              <li
+                                                key={index}
+                                                className={`${collection?.label === value?.label ? 'is-selected' : ''}`}
+                                                onClick={() => { setCollection(collectionOptions[index]); console.log(collection); }}>{value?.label}</li>
+                                            )
+                                          })}
+                                        </>
+                                        :
+                                        <li>Collection is empty</li>
+                                      }
+                                    </ul>
+                                  }
+                                </div>
+                              </div>
+                              {/* <Dropdown
                                 options={collectionOptions}
                                 onChange={(e) => {
-                                  console.log("important", e);
-                                  setCollection(e);
                                 }}
-                                value={collection.value}
-                              />
+                                defaultValue={collection.value}
+                              /> */}
                               <div
                                 className="create-collection-btn"
                                 onClick={() => setshowCreateCollection(true)}
@@ -782,45 +727,45 @@ const Single = ({ search, setSearch }) => {
                                         <p>Collection Name</p>
                                         <input
                                           // value={collectionName} 
-                                          value={collectionName} 
-                                          onChange={(e) =>setCreateCollection(e.target.value)}
+                                          value={collectionName}
+                                          onChange={(e) => setCreateCollection(e.target.value)}
                                           type="text"
                                           placeholder="Enter collection name"
                                         />
                                       </div>
                                       <div className="right">
                                         <h2>Crypto</h2>
-                                        <Dropdown options={cryptoOptions} onChange={(e) => { setCrypto(e.value);}}
+                                        <Dropdown options={cryptoOptions} onChange={(e) => { setCrypto(e); }}
                                           value={defaultCrypto.value}
                                         />
                                       </div>
                                     </div>
                                     <p className="txt-2">Upload image</p>
-                                    <input type="file" accept="image/*" onChange={handleInputChange2}/>
+                                    <input type="file" accept="image/*" onChange={handleInputChange2} />
 
                                     <div className="popUp-btn-group">
-                                      <div
-                                        className="button-styling btnCC"
-                                        onClick={() => {AddCollection() ;  ; postSingleCollection()}}
-                                      >
-                                        Create
-                                      </div>
+                                      
                                       <div
                                         onClick={hideCreateCollection}
                                         className="button-styling-outline btnCC"
                                       >
                                         <div className="btnCCin">Cancel</div>
                                       </div>
+                                      <div
+                                        className="button-styling btnCC"
+                                        onClick={() => { AddCollection(); postSingleCollection() }}
+                                      >
+                                        Create
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               )}
-                              <div
-                                onClick={() => { setcollectionFinalized(true); notify() }}
-                                className="browse-btn my-5 button-styling"
-                              >
-                                Next
-                              </div>
+                              {collection == '' ?
+                              <div className="browse-btn my-5 button-styling" style={{ background: 'gray' }}>Select collection</div>
+                              :
+                              <div onClick={() => { setcollectionFinalized(true); notify() }} className="browse-btn my-5 button-styling">Next</div>
+                            }
                             </div>
                           </div>
                         </div>
@@ -830,14 +775,14 @@ const Single = ({ search, setSearch }) => {
                       <>
                         <div className="col-lg-8 mx-auto collectionDivPreview">
                           <div className="img-holder">
-                            <img src={duck} alt="" />
+                            <img src={collection.image} alt="" />
                           </div>
                           {/* <div className="title">
                             Collection Name
 
                           </div> */}
                           <div className="title-txt">
-                            {choosenCollection.value}
+                            {collection?.label}
                           </div>
                         </div>
                         <div className="col-lg-12">
