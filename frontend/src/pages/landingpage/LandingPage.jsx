@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -21,8 +21,6 @@ import apis from "../../service";
 import { getAddress } from "../../methods/methods";
 
 const LandingPage = ({ search, setSearch }) => {
-
-  const { prompt, setprompt } = useContext(GlobalContext)
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
 
@@ -78,11 +76,13 @@ const LandingPage = ({ search, setSearch }) => {
     return web3Provider;
   };
 
-
-
   const getListedNfts = async () => {
     const provider = await getProvider();
- 
+    // const provider = await getProviderOrSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    let addr = await getAddress();
+    console.log("ZZZZZZ", addr);
+
     console.log("Provider", provider);
 
     const marketplaceContract = new Contract(
@@ -257,7 +257,21 @@ const LandingPage = ({ search, setSearch }) => {
   //   }
   // };
 
-  
+  // const swapUSDTForETH = async () => {
+  //   const signer = await getProviderOrSigner(true);
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+
+  //   await marketplaceContract.swapUSDTForETH(20);
+  // };
+
+  // const swapETHForUSDT = async () => {
+  //   const signer = await getProviderOrSigner(true);
+
   //   const marketplaceContract = new Contract(
   //     MARKETPLACE_CONTRACT_ADDRESS.address,
   //     MARKETPLACE_CONTRACT_ABI.abi,
