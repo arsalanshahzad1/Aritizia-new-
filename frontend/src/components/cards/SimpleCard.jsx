@@ -23,6 +23,8 @@ const SimpleCard = ({
   description,
   collection,
   userAddress,
+  collectionImages
+
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
@@ -170,7 +172,7 @@ const SimpleCard = ({
             </div>
             <div onClick={openDrawer} className="bottom">
               <div className="nft-icon">
-                <img src={duck} alt="" />
+                <img src={collectionImages} alt="" />
                 <span className="checked-icon">
                   <img src={chack} alt="" />
                 </span>

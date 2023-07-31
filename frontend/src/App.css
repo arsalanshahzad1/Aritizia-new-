@@ -442,6 +442,9 @@ header .left .user {
 header .left img {
   border-radius: 50%;
   cursor: pointer;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
 
 .home-first-wrap {
@@ -1041,10 +1044,17 @@ footer h1 {
   padding: 50px 50px 20px 0px;
 }
 
+.profile-first-section{
+  margin-inline: 45px;
+}
+
 .profile-first-section .big-image {
-  width: 100%;
-  padding: 0px 45px;
+  /* width: 100%; */
+  height: 400px;
+  object-fit: cover;
+  /* padding: 0px 45px; */
   margin-top: 107px;
+  background: #a308d126;
 }
 
 .margin-top-35px {
@@ -1054,6 +1064,7 @@ footer h1 {
 
 .profile-first-section .user-pic {
   border-radius: 50%;
+  width: 220px;
   background: #fff;
   padding: 15px;
 }
@@ -4266,7 +4277,10 @@ footer h1 {
 }
 
 .Follow-row .left .img-holder img {
-  width: 100%;
+  width: 70px;
+  height: 70px;
+  background-color: lightgray;
+  border-radius: 50px;
 }
 
 .Follow-row .right {

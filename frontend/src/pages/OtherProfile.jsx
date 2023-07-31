@@ -27,6 +27,7 @@ import liked1 from '../../public/assets/images/liked1.png'
 import liked2 from '../../public/assets/images/liked2.png'
 import collection from '../../public/assets/images/Collection-card-image.png'
 import apis from "../service";
+import { useLocation, useParams , useNavigate } from "react-router-dom";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -41,6 +42,24 @@ const OtherProfile = ({ search, setSearch }) => {
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userAddress, setUserAddress] = useState("0x000000....");
+  const [userDetails, setUserDetails] = useState('');
+  const [likedNfts, setLikedNfts] = useState([]);
+  const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const {state} = useLocation();
+
+    const getOtherUsersDetails = async (address) =>{
+    const response = await apis.getOtherUser(address);
+    setUserDetails(response?.data?.data)
+    console.log(response  , 'other-users');
+    }
+
+    
+    console.log("state",state.address)
+    useEffect(() =>{
+        //  navigate("/other-profile")
+         getOtherUsersDetails(state?.address)
+  } , [])
 
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -243,6 +262,29 @@ const getMyListedNfts = async () => {
     setIsVisible(action);
   };
 
+  const postChatMeaage = async () => {
+    console.log("clicking");
+    const id = JSON.parse(localStorage.getItem("data"));
+    const user_id = id?.id;
+    const response = await apis.postCheckChatMessage({
+      sender_id: user_id,
+      receiver_id: userDetails?.id,
+    });
+    if (response.status) {
+      window.location.replace(`http://localhost:5173/chat/${userDetails?.id}`);
+    }
+  };
+
+  const localStoragedata = JSON.parse(localStorage.getItem("data"));
+  const RealUserId = localStoragedata?.id;
+  
+  const followOther = async (id) => {
+    const response = await apis.postFollowAndUnfollow({
+      follow_by: RealUserId,
+      follow_to: userDetails?.id,
+    });
+  };
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -250,13 +292,13 @@ const getMyListedNfts = async () => {
         <div className="profile-first-section">
           <img
             className="big-image"
-            src={OtherUserBackground}
+            src={userDetails?.cover_image}
             alt=""
             width={"100%"}
           />
           <div className="user">
             <div className="user-wrap">
-              <img className="user-pic" src={OtherUser} alt="" width={"90%"} />
+              <img className="user-pic" src={userDetails?.profile_image} alt="" width={"90%"} />
               <img
                 className="big-chack"
                 src="/assets/images/big-chack.png"
@@ -268,12 +310,12 @@ const getMyListedNfts = async () => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  <div>Follow</div>
+                  <div onClick={followOther} style={{cursor : 'pointer'}}>Follow</div>
                   {/* <div>Following</div> */}
-                  <div>Followers 50k+</div>
+                  <div>Followers {userDetails?.followers?.[0]?.follow_by}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
-                  <h2 className="user-name">Monica Lucas</h2>
+                  <h2 className="user-name">{userDetails?.first_name} {userDetails?.last_name}</h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <SocialShare
@@ -282,18 +324,23 @@ const getMyListedNfts = async () => {
                 </div>
               </div>
               <div className="row">
-                <p className="user-email">@monicaaa</p>
+                <p className="user-email">@{userDetails?.username}</p>
               </div>
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="copy-url">
-                    <span>{userAddress}</span>
+                    <span>{userDetails?.wallet_address}</span>
                     <button>Copy</button>
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
-                  <div className="message-btn">
+                <div
+                    className="message-btn"
+                    onClick={() => {
+                      postChatMeaage();
+                    }}
+                  >
                     <button>
                       <BsFillEnvelopeFill />
                       MESSAGE
@@ -322,87 +369,81 @@ const getMyListedNfts = async () => {
                 {tabs === 0 && (
                   <>
                     <div className="row">
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
-                      <CollectionCard image={collection} />
+                      <div className="Collection-tabs">
+                        <div
+                          onClick={() => setCollectionTabs(0)}
+                          className={`${collectionTabs === 0 && "active-tab"}`}
+                        >
+                          On Sale
+                        </div>
+                        <div
+                          onClick={() => setCollectionTabs(1)}
+                          className={`${collectionTabs === 1 && "active-tab"}`}
+                        >
+                          Auction
+                        </div>
+                      </div>
+                      {collectionTabs === 0 && (
+                        <>
+                          {nftListFP.map((item) => (
+                            <SimpleCard
+                              onOpen={onOpen}
+                              // onClose={onClose}
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              userAddress
+                            />
+                          ))}
+                        </>
+                      )}
+                      {collectionTabs === 1 && (
+                        <>
+                          {nftListAuction.map((item) => (
+                            <NewItemCard
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              highestBid={item?.highestBid}
+                              isLive={item?.isLive}
+                              endTime={item?.endTime}
+                              startTime={item?.startTime}
+                              description={item?.description}
+                              userAddress={userAddress}
+                            />
+                          ))}
+                        </>
+                      )}
                     </div>
                   </>
                 )}
                 {tabs === 1 && (
                   <>
                     <div className="row">
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={
-                          "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-                        }
-                        collection={"abc def ghi"}
-                        userAddress
-                      />
-
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={
-                          "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-                        }
-                        collection={"abc def ghi"}
-                        userAddress
-                      />
-
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={
-                          "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-                        }
-                        collection={"abc def ghi"}
-                        userAddress
-                      />
-
-                      <BuyNow
-                        onOpen={onOpen}
-                        // onClose={onClose}
-                        key={"3"}
-                        id={"3"}
-                        title={"abcefg"}
-                        image={nftimage2}
-                        price={"1010"}
-                        crypto={"ETH"}
-                        royalty={"10%"}
-                        description={
-                          "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum"
-                        }
-                        collection={"abc def ghi"}
-                        userAddress
-                      />
+                      {likedNfts?.map((item) => (
+                        <NewItemCard
+                          key={item?.id}
+                          id={item?.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                          crypto={item?.crypto}
+                          royalty={item?.royalty}
+                          description={item?.description}
+                          collection={item?.collection}
+                          collectionImage={item?.collectionImage}
+                          userAddress
+                        />
+                      ))}
                     </div>
                   </>
                 )}

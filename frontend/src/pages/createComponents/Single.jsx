@@ -835,7 +835,7 @@ const Single = ({ search, setSearch }) => {
                                   className="browse-btn my-5 button-styling"
                                   style={{ background: "gray" }}
                                 >
-                                  Select collection
+                                  Next
                                 </div>
                               ) : (
                                 <div

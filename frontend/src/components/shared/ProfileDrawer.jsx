@@ -22,6 +22,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
+
 import apis from "../../service";
 import {
   Area,
@@ -35,7 +36,7 @@ import {
   Label,
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const Monthly_data = [
@@ -212,88 +213,184 @@ const Weekly_data = [
 ];
 const Daily_data = [
   {
-    data: "Jan",
+    data: 1,
     value: 0,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Feb",
+    data: 2,
     value: 0,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Mar",
+    data: 3,
     value: 0,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Apr",
+    data: 4,
     value: 2,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "May",
+    data: 5,
     value: 3,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "June",
+    data: 6,
     value: 4,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "July",
+    data: 7,
     value: 5,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Aug",
+    data: 8,
     value: 6,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Sep",
+    data: 9,
     value: 5,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Oct",
+    data: 10,
     value: 4,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Nov",
+    data: 11,
     value: 3,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
   },
   {
-    data: "Dec",
+    data: 12,
     value: 2,
     Average_price: "0.62 ETH",
     Num_sales: "1",
     Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 13,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 14,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 15,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 16,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 17,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 18,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 19,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 20,
+    value: 2,
+    Average_price: "0.62 ETH",
+    Num_sales: "1",
+    Date: "May 07 at 5:00 PM",
+  },
+  {
+    data: 21,
+    value: 2,
+  },
+  {
+    data: 22,
+    value: 2,
+  },
+  {
+    data: 23,
+    value: 2,
+  },
+  {
+    data: 24,
+    value: 2,
+  },
+  {
+    data: 25,
+    value: 2,
+  },
+  {
+    data: 26,
+    value: 2,
+  },
+  {
+    data: 27,
+    value: 2,
+  },
+  {
+    data: 28,
+    value: 2,
+  },
+  {
+    data: 29,
+    value: 2,
+  },
+  {
+    data: 30,
+    value: 2,
   },
 ];
 
@@ -324,10 +421,14 @@ function ProfileDrawer({
   const [platformFeeETH, setPlatformFeeETH] = useState(0);
   const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState(0);
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
+  const [nftDetails, setNftDetails] = useState('');
 
+  const navigate = useNavigate();
   useEffect(() => {
     getPriceInUSD();
   }, [isVisible]);
+
+  const userData = JSON.parse(localStorage.getItem('data'))
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -342,7 +443,6 @@ function ProfileDrawer({
     var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
     const response = await apis.getLikeNFT(address, id);
-    console.log(response.data, "getNFTLike");
     setLikeAndViewData(response.data.data);
   };
 
@@ -353,19 +453,15 @@ function ProfileDrawer({
       like_by: address,
       nft_token: id,
     });
-    console.log(response.data, "postNFTLike");
     getNFTLike();
   };
   const postNFTView = async () => {
     var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
-    console.log(address, "address");
-    console.log(id, "nft_token");
     const response = await apis.postViewNFT({
       view_by: address,
       nft_token: id,
     });
-    console.log(response.data, "postNFTView");
     getNFTLike();
   };
 
@@ -378,12 +474,10 @@ function ProfileDrawer({
   let priceInETH = price;
   let _sellerPercentFromDB = 1.5;
   let _buyerPercentFromDB = 1.5;
-
   let sellerPercent = _sellerPercentFromDB * 10;
   let buyerPercent = _buyerPercentFromDB * 10;
 
   const web3ModalRef = useRef();
-  const navigate = useNavigate();
 
   const connectWallet = async () => {
     try {
@@ -434,7 +528,6 @@ function ProfileDrawer({
     price
   ) => {
     let soldData = {
-      // nftContract: nftContract.toString(),
       token_id: tokenId.toString(),
       seller: seller.toString(),
       buyer: owner.toString(),
@@ -442,15 +535,10 @@ function ProfileDrawer({
     };
 
     if (ethPurchase || usdtPurchase) {
-      console.log("soldData", soldData);
       nftSoldPost(soldData);
       ethPurchase = false;
       usdtPurchase = false;
     }
-    // setSucess(false);
-    // onClose(false);
-    // setTimeout(2000);
-    // navigate("/profile");
   };
 
   const nftSoldPost = async (value) => {
@@ -570,52 +658,29 @@ function ProfileDrawer({
 
   const buyWithETH = async () => {
     ethPurchase = true;
-    console.log("buyWithETH");
     const signer = await getProviderOrSigner(true);
-    console.log("buyWithETH");
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    console.log("buyWithETH");
 
     const structData = await marketplaceContract._idToNFT(id);
-    console.log("buyWithETH");
 
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
-    console.log("buyWithETH");
-
-    console.log("platformFeeETH", platformFeeETH);
-    console.log("priceETH", priceETH);
-    console.log("buyWithETH");
 
     var fee = +platformFeeETH;
     var amount = +priceETH + fee;
     var value = amount.toString();
-
-    console.log("fee", fee);
-    console.log("amount", amount);
-    console.log("value", value);
-
-    console.log("22222");
     let checkFan = await marketplaceContract.checkFan(id);
-    console.log("checkFan ", checkFan);
 
     if (checkFan) {
       fee = +discountedPlatformFeeETH;
-      console.log("discountedEth", discountedEth);
 
       amount = +discountedEth + fee;
       value = amount.toString();
-      console.log("buyWithETH");
-
-      console.log("discouted fee", fee);
-      console.log("discouted amount", amount);
-      console.log("discouted value", value);
     }
-    console.log("buyWithETH1111111");
 
     await (
       await marketplaceContract.buyWithETH(
@@ -731,6 +796,18 @@ function ProfileDrawer({
     { value: "Daily", label: "Daily" },
   ];
 
+  const getNFTDetailByNFTTokenId = async () => {
+    const response = await apis.getNFTByTokenId(id);
+    setNftDetails(response?.data?.data)
+    console.log(response.data.data, 'new response');
+  }
+  useEffect(() => {
+
+    if (isVisible) {
+      getNFTDetailByNFTTokenId()
+    }
+  }, [isVisible])
+
   return (
     <>
       <Drawer
@@ -812,13 +889,13 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by <span>Enotic11daday</span>
+                    Owned by <span>{nftDetails?.owner?.username}</span>
                   </p>
                 </div>
                 <div className="three-line">
                   <div>
                     <TfiEye />
-                    <span>{likeAndViewData?.view_count} View</span>
+                    <span>{likeAndViewData?.view_count == '' ? '00' : likeAndViewData?.view_count} View</span>
                   </div>
                   <div onClick={() => postNFTLike()}>
                     {likeAndViewData.is_liked == 0 ? (
@@ -826,7 +903,7 @@ function ProfileDrawer({
                     ) : (
                       <AiFillHeart style={{ fill: "#2636d9" }} />
                     )}
-                    <span>{likeAndViewData?.like_count} Favorite</span>
+                    <span>{likeAndViewData?.like_count == '' ? '0' : likeAndViewData?.like_count} Favorite</span>
                   </div>
                 </div>
                 <div className="four-line">
@@ -837,15 +914,33 @@ function ProfileDrawer({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        <img src="/assets/images/creater.png" alt="" />{" "}
-                        <span>Monica Lucas</span>
+                        {userData?.wallet_address == nftDetails?.user?.wallet_address ?
+                          <Link to={'/profile'}>
+                            <img src={nftDetails?.user?.profile_image} alt="" />{" "}
+                            <span>{nftDetails?.user?.username}</span>
+                            <br />
+                            <span>{userData?.wallet_address}</span>
+                            <br />
+                            <span>{nftDetails?.user?.wallet_address}</span>
+                          </Link>
+                          :
+                          <div onClick={() => navigate("/other-profile", { state: { address: nftDetails?.user?.wallet_address } })}>
+                            <img src={nftDetails?.user?.profile_image} alt="" />{" "}
+                            <span>{nftDetails?.user?.username}</span>
+                          </div>
+                          // <Link to={`/other-profile?address=${nftDetails?.user?.wallet_address}`}>
+                          //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
+                          //   <span>{nftDetails?.user?.username}</span>
+                          // </Link> 
+                        }
+
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
                       <div className="logo-name">
-                        <img src="/assets/images/collector.png" alt="" />{" "}
-                        <span>DevilMonkey</span>
+                        <img src={nftDetails?.collection?.media[0]?.original_url} alt="" />{" "}
+                        <span>{nftDetails?.collection?.name}</span>
                       </div>
                     </div>
                   </div>
@@ -922,7 +1017,7 @@ function ProfileDrawer({
                     {!showBuyNow && (
                       <div className="col-lg-6 col-md-8 col-8">
                         <div className="stock-div">
-                          13 <span>in stock</span>{" "}
+                          {nftDetails?.in_stock} <span>in stock</span>{" "}
                         </div>
                       </div>
                     )}

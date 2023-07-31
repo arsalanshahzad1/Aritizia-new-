@@ -8,6 +8,7 @@ import laravelEcho from "../../socket/index";
 import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
+import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -25,6 +26,8 @@ const Header = ({ search, setSearch }) => {
   const location = useLocation();
   const path = location.pathname;
   let countLength = 13;
+
+  const userData = JSON.parse(localStorage.getItem('data'))
 
   const [walletConnected, setWalletConnected] = useState(false);
 
@@ -64,7 +67,6 @@ const Header = ({ search, setSearch }) => {
       const signer = web3Provider.getSigner();
       return signer;
     }
-
     return web3Provider;
   };
 
@@ -541,13 +543,24 @@ const Header = ({ search, setSearch }) => {
                 )}
                 {user && (
                   <div className="login-user-profile">
+                    {userData?.profile_image == null ?
+                    
                     <img
-                      src="/assets/images/user-image.png"
+                      src='../public/assets/images/user-none.png'
+                      alt="profile-image"
+                      onClick={() => {
+                        setToggleUserDropdown(!toggleUserDropdown);
+                      }}
+                    />
+                    :
+                    <img
+                      src={userData?.profile_image}
                       alt=""
                       onClick={() => {
                         setToggleUserDropdown(!toggleUserDropdown);
                       }}
                     />
+                  }
                     {toggleUserDropdown && (
                       <div
                         className={`user-login-dropdown ${
