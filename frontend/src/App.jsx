@@ -51,7 +51,7 @@ function App() {
             element={<Profile search={search} setSearch={setSearch} />}
           />
           <Route
-            path="/profile/:id"
+            path="/other-profile"
             element={<OtherProfile search={search} setSearch={setSearch} />}
           />
           <Route

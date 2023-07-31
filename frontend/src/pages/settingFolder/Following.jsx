@@ -20,7 +20,11 @@ const Following = ({ data }) => {
               <div className="Follow-row" key={i}>
                 <div className="left">
                   <div className="img-holder">
-                    <img src={data?.profile_image} alt="" />
+                  {data?.profile_image == null ?
+                      <img src='../public/assets/images/user-none.png' alt="" srcset="" />
+                      :
+                      <img src={data?.profile_image} alt="" />
+                    }
                   </div>
                   <div className="txt">
                     <p>{data?.first_name}</p>

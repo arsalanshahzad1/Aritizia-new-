@@ -81,6 +81,13 @@ const createBackendServer = (baseURL) => {
   const getNFTCollection = async () => await api.get(`view-nft-collections/${RealUserId}`);
   const postNFTCollection = async (body) => await api.post(`add-nft-collection`, body);
 
+  const getNFTCollectionImage = async (collectionId) => await api.get(`view-nft-collection-stock/${collectionId}`);
+
+
+  const getNFTByTokenId = async (tokenId) => await api.get(`view-nft-by-token/${tokenId}`);
+  
+  const getOtherUser = async (userAddress) => await api.get(`view-user-detail-by-wallet/${userAddress}`);
+
   //Returning all the API
   return {
     editProfile,
@@ -109,7 +116,12 @@ const createBackendServer = (baseURL) => {
     postCheckChatMessage,
 
     getNFTCollection,
-    postNFTCollection
+    postNFTCollection,
+    getNFTCollectionImage,
+
+    getNFTByTokenId,
+
+    getOtherUser
   };
 };
 

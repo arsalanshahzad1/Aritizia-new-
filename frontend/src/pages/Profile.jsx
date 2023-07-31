@@ -53,6 +53,8 @@ const Profile = ({ search, setSearch }) => {
 
   let likedNftsFromDB = [];
 
+  const userData = JSON.parse(localStorage.getItem('data'))
+
   const getProviderOrSigner = async (needSigner = false) => {
     console.log("getProviderOrSigner");
 
@@ -322,24 +324,26 @@ const Profile = ({ search, setSearch }) => {
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-      // id = mintedTokens[i];
-      console.log("YESS");
+
+      let collectionId;
+      collectionId = +mintedTokens[i].collectionId.toString();
+      console.log("YESS",id);
+
+      const response = await apis.getNFTCollectionImage(collectionId);
+      const collectionImages = response?.data?.data?.media[0]?.original_url;
+      // console.log('response' , response.data.data.media[0].original_url);
 
       const metaData = await nftContract.tokenURI(id);
-      console.log("1111");
 
       const structData = await marketplaceContract._idToNFT(id);
-      console.log("222");
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
       let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
-      console.log("333");
 
       setDiscountPrice(discountOnNFT);
 
       let auctionData = await marketplaceContract._idToAuction(id);
-      console.log("444");
 
       listingType = structData.listingType;
 
@@ -359,9 +363,6 @@ const Profile = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -379,11 +380,12 @@ const Profile = ({ search, setSearch }) => {
               royalty: royalty,
               description: description,
               collection: collection,
+              collectionImages: collectionImages
+
             };
             console.log(nftData);
             myNFTs.push(nftData);
             setNftListFP(myNFTs);
-            // console.log("myNFTs in function", myNFTs);
           } else if (listingType === 1) {
             const nftData = {
               id: id, //
@@ -394,14 +396,11 @@ const Profile = ({ search, setSearch }) => {
               endTime: auctionData.endTime.toString(),
               highestBid: highestBid,
               highestBidder: auctionData.highestBidder.toString(),
-              // isLive: auctionData.isLive.toString(),
               seller: auctionData.seller.toString(),
               startTime: auctionData.startTime.toString(),
             };
-            // console.log("auction in function", myAuctions);
 
             myAuctions.push(nftData);
-            // console.log("auction in function", myAuctions);
             setNftListAuction(myAuctions);
           }
         })
@@ -417,8 +416,6 @@ const Profile = ({ search, setSearch }) => {
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
     const provider = await getProviderOrSigner();
-    // console.log("Connected wallet", userAddress);
-    // console.log("provider", provider);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -473,9 +470,6 @@ const Profile = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -483,7 +477,7 @@ const Profile = ({ search, setSearch }) => {
           const description = data.description;
           const collection = data.collection;
 
-          // if (listingType === 0) {
+
           const nftData = {
             id: id, //
             title: title,
@@ -494,7 +488,7 @@ const Profile = ({ search, setSearch }) => {
             description: description,
             collection: collection,
           };
-          // console.log(nftData);
+
           myNFTs.push(nftData);
           setUserNfts(myNFTs);
           console.log("myNFTs in function", myNFTs);
@@ -697,20 +691,38 @@ const Profile = ({ search, setSearch }) => {
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
+          {userData?.profile_image == null ?
           <img
             className="big-image"
             src="/assets/images/profile-1.png"
             alt=""
             width={"100%"}
           />
+          :
+          <img
+            className="big-image"
+            src={userData?.profile_image}
+            alt=""
+            width={"100%"}
+          />
+          }
           <div className="user">
             <div className="user-wrap">
+              {userData?.profile_image == null ?
               <img
                 className="user-pic"
-                src="/assets/images/user-pic.png"
+                src="../public/assets/images/user-none.png"
+                alt=""
+                width={"240px"}
+              />
+              :
+              <img
+                className="user-pic"
+                src={userData?.profile_image}
                 alt=""
                 width={"90%"}
               />
+            }
               <img
                 className="big-chack"
                 src="/assets/images/big-chack.png"
@@ -723,7 +735,7 @@ const Profile = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12"></div>
                 <div className="col-lg-4 col-md-4 col-6">
-                  <h2 className="user-name">Monica Lucas</h2>
+                  <h2 className="user-name">{userData?.first_name} {userData?.last_name}</h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <SocialShare
@@ -732,13 +744,13 @@ const Profile = ({ search, setSearch }) => {
                 </div>
               </div>
               <div className="row">
-                <p className="user-email">@monicaaa</p>
+                <p className="user-email">@{userData?.username}</p>
               </div>
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="copy-url">
-                    <span>{userAddress}</span>
+                    <span>{userData?.wallet_address}</span>
                     <button>Copy</button>
                   </div>
                 </div>
@@ -746,13 +758,13 @@ const Profile = ({ search, setSearch }) => {
                   <div
                     className="message-btn"
                     onClick={() => {
-                      postChatMeaage();
+                      // postChatMeaage();
                     }}
                   >
-                    <button>
+                    {/* <button>
                       <BsFillEnvelopeFill />
                       MESSAGE
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
@@ -836,6 +848,7 @@ const Profile = ({ search, setSearch }) => {
                               royalty={item?.royalty}
                               description={item?.description}
                               collection={item?.collection}
+                              collectionImages={item?.collectionImages}
                               userAddress
                             />
                           ))}

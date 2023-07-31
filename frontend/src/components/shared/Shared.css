@@ -355,6 +355,7 @@ p {
 .profile-drawer .four-line .logo-name img {
   border-radius: 100%;
   margin-right: 5px;
+  width: 53px;
 }
 
 .profile-drawer .four-line .logo-name span {
