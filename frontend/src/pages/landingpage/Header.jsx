@@ -8,6 +8,7 @@ import laravelEcho from "../../socket/index";
 import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
+import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -55,11 +56,16 @@ const Header = ({ search, setSearch }) => {
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      });
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
-
     if (needSigner) {
       const signer = web3Provider.getSigner();
       return signer;
@@ -95,6 +101,29 @@ const Header = ({ search, setSearch }) => {
       channel.stopListening("notification-event");
     };
   }, []);
+
+  // const [accountChange, setAccountChange] = useState(false);
+
+  // const accountsCheck = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   if (accounts.length === 0) {
+  //     // Handle account disconnection or user logged out from MetaMask.
+  //     console.log("User disconnected from MetaMask.");
+  //     setWalletConnected(false);
+  //     setAccountChange(true);
+  //   } else {
+  //     // Handle the case when the user switches to a different account in MetaMask.
+  //     console.log("User switched to a new account:", accounts[0]);
+  //     alert("User switched to a new account:", accounts[0]);
+  //     setAccountChange(true);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   accountsCheck();
+  // }, [accountChange]);
 
   useEffect(() => {
     const connected = JSON.parse(localStorage.getItem("data"));

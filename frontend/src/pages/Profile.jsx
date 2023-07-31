@@ -27,6 +27,7 @@ import apis from "../service";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Gallery from "./Gallery";
+import { getAddress } from "../methods/methods";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -53,13 +54,21 @@ const Profile = ({ search, setSearch }) => {
   let likedNftsFromDB = [];
 
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("getProviderOrSigner");
+
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
 
-    if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      });
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
 
     if (needSigner) {
@@ -71,52 +80,52 @@ const Profile = ({ search, setSearch }) => {
     return web3Provider;
   };
 
-  const connectWallet = async () => {
-    try {
-      // Get the provider from web3Modal, which in our case is MetaMask
-      // When used for the first time, it prompts the user to connect their wallet
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const connectWallet = async () => {
+  //   try {
+  //     // Get the provider from web3Modal, which in our case is MetaMask
+  //     // When used for the first time, it prompts the user to connect their wallet
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  const getAddress = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setUserAddress(accounts[0]);
-    console.log("getAddress", accounts[0]);
-    postWalletAddress(accounts[0]);
-  };
-  const postWalletAddress = async (address) => {
-    if (localStorage.getItem("data")) {
-      return console.log("data is avaliable");
-    } else {
-      const response = await apis.postWalletAddress({
-        wallet_address: address,
-      });
-      localStorage.setItem("data", JSON.stringify(response.data.data));
-      window.location.reload();
-    }
-    // if (localStorage.getItem("data")) {
-    //   return console.log("data is avaliable");
-    // } else {
-    //   const postData = {
-    //     wallet_address: address,
-    //   };
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
+  //     // The `current` value is persisted throughout as long as this page is open
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
 
-    //   axios
-    //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
-    //     .then((response) => {
-    //       localStorage.setItem("data", JSON.stringify(response.data.data));
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }
-  };
+  // const getAddress = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   console.log("getAddress", accounts[0]);
+  //   postWalletAddress(accounts[0]);
+  // };
+  // const postWalletAddress = async (address) => {
+  //   if (localStorage.getItem("data")) {
+  //     return console.log("data is avaliable");
+  //   } else {
+  //     const response = await apis.postWalletAddress({
+  //       wallet_address: address,
+  //     });
+  //     localStorage.setItem("data", JSON.stringify(response.data.data));
+  //     window.location.reload();
+  //   }
+
+  // };
 
   const getLikedNfts = async () => {
     const provider = await getProviderOrSigner();
@@ -516,27 +525,18 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {
-    // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-    if (!walletConnected) {
-      // Assign the Web3Modal class to the reference object by setting it's `current` value
-      // The `current` value is persisted throughout as long as this page is open
-      web3ModalRef.current = new Web3Modal({
-        network: "hardhat",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-      connectWallet();
-      // numberOFICOTokens();
-    }
-  }, [walletConnected]);
   // useEffect(() => {
   //   window.scroll(0, 0);
   // });
+
   useEffect(() => {
-    connectWallet();
-    getMyListedNfts();
     getAddress();
+    getProviderOrSigner();
+  }, [followers]);
+
+  useEffect(() => {
+    // connectWallet();
+    getMyListedNfts();
     getMyNfts();
     getLikedNfts();
   }, [userAddress]);
@@ -548,21 +548,20 @@ const Profile = ({ search, setSearch }) => {
 
   const getFollowingList = async () => {
     const response = await apis.getFollowingList();
-    if(response.status){
+    if (response.status) {
       console.log(response?.data?.data, "following");
       setFollwing(response?.data?.data);
-    }
-    else{
-      setFollwing('');
+    } else {
+      setFollwing("");
     }
   };
   const getFollowersList = async () => {
     const response = await apis.getFollowersList();
-    if(response.status){
-    console.log(response.data.data, "followers");
-    setFollwers(response.data.data);
-    }else{
-      setFollwers('');
+    if (response.status) {
+      console.log(response.data.data, "followers");
+      setFollwers(response.data.data);
+    } else {
+      setFollwers("");
     }
   };
 

@@ -23,10 +23,12 @@ import nftimage2 from "../../public/assets/images/nftimage2.png";
 import OtherUser from "../../public/assets/images/OtherUser.png";
 import OtherUserBackground from "../../public/assets/images/OtherUserBackground.png";
 import CollectionCard from "../components/cards/CollectionCard";
-import liked1 from '../../public/assets/images/liked1.png'
-import liked2 from '../../public/assets/images/liked2.png'
-import collection from '../../public/assets/images/Collection-card-image.png'
+import liked1 from "../../public/assets/images/liked1.png";
+import liked2 from "../../public/assets/images/liked2.png";
+import collection from "../../public/assets/images/Collection-card-image.png";
 import apis from "../service";
+import { getAddress } from "../methods/methods";
+
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -43,15 +45,22 @@ const OtherProfile = ({ search, setSearch }) => {
   const [userAddress, setUserAddress] = useState("0x000000....");
 
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("getProviderOrSigner");
+
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
 
-    if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      });
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
-
     if (needSigner) {
       const signer = web3Provider.getSigner();
 
@@ -61,76 +70,60 @@ const OtherProfile = ({ search, setSearch }) => {
     return web3Provider;
   };
 
-  const connectWallet = async () => {
-    try {
-      // Get the provider from web3Modal, which in our case is MetaMask
-      // When used for the first time, it prompts the user to connect their wallet
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const connectWallet = async () => {
+  //   try {
+  //     // Get the provider from web3Modal, which in our case is MetaMask
+  //     // When used for the first time, it prompts the user to connect their wallet
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
+  //     // The `current` value is persisted throughout as long as this page is open
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
 
-    const getAddress = async () => {
-        const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-        });
-        setUserAddress(accounts[0]);
-        // console.log("getAddress", accounts[0]);
-        postWalletAddress(accounts[0]);
-       
-    };
+  // const getAddress = async () => {
+  //     const accounts = await window.ethereum.request({
+  //         method: "eth_requestAccounts",
+  //     });
+  //     setUserAddress(accounts[0]);
+  //     // console.log("getAddress", accounts[0]);
+  //     postWalletAddress(accounts[0]);
 
-    const postWalletAddress  = async (address) => {
-        if (localStorage.getItem("data")) {
-          return console.log("data is avaliable");
-        } else {
-        const response = await apis.postWalletAddress({wallet_address:  address})
-        localStorage.setItem("data", JSON.stringify(response.data.data));
-        window.location.reload();
-        }
-        // if (localStorage.getItem("data")) {
-        //   return console.log("data is avaliable");
-        // } else {
-        //   const postData = {
-        //     wallet_address: address,
-        //   };
-    
-        //   axios
-        //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
-        //     .then((response) => {
-        //       localStorage.setItem("data", JSON.stringify(response.data.data));
-        //     })
-        //     .catch((error) => {
-        //       console.error(error);
-        //     });
-        // }
-      };
+  // };
 
-    useEffect(() => {
-        // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-        if (!walletConnected) {
-            // Assign the Web3Modal class to the reference object by setting it's `current` value
-            // The `current` value is persisted throughout as long as this page is open
-            web3ModalRef.current = new Web3Modal({
-                network: "hardhat",
-                providerOptions: {},
-                disableInjectedProvider: false,
-            });
-            connectWallet();
-            // numberOFICOTokens();
-        }
-    }, [walletConnected]);
+  // const postWalletAddress  = async (address) => {
+  //     if (localStorage.getItem("data")) {
+  //       return console.log("data is avaliable");
+  //     } else {
+  //     const response = await apis.postWalletAddress({wallet_address:  address})
+  //     localStorage.setItem("data", JSON.stringify(response.data.data));
+  //     window.location.reload();
+  //     }
 
-const getMyListedNfts = async () => {
-  let emptyList = [];
-  setNftListAuction(emptyList);
-  setNftListFP(emptyList);
-  const provider = await getProviderOrSigner();
-  console.log("Connected wallet", userAddress);
-  console.log("provider", provider);
+  //   };
+
+  const getMyListedNfts = async () => {
+    let emptyList = [];
+    setNftListAuction(emptyList);
+    setNftListFP(emptyList);
+    const provider = await getProviderOrSigner();
+    console.log("Connected wallet", userAddress);
+    console.log("provider", provider);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -230,10 +223,13 @@ const getMyListedNfts = async () => {
   };
 
   useEffect(() => {
-    connectWallet();
+    // connectWallet();
     getMyListedNfts();
-    getAddress();
   }, [userAddress]);
+
+  useEffect(() => {
+    getAddress();
+  }, []);
 
   const onClose = useCallback(() => {
     setIsVisible(false);

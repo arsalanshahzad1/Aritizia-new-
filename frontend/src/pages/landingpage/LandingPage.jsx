@@ -62,11 +62,16 @@ const LandingPage = ({ search, setSearch }) => {
 
     // If user is not connected to the Sepolia network, let them know and throw an error
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      });
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
-
     if (needSigner) {
       const signer = web3Provider.getSigner();
       return signer;
@@ -295,8 +300,11 @@ const LandingPage = ({ search, setSearch }) => {
     connectWallet();
     getProviderOrSigner();
     getListedNfts();
-    getAddress();
   }, [userAddress]);
+
+  useEffect(() => {
+    getAddress();
+  }, []);
 
   useEffect(() => {
     const options = {

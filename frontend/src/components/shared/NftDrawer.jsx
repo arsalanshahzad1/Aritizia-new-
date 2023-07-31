@@ -38,6 +38,7 @@ import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import Slider from "rc-slider";
 import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
+import { getAddress } from "../../methods/methods";
 
 //
 //
@@ -304,11 +305,21 @@ const Daily_data = [
   },
 ];
 
-const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  , royalty , descriptionn , collectionn }) => {
-  console.log(titlee , 'title');
-  console.log(royalty , 'royalty');
-  console.log(descriptionn , 'description');
-  console.log(collectionn , 'collectionn');
+const ProfileDrawer = ({
+  id,
+  isVisible,
+  onClose,
+  timedAuction,
+  image,
+  titlee,
+  royalty,
+  descriptionn,
+  collectionn,
+}) => {
+  console.log(titlee, "title");
+  console.log(royalty, "royalty");
+  console.log(descriptionn, "description");
+  console.log(collectionn, "collectionn");
   // const [image, setImage] = useState("");
   // let image = "";
   // const [price, setPrice] = useState(null);
@@ -363,24 +374,32 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  ,
   const title = useRef("");
   const description = useRef("");
 
-  const getAddress = async () => {
-    const accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    setUserAddress(accounts[0]);
-    console.log("getAddress", accounts[0]);
-  };
+  // const getAddress = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   console.log("getAddress", accounts[0]);
+  // };
 
   const [userAddress, setUserAddress] = useState("0x000000....");
 
   // Helper function to fetch a Provider/Signer instance from Metamask
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("getProviderOrSigner");
+
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      });
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
 
     if (needSigner) {
@@ -556,6 +575,10 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  ,
 
   useEffect(() => {}, [price, title, description]);
 
+  useEffect(() => {
+    getAddress();
+  }, []);
+
   let relist = false;
   function createItem(e) {
     e.preventDefault();
@@ -618,28 +641,28 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  ,
     }
   }
 
-  const connectWallet = async () => {
-    try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "hardhat",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-      connectWallet();
-      getAddress();
-      // numberOFICOTokens();
-    }
-  }, [walletConnected]);
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     getAddress();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
 
   const getItem = async () => {
     try {
@@ -802,11 +825,7 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  ,
                           <div className="row">
                             <div className="col-lg-12 disabled-input-only-view">
                               <h2>Collection Name</h2>
-                              <input
-                                type="text"
-                                value={collectionn}
-                                disabled
-                              />
+                              <input type="text" value={collectionn} disabled />
                             </div>
                           </div>
                         </div>
@@ -855,7 +874,9 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  ,
                               />
                             </div>
                             <div className="col-lg-3 ">
-                              <div className="royality-value">royalty {royalty}%</div>
+                              <div className="royality-value">
+                                royalty {royalty}%
+                              </div>
                             </div>
                           </div>
                         </div>

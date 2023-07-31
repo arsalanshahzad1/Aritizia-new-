@@ -301,8 +301,11 @@ const Earnings = () => {
   const [totalPrice, setTotalPrice] = useState("");
 
   useEffect(() => {
-    getTotalBalance();
     getAddress();
+  }, []);
+
+  useEffect(() => {
+    getTotalBalance();
   }, [totalPrice]);
 
   async function getProvider() {

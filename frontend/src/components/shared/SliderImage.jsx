@@ -3,19 +3,19 @@ import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { GlobalContext } from "../../Context/GlobalContext";
 import { Link } from "react-router-dom";
 const SliderImage = () => {
-  const { prompt, setprompt } = useContext(GlobalContext)
+  const { prompt, setprompt } = useContext(GlobalContext);
   const [count, setCount] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
 
-  const connectWallet = async () => {
-    // console.log("Connect wallet");
-    try {
-      await getProvider();
-      setWalletConnected(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const connectWallet = async () => {
+  //   // console.log("Connect wallet");
+  //   try {
+  //     await getProvider();
+  //     setWalletConnected(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   async function getProvider() {
     // Create a provider using any Ethereum node URL
@@ -46,7 +46,7 @@ const SliderImage = () => {
       <div className="home-first-wrap">
         <h1>CREATE YOUR OWN NFT</h1>
         <div className="search" id="prompt">
-          <Link to='/art'>
+          <Link to="/art">
             <button>Prompt</button>
           </Link>
           <input
@@ -61,7 +61,10 @@ const SliderImage = () => {
         </p>
       </div>
       <div className="connect-wallet-mobile">
-        <button onClick={connectWallet} className={`connect-wallet`}>
+        <button
+          // onClick={connectWallet}
+          className={`connect-wallet`}
+        >
           {/*  className="connect-wallet"> */}
           Connect Wallet
         </button>

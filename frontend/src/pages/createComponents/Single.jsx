@@ -103,12 +103,15 @@ const Single = ({ search, setSearch }) => {
     const web3Provider = new providers.Web3Provider(provider);
     console.log("In provider3");
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
-      toast.warning("Change the network to Sepolia", {
-        position: toast.POSITION.TOP_CENTER,
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
       });
-      // window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
 
     if (needSigner) {
@@ -356,6 +359,7 @@ const Single = ({ search, setSearch }) => {
   };
 
   const nftDataPost = async () => {
+    console.log("nftDataPost");
     const response = await apis.postListNft(listToPost.current[0]);
     console.log("response", response);
 
@@ -366,7 +370,7 @@ const Single = ({ search, setSearch }) => {
     setTimeout(() => {
       navigate("/profile");
     }, 3000);
-    // navigate("/profile");
+    navigate("/profile");
   };
 
   const [file, setFile] = useState(null);
@@ -647,6 +651,7 @@ const Single = ({ search, setSearch }) => {
             },
           ]);
         }
+        console.log(collectionOptions);
       }
     }
   };

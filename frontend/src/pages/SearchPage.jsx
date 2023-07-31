@@ -66,22 +66,31 @@ const SearchPage = ({ search, setSearch }) => {
 
   const web3ModalRef = useRef();
 
-  const connectWallet = async () => {
-    // console.log("Connect wallet");
-    try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const connectWallet = async () => {
+  //   // console.log("Connect wallet");
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const getProviderOrSigner = async (needSigner = false) => {
+    console.log("getProviderOrSigner");
+
     const provider = await web3ModalRef.current.connect();
     const web3Provider = new providers.Web3Provider(provider);
     const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337 ) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
+    try {
+      await ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+        // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      });
+    } catch (error) {
+      // User rejected the network change or there was an error
+      throw new Error("Change network to Sepolia to proceed.");
     }
 
     if (needSigner) {
@@ -330,7 +339,6 @@ const SearchPage = ({ search, setSearch }) => {
   //   localStorage.setItem("walletAddress", accounts[0]);
   //   // console.log("getAddress", accounts[0]);
   //   postWalletAddress(accounts[0]);
-    
 
   // };
 
@@ -373,11 +381,14 @@ const SearchPage = ({ search, setSearch }) => {
   useEffect(() => {}, [searchedNfts, nftListFP]);
 
   useEffect(() => {
-    connectWallet();
-    getListedNfts();
-    getAddress();
+    // connectWallet();
+    getListedNfts(); 
     getSearchedNfts();
   }, [userAddress]);
+
+  useEffect(() => {
+    getAddress();
+  }, []);
 
   const statusOptions = [
     { value: "one", label: "New" },

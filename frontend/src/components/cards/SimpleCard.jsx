@@ -10,6 +10,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import ProfileDrawer from "../shared/ProfileDrawer";
 import Web3Modal from "web3modal";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import { getProviderOrSigner } from "../../methods/methods";
 
 const SimpleCard = ({
   onOpen,
@@ -30,56 +31,40 @@ const SimpleCard = ({
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
-  const getProviderOrSigner = async (needSigner = false) => {
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
+  // const openDrawer = () => {
+  //   if (showLinks === true) {
+  //     return onOpen(false);
+  //   } else {
+  //     setIsVisible(true);
+  //   }
+  // };
 
-    const openDrawer = () => {
-      if (showLinks === true) {
-        return onOpen(false);
-      } else {
-        setIsVisible(true);
-      }
-    };
-    if (chainId !== 31337) {
-      window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
-    }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
 
-      return signer;
-    }
-
-    return web3Provider;
-  };
-
-  const connectWallet = async () => {
-    try {
-      // Get the provider from web3Modal, which in our case is MetaMask
-      // When used for the first time, it prompts the user to connect their wallet
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-    if (!walletConnected) {
-      // Assign the Web3Modal class to the reference object by setting it's `current` value
-      // The `current` value is persisted throughout as long as this page is open
-      web3ModalRef.current = new Web3Modal({
-        network: "hardhat",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-      connectWallet();
-      // numberOFICOTokens();
-    }
-  }, [walletConnected]);
+  // const connectWallet = async () => {
+  //   try {
+  //     // Get the provider from web3Modal, which in our case is MetaMask
+  //     // When used for the first time, it prompts the user to connect their wallet
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
+  //     // The `current` value is persisted throughout as long as this page is open
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
