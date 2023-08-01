@@ -1,21 +1,40 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
 import apis from "../../service";
 const Following = ({ data }) => {
+  const [showOptions, setshowOptions] = useState(false);
+  const [following, setFollwing] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
+
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
       follow_by: RealUserId,
       follow_to: id,
     });
-    console.log(response?.data?.data);
+    getFollowingList()
+    setFollwing([])
   };
-  const [showOptions, setshowOptions] = useState(false);
+
+  const getFollowingList = async () => {
+    const response = await apis.getFollowingList();
+    if(response.status){
+      console.log(response?.data?.data, " ");
+      setFollwing(response?.data?.data);
+    }
+    else{
+      setFollwing([]);
+    }
+  };
+
+
+  useEffect(() => {
+    getFollowingList();
+}, [])
   return (
     <>
-      {data != "" ? (
+      {following != "" ? (
         <>
-          {data?.map((data, i) => {
+          {following?.map((data, i) => {
             return (
               <div className="Follow-row" key={i}>
                 <div className="left">

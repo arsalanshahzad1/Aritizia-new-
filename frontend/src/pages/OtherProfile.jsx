@@ -48,17 +48,25 @@ const OtherProfile = ({ search, setSearch }) => {
     const searchParams = new URLSearchParams(location.search);
     const {state} = useLocation();
 
-    const getOtherUsersDetails = async (address) =>{
-    const response = await apis.getOtherUser(address);
-    setUserDetails(response?.data?.data)
-    console.log(response  , 'other-users');
+   
+
+    const getNFTlikeListing = async (id) =>{
+      const response = await apis.getLikeNFTListing(id)
+      setLikedNfts(response.data.data)
+      console.log(response  , 'other-users');
     }
+
+    const getOtherUsersDetails = async (address) =>{
+      const response = await apis.getOtherUser(address);
+      setUserDetails(response?.data?.data)
+      getNFTlikeListing(response?.data?.data?.id)
+      }
 
     
     console.log("state",state.address)
     useEffect(() =>{
-        //  navigate("/other-profile")
          getOtherUsersDetails(state?.address)
+         
   } , [])
 
   const getProviderOrSigner = async (needSigner = false) => {
@@ -285,6 +293,8 @@ const getMyListedNfts = async () => {
     });
   };
 
+
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -310,7 +320,11 @@ const getMyListedNfts = async () => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
+                  {userDetails.is_follow == 0 ?
                   <div onClick={followOther} style={{cursor : 'pointer'}}>Follow</div>
+                  :  
+                  <div onClick={followOther} style={{cursor : 'pointer'}}>Unfollow</div>
+                }
                   {/* <div>Following</div> */}
                   <div>Followers {userDetails?.followers?.[0]?.follow_by}</div>
                 </div>

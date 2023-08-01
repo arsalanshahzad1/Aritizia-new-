@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import Web3Modal from "web3modal";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-
+import apis from '../service';
 const getAddress = async () => {
   const accounts = await window.ethereum.request({
     method: "eth_requestAccounts",

@@ -780,6 +780,39 @@ header .left img {
 .home-four-sec .table tr {
   margin: 15px 0px;
 }
+.pruchase .table tr {
+  margin: 15px 0px;
+}
+
+.pruchase .table th {
+  border: none !important;
+  font-family: 'Work-Sans';
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #969696 !important;
+}
+
+.pruchase .logo-title p {
+  font-family: 'Jost';
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 35px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.pruchase .two .price {
+  font-family: 'Work-Sans';
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
 
 .home-five-sec .header {
   display: flex;
@@ -1429,6 +1462,25 @@ footer h1 {
 
 .collection-table table tr th:nth-child(5) {
   width: 10%;
+}
+.collection-table.pruchase table tr th:nth-child(1) {
+  width: 10%;
+}
+
+.collection-table.pruchase table tr th:nth-child(2) {
+  width: 20%;
+}
+
+.collection-table.pruchase table tr th:nth-child(3) {
+  width: 20%;
+}
+
+.collection-table.pruchase table tr th:nth-child(4) {
+  width: 14%;
+}
+
+.collection-table.pruchase table tr th:nth-child(5) {
+  width: 20%;
 }
 
 .rbd-xg38tw4z7qb-dr .rbd-54q5amk4eb3-cw {
