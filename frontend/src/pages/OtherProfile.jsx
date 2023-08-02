@@ -52,7 +52,7 @@ const OtherProfile = ({ search, setSearch }) => {
 
     const getNFTlikeListing = async (id) =>{
       const response = await apis.getLikeNFTListing(id)
-      setLikedNfts(response.data.data)
+      setLikedNfts(response?.data?.data)
       console.log(response  , 'other-users');
     }
 

@@ -14,9 +14,9 @@ const Footer = () => {
               return (
                 <div className="col-lg-3 col-md-6 col-12" key={index}>
                   <div className="footer-inner-wrap">
-                    <div className='icon'><img src={data.icon} alt="" /></div>
-                    <h2>{data.title}</h2>
-                    <p>{data.para}</p>
+                    <div className='icon'><img src={data?.icon} alt="" /></div>
+                    <h2>{data?.title}</h2>
+                    <p>{data?.para}</p>
                   </div>
                 </div>
               )

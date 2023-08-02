@@ -94,12 +94,12 @@ const MyMsg = ({ data }) => {
         return `${size.toFixed(2)} ${units[unitIndex]}`;
     };
 
-    const hasMedia = data.media?.length > 0;
-    const hasText = data.text && data.text.trim() !== '';
+    const hasMedia = data?.media?.length > 0;
+    const hasText = data?.text && data?.text.trim() !== '';
 
     return (
         <div className='My-message' style={{ flexDirection: 'column' }}>
-            {hasMedia && data.media.map((res, i) => {
+            {hasMedia && data?.media.map((res, i) => {
                 if (res.mime_type.includes('image/')) {
                     return (
                         <div className='msg-img' style={{ marginLeft: 'auto' }}>
@@ -107,7 +107,7 @@ const MyMsg = ({ data }) => {
                             
                             <div className='time'>
                             {hasText ? null : 
-                                data.date
+                                data?.date
                             }
                             </div>
                         </div>
@@ -145,10 +145,10 @@ const MyMsg = ({ data }) => {
             {hasText && (
                 <div style={{ marginLeft: 'auto' }}>
                     <div className='msg'>
-                        {data.text}
+                        {data?.text}
                     </div>
                     <div className='time'>
-                        {data.date}
+                        {data?.date}
                     </div>
                     
                 </div>

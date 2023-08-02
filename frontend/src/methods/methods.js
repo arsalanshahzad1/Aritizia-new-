@@ -26,14 +26,14 @@ const postWalletAddress = async (address) => {
       const response = await apis.postWalletAddress({
         wallet_address: address,
       });
-      localStorage.setItem("data", JSON.stringify(response.data.data));
+      localStorage.setItem("data", JSON.stringify(response?.data?.data));
       window.location.reload();
     }
   } else {
     const response = await apis.postWalletAddress({
       wallet_address: address,
     });
-    localStorage.setItem("data", JSON.stringify(response.data.data));
+    localStorage.setItem("data", JSON.stringify(response?.data?.data));
     window.location.reload();
   }
 };

@@ -416,11 +416,6 @@ const ProfileDrawer = ({ id, isVisible, onClose, timedAuction, image , titlee  ,
 
     const structData = await marketplaceContract._idToNFT(id);
 
-    console.log("owner", structData.owner);
-    console.log("seller", structData.seller);
-
-    console.log("userAddress", userAddress);
-
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
       NFT_CONTRACT_ABI.abi,

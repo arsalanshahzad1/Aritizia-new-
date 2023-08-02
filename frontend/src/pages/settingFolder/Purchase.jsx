@@ -48,12 +48,12 @@ function Purchase() {
                             </td>
                             <td>
                                 <div className="two">
-                                    <p className="price" style={{ textAlign: 'left' }}>{data.price}</p>
+                                    <p className="price" style={{ textAlign: 'left' }}>{data?.price}</p>
                                 </div>
                             </td>
                             <td>
                                 <div className="two">
-                                    <p className="price" style={{ textAlign: 'left' }}>{data.nft.collection.payment_type}</p>
+                                    <p className="price" style={{ textAlign: 'left' }}>{data.nft?.collection?.payment_type}</p>
                                 </div>
                             </td>
                         </tr>

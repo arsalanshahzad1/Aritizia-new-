@@ -277,9 +277,6 @@ function ProfileDrawer({
     console.log("discountedEth ooo", discountedEth);
 
     const structData = await marketplaceContract._idToNFT(id);
-    console.log("id", id);
-    console.log("structData.seller", structData.seller);
-    console.log("userAddress", userAddress);
 
     let checkFan = await marketplaceContract.checkFan(id);
 
@@ -446,7 +443,6 @@ function ProfileDrawer({
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
     setNftDetails(response?.data?.data)
-    console.log(response.data.data, 'new response');
   }
   const Monthly_data = [
     {
@@ -857,7 +853,6 @@ function ProfileDrawer({
                       height: "100%",
                     }}
                   >
-                    {/* <Chart options={data.options} series={data.series} type="line" height={400} /> */}
                     {status.value === "Monthly" ? (
                       <ChartForEarning data={Monthly_data} />
                     ) : (
@@ -894,7 +889,7 @@ function ProfileDrawer({
                     <span>{likeAndViewData?.view_count == '' ? '00' : likeAndViewData?.view_count} View</span>
                   </div>
                   <div onClick={() => postNFTLike()}>
-                    {likeAndViewData.is_liked == 0 ? (
+                    {likeAndViewData?.is_liked == 0 ? (
                       <AiOutlineHeart />
                     ) : (
                       <AiFillHeart style={{ fill: "#2636d9" }} />

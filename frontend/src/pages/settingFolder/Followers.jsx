@@ -9,8 +9,7 @@ const Followers = ({ data }) => {
   const getFollowersList = async () => {
     const response = await apis.getFollowersList();
     if(response.status){
-    console.log(response.data.data, "followers");
-    setFollwers(response.data.data);
+    setFollwers(response?.data?.data);
     }else{
       setFollwers('');
     }

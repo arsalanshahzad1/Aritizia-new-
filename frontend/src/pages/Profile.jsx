@@ -54,7 +54,7 @@ const Profile = ({ search, setSearch }) => {
 
   const getNFTlikeListing = async () => {
     const response = await apis.getLikeNFTListing(userData?.id)
-    setLikedNfts(response.data.data)
+    setLikedNfts(response?.data?.data)
     console.log(response, 'other-users');
   }
 
@@ -333,8 +333,7 @@ const Profile = ({ search, setSearch }) => {
       console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
-      const collectionImages = response?.data?.data?.media[0]?.original_url;
-      // console.log('response' , response.data.data.media[0].original_url);
+      const collectionImages = response?.data?.data?.media?.[0]?.original_url;
 
       const metaData = await nftContract.tokenURI(id);
 

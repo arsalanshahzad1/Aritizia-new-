@@ -66,7 +66,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>First Name</p> <p></p></div>
                         <input
-                            value={data.first_name}
+                            value={data?.first_name}
                             type="text"
                             placeholder='First Name'
                             name='first_name'
@@ -77,7 +77,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Last Name</p> <p></p></div>
                         <input
-                            defaultValue={data.last_name}
+                            defaultValue={data?.last_name}
                             type="text"
                             placeholder='Last Name'
                             name='last_name'
@@ -90,7 +90,7 @@ const EditProfile = () => {
 
                         <div><p>Username</p> <p></p></div>
                         <input
-                            defaultValue={data.username}
+                            defaultValue={data?.username}
                             type="text"
                             placeholder='Enter username'
                             name='username'
@@ -101,7 +101,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Custom URL</p> <p></p></div>
                         <input
-                            defaultValue={data.custom_url}
+                            defaultValue={data?.custom_url}
                             type="url"
                             placeholder='Enter your custom URL'
                             name='custom_url'
@@ -112,7 +112,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Bio</p> <p></p></div>
                         <input
-                            defaultValue={data.bio}
+                            defaultValue={data?.bio}
                             type="text"
                             placeholder='Tell the world who are you!'
                             name='bio'
@@ -123,7 +123,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Email Address*</p> <p></p></div>
                         <input
-                            defaultValue={data.email}
+                            defaultValue={data?.email}
                             type="email"
                             placeholder='Enter email'
                             name='email'
@@ -135,7 +135,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Your site</p> <p>optional</p></div>
                         <input
-                            defaultValue={data.your_site}
+                            defaultValue={data?.your_site}
                             type="url"
                             placeholder='Enter website URL'
                             name='your_site'
@@ -146,7 +146,7 @@ const EditProfile = () => {
                     <div>
                         <div> <p>Twitter URL</p> <p></p></div>
                         <input
-                            defaultValue={data.twitter_url}
+                            defaultValue={data?.twitter_url}
                             type="url"
                             placeholder='Enter instagram URL'
                             name='twitter_url'
@@ -157,7 +157,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Instagram URL</p><p></p></div>
                         <input
-                            defaultValue={data.instagram_url}
+                            defaultValue={data?.instagram_url}
                             type="url"
                             placeholder='Enter twitter URL'
                             name='instagram_url'
@@ -168,7 +168,7 @@ const EditProfile = () => {
                     <div>
                         <div><p>Wallet Address</p> <p></p></div>
                         <input
-                            defaultValue={data.wallet_address}
+                            defaultValue={data?.wallet_address}
                             type="text"
                             placeholder='Enter wallet address'
                             name='wallet_address'
@@ -180,7 +180,7 @@ const EditProfile = () => {
                     <div>
                         <div> <p>Phone Number</p> <p></p></div>
                         <input
-                            defaultValue={data.phone_no}
+                            defaultValue={data?.phone_no}
                             type="tel"
                             placeholder='Enter your phone number'
                             name='phone_no'
