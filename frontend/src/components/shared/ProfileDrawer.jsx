@@ -22,7 +22,10 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 import apis from "../../service";
 import {
   Area,
@@ -405,7 +408,7 @@ function ProfileDrawer({
   royalty,
   description,
   collection,
-  userAddress,
+  // userAddress,
   showBuyNow,
   ShowAcceptbtn,
 }) {
@@ -421,14 +424,18 @@ function ProfileDrawer({
   const [platformFeeETH, setPlatformFeeETH] = useState(0);
   const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState(0);
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
-  const [nftDetails, setNftDetails] = useState('');
+  const [nftDetails, setNftDetails] = useState("");
 
   const navigate = useNavigate();
   useEffect(() => {
     getPriceInUSD();
   }, [isVisible]);
 
-  const userData = JSON.parse(localStorage.getItem('data'))
+
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
+
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -477,12 +484,10 @@ function ProfileDrawer({
   let sellerPercent = _sellerPercentFromDB * 10;
   let buyerPercent = _buyerPercentFromDB * 10;
 
-  const web3ModalRef = useRef();
+  // const web3ModalRef = useRef();
 
   // const connectWallet = async () => {
   //   try {
-  //     // Get the provider from web3Modal, which in our case is MetaMask
-  //     // When used for the first time, it prompts the user to connect their wallet
   //     await getProviderOrSigner();
   //     setWalletConnected(true);
   //   } catch (err) {
@@ -501,31 +506,31 @@ function ProfileDrawer({
   //   }
   // }, [walletConnected]);
 
-  const getProviderOrSigner = async (needSigner = false) => {
-    console.log("getProviderOrSigner");
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
 
-    const provider = await web3ModalRef.current.connect();
+  //   const provider = await web3ModalRef.current.connect();
 
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
 
-      return signer;
-    }
-    return web3Provider;
-  };
+  //     return signer;
+  //   }
+  //   return web3Provider;
+  // };
 
   const handleNFTSoldEvent = async (
     nftContract,
@@ -585,7 +590,10 @@ function ProfileDrawer({
     let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
     setPlatformFeeETH(feeETH);
 
+    // let dollarPriceOfETH = 123123;
+
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
     let oneETHInUSD = 1 / priceInETH;
@@ -607,6 +615,9 @@ function ProfileDrawer({
       // platformFeeCalculate(priceETH, _buyerPercentFromDB);
       setDiscountedEth(discountedEthPrice.toFixed(2));
       console.log("discountedEthPrice", discountedEthPrice);
+
+      // let dollarPriceOfETH = 123123;
+
       let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
       let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
@@ -664,18 +675,24 @@ function ProfileDrawer({
   let ethPurchase = false;
 
   const buyWithETH = async () => {
+    console.log("11111111111111");
+
     ethPurchase = true;
     const signer = await getProviderOrSigner(true);
+    console.log("2222222222222");
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
+    console.log("3333333333333");
 
     const structData = await marketplaceContract._idToNFT(id);
+    console.log("4444444444444");
 
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    console.log("555555555555");
 
     var fee = +platformFeeETH;
     var amount = +priceETH + fee;
@@ -684,15 +701,23 @@ function ProfileDrawer({
 
     if (checkFan) {
       fee = +discountedPlatformFeeETH;
+      console.log("666666666666666");
 
       amount = +discountedEth + fee;
       value = amount.toString();
     }
+    console.log("www amount", amount);
+    console.log("www value", value);
+    console.log("www sellerPercent", sellerPercent);
+    console.log("www buyerPercent", buyerPercent);
+    console.log("www paymentMethod", paymentMethod.value);
+    console.log("www id", id);
+    console.log("www address", NFT_CONTRACT_ADDRESS.address);
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
+        paymentMethod.value,
         id,
         sellerPercent, //  must be multiple of 10 of the users percent
         buyerPercent, // must be multiple of 10 of the users percent
@@ -780,7 +805,7 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
+        paymentMethod.value,
         id,
         amountInWei,
         sellerPercent, // must be multiple of 10 of the users percent
@@ -805,15 +830,14 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
-    setNftDetails(response?.data?.data)
-    console.log(response.data.data, 'new response');
-  }
+    setNftDetails(response?.data?.data);
+    console.log(response.data.data, "new response");
+  };
   useEffect(() => {
-
     if (isVisible) {
-      getNFTDetailByNFTTokenId()
+      getNFTDetailByNFTTokenId();
     }
-  }, [isVisible])
+  }, [isVisible]);
 
   return (
     <>
@@ -902,7 +926,12 @@ function ProfileDrawer({
                 <div className="three-line">
                   <div>
                     <TfiEye />
-                    <span>{likeAndViewData?.view_count == '' ? '00' : likeAndViewData?.view_count} View</span>
+                    <span>
+                      {likeAndViewData?.view_count == ""
+                        ? "00"
+                        : likeAndViewData?.view_count}{" "}
+                      View
+                    </span>
                   </div>
                   <div onClick={() => postNFTLike()}>
                     {likeAndViewData.is_liked == 0 ? (
@@ -910,7 +939,12 @@ function ProfileDrawer({
                     ) : (
                       <AiFillHeart style={{ fill: "#2636d9" }} />
                     )}
-                    <span>{likeAndViewData?.like_count == '' ? '0' : likeAndViewData?.like_count} Favorite</span>
+                    <span>
+                      {likeAndViewData?.like_count == ""
+                        ? "0"
+                        : likeAndViewData?.like_count}{" "}
+                      Favorite
+                    </span>
                   </div>
                 </div>
                 <div className="four-line">
@@ -921,32 +955,51 @@ function ProfileDrawer({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        {userData?.wallet_address == nftDetails?.user?.wallet_address ?
-                          <Link to={'/profile'}>
-                            <img src={nftDetails?.user?.profile_image} alt="" />{" "}
-                            <span>{nftDetails?.user?.username}</span>
-                            <br />
-                            <span>{userData?.wallet_address}</span>
-                            <br />
-                            <span>{nftDetails?.user?.wallet_address}</span>
-                          </Link>
-                          :
-                          <div onClick={() => navigate("/other-profile", { state: { address: nftDetails?.user?.wallet_address } })}>
-                            <img src={nftDetails?.user?.profile_image} alt="" />{" "}
-                            <span>{nftDetails?.user?.username}</span>
-                          </div>
+                        {
+                          userData?.wallet_address ==
+                          nftDetails?.user?.wallet_address ? (
+                            <Link to={"/profile"}>
+                              <img
+                                src={nftDetails?.user?.profile_image}
+                                alt=""
+                              />{" "}
+                              <span>{nftDetails?.user?.username}</span>
+                              <br />
+                              <span>{userData?.wallet_address}</span>
+                              <br />
+                              <span>{nftDetails?.user?.wallet_address}</span>
+                            </Link>
+                          ) : (
+                            <div
+                              onClick={() =>
+                                navigate("/other-profile", {
+                                  state: {
+                                    address: nftDetails?.user?.wallet_address,
+                                  },
+                                })
+                              }
+                            >
+                              <img
+                                src={nftDetails?.user?.profile_image}
+                                alt=""
+                              />{" "}
+                              <span>{nftDetails?.user?.username}</span>
+                            </div>
+                          )
                           // <Link to={`/other-profile?address=${nftDetails?.user?.wallet_address}`}>
                           //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
                           //   <span>{nftDetails?.user?.username}</span>
-                          // </Link> 
+                          // </Link>
                         }
-
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
                       <div className="logo-name">
-                        <img src={nftDetails?.collection?.media[0]?.original_url} alt="" />{" "}
+                        <img
+                          src={nftDetails?.collection?.media[0]?.original_url}
+                          alt=""
+                        />{" "}
                         <span>{nftDetails?.collection?.name}</span>
                       </div>
                     </div>

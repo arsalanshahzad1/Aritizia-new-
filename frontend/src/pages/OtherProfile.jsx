@@ -28,8 +28,12 @@ import liked2 from "../../public/assets/images/liked2.png";
 import collection from "../../public/assets/images/Collection-card-image.png";
 import apis from "../service";
 import { getAddress } from "../methods/methods";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../methods/walletManager";
 
-import { useLocation, useParams , useNavigate } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -43,51 +47,53 @@ const OtherProfile = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  const [userAddress, setUserAddress] = useState("0x000000....");
-  const [userDetails, setUserDetails] = useState('');
+  // const [userAddress, setUserAddress] = useState("0x000000....");
+  const [userDetails, setUserDetails] = useState("");
   const [likedNfts, setLikedNfts] = useState([]);
   const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const {state} = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const { state } = useLocation();
 
-    const getOtherUsersDetails = async (address) =>{
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
+
+  const getOtherUsersDetails = async (address) => {
     const response = await apis.getOtherUser(address);
-    setUserDetails(response?.data?.data)
-    console.log(response  , 'other-users');
-    }
-
-    
-    console.log("state",state.address)
-    useEffect(() =>{
-        //  navigate("/other-profile")
-         getOtherUsersDetails(state?.address)
-  } , [])
-
-  const getProviderOrSigner = async (needSigner = false) => {
-    console.log("getProviderOrSigner");
-
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
-
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-
-      return signer;
-    }
-
-    return web3Provider;
+    setUserDetails(response?.data?.data);
+    console.log(response, "other-users");
   };
+
+  console.log("state", state.address);
+  useEffect(() => {
+    //  navigate("/other-profile")
+    getOtherUsersDetails(state?.address);
+  }, []);
+
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
+
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+
+  //     return signer;
+  //   }
+
+  //   return web3Provider;
+  // };
 
   // const connectWallet = async () => {
   //   try {
@@ -273,7 +279,7 @@ const OtherProfile = ({ search, setSearch }) => {
 
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
-  
+
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
       follow_by: RealUserId,
@@ -294,7 +300,12 @@ const OtherProfile = ({ search, setSearch }) => {
           />
           <div className="user">
             <div className="user-wrap">
-              <img className="user-pic" src={userDetails?.profile_image} alt="" width={"90%"} />
+              <img
+                className="user-pic"
+                src={userDetails?.profile_image}
+                alt=""
+                width={"90%"}
+              />
               <img
                 className="big-chack"
                 src="/assets/images/big-chack.png"
@@ -306,12 +317,16 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  <div onClick={followOther} style={{cursor : 'pointer'}}>Follow</div>
+                  <div onClick={followOther} style={{ cursor: "pointer" }}>
+                    Follow
+                  </div>
                   {/* <div>Following</div> */}
                   <div>Followers {userDetails?.followers?.[0]?.follow_by}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
-                  <h2 className="user-name">{userDetails?.first_name} {userDetails?.last_name}</h2>
+                  <h2 className="user-name">
+                    {userDetails?.first_name} {userDetails?.last_name}
+                  </h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <SocialShare
@@ -331,7 +346,7 @@ const OtherProfile = ({ search, setSearch }) => {
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
-                <div
+                  <div
                     className="message-btn"
                     onClick={() => {
                       postChatMeaage();

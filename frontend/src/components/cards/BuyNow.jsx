@@ -18,11 +18,14 @@ const BuyNow = ({
   royalty,
   description,
   collection,
-  userAddress,
+  // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
 
   const onClose = useCallback(() => {
     setIsVisible(false);

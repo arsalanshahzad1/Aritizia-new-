@@ -1566,10 +1566,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         }
     }
 
-      function getCurrentTimestamp() public view returns (uint256) {
+    function getCurrentTimestamp() public view returns (uint256) {
         return block.timestamp;
     }
-
 
     receive() external payable {}
 

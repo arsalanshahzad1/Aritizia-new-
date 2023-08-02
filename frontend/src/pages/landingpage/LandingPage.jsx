@@ -19,6 +19,10 @@ import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../../service";
 import { getAddress } from "../../methods/methods";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,64 +30,75 @@ const LandingPage = ({ search, setSearch }) => {
 
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  const [userAddress, setUserAddress] = useState("0x000000....");
+  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [walletConnected, setWalletConnected] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(0);
 
   const web3ModalRef = useRef();
 
-  const connectWallet = async () => {
-    try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
+
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   async function getProvider() {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
       // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
-      "http://localhost:8545"
+      // "http://localhost:8545"
+      "https://rpc.sepolia.org"
     );
 
     return provider;
   }
 
   // Helper function to fetch a Provider/Signer instance from Metamask
-  const getProviderOrSigner = async (needSigner = false) => {
-    // console.log("In get provider or signer");
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("In get provider or signer1");
 
-    // console.log("In try");
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
-    // console.log("In get provider or signer");
+  //   // console.log("In try");
+  //   const provider = await web3ModalRef.current.connect();
+  //   console.log("In get provider or signer12");
 
-    // If user is not connected to the Sepolia network, let them know and throw an error
-    const { chainId } = await web3Provider.getNetwork();
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      return signer;
-    }
-    // console.log("In get provider or signer");
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   // console.log("In get provider or signer");
+  //   console.log("In get provider or signer13");
 
-    return web3Provider;
-  };
+  //   // If user is not connected to the Sepolia network, let them know and throw an error
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   console.log("In get provider or signer14");
+
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //     console.log("In get provider or signer15");
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+  //   console.log("In get provider or signer16");
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     return signer;
+  //   }
+  //   console.log("In get provider or signer7");
+
+  //   return web3Provider;
+  // };
 
   const getListedNfts = async () => {
-    const provider = await getProvider();
-    // const provider = await getProviderOrSigner();
+    // const provider = await getProvider();
+    const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     let addr = await getAddress();
     console.log("ZZZZZZ", addr);
@@ -103,14 +118,19 @@ const LandingPage = ({ search, setSearch }) => {
     );
 
     console.log("nftContract", nftContract);
+    console.log("marketplaceContract", marketplaceContract);
     // console.log("zayyan", await (await nftContract.mintedTokensList()).wait());
 
     let listingType;
     // console.log("Active Method", listingType);
     console.log("time", Date.now());
     // let dollarPriceOfETH = 123123;
+
+    // UNCOMMENT THIS
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    console.log("dollarPriceOfETH", dollarPriceOfETH);
 
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = 1.3;
@@ -125,7 +145,7 @@ const LandingPage = ({ search, setSearch }) => {
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-      console.log("id", id);
+      console.log("idd", id);
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
@@ -178,7 +198,7 @@ const LandingPage = ({ search, setSearch }) => {
           const collection = data.collection;
           // console.log("data.listingType", typeof data.listingType);
 
-          // console.log("listingType", listingType);
+          console.log("listingType", listingType);
 
           if (listingType === 0) {
             const nftData = {
@@ -284,17 +304,18 @@ const LandingPage = ({ search, setSearch }) => {
   //   );
 
   //   await marketplaceContract.swapETHForUSDT(20);
+  // localStorage.removeItem("data");
   // };
 
-  useEffect(() => {
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "sepolia",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-    }
-  }, [walletConnected]);
+  // useEffect(() => {
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "sepolia",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //   }
+  // }, [walletConnected]);
 
   useEffect(() => {
     connectWallet();

@@ -13,7 +13,7 @@ const NewItemCard = ({
   startTime,
   endTime,
   description,
-  userAddress,
+  // userAddress,
   collectionImage
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -21,6 +21,9 @@ const NewItemCard = ({
   const [endDate, setEndDate] = useState("");
 
   highestBid = Number(highestBid).toFixed(2);
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
 
   console.log("highestBiddd", highestBid);
   console.log("highestBiddd", typeof highestBid);

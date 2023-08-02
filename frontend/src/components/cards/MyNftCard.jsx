@@ -20,13 +20,16 @@ const MyNftCard = ({
   royalty,
   description,
   collection,
-  userAddress,
+  // userAddress,
 }) => {
-  console.log(royalty , 'royalty');
+  console.log(royalty, "royalty");
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isVisible2, setIsVisible2] = useState(false);
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
 
   const onClose = useCallback(() => {
     console.log("calling close");
@@ -178,7 +181,6 @@ const MyNftCard = ({
         royalty={royalty}
         descriptionn={description}
         collectionn={collection}
-
       />
       <ProfileDrawer
         isVisible={isVisible2}

@@ -34,7 +34,10 @@ import {
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import apis from "../../service";
-
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 const Monthly_data = [
   {
     data: "Jan",
@@ -303,7 +306,7 @@ const PlaceABidDrawer = ({
   crypto,
   description,
   // collection,
-  userAddress,
+  // userAddress,
   isLive,
   startTime,
   endTime,
@@ -316,6 +319,9 @@ const PlaceABidDrawer = ({
   const [highestBid, setHighestBid] = useState("");
   const [auctionStatus, setAuctionStatus] = useState(false);
   const [bidButton, showBidButton] = useState(false);
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  let userAddress = userData.wallet_address;
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const handleStatus = (e) => {
@@ -459,6 +465,8 @@ const PlaceABidDrawer = ({
     }
 
     priceETH = currBid;
+
+    // let dollarPriceOfETH = 123123;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
@@ -542,30 +550,34 @@ const PlaceABidDrawer = ({
     // navigate("/profile");
   };
 
-  const getProviderOrSigner = async (needSigner = false) => {
-    console.log("getProviderOrSigner");
+  // const getProviderOrSigner = async () => {
+  //   console.log("getProviderOrSigner");
+  // };
 
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
 
-      return signer;
-    }
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
 
-    return web3Provider;
-  };
+  //     return signer;
+  //   }
+
+  //   return web3Provider;
+  // };
 
   const handleBidEvent = async (tokenId, seller, highestBidder, highestBid) => {
     let bidData = {
@@ -598,7 +610,6 @@ const PlaceABidDrawer = ({
   //       disableInjectedProvider: false,
   //     });
   //     connectWallet();
-
   //   }
   // }, [walletConnected]);
 
@@ -638,7 +649,9 @@ const PlaceABidDrawer = ({
       setHighestBid(highestBid);
     }
 
+    // let dollarPriceOfETH = 123123;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
@@ -773,6 +786,8 @@ const PlaceABidDrawer = ({
     console.log("id", typeof id);
 
     // get the price of dollar from smartcontract and convert this value
+    // let dollarPriceOfETH = 123123;
+
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     console.log("HEre");
 

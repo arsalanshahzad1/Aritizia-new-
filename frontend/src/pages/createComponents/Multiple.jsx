@@ -26,6 +26,10 @@ import apis from "../../service/index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -134,39 +138,39 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const web3ModalRef = useRef();
-  const getProviderOrSigner = async (needSigner = false) => {
-    console.log("test1QWER");
-    const provider = await web3ModalRef.current.connect();
-    console.log("test1qq");
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("test1QWER");
+  //   const provider = await web3ModalRef.current.connect();
+  //   console.log("test1qq");
 
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
 
-    // if (chainId !== 31337) {
-    //   window.alert("Change the network to Sepolia");
-    //   throw new Error("Change network to Sepolia");
-    // }
+  //   // if (chainId !== 31337) {
+  //   //   window.alert("Change the network to Sepolia");
+  //   //   throw new Error("Change network to Sepolia");
+  //   // }
 
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      // console.log("getSigner");
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     // console.log("getSigner");
 
-      return signer;
-    }
-    // console.log("getProvider");
-    return web3Provider;
-  };
+  //     return signer;
+  //   }
+  //   // console.log("getProvider");
+  //   return web3Provider;
+  // };
 
   // Upload image to IPFS
   const uploadToIPFS = async () => {
@@ -327,7 +331,8 @@ const Multiple = ({ search, setSearch }) => {
   let listedddd = [];
 
   const handleNFTMintedEvent = async (mintedTokens) => {
-    // console.log("mintedTokens", mintedTokens);
+    console.log("mintedTokens", mintedTokens);
+    console.log("handleNFTMintedEvent");
 
     let id;
     let list = [];
@@ -544,7 +549,7 @@ const Multiple = ({ search, setSearch }) => {
         // await listNFT(marketplaceContract, nftContract),
       ]);
 
-      console.log("NFT minting and listing completed!");
+      console.log("NFT minting completed!");
     } catch (error) {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
@@ -808,27 +813,27 @@ const Multiple = ({ search, setSearch }) => {
     uploadToIPFS(file);
   };
 
-  const connectWallet = async () => {
-    try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "hardhat",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-      connectWallet();
-      // numberOFICOTokens();
-    }
-  }, [walletConnected, price]);
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected, price]);
 
   const getItem = async () => {
     try {

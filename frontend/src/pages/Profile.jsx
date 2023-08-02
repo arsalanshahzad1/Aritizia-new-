@@ -28,6 +28,7 @@ import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Gallery from "./Gallery";
 import { getAddress } from "../methods/methods";
+import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -44,7 +45,7 @@ const Profile = ({ search, setSearch }) => {
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userNFTs, setUserNfts] = useState([]);
   const [likedNfts, setLikedNfts] = useState([]);
-  const [userAddress, setUserAddress] = useState("0x000000....");
+  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
   const [following, setFollwing] = useState([]);
@@ -53,34 +54,35 @@ const Profile = ({ search, setSearch }) => {
 
   let likedNftsFromDB = [];
 
-  const userData = JSON.parse(localStorage.getItem('data'))
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
 
-  const getProviderOrSigner = async (needSigner = false) => {
-    console.log("getProviderOrSigner");
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
 
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
-    const { chainId } = await web3Provider.getNetwork();
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
 
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
 
-      return signer;
-    }
+  //     return signer;
+  //   }
 
-    return web3Provider;
-  };
+  //   return web3Provider;
+  // };
 
   // const connectWallet = async () => {
   //   try {
@@ -116,6 +118,7 @@ const Profile = ({ search, setSearch }) => {
   //   console.log("getAddress", accounts[0]);
   //   postWalletAddress(accounts[0]);
   // };
+
   // const postWalletAddress = async (address) => {
   //   if (localStorage.getItem("data")) {
   //     return console.log("data is avaliable");
@@ -275,10 +278,10 @@ const Profile = ({ search, setSearch }) => {
 
   const postFanList = async () => {
     console.log("postFanList", postFanList);
-    console.log("userAddress", userAddress);
+    console.log("userAddress", localStorage.getItem("date").wallet_address);
     console.log("addedFans", addedFans);
     const response = await apis.postAddFans({
-      fan_by_wallet: userAddress,
+      fan_by_wallet: localStorage.getItem("date").wallet_address,
       fan_to_array_wallet: addedFans,
     });
 
@@ -327,7 +330,7 @@ const Profile = ({ search, setSearch }) => {
 
       let collectionId;
       collectionId = +mintedTokens[i].collectionId.toString();
-      console.log("YESS",id);
+      console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
       const collectionImages = response?.data?.data?.media[0]?.original_url;
@@ -380,8 +383,7 @@ const Profile = ({ search, setSearch }) => {
               royalty: royalty,
               description: description,
               collection: collection,
-              collectionImages: collectionImages
-
+              collectionImages: collectionImages,
             };
             console.log(nftData);
             myNFTs.push(nftData);
@@ -476,7 +478,6 @@ const Profile = ({ search, setSearch }) => {
           const royalty = data.royalty;
           const description = data.description;
           const collection = data.collection;
-
 
           const nftData = {
             id: id, //
@@ -691,38 +692,38 @@ const Profile = ({ search, setSearch }) => {
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
-          {userData?.profile_image == null ?
-          <img
-            className="big-image"
-            src="/assets/images/profile-1.png"
-            alt=""
-            width={"100%"}
-          />
-          :
-          <img
-            className="big-image"
-            src={userData?.profile_image}
-            alt=""
-            width={"100%"}
-          />
-          }
+          {userData?.profile_image == null ? (
+            <img
+              className="big-image"
+              src="/assets/images/profile-1.png"
+              alt=""
+              width={"100%"}
+            />
+          ) : (
+            <img
+              className="big-image"
+              src={userData?.profile_image}
+              alt=""
+              width={"100%"}
+            />
+          )}
           <div className="user">
             <div className="user-wrap">
-              {userData?.profile_image == null ?
-              <img
-                className="user-pic"
-                src="../public/assets/images/user-none.png"
-                alt=""
-                width={"240px"}
-              />
-              :
-              <img
-                className="user-pic"
-                src={userData?.profile_image}
-                alt=""
-                width={"90%"}
-              />
-            }
+              {userData?.profile_image == null ? (
+                <img
+                  className="user-pic"
+                  src="../public/assets/images/user-none.png"
+                  alt=""
+                  width={"240px"}
+                />
+              ) : (
+                <img
+                  className="user-pic"
+                  src={userData?.profile_image}
+                  alt=""
+                  width={"90%"}
+                />
+              )}
               <img
                 className="big-chack"
                 src="/assets/images/big-chack.png"
@@ -735,7 +736,9 @@ const Profile = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12"></div>
                 <div className="col-lg-4 col-md-4 col-6">
-                  <h2 className="user-name">{userData?.first_name} {userData?.last_name}</h2>
+                  <h2 className="user-name">
+                    {userData?.first_name} {userData?.last_name}
+                  </h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <SocialShare

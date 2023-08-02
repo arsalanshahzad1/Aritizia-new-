@@ -21,7 +21,8 @@ const SliderImage = () => {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
       // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
-      "http://localhost:8545"
+      // "http://localhost:8545"
+      "https://rpc.sepolia.org"
     );
 
     return provider;

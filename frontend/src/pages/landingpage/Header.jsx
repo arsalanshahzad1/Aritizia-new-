@@ -9,6 +9,11 @@ import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import { getAddress } from "../../methods/methods";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -27,53 +32,53 @@ const Header = ({ search, setSearch }) => {
   const path = location.pathname;
   let countLength = 13;
 
-  const userData = JSON.parse(localStorage.getItem('data'))
+  const userData = JSON.parse(localStorage.getItem("data"));
 
   const [walletConnected, setWalletConnected] = useState(false);
 
   const web3ModalRef = useRef();
 
-  const connectWallet = async () => {
-    try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "sepolia",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-    }
-  }, [walletConnected]);
+  // useEffect(() => {
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "sepolia",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //   }
+  // }, [walletConnected]);
 
-  const getProviderOrSigner = async (needSigner = false) => {
-    const provider = await web3ModalRef.current.connect();
-    const web3Provider = new providers.Web3Provider(provider);
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
 
-    // If user is not connected to the Sepolia network, let them know and throw an error
-    const { chainId } = await web3Provider.getNetwork();
-    try {
-      await ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-        // params: [{ chainId: "0x7A69" }], // localhost's chainId
-      });
-    } catch (error) {
-      // User rejected the network change or there was an error
-      throw new Error("Change network to Sepolia to proceed.");
-    }
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      return signer;
-    }
-    return web3Provider;
-  };
+  //   // If user is not connected to the Sepolia network, let them know and throw an error
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     return signer;
+  //   }
+  //   return web3Provider;
+  // };
 
   useEffect(() => {
     const id = JSON.parse(localStorage.getItem("data"));
@@ -103,33 +108,78 @@ const Header = ({ search, setSearch }) => {
     };
   }, []);
 
-  // const [accountChange, setAccountChange] = useState(false);
+  const [accountChange, setAccountChange] = useState(false);
 
   // const accountsCheck = async () => {
+  //   let addresses = fetchAddresses();
+  //   console.log("accountsCheck");
   //   const accounts = await window.ethereum.request({
   //     method: "eth_requestAccounts",
   //   });
   //   if (accounts.length === 0) {
+  //     console.log("accountsCheck11");
   //     // Handle account disconnection or user logged out from MetaMask.
   //     console.log("User disconnected from MetaMask.");
   //     setWalletConnected(false);
   //     setAccountChange(true);
   //   } else {
-  //     // Handle the case when the user switches to a different account in MetaMask.
-  //     console.log("User switched to a new account:", accounts[0]);
-  //     alert("User switched to a new account:", accounts[0]);
-  //     setAccountChange(true);
+  //     let storedWallet = JSON.parse(
+  //       localStorage.getItem("data")
+  //     ).wallet_address;
+  //     storedWallet = storedWallet.toLowerCase();
+  //     let address = accounts[0].toLowerCase();
+
+  //     // if (localStorage.getItem("data")) {
+  //     if (storedWallet == address) {
+  //       console.log("DATA IS AVAILABLE");
+  //     } else {
+  //       console.log("accountsCheck222");
+  //       // Handle the case when the user switches to a different account in MetaMask.
+  //       console.log("User switched to a new account:", accounts[0]);
+  //       postWalletAddress();
+  //       alert("User switched to a new account:", accounts[0]);
+  //       setAccountChange(true);
+  //     }
+  //   }
+  // };
+
+  // const accountsCheck = async () => {
+  //   // console.log("accountsss", accounts);
+  //   if (!window.ethereum.isConnected()) {
+  //     console.log("accountsss false");
   //   }
   // };
 
   // useEffect(() => {
   //   accountsCheck();
-  // }, [accountChange]);
+  // }, []);
 
   useEffect(() => {
-    const connected = JSON.parse(localStorage.getItem("data"));
-    setUser(connected);
+    setInterval(getAddress, 3000);
+  }, []);
 
+  function handleDisconnect() {
+    // Handle wallet disconnection here
+    console.log(
+      "Wallet disconnected. Updating state and clearing local storage..."
+    );
+    // For example, update state using React useState hook:
+    // setState(null);
+
+    // Clear localStorage:
+    localStorage.clear();
+  }
+
+  useEffect(() => {
+    window.addEventListener("ethereum#disconnect", handleDisconnect);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("ethereum#disconnect", handleDisconnect);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 100) {
         setScrolled(true);
@@ -151,6 +201,11 @@ const Header = ({ search, setSearch }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [messageArrive, notificationArrive]);
+
+  // useEffect(() => {
+  //   const connected = JSON.parse(localStorage.getItem("data"));
+  //   setUser(connected);
+  // }, [user]);
 
   const getChatnotification = async (name, count) => {
     if (name == "message") {
@@ -571,24 +626,23 @@ const Header = ({ search, setSearch }) => {
                 )}
                 {user && (
                   <div className="login-user-profile">
-                    {userData?.profile_image == null ?
-                    
-                    <img
-                      src='../public/assets/images/user-none.png'
-                      alt="profile-image"
-                      onClick={() => {
-                        setToggleUserDropdown(!toggleUserDropdown);
-                      }}
-                    />
-                    :
-                    <img
-                      src={userData?.profile_image}
-                      alt=""
-                      onClick={() => {
-                        setToggleUserDropdown(!toggleUserDropdown);
-                      }}
-                    />
-                  }
+                    {userData?.profile_image == null ? (
+                      <img
+                        src="../public/assets/images/user-none.png"
+                        alt="profile-image"
+                        onClick={() => {
+                          setToggleUserDropdown(!toggleUserDropdown);
+                        }}
+                      />
+                    ) : (
+                      <img
+                        src={userData?.profile_image}
+                        alt=""
+                        onClick={() => {
+                          setToggleUserDropdown(!toggleUserDropdown);
+                        }}
+                      />
+                    )}
                     {toggleUserDropdown && (
                       <div
                         className={`user-login-dropdown ${

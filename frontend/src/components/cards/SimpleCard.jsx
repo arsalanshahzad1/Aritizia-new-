@@ -10,7 +10,10 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import ProfileDrawer from "../shared/ProfileDrawer";
 import Web3Modal from "web3modal";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import { getProviderOrSigner } from "../../methods/methods";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 
 const SimpleCard = ({
   onOpen,
@@ -23,15 +26,17 @@ const SimpleCard = ({
   royalty,
   description,
   collection,
-  userAddress,
-  collectionImages
-
+  // userAddress,
+  collectionImages,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
 
   // const openDrawer = () => {
   //   if (showLinks === true) {
@@ -40,33 +45,9 @@ const SimpleCard = ({
   //     setIsVisible(true);
   //   }
   // };
-
-
-
-  // const connectWallet = async () => {
-  //   try {
-  //     // Get the provider from web3Modal, which in our case is MetaMask
-  //     // When used for the first time, it prompts the user to connect their wallet
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
-  //     // The `current` value is persisted throughout as long as this page is open
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
+  // const getProviderOrSigner = async () => {
+  //   console.log("getProviderOrSigner")
+  // }
 
   const onClose = useCallback(() => {
     setIsVisible(false);

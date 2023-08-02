@@ -297,8 +297,11 @@ const Earnings = () => {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
-  const [userAddress, setUserAddress] = useState("0x000000....");
+  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [totalPrice, setTotalPrice] = useState("");
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData.wallet_address;
 
   useEffect(() => {
     getAddress();
@@ -312,7 +315,8 @@ const Earnings = () => {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
       // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
-      "http://localhost:8545"
+      // "http://localhost:8545"
+      "https://rpc.sepolia.org"
     );
 
     return provider;
