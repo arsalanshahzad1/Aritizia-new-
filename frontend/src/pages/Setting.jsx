@@ -12,6 +12,7 @@ import Notification from './settingFolder/Notification'
 import { useContext } from 'react'
 import { GlobalContext } from '../Context/GlobalContext'
 import Search from "../components/shared/Search";
+import Purchase from './settingFolder/Purchase'
 
 
 const Setting = ({ search, setSearch }) => {
@@ -38,6 +39,7 @@ const Setting = ({ search, setSearch }) => {
                                     <li onClick={() => { setActiveTabs('Notification') }}><button className={`${activeTabs === 'Notification' ? 'active' : ''}`}><ImNotification />Notification</button></li>
                                     <li onClick={() => { setActiveTabs('Appearance') }}><button className={`${activeTabs === 'Appearance' ? 'active' : ''}`}><IoMdColorPalette />Appearance</button></li>
                                     <li onClick={() => { setActiveTabs('Earnings') }}><button className={`${activeTabs === 'Earnings' ? 'active' : ''}`}><FaHandHoldingUsd />Earnings</button> </li>
+                                    <li onClick={() => { setActiveTabs('Pruchase') }}><button className={`${activeTabs === 'Pruchase' ? 'active' : ''}`}><FaHandHoldingUsd />Pruchase</button> </li>
                                     <li onClick={() => { setActiveTabs('Edit') }}><button className={`${activeTabs === 'Edit' ? 'active' : ''}`}><FaEdit />Edit</button></li>
                                 </ul>
                             </div>
@@ -46,6 +48,7 @@ const Setting = ({ search, setSearch }) => {
                                     {activeTabs === 'Notification' && <Notification />}
                                     {activeTabs === 'Appearance' && <Appearance />}
                                     {activeTabs === 'Earnings' && <Earnings />}
+                                    {activeTabs === 'Pruchase' && <Purchase />}
                                     {activeTabs === 'Edit' && <EditProfile />}
                                 </div>
                             </div>

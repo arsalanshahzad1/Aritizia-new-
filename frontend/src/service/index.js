@@ -86,7 +86,20 @@ const createBackendServer = (baseURL) => {
 
   const getNFTByTokenId = async (tokenId) => await api.get(`view-nft-by-token/${tokenId}`);
   
-  const getOtherUser = async (userAddress) => await api.get(`view-user-detail-by-wallet/${userAddress}`);
+  const getOtherUser = async (userAddress) => await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
+  
+  const getLikeNFTListing = async (userId) => await api.get(`view-liked-nfts/${userId}`);
+
+  const postUserFans = async (body) => await api.post(`add-user-fans`, body);
+  const postCustomUserFans = async (body) => await api.post(`add-custom-user-fans`, body);
+  const getFanList = async () => await api.get(`view-fan-list/${RealUserId}`);
+  const getremovedFan = async (removingUserId) => await api.get(`remove-fan/${removingUserId}`);
+
+  const getSalesHistory = async () => await api.get(`sale-history/${RealUserId}`);
+  const getPurchaseHistory = async () => await api.get(`purchase-history/${RealUserId}`);
+
+
+  
 
   //Returning all the API
   return {
@@ -121,7 +134,17 @@ const createBackendServer = (baseURL) => {
 
     getNFTByTokenId,
 
-    getOtherUser
+    getOtherUser,
+
+    getLikeNFTListing,
+
+    postUserFans,
+    postCustomUserFans,
+    getFanList,
+    getremovedFan,
+
+    getSalesHistory,
+    getPurchaseHistory
   };
 };
 

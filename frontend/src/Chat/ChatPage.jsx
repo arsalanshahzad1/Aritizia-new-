@@ -86,18 +86,18 @@ function ChatPage({ search, setSearch }) {
         data.message = textMessage.current.value;
         data.media_file = fileMessages;
 
-        if (data.message != '' || data.media_file != '') {
+        if (data?.message != '' || data?.media_file != '') {
             const sendData = new FormData();
-            sendData.append('sender_id', data.sender_id);
-            sendData.append('receiver_id', data.receiver_id);
-            sendData.append('message', data.message);
+            sendData.append('sender_id', data?.sender_id);
+            sendData.append('receiver_id', data?.receiver_id);
+            sendData.append('message', data?.message);
 
             for (let i = 0; i < fileMessages.length; i++) {
                 sendData.append('media_file[]', fileMessages[i]);
             }
 
             const response = await apis.postChatMessages(sendData)
-            if (response.data.status) {
+            if (response?.data?.status) {
 
                 setUserMessagesDetails((prevState) => [response?.data?.data, ...prevState])
                 textMessage.current.value = ''
@@ -129,7 +129,7 @@ function ChatPage({ search, setSearch }) {
         channel.listen(".chat-event", (data) => {
             // Handle the received event data
 
-            if (data.data.sender_id == activeUserId) {
+            if (data?.data?.sender_id == activeUserId) {
                 setUserMessagesDetails((prevState) => [data?.data, ...prevState])
             }
             else {

@@ -30,7 +30,9 @@ const Header = ({ search, setSearch }) => {
   const [loader, setloader] = useState(false);
   const location = useLocation();
   const path = location.pathname;
-  let countLength = 13;
+  const [countLength, setCountLength] = useState('');
+
+  // let countLength;
 
   const userData = JSON.parse(localStorage.getItem("data"));
 
@@ -184,13 +186,13 @@ const Header = ({ search, setSearch }) => {
       if (window.scrollY > 100) {
         setScrolled(true);
         setToggleUserDropdown(false);
-        setshowMessage(false);
-        setShowNotification(false);
+        // setshowMessage(false);
+        // setShowNotification(false);
       } else {
         setScrolled(false);
         setToggleUserDropdown(false);
-        setshowMessage(false);
-        setShowNotification(false);
+        // setshowMessage(false);
+        // setShowNotification(false);
       }
     };
 
@@ -218,6 +220,9 @@ const Header = ({ search, setSearch }) => {
         ...prevState,
         ...response?.data?.data,
       ]);
+      console.log(response?.data?.total_count);
+      setCountLength(response?.data?.total_count)
+      console.log(countLength)
       setloader(false);
     } else {
       setloader(false);

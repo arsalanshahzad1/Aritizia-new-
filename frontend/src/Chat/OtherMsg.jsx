@@ -32,13 +32,13 @@ const OtherMsg = ({ img, data }) => {
                 </div>
                 :
                 <>
-                    {data.media.map((res, i) => {
+                    {data?.media.map((res, i) => {
                         if (res.mime_type.includes('image/')) {
                             return (
                                 <div className='msg-img'>
                                     {<img src={res?.original_url} alt="" width={'200px'} />}
                                     <div className='time' style={{ margin: '0px 0px 0px 10px' }}>
-                                        {data.date}
+                                        {data?.date}
                                     </div>
                                 </div>
                             )

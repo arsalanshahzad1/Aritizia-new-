@@ -197,9 +197,9 @@ const CollectionProfile = ({ search, setSearch }) => {
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
-      listingType = structData.listingType;
+      listingType = structData?.listingType;
 
-      const price = ethers.utils.formatEther(structData.price.toString());
+      const price = ethers.utils.formatEther(structData?.price.toString());
 
       let highestBid = ethers.utils.formatEther(
         auctionData.highestBid.toString()
@@ -216,9 +216,6 @@ const CollectionProfile = ({ search, setSearch }) => {
           console.log("Dataa", data);
 
           data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
@@ -326,9 +323,6 @@ const CollectionProfile = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;

@@ -49,7 +49,7 @@ export const uploadFileToIPFS = async (file) => {
       // console.log("image uploaded", response.data.IpfsHash);
       return {
         success: true,
-        pinataURL: "https://ipfs.io/ipfs/" + response.data.IpfsHash,
+        pinataURL: "https://ipfs.io/ipfs/" + response?.data?.IpfsHash,
       };
     })
     .catch(function (error) {

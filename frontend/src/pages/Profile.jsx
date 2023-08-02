@@ -48,9 +48,20 @@ const Profile = ({ search, setSearch }) => {
   // const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
-  const [following, setFollwing] = useState([]);
-  const [followers, setFollwers] = useState([]);
+
+  // const [followers, setFollwers] = useState([]);
   const navigate = useNavigate();
+
+  const getNFTlikeListing = async () => {
+    const response = await apis.getLikeNFTListing(userData?.id)
+    setLikedNfts(response?.data?.data)
+    console.log(response, 'other-users');
+  }
+
+  useEffect(() => {
+    getNFTlikeListing()
+  }, []);
+
 
   let likedNftsFromDB = [];
 
@@ -333,8 +344,7 @@ const Profile = ({ search, setSearch }) => {
       console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
-      const collectionImages = response?.data?.data?.media[0]?.original_url;
-      // console.log('response' , response.data.data.media[0].original_url);
+      const collectionImages = response?.data?.data?.media?.[0]?.original_url;
 
       const metaData = await nftContract.tokenURI(id);
 
@@ -541,29 +551,20 @@ const Profile = ({ search, setSearch }) => {
     return response.data.data;
   };
 
-  const getFollowingList = async () => {
-    const response = await apis.getFollowingList();
-    if (response.status) {
-      console.log(response?.data?.data, "following");
-      setFollwing(response?.data?.data);
-    } else {
-      setFollwing("");
-    }
-  };
-  const getFollowersList = async () => {
-    const response = await apis.getFollowersList();
-    if (response.status) {
-      console.log(response.data.data, "followers");
-      setFollwers(response.data.data);
-    } else {
-      setFollwers("");
-    }
-  };
+
+  // const getFollowersList = async () => {
+  //   const response = await apis.getFollowersList();
+  //   if(response.status){
+  //   console.log(response.data.data, "followers");
+  //   setFollwers(response.data.data);
+  //   }else{
+  //     setFollwers('');
+  //   }
+  // };
 
   useEffect(() => {
     getLikedNfts();
-    getFollowingList();
-    getFollowersList();
+
   }, []);
 
   const onClose = useCallback(() => {
@@ -645,47 +646,114 @@ const Profile = ({ search, setSearch }) => {
     // Add more checkbox data objects as needed
   ];
 
+
   const [checkboxes, setCheckboxes] = useState(initialCheckboxData);
+  const [addingFanList, setAddingFanList] = useState([])
+
+
+  // const handleCheckboxChange = (id) => {
+  //     console.log(id,"ID")
+  //     followers.map((itemX)=>{
+
+  //       if(itemX?.user_id == id)
+  //      {     
+  //       // itemX?.is_check = true
+  //       return itemX?.is_check = true
+  //       // setFollwers((prevState)=>[...prevState, {...itemX,is_check : true}])
+  //      }
+  //      })
+  // }
+
 
   const handleCheckboxChange = (id) => {
-    setCheckboxes((prevCheckboxes) => {
-      const updatedCheckboxes = prevCheckboxes.map((checkbox) => {
-        if (checkbox.id === id) {
+    setFollwers((prevCheckboxes) => {
+      const updatedCheckboxes = prevCheckboxes.map((data) => {
+        if (data?.user_id === id) {
+          // Check if the user_id is already in the addingFanList
+          if (addingFanList.includes(id)) {
+            setAddingFanList((prev) => prev.filter((userId) => userId !== id));
+          } else {
+            setAddingFanList((prev) => [...prev, id]);
+          }
+          console.log(addingFanList, 'addingFanList');
+
           return {
-            ...checkbox,
-            checked: !checkbox.checked,
+            ...data,
+            is_check: !data.is_check,
           };
         }
-        return checkbox;
+        return data;
       });
 
       return updatedCheckboxes;
     });
   };
 
-  const checkAllCheckboxes = () => {
-    setCheckboxes((prevCheckboxes) => {
-      const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
-        ...checkbox,
-        checked: true,
-      }));
+  // const checkAllCheckboxes = (event) => {
+  //   if (!event.target.checked) {
+  //     setAddingFanList([])
+  //   }
+  //   if (event.target.checked) {
 
-      return updatedCheckboxes;
-    });
-  };
+  //     for (let i = 0; i < followers.length; i++) {
+  //       // fansArray.push(followers[i]?.user_id)
+  //       setAddingFanList((prev) => [...prev, followers[i]?.user_id]);
+  //     }
 
-  const postChatMeaage = async () => {
-    console.log("clicking");
-    const id = JSON.parse(localStorage.getItem("data"));
-    const user_id = id?.id;
-    const response = await apis.postCheckChatMessage({
-      sender_id: user_id,
-      receiver_id: "5",
-    });
+  //     setFollwers((prevCheckboxes) => {
+  //       const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
+  //         ...checkbox,
+  //         is_check: true,
+  //       }));
+
+  //       return updatedCheckboxes;
+  //     });
+
+
+  //   } else {
+  //     setAddingFanList([])
+  //     console.log(addingFanList);
+  //   }
+
+  //   setFollwers((prevCheckboxes) => {
+  //     const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
+  //       ...checkbox,
+  //       is_check: false,
+  //     }));
+
+  //     return updatedCheckboxes;
+  //   });
+
+
+  // };
+
+  let [followers, setFollwers] = useState([]);
+  const getFollowersList = async () => {
+    const response = await apis.getFollowersList();
     if (response.status) {
-      window.location.replace("http://localhost:5173/chat/5");
+      console.log(response.data.data, "followers");
+      setFollwers(response.data.data);
+    } else {
+      setFollwers('');
     }
   };
+
+  useEffect(() => {
+    getFollowersList()
+  }, [])
+
+  const addFans = async () =>{
+    if(addingFanList.length > 0){
+      const response = await apis.postUserFans({fan_by : userData?.id , fan_to_array : addingFanList })
+      if (response.status) {
+        setAddingFanList([])
+        getFollowersList()
+      }
+    }
+    else{
+      console.log('empty');
+    }
+  }
 
   return (
     <>
@@ -758,34 +826,24 @@ const Profile = ({ search, setSearch }) => {
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
-                  <div
-                    className="message-btn"
-                    onClick={() => {
-                      // postChatMeaage();
-                    }}
-                  >
-                    {/* <button>
-                      <BsFillEnvelopeFill />
-                      MESSAGE
-                    </button> */}
-                  </div>
+
                 </div>
               </div>
               <div className="row">
                 <div className="profile-tabs">
+
                   <button
                     className={`${tabs === 0 ? "active" : ""}`}
-                    onClick={() => setTabs(0)}
-                  >
-                    Gallery
-                  </button>
-                  <button
-                    className={`${tabs === 1 ? "active" : ""}`}
                     onClick={() => setTabs(1)}
                   >
                     Collection
                   </button>
-
+                  <button
+                    className={`${tabs === 1 ? "active" : ""}`}
+                    onClick={() => setTabs(0)}
+                  >
+                    Gallery
+                  </button>
                   <button
                     className={`${tabs === 2 ? "active" : ""}`}
                     onClick={() => setTabs(2)}
@@ -814,12 +872,8 @@ const Profile = ({ search, setSearch }) => {
               </div>
               {/* <button onClick={testFans}>Test Fans</button> */}
               <div className="profile-buy-card">
+
                 {tabs === 0 && (
-                  <>
-                    <Gallery />
-                  </>
-                )}
-                {tabs === 1 && (
                   <>
                     <div className="row">
                       <div className="Collection-tabs">
@@ -879,22 +933,14 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
+                {tabs === 1 && (
+                  <>
+                    <Gallery />
+                  </>
+                )}
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {/* {nftListAuction.map((item) => (
-                        <NewItemCard
-                          key={item.id}
-                          id={item.id}
-                          title={item?.title}
-                          image={nft}
-                          price={item?.price}
-                          highestBid={item?.highestBid}
-                          isLive={item?.isLive}
-                          endTime={item?.endTime}
-                          userAddress
-                        />
-                      ))} */}
                       {userNFTs.map((item) => (
                         <MyNftCard
                           onOpen={onOpen}
@@ -955,7 +1001,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                            <Followers data={followers} />
+                            <Followers />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
@@ -966,7 +1012,7 @@ const Profile = ({ search, setSearch }) => {
                           </>
                         ) : (
                           <>
-                            <Following data={following} />
+                            <Following />
                             {/* <Follow followed={false} />
                             <Follow followed={false} />
                             <Follow followed={false} />
@@ -981,14 +1027,6 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
-                    <Fan />
-                    <Fan />
-                    <Fan />
-                    <Fan />
-                    <Fan />
-                    <Fan />
-                    <Fan />
-                    <Fan />
                     <Fan />
 
                     <div
@@ -1104,16 +1142,55 @@ const Profile = ({ search, setSearch }) => {
                             <div className="line-1-selector">
                               <div>No.</div>
                               <div>
-                                Select All{" "}
+                                {/* Select All{" "}
                                 <input
                                   onClick={checkAllCheckboxes}
                                   className="check-all-fans"
                                   type="checkbox"
-                                />{" "}
+                                />{" "} */}
                               </div>
                             </div>
                             <div className="Address-holder">
-                              {checkboxes.map((checkbox, Index) => (
+                              {followers.map((data, Index) => (
+                                <div
+                                  key={Index}
+                                  className="follower-in-fan-list"
+                                >
+                                  <div className="inner">
+                                    <div className="num">{Index + 1}</div>
+                                    <div className="inner2">
+                                      <div className="img-holder">
+                                        <img
+                                          src={data?.profile_image}
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div className="Text-follower-fan">
+                                        {data?.username} <br />{" "}
+                                        <span>
+                                          {" "}
+                                          {
+                                            data?.count_follower
+                                          } Followers{" "}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <input
+                                      checked={data?.is_check}
+                                      onChange={() =>
+                                        handleCheckboxChange(data?.user_id)
+                                      }
+                                      className="separate-checkbox-follower"
+                                      type="checkbox"
+                                      name=""
+                                      id=""
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                              {/* {checkboxes.map((checkbox, Index) => (
                                 <div
                                   key={checkbox.id}
                                   className="follower-in-fan-list"
@@ -1151,7 +1228,7 @@ const Profile = ({ search, setSearch }) => {
                                     />
                                   </div>
                                 </div>
-                              ))}
+                              ))} */}
                             </div>
                             <div className="popUp-btn-group">
                               <div
@@ -1165,7 +1242,7 @@ const Profile = ({ search, setSearch }) => {
                                   Cancel
                                 </div>
                               </div>
-                              <div className="button-styling btnCC">Add</div>
+                              <div className="button-styling btnCC" onClick={addFans}>Add</div>
                             </div>
                           </div>
                         </div>

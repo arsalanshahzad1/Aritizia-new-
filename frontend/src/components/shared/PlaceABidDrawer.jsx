@@ -353,12 +353,12 @@ const PlaceABidDrawer = ({
     // console.log("auctionData", auctionData);
     // console.log("startTime", auctionData.startTime.toString());
 
-    let startTime = auctionData.startTime.toString();
-    let highestBidd = auctionData.highestBid.toString();
-    let endTime = auctionData.endTime.toString();
-    let seller = auctionData.seller.toString();
+    let startTime = auctionData?.startTime.toString();
+    let highestBidd = auctionData?.highestBid.toString();
+    let endTime = auctionData?.endTime.toString();
+    let seller = auctionData?.seller.toString();
     seller = seller.toLowerCase();
-    let highestBidder = auctionData.highestBidder.toString();
+    let highestBidder = auctionData?.highestBidder.toString();
     highestBidder = highestBidder.toLowerCase();
     userAddress = userAddress.toLowerCase();
     let currentTime = Date.now();
@@ -440,7 +440,7 @@ const PlaceABidDrawer = ({
     setAuctionStatus(getStatusOfAuction);
 
     let highestBid = ethers.utils.formatEther(
-      auctionData.highestBid.toString()
+      auctionData?.highestBid.toString()
     );
 
     // let startTime = auctionData.startTime.toString();
@@ -631,14 +631,11 @@ const PlaceABidDrawer = ({
 
     let auctionData = await marketplaceContract._idToAuction(id);
 
-    console.log("auctionData.startTime  ", auctionData.startTime.toString());
-    console.log("auctionData.endTime  ", auctionData.endTime.toString());
-
     let highestBid = ethers.utils.formatEther(
       auctionData.highestBid.toString()
     );
 
-    let basePrice = ethers.utils.formatEther(auctionData.basePrice.toString());
+    let basePrice = ethers.utils.formatEther(auctionData?.basePrice.toString());
 
     let priceETH = Number(highestBid);
     console.log("priceETH", priceETH);
@@ -696,22 +693,9 @@ const PlaceABidDrawer = ({
       auctionData.highestBid.toString()
     );
 
-    let startTime = auctionData.startTime.toString();
+    let startTime = auctionData?.startTime.toString();
 
-    let endTime = auctionData.endTime.toString();
-
-    console.log("ooo startTime ", startTime);
-    console.log("ooo endTime ", endTime);
-    console.log("ooo block.timestamp ", time.toString());
-    console.log("ooo Time left", +endTime - +time.toString());
-
-    console.log("aaa highestBid", highestBid);
-    console.log("aaa highestBidder", auctionData.highestBidder);
-    console.log("aaa seller", auctionData.seller);
-
-    console.log("auctionData.seller", auctionData.seller);
-    console.log("structData.seller", structData.seller);
-    console.log("structData.owner", structData.owner);
+    let endTime = auctionData?.endTime.toString();
 
     const unixTimestamp = Date.now();
 
@@ -914,7 +898,6 @@ const PlaceABidDrawer = ({
                       height: "100%",
                     }}
                   >
-                    {/* <Chart options={data.options} series={data.series} type="line" height={400} /> */}
                     {status.value === "Monthly" ? (
                       <ChartForEarning data={Monthly_data} />
                     ) : (

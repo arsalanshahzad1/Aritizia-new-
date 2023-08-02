@@ -167,14 +167,8 @@ const LandingPage = ({ search, setSearch }) => {
 
       listingType = structData.listingType;
       let listed = structData.listed;
-      console.log("auctionData.owner", auctionData.owner);
-      console.log("auctionData.seller", auctionData.seller);
-      console.log("structData.seller", structData.seller);
-      console.log("structData.owner", structData.owner);
-      console.log("listed", listed);
 
       const price = ethers.utils.formatEther(structData.price.toString());
-      console.log("2222s22");
 
       axios
         .get(metaData)

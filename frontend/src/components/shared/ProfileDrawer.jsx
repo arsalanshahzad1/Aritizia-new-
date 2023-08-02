@@ -42,360 +42,7 @@ import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const Monthly_data = [
-  {
-    data: "Jan",
-    value: 0,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Feb",
-    value: 0.5,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Mar",
-    value: 0.85,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Apr",
-    value: 0.98,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "May",
-    value: 0.45,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "June",
-    value: 0.43,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "July",
-    value: 0.41,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Aug",
-    value: 0.52,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Sep",
-    value: 0.54,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Oct",
-    value: 0.85,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Nov",
-    value: 0.48,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Dec",
-    value: 0,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-];
-const Weekly_data = [
-  {
-    data: "Jan",
-    value: 5,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Feb",
-    value: 2.5,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Mar",
-    value: 9.85,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Apr",
-    value: 2.98,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "May",
-    value: 4.45,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "June",
-    value: 6.43,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "July",
-    value: 3.41,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Aug",
-    value: 2.52,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Sep",
-    value: 4.54,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Oct",
-    value: 0.85,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Nov",
-    value: 0.48,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: "Dec",
-    value: 0,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-];
-const Daily_data = [
-  {
-    data: 1,
-    value: 0,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 2,
-    value: 0,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 3,
-    value: 0,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 4,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 5,
-    value: 3,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 6,
-    value: 4,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 7,
-    value: 5,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 8,
-    value: 6,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 9,
-    value: 5,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 10,
-    value: 4,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 11,
-    value: 3,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 12,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 13,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 14,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 15,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 16,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 17,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 18,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 19,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 20,
-    value: 2,
-    Average_price: "0.62 ETH",
-    Num_sales: "1",
-    Date: "May 07 at 5:00 PM",
-  },
-  {
-    data: 21,
-    value: 2,
-  },
-  {
-    data: 22,
-    value: 2,
-  },
-  {
-    data: 23,
-    value: 2,
-  },
-  {
-    data: 24,
-    value: 2,
-  },
-  {
-    data: 25,
-    value: 2,
-  },
-  {
-    data: 26,
-    value: 2,
-  },
-  {
-    data: 27,
-    value: 2,
-  },
-  {
-    data: 28,
-    value: 2,
-  },
-  {
-    data: 29,
-    value: 2,
-  },
-  {
-    data: 30,
-    value: 2,
-  },
-];
+
 
 function ProfileDrawer({
   isVisible,
@@ -648,9 +295,6 @@ function ProfileDrawer({
     console.log("discountedEth ooo", discountedEth);
 
     const structData = await marketplaceContract._idToNFT(id);
-    console.log("id", id);
-    console.log("structData.seller", structData.seller);
-    console.log("userAddress", userAddress);
 
     let checkFan = await marketplaceContract.checkFan(id);
 
@@ -830,9 +474,357 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
-    setNftDetails(response?.data?.data);
-    console.log(response.data.data, "new response");
-  };
+    setNftDetails(response?.data?.data)
+  }
+  const Monthly_data = [
+    {
+      data: "Jan",
+      value: nftDetails?.allMonths_sale?.[0],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Feb",
+      value: nftDetails?.allMonths_sale?.[1],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Mar",
+      value: nftDetails?.allMonths_sale?.[2],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Apr",
+      value: nftDetails?.allMonths_sale?.[3],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "May",
+      value: nftDetails?.allMonths_sale?.[4],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "June",
+      value: nftDetails?.allMonths_sale?.[5],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "July",
+      value: nftDetails?.allMonths_sale?.[6],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Aug",
+      value: nftDetails?.allMonths_sale?.[7],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Sep",
+      value: nftDetails?.allMonths_sale?.[8],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Oct",
+      value: nftDetails?.allMonths_sale?.[9],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Nov",
+      value: nftDetails?.allMonths_sale?.[10],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "Dec",
+      value: nftDetails?.allMonths_sale?.[11],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+  ];
+  const Weekly_data = [
+    {
+      data: "1",
+      value: nftDetails?.lastWeekDays_sale?.[0],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "2",
+      value: nftDetails?.lastWeekDays_sale?.[1],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "3",
+      value: nftDetails?.lastWeekDays_sale?.[2],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "4",
+      value: nftDetails?.lastWeekDays_sale?.[3],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "5",
+      value: nftDetails?.lastWeekDays_sale?.[4],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "6",
+      value: nftDetails?.lastWeekDays_sale?.[5],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: "7",
+      value: nftDetails?.lastWeekDays_sale?.[6],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    }
+  ];
+  const Daily_data = [
+    {
+      data: 1,
+      value: nftDetails?.lastMonthDays_sale?.[0],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 2,
+      value: nftDetails?.lastMonthDays_sale?.[1],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 3,
+      value: nftDetails?.lastMonthDays_sale?.[2],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 4,
+      value: nftDetails?.lastMonthDays_sale?.[3],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 5,
+      value: nftDetails?.lastMonthDays_sale?.[4],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 6,
+      value: nftDetails?.lastMonthDays_sale?.[5],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 7,
+      value: nftDetails?.lastMonthDays_sale?.[6],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 8,
+      value: nftDetails?.lastMonthDays_sale?.[7],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 9,
+      value: nftDetails?.lastMonthDays_sale?.[8],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 10,
+      value: nftDetails?.lastMonthDays_sale?.[9],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 11,
+      value: nftDetails?.lastMonthDays_sale?.[10],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 12,
+      value: nftDetails?.lastMonthDays_sale?.[11],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 13,
+      value: nftDetails?.lastMonthDays_sale?.[12],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 14,
+      value: nftDetails?.lastMonthDays_sale?.[13],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 15,
+      value: nftDetails?.lastMonthDays_sale?.[14],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 16,
+      value: nftDetails?.lastMonthDays_sale?.[15],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 17,
+      value: nftDetails?.lastMonthDays_sale?.[16],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 18,
+      value: nftDetails?.lastMonthDays_sale?.[17],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 19,
+      value: nftDetails?.lastMonthDays_sale?.[18],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 20,
+      value: nftDetails?.lastMonthDays_sale?.[19],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 21,
+      value: nftDetails?.lastMonthDays_sale?.[20],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 22,
+      value: nftDetails?.lastMonthDays_sale?.[21],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 23,
+      value: nftDetails?.lastMonthDays_sale?.[22],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 24,
+      value: nftDetails?.lastMonthDays_sale?.[23],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 25,
+      value: nftDetails?.lastMonthDays_sale?.[24],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 26,
+      value: nftDetails?.lastMonthDays_sale?.[25],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 27,
+      value: nftDetails?.lastMonthDays_sale?.[26],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 28,
+      value: nftDetails?.lastMonthDays_sale?.[27],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 29,
+      value: nftDetails?.lastMonthDays_sale?.[28],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: 30,
+      value: nftDetails?.lastMonthDays_sale?.[29],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+  ];
   useEffect(() => {
     if (isVisible) {
       getNFTDetailByNFTTokenId();
@@ -892,7 +884,6 @@ function ProfileDrawer({
                       height: "100%",
                     }}
                   >
-                    {/* <Chart options={data.options} series={data.series} type="line" height={400} /> */}
                     {status.value === "Monthly" ? (
                       <ChartForEarning data={Monthly_data} />
                     ) : (
@@ -934,7 +925,7 @@ function ProfileDrawer({
                     </span>
                   </div>
                   <div onClick={() => postNFTLike()}>
-                    {likeAndViewData.is_liked == 0 ? (
+                    {likeAndViewData?.is_liked == 0 ? (
                       <AiOutlineHeart />
                     ) : (
                       <AiFillHeart style={{ fill: "#2636d9" }} />

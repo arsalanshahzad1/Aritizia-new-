@@ -57,11 +57,49 @@ const OtherProfile = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData.wallet_address;
 
-  const getOtherUsersDetails = async (address) => {
-    const response = await apis.getOtherUser(address);
-    setUserDetails(response?.data?.data);
-    console.log(response, "other-users");
-  };
+  // const getOtherUsersDetails = async (address) => {
+  //   const response = await apis.getOtherUser(address);
+  //   setUserDetails(response?.data?.data);
+  //   console.log(response, "other-users");
+   
+
+    const getNFTlikeListing = async (id) =>{
+      const response = await apis.getLikeNFTListing(id)
+      setLikedNfts(response?.data?.data)
+      console.log(response  , 'other-users');
+    }
+
+    const getOtherUsersDetails = async (address) =>{
+      const response = await apis.getOtherUser(address);
+      setUserDetails(response?.data?.data)
+      getNFTlikeListing(response?.data?.data?.id)
+      }
+
+    
+    console.log("state",state.address)
+    useEffect(() =>{
+         getOtherUsersDetails(state?.address)
+         
+  } , [])
+
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+
+  //   if (chainId !== 31337) {
+  //     window.alert("Change the network to Sepolia");
+  //     throw new Error("Change network to Sepolia");
+  //   }
+
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+
+  //     return signer;
+  //   }
+
+  //   return web3Provider;
+  // };
 
   console.log("state", state.address);
   useEffect(() => {
@@ -287,6 +325,8 @@ const OtherProfile = ({ search, setSearch }) => {
     });
   };
 
+
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -317,9 +357,11 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  <div onClick={followOther} style={{ cursor: "pointer" }}>
-                    Follow
-                  </div>
+                  {userDetails.is_follow == 0 ?
+                  <div onClick={followOther} style={{cursor : 'pointer'}}>Follow</div>
+                  :  
+                  <div onClick={followOther} style={{cursor : 'pointer'}}>Unfollow</div>
+                }
                   {/* <div>Following</div> */}
                   <div>Followers {userDetails?.followers?.[0]?.follow_by}</div>
                 </div>

@@ -8,9 +8,6 @@ const ChatItem = ({ data, activeUserId }) => {
         navigate(`/chat/${id}`)
     }
 
-    console.log(data.user_id, 'data?.chat_by');
-    console.log(activeUserId, 'activeUserId');
-
     return (
         <div className={`chat-item ${activeUserId == data?.user_id ? 'active' : ''} ${data?.unseen_count > 0 && activeUserId != data?.user_id ? 'un_seen' : ''}`}
             onClick={() => { navigateToChat(data?.user_id) }}
