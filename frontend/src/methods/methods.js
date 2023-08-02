@@ -10,44 +10,43 @@ const getAddress = async () => {
   const accounts = await window.ethereum.request({
     method: "eth_requestAccounts",
   });
-  console.log("accounts", accounts);
+  // console.log("accounts", accounts);
 
   postWalletAddress(accounts[0]);
 
   return accounts[0];
 };
 const postWalletAddress = async (address) => {
-  console.log("postWalletAddress");
+  // console.log("postWalletAddress");
   if (localStorage.getItem("data")) {
     let storedWallet = JSON.parse(localStorage.getItem("data")).wallet_address;
-    console.log("check1");
-    console.log("sss storedWallet", storedWallet);
-    console.log("sss address", address);
+    // console.log("check1");
+    // console.log("sss storedWallet", storedWallet);
+    // console.log("sss address", address);
     storedWallet = storedWallet.toLowerCase();
     address = address.toLowerCase();
 
-    // if (localStorage.getItem("data")) {
     if (storedWallet == address) {
-      console.log("check2");
-      return console.log("data is avaliable");
+      // console.log("check2");
+      // return console.log("data is avaliable");
     } else {
-      console.log("check1");
+      // console.log("check1");
       const response = await apis.postWalletAddress({
         wallet_address: address,
       });
       localStorage.removeItem("data");
-      console.log("response", response);
+      // console.log("response", response);
       localStorage.setItem("data", JSON.stringify(response?.data?.data));
-      console.log("check3");
+      // console.log("check3");
       window.location.reload();
     }
   } else {
-    console.log("check4");
+    // console.log("check4");
     const response = await apis.postWalletAddress({
       wallet_address: address,
     });
     localStorage.setItem("data", JSON.stringify(response?.data?.data));
-    console.log("check5");
+    // console.log("check5");
     window.location.reload();
   }
 };

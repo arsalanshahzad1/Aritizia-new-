@@ -42,8 +42,6 @@ import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-
-
 function ProfileDrawer({
   isVisible,
   onClose,
@@ -78,11 +76,8 @@ function ProfileDrawer({
     getPriceInUSD();
   }, [isVisible]);
 
-
-
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData.wallet_address;
-
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -354,14 +349,15 @@ function ProfileDrawer({
     console.log("www value", value);
     console.log("www sellerPercent", sellerPercent);
     console.log("www buyerPercent", buyerPercent);
-    console.log("www paymentMethod", paymentMethod.value);
+    console.log("www paymentMethod.value", paymentMethod.value);
+    console.log("www paymentMethod", paymentMethod);
     console.log("www id", id);
     console.log("www address", NFT_CONTRACT_ADDRESS.address);
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod.value,
+        paymentMethod,
         id,
         sellerPercent, //  must be multiple of 10 of the users percent
         buyerPercent, // must be multiple of 10 of the users percent
@@ -437,19 +433,24 @@ function ProfileDrawer({
 
     // }
 
-    // console.log("paymentmethod", paymentMethod);
-    // console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
-    // console.log("amountUSD typeof", typeof amountUSD);
-    // console.log("amountUSD", amountUSD);
-    // console.log("amount", amount);
-    // console.log("amountInWei typeof", amountInWei);
+    console.log("paymentmethod", paymentMethod);
+    console.log("paymentmethod.value", paymentMethod.value);
+    console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
+    console.log("amountUSD typeof", typeof amountUSD);
+    console.log("amountUSD", amountUSD);
+    console.log("amount", amount);
+    console.log("id", id);
+    console.log("sellerPercent", sellerPercent);
+    console.log("buyerPercent", buyerPercent);
+    console.log("amountInWei  ", amountInWei);
+    console.log("amountInWei typeof ", typeof amountInWei);
 
     // console.log("Check", check);
 
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod.value,
+        paymentMethod,
         id,
         amountInWei,
         sellerPercent, // must be multiple of 10 of the users percent
@@ -474,8 +475,8 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
-    setNftDetails(response?.data?.data)
-  }
+    setNftDetails(response?.data?.data);
+  };
   const Monthly_data = [
     {
       data: "Jan",
@@ -611,7 +612,7 @@ function ProfileDrawer({
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
-    }
+    },
   ];
   const Daily_data = [
     {

@@ -139,99 +139,109 @@ const LandingPage = ({ search, setSearch }) => {
     console.log("demo", demo);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
+    console.log("mintedTokens", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-      console.log("idd", id);
-      const metaData = await nftContract.tokenURI(id);
+      console.log("YESS", id);
 
-      const structData = await marketplaceContract._idToNFT(id);
+      let firstOwner = mintedTokens[i].firstOwner;
+      if (firstOwner != "0x0000000000000000000000000000000000000000") {
+        console.log("idd", id);
+        const metaData = await nftContract.tokenURI(id);
 
-      const fanNftData = await marketplaceContract._idToNFT2(id);
+        const structData = await marketplaceContract._idToNFT(id);
 
-      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        console.log("structData", structData);
+        console.log("firstownerr", mintedTokens[i].firstOwner);
 
-      setDiscountPrice(discountOnNFT);
+        const fanNftData = await marketplaceContract._idToNFT2(id);
 
-      console.log("discountOnNFT", discountOnNFT);
-      console.log("discountOnNFT", typeof discountOnNFT);
+        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
-      let auctionData = await marketplaceContract._idToAuction(id);
+        setDiscountPrice(discountOnNFT);
 
-      let highestBid = ethers.utils.formatEther(
-        auctionData.highestBid.toString()
-      );
+        console.log("discountOnNFT", discountOnNFT);
+        console.log("discountOnNFT", typeof discountOnNFT);
 
-      listingType = structData.listingType;
-      let listed = structData.listed;
+        let auctionData = await marketplaceContract._idToAuction(id);
 
-      const price = ethers.utils.formatEther(structData.price.toString());
+        let highestBid = ethers.utils.formatEther(
+          auctionData.highestBid.toString()
+        );
 
-      axios
-        .get(metaData)
-        .then((response) => {
-          const meta = response.data;
-          let data = JSON.stringify(meta);
+        listingType = structData.listingType;
+        let listed = structData.listed;
 
-          data = data.slice(2, -5);
-          data = data.replace(/\\/g, "");
-          data = JSON.parse(data);
+        const price = ethers.utils.formatEther(structData.price.toString());
+        console.log("priceee", price);
 
-          console.log("Dataa", data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
-          const crypto = data.crypto;
-          const title = data.title;
-          const image = data.image;
-          const royalty = data.royalty;
-          const description = data.description;
-          const collection = data.collection;
-          // console.log("data.listingType", typeof data.listingType);
+        axios
+          .get(metaData)
+          .then((response) => {
+            const meta = response.data;
+            let data = JSON.stringify(meta);
 
-          console.log("listingType", listingType);
+            data = data.slice(2, -5);
+            data = data.replace(/\\/g, "");
+            data = JSON.parse(data);
 
-          if (listingType === 0) {
-            const nftData = {
-              id: id, //
-              title: title,
-              image: image,
-              price: price,
-              crypto: crypto,
-              royalty: royalty,
-              description: description,
-              collection: collection,
-            };
+            console.log("Dataa", data);
+            // Extracting values using dot notation
+            // const price = data.price;
+            // listingType = data.listingType;
+            const crypto = data.crypto;
+            const title = data.title;
+            const image = data.image;
+            const royalty = data.royalty;
+            const description = data.description;
+            const collection = data.collection;
+            // console.log("data.listingType", typeof data.listingType);
 
-            myNFTs.push(nftData);
-            setNftListFP(myNFTs);
-          } else if (listingType === 1) {
-            const nftData = {
-              id: id, //
-              title: title,
-              image: image,
-              price: price,
-              paymentMethod: crypto,
-              basePrice: price,
-              startTime: auctionData.startTime.toString(),
-              endTime: auctionData.endTime.toString(),
-              highestBid: highestBid,
-              highestBidder: auctionData.highestBidder.toString(),
-              // isLive: auctionData.isLive.toString(),
-              seller: auctionData.seller.toString(),
-            };
+            console.log("listingType", listingType);
 
-            myAuctions.push(nftData);
-            setNftListAuction(myAuctions);
-          }
-        })
+            if (listingType === 0) {
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+              };
 
-        .catch((error) => {
-          console.error("Error fetching metadata:", error);
-        });
+              myNFTs.push(nftData);
+              setNftListFP(myNFTs);
+            } else if (listingType === 1) {
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                paymentMethod: crypto,
+                basePrice: price,
+                startTime: auctionData.startTime.toString(),
+                endTime: auctionData.endTime.toString(),
+                highestBid: highestBid,
+                highestBidder: auctionData.highestBidder.toString(),
+                // isLive: auctionData.isLive.toString(),
+                seller: auctionData.seller.toString(),
+              };
+
+              myAuctions.push(nftData);
+              setNftListAuction(myAuctions);
+            }
+          })
+
+          .catch((error) => {
+            console.error("Error fetching metadata:", error);
+          });
+      }
     }
     // console.log("nftListFPmain", myNFTs);
     // console.log("nftListAuctionmain", myAuctions);

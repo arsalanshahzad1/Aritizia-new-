@@ -177,6 +177,7 @@ const Multiple = ({ search, setSearch }) => {
     // console.log("file in uploadTOIpfs", file);
     if (typeof imageList !== "undefined") {
       console.log("uploadToIPFS1");
+
       for (let i = 0; i < imageList.length; i++) {
         // try {
         //   console.log("uploadToIPFS2");
@@ -193,10 +194,13 @@ const Multiple = ({ search, setSearch }) => {
         // }
         try {
           console.log("uploadToIPFS2");
+          console.log("imageListtt", imageList);
           console.log("this is imageList", i, imageList[i]);
+          console.log("selectedUploadNFTImage", selectedUploadNFTImage);
 
-          const result = await uploadFileToIPFS(imageList[i]);
-          console.log("result", result);
+          const result = await uploadFileToIPFS(selectedUploadNFTImage[i]);
+          console.log("resulttt", result);
+          console.log("resulttt", result.pinataURL);
 
           // Extract the IPFS hash from the pinataURL
           const ipfsHash = result.pinataURL.split("/").pop();
@@ -620,9 +624,9 @@ const Multiple = ({ search, setSearch }) => {
         });
         // alert("NFTs minted");
 
-        setTimeout(() => {
-          navigate("/profile");
-        }, 3000);
+        // setTimeout(() => {
+        //   navigate("/profile");
+        // }, 3000);
       } else {
         console.log("Nhi mili");
       }
@@ -644,7 +648,9 @@ const Multiple = ({ search, setSearch }) => {
       const response = await apis.postListNft(listToPost.current[i]);
       console.log("response", response);
     }
-    navigate("/profile");
+    setTimeout(() => {
+      navigate("/profile");
+    }, 3000);
   };
 
   const [file, setFile] = useState(null);
@@ -909,12 +915,22 @@ const Multiple = ({ search, setSearch }) => {
     fileInputRef2.current.click();
   };
 
+  const [selectedUploadNFTImage, setSelectedUploadNFTImage] = useState([]);
+
   const handleFileUpload = (event) => {
     const files = event.target.files;
     const imageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
     );
     setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      setSelectedUploadNFTImage((prevState) => [...prevState, file]);
+    }
+    console.log("selectedUploadNFTImage", selectedUploadNFTImage);
+    console.log("selectedUploadNFTImage[0]", selectedUploadNFTImage[0]);
   };
 
   const handleRemoveImage = (index) => {
@@ -1383,7 +1399,7 @@ const Multiple = ({ search, setSearch }) => {
                               <div
                                 onClick={() => {
                                   setcollectionFinalized(true);
-                                  notify();
+                                  // notify();
                                 }}
                                 className="browse-btn my-5 button-styling"
                               >

@@ -53,15 +53,14 @@ const Profile = ({ search, setSearch }) => {
   const navigate = useNavigate();
 
   const getNFTlikeListing = async () => {
-    const response = await apis.getLikeNFTListing(userData?.id)
-    setLikedNfts(response?.data?.data)
-    console.log(response, 'other-users');
-  }
+    const response = await apis.getLikeNFTListing(userData?.id);
+    setLikedNfts(response?.data?.data);
+    console.log(response, "other-users");
+  };
 
   useEffect(() => {
-    getNFTlikeListing()
+    getNFTlikeListing();
   }, []);
-
 
   let likedNftsFromDB = [];
 
@@ -300,11 +299,12 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const getMyListedNfts = async () => {
+    console.log("aaaa");
+    console.log("Connected wallet", userAddress);
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
     const provider = await getProviderOrSigner();
-    // console.log("Connected wallet", userAddress);
     console.log("111111");
     // console.log("provider", provider);
 
@@ -537,7 +537,7 @@ const Profile = ({ search, setSearch }) => {
   useEffect(() => {
     getAddress();
     getProviderOrSigner();
-  }, [followers]);
+  }, []);
 
   useEffect(() => {
     // connectWallet();
@@ -551,7 +551,6 @@ const Profile = ({ search, setSearch }) => {
     return response.data.data;
   };
 
-
   // const getFollowersList = async () => {
   //   const response = await apis.getFollowersList();
   //   if(response.status){
@@ -564,7 +563,6 @@ const Profile = ({ search, setSearch }) => {
 
   useEffect(() => {
     getLikedNfts();
-
   }, []);
 
   const onClose = useCallback(() => {
@@ -646,24 +644,21 @@ const Profile = ({ search, setSearch }) => {
     // Add more checkbox data objects as needed
   ];
 
-
   const [checkboxes, setCheckboxes] = useState(initialCheckboxData);
-  const [addingFanList, setAddingFanList] = useState([])
-
+  const [addingFanList, setAddingFanList] = useState([]);
 
   // const handleCheckboxChange = (id) => {
   //     console.log(id,"ID")
   //     followers.map((itemX)=>{
 
   //       if(itemX?.user_id == id)
-  //      {     
+  //      {
   //       // itemX?.is_check = true
   //       return itemX?.is_check = true
   //       // setFollwers((prevState)=>[...prevState, {...itemX,is_check : true}])
   //      }
   //      })
   // }
-
 
   const handleCheckboxChange = (id) => {
     setFollwers((prevCheckboxes) => {
@@ -675,7 +670,7 @@ const Profile = ({ search, setSearch }) => {
           } else {
             setAddingFanList((prev) => [...prev, id]);
           }
-          console.log(addingFanList, 'addingFanList');
+          console.log(addingFanList, "addingFanList");
 
           return {
             ...data,
@@ -709,7 +704,6 @@ const Profile = ({ search, setSearch }) => {
   //       return updatedCheckboxes;
   //     });
 
-
   //   } else {
   //     setAddingFanList([])
   //     console.log(addingFanList);
@@ -724,36 +718,38 @@ const Profile = ({ search, setSearch }) => {
   //     return updatedCheckboxes;
   //   });
 
-
   // };
 
   let [followers, setFollwers] = useState([]);
+
   const getFollowersList = async () => {
     const response = await apis.getFollowersList();
     if (response.status) {
       console.log(response.data.data, "followers");
       setFollwers(response.data.data);
     } else {
-      setFollwers('');
+      setFollwers("");
     }
   };
 
   useEffect(() => {
-    getFollowersList()
-  }, [])
+    getFollowersList();
+  }, []);
 
-  const addFans = async () =>{
-    if(addingFanList.length > 0){
-      const response = await apis.postUserFans({fan_by : userData?.id , fan_to_array : addingFanList })
+  const addFans = async () => {
+    if (addingFanList.length > 0) {
+      const response = await apis.postUserFans({
+        fan_by: userData?.id,
+        fan_to_array: addingFanList,
+      });
       if (response.status) {
-        setAddingFanList([])
-        getFollowersList()
+        setAddingFanList([]);
+        getFollowersList();
       }
+    } else {
+      console.log("empty");
     }
-    else{
-      console.log('empty');
-    }
-  }
+  };
 
   return (
     <>
@@ -825,22 +821,19 @@ const Profile = ({ search, setSearch }) => {
                     <button>Copy</button>
                   </div>
                 </div>
-                <div className="col-lg-3 col-md-3 col-12 my-auto">
-
-                </div>
+                <div className="col-lg-3 col-md-3 col-12 my-auto"></div>
               </div>
               <div className="row">
                 <div className="profile-tabs">
-
                   <button
                     className={`${tabs === 0 ? "active" : ""}`}
-                    onClick={() => setTabs(1)}
+                    onClick={() => setTabs(0)}
                   >
                     Collection
                   </button>
                   <button
                     className={`${tabs === 1 ? "active" : ""}`}
-                    onClick={() => setTabs(0)}
+                    onClick={() => setTabs(1)}
                   >
                     Gallery
                   </button>
@@ -872,7 +865,6 @@ const Profile = ({ search, setSearch }) => {
               </div>
               {/* <button onClick={testFans}>Test Fans</button> */}
               <div className="profile-buy-card">
-
                 {tabs === 0 && (
                   <>
                     <div className="row">
@@ -933,12 +925,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 1 && (
-                  <>
-                    <Gallery />
-                  </>
-                )}
-                {tabs === 2 && (
+                {tabs === 0 && (
                   <>
                     <div className="row">
                       {userNFTs.map((item) => (
@@ -960,6 +947,12 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
+                {tabs === 1 && (
+                  <>
+                    <Gallery />
+                  </>
+                )}
+
                 {tabs === 3 && (
                   <>
                     <div className="row">
@@ -1160,18 +1153,13 @@ const Profile = ({ search, setSearch }) => {
                                     <div className="num">{Index + 1}</div>
                                     <div className="inner2">
                                       <div className="img-holder">
-                                        <img
-                                          src={data?.profile_image}
-                                          alt=""
-                                        />
+                                        <img src={data?.profile_image} alt="" />
                                       </div>
                                       <div className="Text-follower-fan">
                                         {data?.username} <br />{" "}
                                         <span>
                                           {" "}
-                                          {
-                                            data?.count_follower
-                                          } Followers{" "}
+                                          {data?.count_follower} Followers{" "}
                                         </span>
                                       </div>
                                     </div>
@@ -1242,7 +1230,12 @@ const Profile = ({ search, setSearch }) => {
                                   Cancel
                                 </div>
                               </div>
-                              <div className="button-styling btnCC" onClick={addFans}>Add</div>
+                              <div
+                                className="button-styling btnCC"
+                                onClick={addFans}
+                              >
+                                Add
+                              </div>
                             </div>
                           </div>
                         </div>

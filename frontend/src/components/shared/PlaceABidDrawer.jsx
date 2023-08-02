@@ -781,7 +781,10 @@ const PlaceABidDrawer = ({
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
-      USDPriceInWei
+      USDPriceInWei,
+      {
+        gasLimit: ethers.BigNumber.from("2000000"),
+      }
     );
 
     appprove.wait();
@@ -794,7 +797,7 @@ const PlaceABidDrawer = ({
     // console.log("paymentmethod", paymentMethod);
 
     const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, {
-      gasLimit: ethers.BigNumber.from("500000"),
+      gasLimit: ethers.BigNumber.from("2000000"),
     });
 
     // Wait for the transaction to be mined

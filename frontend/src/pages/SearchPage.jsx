@@ -17,10 +17,7 @@ import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../service";
 import { getAddress } from "../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../methods/walletManager";
+import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 const SearchPage = ({ search, setSearch }) => {
   const [status, setStatus] = useState({ value: "one", label: "New" });
@@ -376,15 +373,15 @@ const SearchPage = ({ search, setSearch }) => {
   //   // }
   // };
 
-  useEffect(() => {
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "sepolia",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-    }
-  }, [walletConnected]);
+  // useEffect(() => {
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "sepolia",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //   }
+  // }, [walletConnected]);
 
   useEffect(() => {}, [searchedNfts, nftListFP]);
 
