@@ -333,7 +333,7 @@ const Profile = ({ search, setSearch }) => {
 
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);
-
+    let NFTId = await getLikedNftsList();
     let myNFTs = [];
     let myAuctions = [];
     for (let i = 0; i < mintedTokens.length; i++) {
@@ -345,7 +345,10 @@ const Profile = ({ search, setSearch }) => {
       console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
+      console.log(response, 'responses');
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+      console.log(response?.data?.data?.media?.[0]?.original_url, 'responsess');
+      console.log(collectionImages, 'trrrr');
 
       const metaData = await nftContract.tokenURI(id);
 
@@ -406,15 +409,16 @@ const Profile = ({ search, setSearch }) => {
               image: image,
               price: price,
               basePrice: price,
+              collectionImages: collectionImages,
               endTime: auctionData.endTime.toString(),
               highestBid: highestBid,
               highestBidder: auctionData.highestBidder.toString(),
               seller: auctionData.seller.toString(),
               startTime: auctionData.startTime.toString(),
             };
-
             myAuctions.push(nftData);
             setNftListAuction(myAuctions);
+            console.log(nftListAuction , 'nftData');
           }
         })
 
@@ -425,22 +429,25 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const getMyNfts = async () => {
+    console.log('first')
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
     const provider = await getProviderOrSigner();
-
+    console.log('two')
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
-
+    console.log('three')
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
       NFT_CONTRACT_ABI.abi,
       provider
     );
+
+    console.log('four')
     const signer = provider.getSigner();
     const address = await signer.getAddress();
 
@@ -449,19 +456,27 @@ const Profile = ({ search, setSearch }) => {
     let listingType;
 
     let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
-
+    console.log('five')
     // let mintedTokens = [1, 4, 2];
     // console.log("mintedTokens", mintedTokens);
-
+    let NFTId = await getLikedNftsList();
     let myNFTs = [];
     // let myAuctions = [];
+    console.log(mintedTokens.length)
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-      // id = mintedTokens[i];
-      console.log("YESS", id);
-      console.log("mintedTokens[i].tokenId", mintedTokens[i].tokenId);
+      let collectionId;
+      collectionId = +mintedTokens[i].collectionId.toString();
+      console.log("YESSss", collectionId);
+
+      const response = await apis.getNFTCollectionImage(collectionId);
+      console.log(response.data, 'saad');
+      const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+      console.log(collectionImages, '');
       const metaData = await nftContract.tokenURI(id);
+
+      console.log(response.data, 'workig');
 
       const structData = await marketplaceContract._idToNFT(id);
 
@@ -499,6 +514,7 @@ const Profile = ({ search, setSearch }) => {
             royalty: royalty,
             description: description,
             collection: collection,
+            collectionImages: collectionImages,
           };
 
           myNFTs.push(nftData);
@@ -722,19 +738,29 @@ const Profile = ({ search, setSearch }) => {
   // };
 
   let [followers, setFollwers] = useState([]);
+  let [addFanlisting, setAddFanlisting] = useState([]);
 
   const getFollowersList = async () => {
     const response = await apis.getFollowersList();
     if (response.status) {
-      console.log(response.data.data, "followers");
       setFollwers(response.data.data);
     } else {
       setFollwers("");
     }
   };
+  const getFollowersForFan = async () => {
+    const response = await apis.getFollowersForFan();
+    if (response.status) {
+      console.log(response.data.data, "fan");
+      setAddFanlisting(response.data.data);
+    } else {
+      setAddFanlisting("");
+    }
+  };
 
   useEffect(() => {
     getFollowersList();
+    // getFollowersForFan('')
   }, []);
 
   const addFans = async () => {
@@ -943,6 +969,7 @@ const Profile = ({ search, setSearch }) => {
                           royalty={item?.royalty}
                           description={item?.description}
                           collection={item?.collection}
+                          collectionImages={item?.collectionImages}
                           userAddress
                         />
                       ))}
@@ -969,7 +996,7 @@ const Profile = ({ search, setSearch }) => {
                           royalty={item?.royalty}
                           description={item?.description}
                           collection={item?.collection}
-                          collectionImage={item?.collectionImage}
+                          collectionImages={item?.collectionImages}
                           userAddress
                         />
                       ))}
@@ -1025,7 +1052,7 @@ const Profile = ({ search, setSearch }) => {
                     <Fan />
 
                     <div
-                      onClick={() => setshowAddFanPopUp(1)}
+                      onClick={() => { setshowAddFanPopUp(1); getFollowersForFan() }}
                       className="Add-Fan-btn"
                     >
                       <svg
@@ -1146,40 +1173,46 @@ const Profile = ({ search, setSearch }) => {
                               </div>
                             </div>
                             <div className="Address-holder">
-                              {followers.map((data, Index) => (
-                                <div
-                                  key={Index}
-                                  className="follower-in-fan-list"
-                                >
-                                  <div className="inner">
-                                    <div className="num">{Index + 1}</div>
-                                    <div className="inner2">
-                                      <div className="img-holder">
-                                        <img src={data?.profile_image} alt="" />
+                              {addFanlisting.length > 0 ?
+                                <>
+                                  {addFanlisting.map((data, Index) => (
+                                    <div
+                                      key={Index}
+                                      className="follower-in-fan-list"
+                                    >
+                                      <div className="inner">
+                                        <div className="num">{Index + 1}</div>
+                                        <div className="inner2">
+                                          <div className="img-holder">
+                                            <img src={data?.profile_image} alt="" />
+                                          </div>
+                                          <div className="Text-follower-fan">
+                                            {data?.username} <br />{" "}
+                                            <span>
+                                              {" "}
+                                              {data?.count_follower} Followers{" "}
+                                            </span>
+                                          </div>
+                                        </div>
                                       </div>
-                                      <div className="Text-follower-fan">
-                                        {data?.username} <br />{" "}
-                                        <span>
-                                          {" "}
-                                          {data?.count_follower} Followers{" "}
-                                        </span>
+                                      <div>
+                                        <input
+                                          checked={data?.is_check}
+                                          onChange={() =>
+                                            handleCheckboxChange(data?.user_id)
+                                          }
+                                          className="separate-checkbox-follower"
+                                          type="checkbox"
+                                          name=""
+                                          id=""
+                                        />
                                       </div>
                                     </div>
-                                  </div>
-                                  <div>
-                                    <input
-                                      checked={data?.is_check}
-                                      onChange={() =>
-                                        handleCheckboxChange(data?.user_id)
-                                      }
-                                      className="separate-checkbox-follower"
-                                      type="checkbox"
-                                      name=""
-                                      id=""
-                                    />
-                                  </div>
-                                </div>
-                              ))}
+                                  ))}
+                                </>
+                                :
+                                <div>List is Empty</div>
+                              }
                               {/* {checkboxes.map((checkbox, Index) => (
                                 <div
                                   key={checkbox.id}

@@ -94,6 +94,7 @@ const createBackendServer = (baseURL) => {
   const postCustomUserFans = async (body) => await api.post(`add-custom-user-fans`, body);
   const getFanList = async () => await api.get(`view-fan-list/${RealUserId}`);
   const getremovedFan = async (removingUserId) => await api.get(`remove-fan/${removingUserId}`);
+  const getFollowersForFan = async () => await api.get(`view-followers-for-fan/${RealUserId}`);
 
   const getSalesHistory = async () => await api.get(`sale-history/${RealUserId}`);
   const getPurchaseHistory = async () => await api.get(`purchase-history/${RealUserId}`);
@@ -142,6 +143,7 @@ const createBackendServer = (baseURL) => {
     postCustomUserFans,
     getFanList,
     getremovedFan,
+    getFollowersForFan,
 
     getSalesHistory,
     getPurchaseHistory

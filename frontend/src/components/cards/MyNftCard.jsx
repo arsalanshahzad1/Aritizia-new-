@@ -20,6 +20,7 @@ const MyNftCard = ({
   royalty,
   description,
   collection,
+  collectionImages
   // userAddress,
 }) => {
   console.log(royalty, "royalty");
@@ -131,7 +132,7 @@ const MyNftCard = ({
             </div>
             <div onClick={openDrawer2} className="bottom">
               <div className="nft-icon">
-                <img src={duck} alt="" />
+                <img src={collectionImages} alt="" />
 
                 <span className="checked-icon">
                   <img src={chack} alt="" />

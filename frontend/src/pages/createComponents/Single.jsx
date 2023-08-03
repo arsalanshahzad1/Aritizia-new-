@@ -846,7 +846,6 @@ const Single = ({ search, setSearch }) => {
                                 <div
                                   onClick={() => {
                                     setcollectionFinalized(true);
-                                    // notify();
                                   }}
                                   className="browse-btn my-5 button-styling"
                                 >
