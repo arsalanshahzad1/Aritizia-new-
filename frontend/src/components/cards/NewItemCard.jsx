@@ -14,12 +14,11 @@ const NewItemCard = ({
   endTime,
   description,
   // userAddress,
-  collectionImage
+  collectionImages
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [endDate, setEndDate] = useState("");
-
   highestBid = Number(highestBid).toFixed(2);
 
   const userData = JSON.parse(localStorage.getItem("data"));
@@ -84,7 +83,7 @@ const NewItemCard = ({
           <div className="detail-wrap">
             <div className="center-icon">
               <div className="icon">
-                <img src={collectionImage} alt="" />
+                <img src={collectionImages} alt="" />
                 <img src="/assets/images/chack.png" alt="" />
               </div>
             </div>

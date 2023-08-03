@@ -903,7 +903,9 @@ header .left img {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   border: 5px solid #FFF;
-  width: 66px;
+  width: 60px;
+  height: 60px;
+    object-fit: cover;
 }
 
 .new-item-card .detail-wrap .center-icon .icon img:last-child {
