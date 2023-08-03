@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Header from '../../pages/landingpage/Header'
 import { Navigate, useNavigate } from 'react-router-dom'
 import SocialShare from '../../components/shared/SocialShare'
@@ -7,9 +7,50 @@ import NewItemCard from '../../components/cards/NewItemCard'
 import BuyNow from '../../components/cards/BuyNow'
 import nft from '../../../public/assets/images/nft-big.png'
 import DashboardCard from '../DashboardComponents/DashboardCard'
+import adminApis from '../../service/adminIndex'
+import apis from '../../service/adminIndex'
+import { useLocation, useParams } from "react-router-dom";
+
 function User({ search, setSearch }) {
     const navigate = useNavigate()
+    const { id } = useParams();
+    console.log(id,"call");
     const [tabs, setTabs] = useState(0);
+    const [userDetails, setUserDetails] = useState('');
+    const [userLikedNfts, setUserLikedNfts] = useState('');
+    const [nftCollection, setNftCollection] = useState('');
+
+    const viewUserDetails = async (id) =>{
+        const response = await apis.viewUserDetails(id)
+        if(response.status){
+            setUserDetails(response?.data?.data)
+        }else{
+            setUserDetails([])
+        }
+    }
+    const viewUserLikedNfts = async (id) =>{
+        const response = await apis.viewUserLikedNfts(id)
+        if(response.status){
+            setUserLikedNfts(response?.data?.data)
+        }else{
+            setUserLikedNfts([])
+        }
+    }
+    const viewNftCollection = async (id) =>{
+        const response = await apis.viewNftCollection(id)
+        if(response.status){
+            nftCollection(response?.data?.data)
+        }else{
+            nftCollection([])
+        }
+    }
+
+    useEffect(() =>{
+        viewUserDetails(id)
+        viewUserLikedNfts(id)
+        viewNftCollection(id)
+    } , [])
+
     return (
         <div className='user'>
             <div className='back-btn'>
@@ -23,20 +64,41 @@ function User({ search, setSearch }) {
             <div>
                 <div className="profile" style={{ position: "relative" }}>
                     <div className="profile-first-section">
+                        {userDetails?.cover_image == null ?
                         <img
                             className="big-image margin-top-35px"
                             src="/assets/images/profile-1.png"
                             alt=""
                             width={"100%"}
                         />
+                        :
+                        <img
+                            className="big-image margin-top-35px"
+                            src={userDetails?.cover_image}
+                            alt=""
+                            width={"100%"}
+                        />
+
+                    }
                         <div className="user">
                             <div className="user-wrap">
+                                {userDetails?.profile_image == null ?
                                 <img
                                     className="user-pic"
-                                    src="/assets/images/user-pic.png"
+                                    src="/assets/images/user-none.png"
                                     alt=""
                                     width={"90%"}
                                 />
+                                :
+                                <img
+                                    className="user-pic"
+                                    src={userDetails?.profile_image}
+                                    alt=""
+                                    width={"90%"}
+                                />
+                            }
+
+                            
                                 <img
                                     className="big-chack"
                                     src="/assets/images/big-chack.png"
@@ -49,7 +111,7 @@ function User({ search, setSearch }) {
                                 <div className="row">
                                     <div className="col-lg-4 col-md-4 col-12"></div>
                                     <div className="col-lg-4 col-md-4 col-6">
-                                        <h2 className="user-name">Monica Lucas</h2>
+                                        <h2 className="user-name">{userDetails?.username}</h2>
                                     </div>
                                     {/* <div className="col-lg-4 col-md-4 col-6 my-auto">
                                         <SocialShare
@@ -58,13 +120,13 @@ function User({ search, setSearch }) {
                                     </div> */}
                                 </div>
                                 <div className="row">
-                                    <p className="user-email">@monicaaa</p>
+                                    <p className="user-email">{userDetails?.email}</p>
                                 </div>
                                 <div className="row">
                                     <div className="col-lg-3 col-md-3 col-12"></div>
                                     <div className="col-lg-6 col-md-6 col-12">
                                         <div className="copy-url">
-                                            <span>DdzFFzCqrhshMSxb9....</span>
+                                            <span>{userDetails?.wallet_address}</span>
                                             <button>Copy</button>
                                         </div>
                                     </div>

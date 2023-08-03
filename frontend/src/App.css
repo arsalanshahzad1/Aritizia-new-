@@ -1308,7 +1308,7 @@ footer h1 {
 .action-drop-down {
   top: 10px !important;
   /* right: 20px !important; */
-  left: -80px !important;
+  left: -100px !important;
   position: absolute;
 }
 

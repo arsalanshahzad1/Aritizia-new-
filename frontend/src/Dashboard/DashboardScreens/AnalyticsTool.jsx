@@ -1,13 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../pages/landingpage/Header'
 import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
 import SalesHistoryChart from './SalesHistoryChart';
 import ControllingDataRows from './ContollingDataRows';
 import ChartAnalytics from './ChartAnalytics';
 import TransactionRows from './TransactionRows';
-
+import adminApis from '../../service/adminIndex';
+import {HiOutlineArrowNarrowUp , HiOutlineArrowNarrowDown} from 'react-icons/hi'
+import {TbArrowsDownUp} from 'react-icons/tb'
 
 function AnalyticsTool({ search, setSearch }) {
+
+    const [analyticsDetails, setAnalyticsDetails] = useState('')
+
+    const viewAnalyticUsers = async () => {
+        const response = await adminApis.viewAnalyticUsers()
+        if (response?.status) {
+            setAnalyticsDetails(response?.data.data)
+            console.log(analyticsDetails, 'error');
+        } else {
+            console.log('error');
+        }
+    }
 
     const Monthly_data = [
         {
@@ -267,6 +281,12 @@ function AnalyticsTool({ search, setSearch }) {
             Date: "May 07 at 5:00 PM"
         },
     ];
+
+    useEffect(() => {
+        viewAnalyticUsers()
+    }, [])
+    useEffect(() => {
+    }, [analyticsDetails])
     return (
         <div className='Dashboard-front'>
             <Header
@@ -280,57 +300,110 @@ function AnalyticsTool({ search, setSearch }) {
                 <div className='dashboard-front-section-1 dashboard-front-section-2'>
                     <div className='dashboard-card'>
                         <div>Free Trail Total Users</div>
-                        <div>15K+</div>
-                        <div>
-                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.70711 0.292892C8.31658 -0.0976315 7.68342 -0.0976314 7.29289 0.292892L0.928932 6.65685C0.538407 7.04738 0.538407 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292892ZM9 18L9 1L7 1L7 18L9 18Z" fill="#2636D9" />
-                            </svg>
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                        <div>{analyticsDetails?.analytics?.Free_Trail?.user_count}</div>
+                        {analyticsDetails?.analytics?.Free_Trail?.percentage < 0  ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown/>
+
+                                {analyticsDetails?.analytics?.Free_Trail?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <>
+                            {analyticsDetails?.analytics?.Free_Trail?.percentage == 0 ?
+                            
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp/>
+
+                                {analyticsDetails?.analytics?.Free_Trail?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <TbArrowsDownUp/>
+
+                                {analyticsDetails?.analytics?.Free_Trail?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+
+                        }
+                            </>
+                        }
                     </div>
                     <div className='dashboard-card'>
                         <div>Gold Total User</div>
-                        <div>50K+</div>
-                        <div>
-                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.70711 0.292892C8.31658 -0.0976315 7.68342 -0.0976314 7.29289 0.292892L0.928932 6.65685C0.538407 7.04738 0.538407 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292892ZM9 18L9 1L7 1L7 18L9 18Z" fill="#2636D9" />
-                            </svg>
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                        <div>{analyticsDetails?.analytics?.Gold?.user_count}</div>
+                        {analyticsDetails?.analytics?.Gold?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown/>
+
+                                {analyticsDetails?.analytics?.Gold?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp/>
+
+                                {analyticsDetails?.analytics?.Gold?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                        }
                     </div>
                     <div className='dashboard-card'>
                         <div>Platinum Total User</div>
-                        <div>90K+</div>
-                        <div className='pink'>
-                            <svg width="14" height="16" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.29289 17.7071C7.68342 18.0976 8.31658 18.0976 8.70711 17.7071L15.0711 11.3431C15.4616 10.9526 15.4616 10.3195 15.0711 9.92893C14.6805 9.53841 14.0474 9.53841 13.6569 9.92893L8 15.5858L2.34315 9.92893C1.95262 9.53841 1.31946 9.53841 0.928932 9.92893C0.538407 10.3195 0.538407 10.9526 0.928932 11.3431L7.29289 17.7071ZM7 -4.37114e-08L7 17L9 17L9 4.37114e-08L7 -4.37114e-08Z" fill="#B600D1" />
-                            </svg>
+                        <div>{analyticsDetails?.analytics?.Platinum?.user_count}</div>
+                        {analyticsDetails?.analytics?.Platinum?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown/>
 
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                                {analyticsDetails?.analytics?.Platinum?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp/>
+
+                                {analyticsDetails?.analytics?.Platinum?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                        }
                     </div>
                     <div className='dashboard-card'>
                         <div>Daimond Total User</div>
-                        <div>150K+</div>
-                        <div className='pink'>
-                            <svg width="14" height="16" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.29289 17.7071C7.68342 18.0976 8.31658 18.0976 8.70711 17.7071L15.0711 11.3431C15.4616 10.9526 15.4616 10.3195 15.0711 9.92893C14.6805 9.53841 14.0474 9.53841 13.6569 9.92893L8 15.5858L2.34315 9.92893C1.95262 9.53841 1.31946 9.53841 0.928932 9.92893C0.538407 10.3195 0.538407 10.9526 0.928932 11.3431L7.29289 17.7071ZM7 -4.37114e-08L7 17L9 17L9 4.37114e-08L7 -4.37114e-08Z" fill="#B600D1" />
-                            </svg>
+                        <div>{analyticsDetails?.analytics?.Diamond?.user_count}</div>
+                        {analyticsDetails?.analytics?.Diamond?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown/>
 
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                                {analyticsDetails?.analytics?.Diamond?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp/>
+
+                                {analyticsDetails?.analytics?.Diamond?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                        }
                     </div>
 
                 </div>
