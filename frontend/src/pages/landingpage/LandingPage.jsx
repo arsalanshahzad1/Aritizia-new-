@@ -37,7 +37,7 @@ const LandingPage = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   // const connectWallet = async () => {
   //   try {
@@ -124,10 +124,11 @@ const LandingPage = ({ search, setSearch }) => {
     let listingType;
     // console.log("Active Method", listingType);
     console.log("time", Date.now());
-    // let dollarPriceOfETH = 123123;
+
+    let dollarPriceOfETH = 1831;
 
     // UNCOMMENT THIS
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     console.log("dollarPriceOfETH", dollarPriceOfETH);

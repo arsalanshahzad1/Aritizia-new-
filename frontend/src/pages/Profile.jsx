@@ -65,7 +65,7 @@ const Profile = ({ search, setSearch }) => {
   let likedNftsFromDB = [];
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   // const getProviderOrSigner = async (needSigner = false) => {
   //   console.log("getProviderOrSigner");
@@ -160,78 +160,79 @@ const Profile = ({ search, setSearch }) => {
 
     let liked = [];
 
-    console.log("NFTId", NFTId);
+    // console.log("NFTId", NFTId);
 
     console.log("Running");
+    if (NFTId.length > 0 && NFTId != "") {
+      for (let i = 0; i < NFTId.length; i++) {
+        let id;
+        let collectionImage = NFTId[i].collection_image;
+        id = +NFTId[i].token_id;
+        // id =i;
 
-    for (let i = 0; i < NFTId.length; i++) {
-      let id;
-      let collectionImage = NFTId[i].collection_image;
-      id = +NFTId[i].token_id;
-      // id =i;
+        console.log("zayyan", id);
 
-      console.log("zayyan", id);
+        const metaData = await nftContract.tokenURI(id);
 
-      const metaData = await nftContract.tokenURI(id);
+        const structData = await marketplaceContract._idToNFT(id);
 
-      const structData = await marketplaceContract._idToNFT(id);
+        console.log("structData", structData);
 
-      console.log("structData", structData);
+        const fanNftData = await marketplaceContract._idToNFT2(id);
 
-      const fanNftData = await marketplaceContract._idToNFT2(id);
+        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
-      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        setDiscountPrice(discountOnNFT);
 
-      setDiscountPrice(discountOnNFT);
+        // let auctionData = await marketplaceContract._idToAuction(id);
 
-      // let auctionData = await marketplaceContract._idToAuction(id);
+        // let listingType = structData.listingType;
 
-      // let listingType = structData.listingType;
+        const price = ethers.utils.formatEther(structData.price.toString());
 
-      const price = ethers.utils.formatEther(structData.price.toString());
+        axios
+          .get(metaData)
+          .then((response) => {
+            const meta = response.data;
+            let data = JSON.stringify(meta);
 
-      axios
-        .get(metaData)
-        .then((response) => {
-          const meta = response.data;
-          let data = JSON.stringify(meta);
+            data = data.slice(2, -5);
+            data = data.replace(/\\/g, "");
 
-          data = data.slice(2, -5);
-          data = data.replace(/\\/g, "");
+            data = JSON.parse(data);
+            // Extracting values using dot notation
+            // const price = data.price;
+            // listingType = data.listingType;
+            const crypto = data.crypto;
+            const title = data.title;
+            const image = data.image;
+            const royalty = data.royalty;
+            const description = data.description;
+            const collection = data.collection;
 
-          data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
-          const crypto = data.crypto;
-          const title = data.title;
-          const image = data.image;
-          const royalty = data.royalty;
-          const description = data.description;
-          const collection = data.collection;
+            // if (listingType === 0) {
+            const nftData = {
+              id: id, //
+              title: title,
+              image: image,
+              price: price,
+              crypto: crypto,
+              royalty: royalty,
+              description: description,
+              collection: collection,
+              collectionImage: collectionImage,
+            };
+            console.log("nftData", nftData);
+            liked.push(nftData);
+            setLikedNfts(liked);
 
-          // if (listingType === 0) {
-          const nftData = {
-            id: id, //
-            title: title,
-            image: image,
-            price: price,
-            crypto: crypto,
-            royalty: royalty,
-            description: description,
-            collection: collection,
-            collectionImage: collectionImage,
-          };
-          console.log("nftData", nftData);
-          liked.push(nftData);
-          setLikedNfts(liked);
+            // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
+          })
 
-          // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
-        })
-
-        .catch((error) => {
-          console.error("Error fetching metadata:", error);
-        });
+          .catch((error) => {
+            console.error("Error fetching metadata:", error);
+          });
+      }
     }
   };
 
@@ -756,7 +757,7 @@ const Profile = ({ search, setSearch }) => {
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
-          {userData?.profile_image == null ? (
+          {userData?.cover_image == null ? (
             <img
               className="big-image"
               src="/assets/images/profile-1.png"
@@ -766,7 +767,7 @@ const Profile = ({ search, setSearch }) => {
           ) : (
             <img
               className="big-image"
-              src={userData?.profile_image}
+              src={userData?.cover_image}
               alt=""
               width={"100%"}
             />
@@ -776,7 +777,7 @@ const Profile = ({ search, setSearch }) => {
               {userData?.profile_image == null ? (
                 <img
                   className="user-pic"
-                  src="../public/assets/images/user-none.png"
+                  src="/assets/images/user-none.png"
                   alt=""
                   width={"240px"}
                 />
@@ -917,6 +918,7 @@ const Profile = ({ search, setSearch }) => {
                               endTime={item?.endTime}
                               startTime={item?.startTime}
                               description={item?.description}
+                              collectionImages={item?.collectionImages}
                               userAddress={userAddress}
                             />
                           ))}

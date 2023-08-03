@@ -385,7 +385,7 @@ const ProfileDrawer = ({
   //   console.log("getAddress", accounts[0]);
   // };
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
   // const [userAddress, setUserAddress] = useState("0x000000....");
 
   // const getProviderOrSigner = async () => {

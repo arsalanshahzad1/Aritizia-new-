@@ -633,7 +633,7 @@ const Header = ({ search, setSearch }) => {
                   <div className="login-user-profile">
                     {userData?.profile_image == null ? (
                       <img
-                        src="../public/assets/images/user-none.png"
+                        src="/assets/images/user-none.png"
                         alt="profile-image"
                         onClick={() => {
                           setToggleUserDropdown(!toggleUserDropdown);

@@ -333,6 +333,7 @@ const Multiple = ({ search, setSearch }) => {
   let marketplaceContractGlobal;
   let nftContractGlobal;
   let listedddd = [];
+  let listCalled = false;
 
   const handleNFTMintedEvent = async (mintedTokens) => {
     console.log("mintedTokens", mintedTokens);
@@ -351,14 +352,23 @@ const Multiple = ({ search, setSearch }) => {
     console.log("aaaa listOfListedTokens", list.length);
 
     if (list.length == ipfsList.current.length) {
-      listNFT(marketplaceContractGlobal, nftContractGlobal, list);
+      console.log("listcount event");
+      if (!listCalled) {
+        console.log("listcount event in if");
+        listNFT(marketplaceContractGlobal, nftContractGlobal, list);
+      }
     }
 
     console.log("brrr listOfMintedTokens", listOfMintedTokens.length);
     console.log("brrr imageList", imageList.length);
   };
+  let listcount = 0;
 
   async function listNFT(marketplaceContract, nftContract, listOfTokens) {
+    listcount = listcount + 1;
+    console.log("listcount", listcount);
+    console.log("listcountt");
+
     // if (isMinted) {
     try {
       console.log("listOfMintedTokensInListNFT", listOfMintedTokens);
@@ -396,21 +406,24 @@ const Multiple = ({ search, setSearch }) => {
         console.log("ethPrice", ethPrice);
         ethParsedList.push(ethPrice);
       }
-
-      await (
-        await marketplaceContract.listNft(
-          nftContract.address,
-          multi ? mintedTokens : [mintedTokens],
-          ethParsedList,
-          royaltyList,
-          listingType,
-          startingDateList,
-          endingDateList,
-          // [startingDateList[0] + 5 * 60 * 1000],
-          collection.value, // collection number
-          collection.crypto
-        )
-      ).wait();
+      if (!listCalled) {
+        console.log("listcount actually listing", mintedTokens);
+        await (
+          await marketplaceContract.listNft(
+            nftContract.address,
+            multi ? mintedTokens : [mintedTokens],
+            ethParsedList,
+            royaltyList,
+            listingType,
+            startingDateList,
+            endingDateList,
+            // [startingDateList[0] + 5 * 60 * 1000],
+            collection.value, // collection number
+            collection.crypto
+          )
+        ).wait();
+      }
+      listCalled = true;
       setLoading(false);
       console.log("NFT listing is complete!");
     } catch (error) {
@@ -624,9 +637,10 @@ const Multiple = ({ search, setSearch }) => {
         });
         // alert("NFTs minted");
 
-        // setTimeout(() => {
-        //   navigate("/profile");
-        // }, 3000);
+        setTimeout(() => {
+          navigate("/profile");
+          window.location.reload();
+        }, 3000);
       } else {
         console.log("Nhi mili");
       }
@@ -648,9 +662,9 @@ const Multiple = ({ search, setSearch }) => {
       const response = await apis.postListNft(listToPost.current[i]);
       console.log("response", response);
     }
-    setTimeout(() => {
-      navigate("/profile");
-    }, 3000);
+    // setTimeout(() => {
+    //   navigate("/profile");
+    // }, 3000);
   };
 
   const [file, setFile] = useState(null);

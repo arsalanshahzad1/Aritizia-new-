@@ -29,7 +29,7 @@ const MyNftCard = ({
   const [isVisible2, setIsVisible2] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   const onClose = useCallback(() => {
     console.log("calling close");

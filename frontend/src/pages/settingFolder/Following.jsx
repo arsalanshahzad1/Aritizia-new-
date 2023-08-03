@@ -40,7 +40,7 @@ const Following = ({ data }) => {
                 <div className="left">
                   <div className="img-holder">
                   {data?.profile_image == null ?
-                      <img src='../public/assets/images/user-none.png' alt="" srcset="" />
+                      <img src='/assets/images/user-none.png' alt="" srcset="" />
                       :
                       <img src={data?.profile_image} alt="" />
                     }

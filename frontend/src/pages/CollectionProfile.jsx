@@ -29,10 +29,7 @@ import liked3 from "../../public/assets/images/liked3.png";
 import liked4 from "../../public/assets/images/liked4.png";
 import apis from "../service";
 import { getAddress } from "../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../methods/walletManager";
+import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -52,8 +49,8 @@ const CollectionProfile = ({ search, setSearch }) => {
   const [discountPrice, setDiscountPrice] = useState(0);
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
- 
+  const userAddress = userData?.wallet_address;
+
   // const getProviderOrSigner = async (needSigner = false) => {
   //   console.log("getProviderOrSigner");
 

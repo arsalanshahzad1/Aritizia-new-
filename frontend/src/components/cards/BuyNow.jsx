@@ -25,12 +25,11 @@ const BuyNow = ({
   const [isVisible, setIsVisible] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
-
 
   const openDrawer = () => {
     if (showLinks === true) {

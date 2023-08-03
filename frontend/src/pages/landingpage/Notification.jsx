@@ -14,7 +14,7 @@ function Notification(props) {
                     <div onClick={() => navigateToChat(res?.chat_by)} className={`Notification-in-header ${res?.is_seen == 0 ? 'is_seen' : ''}`} >
                         <div className='image-holder'>
                             {res?.user?.profile_image == null ?
-                                <img src='../public/assets/images/user-none.png' alt="" />
+                                <img src='/assets/images/user-none.png' alt="" />
                                 :
                                 <img src={res?.user?.profile_image} alt="" />
                             }

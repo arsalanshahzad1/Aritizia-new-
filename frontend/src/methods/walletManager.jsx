@@ -17,9 +17,8 @@ export const getProviderOrSigner = async (needSigner = false) => {
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x7A69" }], // localhost's chainId
-   // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-
+      // params: [{ chainId: "0x7A69" }], // localhost's chainId
+      params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
     });
   } catch (error) {
     // User rejected the network change or there was an error

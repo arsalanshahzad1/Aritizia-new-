@@ -2957,6 +2957,8 @@ footer h1 {
     background: #fff;
     padding: 5px;
     width: 150px;
+    height: 150px;
+    object-fit: cover;
   }
 
   .profile-first-section .user-wrap {

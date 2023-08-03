@@ -24,6 +24,10 @@ import apis from "../../service/index";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -96,30 +100,30 @@ const Single = ({ search, setSearch }) => {
   let listcounter = 0;
 
   // Helper function to fetch a Provider/Signer instance from Metamask
-  const getProviderOrSigner = async (needSigner = false) => {
-    console.log("In provider");
-    const provider = await web3ModalRef.current.connect();
-    console.log("In provider2");
-    const web3Provider = new providers.Web3Provider(provider);
-    console.log("In provider3");
-    const { chainId } = await web3Provider.getNetwork();
-    if (chainId !== 31337) {
-      toast.warning("Change the network to Sepolia", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      // window.alert("Change the network to Sepolia");
-      throw new Error("Change network to Sepolia");
-    }
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("In provider");
+  //   const provider = await web3ModalRef.current.connect();
+  //   console.log("In provider2");
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   console.log("In provider3");
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   if (chainId !== 31337) {
+  //     toast.warning("Change the network to Sepolia", {
+  //       position: toast.POSITION.TOP_CENTER,
+  //     });
+  //     // window.alert("Change the network to Sepolia");
+  //     throw new Error("Change network to Sepolia");
+  //   }
 
-    if (needSigner) {
-      const signer = web3Provider.getSigner();
-      // console.log("getSigner");
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     // console.log("getSigner");
 
-      return signer;
-    }
-    // console.log("getProvider");
-    return web3Provider;
-  };
+  //     return signer;
+  //   }
+  //   // console.log("getProvider");
+  //   return web3Provider;
+  // };
 
   // Upload image to IPFS
   const uploadToIPFS = async (event) => {
@@ -365,6 +369,7 @@ const Single = ({ search, setSearch }) => {
     // alert("Nft listed");
     setTimeout(() => {
       navigate("/profile");
+      window.location.reload();
     }, 3000);
     // navigate("/profile");
   };
@@ -455,27 +460,27 @@ const Single = ({ search, setSearch }) => {
     }
   }
 
-  const connectWallet = async () => {
-    try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
-  useEffect(() => {
-    // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-    if (!walletConnected) {
-      web3ModalRef.current = new Web3Modal({
-        network: "hardhat",
-        providerOptions: {},
-        disableInjectedProvider: false,
-      });
-      connectWallet();
-      // numberOFICOTokens();
-    }
-  }, [walletConnected]);
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
 
   const getItem = async () => {
     try {
@@ -841,7 +846,7 @@ const Single = ({ search, setSearch }) => {
                                 <div
                                   onClick={() => {
                                     setcollectionFinalized(true);
-                                    notify();
+                                    // notify();
                                   }}
                                   className="browse-btn my-5 button-styling"
                                 >
@@ -940,6 +945,32 @@ const Single = ({ search, setSearch }) => {
                             </div>
                           </div>
                         </div>
+                        <div className="line-four">
+                          <div className="row">
+                            <div className="col-lg-9">
+                              <h2>Title</h2>
+                              <input
+                                type="text"
+                                placeholder="e.g. ‘Crypto Funk"
+                                // defaultValue={title.current.value}
+                                ref={title}
+                                // onChange={(e) => setTitle(e.target.value)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="line-five">
+                          <div className="row">
+                            <div className="col-lg-9">
+                              <h2>Description</h2>
+                              <input
+                                type="text"
+                                placeholder="e.g. ‘This is very limited item’"
+                                ref={description}
+                              />
+                            </div>
+                          </div>
+                        </div>
                         {listingType === 0 ? (
                           <div className="line-two">
                             <div className="row">
@@ -981,16 +1012,6 @@ const Single = ({ search, setSearch }) => {
                                     </p>
                                   )}
                                 </div>
-                                <div className="col-lg-4 col-md-4 col-5">
-                                  <h2>Crypto</h2>
-                                  <Dropdown
-                                    options={cryptoOptions}
-                                    onChange={(e) => {
-                                      setCrypto(e.value);
-                                    }}
-                                    value={defaultCrypto.value}
-                                  />
-                                </div>
                               </div>
                             </div>
                             <div className="line-two">
@@ -1028,32 +1049,6 @@ const Single = ({ search, setSearch }) => {
                           </>
                         )}
 
-                        <div className="line-four">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Title</h2>
-                              <input
-                                type="text"
-                                placeholder="e.g. ‘Crypto Funk"
-                                // defaultValue={title.current.value}
-                                ref={title}
-                                // onChange={(e) => setTitle(e.target.value)}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="line-five">
-                          <div className="row">
-                            <div className="col-lg-9">
-                              <h2>Description</h2>
-                              <input
-                                type="text"
-                                placeholder="e.g. ‘This is very limited item’"
-                                ref={description}
-                              />
-                            </div>
-                          </div>
-                        </div>
                         <div className="line-six">
                           <div className="row">
                             <div className="col-lg-9">
@@ -1088,7 +1083,7 @@ const Single = ({ search, setSearch }) => {
               </div>
             </div>
           </form>
-          <button onClick={getBlockTimestamp}>GetBlockTimestamp</button>
+          {/* <button onClick={getBlockTimestamp}>GetBlockTimestamp</button> */}
           <br></br>
           {/* <button onClick={getItem} className="button-styling">
             Get NFTS data

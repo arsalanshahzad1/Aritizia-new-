@@ -46,7 +46,7 @@ const SearchPage = ({ search, setSearch }) => {
   const [name, setName] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   let searchedNft = useRef([]);
 
@@ -112,8 +112,8 @@ const SearchPage = ({ search, setSearch }) => {
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
-    // let dollarPriceOfETH = 123123;
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let dollarPriceOfETH = 1831;
+    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceETH = 0.00000002;
     let priceInETH = dollarPriceOfETH.toString() / 1e18;

@@ -36,7 +36,7 @@ const SimpleCard = ({
   const web3ModalRef = useRef();
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   // const openDrawer = () => {
   //   if (showLinks === true) {

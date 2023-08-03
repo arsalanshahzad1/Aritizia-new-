@@ -177,7 +177,7 @@ function ChatPage({ search, setSearch }) {
                                 <div className='user'>
                                     <div className='img-holder'>
                                         {userMessagesDetails?.user?.profile_image == null ?
-                                            <img src='../public/assets/images/user-none.png' alt="" />
+                                            <img src='/assets/images/user-none.png' alt="" />
                                             :
                                             <img src={userMessagesDetails?.user?.profile_image} alt="" />
                                         }

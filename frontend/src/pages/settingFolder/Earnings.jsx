@@ -10,25 +10,24 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import { getAddress } from "../../methods/methods";
-import apis from '../../service';
-
-
+import apis from "../../service";
 
 const Earnings = () => {
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
-  const [earning , setEarning] = useState([])
-  const handleStatus = (e) => {setStatus(e);};
+  const [earning, setEarning] = useState([]);
+  const handleStatus = (e) => {
+    setStatus(e);
+  };
 
   const getEarning = async () => {
     const response = await apis.getSalesHistory();
-    console.log(response?.data?.data)
-    setEarning(response?.data?.data)
-
+    console.log(response?.data?.data);
+    setEarning(response?.data?.data);
   };
 
-  useEffect(() =>{
-    getEarning()
-  } , [])
+  useEffect(() => {
+    getEarning();
+  }, []);
 
   const statusOptions = [
     { value: "Monthly", label: "Monthly" },
@@ -172,7 +171,6 @@ const Earnings = () => {
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
-    
   ];
   const Daily_data = [
     {
@@ -394,7 +392,7 @@ const Earnings = () => {
   const [totalPrice, setTotalPrice] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   useEffect(() => {
     getAddress();

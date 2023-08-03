@@ -28,10 +28,7 @@ import liked2 from "../../public/assets/images/liked2.png";
 import collection from "../../public/assets/images/Collection-card-image.png";
 import apis from "../service";
 import { getAddress } from "../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../methods/walletManager";
+import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 const { ethereum } = window;
@@ -55,32 +52,29 @@ const OtherProfile = ({ search, setSearch }) => {
   const { state } = useLocation();
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   // const getOtherUsersDetails = async (address) => {
   //   const response = await apis.getOtherUser(address);
   //   setUserDetails(response?.data?.data);
   //   console.log(response, "other-users");
-   
 
-    const getNFTlikeListing = async (id) =>{
-      const response = await apis.getLikeNFTListing(id)
-      setLikedNfts(response?.data?.data)
-      console.log(response  , 'other-users');
-    }
+  const getNFTlikeListing = async (id) => {
+    const response = await apis.getLikeNFTListing(id);
+    setLikedNfts(response?.data?.data);
+    console.log(response, "other-users");
+  };
 
-    const getOtherUsersDetails = async (address) =>{
-      const response = await apis.getOtherUser(address);
-      setUserDetails(response?.data?.data)
-      getNFTlikeListing(response?.data?.data?.id)
-      }
+  const getOtherUsersDetails = async (address) => {
+    const response = await apis.getOtherUser(address);
+    setUserDetails(response?.data?.data);
+    getNFTlikeListing(response?.data?.data?.id);
+  };
 
-    
-    console.log("state",state.address)
-    useEffect(() =>{
-         getOtherUsersDetails(state?.address)
-         
-  } , [])
+  console.log("state", state.address);
+  useEffect(() => {
+    getOtherUsersDetails(state?.address);
+  }, []);
 
   // const getProviderOrSigner = async (needSigner = false) => {
   //   const provider = await web3ModalRef.current.connect();
@@ -325,8 +319,6 @@ const OtherProfile = ({ search, setSearch }) => {
     });
   };
 
-
-
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -357,11 +349,15 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {userDetails.is_follow == 0 ?
-                  <div onClick={followOther} style={{cursor : 'pointer'}}>Follow</div>
-                  :  
-                  <div onClick={followOther} style={{cursor : 'pointer'}}>Unfollow</div>
-                }
+                  {userDetails.is_follow == 0 ? (
+                    <div onClick={followOther} style={{ cursor: "pointer" }}>
+                      Follow
+                    </div>
+                  ) : (
+                    <div onClick={followOther} style={{ cursor: "pointer" }}>
+                      Unfollow
+                    </div>
+                  )}
                   {/* <div>Following</div> */}
                   <div>Followers {userDetails?.followers?.[0]?.follow_by}</div>
                 </div>

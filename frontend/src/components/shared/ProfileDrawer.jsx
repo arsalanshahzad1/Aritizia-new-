@@ -77,7 +77,7 @@ function ProfileDrawer({
   }, [isVisible]);
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -232,9 +232,9 @@ function ProfileDrawer({
     let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
     setPlatformFeeETH(feeETH);
 
-    // let dollarPriceOfETH = 123123;
+    let dollarPriceOfETH = 1831;
 
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
@@ -258,9 +258,9 @@ function ProfileDrawer({
       setDiscountedEth(discountedEthPrice.toFixed(2));
       console.log("discountedEthPrice", discountedEthPrice);
 
-      // let dollarPriceOfETH = 123123;
+      let dollarPriceOfETH = 1831;
 
-      let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+      // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
       let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
 

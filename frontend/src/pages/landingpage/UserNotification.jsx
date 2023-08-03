@@ -21,7 +21,7 @@ function UserNotification(props) {
                 <div key={id} onClick={() => navigateToProfile(res?.sender_id)} className={`Notification-in-header ${res?.is_seen == 0 ? 'is_seen' : ''}`} >
                     <div className='image-holder'>
                         {res?.user?.profile_image == null ?
-                        <img src='../public/assets/images/user-none.png' alt="" />
+                        <img src='/assets/images/user-none.png' alt="" />
                         :
                         <img src={res?.user?.profile_image} alt="" />
                     }
