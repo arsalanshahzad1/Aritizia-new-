@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import nft from '../../../public/assets/images/nft-2.png'
 import './../DashboardScreens/Dashboard.css'
-function TransactionRows() {
+function TransactionRows({data , index , listCount}) {
 
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate()
@@ -15,19 +15,19 @@ function TransactionRows() {
 
     return (
 
-        <tr className='transaction-row'>
-            <td>01</td>
+        <tr className='transaction-row' key={index}>
+            <td>{index + listCount + 1}</td>
             <td>
                 <div className='nft-thumbnail-holder'>
                     <img src={nft} alt="" />
                 </div>
             </td>
-            <td>xasda2678xafasqw897654as</td>
-            <td>Naqi</td>
-            <td>0.39 ETH</td>
-            <td>xasda2678xafasqw897654as</td>
-            <td>Naqi</td>
-            <td>0.39 ETH</td>
+            <td><p>{data?.user?.wallet_address}</p> </td>
+            <td><p>{data?.user?.username}</p></td>
+            <td><p>{data?.price} ETH</p></td>
+            <td><p>{data?.buyer?.wallet_address}</p></td>
+            <td><p>{data?.buyer?.username}</p></td>
+            <td><p>{data?.buyer?.buying_price} ETH</p> </td>
 
 
         </tr>

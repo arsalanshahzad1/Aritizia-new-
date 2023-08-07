@@ -2280,7 +2280,7 @@ footer h1 {
 .subscription .subscription-wrap .subscription-card-wrap {
   padding: 30px 20px;
   background-color: #F4F4F4;
-  height: 740px;
+  /* height: 740px; */
   border-radius: 20px;
   border: 2px solid var(--primary);
   margin-bottom: 25px;

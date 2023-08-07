@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from './landingpage/Header'
 import PageTopSection from '../components/shared/PageTopSection'
 import Footer from './landingpage/Footer'
 import SubscriptionCard from '../components/cards/SubscriptionCard'
 import Search from "../components/shared/Search";
+import apis from '../service'
+import StripeCheckout from 'react-stripe-checkout';
 
 const Subscription = ({ search, setSearch }) => {
+    const [subscriptionData , setSubscriptionData] = useState([])
+    const viewSubscriptions = async () =>{
+        const response = await apis.viewSubscriptions()
+        if(response.status){
+            setSubscriptionData(response?.data?.data)
+        }
+        console.log(response);
+    }
+
+    useEffect(() =>{
+        viewSubscriptions()
+    }, [])
     return (
         <>
             <Header
@@ -18,7 +32,7 @@ const Subscription = ({ search, setSearch }) => {
                 <div className="subscription-wrap">
                     <div className="container-fluid">
                         <div className="row">
-                            <SubscriptionCard />
+                            <SubscriptionCard data ={subscriptionData}/>
                         </div>
                     </div>
                 </div>

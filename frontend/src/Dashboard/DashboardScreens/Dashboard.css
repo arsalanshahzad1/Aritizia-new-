@@ -184,7 +184,7 @@
 .dashboard-front-section-2 {
     position: absolute;
     padding: 20px 0;
-    width: 95%;
+    width: 100%;
 }
 
 .dashboard-front-section-2-row-1 {
@@ -224,7 +224,50 @@
     color: #959595;
 }
 
-.user-sub-dd{}
+.user-sub-dd{
+    position: relative;
+}
+.user-sub-dd .title{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 5px 10px;
+    width: 130px;
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+
+}
+
+.user-sub-dd .title svg{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right:5px;
+    font-size: 22px;
+}
+
+.user-sub-dd .options{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    position: absolute;
+    background: #fff;
+    z-index: 1000;
+    width: 100%;
+}
+.user-sub-dd .options h2{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    padding: 10px 10px;
+    cursor: pointer;
+}
 .user-sub-dd .Dropdown-control{
     border-radius: 5px;
     border: 2px solid #929292;
@@ -308,14 +351,44 @@
 
 .controls-for-user-management {
     display: flex;
-    width: 235px;
     justify-content: space-between;
+}
+
+.user-search{
+    position: relative;
+}
+
+.user-search svg{
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24px;
+    color: #929292;
+}
+.user-search input{
+    height: 100%;
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 5px 10px 5px 35px;
+    width: 200px;
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.user-search input:focus-visible{
+    outline: none;
 }
 
 .table-for-user-management {
     position: relative;
     top: 120px;
-    padding: 0 3%;
+    /* padding: 0 3%; */
 }
 
 .data-table {
@@ -336,6 +409,24 @@
 
 .data-table .data-table-2 tr td:nth-child(3) {
     color: black !important;
+}
+.data-table .data-table-2 tr td:nth-child(3) p{
+    color: black !important;
+    width: 155px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 100%;
+}
+.data-table .data-table-2 tr td:nth-child(7) p{
+    color: black !important;
+    width: 155px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 100%;
 }
 
 
