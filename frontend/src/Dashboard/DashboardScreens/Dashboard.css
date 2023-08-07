@@ -205,7 +205,7 @@
     color: #000000;
 }
 
-.df-s2-r1-c1 div:nth-child(2) {
+.df-s2-r1-c1 div.active {
     font-weight: 600;
     font-size: 22px;
     background-color: #B600D1;
@@ -216,11 +216,42 @@
     cursor: pointer;
 }
 
-.df-s2-r1-c1 div:nth-child(3), .df-s2-r1-c1 div:nth-child(4), .df-s2-r1-c1 div:nth-child(5) {
+.df-s2-r1-c1 div {
     font-weight: 600;
     font-size: 22px;
     margin-inline: 15px;
     cursor: pointer;
+    color: #959595;
+}
+
+.user-sub-dd{}
+.user-sub-dd .Dropdown-control{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 5px 10px;
+    width: 130px;
+}
+.user-sub-dd .Dropdown-menu{
+    border-radius: 5px;
+    border: 2px solid #929292;
+}
+.user-sub-dd .Dropdown-placeholder{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+.user-sub-dd .Dropdown-option{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+
+.user-sub-dd .Dropdown-arrow {
+    border-width: 6px 7px 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .dashboard-drop-down {

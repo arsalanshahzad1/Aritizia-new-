@@ -23,6 +23,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,7 +38,7 @@ const LandingPage = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData.wallet_address;
+  const userAddress = userData?.wallet_address;
 
   // const connectWallet = async () => {
   //   try {
@@ -352,6 +353,12 @@ const LandingPage = ({ search, setSearch }) => {
 
   return (
     <>
+      <MetaDecorator/>
+      {/* <MetaDecorator
+        title={'Artizia'}
+        description={'The Best NFT Marketplace In The World'}
+        imageAlt={'Artizia'}
+        url={'https://artizia.pluton.ltd'} /> */}
       <Header
         connectWallet={connectWallet}
         search={search}
@@ -418,8 +425,6 @@ const LandingPage = ({ search, setSearch }) => {
                 </div>
                 {nftListFP.map((item) => (
                   <BuyNow
-                    // onOpen={onOpen}
-                    // onClose={onClose}
                     key={item?.id}
                     id={item?.id}
                     title={item?.title}

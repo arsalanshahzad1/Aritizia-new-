@@ -3,11 +3,11 @@ import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 import "./Cards.css";
 import { Link } from "react-router-dom";
-
+import { FacebookShareButton, InstapaperShareButton, TwitterShareButton , LinkedinShareButton } from 'react-share';
 import ProfileDrawer from "../shared/ProfileDrawer";
 
 const BuyNow = ({
-  onOpen,
+
   path,
   id,
   title,
@@ -35,7 +35,8 @@ const BuyNow = ({
 
   const openDrawer = () => {
     if (showLinks === true) {
-      return onOpen(false);
+      setShowLinks(false)
+      // setIsVisible(true);
     } else {
       setIsVisible(true);
     }
@@ -90,13 +91,25 @@ const BuyNow = ({
                         <div className="social-links">
                           <ul>
                             <li>
-                              <a href="">Instagram</a>
+                              <a>
+                                <LinkedinShareButton url="http://artizia.pluton.ltd" title="Ali Khan" >
+                                  <p>Instagram</p>
+                                </LinkedinShareButton>
+                              </a>
                             </li>
                             <li>
-                              <a href="">Twitter</a>
+                              <a>
+                                <TwitterShareButton url="http://artizia.pluton.ltd" title="Ali Khan" >
+                                  <p>Twitter</p>
+                                </TwitterShareButton>
+                              </a>
                             </li>
                             <li>
-                              <a href="">Facebook</a>
+                              <a>
+                                <FacebookShareButton url="http://artizia.pluton.ltd" title="Ali Khan" >
+                                  <p>Facebook</p>
+                                </FacebookShareButton>
+                              </a>
                             </li>
                           </ul>
                         </div>

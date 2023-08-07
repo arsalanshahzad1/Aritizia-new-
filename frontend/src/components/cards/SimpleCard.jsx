@@ -10,6 +10,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import ProfileDrawer from "../shared/ProfileDrawer";
 import Web3Modal from "web3modal";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import { FacebookShareButton, InstapaperShareButton , TwitterShareButton } from 'react-share';
 import {
   connectWallet,
   getProviderOrSigner,
@@ -130,9 +131,15 @@ const SimpleCard = ({
               </div>
               {showLinks && (
                 <div className="social-media">
+                  <InstapaperShareButton url="http://artizia.pluton.ltd/profile" title="Ali Khan" >
                   <p>Instagram</p>
+                  </InstapaperShareButton>
+                  <TwitterShareButton url="http://artizia.pluton.ltd/profile" title="Ali Khan" >
                   <p>Twitter</p>
+                  </TwitterShareButton>
+                  <FacebookShareButton url="http://artizia.pluton.ltd/profile" title="Ali Khan" >
                   <p>Facebook</p>
+                  </FacebookShareButton>
                 </div>
               )}
             </div>
