@@ -2,9 +2,11 @@ import React from 'react'
 import Header from '../../pages/landingpage/Header'
 import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
 import SalesHistoryChart from './SalesHistoryChart';
-
+import apis from '../../service/adminIndex';
 
 function DashboardFront({ search, setSearch }) {
+
+
 
     const Monthly_data = [
         {

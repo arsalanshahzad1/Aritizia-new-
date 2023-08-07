@@ -4,6 +4,7 @@
     width: 100vw;
     height: auto;
     background-color: black;
+    overflow-x: hidden;
 }
 
 .Sidebar {
@@ -145,8 +146,23 @@
     font-size: 26px;
 }
 
-.dashboard-card div:nth-child(3) {
+.dashboard-card div:nth-child(3).up {
     color: #2636D9;
+    font-weight: 500;
+    font-size: 18px;
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+}
+
+.dashboard-card div:nth-child(3).up svg path{
+    fill: #2636D9;
+}
+.dashboard-card div:nth-child(3).down svg path{
+    fill: #B600D1;
+}
+.dashboard-card div:nth-child(3).down {
+    color: #B600D1;
     font-weight: 500;
     font-size: 18px;
     display: flex;
@@ -189,7 +205,7 @@
     color: #000000;
 }
 
-.df-s2-r1-c1 div:nth-child(2) {
+.df-s2-r1-c1 div.active {
     font-weight: 600;
     font-size: 22px;
     background-color: #B600D1;
@@ -200,11 +216,42 @@
     cursor: pointer;
 }
 
-.df-s2-r1-c1 div:nth-child(3), .df-s2-r1-c1 div:nth-child(4), .df-s2-r1-c1 div:nth-child(5) {
+.df-s2-r1-c1 div {
     font-weight: 600;
     font-size: 22px;
     margin-inline: 15px;
     cursor: pointer;
+    color: #959595;
+}
+
+.user-sub-dd{}
+.user-sub-dd .Dropdown-control{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 5px 10px;
+    width: 130px;
+}
+.user-sub-dd .Dropdown-menu{
+    border-radius: 5px;
+    border: 2px solid #929292;
+}
+.user-sub-dd .Dropdown-placeholder{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+.user-sub-dd .Dropdown-option{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+
+.user-sub-dd .Dropdown-arrow {
+    border-width: 6px 7px 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .dashboard-drop-down {
@@ -324,23 +371,61 @@
 .data-table tbody tr td:nth-child(2) {
     color: #B600D1;
 }
+.data-table tbody tr td:nth-child(2) p{
+    width: 180px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 .data-table tbody tr td:nth-child(3) {
     color: #B600D1;
+}
+
+.data-table tbody tr td:nth-child(3) p{
+    width: 80px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .data-table tbody tr td:nth-child(4) {
     color: black;
 }
 
+.data-table tbody tr td:nth-child(4) p{
+    width: 80px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .data-table tbody tr td:nth-child(5) {
     color: black;
+}
+
+.data-table tbody tr td:nth-child(5) p{
+    width: 120px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .data-table tbody tr td:nth-child(6) {
     color: black;
 }
 
+.data-table tbody tr td:nth-child(6) p{
+    width: 120px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 .space-between-rows {
     margin: 4px 0;
     color: transparent;
@@ -379,9 +464,15 @@
     color: #949494;
     font-size: 14px;
     font-weight: 500;
-    background-color: #B600D180;
+    background-color: #B600D1;
     display: flex;
     align-items: center;
+    cursor: pointer;
+}
+.user-management-table-contorls>div div:nth-child(3).disable {
+
+    background-color: #B600D180;
+    pointer-events: none;
     cursor: pointer;
 }
 
@@ -394,6 +485,13 @@
     margin-left: 5px;
     display: flex;
     align-items: center;
+    cursor: pointer;
+
+}
+.user-management-table-contorls>div div:nth-child(4).disable {
+
+    background-color: #B600D180;
+    pointer-events: none;
     cursor: pointer;
 
 }

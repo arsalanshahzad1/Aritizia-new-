@@ -1,95 +1,132 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../pages/landingpage/Header'
 import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
 import SalesHistoryChart from './SalesHistoryChart';
 import ControllingDataRows from './ContollingDataRows';
 import ChartAnalytics from './ChartAnalytics';
 import TransactionRows from './TransactionRows';
-
+import adminApis from '../../service/adminIndex';
+import { HiOutlineArrowNarrowUp, HiOutlineArrowNarrowDown } from 'react-icons/hi'
+import { TbArrowsDownUp } from 'react-icons/tb'
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
 
 function AnalyticsTool({ search, setSearch }) {
+
+    const [analyticsDetails, setAnalyticsDetails] = useState('');
+    // const [saleHistory, setSaleHistory] = useState(0);
+    const [activeTabData, setActiveTabData] = useState('free_trail');
+
+    const [userSubscription, setUserSubscription] = useState({ value: 0, label: "Monthly" });
+    const [saleHistory, setSaleHistory] = useState({ value: 0, label: "Monthly" });
+
+    const userSubscriptionyptoOptions = [
+        { value: 0, label: "Monthly" },
+        { value: 1, label: "Weekly" },
+        { value: 2, label: "Daily" },
+    ];
+    const saleHistoryOptions = [
+        { value: 0, label: "Monthly" },
+        { value: 1, label: "Weekly" },
+        { value: 2, label: "Daily" },
+    ];
+
+    const defaultUserSubscription = userSubscriptionyptoOptions[0];
+    const defaultSaleHistory = saleHistoryOptions[0];
+
+    const viewAnalyticUsers = async () => {
+
+        const response = await adminApis.viewAnalyticUsers()
+        if (response?.status) {
+            setAnalyticsDetails(response?.data.data)
+            console.log(response?.data.data, 'error');
+            console.log(analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[0], 'chart-data');
+        } else {
+            console.log('error');
+        }
+    }
 
     const Monthly_data = [
         {
             data: "Jan",
-            value: 0,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[0],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Feb",
-            value: 0.50,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[1],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Mar",
-            value: 0.85,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[2],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Apr",
-            value: 0.98,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[3],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "May",
-            value: 0.45,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[4],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "June",
-            value: 0.43,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[5],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "July",
-            value: 0.41,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[6],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Aug",
-            value: 0.52,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[7],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Sep",
-            value: 0.54,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[8],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Oct",
-            value: 0.85,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[9],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Nov",
-            value: 0.48,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[10],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
             data: "Dec",
-            value: 0,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.all_months?.[11],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
@@ -97,85 +134,50 @@ function AnalyticsTool({ search, setSearch }) {
     ];
     const Weekly_data = [
         {
-            data: "Jan",
-            value: 5,
+            data: 1,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[0],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Feb",
-            value: 2.50,
+            data: 2,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[1],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Mar",
-            value: 9.85,
+            data: 3,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[2],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Apr",
-            value: 2.98,
+            data: 4,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[3],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "May",
-            value: 4.45,
+            data: 5,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[4],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "June",
-            value: 6.43,
+            data: 6,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[5],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "July",
-            value: 3.41,
-            Average_price: "0.62 ETH",
-            Num_sales: "1",
-            Date: "May 07 at 5:00 PM"
-        },
-        {
-            data: "Aug",
-            value: 2.52,
-            Average_price: "0.62 ETH",
-            Num_sales: "1",
-            Date: "May 07 at 5:00 PM"
-        },
-        {
-            data: "Sep",
-            value: 4.54,
-            Average_price: "0.62 ETH",
-            Num_sales: "1",
-            Date: "May 07 at 5:00 PM"
-        },
-        {
-            data: "Oct",
-            value: 0.85,
-            Average_price: "0.62 ETH",
-            Num_sales: "1",
-            Date: "May 07 at 5:00 PM"
-        },
-        {
-            data: "Nov",
-            value: 0.48,
-            Average_price: "0.62 ETH",
-            Num_sales: "1",
-            Date: "May 07 at 5:00 PM"
-        },
-        {
-            data: "Dec",
-            value: 0,
+            data: 7,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_week_all_days?.[6],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
@@ -183,90 +185,226 @@ function AnalyticsTool({ search, setSearch }) {
     ];
     const Daily_data = [
         {
-            data: "Jan",
-            value: 0,
+            data: 1,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[0],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Feb",
-            value: 0,
+            data: 2,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[1],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Mar",
-            value: 0,
+            data: 3,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[2],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Apr",
-            value: 2,
+            data: 4,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[3],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "May",
-            value: 3,
+            data: 5,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[4],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "June",
-            value: 4,
+            data: 6,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[5],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "July",
-            value: 5,
+            data: 7,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[6],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Aug",
-            value: 6,
+            data: 8,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[7],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Sep",
-            value: 5,
+            data: 9,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[8],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Oct",
-            value: 4,
+            data: 10,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[9],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Nov",
-            value: 3,
+            data: 11,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[10],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
         {
-            data: "Dec",
-            value: 2,
+            data: 12,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[11],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 13,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[12],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 14,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[13],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 15,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[14],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 16,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[15],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 17,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[16],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 18,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[17],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 19,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[18],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 20,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[19],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 21,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[20],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 22,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[21],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 23,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[22],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 24,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[23],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 25,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[24],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 26,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[25],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 27,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[26],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 28,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[27],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 29,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[28],
+            Average_price: "0.62 ETH",
+            Num_sales: "1",
+            Date: "May 07 at 5:00 PM"
+        },
+        {
+            data: 30,
+            value: analyticsDetails?.user_subscription?.[activeTabData]?.last_month_all_days?.[29],
             Average_price: "0.62 ETH",
             Num_sales: "1",
             Date: "May 07 at 5:00 PM"
         },
     ];
+
+    const months = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sep","Oct","Nov","Dec"]
+    const weekly = [1,2,3,4,5,6,7]
+    const daily = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]
+
+    useEffect(() => {
+        viewAnalyticUsers()
+    }, [])
+    useEffect(() => {
+    }, [analyticsDetails])
     return (
         <div className='Dashboard-front'>
             <Header
@@ -280,57 +418,110 @@ function AnalyticsTool({ search, setSearch }) {
                 <div className='dashboard-front-section-1 dashboard-front-section-2'>
                     <div className='dashboard-card'>
                         <div>Free Trail Total Users</div>
-                        <div>15K+</div>
-                        <div>
-                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.70711 0.292892C8.31658 -0.0976315 7.68342 -0.0976314 7.29289 0.292892L0.928932 6.65685C0.538407 7.04738 0.538407 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292892ZM9 18L9 1L7 1L7 18L9 18Z" fill="#2636D9" />
-                            </svg>
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                        <div>{analyticsDetails?.analytics?.Free_Trail?.user_count}</div>
+                        {analyticsDetails?.analytics?.Free_Trail?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown />
+
+                                {analyticsDetails?.analytics?.Free_Trail?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <>
+                                {analyticsDetails?.analytics?.Free_Trail?.percentage == 0 ?
+
+                                    <div className='up'>
+                                        <HiOutlineArrowNarrowUp />
+
+                                        {analyticsDetails?.analytics?.Free_Trail?.percentage}%
+                                        <span>
+                                            vs previous month
+                                        </span>
+                                    </div>
+                                    :
+                                    <div className='up'>
+                                        <TbArrowsDownUp />
+
+                                        {analyticsDetails?.analytics?.Free_Trail?.percentage}%
+                                        <span>
+                                            vs previous month
+                                        </span>
+                                    </div>
+
+                                }
+                            </>
+                        }
                     </div>
                     <div className='dashboard-card'>
                         <div>Gold Total User</div>
-                        <div>50K+</div>
-                        <div>
-                            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.70711 0.292892C8.31658 -0.0976315 7.68342 -0.0976314 7.29289 0.292892L0.928932 6.65685C0.538407 7.04738 0.538407 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292892ZM9 18L9 1L7 1L7 18L9 18Z" fill="#2636D9" />
-                            </svg>
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                        <div>{analyticsDetails?.analytics?.Gold?.user_count}</div>
+                        {analyticsDetails?.analytics?.Gold?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown />
+
+                                {analyticsDetails?.analytics?.Gold?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp />
+
+                                {analyticsDetails?.analytics?.Gold?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                        }
                     </div>
                     <div className='dashboard-card'>
                         <div>Platinum Total User</div>
-                        <div>90K+</div>
-                        <div className='pink'>
-                            <svg width="14" height="16" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.29289 17.7071C7.68342 18.0976 8.31658 18.0976 8.70711 17.7071L15.0711 11.3431C15.4616 10.9526 15.4616 10.3195 15.0711 9.92893C14.6805 9.53841 14.0474 9.53841 13.6569 9.92893L8 15.5858L2.34315 9.92893C1.95262 9.53841 1.31946 9.53841 0.928932 9.92893C0.538407 10.3195 0.538407 10.9526 0.928932 11.3431L7.29289 17.7071ZM7 -4.37114e-08L7 17L9 17L9 4.37114e-08L7 -4.37114e-08Z" fill="#B600D1" />
-                            </svg>
+                        <div>{analyticsDetails?.analytics?.Platinum?.user_count}</div>
+                        {analyticsDetails?.analytics?.Platinum?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown />
 
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                                {analyticsDetails?.analytics?.Platinum?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp />
+
+                                {analyticsDetails?.analytics?.Platinum?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                        }
                     </div>
                     <div className='dashboard-card'>
                         <div>Daimond Total User</div>
-                        <div>150K+</div>
-                        <div className='pink'>
-                            <svg width="14" height="16" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.29289 17.7071C7.68342 18.0976 8.31658 18.0976 8.70711 17.7071L15.0711 11.3431C15.4616 10.9526 15.4616 10.3195 15.0711 9.92893C14.6805 9.53841 14.0474 9.53841 13.6569 9.92893L8 15.5858L2.34315 9.92893C1.95262 9.53841 1.31946 9.53841 0.928932 9.92893C0.538407 10.3195 0.538407 10.9526 0.928932 11.3431L7.29289 17.7071ZM7 -4.37114e-08L7 17L9 17L9 4.37114e-08L7 -4.37114e-08Z" fill="#B600D1" />
-                            </svg>
+                        <div>{analyticsDetails?.analytics?.Diamond?.user_count}</div>
+                        {analyticsDetails?.analytics?.Diamond?.percentage < 0 ?
+                            <div className='down'>
+                                <HiOutlineArrowNarrowDown />
 
-                            12.5%
-                            <span>
-                                vs previous month
-                            </span>
-                        </div>
+                                {analyticsDetails?.analytics?.Diamond?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                            :
+                            <div className='up'>
+                                <HiOutlineArrowNarrowUp />
+
+                                {analyticsDetails?.analytics?.Diamond?.percentage}%
+                                <span>
+                                    vs previous month
+                                </span>
+                            </div>
+                        }
                     </div>
 
                 </div>
@@ -346,24 +537,25 @@ function AnalyticsTool({ search, setSearch }) {
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
                             <div>User Subscription</div>
-                            <div>Free Trial</div>
-                            <div>Gold</div>
-                            <div>Platinum</div>
-                            <div>Daimond</div>
+                            <div className={`${activeTabData == 'free_trail' ? 'active' : ''}`} onClick={() => setActiveTabData('free_trail')}>Free Trial</div>
+                            <div className={`${activeTabData == 'gold' ? 'active' : ''}`} onClick={() => setActiveTabData('gold')}>Gold</div>
+                            <div className={`${activeTabData == 'platinum' ? 'active' : ''}`} onClick={() => setActiveTabData('platinum')}>Platinum</div>
+                            <div className={`${activeTabData == 'diamond' ? 'active' : ''}`} onClick={() => setActiveTabData('diamond')}>Daimond</div>
                         </div>
-                        <div>
-                            <div className='dashboard-drop-down'>
-                                Monthly
-                                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.98009 9C6.83131 8.98977 6.68991 8.92162 6.57886 8.80668L5.74292 7.84011L0.334397 1.56713C0.252801 1.46609 0.179994 1.35599 0.117044 1.23847L0 1.04514L0 0.70687C0.14211 0.262251 0.376164 0.0592894 0.668743 0.0592894C0.790901 0.0633694 0.911057 0.0963116 1.02176 0.156158C1.13247 0.216005 1.23139 0.301472 1.31244 0.407238C2.7001 2.03106 4.09334 3.642 5.49215 5.24005L6.99683 6.98953L12.7397 0.329896C12.8838 0.143929 13.0845 0.0296689 13.2998 0.010973C13.3717 -0.00365766 13.4453 -0.00365766 13.5172 0.010973C13.6237 0.0483471 13.7207 0.115497 13.7994 0.206539C13.8782 0.297582 13.9363 0.409686 13.9686 0.532896C14.0021 0.657133 14.0089 0.788914 13.9885 0.91689C13.9681 1.04487 13.9211 1.16521 13.8516 1.26749L13.7345 1.40283L12.8986 2.36939L7.53185 8.58438C7.40778 8.71781 7.25914 8.81694 7.09714 8.87434L6.98009 9Z" fill="#929292" />
-                                </svg>
-
-                            </div>
+                        <div className='user-sub-dd'>
+                            <Dropdown
+                                options={userSubscriptionyptoOptions}
+                                onChange={(e) => {setUserSubscription(e)}}
+                                value={defaultUserSubscription.value}
+                            />
                         </div>
                     </div>
                 </div>
                 <div className='df-row-3'>
-                    <ChartForEarning data={Monthly_data} />
+                    {userSubscription.value == 0 &&  <ChartForEarning data={Monthly_data} />}
+                    {userSubscription.value == 1 && <ChartForEarning data={Weekly_data} />}
+                    {userSubscription.value == 2 && <ChartForEarning data={Daily_data} />}
+                    {/* <ChartForEarning data={Monthly_data} /> */}
                 </div>
                 <br /><br /><br /><br /> <br /> <br />
                 <div className='dashboard-front-section-2'>
@@ -372,21 +564,22 @@ function AnalyticsTool({ search, setSearch }) {
                             <div>Sales History</div>
 
                         </div>
-                        <div>
-                            <div className='dashboard-drop-down'>
-                                Monthly
-                                <svg width="14" height="9" viewBox="0 0 14 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.98009 9C6.83131 8.98977 6.68991 8.92162 6.57886 8.80668L5.74292 7.84011L0.334397 1.56713C0.252801 1.46609 0.179994 1.35599 0.117044 1.23847L0 1.04514L0 0.70687C0.14211 0.262251 0.376164 0.0592894 0.668743 0.0592894C0.790901 0.0633694 0.911057 0.0963116 1.02176 0.156158C1.13247 0.216005 1.23139 0.301472 1.31244 0.407238C2.7001 2.03106 4.09334 3.642 5.49215 5.24005L6.99683 6.98953L12.7397 0.329896C12.8838 0.143929 13.0845 0.0296689 13.2998 0.010973C13.3717 -0.00365766 13.4453 -0.00365766 13.5172 0.010973C13.6237 0.0483471 13.7207 0.115497 13.7994 0.206539C13.8782 0.297582 13.9363 0.409686 13.9686 0.532896C14.0021 0.657133 14.0089 0.788914 13.9885 0.91689C13.9681 1.04487 13.9211 1.16521 13.8516 1.26749L13.7345 1.40283L12.8986 2.36939L7.53185 8.58438C7.40778 8.71781 7.25914 8.81694 7.09714 8.87434L6.98009 9Z" fill="#929292" />
-                                </svg>
-
-                            </div>
+                        <div className='user-sub-dd'>
+                            <Dropdown
+                                options={saleHistoryOptions}
+                                onChange={(e) => {setSaleHistory(e)}}
+                                value={defaultSaleHistory.value}
+                            />
                         </div>
                     </div>
                 </div>
                 <div className='df-row-3'>
                     {/* <ChartForEarning data={Monthly_data} /> */}
                     {/* <SalesHistoryChart /> */}
-                    <ChartAnalytics />
+                    {saleHistory.value == 0 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.all_months} option={months}/>}
+                    {saleHistory.value == 1 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_week_all_day} option={weekly}/>}
+                    {saleHistory.value == 2 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_month_all_days} option={daily}/>}
+                    
                 </div>
 
                 <div className='table-for-user-management'>
