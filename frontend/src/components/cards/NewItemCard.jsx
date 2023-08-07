@@ -14,7 +14,7 @@ const NewItemCard = ({
   endTime,
   description,
   // userAddress,
-  collectionImages
+  collectionImages,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -25,6 +25,7 @@ const NewItemCard = ({
   const userAddress = userData?.wallet_address;
 
   console.log("highestBiddd", highestBid);
+  console.log("collectionImagestt", collectionImages);
   console.log("highestBiddd", typeof highestBid);
 
   function convertTimestampToCustomFormat() {

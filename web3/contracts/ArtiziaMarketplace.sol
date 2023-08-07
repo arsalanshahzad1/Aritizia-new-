@@ -322,6 +322,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     event addedFans(address[] fans);
 
+    event removeFan(address fan);
+
     event receivedABid(
         uint256 tokenId,
         address seller,
@@ -375,7 +377,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     // Function to swap USDT for ETH
     function swapUSDTForETH(uint256 usdtAmountIn) public returns (uint256) {
-        console.log("test=1", usdtAmountIn);
         address[] memory path = new address[](2);
         path[0] = USDT_ADDRESS;
         path[1] = uniswapRouter.WETH();
@@ -386,14 +387,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         // Approve the Uniswap Router to spend the USDT
         USDTtoken.approve(UNISWAP_ROUTER_ADDRESS, usdtAmountIn);
 
-        console.log("test3");
         // Define the variable to store the return array
         uint256[] memory amountsOut = new uint256[](2);
 
         // Call the getAmountsOut function and assign the return value
         amountsOut = uniswapRouter.getAmountsOut(usdtAmountIn, path);
-
-        console.log("amount", amountsOut[1]);
 
         // Perform the swap transaction
         uniswapRouter.swapTokensForExactETH(
@@ -405,7 +403,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         );
 
         // Transfer the received ETH to the desired recipient (User A)
-        console.log("test4");
         // payable(msg.sender).transfer(amountsOut[1]);
 
         return amountsOut[1];
@@ -494,32 +491,21 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         // require(msg.value == LISTING_FEE, "Not enough ether for listing fee");
 
         for (uint256 i = 0; i < _tokenId.length; i++) {
-            console.log("this is 1", _tokenId[i]);
-            console.log("_listingType", _listingType);
-            console.log(
-                "uint256(ListingType.Auction)",
-                uint256(ListingType.Auction)
-            );
-
             if (_price[i] < 0) {
                 revert invalidPrice();
             } else if (_listingType > uint256(ListingType.Auction)) {
                 revert invalidListingType();
             } else {
-                console.log("_tokenId[i]", _tokenId[i]);
-
                 IERC721(_nftContract).transferFrom(
                     msg.sender,
                     address(this),
                     _tokenId[i]
                 );
-                console.log("this is 2");
 
                 // _marketOwner.transfer(LISTING_FEE);
                 // console.log("this is 3");
 
                 _nftCount.increment();
-                console.log("this is 4");
 
                 collection[_collectionId].push(_tokenId[i]);
 
@@ -538,15 +524,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     _collectionId
                 );
 
-                console.log("this is 5");
-
                 _idToNFT2[_tokenId[i]] = NFT2(_tokenId[i], false, 0);
 
                 if (_listingType == uint256(ListingType.Auction)) {
-                    console.log("this is 6");
-                    console.log("_startTime[i]", _startTime[i]);
-                    console.log("_endTime[i]", _endTime[i]);
-
                     _idToAuction[_tokenId[i]] = Auction(
                         _tokenId[i], //tokenId
                         payable(msg.sender), // seller
@@ -559,7 +539,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                         // false // isLive
                     );
                 }
-                console.log("this is 7");
 
                 emit NFTListed(
                     _nftContract,
@@ -662,7 +641,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _amountAfterRoyalty;
 
         // require(nft.seller == nft.firstOwner, "Seller and first owner");
-        // console.log("Check2");
 
         USDTtoken.transferFrom(msg.sender, address(this), _amount);
 
@@ -912,8 +890,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         NFT storage nft = _idToNFT[_tokenId];
 
         require(_price > 0, "Price must be at least 1 wei");
-        console.log("nft.owner", nft.owner);
-        console.log("_user", _user);
+
         require(
             nft.owner == _user,
             "Only the owner of an nft can list the nft."
@@ -1045,7 +1022,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         _amountInETHInWei = _amountInETHInWei * ethPriceInUsdt;
         _amountInETHInWei = _amountInETHInWei / 10 ** 18;
         // uint256 _amountInETH = _amountInETHInWei / 10 ** 18;
-        console.log("_amountInETHInWei", _amountInETHInWei);
         if (_idToAuction[_tokenId].highestBidder == address(0)) {
             require(
                 _amountInETHInWei >= _idToAuction[_tokenId].basePrice,
@@ -1367,24 +1343,40 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         emit addedFans(myFans);
     }
 
-    function removeFans(address[] memory addresses) public {
-        for (uint256 i = 0; i < addresses.length; i++) {
-            address fanAddress = addresses[i];
-
-            // Remove fanAddress from fanLists
-            address[] storage fanList = fanLists[fanAddress];
-            for (uint256 j = 0; j < fanList.length; j++) {
-                if (fanList[j] == msg.sender) {
-                    fanList[j] = fanList[fanList.length - 1];
-                    fanList.pop();
-                    break;
-                }
+    function removeFans(address addressToRemove) public {
+        address[] storage fanList = fanLists[msg.sender];
+        for (uint256 i = 0; i < fanList.length; i++) {
+            if (fanList[i] == addressToRemove) {
+                fanList[i] = fanList[fanList.length - 1];
+                fanList.pop();
+                emit removeFan(addressToRemove);
+                break;
             }
-
-            // Update isFan mapping
-            isFan[fanAddress][msg.sender] = false;
         }
     }
+
+    // function removeFans(address[] memory addresses) public {
+    //     for (uint256 i = 0; i < addresses.length; i++) {
+    //         address fanAddress = addresses[i];
+    //         console.log("fanAddress", fanAddress);
+
+    //         // Remove fanAddress from fanLists
+    //         address[] storage fanList = fanLists[fanAddress];
+    //         for (uint256 j = 0; j < fanList.length; j++) {
+    //             if (fanList[j] == msg.sender) {
+    //                 fanList[j] = fanList[fanList.length - 1];
+
+    //                 fanList.pop();
+    //                 emit removeFan(fanAddress);
+    //                 break;
+    //             }
+    //         }
+
+    //         // Update isFan mapping
+    //         console.log("isFan[fanAddress][msg.sender]", isFan[fanAddress][msg.sender]);
+    //         isFan[fanAddress][msg.sender] = false;
+    //     }
+    // }
 
     // function removeAllFans() public {
     //     address[] storage fans = fanLists[msg.sender];
@@ -1459,13 +1451,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 nftCount = _nftCount.current();
         uint256 unsoldNftsCount = nftCount - _nftsSold.current();
 
-        console.log("nftCount", nftCount);
-        console.log("unsoldNftsCount", unsoldNftsCount);
-
         NFT[] memory nfts = new NFT[](unsoldNftsCount);
         uint nftsIndex = 0;
-
-        console.log("_collectionId");
 
         for (uint i = 0; i < nftCount; i++) {
             if (
@@ -1483,13 +1470,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 nftCount = _nftCount.current();
         uint256 unsoldNftsCount = nftCount - _nftsSold.current();
 
-        console.log("nftCount", nftCount);
-        console.log("unsoldNftsCount", unsoldNftsCount);
-
         NFT[] memory nfts = new NFT[](unsoldNftsCount);
         uint nftsIndex = 0;
-
-        console.log("_idToNFT[i]");
 
         for (uint i = 0; i < nftCount; i++) {
             if (
@@ -1558,18 +1540,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             block.timestamp > _idToAuction[_tokenId].startTime &&
             block.timestamp < _idToAuction[_tokenId].endTime
         ) {
-            console.log("StartTime: ", _idToAuction[_tokenId].startTime);
-            console.log("endTime: ", _idToAuction[_tokenId].endTime);
             return true;
         } else {
             return false;
         }
     }
 
-      function getCurrentTimestamp() public view returns (uint256) {
+    function getCurrentTimestamp() public view returns (uint256) {
         return block.timestamp;
     }
-
 
     receive() external payable {}
 

@@ -444,7 +444,7 @@ header .left img {
   cursor: pointer;
   width: 42px;
   height: 42px;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .home-first-wrap {
@@ -780,6 +780,7 @@ header .left img {
 .home-four-sec .table tr {
   margin: 15px 0px;
 }
+
 .pruchase .table tr {
   margin: 15px 0px;
 }
@@ -905,7 +906,7 @@ header .left img {
   border: 5px solid #FFF;
   width: 60px;
   height: 60px;
-    object-fit: cover;
+  object-fit: cover;
 }
 
 .new-item-card .detail-wrap .center-icon .icon img:last-child {
@@ -1079,7 +1080,7 @@ footer h1 {
   padding: 50px 50px 20px 0px;
 }
 
-.profile-first-section{
+.profile-first-section {
   margin-inline: 45px;
 }
 
@@ -1465,6 +1466,7 @@ footer h1 {
 .collection-table table tr th:nth-child(5) {
   width: 10%;
 }
+
 .collection-table.pruchase table tr th:nth-child(1) {
   width: 10%;
 }
@@ -5176,7 +5178,7 @@ footer h1 {
   transition: all 200ms ease;
 }
 
-.custom-drop-down .drop-down-select svg{
+.custom-drop-down .drop-down-select svg {
   position: absolute;
   right: 5px;
   top: 50%;
@@ -5227,6 +5229,7 @@ footer h1 {
   background-color: #f2f9fc;
   color: #333;
 }
+
 .custom-drop-down .dropdown-list-wrap ul li:hover {
   background-color: #f2f9fc;
   color: #333;

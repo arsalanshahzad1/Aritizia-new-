@@ -20,7 +20,8 @@ const MyNftCard = ({
   royalty,
   description,
   collection,
-  collectionImages
+  collectionImages,
+  getMyNfts
   // userAddress,
 }) => {
   console.log(royalty, "royalty");
@@ -182,6 +183,7 @@ const MyNftCard = ({
         royalty={royalty}
         descriptionn={description}
         collectionn={collection}
+        getMyNfts={getMyNfts}
       />
       <ProfileDrawer
         isVisible={isVisible2}

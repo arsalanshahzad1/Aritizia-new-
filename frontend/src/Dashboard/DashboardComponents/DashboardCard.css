@@ -635,6 +635,8 @@ img {
     border-radius: 50%;
     border: 5px solid #FFF;
     width: 66px;
+    height: 66px;
+    object-fit: cover;
 }
 
 .css-fwx73e .detail-wrap .center-icon .icon {

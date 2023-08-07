@@ -318,6 +318,7 @@ const ProfileDrawer = ({
   royalty,
   descriptionn,
   collectionn,
+  getMyNfts,
 }) => {
   console.log(titlee, "title");
   console.log(royalty, "royalty");
@@ -524,11 +525,16 @@ const ProfileDrawer = ({
     console.log("postListNft");
     console.log("listToPost.current[0]", listToPost.current[0]);
 
-    const response = await apis.postListNft(listToPost.current[0]);
-    console.log("2222222222222222");
-    console.log("response", response);
+    // const response = await apis.postListNft(listToPost.current[0]);
+    // console.log("2222222222222222");
+    // console.log("response", response);
     relist = false;
-    navigate("/profile");
+    await onClose(false);
+    // setTimeout(() => {
+    window.location.reload();
+
+    // await getMyNfts();
+    // }, 500);
   };
 
   //   const [file, setFile] = useState(null);
@@ -676,6 +682,7 @@ const ProfileDrawer = ({
         MARKETPLACE_CONTRACT_ABI.abi,
         provider
       );
+
       const _listedNfts = await marketplaceContract.getListedNfts();
 
       console.log("listedNfts", _listedNfts);

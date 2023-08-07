@@ -201,8 +201,12 @@ function ProfileDrawer({
 
     const response = await apis.postNftSold(value);
     console.log("response", response);
-    alert("NFT bought");
-    // navigate("/profile");
+    // alert("NFT bought");
+    setSucess(false);
+    await onClose(false);
+    setTimeout(() => {
+      navigate("/profile");
+    }, 1500);
   };
 
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
@@ -357,13 +361,13 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
+        paymentMethod.value,
         id,
         sellerPercent, //  must be multiple of 10 of the users percent
         buyerPercent, // must be multiple of 10 of the users percent
         {
           value: ethers.utils.parseEther(value),
-          gasLimit: ethers.BigNumber.from("500000"),
+          gasLimit: ethers.BigNumber.from("5000000"),
         }
       )
     ).wait();
@@ -419,19 +423,10 @@ function ProfileDrawer({
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       amountInWei,
-      { gasLimit: ethers.BigNumber.from("500000") }
+      { gasLimit: ethers.BigNumber.from("5000000") }
     );
 
     appprove.wait();
-
-    // allowance = await USDTContract.allowance(
-    //   userAddress,
-    //   MARKETPLACE_CONTRACT_ADDRESS.address
-    // );
-
-    // console.log("Allowance after", allowance.toString());
-
-    // }
 
     console.log("paymentmethod", paymentMethod);
     console.log("paymentmethod.value", paymentMethod.value);
@@ -450,12 +445,12 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
+        paymentMethod.value,
         id,
         amountInWei,
         sellerPercent, // must be multiple of 10 of the users percent
         buyerPercent, // must be multiple of 10 of the users percent
-        { gasLimit: ethers.BigNumber.from("500000") }
+        { gasLimit: ethers.BigNumber.from("5000000") }
       )
     ).wait();
 

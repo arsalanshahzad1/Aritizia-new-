@@ -48,6 +48,83 @@ const Single = ({ search, setSearch }) => {
   const user_id = id?.id;
   const navigate = useNavigate();
 
+  const getCollection = async () => {
+    const response = await apis.getNFTCollection();
+    if (response.status) {
+      setcollectionOptions("");
+
+      for (let i = 0; i < response?.data?.data?.length; i++) {
+        let type = response?.data?.data[i]?.payment_type;
+        console.log(type == "eth", "eth", "TYpe", type);
+
+        if (type == "eth") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 0,
+            },
+          ]);
+        }
+        if (type == "usdt") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 1,
+            },
+          ]);
+        }
+      }
+    }
+    console.log(collectionOptions, "collectionOptions");
+  };
+
+  const postSingleCollection = async () => {
+    let cryptoType;
+    console.log(user_id, collectionName, crypto, selectedImage2);
+    if (collectionName.length < 1 || !selectedImage2) {
+      toast.warning("Input Collection Name and image to Create", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } else {
+      if (crypto.value === 0) {
+        cryptoType = "eth";
+      } else if (crypto.value === 1) {
+        cryptoType = "usdt";
+      }
+
+      const sendData = new FormData();
+      sendData.append("user_id", user_id);
+      sendData.append("name", collectionName);
+      sendData.append("payment_type", cryptoType);
+      sendData.append("image", selectedImage2);
+      const response = await apis.postNFTCollection(sendData);
+
+      if (response.status) {
+        getCollection();
+        setshowCreateCollection(false);
+      }
+
+      // setcollectionOptions((previousOptions) => [
+      //   ...previousOptions,
+      //   {
+      //     value: response?.data?.data?.id,
+      //     label: response?.data?.data?.name,
+      //     image: response?.data?.data?.media[0]?.original_url,
+      //   },
+      // ]);
+    }
+  };
+
+  useEffect(() => {
+    getCollection();
+  }, []);
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value) || value === "") {
@@ -220,7 +297,10 @@ const Single = ({ search, setSearch }) => {
     console.log("mintcounter", mintcounter);
     try {
       console.log("result", result);
-      await (await nftContract.mint([result])).wait();
+      await nftContract.mint([result], {
+        gasLimit: ethers.BigNumber.from("5000000"),
+      });
+
       console.log("NFT minting is complete!");
 
       let response = await nftContract.on(
@@ -239,8 +319,10 @@ const Single = ({ search, setSearch }) => {
   let nftContractGlobal;
 
   const handleNFTMintedEvent2 = async (mintedTokens) => {
+    console.log("handleNFTMintedEvent2");
     let tokenId = +mintedTokens[0].toString();
     setMintedTokensList(tokenId);
+    console.log("tokenId", tokenId);
 
     singleMinting
       ? listNFT(marketplaceContractGlobal, nftContractGlobal, tokenId)
@@ -248,6 +330,7 @@ const Single = ({ search, setSearch }) => {
   };
 
   async function listNFT(marketplaceContract, nftContract, listedToken) {
+    console.log("listNFT", listNFT);
     listcounter += 1;
     try {
       let mintedTokens = listedToken;
@@ -285,11 +368,18 @@ const Single = ({ search, setSearch }) => {
           collection.value, // collection number
           collection.crypto,
           {
-            gasLimit: ethers.BigNumber.from("500000"),
+            gasLimit: ethers.BigNumber.from("5000000"),
           }
         )
       ).wait();
       console.log("NFT listing is complete!");
+
+      let response = await marketplaceContract.on(
+        "NFTListed",
+        singleMinting ? handleNFTListedEvent2 : null
+      );
+
+      console.log("response", response);
     } catch (error) {
       toast.error(`Error while listing NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
@@ -298,11 +388,6 @@ const Single = ({ search, setSearch }) => {
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
     console.log("singleMinting", singleMinting);
-
-    let response = await marketplaceContract.on(
-      "NFTListed",
-      singleMinting ? handleNFTListedEvent2 : null
-    );
   }
 
   // mint the NFT then list
@@ -342,6 +427,8 @@ const Single = ({ search, setSearch }) => {
     collectionId,
     listingType
   ) => {
+    console.log("handleNFTListedEvent2");
+
     if (singleMinting) {
       let listedData = {
         title: item.title,
@@ -360,12 +447,12 @@ const Single = ({ search, setSearch }) => {
   };
 
   const nftDataPost = async () => {
-    const response = await apis.postListNft(listToPost.current[0]);
-    console.log("response", response);
-
     toast.success("Nft listed", {
       position: toast.POSITION.TOP_CENTER,
     });
+    const response = await apis.postListNft(listToPost.current[0]);
+    console.log("response", response);
+
     // alert("Nft listed");
     setTimeout(() => {
       navigate("/profile");
@@ -587,79 +674,6 @@ const Single = ({ search, setSearch }) => {
 
   const [collectionFinalized, setcollectionFinalized] = useState(false);
 
-  const postSingleCollection = async () => {
-    let cryptoType;
-    console.log(user_id, collectionName, crypto, selectedImage2);
-    if (collectionName.length < 1 || !selectedImage2) {
-      toast.warning("Input Collection Name and image to Create", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    } else {
-      if (crypto.value === 0) {
-        cryptoType = "eth";
-      } else if (crypto.value === 1) {
-        cryptoType = "usdt";
-      }
-
-      const sendData = new FormData();
-      sendData.append("user_id", user_id);
-      sendData.append("name", collectionName);
-      sendData.append("payment_type", cryptoType);
-      sendData.append("image", selectedImage2);
-      const response = await apis.postNFTCollection(sendData);
-
-      setcollectionOptions((previousOptions) => [
-        ...previousOptions,
-        {
-          value: response?.data?.data?.id,
-          label: response?.data?.data?.name,
-          image: response?.data?.data?.media[0]?.original_url,
-        },
-      ]);
-
-      setshowCreateCollection(false);
-    }
-  };
-
-  const getCollection = async () => {
-    const response = await apis.getNFTCollection();
-    if (response.status) {
-      setcollectionOptions("");
-
-      for (let i = 0; i < response?.data?.data?.length; i++) {
-        let type = response?.data?.data[i]?.payment_type;
-        console.log(type == "eth", "eth", "TYpe", type);
-
-        if (type == "eth") {
-          setcollectionOptions((previousOptions) => [
-            ...previousOptions,
-            {
-              value: response?.data?.data[i]?.id,
-              label: response?.data?.data[i]?.name,
-              image: response?.data?.data[i]?.media[0]?.original_url,
-              crypto: 0,
-            },
-          ]);
-        }
-        if (type == "usdt") {
-          setcollectionOptions((previousOptions) => [
-            ...previousOptions,
-            {
-              value: response?.data?.data[i]?.id,
-              label: response?.data?.data[i]?.name,
-              image: response?.data?.data[i]?.media[0]?.original_url,
-              crypto: 1,
-            },
-          ]);
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    getCollection();
-  }, []);
-
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -846,6 +860,7 @@ const Single = ({ search, setSearch }) => {
                                 <div
                                   onClick={() => {
                                     setcollectionFinalized(true);
+                                    // notify();
                                   }}
                                   className="browse-btn my-5 button-styling"
                                 >

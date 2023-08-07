@@ -47,6 +47,86 @@ const Multiple = ({ search, setSearch }) => {
   const [showCollection, setshowcollection] = useState(false);
 
   const navigate = useNavigate();
+  const id = JSON.parse(localStorage.getItem("data"));
+  const user_id = id?.id;
+  const [collectionName, setCreateCollection] = useState("");
+  const getCollection = async () => {
+    const response = await apis.getNFTCollection();
+    if (response.status) {
+      setcollectionOptions("");
+
+      for (let i = 0; i < response?.data?.data?.length; i++) {
+        let type = response?.data?.data[i]?.payment_type;
+        console.log(type == "eth", "eth", "TYpe", type);
+
+        if (type == "eth") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 0,
+            },
+          ]);
+        }
+        if (type == "usdt") {
+          setcollectionOptions((previousOptions) => [
+            ...previousOptions,
+            {
+              value: response?.data?.data[i]?.id,
+              label: response?.data?.data[i]?.name,
+              image: response?.data?.data[i]?.media[0]?.original_url,
+              crypto: 1,
+            },
+          ]);
+        }
+      }
+    }
+    console.log(collectionOptions, "collectionOptions");
+  };
+
+  const postSingleCollection = async () => {
+    console.log("calling");
+    let cryptoType;
+    console.log(user_id, collectionName, crypto, selectedImage2);
+    if (collectionName.length < 1 || !selectedImage2) {
+      toast.warning("Input Collection Name and image to Create", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } else {
+      if (crypto.value === 0) {
+        cryptoType = "eth";
+      } else if (crypto.value === 1) {
+        cryptoType = "usdt";
+      }
+
+      const sendData = new FormData();
+      sendData.append("user_id", user_id);
+      sendData.append("name", collectionName);
+      sendData.append("payment_type", cryptoType);
+      sendData.append("image", selectedImage2);
+      const response = await apis.postNFTCollection(sendData);
+
+      if (response.status) {
+        getCollection();
+        setshowCreateCollection(false);
+      }
+
+      // setcollectionOptions((previousOptions) => [
+      //   ...previousOptions,
+      //   {
+      //     value: response?.data?.data?.id,
+      //     label: response?.data?.data?.name,
+      //     image: response?.data?.data?.media[0]?.original_url,
+      //   },
+      // ]);
+    }
+  };
+
+  useEffect(() => {
+    getCollection();
+  }, []);
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -330,6 +410,7 @@ const Multiple = ({ search, setSearch }) => {
   }
 
   const [getMintedTokenss, setMintedTokensList] = useState([]);
+  
   let marketplaceContractGlobal;
   let nftContractGlobal;
   let listedddd = [];
@@ -1168,79 +1249,6 @@ const Multiple = ({ search, setSearch }) => {
     setSelectedImage2(file);
   };
   const [collectionFinalized, setcollectionFinalized] = useState(false);
-  const [collectionName, setCreateCollection] = useState("");
-  const postSingleCollection = async () => {
-    let cryptoType;
-    console.log(user_id, collectionName, crypto, selectedImage2);
-    if (collectionName.length < 1 || !selectedImage2) {
-      toast.warning("Input Collection Name and image to Create", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-    } else {
-      if (crypto.value === 0) {
-        cryptoType = "eth";
-      } else if (crypto.value === 1) {
-        cryptoType = "usdt";
-      }
-
-      const sendData = new FormData();
-      sendData.append("user_id", user_id);
-      sendData.append("name", collectionName);
-      sendData.append("payment_type", cryptoType);
-      sendData.append("image", selectedImage2);
-      const response = await apis.postNFTCollection(sendData);
-
-      setcollectionOptions((previousOptions) => [
-        ...previousOptions,
-        {
-          value: response?.data?.data?.id,
-          label: response?.data?.data?.name,
-          image: response?.data?.data?.media[0]?.original_url,
-        },
-      ]);
-
-      setshowCreateCollection(false);
-    }
-  };
-
-  const getCollection = async () => {
-    const response = await apis.getNFTCollection();
-    if (response.status) {
-      setcollectionOptions("");
-
-      for (let i = 0; i < response?.data?.data?.length; i++) {
-        let type = response?.data?.data[i]?.payment_type;
-        console.log(type == "eth", "eth", "TYpe", type);
-
-        if (type == "eth") {
-          setcollectionOptions((previousOptions) => [
-            ...previousOptions,
-            {
-              value: response?.data?.data[i]?.id,
-              label: response?.data?.data[i]?.name,
-              image: response?.data?.data[i]?.media[0]?.original_url,
-              crypto: 0,
-            },
-          ]);
-        }
-        if (type == "usdt") {
-          setcollectionOptions((previousOptions) => [
-            ...previousOptions,
-            {
-              value: response?.data?.data[i]?.id,
-              label: response?.data?.data[i]?.name,
-              image: response?.data?.data[i]?.media[0]?.original_url,
-              crypto: 1,
-            },
-          ]);
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    getCollection();
-  }, []);
 
   return (
     <>
@@ -1391,10 +1399,7 @@ const Multiple = ({ search, setSearch }) => {
                                     </div>
                                     <div
                                       className="button-styling btnCC"
-                                      onClick={() => {
-                                        AddCollection();
-                                        postSingleCollection();
-                                      }}
+                                      onClick={postSingleCollection}
                                     >
                                       Create
                                     </div>

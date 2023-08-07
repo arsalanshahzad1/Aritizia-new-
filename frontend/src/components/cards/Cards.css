@@ -628,12 +628,14 @@ img {
 
 .css-fwx73e .detail-wrap .center-icon .icon img:first-child {
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  border: 5px solid #FFF;
-  width: 66px;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 5px solid #FFF;
+    width: 66px;
+    height: 66px;
+    object-fit: cover;
 }
 
 .css-fwx73e .detail-wrap .center-icon .icon {

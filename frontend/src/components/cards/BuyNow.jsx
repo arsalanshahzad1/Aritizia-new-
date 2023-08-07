@@ -18,7 +18,7 @@ const BuyNow = ({
   royalty,
   description,
   collection,
-  collectionImages
+  collectionImages,
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);

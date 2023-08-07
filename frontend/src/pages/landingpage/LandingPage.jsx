@@ -177,6 +177,17 @@ const LandingPage = ({ search, setSearch }) => {
         listingType = structData.listingType;
         let listed = structData.listed;
 
+        let collectionId = structData.collectionId.toString();
+
+        console.log("collectionId", collectionId);
+        const response = await apis.getNFTCollectionImage(collectionId);
+        console.log(response.data, "saad");
+        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        console.log(
+          response?.data?.data?.media?.[0]?.original_url,
+          "collectionImagesss"
+        );
+
         const price = ethers.utils.formatEther(structData.price.toString());
         console.log("priceee", price);
 
@@ -214,6 +225,7 @@ const LandingPage = ({ search, setSearch }) => {
                 royalty: royalty,
                 description: description,
                 collection: collection,
+                collectionImages: collectionImages,
               };
 
               myNFTs.push(nftData);
@@ -431,6 +443,7 @@ const LandingPage = ({ search, setSearch }) => {
                     royalty={item?.royalty}
                     description={item?.description}
                     collection={item?.collection}
+                    collectionImages={item?.collectionImages}
                     userAddress={userAddress}
                   />
                 ))}
@@ -474,6 +487,7 @@ const LandingPage = ({ search, setSearch }) => {
                   endTime={item?.endTime}
                   startTime={item?.startTime}
                   description={item?.description}
+                  collectionImages={item?.collectionImages}
                   userAddress={userAddress}
                 />
               ))}

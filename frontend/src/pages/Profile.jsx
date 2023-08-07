@@ -37,6 +37,7 @@ const { ethereum } = window;
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
   const [collectionTabs, setCollectionTabs] = useState(0);
+  const [likedTabs, setLikedTabs] = useState(0);
   const [FollowersTab, setFollowersTab] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
@@ -45,6 +46,7 @@ const Profile = ({ search, setSearch }) => {
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userNFTs, setUserNfts] = useState([]);
   const [likedNfts, setLikedNfts] = useState([]);
+  const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   // const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
@@ -67,81 +69,6 @@ const Profile = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("getProviderOrSigner");
-
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   const { chainId } = await web3Provider.getNetwork();
-
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-
-  //     return signer;
-  //   }
-
-  //   return web3Provider;
-  // };
-
-  // const connectWallet = async () => {
-  //   try {
-  //     // Get the provider from web3Modal, which in our case is MetaMask
-  //     // When used for the first time, it prompts the user to connect their wallet
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
-  //     // The `current` value is persisted throughout as long as this page is open
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
-
-  // const getAddress = async () => {
-  //   const accounts = await window.ethereum.request({
-  //     method: "eth_requestAccounts",
-  //   });
-  //   setUserAddress(accounts[0]);
-  //   console.log("getAddress", accounts[0]);
-  //   postWalletAddress(accounts[0]);
-  // };
-
-  // const postWalletAddress = async (address) => {
-  //   if (localStorage.getItem("data")) {
-  //     return console.log("data is avaliable");
-  //   } else {
-  //     const response = await apis.postWalletAddress({
-  //       wallet_address: address,
-  //     });
-  //     localStorage.setItem("data", JSON.stringify(response.data.data));
-  //     window.location.reload();
-  //   }
-
-  // };
-
   const getLikedNfts = async () => {
     const provider = await getProviderOrSigner();
 
@@ -159,6 +86,11 @@ const Profile = ({ search, setSearch }) => {
     let NFTId = await getLikedNftsList();
 
     let liked = [];
+    let myAuctions = [];
+
+    let emptyList = [];
+    setLikedNfts(emptyList);
+    setLikedNftsAuction(emptyList);
 
     // console.log("NFTId", NFTId);
 
@@ -170,19 +102,38 @@ const Profile = ({ search, setSearch }) => {
         id = +NFTId[i].token_id;
         // id =i;
 
-        console.log("zayyan", id);
-
         const metaData = await nftContract.tokenURI(id);
 
         const structData = await marketplaceContract._idToNFT(id);
-
-        console.log("structData", structData);
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
         let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
         setDiscountPrice(discountOnNFT);
+
+        let auctionData = await marketplaceContract._idToAuction(id);
+
+        let listingType = structData.listingType;
+
+        let highestBid = ethers.utils.formatEther(
+          auctionData.highestBid.toString()
+        );
+
+        setDiscountPrice(discountOnNFT);
+
+        let collectionId = structData.collectionId.toString();
+
+        console.log("collectionId", collectionId);
+        const response = await apis.getNFTCollectionImage(collectionId);
+        console.log(response.data, "saad");
+        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        console.log(
+          response?.data?.data?.media?.[0]?.original_url,
+          "collectionImagesss"
+        );
+
+        console.log("zayyan", id);
 
         // let auctionData = await marketplaceContract._idToAuction(id);
 
@@ -210,21 +161,39 @@ const Profile = ({ search, setSearch }) => {
             const description = data.description;
             const collection = data.collection;
 
-            // if (listingType === 0) {
-            const nftData = {
-              id: id, //
-              title: title,
-              image: image,
-              price: price,
-              crypto: crypto,
-              royalty: royalty,
-              description: description,
-              collection: collection,
-              collectionImage: collectionImage,
-            };
-            console.log("nftData", nftData);
-            liked.push(nftData);
-            setLikedNfts(liked);
+            if (listingType === 0) {
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+              };
+              console.log("nftData", nftData);
+              liked.push(nftData);
+              setLikedNfts(liked);
+            } else if (listingType === 1) {
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                basePrice: price,
+                collectionImages: collectionImages,
+                endTime: auctionData.endTime.toString(),
+                highestBid: highestBid,
+                highestBidder: auctionData.highestBidder.toString(),
+                seller: auctionData.seller.toString(),
+                startTime: auctionData.startTime.toString(),
+              };
+              myAuctions.push(nftData);
+              setLikedNftsAuction(myAuctions);
+              console.log(nftListAuction, "nftData");
+            }
 
             // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
           })
@@ -235,7 +204,6 @@ const Profile = ({ search, setSearch }) => {
       }
     }
   };
-
   const addFanList = async () => {
     const signer = await getProviderOrSigner(true);
 
@@ -252,14 +220,9 @@ const Profile = ({ search, setSearch }) => {
 
     console.log("FansAddress", FansAddress);
 
-    await (await marketplaceContract.addFans(FansAddress)).wait();
+    let fanadd = await (await marketplaceContract.addFans(FansAddress)).wait();
+    console.log("fanadd", fanadd);
     console.log("asdasdasd");
-
-    // const fans = await marketplaceContract.getFans(
-    //   "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-    // );
-
-    // console.log("fanssss", fans);
 
     let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
 
@@ -278,25 +241,35 @@ const Profile = ({ search, setSearch }) => {
     postFanList();
   };
 
-  // const testFans = async () => {
-  //   console.log("testFans");
-  //   console.log("addedFans hook ", addedFans);
-  //   console.log("addedFans hook ", addedFans[0]);
-  //   console.log("userAddress", userAddress);
-
-  //   postFanList();
-  // };
-
   const postFanList = async () => {
-    console.log("postFanList", postFanList);
-    console.log("userAddress", localStorage.getItem("date").wallet_address);
-    console.log("addedFans", addedFans);
+    console.log("ssss postFanList");
+    console.log("ssss userAddress", userAddress);
+    console.log("ssss addedFans", addedFans);
+
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let fanList = await marketplaceContract.getFans(userAddress);
+
+    console.log("ssssr fanList", fanList);
+    console.log("ssssr userAddress", userAddress);
+
     const response = await apis.postAddFans({
-      fan_by_wallet: localStorage.getItem("date").wallet_address,
-      fan_to_array_wallet: addedFans,
+      fan_by_wallet: userAddress,
+      fan_to_array_wallet: fanList,
     });
 
     console.log("DATA", response);
+
+    setTimeout(() => {
+      navigate("/profile");
+      // window.location.reload();
+    }, 1000);
   };
 
   const getMyListedNfts = async () => {
@@ -345,10 +318,10 @@ const Profile = ({ search, setSearch }) => {
       console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
-      console.log(response, 'responses');
+      console.log(response, "responses");
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-      console.log(response?.data?.data?.media?.[0]?.original_url, 'responsess');
-      console.log(collectionImages, 'trrrr');
+      console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
+      console.log(collectionImages, "trrrr");
 
       const metaData = await nftContract.tokenURI(id);
 
@@ -418,7 +391,7 @@ const Profile = ({ search, setSearch }) => {
             };
             myAuctions.push(nftData);
             setNftListAuction(myAuctions);
-            console.log(nftListAuction , 'nftData');
+            console.log(nftListAuction, "nftData");
           }
         })
 
@@ -429,25 +402,25 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const getMyNfts = async () => {
-    console.log('first')
+    console.log("first");
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
     const provider = await getProviderOrSigner();
-    console.log('two')
+    console.log("two");
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
-    console.log('three')
+    console.log("three");
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
       NFT_CONTRACT_ABI.abi,
       provider
     );
 
-    console.log('four')
+    console.log("four");
     const signer = provider.getSigner();
     const address = await signer.getAddress();
 
@@ -456,13 +429,13 @@ const Profile = ({ search, setSearch }) => {
     let listingType;
 
     let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
-    console.log('five')
+    console.log("five");
     // let mintedTokens = [1, 4, 2];
     // console.log("mintedTokens", mintedTokens);
     let NFTId = await getLikedNftsList();
     let myNFTs = [];
     // let myAuctions = [];
-    console.log(mintedTokens.length)
+    console.log(mintedTokens.length);
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
@@ -471,12 +444,15 @@ const Profile = ({ search, setSearch }) => {
       console.log("YESSss", collectionId);
 
       const response = await apis.getNFTCollectionImage(collectionId);
-      console.log(response.data, 'saad');
+      console.log(response.data, "saad");
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-      console.log(collectionImages, '');
+      console.log(
+        response?.data?.data?.media?.[0]?.original_url,
+        "collectionImagesss"
+      );
       const metaData = await nftContract.tokenURI(id);
 
-      console.log(response.data, 'workig');
+      console.log(response.data, "workig");
 
       const structData = await marketplaceContract._idToNFT(id);
 
@@ -600,82 +576,7 @@ const Profile = ({ search, setSearch }) => {
     console.log(FansAddress);
   };
 
-  const initialCheckboxData = [
-    {
-      id: 1,
-      label: "Checkbox 1",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-    {
-      id: 2,
-      label: "Checkbox 2",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-    {
-      id: 3,
-      label: "Checkbox 3",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-    {
-      id: 4,
-      label: "Checkbox 4",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-    {
-      id: 5,
-      label: "Checkbox 5",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-    {
-      id: 6,
-      label: "Checkbox 6",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-    {
-      id: 7,
-      label: "Checkbox 7",
-      checked: false,
-      FollowerName: "Monica Lucas",
-      FollowersCount: "100k",
-      FollowerImg: followerImg,
-    },
-
-    // Add more checkbox data objects as needed
-  ];
-
-  const [checkboxes, setCheckboxes] = useState(initialCheckboxData);
   const [addingFanList, setAddingFanList] = useState([]);
-
-  // const handleCheckboxChange = (id) => {
-  //     console.log(id,"ID")
-  //     followers.map((itemX)=>{
-
-  //       if(itemX?.user_id == id)
-  //      {
-  //       // itemX?.is_check = true
-  //       return itemX?.is_check = true
-  //       // setFollwers((prevState)=>[...prevState, {...itemX,is_check : true}])
-  //      }
-  //      })
-  // }
 
   const handleCheckboxChange = (id) => {
     setFollwers((prevCheckboxes) => {
@@ -700,42 +601,6 @@ const Profile = ({ search, setSearch }) => {
       return updatedCheckboxes;
     });
   };
-
-  // const checkAllCheckboxes = (event) => {
-  //   if (!event.target.checked) {
-  //     setAddingFanList([])
-  //   }
-  //   if (event.target.checked) {
-
-  //     for (let i = 0; i < followers.length; i++) {
-  //       // fansArray.push(followers[i]?.user_id)
-  //       setAddingFanList((prev) => [...prev, followers[i]?.user_id]);
-  //     }
-
-  //     setFollwers((prevCheckboxes) => {
-  //       const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
-  //         ...checkbox,
-  //         is_check: true,
-  //       }));
-
-  //       return updatedCheckboxes;
-  //     });
-
-  //   } else {
-  //     setAddingFanList([])
-  //     console.log(addingFanList);
-  //   }
-
-  //   setFollwers((prevCheckboxes) => {
-  //     const updatedCheckboxes = prevCheckboxes.map((checkbox) => ({
-  //       ...checkbox,
-  //       is_check: false,
-  //     }));
-
-  //     return updatedCheckboxes;
-  //   });
-
-  // };
 
   let [followers, setFollwers] = useState([]);
   let [addFanlisting, setAddFanlisting] = useState([]);
@@ -953,7 +818,12 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 0 && (
+                {tabs === 1 && (
+                  <>
+                    <Gallery />
+                  </>
+                )}
+                {tabs === 2 && (
                   <>
                     <div className="row">
                       {userNFTs.map((item) => (
@@ -970,38 +840,93 @@ const Profile = ({ search, setSearch }) => {
                           description={item?.description}
                           collection={item?.collection}
                           collectionImages={item?.collectionImages}
+                          getMyNfts={getMyNfts}
                           userAddress
                         />
                       ))}
                     </div>
-                  </>
-                )}
-                {tabs === 1 && (
-                  <>
-                    <Gallery />
                   </>
                 )}
 
                 {tabs === 3 && (
                   <>
                     <div className="row">
-                      {likedNfts?.map((item) => (
-                        <NewItemCard
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                          crypto={item?.crypto}
-                          royalty={item?.royalty}
-                          description={item?.description}
-                          collection={item?.collection}
-                          collectionImages={item?.collectionImages}
-                          userAddress
-                        />
-                      ))}
+                      <div className="Collection-tabs">
+                        <div
+                          onClick={() => setCollectionTabs(0)}
+                          className={`${collectionTabs === 0 && "active-tab"}`}
+                        >
+                          On Sale
+                        </div>
+                        <div
+                          onClick={() => setCollectionTabs(1)}
+                          className={`${collectionTabs === 1 && "active-tab"}`}
+                        >
+                          Auction
+                        </div>
+                      </div>
+                      {collectionTabs === 0 && (
+                        <>
+                          {likedNfts.map((item) => (
+                            <SimpleCard
+                              onOpen={onOpen}
+                              // onClose={onClose}
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              userAddress
+                            />
+                          ))}
+                        </>
+                      )}
+                      {collectionTabs === 1 && (
+                        <>
+                          {likedNftsAuction.map((item) => (
+                            <NewItemCard
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              highestBid={item?.highestBid}
+                              isLive={item?.isLive}
+                              endTime={item?.endTime}
+                              startTime={item?.startTime}
+                              description={item?.description}
+                              collectionImages={item?.collectionImages}
+                              userAddress={userAddress}
+                            />
+                          ))}
+                        </>
+                      )}
                     </div>
                   </>
+                  // <>
+                  //   <div className="row">
+                  //     {likedNfts?.map((item) => (
+                  //       <NewItemCard
+                  //         key={item?.id}
+                  //         id={item?.id}
+                  //         title={item?.title}
+                  //         image={item?.image}
+                  //         price={item?.price}
+                  //         crypto={item?.crypto}
+                  //         royalty={item?.royalty}
+                  //         description={item?.description}
+                  //         collection={item?.collection}
+                  //         collectionImages={item?.collectionImages}
+                  //         userAddress
+                  //       />
+                  //     ))}
+                  //   </div>
+                  // </>
                 )}
                 {tabs === 4 && (
                   <>
@@ -1052,7 +977,10 @@ const Profile = ({ search, setSearch }) => {
                     <Fan />
 
                     <div
-                      onClick={() => { setshowAddFanPopUp(1); getFollowersForFan() }}
+                      onClick={() => {
+                        setshowAddFanPopUp(1);
+                        getFollowersForFan();
+                      }}
                       className="Add-Fan-btn"
                     >
                       <svg
@@ -1173,7 +1101,7 @@ const Profile = ({ search, setSearch }) => {
                               </div>
                             </div>
                             <div className="Address-holder">
-                              {addFanlisting.length > 0 ?
+                              {addFanlisting.length > 0 ? (
                                 <>
                                   {addFanlisting.map((data, Index) => (
                                     <div
@@ -1184,13 +1112,18 @@ const Profile = ({ search, setSearch }) => {
                                         <div className="num">{Index + 1}</div>
                                         <div className="inner2">
                                           <div className="img-holder">
-                                            <img src={data?.profile_image} alt="" />
+                                            <img
+                                              src={data?.profile_image}
+                                              alt=""
+                                            />
                                           </div>
                                           <div className="Text-follower-fan">
                                             {data?.username} <br />{" "}
                                             <span>
                                               {" "}
-                                              {data?.count_follower} Followers{" "}
+                                              {
+                                                data?.count_follower
+                                              } Followers{" "}
                                             </span>
                                           </div>
                                         </div>
@@ -1210,9 +1143,9 @@ const Profile = ({ search, setSearch }) => {
                                     </div>
                                   ))}
                                 </>
-                                :
+                              ) : (
                                 <div>List is Empty</div>
-                              }
+                              )}
                               {/* {checkboxes.map((checkbox, Index) => (
                                 <div
                                   key={checkbox.id}
