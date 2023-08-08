@@ -5,7 +5,6 @@ import Footer from './landingpage/Footer'
 import SubscriptionCard from '../components/cards/SubscriptionCard'
 import Search from "../components/shared/Search";
 import apis from '../service'
-import StripeCheckout from 'react-stripe-checkout';
 
 const Subscription = ({ search, setSearch }) => {
     const [subscriptionData , setSubscriptionData] = useState([])
