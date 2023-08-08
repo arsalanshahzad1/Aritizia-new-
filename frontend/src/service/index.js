@@ -48,38 +48,27 @@ const createBackendServer = (baseURL) => {
 
   const postNftSold = async (body) => await api.post("sold-nft", body);
 
-  const postWalletAddress = async (body) =>
-    await api.post(`connect-wallet`, body);
-  const postAddFans = async (body) =>
-    await api.post("add-custom-user-fans", body);
+  const postWalletAddress = async (body) => await api.post(`connect-wallet`, body);
+  const postAddFans = async (body) => await api.post("add-custom-user-fans", body);
 
   //Returning all the API
 
-  const editProfile = async (body) =>
-    await api.post(`update-profile`, body, headers);
+  const editProfile = async (body) => await api.post(`update-profile`, body, headers);
 
-  const getChatNotification = async (count) =>
-    await api.get(`view-chat-notifications/${RealUserId}?last_count=${count}`);
-  const getChatUsers = async () =>
-    await api.get(`view-chat-users/${RealUserId}`);
-  const getChatMessages = async (id) =>
-    await api.get(`view-chat-messages/${RealUserId}/${id}`);
-  const postChatMessages = async (body) =>
-    await api.post(`send-chat-message`, body, headers);
+  const getChatNotification = async (count) => await api.get(`view-chat-notifications/${RealUserId}?last_count=${count}`);
+  const getChatUsers = async () => await api.get(`view-chat-users/${RealUserId}`);
+  const getChatMessages = async (id) => await api.get(`view-chat-messages/${RealUserId}/${id}`);
+  const postChatMessages = async (body) => await api.post(`send-chat-message`, body, headers);
 
   const viewNotification = async () => await api.get(`view-notifications/8`);
   const ReadNotification = async () => await api.get(`read-notification/7`);
-  const sendNotification = async (body) =>
-    await api.post(`send-notification`, body);
+  const sendNotification = async (body) => await api.post(`send-notification`, body);
 
-  const getLikeNFT = async (userId, NFTTokenId) =>
-    await api.get(`/count-like-nft/${RealUserId}/${NFTTokenId}`);
-  const getLikeNFTList = async () =>
-    await api.get(`user-liked-nfts/${RealUserId}`);
+  const getLikeNFT = async (userId, NFTTokenId) => await api.get(`/count-like-nft/${RealUserId}/${NFTTokenId}`);
+  const getLikeNFTList = async () => await api.get(`user-liked-nfts/${RealUserId}`);
   const postLikeNFT = async (body) => await api.post(`user-like-nft`, body);
 
-  const getViewNFT = async (NFTTokenId) =>
-    await api.get(`/show-view-nft/${NFTTokenId}`);
+  const getViewNFT = async (NFTTokenId) => await api.get(`/show-view-nft/${NFTTokenId}`);
   const postViewNFT = async (body) => await api.post(`user-view-nft`, body);
 
   //follow
@@ -102,15 +91,12 @@ const createBackendServer = (baseURL) => {
 
   const getNFTCollectionImage = async (collectionId) =>
     await api.get(`view-nft-collection-stock/${collectionId}`);
+ 
+  const getNFTByTokenId = async (tokenId) => await api.get(`view-nft-by-token/${tokenId}`);
 
-  const getNFTByTokenId = async (tokenId) =>
-    await api.get(`view-nft-by-token/${tokenId}`);
+  const getOtherUser = async (userAddress) => await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
 
-  const getOtherUser = async (userAddress) =>
-    await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
-
-  const getLikeNFTListing = async (userId) =>
-    await api.get(`view-liked-nfts/${userId}`);
+  const getLikeNFTListing = async (userId) => await api.get(`view-liked-nfts/${userId}`);
 
   const postUserFans = async (body) => await api.post(`add-user-fans`, body);
   const postCustomUserFans = async (body) =>
@@ -121,10 +107,16 @@ const createBackendServer = (baseURL) => {
   const getFollowersForFan = async () =>
     await api.get(`view-followers-for-fan/${RealUserId}`);
 
-  const getSalesHistory = async () =>
-    await api.get(`sale-history/${RealUserId}`);
-  const getPurchaseHistory = async () =>
-    await api.get(`purchase-history/${RealUserId}`);
+  const getSalesHistory = async () => await api.get(`sale-history/${RealUserId}`);
+  const getPurchaseHistory = async () => await api.get(`purchase-history/${RealUserId}`);
+
+
+  // User Subscription //
+
+  const userSubscribe = async (body) => await api.post(`subscribe`, body);
+  const cancelSubscription = async (body) => await api.post(`cancel-subscription`, body);
+  const viewSubscriptions = async () => await api.get(`view-subscriptions`);
+
 
   //Returning all the API
   return {
@@ -171,6 +163,13 @@ const createBackendServer = (baseURL) => {
 
     getSalesHistory,
     getPurchaseHistory,
+
+    // User Subscription //
+
+    userSubscribe,
+    cancelSubscription,
+    viewSubscriptions,
+
   };
 };
 
