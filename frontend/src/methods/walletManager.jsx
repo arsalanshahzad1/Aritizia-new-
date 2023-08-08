@@ -12,7 +12,7 @@ const web3ModalRef = new Web3Modal({
 });
 
 export const getProviderOrSigner = async (needSigner = false) => {
-  console.log("getProviderOrSigner");
+  // console.log("getProviderOrSigner");
 
   const provider = await web3ModalRef.connect();
   const web3Provider = new providers.Web3Provider(provider);

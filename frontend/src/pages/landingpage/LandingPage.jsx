@@ -70,7 +70,7 @@ const LandingPage = ({ search, setSearch }) => {
 
   //   const web3Provider = new providers.Web3Provider(provider);
   //   // console.log("In get provider or signer");
-  //   console.log("In get provider or signer13");  
+  //   console.log("In get provider or signer13");
 
   //   // If user is not connected to the Sepolia network, let them know and throw an error
   //   const { chainId } = await web3Provider.getNetwork();
@@ -157,6 +157,7 @@ const LandingPage = ({ search, setSearch }) => {
 
         const structData = await marketplaceContract._idToNFT(id);
 
+        console.log("metaData", metaData);
         console.log("structData", structData);
         console.log("firstownerr", mintedTokens[i].firstOwner);
 
@@ -165,6 +166,7 @@ const LandingPage = ({ search, setSearch }) => {
         let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
         setDiscountPrice(discountOnNFT);
+        let seller = structData.seller;
 
         console.log("discountOnNFT", discountOnNFT);
         console.log("discountOnNFT", typeof discountOnNFT);
@@ -174,6 +176,8 @@ const LandingPage = ({ search, setSearch }) => {
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()
         );
+  
+
 
         listingType = structData.listingType;
         let listed = structData.listed;
@@ -196,6 +200,7 @@ const LandingPage = ({ search, setSearch }) => {
           .get(metaData)
           .then((response) => {
             const meta = response.data;
+            console.log("first")
             let data = JSON.stringify(meta);
 
             data = data.slice(2, -5);
@@ -227,6 +232,7 @@ const LandingPage = ({ search, setSearch }) => {
                 description: description,
                 collection: collection,
                 collectionImages: collectionImages,
+                seller: seller,
               };
 
               myNFTs.push(nftData);
@@ -450,6 +456,7 @@ const LandingPage = ({ search, setSearch }) => {
                     collection={item?.collection}
                     collectionImages={item?.collectionImages}
                     userAddress={userAddress}
+                    seller={item?.seller} 
                   />
                 ))}
               </div>

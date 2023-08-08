@@ -20,6 +20,7 @@ import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
 import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import Modal from "react-bootstrap/Modal";
+import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineClose } from "react-icons/ai";
 import {
   Area,
@@ -38,6 +39,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+
 const Monthly_data = [
   {
     data: "Jan",
@@ -581,15 +583,31 @@ const PlaceABidDrawer = ({
 
   const handleBidEvent = async (tokenId, seller, highestBidder, highestBid) => {
     let bidData = {
-      tokenId: tokenId.toString(),
+      token_id: tokenId.toString(),
       seller: seller.toString(),
-      highestBidder: highestBidder.toString(),
-      highestBid: ethers.utils.formatEther(highestBid.toString()),
+      bidder: highestBidder.toString(),
+      bidding_price: ethers.utils.formatEther(highestBid.toString()),
     };
 
     console.log("bidData", bidData);
     ethBid = false;
     usdtBid = false;
+    bidEventPost(bidData);
+  };
+
+  const bidEventPost = async (bidData) => {
+    console.log("bidEventPost");
+    const response = await apis.postBid(bidData);
+    console.log("response", response);
+    
+    toast.success("Bid Succesful", {
+      position: toast.POSITION.TOP_CENTER,
+    });
+
+    // setTimeout(() => {
+    //   navigate("/");
+    //   window.location.reload();
+    // }, 3000);
   };
 
   // const connectWallet = async () => {
@@ -1191,6 +1209,7 @@ const PlaceABidDrawer = ({
           )}
         </div>
       </Modal>
+      <ToastContainer />
     </>
   );
 };

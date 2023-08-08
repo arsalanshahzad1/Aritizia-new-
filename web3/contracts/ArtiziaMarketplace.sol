@@ -324,6 +324,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     event removeFan(address fan);
 
+    event approvalUpdate(uint256 tokenId, bool decision);
+
     event receivedABid(
         uint256 tokenId,
         address seller,
@@ -574,7 +576,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _amount,
         uint256 _sellerPercent,
         uint256 _buyerPercent
-    ) public payable isUserBanned isUserDeleted nonReentrant {
+    )
+        public
+        payable
+        isApproved(_tokenId)
+        isUserBanned
+        isUserDeleted
+        nonReentrant
+    {
         NFT storage nft = _idToNFT[_tokenId];
 
         require(
@@ -731,7 +740,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _tokenId,
         uint256 _sellerPercent,
         uint256 _buyerPercent
-    ) public payable isUserBanned isUserDeleted nonReentrant {
+    )
+        public
+        payable
+        isApproved(_tokenId)
+        isUserBanned
+        isUserDeleted
+        nonReentrant
+    {
         NFT storage nft = _idToNFT[_tokenId];
 
         require(
@@ -934,7 +950,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     function bidInETH(
         uint256 _tokenId,
         uint256 _bidCurrency
-    ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
+    )
+        public
+        payable
+        auctionIsLive(_tokenId)
+        isApproved(_tokenId)
+        isUserDeleted
+        isUserBanned
+    {
         bool check = false;
         if (_idToNFT2[_tokenId].onlyFans) {
             require(
@@ -1009,7 +1032,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _tokenId,
         uint256 _amount, // usdt in wei
         uint256 _bidCurrency
-    ) public payable auctionIsLive(_tokenId) isUserDeleted isUserBanned {
+    )
+        public
+        payable
+        auctionIsLive(_tokenId)
+        isApproved(_tokenId)
+        isUserDeleted
+        isUserBanned
+    {
         uint256 ethPriceInUsdt = getLatestUSDTPrice();
         bool check = false;
         if (_idToNFT2[_tokenId].onlyFans) {
@@ -1405,6 +1435,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         for (uint256 i = 0; i < _tokenId.length; i++) {
             id = _tokenId[i];
             _idToNFT[id].approve = _decision;
+            emit approvalUpdate(id, _decision);
         }
         return true;
     }
@@ -1456,8 +1487,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         for (uint i = 0; i < nftCount; i++) {
             if (
-                _idToNFT[i].listed && _idToNFT[i].collectionId == _collectionId
-                // && _idToAuction[id].approve
+                _idToNFT[i].listed &&
+                _idToNFT[i].collectionId == _collectionId &&
+                _idToNFT[i].approve
             ) {
                 nfts[nftsIndex] = _idToNFT[i];
                 nftsIndex++;
@@ -1474,10 +1506,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint nftsIndex = 0;
 
         for (uint i = 0; i < nftCount; i++) {
-            if (
-                _idToNFT[i].listed
-                // && _idToAuction[id].approve
-            ) {
+            if (_idToNFT[i].listed && _idToNFT[i].approve) {
                 nfts[nftsIndex] = _idToNFT[i];
                 nftsIndex++;
             }
@@ -1507,15 +1536,16 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         return nfts;
     }
 
-    function getMyListedNfts(
+    function getUsersNfts(
         address _user
     ) public view isUserDeleted isUserBanned returns (NFT[] memory) {
         uint nftCount = _nftCount.current();
         uint myListedNftCount = 0;
         for (uint i = 0; i < nftCount; i++) {
             if (
-                _idToNFT[i].seller == _user && _idToNFT[i].listed
-                //  && _idToAuction[id].approve
+                _idToNFT[i].seller == _user
+                // && _idToAuction[i].approve
+                //   && _idToNFT[i].listed
             ) {
                 myListedNftCount++;
             }
@@ -1525,8 +1555,39 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint nftsIndex = 0;
         for (uint i = 0; i < nftCount; i++) {
             if (
-                _idToNFT[i].seller == _user && _idToNFT[i].listed
+                _idToNFT[i].seller == _user
+                //  && _idToNFT[i].listed
                 //   && _idToAuction[id].approve
+            ) {
+                nfts[nftsIndex] = _idToNFT[i];
+                nftsIndex++;
+            }
+        }
+        return nfts;
+    }
+
+    function getMyListedNfts(
+        address _user
+    ) public view isUserDeleted isUserBanned returns (NFT[] memory) {
+        uint nftCount = _nftCount.current();
+        uint myListedNftCount = 0;
+        for (uint i = 0; i < nftCount; i++) {
+            if (
+                _idToNFT[i].seller == _user &&
+                _idToNFT[i].listed &&
+                _idToNFT[i].approve
+            ) {
+                myListedNftCount++;
+            }
+        }
+
+        NFT[] memory nfts = new NFT[](myListedNftCount);
+        uint nftsIndex = 0;
+        for (uint i = 0; i < nftCount; i++) {
+            if (
+                _idToNFT[i].seller == _user &&
+                _idToNFT[i].listed &&
+                _idToNFT[i].approve
             ) {
                 nfts[nftsIndex] = _idToNFT[i];
                 nftsIndex++;

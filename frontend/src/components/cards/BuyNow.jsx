@@ -3,11 +3,15 @@ import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 import "./Cards.css";
 import { Link } from "react-router-dom";
-import { FacebookShareButton, InstapaperShareButton, TwitterShareButton , LinkedinShareButton } from 'react-share';
+import {
+  FacebookShareButton,
+  InstapaperShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+} from "react-share";
 import ProfileDrawer from "../shared/ProfileDrawer";
 
 const BuyNow = ({
-
   path,
   id,
   title,
@@ -19,11 +23,44 @@ const BuyNow = ({
   description,
   collection,
   collectionImages,
+  seller,
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+
+  const [buyButton, showBuyButton] = useState(false);
+
+  const checkSeller = async () => {
+    // const provider = await getProviderOrSigner();
+
+    // const marketplaceContract = new Contract(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   MARKETPLACE_CONTRACT_ABI.abi,
+    //   provider
+    // );
+
+    // const structData = await marketplaceContract._idToNFT(id);
+    // let seller = structData.seller;
+    console.log("checkSeller Seller", seller);
+    console.log("checkSeller userAddress", userAddress);
+    console.log("checkSeller Seller == userAddress", seller == userAddress);
+
+    if (userAddress != seller) {
+      // show buy button
+      showBuyButton(true);
+      // console.log("WWW Bid");
+    } else {
+      // console.log("WWW show claim");
+      showBuyButton(false);
+      // show claim
+    }
+  };
+
+  useEffect(() => {
+    checkSeller();
+  }, []);
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
@@ -34,7 +71,7 @@ const BuyNow = ({
 
   const openDrawer = () => {
     if (showLinks === true) {
-      setShowLinks(false)
+      setShowLinks(false);
       // setIsVisible(true);
     } else {
       setIsVisible(true);
@@ -91,21 +128,30 @@ const BuyNow = ({
                           <ul>
                             <li>
                               <a>
-                                <LinkedinShareButton url="http://artizia.pluton.ltd" title="Ali Khan" >
+                                <LinkedinShareButton
+                                  url="http://artizia.pluton.ltd"
+                                  title="Ali Khan"
+                                >
                                   <p>Instagram</p>
                                 </LinkedinShareButton>
                               </a>
                             </li>
                             <li>
                               <a>
-                                <TwitterShareButton url="http://artizia.pluton.ltd" title="Ali Khan" >
+                                <TwitterShareButton
+                                  url="http://artizia.pluton.ltd"
+                                  title="Ali Khan"
+                                >
                                   <p>Twitter</p>
                                 </TwitterShareButton>
                               </a>
                             </li>
                             <li>
                               <a>
-                                <FacebookShareButton url="http://artizia.pluton.ltd" title="Ali Khan" >
+                                <FacebookShareButton
+                                  url="http://artizia.pluton.ltd"
+                                  title="Ali Khan"
+                                >
                                   <p>Facebook</p>
                                 </FacebookShareButton>
                               </a>
@@ -148,12 +194,19 @@ const BuyNow = ({
                   {/* <div className="button css-pxd23z">
                                         <p>Read More</p>
                                     </div> */}
-                  <div className="button css-pxd23z">
-                    <p>Buy Now</p>
-                    <span>
-                      <img src="/assets/icons/shop.png" alt="" />
-                    </span>
-                  </div>
+                  {buyButton ? (
+                    <div className="button css-pxd23z">
+                      <p>Buy Now</p>
+
+                      <span>
+                        <img src="/assets/icons/shop.png" alt="" />
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="button css-pxd23z">
+                      <p>Your nft</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </a>

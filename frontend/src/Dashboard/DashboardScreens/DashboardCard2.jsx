@@ -3,8 +3,16 @@ import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 import "../DashboardComponents/DashboardCard.css";
 import { Link } from "react-router-dom";
-import ProfileDrawer from "../../components/shared/ProfileDrawer";
 import nft from "../../../public/assets/images/nft-big.png";
+import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
+import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
+import {
+  connectWallet,
+  getProviderOrSigner,
+} from "../../methods/walletManager";
+import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
+
 const DashboardCard2 = ({
   onOpen,
   path,
@@ -28,9 +36,42 @@ const DashboardCard2 = ({
     setIsVisible(false);
   }, []);
 
-  const [showEditSidebar, setshowEditSidebar] = useState(false);
+  const approveNFT = async (decision) => {
+    console.log("approveNFT");
+    const signer = await getProviderOrSigner(true);
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
 
-  console.log("USER in buy now", userAddress);
+    console.log("ALS");
+    console.log("id", id);
+    console.log("decision", decision);
+
+    let approve = await marketplaceContract.approveNfts([id], decision, {
+      gasLimit: ethers.BigNumber.from("500000"),
+    });
+
+    console.log("approve", approve);
+    approveEvent(marketplaceContract);
+  };
+
+  const approveEvent = async (marketplaceContract) => {
+    let response = await marketplaceContract.on(
+      "approvalUpdate",
+      handleApprovalEvent
+    );
+
+    console.log("response", response);
+  };
+
+  const handleApprovalEvent = async (decision) => {
+    console.log("handleApprovalEvent");
+    console.log("decision", decision);
+  };
+
+  const [showEditSidebar, setshowEditSidebar] = useState(false);
 
   const openDrawer = () => {
     if (showLinks === true) {
@@ -110,8 +151,8 @@ const DashboardCard2 = ({
                     <div className="css-x2gp5l"></div>
                   </div>
                   <div className="nft-card-btn-holder">
-                    <button>Accept</button>
-                    <button>Decline</button>
+                    <button onClick={() => approveNFT(true)}>Accept</button>
+                    <button onClick={() => approveNFT(false)}>Decline</button>
                   </div>
                 </div>
                 {/* <div className="J-buynow css-1elubna">
@@ -205,7 +246,7 @@ const DashboardCard2 = ({
           </div>
         </div>
       )}
-      <ProfileDrawer
+      <ProfileDrawerAdmin
         isVisible={isVisible}
         onClose={onClose}
         id={id}

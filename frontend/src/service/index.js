@@ -49,35 +49,50 @@ const createBackendServer = (baseURL) => {
   const postNftSold = async (body) => await api.post("sold-nft", body);
 
   const postWalletAddress = async (body) => await api.post(`connect-wallet`, body);
+
   const postAddFans = async (body) => await api.post("add-custom-user-fans", body);
+
+  const postBid = async (body) => await api.post("bidding-nft", body);
+
 
   //Returning all the API
 
   const editProfile = async (body) => await api.post(`update-profile`, body, headers);
 
   const getChatNotification = async (count) => await api.get(`view-chat-notifications/${RealUserId}?last_count=${count}`);
+  
   const getChatUsers = async () => await api.get(`view-chat-users/${RealUserId}`);
+
   const getChatMessages = async (id) => await api.get(`view-chat-messages/${RealUserId}/${id}`);
+
   const postChatMessages = async (body) => await api.post(`send-chat-message`, body, headers);
 
   const viewNotification = async () => await api.get(`view-notifications/8`);
+
   const ReadNotification = async () => await api.get(`read-notification/7`);
+
   const sendNotification = async (body) => await api.post(`send-notification`, body);
 
   const getLikeNFT = async (userId, NFTTokenId) => await api.get(`/count-like-nft/${RealUserId}/${NFTTokenId}`);
+
   const getLikeNFTList = async () => await api.get(`user-liked-nfts/${RealUserId}`);
+
   const postLikeNFT = async (body) => await api.post(`user-like-nft`, body);
 
   const getViewNFT = async (NFTTokenId) => await api.get(`/show-view-nft/${NFTTokenId}`);
+
   const postViewNFT = async (body) => await api.post(`user-view-nft`, body);
 
   //follow
   const postFollowAndUnfollow = async (body) =>
     await api.post(`user-follow-unfollow`, body);
+
   const getCountFollow = async (userId, otherUserId) =>
     await api.get(`count-follow-unfollow/${RealUserId}/${otherUserId}`);
+  
   const getFollowingList = async () =>
     await api.get(`view-following-list/${RealUserId}`);
+
   const getFollowersList = async () =>
     await api.get(`view-followers-list/${RealUserId}`);
 
@@ -86,6 +101,7 @@ const createBackendServer = (baseURL) => {
 
   const getNFTCollection = async () =>
     await api.get(`view-nft-collections/${RealUserId}`);
+
   const postNFTCollection = async (body) =>
     await api.post(`add-nft-collection`, body);
 
@@ -99,15 +115,20 @@ const createBackendServer = (baseURL) => {
   const getLikeNFTListing = async (userId) => await api.get(`view-liked-nfts/${userId}`);
 
   const postUserFans = async (body) => await api.post(`add-user-fans`, body);
+
   const postCustomUserFans = async (body) =>
     await api.post(`add-custom-user-fans`, body);
+
   const getFanList = async () => await api.get(`view-fan-list/${RealUserId}`);
+
   const getremovedFan = async (removingUserId) =>
     await api.get(`remove-fan/${removingUserId}`);
+
   const getFollowersForFan = async () =>
     await api.get(`view-followers-for-fan/${RealUserId}`);
 
   const getSalesHistory = async () => await api.get(`sale-history/${RealUserId}`);
+
   const getPurchaseHistory = async () => await api.get(`purchase-history/${RealUserId}`);
 
 
@@ -137,7 +158,7 @@ const createBackendServer = (baseURL) => {
     postLikeNFT,
     getViewNFT,
     postViewNFT,
-
+    postBid,
     postFollowAndUnfollow,
     getCountFollow,
     getFollowingList,
