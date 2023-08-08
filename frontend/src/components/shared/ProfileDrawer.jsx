@@ -236,9 +236,9 @@ function ProfileDrawer({
     let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
     setPlatformFeeETH(feeETH);
 
-    let dollarPriceOfETH = 1831;
+    // let dollarPriceOfETH = 1831;
 
-    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
@@ -262,9 +262,9 @@ function ProfileDrawer({
       setDiscountedEth(discountedEthPrice.toFixed(2));
       console.log("discountedEthPrice", discountedEthPrice);
 
-      let dollarPriceOfETH = 1831;
+      // let dollarPriceOfETH = 1831;
 
-      // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+      let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
       let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
 

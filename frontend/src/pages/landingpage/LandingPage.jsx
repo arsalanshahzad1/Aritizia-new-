@@ -70,7 +70,7 @@ const LandingPage = ({ search, setSearch }) => {
 
   //   const web3Provider = new providers.Web3Provider(provider);
   //   // console.log("In get provider or signer");
-  //   console.log("In get provider or signer13");
+  //   console.log("In get provider or signer13");  
 
   //   // If user is not connected to the Sepolia network, let them know and throw an error
   //   const { chainId } = await web3Provider.getNetwork();
@@ -126,10 +126,10 @@ const LandingPage = ({ search, setSearch }) => {
     // console.log("Active Method", listingType);
     console.log("time", Date.now());
 
-    let dollarPriceOfETH = 1831;
+    // let dollarPriceOfETH = 1831;
 
     // UNCOMMENT THIS
-    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     console.log("dollarPriceOfETH", dollarPriceOfETH);
@@ -366,7 +366,7 @@ const LandingPage = ({ search, setSearch }) => {
 
   return (
     <>
-      <MetaDecorator/>
+      <MetaDecorator />
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}

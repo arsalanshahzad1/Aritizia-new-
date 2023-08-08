@@ -26,7 +26,9 @@ const SearchPage = ({ search, setSearch }) => {
   const [sortBy, setSortBy] = useState({ value: "all", label: "All" });
   const [rating, setRating] = useState({ value: "all", label: "All" });
   const [chain, setChain] = useState({ value: "all", label: "All" });
+
   const [currency, setCurrency] = useState({ value: "eth", label: "ETH" });
+
   const [slider, setSlider] = useState(false);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
 
@@ -39,6 +41,10 @@ const SearchPage = ({ search, setSearch }) => {
   // const [userAddress, setUserAddress] = useState("0x000000....");
   const [searchedNfts, setSearchedNfts] = useState([]);
   const [discountPrice, setDiscountPrice] = useState(0);
+
+  const [listingType, setListingType] = useState("");
+  const [minPrice, setMinPrice] = useState(10);
+  const [maxPrice, setMaxPrice] = useState(100000);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -112,8 +118,8 @@ const SearchPage = ({ search, setSearch }) => {
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
-    let dollarPriceOfETH = 1831;
-    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    // let dollarPriceOfETH = 1831;
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceETH = 0.00000002;
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
@@ -371,7 +377,7 @@ const SearchPage = ({ search, setSearch }) => {
   //   //       console.error(error);
   //   //     });
   //   // }
-  // };
+  // };nftListFP
 
   // useEffect(() => {
   //   if (!walletConnected) {
@@ -383,7 +389,11 @@ const SearchPage = ({ search, setSearch }) => {
   //   }
   // }, [walletConnected]);
 
-  useEffect(() => {}, [searchedNfts, nftListFP]);
+  useEffect(() => {}, [nftListFP]);
+  useEffect(() => {
+    getSearchedNfts();
+  }, [search]);
+  useEffect(() => {}, [searchedNfts]);
 
   useEffect(() => {
     connectWallet();
@@ -396,10 +406,10 @@ const SearchPage = ({ search, setSearch }) => {
   }, []);
 
   const statusOptions = [
-    { value: "one", label: "New" },
-    { value: "two", label: "Old" },
-    { value: "three", label: "Used" },
+    { value: "0", label: "Fixed Price" },
+    { value: "1", label: "Auction" },
   ];
+
   const categoriesOptions = [
     { value: "one", label: "Art" },
     { value: "two", label: "Game" },
@@ -428,9 +438,8 @@ const SearchPage = ({ search, setSearch }) => {
     { value: "three", label: "All" },
   ];
   const currencyOptions = [
-    { value: "one", label: "ETH" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
+    { value: "0", label: "ETH" },
+    { value: "1", label: "USDT" },
   ];
 
   const handleSliderChange = (value) => {
@@ -569,15 +578,31 @@ const SearchPage = ({ search, setSearch }) => {
               </div>
               <div className="col-lg-9 col-md-12">
                 <div className="row">
-                  {searchedNfts.map((item) => (
-                    <SearchNftCards
-                      key={item?.id}
-                      id={item?.id}
-                      title={item?.title}
-                      image={item?.image}
-                      price={item?.price}
-                    />
-                  ))}
+                  {searchedNfts.length > 0 || search != "" ? (
+                    <>
+                      {searchedNfts.map((item) => (
+                        <SearchNftCards
+                          key={item?.id}
+                          id={item?.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {nftListFP.map((item) => (
+                        <SearchNftCards
+                          key={item?.id}
+                          id={item?.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                        />
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
             </div>

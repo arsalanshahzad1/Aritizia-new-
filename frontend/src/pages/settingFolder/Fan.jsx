@@ -111,7 +111,7 @@ function Fan() {
                 Remove
               </button>
             </div>
-            <button onClick={getFansBC}>getBC</button>
+            {/* <button onClick={getFansBC}>getBC</button> */}
           </div>
         );
       })}

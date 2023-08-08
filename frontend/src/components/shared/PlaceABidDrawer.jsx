@@ -466,8 +466,8 @@ const PlaceABidDrawer = ({
 
     priceETH = currBid;
 
-    let dollarPriceOfETH = 1831;
-    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    // let dollarPriceOfETH = 1831;
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
 
     let oneETHInUSD = 1 / priceInETH;
@@ -646,8 +646,8 @@ const PlaceABidDrawer = ({
       setHighestBid(highestBid);
     }
 
-    let dollarPriceOfETH = 1831;
-    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    // let dollarPriceOfETH = 1831;
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
@@ -770,9 +770,9 @@ const PlaceABidDrawer = ({
     console.log("id", typeof id);
 
     // get the price of dollar from smartcontract and convert this value
-    let dollarPriceOfETH = 1831;
+    // let dollarPriceOfETH = 1831;
 
-    // let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
     console.log("HEre");
 
     let USDPrice = buyNowPrice;

@@ -1101,14 +1101,16 @@ footer h1 {
 .profile-first-section .user-pic {
   border-radius: 50%;
   width: 220px;
+  height: 220px;
   background: #fff;
   padding: 15px;
+  object-fit: cover;
 }
 
 .profile-first-section .big-chack {
   position: absolute;
   bottom: 15px;
-  right: 36px;
+  right: 9px;
 }
 
 .profile-first-section .user {
