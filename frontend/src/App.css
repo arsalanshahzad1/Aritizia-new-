@@ -780,6 +780,7 @@ header .left img {
 .home-four-sec .table tr {
   margin: 15px 0px;
 }
+
 .pruchase .table tr {
   margin: 15px 0px;
 }
@@ -905,7 +906,7 @@ header .left img {
   border: 5px solid #FFF;
   width: 60px;
   height: 60px;
-    object-fit: cover;
+  object-fit: cover;
 }
 
 .new-item-card .detail-wrap .center-icon .icon img:last-child {
@@ -1079,7 +1080,7 @@ footer h1 {
   padding: 50px 50px 20px 0px;
 }
 
-.profile-first-section{
+.profile-first-section {
   margin-inline: 45px;
 }
 
@@ -1465,6 +1466,7 @@ footer h1 {
 .collection-table table tr th:nth-child(5) {
   width: 10%;
 }
+
 .collection-table.pruchase table tr th:nth-child(1) {
   width: 10%;
 }
@@ -2321,6 +2323,10 @@ footer h1 {
 .subscription .subscription-wrap .subscription-card-wrap:hover {
   background: linear-gradient(120deg, rgba(36, 56, 203, 1) 0%, rgba(182, 0, 209, 1) 100%);
   ;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap:hover .title{
+  color: #fff;
 }
 
 .subscription .subscription-wrap .subscription-card-wrap:hover .p1 {
@@ -5174,7 +5180,7 @@ footer h1 {
   transition: all 200ms ease;
 }
 
-.custom-drop-down .drop-down-select svg{
+.custom-drop-down .drop-down-select svg {
   position: absolute;
   right: 5px;
   top: 50%;
@@ -5225,7 +5231,70 @@ footer h1 {
   background-color: #f2f9fc;
   color: #333;
 }
+
 .custom-drop-down .dropdown-list-wrap ul li:hover {
   background-color: #f2f9fc;
   color: #333;
+}
+
+/* stripe */
+
+.stripe-payment-form .FormGroup {
+  margin: 15px 0px 20px;
+  padding: 0;
+  border-style: none;
+  background-color: transparent;
+  will-change: opacity, transform;
+  /* box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08), inset 0 1px 0 #829fff; */
+  border-radius: 6px;
+  border: 2px solid #929292;
+}
+
+.stripe-payment-form .FormRow {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: 15px;
+  /* border-top: 1px solid #819efc; */
+}
+
+.stripe-payment-form .StripeElement--webkit-autofill {
+  background: transparent !important;
+}
+
+.stripe-payment-form .StripeElement {
+  width: 100%;
+  padding: 11px 15px 11px 0;
+}
+
+.stripe-payment-form button {
+  background: var(--bg-gradient);
+  padding: 12px 32px;
+  border-radius: 66px;
+  border: none;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+}
+
+.stripe-payment-form button:active {
+  background-color: #d782d9;
+  box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08), inset 0 1px 0 #e298d8;
+  transform: scale(0.99);
+}
+
+.App {
+  margin-left: 25%;
+  margin-top: 5%;
+  margin-right: 25%;
+}
+
+h1,
+h3 {
+  text-align: center;
 }

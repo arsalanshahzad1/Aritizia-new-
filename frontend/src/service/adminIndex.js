@@ -45,7 +45,7 @@ const createBackendServer = (baseURL) => {
 
     // User Section Apis //
 
-    const viewUserList = async (count , filter , search) => await api.get(`view-user-list?page=${count}&filter=${filter}&search=${search}`);
+    const viewUserList = async (count, filter, search) => await api.get(`view-user-list?page=${count}&filter=${filter}&search=${search}`);
     const viewUserDetails = async (userId) => await api.get(`view-user-detail/${userId}`);
     const viewUserLikedNfts = async (userId) => await api.get(`view-user-liked-nfts/${userId}`);
     const viewNftCollection = async (userId) => await api.get(`view-nft-collection/${userId}`);
@@ -73,6 +73,14 @@ const createBackendServer = (baseURL) => {
     const viewAnalyticUsers = async () => await api.get(`view-analytic-users`);
     const viewAnalyticTransaction = async (count) => await api.get(`view-analytic-transaction?page=${count}&filter=yearly`);
 
+    // Admin NFT Section Apis //
+
+    const viewNftList = async () => await api.get(`view-nft-list`);
+    const nftDetailByToken = async (tokenId) => await api.get(`nft-detail-by-token/${tokenId}`);
+    const approveNft = async (tokenId) => await api.get(`approve-nft/${tokenId}`);
+    const rejectNft = async (tokenId) => await api.get(`reject-nft/${tokenId}`);
+
+
     //Returning all the API
     return {
         viewUserList,
@@ -90,6 +98,10 @@ const createBackendServer = (baseURL) => {
         deletePlan,
         viewAnalyticUsers,
         viewAnalyticTransaction,
+        viewNftList,
+        nftDetailByToken,
+        approveNft,
+        rejectNft
 
     };
 };

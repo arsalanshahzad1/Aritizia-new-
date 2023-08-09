@@ -123,7 +123,7 @@
 }
 
 .dashboard-card {
-    width: 220px;
+    width: 260px;
     margin: 5px;
     display: flex;
     flex-direction: column;
@@ -295,6 +295,156 @@
     border-width: 6px 7px 0;
     top: 50%;
     transform: translateY(-50%);
+}
+
+
+
+
+
+.user-sub-payment{
+    position: relative;
+}
+.user-sub-payment .title{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 7px 10px;
+    width: 100%;
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    text-transform: capitalize;
+    height: 42px;
+}
+
+.ElementsApp .InputElement{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 7px 10px;
+    width: 100%;
+    color: #929292 !important;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    text-transform: capitalize;
+    height: 42px;  
+}
+
+.ElementsApp .InputElement.is-invalid{
+    color: red !important;
+}
+
+.user-sub-payment .title svg{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right:5px;
+    font-size: 22px;
+}
+
+.user-sub-payment .options{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    background: #fff;
+    width: 100%;
+}
+.user-sub-payment .options h2{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    padding: 10px 10px;
+    cursor: pointer;
+}
+.user-sub-payment .Dropdown-control{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 5px 10px;
+    width: 130px;
+}
+.user-sub-payment .Dropdown-menu{
+    border-radius: 5px;
+    border: 2px solid #929292;
+}
+.user-sub-payment .Dropdown-placeholder{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+.user-sub-payment .Dropdown-option{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+
+.user-sub-payment .Dropdown-arrow {
+    border-width: 6px 7px 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.payment-modal-wrap{
+  
+}
+.payment-modal-wrap .modal-body{
+  padding: 30px;
+}
+.payment-modal-wrap .payment-close{
+   position: absolute;
+   right: 15px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.payment-modal-wrap .payment-close svg{
+    font-size: 20px;
+}
+.payment-modal-wrap .modal-dialog{
+    width: 500px;
+    margin-inline: auto;
+     position: relative;
+}
+
+.payment-modal-wrap .user-sub-payment{}
+.payment-modal-wrap .user-sub-payment p{
+    font-family: 'Jost';
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left !important;
+    color: #121212;
+    padding-bottom: 0px !important;
+}
+
+.payment-dd-wrap{
+    display: flex;
+    gap: 20px;
+}
+.payment-dd-wrap .user-sub-payment{
+    flex: 1;
+}
+
+.payment-modal-wrap .card-title{
+    font-family: 'Jost';
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: center !important;
+    color: #121212;
+    padding-bottom: 0px !important;
+    margin-bottom: 30px !important;
+    margin-top: 10px !important;
 }
 
 .dashboard-drop-down {
