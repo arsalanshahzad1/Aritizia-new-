@@ -87,6 +87,7 @@ const Header = ({ search, setSearch }) => {
     const user_id = id?.id;
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
+      console.log(data , 'data');
       // Handle the received event data
       setMessageArrive(true);
     });

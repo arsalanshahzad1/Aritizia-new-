@@ -21,6 +21,7 @@ import ChatPage from "./Chat/ChatPage";
 import "react-toastify/dist/ReactToastify.css";
 import Art from "./pages/Art";
 import WalletManager from "../src/methods/walletManager";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -120,6 +121,7 @@ function App() {
           </Routes>
         </GlobalProvider>
       </Router>
+      <ToastContainer />
     </>
   );
 }

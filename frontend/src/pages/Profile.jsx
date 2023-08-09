@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import Gallery from "./Gallery";
 import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+// import MetaDecorator from "../Meta/MetaDecorator";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -645,6 +646,11 @@ const Profile = ({ search, setSearch }) => {
 
   return (
     <>
+    {/* <MetaDecorator
+        title={'Artizia'}
+        description={'The Best NFT Marketplace In The World'}
+        imageAlt={'Artizia'}
+        url={userData?.cover_image} /> */}
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">

@@ -1,16 +1,32 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from '../../pages/landingpage/Header'
 import { useState } from 'react';
 import UserDataRows from './UserDataRows';
 import ControllingDataRows from './ContollingDataRows';
+import adminApis from '../../service/adminIndex';
 
 function ControllingContent({ search, setSearch }) {
     const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
+    const [listCount, setListCount] = useState(0);
+    const [list, setList] = useState([]);
+
+    const viewNftList = async () =>{
+        setListCount(count * 10 - 10)
+        const response = await adminApis.viewNftList(count)
+        if (response?.status) {
+            setList(response?.data?.data)
+        } else {
+            console.log('error');
+        }
+    }
+    
+    useEffect(()=> {
+        viewNftList()
+    }, [])
 
     return (
         <div className='user-management'>
             <Header
-
                 search={search}
                 setSearch={setSearch}
             />
@@ -53,8 +69,11 @@ function ControllingContent({ search, setSearch }) {
                             <hr className='space-between-rows'></hr>
                         </thead>
                         <tbody className='data-table-2'>
+                            
 
-                            <ControllingDataRows />
+                            <ControllingDataRows data={list} listCount={listCount}/>
+                            <hr className='space-between-rows'></hr>
+                            {/* <ControllingDataRows />
                             <hr className='space-between-rows'></hr>
                             <ControllingDataRows />
                             <hr className='space-between-rows'></hr>
@@ -83,9 +102,7 @@ function ControllingContent({ search, setSearch }) {
                             <ControllingDataRows />
                             <hr className='space-between-rows'></hr>
                             <ControllingDataRows />
-                            <hr className='space-between-rows'></hr>
-                            <ControllingDataRows />
-                            <hr className='space-between-rows'></hr>
+                            <hr className='space-between-rows'></hr> */}
 
 
                         </tbody>

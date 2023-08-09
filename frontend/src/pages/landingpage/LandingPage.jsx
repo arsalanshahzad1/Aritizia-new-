@@ -23,7 +23,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
-import MetaDecorator from "../../Meta/MetaDecorator";
+// import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -372,12 +372,12 @@ const LandingPage = ({ search, setSearch }) => {
 
   return (
     <>
-      <MetaDecorator />
+      {/* <MetaDecorator/> */}
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
         imageAlt={'Artizia'}
-        url={'https://artizia.pluton.ltd'} /> */}
+        url={'https://www.youtube.com/img/desktop/yt_1200.png'} /> */}
       <Header
         connectWallet={connectWallet}
         search={search}
