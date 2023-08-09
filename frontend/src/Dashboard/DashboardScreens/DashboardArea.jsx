@@ -18,7 +18,7 @@ function DashboardArea({ search, setSearch }) {
                     <UserManagement search={search} setSearch={setSearch} />
 
                 } />
-                <Route path='/user-management/:id' element={
+                <Route path='/user' element={
                     <User search={search} setSearch={setSearch} />
 
                 } />

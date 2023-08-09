@@ -3,29 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import adminApis from '../../service/adminIndex';
 import apis from '../../service/adminIndex';
 
-function UserDataRows({ data, index, listCount, handleToggleOpen, isOpen, setIsOpen , viewUserList }) {
+function UserDataRows({ data, index, listCount, handleToggleOpen, isOpen, setIsOpen , viewUserList , count , filter ,searchInput}) {
     console.log(listCount, 'reciving data');
 
 
     const navigate = useNavigate()
-    const NavigateToUser = (id) => {
-        navigate(`/dashboard/user-management/${id}`)
+    const NavigateToUser = (id , address) => {
+        navigate(`/dashboard/user?id=${id}&add=${address}`)
     }
 
     const updateUserStatuss = async (id) =>{
         const response = await apis.updateUserStatus(id)
         if(response.status){
-            viewUserList(data?.pagination?.page)
+            viewUserList(count , filter , searchInput)
             console.log(response);
         }
     }
 
     useEffect(() => { }, [isOpen])
 
-
-
-
-    // <tr onClick={NavigateToUser}>
     return (
         <>
             {data?.data?.map((data, index) => {
@@ -50,7 +46,7 @@ function UserDataRows({ data, index, listCount, handleToggleOpen, isOpen, setIsO
                                     {data?.id === isOpen ?
                                         <div className={`user-login-dropdown action-drop-down`}>
                                             <ul>
-                                                <li onClick={() =>NavigateToUser(data?.id)}>View Profile</li>
+                                                <li onClick={() =>NavigateToUser(data?.id , data?.wallet_address)}>View Profile</li>
                                                 {data?.status == 1 ? 
                                                 <li onClick={() =>updateUserStatuss(data?.id)}>Block</li> : 
                                                 <li onClick={() =>updateUserStatuss(data?.id)}>Unblock</li>}

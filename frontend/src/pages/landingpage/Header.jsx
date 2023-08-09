@@ -81,10 +81,10 @@ const Header = ({ search, setSearch }) => {
   //   }
   //   return web3Provider;
   // };
+  const id = JSON.parse(localStorage.getItem("data"));
+  const user_id = id?.id;
 
   useEffect(() => {
-    const id = JSON.parse(localStorage.getItem("data"));
-    const user_id = id?.id;
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
       console.log(data , 'data');
@@ -98,8 +98,6 @@ const Header = ({ search, setSearch }) => {
   }, []);
 
   useEffect(() => {
-    const id = JSON.parse(localStorage.getItem("data"));
-    const user_id = id?.id;
     const channel = laravelEcho.channel("notification-channel-" + user_id);
     channel.listen(".notification-event", (data) => {
       // Handle the received event data
@@ -113,49 +111,6 @@ const Header = ({ search, setSearch }) => {
 
   const [accountChange, setAccountChange] = useState(false);
 
-  // const accountsCheck = async () => {
-  //   let addresses = fetchAddresses();
-  //   console.log("accountsCheck");
-  //   const accounts = await window.ethereum.request({
-  //     method: "eth_requestAccounts",
-  //   });
-  //   if (accounts.length === 0) {
-  //     console.log("accountsCheck11");
-  //     // Handle account disconnection or user logged out from MetaMask.
-  //     console.log("User disconnected from MetaMask.");
-  //     setWalletConnected(false);
-  //     setAccountChange(true);
-  //   } else {
-  //     let storedWallet = JSON.parse(
-  //       localStorage.getItem("data")
-  //     ).wallet_address;
-  //     storedWallet = storedWallet.toLowerCase();
-  //     let address = accounts[0].toLowerCase();
-
-  //     // if (localStorage.getItem("data")) {
-  //     if (storedWallet == address) {
-  //       console.log("DATA IS AVAILABLE");
-  //     } else {
-  //       console.log("accountsCheck222");
-  //       // Handle the case when the user switches to a different account in MetaMask.
-  //       console.log("User switched to a new account:", accounts[0]);
-  //       postWalletAddress();
-  //       alert("User switched to a new account:", accounts[0]);
-  //       setAccountChange(true);
-  //     }
-  //   }
-  // };
-
-  // const accountsCheck = async () => {
-  //   // console.log("accountsss", accounts);
-  //   if (!window.ethereum.isConnected()) {
-  //     console.log("accountsss false");
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   accountsCheck();
-  // }, []);
 
   useEffect(() => {
     setInterval(getAddress, 3000);
@@ -215,7 +170,7 @@ const Header = ({ search, setSearch }) => {
       setChatNotificationRes("");
       setloader(true);
     }
-    const response = await apis.getChatNotification(count);
+    const response = await apis.getChatNotification(user_id , count);
     if (response.status) {
       setChatNotificationRes((prevState) => [
         ...prevState,

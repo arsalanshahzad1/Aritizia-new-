@@ -8,14 +8,14 @@ import {
   getProviderOrSigner,
 } from "../../methods/walletManager";
 
-function Fan() {
+function Fan({id}) {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
   const [fanListing, setFanListing] = useState([]);
 
   const getFanListing = async () => {
-    const response = await apis.getFanList();
+    const response = await apis.getFanList(id);
     setFanListing(response?.data?.data);
     console.log(response?.data?.data, "fanlist");
   };

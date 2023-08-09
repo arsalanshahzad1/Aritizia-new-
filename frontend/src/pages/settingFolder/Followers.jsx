@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import apis from "../../service";
-const Followers = ({ data }) => {
+const Followers = ({ data  , id}) => {
   const [showOptions, setshowOptions] = useState(false);
   const [followers, setFollwers] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
 
   const getFollowersList = async () => {
-    const response = await apis.getFollowersList();
+    const response = await apis.getFollowersList(id);
     if(response.status){
     setFollwers(response?.data?.data);
     }else{

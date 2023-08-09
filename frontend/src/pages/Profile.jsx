@@ -69,6 +69,9 @@ const Profile = ({ search, setSearch }) => {
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
+  const userId = userData?.id;
+
+  console.log(userId , 'ggggggg');
 
   const getLikedNfts = async () => {
     const provider = await getProviderOrSigner();
@@ -541,7 +544,7 @@ const Profile = ({ search, setSearch }) => {
   }, [userAddress]);
 
   const getLikedNftsList = async () => {
-    const response = await apis.getLikeNFTList();
+    const response = await apis.getLikeNFTList(userId);
     return response.data.data;
   };
 
@@ -607,7 +610,7 @@ const Profile = ({ search, setSearch }) => {
   let [addFanlisting, setAddFanlisting] = useState([]);
 
   const getFollowersList = async () => {
-    const response = await apis.getFollowersList();
+    const response = await apis.getFollowersList(userId);
     if (response.status) {
       setFollwers(response.data.data);
     } else {
@@ -625,7 +628,7 @@ const Profile = ({ search, setSearch }) => {
   };
 
   useEffect(() => {
-    getFollowersList();
+    getFollowersList(userId);
     // getFollowersForFan('')
   }, []);
 
@@ -954,7 +957,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                            <Followers />
+                            <Followers id={userId}/>
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
@@ -965,7 +968,7 @@ const Profile = ({ search, setSearch }) => {
                           </>
                         ) : (
                           <>
-                            <Following />
+                            <Following id={userId}/>
                             {/* <Follow followed={false} />
                             <Follow followed={false} />
                             <Follow followed={false} />
@@ -980,7 +983,7 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
-                    <Fan />
+                    <Fan id={userId}/>
 
                     <div
                       onClick={() => {
