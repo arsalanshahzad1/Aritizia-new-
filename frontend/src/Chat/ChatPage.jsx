@@ -38,7 +38,7 @@ function ChatPage({ search, setSearch }) {
     ];
 
     const ChatUsers = async () => {
-        const response = await apis.getChatUsers()
+        const response = await apis.getChatUsers(user_id)
         if (response.status) {
             setUserMessagesListing(response.data)
         } else {
@@ -49,7 +49,7 @@ function ChatPage({ search, setSearch }) {
     const ChatMessage = async (id) => {
         // setChatIndex(index)
         setActiveUserId(id)
-        const response = await apis.getChatMessages(id);
+        const response = await apis.getChatMessages(user_id,id);
         if (response.status) {
             setUserMessagesDetails(response?.data?.data)
             setUserDetails(response?.data?.user)

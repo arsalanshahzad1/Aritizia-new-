@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const createBackendServer = (baseURL) => {
-
-
     const api = axios.create({
         baseURL: `${baseURL}/api/admin`,
         withCredentials: false,
@@ -49,13 +47,9 @@ const createBackendServer = (baseURL) => {
 
     const viewUserList = async (count, filter, search) => await api.get(`view-user-list?page=${count}&filter=${filter}&search=${search}`);
     const viewUserDetails = async (userId) => await api.get(`view-user-detail/${userId}`);
-    
     const viewUserLikedNfts = async (userId) => await api.get(`view-user-liked-nfts/${userId}`);
-    
     const viewNftCollection = async (userId) => await api.get(`view-nft-collection/${userId}`);
-    
     const updateUserStatus = async (userId) => await api.get(`update-user-status/${userId}`);
-    
     const editUserProfile = async (body) => await api.post(`edit-user-profile`, body);
 
     // NFT Section Apis //
@@ -65,28 +59,23 @@ const createBackendServer = (baseURL) => {
     // Art Gallery Section Apis //
 
     const viewArtGalleyList = async (count) => await api.get(`view-art-gallery-images?last_count=${count}`);
-    
     const approvedUnapprovedArtGalleryImages = async (artGalleryId) => await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 
     // Subscription Section Apis //
 
     const viewPlans = async () => await api.get(`subscriptions`);
-    
     const addPlan = async (body) => await api.post(`subscriptions`, body);
-    
     const updatePlan = async (planId, body) => await api.post(`subscriptions/${planId}`, body);
-    
     const deletePlan = async (planId) => await api.delete(`subscriptions/${planId}`);
 
     // Analytics Section Apis //
 
     const viewAnalyticUsers = async () => await api.get(`view-analytic-users`);
-    
     const viewAnalyticTransaction = async (count) => await api.get(`view-analytic-transaction?page=${count}&filter=yearly`);
 
     // Admin NFT Section Apis //
 
-    const viewNftList = async () => await api.get(`view-nft-list`);
+    const viewNftList = async (count, filter, search) => await api.get(`view-nft-list?page=${count}&filter=${filter}&search=${search}`);
     const nftDetailByToken = async (tokenId) => await api.get(`nft-detail-by-token/${tokenId}`);
     const approveNft = async (tokenId) => await api.get(`approve-nft/${tokenId}`);
     const rejectNft = async (tokenId) => await api.get(`reject-nft/${tokenId}`);

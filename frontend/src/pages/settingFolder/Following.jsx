@@ -1,6 +1,6 @@
 import { useState , useEffect } from "react";
 import apis from "../../service";
-const Following = ({ data }) => {
+const Following = ({ data , id }) => {
   const [showOptions, setshowOptions] = useState(false);
   const [following, setFollwing] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
@@ -11,12 +11,12 @@ const Following = ({ data }) => {
       follow_by: RealUserId,
       follow_to: id,
     });
-    getFollowingList()
+    getFollowingList(id)
     setFollwing([])
   };
 
   const getFollowingList = async () => {
-    const response = await apis.getFollowingList();
+    const response = await apis.getFollowingList(id);
     if(response.status){
       console.log(response?.data?.data, " ");
       setFollwing(response?.data?.data);
@@ -28,7 +28,7 @@ const Following = ({ data }) => {
 
 
   useEffect(() => {
-    getFollowingList();
+    getFollowingList(id);
 }, [])
   return (
     <>

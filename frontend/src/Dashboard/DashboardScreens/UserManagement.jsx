@@ -14,7 +14,6 @@ function UserManagement({ search, setSearch }) {
     const [userList, setUserList] = useState([]);
     const [isOpen, setIsOpen] = useState('');
     const [searchInput, setSearchInput] = useState('');
-    const [dateType, setDateType] = useState({ value: 'yearly', label: "Yearly" });
     const [filter, setFilter] = useState('Yearly');
     const [showfilter, setShowFilter] = useState(false);
 
@@ -29,14 +28,13 @@ function UserManagement({ search, setSearch }) {
 
     const defaultDateType = dateTypeOptions[0];
 
-    console.log(dateType.value); 
-
     const viewUserList = async (count, filter, searchInput) => {
 
         setListCount(count * 10 - 10)
         const response = await adminApis.viewUserList(count, filter, searchInput);
         if (response?.status) {
             setUserList(response?.data)
+            console.log(response?.data , 'asasas');
         } else {
             console.log('error');
         }
@@ -47,12 +45,11 @@ function UserManagement({ search, setSearch }) {
         setIsOpen(prev => (prev === data?.id) ? null : data?.id);
     };
 
-    useEffect(() => {
-        if(searchInput == ''){
-            viewUserList(1, 'yearly', searchInput)
-        }
-        if(searchInput != '' && searchInput.length > 2){
-            viewUserList(1, filter, searchInput)
+    useEffect(()=> {
+        if (searchInput.length < 3) {
+            viewUserList(1, 'yearly', ''); // Fetch all data
+        } else {
+            viewUserList(1, filter, searchInput); // Fetch search-specific data
         }
     }, [searchInput])
     useEffect(() => {
@@ -117,6 +114,9 @@ function UserManagement({ search, setSearch }) {
                                 isOpen={isOpen}
                                 setIsOpen={setIsOpen}
                                 viewUserList={viewUserList}
+                                count={+(userList?.pagination?.page)}
+                                filter={filter}
+                                searchInput={searchInput}
                             />
                             <hr className='space-between-rows'></hr>
                         </tbody>
