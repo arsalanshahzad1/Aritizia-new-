@@ -23,6 +23,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import DummyCard from "../../components/cards/DummyCard";
 // import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
@@ -442,7 +443,9 @@ const LandingPage = ({ search, setSearch }) => {
                 <div>
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
-                {nftListFP.map((item) => (
+                {nftListFP.length > 0 ?
+                <>
+                 {nftListFP.map((item) => (
                   <BuyNow
                     key={item?.id}
                     id={item?.id}
@@ -459,6 +462,16 @@ const LandingPage = ({ search, setSearch }) => {
                     seller={item?.seller} 
                   />
                 ))}
+                </>
+               
+              :
+              <>
+              <DummyCard/>
+              <DummyCard/>
+              <DummyCard/>
+              <DummyCard/>
+              </>
+              }
               </div>
             </div>
           </div>
