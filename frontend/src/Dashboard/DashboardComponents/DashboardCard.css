@@ -757,7 +757,7 @@ img {
     margin-top: 10px;
 }
 
-.nft-card-btn-holder button:nth-child(1) {
+.nft-card-btn-holder button:nth-child(2) {
     background: linear-gradient(92.94deg, #2438CB 2.4%, #B600D1 97.52%);
     padding: 4px 20px;
     border-radius: 25px;
@@ -767,7 +767,7 @@ img {
     font-weight: 500;
 }
 
-.nft-card-btn-holder button:nth-child(2) {
+.nft-card-btn-holder button:nth-child(1) {
     background-color: transparent;
     padding: 4px 15px;
     border-radius: 25px;

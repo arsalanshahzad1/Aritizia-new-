@@ -66,9 +66,15 @@ const DashboardCard2 = ({
     console.log("response", response);
   };
 
-  const handleApprovalEvent = async (decision) => {
-    console.log("handleApprovalEvent");
-    console.log("decision", decision);
+  const handleApprovalEvent = async (_tokenId, _decision) => {
+    console.log("_tokenId", _tokenId[0]);
+
+    for (let i = 0; i < _tokenId.length; i++) {
+      console.log("_tokenId", _tokenId[i]);
+    }
+    console.log("_decision", _decision.toString());
+
+    // console.log("handleApprovalEvent");
   };
 
   const [showEditSidebar, setshowEditSidebar] = useState(false);
