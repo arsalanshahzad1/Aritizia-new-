@@ -14,6 +14,7 @@ const Subscription = ({ search, setSearch }) => {
     const [subscriptionData, setSubscriptionData] = useState([])
     const [showPaymentForm, setShowPaymentForm] = useState(false);
     const [planName, setPlanName] = useState('');
+    const [index, setIndex] = useState('');
     const viewSubscriptions = async () => {
         const response = await apis.viewSubscriptions()
         if (response.status) {
@@ -43,7 +44,7 @@ const Subscription = ({ search, setSearch }) => {
                 <div className="subscription-wrap">
                     <div className="container-fluid">
                         <div className="row">
-                            <SubscriptionCard data={subscriptionData} setShowPaymentForm={setShowPaymentForm} setPlanName={setPlanName} />
+                            <SubscriptionCard data={subscriptionData} setShowPaymentForm={setShowPaymentForm} setPlanName={setPlanName} setIndex={setIndex} index={index} />
                         </div>
                     </div>
                 </div>
@@ -63,7 +64,7 @@ const Subscription = ({ search, setSearch }) => {
                         </div>
                         <div className="sucess-data">
                             <p className='card-title'>Subscription : {planName}</p>
-                            <StripeContainer planName={planName} setShowPaymentForm={setShowPaymentForm} showResponseMessage={showResponseMessage}/>
+                            <StripeContainer index={index} planName={planName} setShowPaymentForm={setShowPaymentForm} showResponseMessage={showResponseMessage}/>
                         </div>
                     </div>
 

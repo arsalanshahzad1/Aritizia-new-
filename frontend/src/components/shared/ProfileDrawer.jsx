@@ -154,10 +154,8 @@ function ProfileDrawer({
   }, [isVisible]);
 
   let priceInETH = price;
-  let _sellerPercentFromDB = 1.5;
-  let _buyerPercentFromDB = 1.5;
-  let sellerPercent = _sellerPercentFromDB * 10;
-  let buyerPercent = _buyerPercentFromDB * 10;
+  let sellerPlan = 0;
+  let buyerPlan = 1;
 
   // const web3ModalRef = useRef();
 
@@ -396,8 +394,8 @@ function ProfileDrawer({
         NFT_CONTRACT_ADDRESS.address,
         paymentMethod.value,
         id,
-        sellerPercent, //  must be multiple of 10 of the users percent
-        buyerPercent, // must be multiple of 10 of the users percent
+        sellerPlan, //  must be multiple of 10 of the users percent
+        buyerPlan, // must be multiple of 10 of the users percent
         {
           value: ethers.utils.parseEther(value),
           gasLimit: ethers.BigNumber.from("5000000"),
@@ -480,9 +478,9 @@ function ProfileDrawer({
         NFT_CONTRACT_ADDRESS.address,
         paymentMethod.value,
         id,
+        sellerPlan, // must be multiple of 10 of the users percent
+        buyerPlan, // must be multiple of 10 of the users percent
         amountInWei,
-        sellerPercent, // must be multiple of 10 of the users percent
-        buyerPercent, // must be multiple of 10 of the users percent
         { gasLimit: ethers.BigNumber.from("5000000") }
       )
     ).wait();

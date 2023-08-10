@@ -18,6 +18,9 @@ function UserManagement({ search, setSearch }) {
     const [filter, setFilter] = useState('Yearly');
     const [showfilter, setShowFilter] = useState(false);
 
+
+    
+
     const dateTypeOptions = [
         { value: 'yearly', label: "Yearly" },
         { value: 'monthly', label: "Monthly" },
@@ -26,10 +29,7 @@ function UserManagement({ search, setSearch }) {
 
     const defaultDateType = dateTypeOptions[0];
 
-    console.log(dateType.value);
-
-
-
+    console.log(dateType.value); 
 
     const viewUserList = async (count, filter, searchInput) => {
 
@@ -57,6 +57,8 @@ function UserManagement({ search, setSearch }) {
     }, [searchInput])
     useEffect(() => {
     }, [dateType])
+
+
     return (
         <div className='user-management'>
             <Header
@@ -131,14 +133,12 @@ function UserManagement({ search, setSearch }) {
                             <div onClick={() => { viewUserList(+(userList?.pagination?.page) + 1 , filter , searchInput);; setIsOpen(null) }} className={`${userList?.pagination?.remaining == 0 ? 'disable' : ''}`}>
                                 <svg width="7" height="13" viewBox="0 0 7 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0.528779 0C0.397474 0.0659459 0.274285 0.147667 0.161888 0.243433C0.0652976 0.353091 0.0102797 0.494467 0.0066433 0.64203C0.00300694 0.789592 0.0510526 0.933619 0.142119 1.04812C0.182678 1.10085 0.226824 1.15057 0.274287 1.19688L5.34089 6.3766C5.37958 6.41609 5.42037 6.45333 5.46313 6.48817L5.35412 6.6065L0.254438 11.82C0.136648 11.9189 0.0558791 12.0564 0.0257664 12.2091C-0.00434637 12.3619 0.0180469 12.5207 0.0891876 12.6585C0.133197 12.7414 0.194219 12.8134 0.268074 12.8698C0.34193 12.9262 0.426853 12.9656 0.516999 12.9852C0.607144 13.0048 0.7004 13.0042 0.790291 12.9834C0.880182 12.9626 0.964625 12.9221 1.03776 12.8648C1.08631 12.8246 1.13262 12.7817 1.17655 12.7363L6.75213 7.03589C6.83236 6.97273 6.89728 6.89157 6.94199 6.79866C6.9867 6.70574 7.01001 6.60356 7.01001 6.5C7.01001 6.39644 6.9867 6.29426 6.94199 6.20135C6.89728 6.10843 6.83236 6.02727 6.75213 5.96411C4.92777 4.09329 3.10228 2.22584 1.27571 0.361771C1.14293 0.200345 0.972389 0.0758949 0.779963 0H0.528779Z" fill="white" />
-                                </svg>
-
+                                </svg> 
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </div> 
         </div>
     )
 }

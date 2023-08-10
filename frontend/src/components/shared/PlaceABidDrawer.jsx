@@ -331,11 +331,9 @@ const PlaceABidDrawer = ({
   };
 
   const web3ModalRef = useRef();
-  let _sellerPercentFromDB = 1.5;
-  let _buyerPercentFromDB = 1.5;
 
-  let sellerPercent = _sellerPercentFromDB * 10;
-  let buyerPercent = _buyerPercentFromDB * 10;
+  let sellerPlan = 0;
+  let buyerPlan = 1;
 
   const [amountUSD, setAmountUSD] = useState("");
   const [platformFee, setPlatformFee] = useState("");
@@ -501,8 +499,8 @@ const PlaceABidDrawer = ({
       await marketplaceContract.closeAuction(
         NFT_CONTRACT_ADDRESS.address,
         id,
-        sellerPercent,
-        buyerPercent
+        sellerPlan,
+        buyerPlan
       )
     ).wait();
 
@@ -599,7 +597,7 @@ const PlaceABidDrawer = ({
     console.log("bidEventPost");
     const response = await apis.postBid(bidData);
     console.log("response", response);
-    
+
     toast.success("Bid Succesful", {
       position: toast.POSITION.TOP_CENTER,
     });

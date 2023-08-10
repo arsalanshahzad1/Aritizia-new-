@@ -10,6 +10,13 @@ import DashboardCard from '../DashboardComponents/DashboardCard'
 import adminApis from '../../service/adminIndex'
 import apis from '../../service/adminIndex'
 import { useLocation, useParams } from "react-router-dom";
+import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
+import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
+import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
+import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
+import axios from "axios";
+import { connectWallet, getProviderOrSigner } from "../../methods/walletManager";
 
 function User({ search, setSearch }) {
     const navigate = useNavigate()
@@ -50,6 +57,138 @@ function User({ search, setSearch }) {
         viewUserLikedNfts(id)
         viewNftCollection(id)
     } , [])
+
+
+    const getMyListedNfts = async () => {
+        console.log("aaaa");
+        console.log("Connected wallet", userAddress);
+        let emptyList = [];
+        setNftListAuction(emptyList);
+        setNftListFP(emptyList);
+        const provider = await getProviderOrSigner();
+        console.log("111111");
+        // console.log("provider", provider);
+    
+        const marketplaceContract = new Contract(
+          MARKETPLACE_CONTRACT_ADDRESS.address,
+          MARKETPLACE_CONTRACT_ABI.abi,
+          provider
+        );
+        console.log("222222");
+    
+        const nftContract = new Contract(
+          NFT_CONTRACT_ADDRESS.address,
+          NFT_CONTRACT_ABI.abi,
+          provider
+        );
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+    
+        // console.log("MYADDRESS", address);
+        console.log("333333");
+    
+        let listingType;
+    
+        let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
+    
+        // let mintedTokens = [1, 4, 2];
+        console.log("mintedTokens", mintedTokens);
+        let NFTId = await getLikedNftsList();
+        let myNFTs = [];
+        let myAuctions = [];
+        for (let i = 0; i < mintedTokens.length; i++) {
+          let id;
+          id = +mintedTokens[i].tokenId.toString();
+    
+          let collectionId;
+          collectionId = +mintedTokens[i].collectionId.toString();
+          console.log("YESS", id);
+    
+          const response = await apis.getNFTCollectionImage(collectionId);
+          console.log(response, "responses");
+          const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+          console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
+          console.log(collectionImages, "trrrr");
+    
+          const metaData = await nftContract.tokenURI(id);
+    
+          const structData = await marketplaceContract._idToNFT(id);
+    
+          const fanNftData = await marketplaceContract._idToNFT2(id);
+    
+          let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+    
+          setDiscountPrice(discountOnNFT);
+    
+          let auctionData = await marketplaceContract._idToAuction(id);
+    
+          listingType = structData.listingType;
+    
+          let highestBid = ethers.utils.formatEther(
+            auctionData.highestBid.toString()
+          );
+    
+          const price = ethers.utils.formatEther(structData.price.toString());
+    
+          axios
+            .get(metaData)
+            .then((response) => {
+              const meta = response.data;
+              let data = JSON.stringify(meta);
+    
+              data = data.slice(2, -5);
+              data = data.replace(/\\/g, "");
+    
+              data = JSON.parse(data);
+              const crypto = data.crypto;
+              const title = data.title;
+              const image = data.image;
+              const royalty = data.royalty;
+              const description = data.description;
+              const collection = data.collection;
+    
+              if (listingType === 0) {
+                const nftData = {
+                  id: id, //
+                  title: title,
+                  image: image,
+                  price: price,
+                  crypto: crypto,
+                  royalty: royalty,
+                  description: description,
+                  collection: collection,
+                  collectionImages: collectionImages,
+                };
+                console.log(nftData);
+                myNFTs.push(nftData);
+                setNftListFP(myNFTs);
+              } else if (listingType === 1) {
+                const nftData = {
+                  id: id, //
+                  title: title,
+                  image: image,
+                  price: price,
+                  basePrice: price,
+                  collectionImages: collectionImages,
+                  endTime: auctionData.endTime.toString(),
+                  highestBid: highestBid,
+                  highestBidder: auctionData.highestBidder.toString(),
+                  seller: auctionData.seller.toString(),
+                  startTime: auctionData.startTime.toString(),
+                };
+                myAuctions.push(nftData);
+                setNftListAuction(myAuctions);
+                console.log(nftListAuction, "nftData");
+              }
+            })
+    
+            .catch((error) => {
+              console.error("Error fetching metadata:", error);
+            });
+        }
+      };
+
+
 
     return (
         <div className='user'>

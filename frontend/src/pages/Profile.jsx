@@ -205,6 +205,8 @@ const Profile = ({ search, setSearch }) => {
       }
     }
   };
+
+  
   const addFanList = async () => {
     const signer = await getProviderOrSigner(true);
 

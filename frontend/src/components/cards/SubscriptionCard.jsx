@@ -3,13 +3,13 @@ import { GiCrossMark } from 'react-icons/gi'
 import Cross from '../svg/Cross'
 import Check from '../svg/Check'
 
-const SubscriptionCard = ({ data , setShowPaymentForm , setPlanName}) => {
+const SubscriptionCard = ({ data , setShowPaymentForm , setPlanName , setIndex , index}) => {
     console.log(data);
     return (
         <>
-            {data.map((res, index) => {
+            {data.map((res, i) => {
                 return (
-                    <div className="col-lg-3 col-md-6">
+                    <div className="col-lg-3 col-md-6" key={i}>
                         {res?.name == 'Free Trail' ?
                         <div className="subscription-card-wrap">
                             <h2 className='title'>{res?.name}</h2>
@@ -135,7 +135,7 @@ const SubscriptionCard = ({ data , setShowPaymentForm , setPlanName}) => {
                             </div>
                         </div>
                         :
-                        <div className="subscription-card-wrap" onClick={() =>{setShowPaymentForm(true) ; setPlanName(res?.name)}}>
+                        <div className="subscription-card-wrap" key={i} onClick={() =>{setShowPaymentForm(true) ; setPlanName(res?.name) ; setIndex(i) }}>
                             <h2 className='title'>{res?.name}</h2>
                             <div>
                                 {res?.monthly_cost == 0 ?
