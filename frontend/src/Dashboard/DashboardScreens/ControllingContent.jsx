@@ -195,8 +195,11 @@ function ControllingContent({ search, setSearch }) {
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
+  let bulkCall = false;
 
+  
   const approveNFT = async (decision) => {
+    bulkCall = true;
     console.log("approveNFT");
     const signer = await getProviderOrSigner(true);
     const marketplaceContract = new Contract(
@@ -220,15 +223,17 @@ function ControllingContent({ search, setSearch }) {
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(
       "approvalUpdate",
-      handleApprovalEvent
+      bulkCall ? handleApprovalEvent : null
     );
 
     console.log("response", response);
   };
 
   const handleApprovalEvent = async (decision) => {
-    console.log("handleApprovalEvent");
-    console.log("decision", decision);
+    if (bulkCall) {
+      console.log("handleApprovalEvent");
+      console.log("decision", decision);
+    }
   };
 
   const [showEditSidebar, setshowEditSidebar] = useState(false);

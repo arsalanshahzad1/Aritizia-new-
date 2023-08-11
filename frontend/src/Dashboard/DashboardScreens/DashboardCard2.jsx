@@ -12,6 +12,7 @@ import {
   getProviderOrSigner,
 } from "../../methods/walletManager";
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
+import adminApis from "../../service/adminIndex";
 
 const DashboardCard2 = ({
   onOpen,
@@ -35,9 +36,10 @@ const DashboardCard2 = ({
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
-
+  let called = false;
   const approveNFT = async (decision) => {
     console.log("approveNFT");
+    called = true;
     const signer = await getProviderOrSigner(true);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -54,27 +56,50 @@ const DashboardCard2 = ({
     });
 
     console.log("approve", approve);
-    approveEvent(marketplaceContract);
+    await approveEvent(marketplaceContract);
+    await postAPI(decision);
   };
 
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(
       "approvalUpdate",
-      handleApprovalEvent
+      called ? handleApprovalEvent : null
     );
 
     console.log("response", response);
   };
 
+  let tokens = [];
   const handleApprovalEvent = async (_tokenId, _decision) => {
-    console.log("_tokenId", _tokenId[0]);
+    if (called) {
+      console.log("handleApprovalEventzzz");
 
-    for (let i = 0; i < _tokenId.length; i++) {
-      console.log("_tokenId", _tokenId[i]);
+      for (let i = 0; i < _tokenId.length; i++) {
+        console.log("_tokenId", _tokenId[i]);
+      }
+      console.log("_decision", _decision.toString());
+      called = false;
     }
-    console.log("_decision", _decision.toString());
+  };
 
-    // console.log("handleApprovalEvent");
+  let count = 1;
+
+  const postAPI = async (decision) => {
+    console.log("postAPI", id);
+    let body = {
+      token_idz: [id],
+    };
+    console.log("postAPI", body);
+
+    if (decision) {
+      const response = await adminApis.approveNfts(body);
+      console.log("response", response);
+    } else {
+      const response = await adminApis.rejectNfts(body);
+      console.log("response", response);
+    }
+    console.log("count", count);
+    count++;
   };
 
   const [showEditSidebar, setshowEditSidebar] = useState(false);

@@ -49,7 +49,7 @@ const createBackendServer = (baseURL) => {
   const postNftSold = async (body) => await api.post("sold-nft", body);
 
   const postWalletAddress = async (body) => await api.post(`connect-wallet`, body);
-
+  
   const postAddFans = async (body) => await api.post("add-custom-user-fans", body);
 
   const postBid = async (body) => await api.post("bidding-nft", body);
