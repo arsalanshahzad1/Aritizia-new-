@@ -35,7 +35,7 @@ const postWalletAddress = async (address) => {
         wallet_address: address,
       });
       localStorage.removeItem("data");
-      // console.log("response", response);
+      console.log("responsepostWalletAddress", response);
       localStorage.setItem("data", JSON.stringify(response?.data?.data));
       // console.log("check3");
       window.location.reload();

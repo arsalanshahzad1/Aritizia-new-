@@ -83,9 +83,11 @@ function ProfileDrawer({
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
+  const getBuyerPlan = userData?.subscription_plan;
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
+  const [getSellerPlan, setSellerPlan] = useState("");
   const [likeAndViewData, setLikeAndViewData] = useState("");
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
@@ -154,8 +156,8 @@ function ProfileDrawer({
   }, [isVisible]);
 
   let priceInETH = price;
-  let sellerPlan = 0;
-  let buyerPlan = 1;
+  let sellerPlan = getSellerPlan;
+  let buyerPlan = getBuyerPlan;
 
   // const web3ModalRef = useRef();
 
@@ -501,7 +503,9 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
+    console.log("Zayyan", response?.data?.data?.subscription_plan);
     setNftDetails(response?.data?.data);
+    setSellerPlan(response?.data?.data?.subscription_plan);
   };
 
   const Monthly_data = [
