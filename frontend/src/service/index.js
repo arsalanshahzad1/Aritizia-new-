@@ -136,7 +136,7 @@ const createBackendServer = (baseURL) => {
 
   const userSubscribe = async (body) => await api.post(`subscribe`, body);
   const cancelSubscription = async (body) => await api.post(`cancel-subscription`, body);
-  const viewSubscriptions = async () => await api.get(`view-subscriptions`);
+  const viewSubscriptions = async (userId) => await api.get(`view-subscriptions/${userId}`);
 
 
   //Returning all the API

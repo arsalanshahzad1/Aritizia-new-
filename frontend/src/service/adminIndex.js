@@ -75,7 +75,9 @@ const createBackendServer = (baseURL) => {
 
     // Admin NFT Section Apis //
 
-    const viewNftList = async (count, filter, search) => await api.get(`view-nft-list?page=${count}&filter=${filter}&search=${search}`);
+    let page_size = 8
+
+    const viewNftList = async (count, filter, search) => await api.get(`view-nft-list?page=${count}&filter=${filter}&search=${search}&page_size=${page_size}`);
     const nftDetailByToken = async (tokenId) => await api.get(`nft-detail-by-token/${tokenId}`);
     const approveNft = async (tokenId) => await api.get(`approve-nft/${tokenId}`);
     const rejectNft = async (tokenId) => await api.get(`reject-nft/${tokenId}`);

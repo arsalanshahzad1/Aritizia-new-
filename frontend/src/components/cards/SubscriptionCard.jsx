@@ -2,8 +2,9 @@ import React from 'react'
 import { GiCrossMark } from 'react-icons/gi'
 import Cross from '../svg/Cross'
 import Check from '../svg/Check'
+import { BsCheck } from "react-icons/bs";
 
-const SubscriptionCard = ({ data , setShowPaymentForm , setPlanName , setIndex , index}) => {
+const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, index }) => {
     console.log(data);
     return (
         <>
@@ -11,254 +12,265 @@ const SubscriptionCard = ({ data , setShowPaymentForm , setPlanName , setIndex ,
                 return (
                     <div className="col-lg-3 col-md-6" key={i}>
                         {res?.name == 'Free Trail' ?
-                        <div className="subscription-card-wrap">
-                            <h2 className='title'>{res?.name}</h2>
-                            <div>
-                                {res?.monthly_cost == 0 ?
-                                    <>
-                                        <p className='p1'>Monthly subscription cost</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                        <p className='p1'>Monthly subscription cost</p>
-                                        <span class="span-1">{res?.monthly_cost}</span>
-                                    </>
+                            <div className="subscription-card-wrap">
+                                <h2 className='title'>{res?.name}</h2>
+                                <div>
+                                    {res?.monthly_cost == 0 ?
+                                        <>
+                                            <p className='p1'>Monthly subscription cost</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Monthly subscription cost</p>
+                                            <span class="span-1">{res?.monthly_cost}</span>
+                                        </>
 
 
-                                }
+                                    }
+                                </div>
+                                <div>
+                                    {res?.annual_cost == 0 ?
+                                        <>
+                                            <p className='p1'>Annual subscription cost</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Annual subscription cost</p>
+                                            <span class="span-1">{res?.annual_cost}</span>
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.monthly_generated_images == 0 ?
+                                        <>
+                                            <p className='p1'>Images generated/mo</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Images generated/mo</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.transection_fee == 0 ?
+                                        <>
+                                            <p className='p1'>Transection fee</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Transection fee</p>
+                                            <span class="span-1">{res?.transection_fee}%</span>
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.unlimited_gallery_uploads == 0 ?
+                                        <>
+                                            <p className='p1'>Unlimited gallegy uploads</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Unlimited gallegy uploads</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.prompt_privacy == 0 ?
+                                        <>
+                                            <p className='p1'>Prompt privacy</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Prompt privacy</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.nft_minting == 0 ?
+                                        <>
+                                            <p className='p1'>NFT Minting</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>NFT Minting</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.personal_gallery == 0 ?
+                                        <>
+                                            <p className='p1'>Personal Gallery</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Personal Gallery</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.exclusive_art_release == 0 ?
+                                        <>
+                                            <p className='p1'>Access to exclusive art releases</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Access to exclusive art releases</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
                             </div>
-                            <div>
-                                {res?.annual_cost == 0 ?
-                                    <>
-                                        <p className='p1'>Annual subscription cost</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                        <p className='p1'>Annual subscription cost</p>
-                                        <span class="span-1">{res?.annual_cost}</span>
-                                    </>
+                            :
+                            <div className="subscription-card-wrap" key={i} onClick={() => { setShowPaymentForm(true); setPlanName(res?.name); setIndex(i) }}>
+                                <h2 className='title'>{res?.name}</h2>
+                                <div>
+                                    {res?.monthly_cost == 0 ?
+                                        <>
+                                            <p className='p1'>Monthly subscription cost</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Monthly subscription cost</p>
+                                            <span class="span-1">{res?.monthly_cost}</span>
+                                        </>
 
 
-                                }
+                                    }
+                                </div>
+                                <div>
+                                    {res?.annual_cost == 0 ?
+                                        <>
+                                            <p className='p1'>Annual subscription cost</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Annual subscription cost</p>
+                                            <span class="span-1">{res?.annual_cost}</span>
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.monthly_generated_images == 0 ?
+                                        <>
+                                            <p className='p1'>Images generated/mo</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Images generated/mo</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.transection_fee == 0 ?
+                                        <>
+                                            <p className='p1'>Transection fee</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Transection fee</p>
+                                            <span class="span-1">{res?.transection_fee}%</span>
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.unlimited_gallery_uploads == 0 ?
+                                        <>
+                                            <p className='p1'>Unlimited gallegy uploads</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Unlimited gallegy uploads</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.prompt_privacy == 0 ?
+                                        <>
+                                            <p className='p1'>Prompt privacy</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Prompt privacy</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.nft_minting == 0 ?
+                                        <>
+                                            <p className='p1'>NFT Minting</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>NFT Minting</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.personal_gallery == 0 ?
+                                        <>
+                                            <p className='p1'>Personal Gallery</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Personal Gallery</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    {res?.exclusive_art_release == 0 ?
+                                        <>
+                                            <p className='p1'>Access to exclusive art releases</p><Cross />
+                                        </>
+                                        :
+                                        <>
+                                            <p className='p1'>Access to exclusive art releases</p><Check />
+                                        </>
+
+
+                                    }
+                                </div>
+                                <div>
+                                    <div className="left">
+                                        Activate
+                                        <div className="seven-line-nft-cardd" style={{display:'flex' , alignItems : 'center'}}>
+                                            <span>
+                                                <BsCheck className={`${res?.user_subs?.auto_recursion ? "red" : "transparent"}`} />
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="right"></div>
+                                </div>
                             </div>
-                            <div>
-                                {res?.monthly_generated_images == 0 ?
-                                    <>
-                                        <p className='p1'>Images generated/mo</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Images generated/mo</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.transection_fee == 0 ?
-                                    <>
-                                        <p className='p1'>Transection fee</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                        <p className='p1'>Transection fee</p>
-                                        <span class="span-1">{res?.transection_fee}%</span>
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.unlimited_gallery_uploads == 0 ?
-                                    <>
-                                        <p className='p1'>Unlimited gallegy uploads</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Unlimited gallegy uploads</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.prompt_privacy == 0 ?
-                                    <>
-                                        <p className='p1'>Prompt privacy</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Prompt privacy</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.nft_minting == 0 ?
-                                    <>
-                                        <p className='p1'>NFT Minting</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>NFT Minting</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.personal_gallery == 0 ?
-                                    <>
-                                        <p className='p1'>Personal Gallery</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Personal Gallery</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.exclusive_art_release == 0 ?
-                                    <>
-                                        <p className='p1'>Access to exclusive art releases</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Access to exclusive art releases</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                        </div>
-                        :
-                        <div className="subscription-card-wrap" key={i} onClick={() =>{setShowPaymentForm(true) ; setPlanName(res?.name) ; setIndex(i) }}>
-                            <h2 className='title'>{res?.name}</h2>
-                            <div>
-                                {res?.monthly_cost == 0 ?
-                                    <>
-                                        <p className='p1'>Monthly subscription cost</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                        <p className='p1'>Monthly subscription cost</p>
-                                        <span class="span-1">{res?.monthly_cost}</span>
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.annual_cost == 0 ?
-                                    <>
-                                        <p className='p1'>Annual subscription cost</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                        <p className='p1'>Annual subscription cost</p>
-                                        <span class="span-1">{res?.annual_cost}</span>
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.monthly_generated_images == 0 ?
-                                    <>
-                                        <p className='p1'>Images generated/mo</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Images generated/mo</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.transection_fee == 0 ?
-                                    <>
-                                        <p className='p1'>Transection fee</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                        <p className='p1'>Transection fee</p>
-                                        <span class="span-1">{res?.transection_fee}%</span>
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.unlimited_gallery_uploads == 0 ?
-                                    <>
-                                        <p className='p1'>Unlimited gallegy uploads</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Unlimited gallegy uploads</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.prompt_privacy == 0 ?
-                                    <>
-                                        <p className='p1'>Prompt privacy</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Prompt privacy</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.nft_minting == 0 ?
-                                    <>
-                                        <p className='p1'>NFT Minting</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>NFT Minting</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.personal_gallery == 0 ?
-                                    <>
-                                        <p className='p1'>Personal Gallery</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Personal Gallery</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                            <div>
-                                {res?.exclusive_art_release == 0 ?
-                                    <>
-                                        <p className='p1'>Access to exclusive art releases</p><Cross />
-                                    </>
-                                    :
-                                    <>
-                                    <p className='p1'>Access to exclusive art releases</p><Check />
-                                    </>
-
-
-                                }
-                            </div>
-                        </div>
-                    }
+                        }
                     </div>
                 )
             })}

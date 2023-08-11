@@ -716,10 +716,10 @@ const Multiple = ({ search, setSearch }) => {
         });
         // alert("NFTs minted");
 
-        setTimeout(() => {
-          navigate("/profile");
-          window.location.reload();
-        }, 3000);
+        // setTimeout(() => {
+        //   navigate("/profile");
+        //   window.location.reload();
+        // }, 3000);
       } else {
         console.log("Nhi mili");
       }

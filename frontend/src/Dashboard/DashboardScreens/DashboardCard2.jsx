@@ -12,6 +12,8 @@ import {
   getProviderOrSigner,
 } from "../../methods/walletManager";
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
+import { BsCheck } from "react-icons/bs";
+import NftControllingDrawer from "../userControllingNft/NftControllingDrawer";
 
 const DashboardCard2 = ({
   onOpen,
@@ -24,6 +26,9 @@ const DashboardCard2 = ({
   royalty,
   description,
   collection,
+  getSelectedId,
+  index,
+  selectedNTFIds
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -87,19 +92,30 @@ const DashboardCard2 = ({
     }
   };
 
+  const [chack, setChack] = useState(false);
+
+
+
   return (
     <>
       <div
         onMouseEnter={() => setShowLinks(true)}
         onMouseLeave={() => setShowLinks(false)}
         className="col-lg-3 col-md-4"
+        key={index}
       >
+        <div className="seven-line-nft-card" onClick={() => { setChack(!chack); getSelectedId(id) }}>
+          <span>
+            <BsCheck className={`${chack ? "red" : "transparent"}`} />
+          </span>
+        </div>
         <Link to={path}>
+
           <div
-            className="css-vurnku height-335"
-            style={{ position: "relative" }}
+            className="css-vurnkuu"
+            style={{ position: "relative", height: 'auto !important' }}
           >
-            <a className="css-118gt74" onClick={() => openDrawer()}>
+            <a className="css-118gt75" onClick={() => openDrawer()}>
               <div className="css-15eyh94">
                 <div className="css-2r2ti0">
                   <div className="css-15xcape">
@@ -120,9 +136,9 @@ const DashboardCard2 = ({
                             <li onClick={() => setIsVisible(true)}>
                               <a href="">VIEW</a>
                             </li>
-                            <li onClick={() => setshowEditSidebar(true)}>
+                            {/* <li onClick={() => setshowEditSidebar(true)}>
                               <a href="">EDIT</a>
-                            </li>
+                            </li> */}
                           </ul>
                         </div>
                       )}
@@ -156,38 +172,17 @@ const DashboardCard2 = ({
                     </div>
                     <div className="css-x2gp5l"></div>
                   </div>
-                  <div className="nft-card-btn-holder">
-                    <button onClick={() => approveNFT(true)}>Accept</button>
-                    <button onClick={() => approveNFT(false)}>Decline</button>
-                  </div>
+                  {selectedNTFIds?.length > 0 ? null :
+                    <div className="nft-card-btn-holder">
+                      <button onClick={() => approveNFT(false)}>Decline</button>
+                      <button onClick={() => approveNFT(true)}>Accept</button>
+                    </div>
+                  }
                 </div>
-                {/* <div className="J-buynow css-1elubna">
-                                    
-                                    <div className="button css-pxd23z">
-                                        <p>Buy Now</p>
-                                        <span>
-                                            <img src="/assets/icons/shop.png" alt="" />
-                                        </span>
-                                    </div>
-                                </div> */}
               </div>
             </a>
-            {/* <span
-                            className="btc-gray-logo"
-                            onClick={() => {
-                                setShowLinks(!showLinks);
-                            }}
-                        >
-                            <span>
-                                <BsShareFill />
-                            </span>
-                        </span> */}
-            {/* <img src="/assets/images/btc.png" alt="" className='btc-gray-logo' onClick={() => { setShowLinks(!showLinks) }} /> */}
           </div>
         </Link>
-
-        {/* <button onClick={buyWithETH}>Buy with ETH</button>
-                                    <button onClick={buyWithUSDT}>Buy with USDT</button> */}
       </div>
       {showEditSidebar && (
         <div className="Edit-nft">
@@ -252,7 +247,7 @@ const DashboardCard2 = ({
           </div>
         </div>
       )}
-      <ProfileDrawerAdmin
+      <NftControllingDrawer
         isVisible={isVisible}
         onClose={onClose}
         id={id}

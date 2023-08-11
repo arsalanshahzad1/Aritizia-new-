@@ -251,15 +251,17 @@ p {
       text-decoration: none;
     } */
 
-.css-vurnku {
+.css-vurnkuu {
     box-sizing: border-box;
     margin: 0;
     min-width: 0;
-    height: 310px;
+    /* height: 310px; */
     margin-bottom: 50px;
+    border-radius: 12px;
+    box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
 }
 
-.css-vurnku .doted-icon {
+.css-vurnkuu .doted-icon {
     position: absolute;
     right: 19px;
     top: 0px;
@@ -268,7 +270,13 @@ p {
     z-index: 99;
 }
 
-.css-vurnku .social-links1,
+.css-vurnkuu .css-15xcape img{
+    width: 100%;
+    height: 195px;
+    object-fit: contain;
+}
+
+.css-vurnkuu .social-links1,
 .sec-five-wrap .image .social-links1 {
     position: absolute;
     z-index: 10;
@@ -286,7 +294,7 @@ p {
     height: 345px !important;
 }
 
-.css-vurnku .social-links1 ul,
+.css-vurnkuu .social-links1 ul,
 .sec-five-wrap .image .social-links1 ul {
     display: flex;
     flex-direction: column;
@@ -298,17 +306,17 @@ p {
     margin: 0;
 }
 
-.css-vurnku .social-links1 ul li,
+.css-vurnkuu .social-links1 ul li,
 .sec-five-wrap .image .social-links1 ul li {
     padding: 10px 0px;
 }
 
-.css-vurnku .social-links1 ul li:last-child,
+.css-vurnkuu .social-links1 ul li:last-child,
 .sec-five-wrap .image .social-links1 ul li:last-child {
     padding-bottom: 35px;
 }
 
-.css-vurnku .social-links1 ul li a,
+.css-vurnkuu .social-links1 ul li a,
 .sec-five-wrap .image .social-links1 ul li a {
     font-family: 'Jost';
     font-size: 18px;
@@ -321,7 +329,18 @@ p {
     border: 2px solid white;
 }
 
-.css-118gt74 {
+
+
+
+.multi_select_nft_cb input[type=checkbox]{
+    width: 30px;
+   height: 30px;
+   accent-color: red;
+   background: red !important;
+   color: #000;
+}
+
+.css-118gt75 {
     box-sizing: border-box;
     margin: 0px;
     min-width: 0px;
@@ -413,17 +432,17 @@ img {
     z-index: 10;
 }
 
-.css-118gt74:hover {
+.css-118gt75:hover {
     /* transform: translateY(-4px); */
     box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
     height: 104%;
 }
 
-.css-vurnku:hover .btc-gray-logo {
+.css-vurnkuu:hover .btc-gray-logo {
     opacity: 1;
 }
 
-/* .css-vurnku .J-image {
+/* .css-vurnkuu .J-image {
     height: 100%;
     width: 100%;
     object-fit: contain;
@@ -432,17 +451,17 @@ img {
     position: relative
 } */
 
-.css-118gt74:hover .J-bottom {
+.css-118gt75:hover .J-bottom {
     /* margin-top: -44px; */
     padding-bottom: 60px;
 }
 
-.css-118gt74:hover .social-links1 ul li:last-child {
+.css-118gt75:hover .social-links1 ul li:last-child {
     /* padding-bottom: 85px; */
     transition: .5s ease-in-out;
 }
 
-.css-118gt74:hover .css-1elubna {
+.css-118gt75:hover .css-1elubna {
     margin-top: -5px;
 }
 
@@ -458,9 +477,9 @@ img {
     transition: all 0.2s ease 0s;
 }
 
-.css-118gt74:hover .J1-bottom {
+.css-118gt75:hover .J1-bottom {
     /* margin-top: -44px; */
-    padding-bottom: 65px;
+    /* padding-bottom: 65px; */
 }
 
 .css-1xg74gr {
@@ -668,6 +687,56 @@ img {
     margin-top: 5px;
 }
 
+.controling-Nft-Load-More{
+    background: var(--bg-gradient);
+    padding: 12px 32px;
+    border-radius: 66px;
+    border: none;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: var(--white);
+    margin: 0px 20px 0px 36px;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.controling-Nft-Load-More.disable{
+    background: lightgray;
+    padding: 12px 32px;
+    border-radius: 66px;
+    border: none;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000;
+    margin: 0px 20px 0px 36px;
+    position: relative;
+    margin-bottom: 30px;
+    pointer-events: none;
+}
+
+.empty-messahe{
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-messahe h2{
+    font-weight: 600;
+    font-size: 22px;
+    font-family: 'Jost';
+    color: #B600D1;
+}
+
+
 @keyframes scroll {
     to {
         background-position: -500px 0;
@@ -675,14 +744,14 @@ img {
 }
 
 @media only screen and (min-width: 1399px) {
-    .css-vurnku {
-        height: 340px !important;
+    .css-vurnkuu {
+        /* height: 340px !important; */
     }
 }
 
 @media only screen and (max-width: 1399px) {
-    .css-vurnku {
-        height: 340px !important;
+    .css-vurnkuu {
+        /* height: 340px !important; */
     }
 }
 
@@ -692,7 +761,7 @@ img {
         width: 600px;
     }
 
-    .css-vurnku {
+    .css-vurnkuu {
         height: auto !important;
     }
 
@@ -700,28 +769,28 @@ img {
         position: static;
     }
 
-    .css-118gt74 {
+    .css-118gt75 {
         /* transform: translateY(-4px); */
         box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
         height: auto;
     }
 
-    .css-118gt74:hover {
+    .css-118gt75:hover {
         /* transform: translateY(-4px); */
         box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
         height: auto;
     }
 
-    .css-118gt74:hover .social-links1 ul li:last-child {
+    .css-118gt75:hover .social-links1 ul li:last-child {
         padding-bottom: 0px;
         transition: .5s ease-in-out;
     }
 
-    .css-118gt74:hover .css-1elubna {
+    .css-118gt75:hover .css-1elubna {
         margin-top: 0px;
     }
 
-    .css-118gt74:hover .J-bottom {
+    .css-118gt75:hover .J-bottom {
         margin-top: 0px;
         padding-bottom: 12px;
     }
@@ -759,7 +828,7 @@ img {
 
 .nft-card-btn-holder button:nth-child(2) {
     background: linear-gradient(92.94deg, #2438CB 2.4%, #B600D1 97.52%);
-    padding: 4px 20px;
+    padding: 6px 20px;
     border-radius: 25px;
     border: none;
     color: white;
