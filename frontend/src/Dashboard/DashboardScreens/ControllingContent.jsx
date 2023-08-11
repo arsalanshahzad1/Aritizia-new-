@@ -150,6 +150,7 @@ function ControllingContent({ search, setSearch }) {
           console.log(nftData);
           myNFTs.push(nftData);
           setNftList((prev) => [...prev, nftData]);
+          deleteItems(nftList)
           console.log("nftList", nftList);
 
           // } else if (listingType === 1) {
@@ -253,11 +254,19 @@ function ControllingContent({ search, setSearch }) {
     if (decision) {
       const response = await adminApis.approveNfts(body);
       console.log("response", response);
+    //   deleteItems(selectedNTFIds)
+
     } else {
       const response = await adminApis.rejectNfts(body);
       console.log("response", response);
     }
   };
+
+//   const deleteItems = (ids) => {
+//     console.log(ids , 'ids');
+//     const updatedData = data.filter(item => !ida.includes(item.id));
+//     setNftList(updatedData);
+//   };
 
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(

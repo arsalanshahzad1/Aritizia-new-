@@ -66,36 +66,42 @@ const PaymentForm = ({
           plan_type: planeType,
           payment_mode: paymentMode,
         });
+       
+        if (response.status) {
 
+        toast.success("Plan purchased!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
         // {
         //     amout : 1000,
         //     id
         // })
-        if (response.status) {
-          console.log("Success", response);
-          console.log("zzzzz ", index);
-          // toast.success(response?.data?.message, {
-          //     position: toast.POSITION.TOP_RIGHT,
-          // });
-          console.log("QQ One");
-          await updateUserPlanInSC(index);
-          console.log("QQ Two");
+        // if (response.status) {
+        //   console.log("Success", response);
+        //   console.log("zzzzz ", index);
+        //   // toast.success(response?.data?.message, {
+        //   //     position: toast.POSITION.TOP_RIGHT,
+        //   // });
+        //   console.log("QQ One");
+        //   await updateUserPlanInSC(index);
+        //   console.log("QQ Two");
 
-          toast.success("Plan purchased!", {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+        //   toast.success("Plan purchased!", {
+        //     position: toast.POSITION.TOP_RIGHT,
+        //   });
 
-          //   setTimeout(() => {
-          //     window.location.reload();
-          //   }, 1500);
+        //   //   setTimeout(() => {
+        //   //     window.location.reload();
+        //   //   }, 1500);
 
-          //   showResponseMessage(response?.data?.message);
-          setShowPaymentForm(false);
-        } else {
-          toast.error(response?.data?.message, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
+        //   //   showResponseMessage(response?.data?.message);
+        //   setShowPaymentForm(false);
+        // } else {
+        //   toast.error(response?.data?.message, {
+        //     position: toast.POSITION.TOP_RIGHT,
+        //   });
+        // }
       } catch (error) {
         console.log("Error", error.message);
         toast.error(error.message, {

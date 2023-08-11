@@ -137,6 +137,7 @@ const createBackendServer = (baseURL) => {
   const userSubscribe = async (body) => await api.post(`subscribe`, body);
   const cancelSubscription = async (body) => await api.post(`cancel-subscription`, body);
   const viewSubscriptions = async (userId) => await api.get(`view-subscriptions/${userId}`);
+  const autoRecursionOnoff = async (body) => await api.post(`auto-recursion-onoff` , body);
 
 
   //Returning all the API
@@ -190,6 +191,7 @@ const createBackendServer = (baseURL) => {
     userSubscribe,
     cancelSubscription,
     viewSubscriptions,
+    autoRecursionOnoff
 
   };
 };

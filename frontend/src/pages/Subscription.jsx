@@ -17,8 +17,8 @@ const Subscription = ({ search, setSearch }) => {
     const [index, setIndex] = useState('');
     const userData = JSON.parse(localStorage.getItem("data"));
     const userId = userData?.id;
-    const viewSubscriptions = async () => {
-        const response = await apis.viewSubscriptions()
+    const viewSubscriptions = async (id) => {
+        const response = await apis.viewSubscriptions(id)
         if (response.status) {
             setSubscriptionData(response?.data?.data)
         }
@@ -32,7 +32,7 @@ const Subscription = ({ search, setSearch }) => {
     }
 
     useEffect(() => {
-        viewSubscriptions()
+        viewSubscriptions(userId)
     }, [])
     return (
         <>
@@ -46,7 +46,14 @@ const Subscription = ({ search, setSearch }) => {
                 <div className="subscription-wrap">
                     <div className="container-fluid">
                         <div className="row">
-                            <SubscriptionCard data={subscriptionData} setShowPaymentForm={setShowPaymentForm} setPlanName={setPlanName} setIndex={setIndex} index={index} />
+                            <SubscriptionCard 
+                            data={subscriptionData} 
+                            setShowPaymentForm={setShowPaymentForm} 
+                            setPlanName={setPlanName} 
+                            setIndex={setIndex} 
+                            index={index} 
+                            viewSubscriptions={viewSubscriptions}
+                            />
                         </div>
                     </div>
                 </div>
