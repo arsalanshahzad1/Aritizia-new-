@@ -1101,7 +1101,7 @@ const PlaceABidDrawer = ({
               </div>
             </div>
           </div>
-          <button onClick={getStatusOfAuction}>getStatusOfAuction</button>
+          {/* <button onClick={getStatusOfAuction}>getStatusOfAuction</button> */}
         </div>
       </Drawer>
       {/* <Modal

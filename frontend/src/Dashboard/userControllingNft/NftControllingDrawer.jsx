@@ -57,6 +57,7 @@ function NftControllingDrawer({
   // userAddress,
   showBuyNow,
   ShowAcceptbtn,
+  approveNFT,
 }) {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -96,20 +97,20 @@ function NftControllingDrawer({
 
   const [buyButton, showBuyButton] = useState(false);
 
-  const checkSeller = async () => {
-    const provider = await getProviderOrSigner();
+  // const checkSeller = async () => {
+  //   const provider = await getProviderOrSigner();
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     provider
+  //   );
 
-    const structData = await marketplaceContract._idToNFT(id);
-    let approve = structData.approve;
-    console.log("checkSeller id", id);
-    console.log("checkSeller approve", approve);
-  };
+  //   const structData = await marketplaceContract._idToNFT(id);
+  //   let approve = structData.approve;
+  //   console.log("checkSeller id", id);
+  //   console.log("checkSeller approve", approve);
+  // };
 
   const getNFTLike = async () => {
     var temp = JSON.parse(localStorage.getItem("data"));
@@ -144,7 +145,6 @@ function NftControllingDrawer({
     }
   }, [isVisible]);
 
-  let _sellerPercentFromDB = 1.5;
   let _buyerPercentFromDB = 1.5;
 
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
@@ -225,18 +225,18 @@ function NftControllingDrawer({
     setNftDetails(response?.data?.data);
   };
 
-  const [drawerData, setDrawerData] = useState('')
+  const [drawerData, setDrawerData] = useState("");
 
   const nftDetailByToken = async (id) => {
     const response = await adminApis.nftDetailByToken(id);
     setDrawerData(response?.data?.data);
-    console.log(response?.data?.data, 'drawerData');
+    console.log(response?.data?.data, "drawerData");
   };
 
   useEffect(() => {
     if (isVisible) {
       getNFTDetailByNFTTokenId();
-      nftDetailByToken(id)
+      nftDetailByToken(id);
     }
   }, [isVisible]);
 
@@ -314,7 +314,6 @@ function NftControllingDrawer({
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="pro-dtails">
-
                 <div className="first-line">
                   <h2>{title}</h2>
                   <img src="/assets/images/chack.png" alt="" />
@@ -326,7 +325,15 @@ function NftControllingDrawer({
                   </p>
                 </div>
                 <div className="four-line">
-                  <p style={{color : '#000' , fontWeight : '500' , fontSize : '26px' }}>Description</p>
+                  <p
+                    style={{
+                      color: "#000",
+                      fontWeight: "500",
+                      fontSize: "26px",
+                    }}
+                  >
+                    Description
+                  </p>
                   <p>{description}</p>
                 </div>
                 <div className="four-line">
@@ -334,38 +341,30 @@ function NftControllingDrawer({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        {
-                          userData?.wallet_address ==
-                            drawerData?.user?.wallet_address ? (
-                            <Link to={"/profile"}>
-                              <img
-                                src={drawerData?.user?.profile_image}
-                                alt=""
-                              />{" "}
-                              <span>{drawerData?.user?.username}</span>
-                              <br />
-                              <span>{userData?.wallet_address}</span>
-                              <br />
-                              <span>{nftDetails?.user?.wallet_address}</span>
-                            </Link>
-                          ) : (
-                            <div
-                              onClick={() =>
-                                navigate("/other-profile", {
-                                  state: {
-                                    address: drawerData?.user?.wallet_address,
-                                  },
-                                })
-                              }
-                            >
-                              <img
-                                src={drawerData?.user?.profile_image}
-                                alt=""
-                              />{" "}
-                              <span>{drawerData?.user?.username}</span>
-                            </div>
-                          )
-                        }
+                        {userData?.wallet_address ==
+                        drawerData?.user?.wallet_address ? (
+                          <Link to={"/profile"}>
+                            <img src={drawerData?.user?.profile_image} alt="" />{" "}
+                            <span>{drawerData?.user?.username}</span>
+                            <br />
+                            <span>{userData?.wallet_address}</span>
+                            <br />
+                            <span>{nftDetails?.user?.wallet_address}</span>
+                          </Link>
+                        ) : (
+                          <div
+                            onClick={() =>
+                              navigate("/other-profile", {
+                                state: {
+                                  address: drawerData?.user?.wallet_address,
+                                },
+                              })
+                            }
+                          >
+                            <img src={drawerData?.user?.profile_image} alt="" />{" "}
+                            <span>{drawerData?.user?.username}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
@@ -401,8 +400,7 @@ function NftControllingDrawer({
                       </div>
                     )}
                     <div className="col-lg-6 col-md-4 col-4">
-                      <div className="right">
-                      </div>
+                      <div className="right"></div>
                     </div>
                   </div>
                   <img
@@ -416,8 +414,8 @@ function NftControllingDrawer({
                 {ShowAcceptbtn && (
                   <div className="drawer-inner-accept-btn">
                     <div className="nft-card-btn-holder">
-                      <button>Accept</button>
-                      <button>Decline</button>
+                      <button onClick={() => approveNFT(false)}>Decline</button>
+                      <button onClick={() => approveNFT(true)}>Accept</button>
                     </div>
                   </div>
                 )}

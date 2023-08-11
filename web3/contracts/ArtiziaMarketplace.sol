@@ -278,6 +278,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     enum SubscriptionLevel {
         FreeTrial,
+        FreeTrialEnded,
         Gold,
         Platinum,
         Diamond
@@ -397,6 +398,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         USDTtoken = IERC20USDT(_token);
 
         setSubscriptionFee(SubscriptionLevel.FreeTrial, 150);
+        setSubscriptionFee(SubscriptionLevel.FreeTrialEnded, 150);
         setSubscriptionFee(SubscriptionLevel.Gold, 150);
         setSubscriptionFee(SubscriptionLevel.Platinum, 100);
         setSubscriptionFee(SubscriptionLevel.Diamond, 0);
@@ -674,7 +676,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             "This NFT is not at auction"
         );
 
-        require(nft.listed == true, "Nft is not listed to purchase");
+        // require(nft.listed == true, "Nft is not listed to purchase");
 
         // if condition ajayegi jo check kregi k agr
 

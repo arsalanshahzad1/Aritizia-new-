@@ -29,7 +29,7 @@ const DashboardCard2 = ({
   collection,
   getSelectedId,
   index,
-  selectedNTFIds
+  selectedNTFIds,
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -119,8 +119,6 @@ const DashboardCard2 = ({
 
   const [chack, setChack] = useState(false);
 
-
-
   return (
     <>
       <div
@@ -129,16 +127,21 @@ const DashboardCard2 = ({
         className="col-lg-3 col-md-4"
         key={index}
       >
-        <div className="seven-line-nft-card" onClick={() => { setChack(!chack); getSelectedId(id) }}>
+        <div
+          className="seven-line-nft-card"
+          onClick={() => {
+            setChack(!chack);
+            getSelectedId(id);
+          }}
+        >
           <span>
             <BsCheck className={`${chack ? "red" : "transparent"}`} />
           </span>
         </div>
         <Link to={path}>
-
           <div
             className="css-vurnkuu"
-            style={{ position: "relative", height: 'auto !important' }}
+            style={{ position: "relative", height: "auto !important" }}
           >
             <a className="css-118gt75" onClick={() => openDrawer()}>
               <div className="css-15eyh94">
@@ -197,12 +200,12 @@ const DashboardCard2 = ({
                     </div>
                     <div className="css-x2gp5l"></div>
                   </div>
-                  {selectedNTFIds?.length > 0 ? null :
+                  {selectedNTFIds?.length > 0 ? null : (
                     <div className="nft-card-btn-holder">
                       <button onClick={() => approveNFT(false)}>Decline</button>
                       <button onClick={() => approveNFT(true)}>Accept</button>
                     </div>
-                  }
+                  )}
                 </div>
               </div>
             </a>
@@ -286,6 +289,7 @@ const DashboardCard2 = ({
         userAddress={userAddress}
         showBuyNow={false}
         ShowAcceptbtn={true}
+        approveNFT={approveNFT}
       />
     </>
   );

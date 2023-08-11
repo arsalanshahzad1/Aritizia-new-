@@ -251,6 +251,21 @@ function ProfileDrawer({
   const getPriceInUSD = async () => {
     const provider = await getProviderOrSigner();
 
+    let _buyerPercent;
+    console.log("buyerPlan", buyerPlan);
+
+    if (buyerPlan < 3) {
+      _buyerPercent = 1.5;
+    } else if (buyerPlan == 3) {
+      _buyerPercent = 1.5;
+      1;
+    } else if (buyerPlan == 4) {
+      _buyerPercent = 0;
+    } else {
+      _buyerPercent = 1.5;
+    }
+    console.log("_buyerPercent", _buyerPercent);
+
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -266,7 +281,7 @@ function ProfileDrawer({
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
     setPriceETH(nftEthPrice);
     let priceETH = nftEthPrice;
-    let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
+    let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
     setPlatformFeeETH(feeETH);
 
     // let dollarPriceOfETH = 1831;
@@ -281,7 +296,7 @@ function ProfileDrawer({
     priceInUSD = Math.ceil(priceInUSD);
     setAmountUSD(priceInUSD.toString());
 
-    let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+    let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercent);
     setPlatformFeeUSDT(Math.ceil(feeUSD));
 
     // let fee = Math.ceil((priceInUSD * 3) / 100);
@@ -291,7 +306,6 @@ function ProfileDrawer({
       let discountedEthPrice = (nftEthPrice * discount) / 100;
       // let discountedEthPrice = (nftEthPrice * discount) / 100;
       let priceETH = discountedEthPrice;
-      // platformFeeCalculate(priceETH, _buyerPercentFromDB);
       setDiscountedEth(discountedEthPrice.toFixed(2));
       console.log("discountedEthPrice", discountedEthPrice);
 
@@ -299,7 +313,7 @@ function ProfileDrawer({
 
       let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
+      let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
 
       setDiscountedPlatformFeeETH(Math.ceil(feeETH));
       let oneETHInUSD = 1 / priceInETH;
@@ -308,7 +322,7 @@ function ProfileDrawer({
       priceInUSD = Math.ceil(priceInUSD);
       setDiscountedAmountUSD(priceInUSD.toString());
       // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
-      let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+      let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercent);
       feeUSD = Math.ceil(feeUSD);
       // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
       setDiscountedPlatformFeeUSDT(feeUSD);
@@ -384,17 +398,19 @@ function ProfileDrawer({
     }
     console.log("www amount", amount);
     console.log("www value", value);
-    console.log("www sellerPercent", sellerPercent);
-    console.log("www buyerPercent", buyerPercent);
+    // console.log("www sellerPercent", sellerPercent);
+    // console.log("www buyerPercent", buyerPercent);
     console.log("www paymentMethod.value", paymentMethod.value);
     console.log("www paymentMethod", paymentMethod);
     console.log("www id", id);
+    console.log("www sellerPlan", sellerPlan);
+    console.log("www buyerPlan", buyerPlan);
     console.log("www address", NFT_CONTRACT_ADDRESS.address);
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod.value,
+        paymentMethod,
         id,
         sellerPlan, //  must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent
@@ -468,8 +484,8 @@ function ProfileDrawer({
     console.log("amountUSD", amountUSD);
     console.log("amount", amount);
     console.log("id", id);
-    console.log("sellerPercent", sellerPercent);
-    console.log("buyerPercent", buyerPercent);
+    // console.log("sellerPercent", sellerPercent);
+    // console.log("buyerPercent", buyerPercent);
     console.log("amountInWei  ", amountInWei);
     console.log("amountInWei typeof ", typeof amountInWei);
 
@@ -478,7 +494,7 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod.value,
+        paymentMethod,
         id,
         sellerPlan, // must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent

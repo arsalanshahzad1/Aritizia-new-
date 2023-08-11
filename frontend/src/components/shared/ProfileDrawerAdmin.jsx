@@ -143,7 +143,6 @@ function ProfileDrawerAdmin({
     }
   }, [isVisible]);
 
-  let _sellerPercentFromDB = 1.5;
   let _buyerPercentFromDB = 1.5;
 
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
