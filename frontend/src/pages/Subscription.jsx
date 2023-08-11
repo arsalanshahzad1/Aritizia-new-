@@ -15,6 +15,8 @@ const Subscription = ({ search, setSearch }) => {
     const [showPaymentForm, setShowPaymentForm] = useState(false);
     const [planName, setPlanName] = useState('');
     const [index, setIndex] = useState('');
+    const userData = JSON.parse(localStorage.getItem("data"));
+    const userId = userData?.id;
     const viewSubscriptions = async () => {
         const response = await apis.viewSubscriptions()
         if (response.status) {
