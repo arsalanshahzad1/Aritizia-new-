@@ -68,7 +68,7 @@
 }
 
 .active-sidebar-item .svg-div svg, .active-sidebar-item .svg-div svg path {
-    fill-opacity: 1 !important;
+    fillOpacity: 1 !important;
 }
 
 .active-sidebar-item .svg-div {

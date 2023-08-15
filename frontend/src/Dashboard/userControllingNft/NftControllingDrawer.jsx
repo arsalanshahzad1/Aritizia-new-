@@ -79,9 +79,6 @@ function NftControllingDrawer({
     getPriceInUSD();
   }, [isVisible]);
 
-  useEffect(() => {
-    // checkSeller();
-  }, []);
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;

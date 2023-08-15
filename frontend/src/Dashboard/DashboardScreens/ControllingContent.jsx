@@ -150,7 +150,7 @@ function ControllingContent({ search, setSearch }) {
           console.log(nftData);
           myNFTs.push(nftData);
           setNftList((prev) => [...prev, nftData]);
-          deleteItems(nftList)
+          // deleteItems(nftList)
           console.log("nftList", nftList);
 
           // } else if (listingType === 1) {
@@ -213,9 +213,10 @@ function ControllingContent({ search, setSearch }) {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-  const onClose = useCallback(() => {
+  const onClose = async () => {
+    console.log('called');
     setIsVisible(false);
-  }, []);
+  };
   let bulkCall = false;
 
   const approveNFT = async (decision, id) => {
@@ -228,9 +229,6 @@ function ControllingContent({ search, setSearch }) {
       signer
     );
 
-    console.log("ALS");
-    console.log("decision", decision);
-
     let approve = await marketplaceContract.approveNfts(id, decision, {
       gasLimit: ethers.BigNumber.from("500000"),
     });
@@ -238,19 +236,20 @@ function ControllingContent({ search, setSearch }) {
     console.log("approve", approve);
     await approveEvent(marketplaceContract);
     await handleApprovalEvent();
-    await postAPI(decision);
+    await postAPI(decision, id);
   };
 
-  const postAPI = async (decision) => {
+  const postAPI = async (decision, id) => {
     let body = {
-      token_idz: selectedNTFIds,
+      token_idz: id,
     };
     console.log("postAPI", body);
 
     if (decision) {
       const response = await adminApis.approveNfts(body);
-      console.log("response", response);
-      deleteItems(selectedNTFIds)
+      // console.log("response", response);
+      deleteItems(id);
+      await onClose(false);
 
     } else {
       const response = await adminApis.rejectNfts(body);
@@ -258,10 +257,10 @@ function ControllingContent({ search, setSearch }) {
     }
   };
 
-  useEffect(()=>{} , [nftList])
+
 
   const deleteItems = (ids) => {
-    // console.log(ids , 'ids');
+    console.log(ids, 'ids');
     const updatedData = nftList.filter(item => !ids.includes(item.id));
     setNftList(updatedData);
     setSelectedNTFIds([])
@@ -274,6 +273,7 @@ function ControllingContent({ search, setSearch }) {
     );
 
     console.log("response", response);
+
   };
 
   const handleApprovalEvent = async (decision) => {
@@ -282,30 +282,15 @@ function ControllingContent({ search, setSearch }) {
       console.log("decision", decision);
       //   removeSelected();
     }
-    onClose(false);
   };
 
-  const removeSelected = async () => {
-    const updatedListA = [];
-
-    // Iterate through list a
-    for (let itemA of nftList) {
-      // Check if the current item is not in list b
-      if (!selectedNTFIds.includes(itemA)) {
-        updatedListA.push(itemA);
-      }
-    }
-    console.log("updatedListA", updatedListA);
-  };
 
   const [showEditSidebar, setshowEditSidebar] = useState(false);
 
   const openDrawer = () => {
-    if (showLinks === true) {
-      return onOpen(false);
-    } else {
+
       setIsVisible(true);
-    }
+  
   };
 
   return (
@@ -414,8 +399,12 @@ function ControllingContent({ search, setSearch }) {
                         getSelectedId={getSelectedId}
                         selectedNTFIds={selectedNTFIds}
                         approveNFT={approveNFT}
-                        // collection={item?.collection}
-                        // collectionImages={item?.collectionImages}
+                        onClose={onClose}
+                        isVisible={isVisible}
+                        setIsVisible={setIsVisible}
+                        openDrawer={openDrawer}
+                      // collection={item?.collection}
+                      // collectionImages={item?.collectionImages}
                       />
                     ))}
                   </div>
@@ -427,9 +416,8 @@ function ControllingContent({ search, setSearch }) {
                 style={{ justifyContent: "center" }}
               >
                 <button
-                  className={`controling-Nft-Load-More ${
-                    list?.pagination?.remaining == 0 ? "disable" : ""
-                  }`}
+                  className={`controling-Nft-Load-More ${list?.pagination?.remaining == 0 ? "disable" : ""
+                    }`}
                   onClick={() => {
                     viewNftList(
                       +list?.pagination?.page + 1,
