@@ -16,7 +16,8 @@ import adminApis from "../../service/adminIndex";
 import { BsCheck } from "react-icons/bs";
 import NftControllingDrawer from "../userControllingNft/NftControllingDrawer";
 
-const DashboardCard2 = ({
+const 
+DashboardCard2 = ({
   onOpen,
   path,
   id,

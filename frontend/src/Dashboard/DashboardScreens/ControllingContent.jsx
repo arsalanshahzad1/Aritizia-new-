@@ -254,7 +254,7 @@ function ControllingContent({ search, setSearch }) {
     if (decision) {
       const response = await adminApis.approveNfts(body);
       console.log("response", response);
-    //   deleteItems(selectedNTFIds)
+      deleteItems(selectedNTFIds)
 
     } else {
       const response = await adminApis.rejectNfts(body);
@@ -262,11 +262,14 @@ function ControllingContent({ search, setSearch }) {
     }
   };
 
-//   const deleteItems = (ids) => {
-//     console.log(ids , 'ids');
-//     const updatedData = data.filter(item => !ida.includes(item.id));
-//     setNftList(updatedData);
-//   };
+  useEffect(()=>{} , [nftList])
+
+  const deleteItems = (ids) => {
+    // console.log(ids , 'ids');
+    const updatedData = nftList.filter(item => !ids.includes(item.id));
+    setNftList(updatedData);
+    setSelectedNTFIds([])
+  };
 
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(
