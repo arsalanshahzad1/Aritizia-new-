@@ -2284,10 +2284,10 @@ footer h1 {
 .subscription .subscription-wrap .subscription-card-wrap {
   padding: 30px 20px;
   background-color: #F4F4F4;
-  /* height: 740px; */
+  height: 100%;
   border-radius: 20px;
   border: 2px solid var(--primary);
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
   cursor: pointer;
 }
 
@@ -3806,6 +3806,29 @@ footer h1 {
   color: rgb(117, 117, 117);
   font-weight: 400;
   text-transform: initial;
+}
+
+.sub-card-chack-box{
+}
+.sub-card-chack-box .left{
+  display: flex;
+  gap: 10px;
+  font-family: 'Jost';
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: rgba(117, 117, 117, 0.5);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap:hover .sub-card-chack-box .left{
+  color: #fff;
+}
+.subscription .subscription-wrap .subscription-card-wrap:hover .seven-line-nft-cardd span:nth-child(1) {
+  border: 3px solid #fff;
 }
 
 @media only screen and (min-width: 768px) {
