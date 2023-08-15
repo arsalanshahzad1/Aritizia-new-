@@ -53,6 +53,9 @@ const OtherProfile = ({ search, setSearch }) => {
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
+  const navigate = useNavigate();
+  const [userID, setUserID] = useState(searchParams.get("id"));
+  const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
 
   // const getOtherUsersDetails = async (address) => {
   //   const response = await apis.getOtherUser(address);

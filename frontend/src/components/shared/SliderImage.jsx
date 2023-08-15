@@ -52,7 +52,7 @@ const SliderImage = () => {
           </Link>
           <input
             type="text"
-            placeholder="A cinematic wide shot of a hamster in a space suit, HD, 2:3"
+            placeholder="A cinematic wide shot of a hamster in a space suite, HD, NFT art, 2:3"
             defaultValue={prompt}
             onChange={(e) => setprompt(e.target.value)}
           />

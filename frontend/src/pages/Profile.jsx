@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import Gallery from "./Gallery";
 import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+import RejectedNFTSCard from "../components/cards/RejectedNFTSCard";
 // import MetaDecorator from "../Meta/MetaDecorator";
 
 const { ethereum } = window;
@@ -764,9 +765,14 @@ const Profile = ({ search, setSearch }) => {
                   >
                     Fan List
                   </button>
+                  <button
+                    className={`${tabs === 6 ? "active" : ""}`}
+                    onClick={() => setTabs(6)}
+                  >
+                    Rejected NFTs
+                  </button>
                 </div>
               </div>
-              {/* <button onClick={testFans}>Test Fans</button> */}
               <div className="profile-buy-card">
                 {tabs === 0 && (
                   <>
@@ -1103,12 +1109,6 @@ const Profile = ({ search, setSearch }) => {
                             <div className="line-1-selector">
                               <div>No.</div>
                               <div>
-                                {/* Select All{" "}
-                                <input
-                                  onClick={checkAllCheckboxes}
-                                  className="check-all-fans"
-                                  type="checkbox"
-                                />{" "} */}
                               </div>
                             </div>
                             <div className="Address-holder">
@@ -1157,45 +1157,7 @@ const Profile = ({ search, setSearch }) => {
                               ) : (
                                 <div>List is Empty</div>
                               )}
-                              {/* {checkboxes.map((checkbox, Index) => (
-                                <div
-                                  key={checkbox.id}
-                                  className="follower-in-fan-list"
-                                >
-                                  <div className="inner">
-                                    <div className="num">{Index + 1}</div>
-                                    <div className="inner2">
-                                      <div className="img-holder">
-                                        <img
-                                          src={checkbox.FollowerImg}
-                                          alt=""
-                                        />
-                                      </div>
-                                      <div className="Text-follower-fan">
-                                        {checkbox.FollowerName} <br />{" "}
-                                        <span>
-                                          {" "}
-                                          {
-                                            checkbox.FollowersCount
-                                          } Followers{" "}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <input
-                                      checked={checkbox.checked}
-                                      onChange={() =>
-                                        handleCheckboxChange(checkbox.id)
-                                      }
-                                      className="separate-checkbox-follower"
-                                      type="checkbox"
-                                      name=""
-                                      id=""
-                                    />
-                                  </div>
-                                </div>
-                              ))} */}
+                              
                             </div>
                             <div className="popUp-btn-group">
                               <div
@@ -1221,6 +1183,14 @@ const Profile = ({ search, setSearch }) => {
                       </>
                     )}
                   </>
+                )}
+               
+                {tabs === 6 && (
+                   <>
+                   <div className="row">
+                       <RejectedNFTSCard/>
+                   </div>
+                 </>
                 )}
               </div>
             </div>

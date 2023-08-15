@@ -1,6 +1,6 @@
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import apis from "../../service";
-const Following = ({ data , id }) => {
+const Following = ({ data, id }) => {
   const [showOptions, setshowOptions] = useState(false);
   const [following, setFollwing] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
@@ -17,11 +17,11 @@ const Following = ({ data , id }) => {
 
   const getFollowingList = async () => {
     const response = await apis.getFollowingList(id);
-    if(response.status){
+    if (response.status) {
       console.log(response?.data?.data, " ");
       setFollwing(response?.data?.data);
     }
-    else{
+    else {
       setFollwing([]);
     }
   };
@@ -29,7 +29,7 @@ const Following = ({ data , id }) => {
 
   useEffect(() => {
     getFollowingList(id);
-}, [])
+  }, [])
   return (
     <>
       {following != "" ? (
@@ -39,7 +39,7 @@ const Following = ({ data , id }) => {
               <div className="Follow-row" key={i}>
                 <div className="left">
                   <div className="img-holder">
-                  {data?.profile_image == null ?
+                    {data?.profile_image == null ?
                       <img src='/assets/images/user-none.png' alt="" srcset="" />
                       :
                       <img src={data?.profile_image} alt="" />
@@ -87,7 +87,11 @@ const Following = ({ data , id }) => {
           })}
         </>
       ) : (
-        <h2>List is empty</h2>
+        <>
+          <div className="data-not-avaliable">
+            <h2>No data avaliable</h2>
+          </div>
+        </>
       )}
     </>
   );

@@ -139,6 +139,7 @@ const createBackendServer = (baseURL) => {
   const viewSubscriptions = async (userId) => await api.get(`view-subscriptions/${userId}`);
   const autoRecursionOnoff = async (body) => await api.post(`auto-recursion-onoff` , body);
 
+  const viewRejectedNftList = async (userId) => await api.get(`view-rejected-nft-list/${userId}`);
 
   //Returning all the API
   return {
@@ -191,7 +192,9 @@ const createBackendServer = (baseURL) => {
     userSubscribe,
     cancelSubscription,
     viewSubscriptions,
-    autoRecursionOnoff
+    autoRecursionOnoff,
+
+    viewRejectedNftList
 
   };
 };

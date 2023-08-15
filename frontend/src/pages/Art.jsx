@@ -4,8 +4,15 @@ import bird from '../../public/assets/images/bird.png'
 import { GlobalContext } from '../Context/GlobalContext'
 import ArtItem from './ArtItem'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { TNL } from 'tnl-midjourney-api';
 const Art = ({ search, setSearch }) => {
+    const TNL_API_KEY = '79717817-c7c3-46a3-af8b-75843d6f7bfb';
+    const tnl = new TNL(TNL_API_KEY);
+    const promptt = 'a cat playing the piano';
+const response =  tnl.imagine(promptt);
+
+console.log(JSON.stringify(response) , 'response');
     const navigate = useNavigate()
 
     const { prompt, setprompt } = useContext(GlobalContext)
@@ -58,6 +65,30 @@ const Art = ({ search, setSearch }) => {
     return (
         < div >
             <Header search={search} setSearch={setSearch} />
+            <section className="home-first-section">
+                <div className="home-first-wraper">
+                    <div className="search" id="prompt">
+
+                        <button>Prompt</button>
+
+                        <input
+                            type="text"
+                            placeholder="A cinematic wide shot of a hamster in a space suite, HD, NFT art, 2:3"
+                            defaultValue={prompt}
+                            onChange={(e) => setprompt(e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="connect-wallet-mobile">
+                    <button
+                        // onClick={connectWallet}
+                        className={`connect-wallet`}
+                    >
+                        {/*  className="connect-wallet"> */}
+                        Connect Wallet
+                    </button>
+                </div>
+            </section>
             <br /><br /><br /><br />
             <br /><br />
             <h1 style={{ textAlign: 'center' }}>Your Generated Art</h1>

@@ -1013,7 +1013,7 @@ function ProfileDrawer({
                           ) : (
                             <div
                               onClick={() =>
-                                navigate("/other-profile", {
+                                navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`, {
                                   state: {
                                     address: nftDetails?.user?.wallet_address,
                                   },

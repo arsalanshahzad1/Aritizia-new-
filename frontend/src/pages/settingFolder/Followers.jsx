@@ -73,7 +73,11 @@ const Followers = ({ data  , id}) => {
           })}
         </>
         :
-        <h2>List is empty</h2>
+        <>
+        <div className="data-not-avaliable">
+            <h2>No data avaliable</h2>
+        </div>
+        </>
       }
     </>
   );

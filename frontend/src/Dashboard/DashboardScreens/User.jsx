@@ -1,367 +1,3 @@
-// import { useEffect, useState } from 'react'
-// import Header from '../../pages/landingpage/Header'
-// import { Navigate, useNavigate } from 'react-router-dom'
-// import SocialShare from '../../components/shared/SocialShare'
-// import { BsFillEnvelopeFill } from 'react-icons/bs'
-// import NewItemCard from '../../components/cards/NewItemCard'
-// import BuyNow from '../../components/cards/BuyNow'
-// import nft from '../../../public/assets/images/nft-big.png'
-// import DashboardCard from '../DashboardComponents/DashboardCard'
-// import adminApis from '../../service/adminIndex'
-// import apis from '../../service/adminIndex'
-// import { useLocation, useParams } from "react-router-dom";
-
-// function User({ search, setSearch }) {
-//     const navigate = useNavigate()
-//     const { id } = useParams();
-
-//     const [tabs, setTabs] = useState(0);
-//     const [userDetails, setUserDetails] = useState('');
-//     const [userLikedNfts, setUserLikedNfts] = useState('');
-//     const [nftCollection, setNftCollection] = useState('');
-
-//     const viewUserDetails = async (id) =>{
-//         const response = await apis.viewUserDetails(id)
-//         if(response.status){
-//             setUserDetails(response?.data?.data)
-//             console.log(response,"yyyyyy");
-//         }else{
-//             setUserDetails([])
-//         }
-//     }
-//     const viewUserLikedNfts = async (id) =>{
-//         const response = await apis.viewUserLikedNfts(id)
-//         if(response.status){
-//             setUserLikedNfts(response?.data?.data)
-//         }else{
-//             setUserLikedNfts([])
-//         }
-//     }
-//     const viewNftCollection = async (id) =>{
-//         const response = await apis.viewNftCollection(id)
-//         if(response.status){
-//             nftCollection(response?.data?.data)
-//         }else{
-//             nftCollection([])
-//         }
-//     }
-
-//     useEffect(() =>{
-//         viewUserDetails(id)
-//         viewUserLikedNfts(id)
-//         viewNftCollection(id)
-//     } , [])
-
-//     return (
-//         <div className='user'>
-//             <div className='back-btn'>
-//                 <div onClick={() => navigate(-1)}>
-//                     <svg width="32" height="20" viewBox="0 0 54 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-//                         <path d="M0.585785 13.5858C-0.195263 14.3668 -0.195263 15.6332 0.585785 16.4142L13.3137 29.1421C14.0948 29.9232 15.3611 29.9232 16.1421 29.1421C16.9232 28.3611 16.9232 27.0948 16.1421 26.3137L4.82843 15L16.1421 3.68629C16.9232 2.90524 16.9232 1.63891 16.1421 0.857861C15.3611 0.0768122 14.0948 0.0768121 13.3137 0.857861L0.585785 13.5858ZM54 13L2 13L2 17L54 17L54 13Z" fill="black" />
-//                     </svg>
-
-//                 </div>
-//             </div>
-//             <div>
-//                 <div className="profile" style={{ position: "relative" }}>
-//                     <div className="profile-first-section">
-//                         {userDetails?.cover_image == null ?
-//                         <img
-//                             className="big-image margin-top-35px"
-//                             src="/assets/images/profile-1.png"
-//                             alt=""
-//                             width={"100%"}
-//                         />
-//                         :
-//                         <img
-//                             className="big-image margin-top-35px"
-//                             src={userDetails?.cover_image}
-//                             alt=""
-//                             width={"100%"}
-//                         />
-
-//                     }
-//                         <div className="user">
-//                             <div className="user-wrap">
-//                                 {userDetails?.profile_image == null ?
-//                                 <img
-//                                     className="user-pic"
-//                                     src="/assets/images/user-none.png"
-//                                     alt=""
-//                                     width={"90%"}
-//                                 />
-//                                 :
-//                                 <img
-//                                     className="user-pic"
-//                                     src={userDetails?.profile_image}
-//                                     alt=""
-//                                     width={"90%"}
-//                                 />
-//                             }
-
-
-//                                 <img
-//                                     className="big-chack"
-//                                     src="/assets/images/big-chack.png"
-//                                     alt=""
-//                                 />
-//                             </div>
-//                         </div>
-//                         <div className="detail">
-//                             <div className="container-fluid">
-//                                 <div className="row">
-//                                     <div className="col-lg-4 col-md-4 col-12"></div>
-//                                     <div className="col-lg-4 col-md-4 col-6">
-//                                         <h2 className="user-name">{userDetails?.username}</h2>
-//                                     </div>
-//                                 </div>
-//                                 <div className="row">
-//                                     <p className="user-email">{userDetails?.email}</p>
-//                                 </div>
-//                                 <div className="row">
-//                                     <div className="col-lg-3 col-md-3 col-12"></div>
-//                                     <div className="col-lg-6 col-md-6 col-12">
-//                                         <div className="copy-url">
-//                                             <span>{userDetails?.wallet_address}</span>
-//                                             <button>Copy</button>
-//                                         </div>
-//                                     </div>
-//                                 </div>
-//                                 <div className="row">
-//                                     <div className="profile-tabs">
-//                                         <button
-//                                             className={`${tabs === 0 ? "active" : ""}`}
-//                                             onClick={() => setTabs(0)}
-//                                         >
-//                                             On Sale
-//                                         </button>
-//                                         <button
-//                                             className={`${tabs === 1 ? "active" : ""}`}
-//                                             onClick={() => setTabs(1)}
-//                                         >
-//                                             Created
-//                                         </button>
-//                                         <button
-//                                             className={`${tabs === 2 ? "active" : ""}`}
-//                                             onClick={() => setTabs(2)}
-//                                         >
-//                                             Liked
-//                                         </button>
-//                                     </div>
-//                                 </div>
-//                                 <div className="profile-buy-card">
-//                                     {tabs === 0 && (
-//                                         <>
-//                                             <div className="row">
-
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-
-//                                             </div>
-
-//                                         </>
-//                                     )}
-//                                     {tabs === 1 && (
-//                                         <>
-
-//                                             <div className="row">
-//                                             <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                             </div>
-//                                         </>
-//                                     )}
-//                                     {tabs === 2 && (
-//                                         <>
-//                                             <div className="row">
-//                                             <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                                 <DashboardCard
-//                                                     key={'2'}
-//                                                     id={'2'}
-//                                                     title={'Bull BTC Club'}
-//                                                     image={nft}
-//                                                     price={"0.008"}
-//                                                     crypto={"0"}
-//                                                     royalty={"item?.royalty"}
-//                                                     description={"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."}
-//                                                     collection={"item?.collection"}
-//                                                 />
-//                                             </div>
-
-//                                         </>
-//                                     )}
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-
-//                 </div>
-//             </div>
-
-//         </div>
-//     )
-// }
-
-// export default User
 
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import Header from "../../pages/landingpage/Header";
@@ -389,6 +25,7 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Gallery from "../../pages/Gallery";
 import { getAddress } from "../../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../../methods/walletManager";
+import RejectedNFTSCard from "../../components/cards/RejectedNFTSCard";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -417,11 +54,10 @@ const User = ({ search, setSearch }) => {
     const getOtherUsersDetails = async (userADDRESS) => {
         const response = await apis.getOtherUser(userADDRESS);
         setUserDetails(response?.data?.data);
-        console.log(response?.data?.data , 'gfgfgfg');
+        console.log(response?.data?.data, 'gfgfgfg');
         // getNFTlikeListing(response?.data?.data?.id);
-      };
+    };
 
-    console.log(userID , userADDRESS , 'cccccc');
     const getNFTlikeListing = async () => {
         const response = await apis.getLikeNFTListing(userID);
         setLikedNfts(response?.data?.data);
@@ -865,7 +501,7 @@ const User = ({ search, setSearch }) => {
                     myNFTs.push(nftData);
                     setUserNfts(myNFTs);
                     console.log("myNFTs in function", myNFTs);
-                
+
                 })
 
                 .catch((error) => {
@@ -988,14 +624,14 @@ const User = ({ search, setSearch }) => {
     //     const provider = await getProviderOrSigner();
     //     console.log("111111");
     //     // console.log("provider", provider);
-    
+
     //     const marketplaceContract = new Contract(
     //       MARKETPLACE_CONTRACT_ADDRESS.address,
     //       MARKETPLACE_CONTRACT_ABI.abi,
     //       provider
     //     );
     //     console.log("222222");
-    
+
     //     const nftContract = new Contract(
     //       NFT_CONTRACT_ADDRESS.address,
     //       NFT_CONTRACT_ABI.abi,
@@ -1003,14 +639,14 @@ const User = ({ search, setSearch }) => {
     //     );
     //     const signer = provider.getSigner();
     //     const address = await signer.getAddress();
-    
+
     //     // console.log("MYADDRESS", address);
     //     console.log("333333");
-    
+
     //     let listingType;
-    
+
     //     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
-    
+
     //     // let mintedTokens = [1, 4, 2];
     //     console.log("mintedTokens", mintedTokens);
     //     let NFTId = await getLikedNftsList();
@@ -1019,46 +655,46 @@ const User = ({ search, setSearch }) => {
     //     for (let i = 0; i < mintedTokens.length; i++) {
     //       let id;
     //       id = +mintedTokens[i].tokenId.toString();
-    
+
     //       let collectionId;
     //       collectionId = +mintedTokens[i].collectionId.toString();
     //       console.log("YESS", id);
-    
+
     //       const response = await apis.getNFTCollectionImage(collectionId);
     //       console.log(response, "responses");
     //       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
     //       console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
     //       console.log(collectionImages, "trrrr");
-    
+
     //       const metaData = await nftContract.tokenURI(id);
-    
+
     //       const structData = await marketplaceContract._idToNFT(id);
-    
+
     //       const fanNftData = await marketplaceContract._idToNFT2(id);
-    
+
     //       let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
-    
+
     //       setDiscountPrice(discountOnNFT);
-    
+
     //       let auctionData = await marketplaceContract._idToAuction(id);
-    
+
     //       listingType = structData.listingType;
-    
+
     //       let highestBid = ethers.utils.formatEther(
     //         auctionData.highestBid.toString()
     //       );
-    
+
     //       const price = ethers.utils.formatEther(structData.price.toString());
-    
+
     //       axios
     //         .get(metaData)
     //         .then((response) => {
     //           const meta = response.data;
     //           let data = JSON.stringify(meta);
-    
+
     //           data = data.slice(2, -5);
     //           data = data.replace(/\\/g, "");
-    
+
     //           data = JSON.parse(data);
     //           const crypto = data.crypto;
     //           const title = data.title;
@@ -1066,7 +702,7 @@ const User = ({ search, setSearch }) => {
     //           const royalty = data.royalty;
     //           const description = data.description;
     //           const collection = data.collection;
-    
+
     //           if (listingType === 0) {
     //             const nftData = {
     //               id: id, //
@@ -1101,7 +737,7 @@ const User = ({ search, setSearch }) => {
     //             console.log(nftListAuction, "nftData");
     //           }
     //         })
-    
+
     //         .catch((error) => {
     //           console.error("Error fetching metadata:", error);
     //         });
@@ -1114,7 +750,7 @@ const User = ({ search, setSearch }) => {
         <>
             <Header search={search} setSearch={setSearch} />
             <div className="profile" style={{ position: "relative" }}>
-                <div className="profile-first-section">
+                <div className="profile-first-section" style={{margin : '0px'}}>
                     {userDetails?.cover_image == null ? (
                         <img
                             className="big-image"
@@ -1154,7 +790,7 @@ const User = ({ search, setSearch }) => {
                             />
                         </div>
                     </div>
-                    <div className="detail">
+                    <div className="detail" style={{padding : '0px'}}>
                         <div className="container-fluid">
                             <div className="row">
                                 <div className="col-lg-4 col-md-4 col-12"></div>
@@ -1219,6 +855,12 @@ const User = ({ search, setSearch }) => {
                                         onClick={() => setTabs(5)}
                                     >
                                         Fan List
+                                    </button>
+                                    <button
+                                        className={`${tabs === 6 ? "active" : ""}`}
+                                        onClick={() => setTabs(6)}
+                                    >
+                                        Rejected NFTs
                                     </button>
                                 </div>
                             </div>
@@ -1371,7 +1013,7 @@ const User = ({ search, setSearch }) => {
                                             )}
                                         </div>
                                     </>
-                           
+
                                 )}
                                 {tabs === 4 && (
                                     <>
@@ -1393,13 +1035,13 @@ const User = ({ search, setSearch }) => {
                                             <div className="followers-tab">
                                                 {FollowersTab === 0 ? (
                                                     <>
-                                                        <Followers id={userID}/>
-                                                      
+                                                        <Followers id={userID} />
+
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <Following id={userID}/>
-                                               
+                                                        <Following id={userID} />
+
                                                     </>
                                                 )}
                                             </div>
@@ -1409,7 +1051,7 @@ const User = ({ search, setSearch }) => {
                                 {tabs === 5 && (
                                     <>
                                         <div className="FanListPage"></div>
-                                        <Fan id={userID}/>
+                                        <Fan id={userID} />
 
                                         <div
                                             onClick={() => {
@@ -1599,6 +1241,13 @@ const User = ({ search, setSearch }) => {
                                                 </div>
                                             </>
                                         )}
+                                    </>
+                                )}
+                                {tabs === 6 && (
+                                    <>
+                                        <div className="row">
+                                            <RejectedNFTSCard userID={userID}/>
+                                        </div>
                                     </>
                                 )}
                             </div>

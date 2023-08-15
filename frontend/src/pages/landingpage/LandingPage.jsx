@@ -500,6 +500,8 @@ const LandingPage = ({ search, setSearch }) => {
                   {/* <div className="right">View more markets</div> */}
                 </div>
               </div>
+              {nftListAuction.length > 0 ?
+              <>
               {nftListAuction.map((item) => (
                 <NewItemCard
                   key={item.id}
@@ -516,6 +518,15 @@ const LandingPage = ({ search, setSearch }) => {
                   userAddress={userAddress}
                 />
               ))}
+              </>
+              :
+              <>
+              <DummyCard/>
+              <DummyCard/>
+              <DummyCard/>
+              <DummyCard/>
+              </>
+            }
             </div>
           </div>
         </section>

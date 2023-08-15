@@ -27,7 +27,6 @@ const SimpleCard = ({
   royalty,
   description,
   collection,
-  // userAddress,
   collectionImages,
 }) => {
   const [showLinks, setShowLinks] = useState(false);

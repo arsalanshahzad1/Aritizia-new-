@@ -281,18 +281,8 @@ p {
   position: relative;
 }
 
-/* .home-first-sec {
-  width: 100%;
-  height: 647px;
-  margin: 10px auto;
-  background-size: cover;
-  border-radius: 3px;
-  box-shadow: 0 15px 15px 1px rgba(0,0,0,0.3);
-  background: url(../public/assets/images/testing.png) ;
-  background-size: 500px 300px;
-  animation: scroll 2s linear infinite;
-  position: relative;
-} */
+.home-first-section {
+}
 
 header {
   padding: 30px 0px;
@@ -454,6 +444,13 @@ header .left img {
   transform: translate(-50%, -50%);
   width: 760px;
 }
+.home-first-wraper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 760px;
+}
 
 .home-first-wrap h1 {
   font-family: 'Jost';
@@ -465,8 +462,25 @@ header .left img {
   color: var(--white);
   text-align: center;
 }
+.home-first-wraper h1 {
+  font-family: 'Jost';
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 58px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  text-align: center;
+}
 
 .home-first-wrap .search {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  border-radius: 6px;
+  margin: 15px 0px;
+}
+.home-first-wraper .search {
   display: flex;
   justify-content: center;
   background: #fff;
@@ -489,8 +503,29 @@ header .left img {
   padding: 0px 15px;
   color: var(--primary);
 }
+.home-first-wraper .search input {
+  width: 100%;
+  display: inline-block;
+  border: none;
+  outline: none;
+  background: #9c9c9c4a;
+  font-family: 'Jost';
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: left;
+  padding: 0px 15px;
+  color: var(--primary);
+  border-radius: 6px;
+}
 
 .home-first-wrap .search input::-webkit-input-placeholder {
+  color: #9F9F9F;
+  transition: color 0.5s ease;
+  font-size: 16px;
+}
+.home-first-wraper .search input::-webkit-input-placeholder {
   color: #9F9F9F;
   transition: color 0.5s ease;
   font-size: 16px;
@@ -499,9 +534,25 @@ header .left img {
 .home-first-wrap .search input:focus::-webkit-input-placeholder {
   color: #9F9F9F;
 }
+.home-first-wraper .search input:focus::-webkit-input-placeholder {
+  color: #9F9F9F;
+}
 
 
 .home-first-wrap .search button {
+  font-family: 'Jost';
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  background: var(--primary);
+  padding: 8px 30px;
+  border-radius: 6px;
+  border: none;
+}
+.home-first-wraper .search button {
   font-family: 'Jost';
   font-size: 26px;
   font-weight: 400;
@@ -1264,7 +1315,7 @@ footer h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 35px;
+  gap: 10px;
   padding-top: 50px;
   flex-wrap: wrap;
 }
@@ -1278,9 +1329,9 @@ footer h1 {
   text-align: center;
   border: 2px solid #9D9D9D;
   color: #9D9D9D;
-  padding: 5px 32px;
+  padding: 5px 16px;
   background-color: transparent;
-
+  border-radius: 6px;
 }
 
 .profile-first-section .profile-tabs button:hover {
@@ -3637,6 +3688,20 @@ footer h1 {
 .modal-dialog {
   /* max-width: 100%; */
   margin: 1.75rem auto;
+}
+
+.data-not-avaliable{
+  height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.data-not-avaliable h2 {
+  font-weight: 600;
+  font-size: 22px;
+  font-family: 'Jost';
+  color: #B600D1;
 }
 
 @media (min-width: 576px) {
