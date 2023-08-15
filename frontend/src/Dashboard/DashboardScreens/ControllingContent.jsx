@@ -217,9 +217,9 @@ function ControllingContent({ search, setSearch }) {
   }, []);
   let bulkCall = false;
 
-  const approveNFT = async (decision) => {
+  const approveNFT = async (decision, id) => {
     bulkCall = true;
-    console.log("approveNFT", selectedNTFIds);
+    console.log("approveNFT", id);
     const signer = await getProviderOrSigner(true);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -230,13 +230,9 @@ function ControllingContent({ search, setSearch }) {
     console.log("ALS");
     console.log("decision", decision);
 
-    let approve = await marketplaceContract.approveNfts(
-      selectedNTFIds,
-      decision,
-      {
-        gasLimit: ethers.BigNumber.from("500000"),
-      }
-    );
+    let approve = await marketplaceContract.approveNfts(id, decision, {
+      gasLimit: ethers.BigNumber.from("500000"),
+    });
 
     console.log("approve", approve);
     await approveEvent(marketplaceContract);
@@ -274,6 +270,7 @@ function ControllingContent({ search, setSearch }) {
       console.log("decision", decision);
       //   removeSelected();
     }
+    onClose(false);
   };
 
   const removeSelected = async () => {
@@ -372,8 +369,12 @@ function ControllingContent({ search, setSearch }) {
               className="nft-card-btn-holder"
               style={{ justifyContent: " end", gap: "10px", marginTop: "20px" }}
             >
-              <button onClick={() => approveNFT(false)}>Decline</button>
-              <button onClick={() => approveNFT(true)}>Accept</button>
+              <button onClick={() => approveNFT(false, selectedNTFIds)}>
+                Decline
+              </button>
+              <button onClick={() => approveNFT(true, selectedNTFIds)}>
+                Accept
+              </button>
             </div>
           )}
         </div>
@@ -400,6 +401,7 @@ function ControllingContent({ search, setSearch }) {
                         description={item?.description}
                         getSelectedId={getSelectedId}
                         selectedNTFIds={selectedNTFIds}
+                        approveNFT={approveNFT}
                         // collection={item?.collection}
                         // collectionImages={item?.collectionImages}
                       />

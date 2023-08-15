@@ -414,8 +414,12 @@ function NftControllingDrawer({
                 {ShowAcceptbtn && (
                   <div className="drawer-inner-accept-btn">
                     <div className="nft-card-btn-holder">
-                      <button onClick={() => approveNFT(false)}>Decline</button>
-                      <button onClick={() => approveNFT(true)}>Accept</button>
+                      <button onClick={() => approveNFT(false, [id])}>
+                        Decline
+                      </button>
+                      <button onClick={() => approveNFT(true, [id])}>
+                        Accept
+                      </button>
                     </div>
                   </div>
                 )}

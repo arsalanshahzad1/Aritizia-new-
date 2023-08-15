@@ -30,6 +30,7 @@ const DashboardCard2 = ({
   getSelectedId,
   index,
   selectedNTFIds,
+  approveNFT,
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -41,71 +42,73 @@ const DashboardCard2 = ({
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
-  let called = false;
-  const approveNFT = async (decision) => {
-    console.log("approveNFT");
-    called = true;
-    const signer = await getProviderOrSigner(true);
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
 
-    console.log("ALS");
-    console.log("id", id);
-    console.log("decision", decision);
+  // let called = false;
 
-    let approve = await marketplaceContract.approveNfts([id], decision, {
-      gasLimit: ethers.BigNumber.from("500000"),
-    });
+  // const approveNFT = async (decision) => {
+  //   console.log("approveNFT");
+  //   called = true;
+  //   const signer = await getProviderOrSigner(true);
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
 
-    console.log("approve", approve);
-    await approveEvent(marketplaceContract);
-    await postAPI(decision);
-  };
+  //   console.log("ALS");
+  //   console.log("id", id);
+  //   console.log("decision", decision);
 
-  const approveEvent = async (marketplaceContract) => {
-    let response = await marketplaceContract.on(
-      "approvalUpdate",
-      called ? handleApprovalEvent : null
-    );
+  //   let approve = await marketplaceContract.approveNfts(id, decision, {
+  //     gasLimit: ethers.BigNumber.from("500000"),
+  //   });
 
-    console.log("response", response);
-  };
+  //   console.log("approve", approve);
+  //   await approveEvent(marketplaceContract);
+  //   await postAPI(decision);
+  // };
 
-  let tokens = [];
-  const handleApprovalEvent = async (_tokenId, _decision) => {
-    if (called) {
-      console.log("handleApprovalEventzzz");
+  // const approveEvent = async (marketplaceContract) => {
+  //   let response = await marketplaceContract.on(
+  //     "approvalUpdate",
+  //     called ? handleApprovalEvent : null
+  //   );
 
-      for (let i = 0; i < _tokenId.length; i++) {
-        console.log("_tokenId", _tokenId[i]);
-      }
-      console.log("_decision", _decision.toString());
-      called = false;
-    }
-  };
+  //   console.log("response", response);
+  // };
 
-  let count = 1;
+  // let tokens = [];
+  // const handleApprovalEvent = async (_tokenId, _decision) => {
+  //   if (called) {
+  //     console.log("handleApprovalEventzzz");
 
-  const postAPI = async (decision) => {
-    console.log("postAPI", id);
-    let body = {
-      token_idz: [id],
-    };
-    console.log("postAPI", body);
+  //     for (let i = 0; i < _tokenId.length; i++) {
+  //       console.log("_tokenId", _tokenId[i]);
+  //     }
+  //     console.log("_decision", _decision.toString());
+  //     called = false;
+  //   }
+  // };
 
-    if (decision) {
-      const response = await adminApis.approveNfts(body);
-      console.log("response", response);
-    } else {
-      const response = await adminApis.rejectNfts(body);
-      console.log("response", response);
-    }
-    console.log("count", count);
-    count++;
-  };
+  // let count = 1;
+
+  // const postAPI = async (decision) => {
+  //   console.log("postAPI", id);
+  //   let body = {
+  //     token_idz: [id],
+  //   };
+  //   console.log("postAPI", body);
+
+  //   if (decision) {
+  //     const response = await adminApis.approveNfts(body);
+  //     console.log("response", response);
+  //   } else {
+  //     const response = await adminApis.rejectNfts(body);
+  //     console.log("response", response);
+  //   }
+  //   console.log("count", count);
+  //   count++;
+  // };
 
   const [showEditSidebar, setshowEditSidebar] = useState(false);
 
@@ -202,8 +205,12 @@ const DashboardCard2 = ({
                   </div>
                   {selectedNTFIds?.length > 0 ? null : (
                     <div className="nft-card-btn-holder">
-                      <button onClick={() => approveNFT(false)}>Decline</button>
-                      <button onClick={() => approveNFT(true)}>Accept</button>
+                      <button onClick={() => approveNFT(false, [id])}>
+                        Decline
+                      </button>
+                      <button onClick={() => approveNFT(true, [id])}>
+                        Accept
+                      </button>
                     </div>
                   )}
                 </div>
