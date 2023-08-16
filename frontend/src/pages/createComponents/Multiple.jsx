@@ -50,6 +50,7 @@ const Multiple = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const getCollection = async () => {
     const response = await apis.getNFTCollection();
+    console.log("collection api", response);
     if (response.status) {
       setcollectionOptions("");
 
@@ -61,7 +62,7 @@ const Multiple = ({ search, setSearch }) => {
           setcollectionOptions((previousOptions) => [
             ...previousOptions,
             {
-              value: response?.data?.data[i]?.id,
+              collection_id: response?.data?.data[i]?.id,
               label: response?.data?.data[i]?.name,
               image: response?.data?.data[i]?.media[0]?.original_url,
               crypto: 0,
@@ -476,6 +477,10 @@ const Multiple = ({ search, setSearch }) => {
       // // UNCOMMENT this
       let ethParsedList = [];
 
+      console.log("collection ", collection);
+      console.log("collection .value", collection.collection_id);
+      console.log("collection .crypto", collection.crypto);
+
       for (let i = 0; i < priceList.length; i++) {
         console.log("Yahoo4");
         console.log("priceList[i]", priceList[i]);
@@ -486,6 +491,7 @@ const Multiple = ({ search, setSearch }) => {
         ethParsedList.push(ethPrice);
       }
       if (!listCalled) {
+     
         console.log("listcount actually listing", mintedTokens);
         await (
           await marketplaceContract.listNft(
@@ -497,7 +503,7 @@ const Multiple = ({ search, setSearch }) => {
             startingDateList,
             endingDateList,
             // [startingDateList[0] + 5 * 60 * 1000],
-            collection.value, // collection number
+            collection.collection_id, // collection number
             collection.crypto
           )
         ).wait();
@@ -1044,7 +1050,7 @@ const Multiple = ({ search, setSearch }) => {
           status: "",
           title: "",
           royalty: royalty,
-          collection: choosenCollection.value,
+          collection: choosenCollection.collection_id,
           crypto: crypto,
           listingType: listingType,
         }));
@@ -1059,7 +1065,7 @@ const Multiple = ({ search, setSearch }) => {
           status: "",
           title: "",
           royalty: royalty,
-          collection: choosenCollection.value,
+          collection: choosenCollection.collection_id,
           crypto: crypto,
           listingType: listingType,
         }));
@@ -1298,7 +1304,7 @@ const Multiple = ({ search, setSearch }) => {
                                             setCollection(
                                               collectionOptions[index]
                                             );
-                                            console.log(collection);
+                                            console.log("collection select",collection);
                                           }}
                                         >
                                           {value?.label}
@@ -1313,7 +1319,7 @@ const Multiple = ({ search, setSearch }) => {
                            options={collectionOptions}
                            onChange={(e) => {
                            }}
-                           defaultValue={collection.value}
+                           defaultValue={collection.collection_id}
                          /> */}
                             <div
                               className="create-collection-btn"
@@ -2042,7 +2048,7 @@ const Multiple = ({ search, setSearch }) => {
                                           <div className="col-lg-8">
                                             <h2>Minimum bid</h2>
                                             <input
-                                              type="text"
+                                              type="number"
                                               value={nftForm.bid}
                                               name="bid"
                                               onChange={handleNftForm}

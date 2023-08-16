@@ -141,6 +141,12 @@ const createBackendServer = (baseURL) => {
 
   const viewRejectedNftList = async (userId) => await api.get(`view-rejected-nft-list/${userId}`);
 
+
+  // NFT Collection//
+  const viewNftCollectionStock = async (collectionID) => await api.get(`view-nft-collection-stock/${collectionID}`);
+  const viewNftCollectionProfile = async (collectionID) => await api.get(`view-nft-collection-profile/${collectionID}`);
+  const viewNftTopCollections = async () => await api.get(`view-nft-top-collections`);
+
   //Returning all the API
   return {
     editProfile,
@@ -193,8 +199,11 @@ const createBackendServer = (baseURL) => {
     cancelSubscription,
     viewSubscriptions,
     autoRecursionOnoff,
+    viewRejectedNftList,
 
-    viewRejectedNftList
+    viewNftCollectionStock,
+    viewNftCollectionProfile,
+    viewNftTopCollections
 
   };
 };

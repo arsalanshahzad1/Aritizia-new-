@@ -54,8 +54,6 @@ function ControllingContent({ search, setSearch }) {
   };
 
   const getUsersNfts = async (list) => {
-    console.log("aaaa", list);
-    console.log("Connected wallet", userAddress);
     // let emptyList = [];
     // setNftList(emptyList);
 
@@ -66,7 +64,6 @@ function ControllingContent({ search, setSearch }) {
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
-    console.log("222222");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -76,8 +73,6 @@ function ControllingContent({ search, setSearch }) {
 
     let listingType;
     console.log("list", list);
-    // console.log("list.data", typeof list.data);
-    // console.log("list.data", list.data.length);
 
     // let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
     let mintedTokens = list;
@@ -87,7 +82,6 @@ function ControllingContent({ search, setSearch }) {
     let myNFTs = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
-      console.log("mintedTokens", mintedTokens[i]);
 
       let id = mintedTokens[i];
       // id = +mintedTokens[i].tokenId.toString();
@@ -147,11 +141,11 @@ function ControllingContent({ search, setSearch }) {
             // collection: collection,
             // collectionImages: collectionImages,
           };
-          console.log(nftData);
-          myNFTs.push(nftData);
-          setNftList((prev) => [...prev, nftData]);
-          // deleteItems(nftList)
-          console.log("nftList", nftList);
+          // console.log(nftData);
+          // myNFTs.push(nftData);
+          if (!nftList.some(item => item.id === nftData.id)) {
+            setNftList(prev => [...prev, nftData]);
+          }
 
           // } else if (listingType === 1) {
           //   const nftData = {
@@ -288,10 +282,10 @@ function ControllingContent({ search, setSearch }) {
   const [showEditSidebar, setshowEditSidebar] = useState(false);
 
   const openDrawer = () => {
-
       setIsVisible(true);
-  
   };
+
+  useEffect(() =>{} , [])
 
   return (
     <div className="user-management">
@@ -384,6 +378,7 @@ function ControllingContent({ search, setSearch }) {
               <div className="row">
                 <div className="col-lg-10 mx-auto">
                   <div className="row">
+                    
                     {nftList.map((item, index) => (
                       <DashboardCard2
                         onOpen={onOpen}

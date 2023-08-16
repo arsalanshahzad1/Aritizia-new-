@@ -35,7 +35,7 @@ const
     onClose,
     isVisible,
     setIsVisible,
-    openDrawer
+    openDrawer,
     // userAddress,
   }) => {
     const [showLinks, setShowLinks] = useState(false);
@@ -129,33 +129,17 @@ const
 
     return (
       <>
-        <div
-
-          className="col-lg-3 col-md-4"
-          key={index}
-        >
+        <div className="col-lg-3 col-md-4" key={index}>
           <div
-            className="seven-line-nft-card"
-            onClick={() => {
-              setChack(!chack);
-              getSelectedId(id);
-            }}
-          >
+            className="seven-line-nft-card" onClick={() => {setChack(!chack); getSelectedId(id);}}>
             <span>
               <BsCheck className={`${selectedNTFIds.includes(id) ? "red" : "transparent"}`} />
             </span>
           </div>
           <Link to={path}>
-            <div
-              className="css-vurnkuu"
-              style={{ position: "relative", height: "auto !important" }}
-            >
+            <div className="css-vurnkuu" style={{ position: "relative", height: "auto !important" }}>
               <a className="css-118gt75">
-                <div className="css-15eyh94"
-                  onMouseEnter={() => setShowLinks(true)}
-                  onMouseLeave={() => setShowLinks(false)}
-                 
-                >
+                <div className="css-15eyh94" onMouseEnter={() => setShowLinks(true)} onMouseLeave={() => setShowLinks(false)}>
                   <div className="css-2r2ti0">
                     <div className="css-15xcape">
                       <span

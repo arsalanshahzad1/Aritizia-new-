@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route , Navigate } from "react-router-dom";
 import LandingPage from "./pages/landingpage/LandingPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -44,7 +44,8 @@ function App() {
           <Routes>
             <Route
               path="*"
-              element={<LandingPage search={search} setSearch={setSearch} />}
+              element={<Navigate to={'/'} replace />}
+              // element={<LandingPage search={search} setSearch={setSearch} />}
             />
             <Route
               path="/"
@@ -58,12 +59,12 @@ function App() {
               path="/other-profile"
               element={<OtherProfile search={search} setSearch={setSearch} />}
             />
-            <Route
+            {/* <Route
               path="/user-profile"
               element={<UserProfile search={search} setSearch={setSearch} />}
-            />
+            /> */}
             <Route
-              path="/collection-profile"
+              path="/collection"
               element={
                 <CollectionProfile search={search} setSearch={setSearch} />
               }

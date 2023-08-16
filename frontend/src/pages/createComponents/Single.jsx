@@ -59,7 +59,7 @@ const Single = ({ search, setSearch }) => {
           setcollectionOptions((previousOptions) => [
             ...previousOptions,
             {
-              value: response?.data?.data[i]?.id,
+              collection_id: response?.data?.data[i]?.id,
               label: response?.data?.data[i]?.name,
               image: response?.data?.data[i]?.media[0]?.original_url,
               crypto: 0,
@@ -350,7 +350,7 @@ const Single = ({ search, setSearch }) => {
 
       let currentTime = 1690440477;
       let addedTime = currentTime + 400;
-      console.log("collection.value", collection.value);
+      console.log(" collection.collection_id",  collection.collection_id);
       console.log("collection.crypto", collection.crypto);
       await (
         await marketplaceContract.listNft(
@@ -363,7 +363,7 @@ const Single = ({ search, setSearch }) => {
           // [addedTime],
           [startTime], // list
           [endTime], // list
-          collection.value, // collection number
+           collection.collection_id, // collection number
           collection.crypto,
           {
             gasLimit: ethers.BigNumber.from("5000000"),
@@ -646,7 +646,7 @@ const Single = ({ search, setSearch }) => {
 
     let time = await marketplaceContract.getCurrentTimestamp();
 
-    console.log("GGGG collection.value", collection.value);
+    console.log("GGGG  collection.collection_id",  collection.collection_id);
     console.log("GGGG collection.crypto", collection.crypto);
     // console.log("block.timestamp", time);
     console.log("block.timestamp", time.toString());
@@ -752,7 +752,7 @@ const Single = ({ search, setSearch }) => {
                                 options={collectionOptions}
                                 onChange={(e) => {
                                 }}
-                                defaultValue={collection.value}
+                                defaultValue={ collection.collection_id}
                               /> */}
                               <div
                                 className="create-collection-btn"
@@ -1011,7 +1011,7 @@ const Single = ({ search, setSearch }) => {
                                 <div className="col-lg-8">
                                   <h2>Minimum bid</h2>
                                   <input
-                                    type="text"
+                                    type="number"
                                     value={inputValue}
                                     onChange={handleInputChange}
                                     // type="number"
