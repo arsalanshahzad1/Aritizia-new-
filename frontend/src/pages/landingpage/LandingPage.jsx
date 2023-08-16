@@ -493,7 +493,7 @@ const LandingPage = ({ search, setSearch }) => {
         </section>
         <section className="home-five-sec">
           <div className="container">
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-lg-12">
                 <div className="header">
                   <div className="left">New Items</div>

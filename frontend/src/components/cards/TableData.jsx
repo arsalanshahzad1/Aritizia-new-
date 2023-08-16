@@ -39,8 +39,8 @@ const navigateTo = (id) =>{
         </tr>
       </thead>
       <tbody>
-        {list.map((res , index) =>{
-          return(<tr className="table-details">
+        {list.slice(0 , 3).map((res , index) =>{
+          return(<tr className="table-details" key={index}>
           <td onClick={() =>navigateTo(res?.id)} style={{cursor : 'pointer'}}>
             <div className="logo-title">
               <div>
