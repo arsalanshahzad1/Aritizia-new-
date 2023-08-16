@@ -25,7 +25,7 @@ const RejectedNFTSCard = (
         description,
         collection,
         collectionImages,
-        userID
+        userId
     }
 ) => {
     const [showLinks, setShowLinks] = useState(false);
@@ -97,7 +97,7 @@ const RejectedNFTSCard = (
     }
 
     useEffect(() => {
-        viewRejectedNftList(userID)
+        viewRejectedNftList(7)
     }, [])
     return (
         <>

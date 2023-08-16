@@ -72,8 +72,6 @@ const Profile = ({ search, setSearch }) => {
   const userAddress = userData?.wallet_address;
   const userId = userData?.id;
 
-  console.log(userId , 'ggggggg');
-
   const getLikedNfts = async () => {
     const provider = await getProviderOrSigner();
 
@@ -1188,7 +1186,7 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 6 && (
                    <>
                    <div className="row">
-                       <RejectedNFTSCard/>
+                       <RejectedNFTSCard userId={userId}/>
                    </div>
                  </>
                 )}

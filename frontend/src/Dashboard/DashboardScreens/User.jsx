@@ -1246,7 +1246,7 @@ const User = ({ search, setSearch }) => {
                                 {tabs === 6 && (
                                     <>
                                         <div className="row">
-                                            <RejectedNFTSCard userID={userID}/>
+                                            <RejectedNFTSCard userId={userID}/>
                                         </div>
                                     </>
                                 )}
