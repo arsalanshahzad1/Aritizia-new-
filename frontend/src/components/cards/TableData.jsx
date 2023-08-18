@@ -38,7 +38,7 @@ const TableData = () => {
           </tr>
         </thead>
         <tbody>
-          {list.slice(0, 5).map((res, index) => {
+          {list.slice(0, 3).map((res, index) => {
             return (
               <tr className="table-details" key={index}>
                 <td
