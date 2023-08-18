@@ -97,7 +97,7 @@ const RejectedNFTSCard = (
     }
 
     useEffect(() => {
-        viewRejectedNftList(7)
+        viewRejectedNftList(userId)
     }, [])
     return (
         <>

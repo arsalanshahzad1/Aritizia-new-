@@ -131,7 +131,7 @@ function UserDataRows({
                 <p>{data?.phone_no == null ? "Null" : data?.phone_no}</p>
               </td>
               <td>
-                <div onClick={() => handleToggleOpen(data)}>
+                <div onClick={() => handleToggleOpen(data)} style={{cursor : 'pointer'}}>
                   <svg
                     width="25"
                     height="6"
