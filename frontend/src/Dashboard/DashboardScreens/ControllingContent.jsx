@@ -82,7 +82,6 @@ function ControllingContent({ search, setSearch }) {
     let myNFTs = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
-
       let id = mintedTokens[i];
       // id = +mintedTokens[i].tokenId.toString();
 
@@ -143,8 +142,8 @@ function ControllingContent({ search, setSearch }) {
           };
           // console.log(nftData);
           // myNFTs.push(nftData);
-          if (!nftList.some(item => item.id === nftData.id)) {
-            setNftList(prev => [...prev, nftData]);
+          if (!nftList.some((item) => item.id === nftData.id)) {
+            setNftList((prev) => [...prev, nftData]);
           }
 
           // } else if (listingType === 1) {
@@ -208,7 +207,7 @@ function ControllingContent({ search, setSearch }) {
   const userAddress = userData?.wallet_address;
 
   const onClose = async () => {
-    console.log('called');
+    console.log("called");
     setIsVisible(false);
   };
   let bulkCall = false;
@@ -244,20 +243,19 @@ function ControllingContent({ search, setSearch }) {
       // console.log("response", response);
       deleteItems(id);
       await onClose(false);
-
     } else {
       const response = await adminApis.rejectNfts(body);
       console.log("response", response);
+      deleteItems(id);
+      await onClose(false);
     }
   };
 
-
-
   const deleteItems = (ids) => {
-    console.log(ids, 'ids');
-    const updatedData = nftList.filter(item => !ids.includes(item.id));
+    console.log(ids, "ids");
+    const updatedData = nftList.filter((item) => !ids.includes(item.id));
     setNftList(updatedData);
-    setSelectedNTFIds([])
+    setSelectedNTFIds([]);
   };
 
   const approveEvent = async (marketplaceContract) => {
@@ -267,7 +265,6 @@ function ControllingContent({ search, setSearch }) {
     );
 
     console.log("response", response);
-
   };
 
   const handleApprovalEvent = async (decision) => {
@@ -278,14 +275,13 @@ function ControllingContent({ search, setSearch }) {
     }
   };
 
-
   const [showEditSidebar, setshowEditSidebar] = useState(false);
 
   const openDrawer = () => {
-      setIsVisible(true);
+    setIsVisible(true);
   };
 
-  useEffect(() =>{} , [])
+  useEffect(() => {}, []);
 
   return (
     <div className="user-management">
@@ -378,7 +374,6 @@ function ControllingContent({ search, setSearch }) {
               <div className="row">
                 <div className="col-lg-10 mx-auto">
                   <div className="row">
-                    
                     {nftList.map((item, index) => (
                       <DashboardCard2
                         onOpen={onOpen}
@@ -398,8 +393,8 @@ function ControllingContent({ search, setSearch }) {
                         isVisible={isVisible}
                         setIsVisible={setIsVisible}
                         openDrawer={openDrawer}
-                      // collection={item?.collection}
-                      // collectionImages={item?.collectionImages}
+                        // collection={item?.collection}
+                        // collectionImages={item?.collectionImages}
                       />
                     ))}
                   </div>
@@ -411,8 +406,9 @@ function ControllingContent({ search, setSearch }) {
                 style={{ justifyContent: "center" }}
               >
                 <button
-                  className={`controling-Nft-Load-More ${list?.pagination?.remaining == 0 ? "disable" : ""
-                    }`}
+                  className={`controling-Nft-Load-More ${
+                    list?.pagination?.remaining == 0 ? "disable" : ""
+                  }`}
                   onClick={() => {
                     viewNftList(
                       +list?.pagination?.page + 1,

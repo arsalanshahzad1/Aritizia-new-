@@ -321,6 +321,8 @@ const PlaceABidDrawer = ({
   const [highestBid, setHighestBid] = useState("");
   const [auctionStatus, setAuctionStatus] = useState(false);
   const [bidButton, showBidButton] = useState(false);
+  const [nftDetails, setNftDetails] = useState("");
+  const [getSellerPlan, setSellerPlan] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   let userAddress = userData?.wallet_address;
@@ -330,7 +332,18 @@ const PlaceABidDrawer = ({
     setStatus(e);
   };
 
-  const web3ModalRef = useRef();
+  const getNFTDetailByNFTTokenId = async () => {
+    const response = await apis.getNFTByTokenId(id);
+    console.log("Zayyan", response?.data?.data?.subscription_plan);
+    setNftDetails(response?.data?.data);
+    setSellerPlan(response?.data?.data?.subscription_plan);
+  };
+
+  useEffect(() => {
+    if (isVisible) {
+      getNFTDetailByNFTTokenId();
+    }
+  }, [isVisible]);
 
   let sellerPlan = 0;
   let buyerPlan = 1;
@@ -996,15 +1009,55 @@ const PlaceABidDrawer = ({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        <img src="/assets/images/creater.png" alt="" />{" "}
-                        <span>Monica Lucas</span>
+                        {
+                          userData?.wallet_address ==
+                          nftDetails?.user?.wallet_address ? (
+                            <Link to={"/profile"}>
+                              <img
+                                src={nftDetails?.user?.profile_image}
+                                alt=""
+                              />{" "}
+                              <span>{nftDetails?.user?.username}</span>
+                              <br />
+                              <span>{userData?.wallet_address}</span>
+                              <br />
+                              <span>{nftDetails?.user?.wallet_address}</span>
+                            </Link>
+                          ) : (
+                            <div
+                              onClick={() =>
+                                navigate(
+                                  `/other-profile?add=${nftDetails?.user?.wallet_address}`,
+                                  {
+                                    state: {
+                                      address: nftDetails?.user?.wallet_address,
+                                    },
+                                  }
+                                )
+                              }
+                            >
+                              <img
+                                src={nftDetails?.user?.profile_image}
+                                alt=""
+                              />{" "}
+                              <span>{nftDetails?.user?.username}</span>
+                            </div>
+                          )
+                          // <Link to={`/other-profile?address=${nftDetails?.user?.wallet_address}`}>
+                          //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
+                          //   <span>{nftDetails?.user?.username}</span>
+                          // </Link>
+                        }
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
                       <div className="logo-name">
-                        <img src="/assets/images/collector.png" alt="" />{" "}
-                        <span>DevilMonkey</span>
+                        <img
+                          src={nftDetails?.collection?.media[0]?.original_url}
+                          alt=""
+                        />{" "}
+                        <span>{nftDetails?.collection?.name}</span>
                       </div>
                     </div>
                   </div>
