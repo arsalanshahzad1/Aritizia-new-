@@ -143,7 +143,7 @@ const Profile = ({ search, setSearch }) => {
         // let listingType = structData.listingType;
 
         const price = ethers.utils.formatEther(structData.price.toString());
-
+        console.log("likednfts price", price);
         axios
           .get(metaData)
           .then((response) => {
@@ -154,6 +154,8 @@ const Profile = ({ search, setSearch }) => {
             data = data.replace(/\\/g, "");
 
             data = JSON.parse(data);
+            console.log("likednfts data", data);
+
             // Extracting values using dot notation
             // const price = data.price;
             // listingType = data.listingType;
@@ -208,7 +210,6 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  
   const addFanList = async () => {
     const signer = await getProviderOrSigner(true);
 
@@ -650,7 +651,7 @@ const Profile = ({ search, setSearch }) => {
 
   return (
     <>
-    {/* <MetaDecorator
+      {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
         imageAlt={'Artizia'}
@@ -963,7 +964,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                            <Followers id={userId}/>
+                            <Followers id={userId} />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
@@ -974,7 +975,7 @@ const Profile = ({ search, setSearch }) => {
                           </>
                         ) : (
                           <>
-                            <Following id={userId}/>
+                            <Following id={userId} />
                             {/* <Follow followed={false} />
                             <Follow followed={false} />
                             <Follow followed={false} />
@@ -989,7 +990,7 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
-                    <Fan id={userId}/>
+                    <Fan id={userId} />
 
                     <div
                       onClick={() => {
@@ -1106,8 +1107,7 @@ const Profile = ({ search, setSearch }) => {
                             <h3 className="center-align">ADD TO FAN LIST</h3>
                             <div className="line-1-selector">
                               <div>No.</div>
-                              <div>
-                              </div>
+                              <div></div>
                             </div>
                             <div className="Address-holder">
                               {addFanlisting.length > 0 ? (
@@ -1155,7 +1155,6 @@ const Profile = ({ search, setSearch }) => {
                               ) : (
                                 <div>List is Empty</div>
                               )}
-                              
                             </div>
                             <div className="popUp-btn-group">
                               <div
@@ -1182,13 +1181,13 @@ const Profile = ({ search, setSearch }) => {
                     )}
                   </>
                 )}
-               
+
                 {tabs === 6 && (
-                   <>
-                   <div className="row">
-                       <RejectedNFTSCard userId={userId}/>
-                   </div>
-                 </>
+                  <>
+                    <div className="row">
+                      <RejectedNFTSCard userId={userId} />
+                    </div>
+                  </>
                 )}
               </div>
             </div>

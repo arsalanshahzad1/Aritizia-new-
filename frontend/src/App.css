@@ -5155,7 +5155,7 @@ footer h1 {
 /* Art Page */
 
 .Arts-holder {
-  margin: 3% 5%;
+  margin: 9% 5% 3% 5%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

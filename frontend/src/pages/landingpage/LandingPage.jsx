@@ -177,8 +177,6 @@ const LandingPage = ({ search, setSearch }) => {
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()
         );
-  
-
 
         listingType = structData.listingType;
         let listed = structData.listed;
@@ -201,7 +199,7 @@ const LandingPage = ({ search, setSearch }) => {
           .get(metaData)
           .then((response) => {
             const meta = response.data;
-            console.log("first")
+            console.log("first");
             let data = JSON.stringify(meta);
 
             data = data.slice(2, -5);
@@ -436,42 +434,41 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                    <div className="left">NFT Collection</div>
+                    <div className="left">NFT</div>
                     <div className="right">View more</div>
                   </div>
                 </div>
                 <div>
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
-                {nftListFP.length > 0 ?
-                <>
-                 {nftListFP.map((item) => (
-                  <BuyNow
-                    key={item?.id}
-                    id={item?.id}
-                    title={item?.title}
-                    image={item?.image}
-                    price={item?.price}
-                    discountPrice={item?.discountPrice}
-                    crypto={item?.crypto}
-                    royalty={item?.royalty}
-                    description={item?.description}
-                    collection={item?.collection}
-                    collectionImages={item?.collectionImages}
-                    userAddress={userAddress}
-                    seller={item?.seller} 
-                  />
-                ))}
-                </>
-               
-              :
-              <>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              </>
-              }
+                {nftListFP.length > 0 ? (
+                  <>
+                    {nftListFP.map((item) => (
+                      <BuyNow
+                        key={item?.id}
+                        id={item?.id}
+                        title={item?.title}
+                        image={item?.image}
+                        price={item?.price}
+                        discountPrice={item?.discountPrice}
+                        crypto={item?.crypto}
+                        royalty={item?.royalty}
+                        description={item?.description}
+                        collection={item?.collection}
+                        collectionImages={item?.collectionImages}
+                        userAddress={userAddress}
+                        seller={item?.seller}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -496,37 +493,37 @@ const LandingPage = ({ search, setSearch }) => {
             <div className="row mb-5">
               <div className="col-lg-12">
                 <div className="header">
-                  <div className="left">New Items</div>
+                  <div className="left">Auction NFTs</div>
                   {/* <div className="right">View more markets</div> */}
                 </div>
               </div>
-              {nftListAuction.length > 0 ?
-              <>
-              {nftListAuction.map((item) => (
-                <NewItemCard
-                  key={item.id}
-                  id={item.id}
-                  title={item?.title}
-                  image={item?.image}
-                  price={item?.price}
-                  highestBid={item?.highestBid}
-                  isLive={item?.isLive}
-                  endTime={item?.endTime}
-                  startTime={item?.startTime}
-                  description={item?.description}
-                  collectionImages={item?.collectionImages}
-                  userAddress={userAddress}
-                />
-              ))}
-              </>
-              :
-              <>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              </>
-            }
+              {nftListAuction.length > 0 ? (
+                <>
+                  {nftListAuction.map((item) => (
+                    <NewItemCard
+                      key={item.id}
+                      id={item.id}
+                      title={item?.title}
+                      image={item?.image}
+                      price={item?.price}
+                      highestBid={item?.highestBid}
+                      isLive={item?.isLive}
+                      endTime={item?.endTime}
+                      startTime={item?.startTime}
+                      description={item?.description}
+                      collectionImages={item?.collectionImages}
+                      userAddress={userAddress}
+                    />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <DummyCard />
+                  <DummyCard />
+                  <DummyCard />
+                  <DummyCard />
+                </>
+              )}
             </div>
           </div>
         </section>

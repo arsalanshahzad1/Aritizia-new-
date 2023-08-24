@@ -208,18 +208,20 @@ function ProfileDrawer({
   // };
 
   const handleNFTSoldEvent = async (
-    nftContract,
+    // nftContract,
     tokenId,
     seller,
     owner,
     price
   ) => {
+    console.log("handleNFTSoldEvent");
     let soldData = {
       token_id: tokenId.toString(),
       seller: seller.toString(),
       buyer: owner.toString(),
       price: ethers.utils.formatEther(price.toString()),
     };
+    console.log("soldData", soldData);
 
     if (ethPurchase || usdtPurchase) {
       nftSoldPost(soldData);
@@ -460,6 +462,8 @@ function ProfileDrawer({
 
     if (checkFan) {
       fee = +discountedPlatformFeeUSDT;
+      console.log("fee", fee);
+
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
       amountInWei = amountInWei.toString();
@@ -468,11 +472,16 @@ function ProfileDrawer({
       console.log("amount", amount);
       console.log("amountInWei", amountInWei);
     }
+    console.log("amountInWei  ", amountInWei);
+    console.log(
+      "MARKETPLACE_CONTRACT_ADDRESS.address  ",
+      MARKETPLACE_CONTRACT_ADDRESS.address
+    );
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       amountInWei,
-      { gasLimit: ethers.BigNumber.from("5000000") }
+      { gasLimit: ethers.BigNumber.from("50000") }
     );
 
     appprove.wait();
@@ -1005,19 +1014,18 @@ function ProfileDrawer({
                                 alt=""
                               />{" "}
                               <span>{nftDetails?.user?.username}</span>
-                              <br />
-                              <span>{userData?.wallet_address}</span>
-                              <br />
-                              <span>{nftDetails?.user?.wallet_address}</span>
                             </Link>
                           ) : (
                             <div
                               onClick={() =>
-                                navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`, {
-                                  state: {
-                                    address: nftDetails?.user?.wallet_address,
-                                  },
-                                })
+                                navigate(
+                                  `/other-profile?add=${nftDetails?.user?.wallet_address}`,
+                                  {
+                                    state: {
+                                      address: nftDetails?.user?.wallet_address,
+                                    },
+                                  }
+                                )
                               }
                             >
                               <img

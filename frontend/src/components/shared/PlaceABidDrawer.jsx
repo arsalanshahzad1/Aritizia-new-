@@ -22,6 +22,7 @@ import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import Modal from "react-bootstrap/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineClose } from "react-icons/ai";
+import { Link, useLocation } from "react-router-dom";
 import {
   Area,
   AreaChart,
@@ -1018,10 +1019,6 @@ const PlaceABidDrawer = ({
                                 alt=""
                               />{" "}
                               <span>{nftDetails?.user?.username}</span>
-                              <br />
-                              <span>{userData?.wallet_address}</span>
-                              <br />
-                              <span>{nftDetails?.user?.wallet_address}</span>
                             </Link>
                           ) : (
                             <div
