@@ -57,6 +57,7 @@ const Profile = ({ search, setSearch }) => {
   const navigate = useNavigate();
 
   const getNFTlikeListing = async () => {
+    console.log("getNFTlikeListing");
     const response = await apis.getLikeNFTListing(userData?.id);
     setLikedNfts(response?.data?.data);
     console.log(response, "other-users");
@@ -219,10 +220,10 @@ const Profile = ({ search, setSearch }) => {
       signer
     );
 
-    //  0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
+    // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
     // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
     // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-    //
+    // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 
     console.log("FansAddress", FansAddress);
 
@@ -307,6 +308,8 @@ const Profile = ({ search, setSearch }) => {
     console.log("333333");
 
     let listingType;
+
+    console.log("userAddress", userAddress);
 
     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
 
@@ -461,6 +464,8 @@ const Profile = ({ search, setSearch }) => {
       console.log(response.data, "workig");
 
       const structData = await marketplaceContract._idToNFT(id);
+
+      console.log(structData, "structDataABC");
 
       let auctionData = await marketplaceContract._idToAuction(id);
 

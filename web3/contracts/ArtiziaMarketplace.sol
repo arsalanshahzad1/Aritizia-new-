@@ -963,8 +963,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _price,
         uint256 _listingType,
         uint256 _startTime,
-        uint256 _endTime,
-        address _user
+        uint256 _endTime
     )
         public
         // uint256 _paymentMethod
@@ -977,13 +976,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         require(_price > 0, "Price must be at least 1 wei");
 
         require(
-            nft.owner == _user,
+            nft.owner == msg.sender,
             "Only the owner of an nft can list the nft."
         );
 
-        IERC721(_nftContract).transferFrom(_user, address(this), _tokenId);
+        IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
 
-        nft.seller = payable(_user);
+        nft.seller = payable(msg.sender);
         nft.owner = payable(address(this));
         nft.price = _price;
         nft.listed = true;
@@ -993,7 +992,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         if (_listingType == uint256(ListingType.Auction)) {
             _idToAuction[_tokenId] = Auction(
                 _tokenId, // tokenId
-                payable(_user), // seller
+                payable(msg.sender), // seller
                 _price, // basePrice
                 _startTime, // startTime
                 _endTime, // endTime
@@ -1008,7 +1007,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         emit NFTListed(
             _nftContract,
             _tokenId,
-            _user,
+            msg.sender,
             address(this),
             _price,
             nft.collectionId,
@@ -1698,10 +1697,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         } else {
             return false;
         }
-    }
-
-    function getCurrentTimestamp() public view returns (uint256) {
-        return block.timestamp;
     }
 
     receive() external payable {}
