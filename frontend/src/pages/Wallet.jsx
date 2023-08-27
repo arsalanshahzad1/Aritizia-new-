@@ -17,8 +17,6 @@ const Wallet = ({ search, setSearch }) => {
             <div className="row">
               <MetaMaskWalletCard />
               <CoinBaseWalletCard />
-              <CoinBaseWalletCard />
-              <CoinBaseWalletCard />
               {/* <MetaMaskWalletCard />
                             <MetaMaskWalletCard />
                             <MetaMaskWalletCard />

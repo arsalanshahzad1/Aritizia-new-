@@ -325,7 +325,7 @@ const Header = ({ search, setSearch }) => {
                               {chatNotificationRes?.length > 0 ? (
                                 <Notification data={chatNotificationRes} />
                               ) : (
-                                <section>No record found </section>
+                                <section  className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
                               chatNotificationRes.length > 0 ? (
@@ -395,7 +395,7 @@ const Header = ({ search, setSearch }) => {
                               {notificationRes?.length > 0 ? (
                                 <UserNotification data={notificationRes} />
                               ) : (
-                                <section>No record found </section>
+                                <section  className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {notificationRes.length < countLength &&
                               notificationRes.length > 0 ? (
@@ -486,7 +486,7 @@ const Header = ({ search, setSearch }) => {
                               {chatNotificationRes?.length > 0 ? (
                                 <Notification data={chatNotificationRes} />
                               ) : (
-                                <section>No record found </section>
+                                <section  className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
                               chatNotificationRes.length > 0 ? (
@@ -551,7 +551,7 @@ const Header = ({ search, setSearch }) => {
                               {notificationRes?.length > 0 ? (
                                 <UserNotification data={notificationRes} />
                               ) : (
-                                <section>No record found </section>
+                                <section  className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {notificationRes.length < countLength &&
                               notificationRes.length > 0 ? (

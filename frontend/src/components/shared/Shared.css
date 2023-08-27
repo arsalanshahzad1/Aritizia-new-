@@ -270,6 +270,7 @@ p {
   letter-spacing: 0em;
   text-align: left;
   color: #121212;
+  text-transform: capitalize;
   margin-right: 10px;
 }
 

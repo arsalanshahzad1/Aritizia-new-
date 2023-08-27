@@ -24,6 +24,7 @@ import {
   getProviderOrSigner,
 } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
+import { Link } from "react-router-dom";
 // import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
@@ -161,6 +162,7 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("metaData", metaData);
         console.log("structData", structData);
         console.log("firstownerr", mintedTokens[i].firstOwner);
+        let collectionId = structData.collectionId.toString();
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -181,11 +183,10 @@ const LandingPage = ({ search, setSearch }) => {
         listingType = structData.listingType;
         let listed = structData.listed;
 
-        let collectionId = structData.collectionId.toString();
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
-        console.log(response.data, "saad");
+        console.log(response.data, "saad landing");
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         console.log(
           response?.data?.data?.media?.[0]?.original_url,
@@ -249,6 +250,7 @@ const LandingPage = ({ search, setSearch }) => {
                 highestBid: highestBid,
                 highestBidder: auctionData.highestBidder.toString(),
                 // isLive: auctionData.isLive.toString(),
+                collectionImages: collectionImages,
                 seller: auctionData.seller.toString(),
               };
 
@@ -435,7 +437,9 @@ const LandingPage = ({ search, setSearch }) => {
                 <div className="col-lg-12">
                   <div className="header">
                     <div className="left">NFT</div>
-                    <div className="right">View more</div>
+                    <Link to="/search">
+                      <div className="right">View more</div>
+                    </Link>
                   </div>
                 </div>
                 <div>
@@ -479,7 +483,9 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="col-lg-12">
                 <div className="header">
                   <div className="left">Top Collection</div>
-                  <div className="right">View more markets</div>
+                  <Link to="/search">
+                    <div className="right">View more markets</div>
+                  </Link>
                 </div>
               </div>
               <div className="col-lg-12">
@@ -494,11 +500,15 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="col-lg-12">
                 <div className="header">
                   <div className="left">Auction NFTs</div>
+                  <Link to="/search">
+                    <div className="right">View more</div>
+                  </Link>
                   {/* <div className="right">View more markets</div> */}
                 </div>
               </div>
               {nftListAuction.length > 0 ? (
                 <>
+                  {console.log(nftListAuction, "nft list auction")}
                   {nftListAuction.map((item) => (
                     <NewItemCard
                       key={item.id}
