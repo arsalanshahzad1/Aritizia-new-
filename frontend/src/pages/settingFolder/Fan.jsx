@@ -7,8 +7,9 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import { Link } from "react-router-dom";
 
-function Fan({id}) {
+function Fan({ id }) {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
@@ -51,7 +52,7 @@ function Fan({id}) {
     console.log("remove", remove);
 
     let response = marketplaceContract.on("removeFan", handleRemoveFansEvent);
-
+    // getFanListing();
     console.log("Response of removeFan event", response);
   };
 
@@ -92,15 +93,21 @@ function Fan({id}) {
       {fanListing.map((data, index) => {
         return (
           <div className="Follow-row" key={index}>
-            <div className="left">
-              <div className="img-holder">
-                <img src={data?.profile_image} alt="" />
+            <Link to={`/other-profile?add=${data?.wallet_address}`}>
+              <div className="left">
+                <div className="img-holder">
+                  {data?.profile_image ? (
+                    <img src={data?.profile_image} alt="" />
+                  ) : (
+                    <img src="assets/images/user-none.png" alt="" />
+                  )}
+                </div>
+                <div className="txt">
+                  <p>{data?.username}</p>
+                  <p>{data?.count_fan} Fans</p>
+                </div>
               </div>
-              <div className="txt">
-                <p>{data?.username}</p>
-                <p>{data?.count_fan} Fans</p>
-              </div>
-            </div>
+            </Link>
             <div className="right">
               <button
                 className="unfollow"

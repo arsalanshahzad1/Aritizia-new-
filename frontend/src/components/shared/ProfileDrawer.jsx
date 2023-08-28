@@ -413,7 +413,7 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
+        paymentMethod.value,
         id,
         sellerPlan, //  must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent

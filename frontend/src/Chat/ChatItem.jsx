@@ -23,11 +23,12 @@ const ChatItem = ({ data, activeUserId }) => {
             <div className='text-area'>
                 <div className='name-txt'>
                     <span>
-                        {data.first_name == null ?
+                        {data?.username}
+                        {/* {data.first_name == null ?
                             'User' + data?.id
                             :
                             data?.first_name
-                        }
+                        } */}
                     </span>
                 </div>
                 <div className='msg-txt'>
