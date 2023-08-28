@@ -84,6 +84,7 @@ function ProfileDrawer({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
+  console.log("getBuyerPlan", getBuyerPlan);
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -158,6 +159,8 @@ function ProfileDrawer({
   let priceInETH = price;
   let sellerPlan = getSellerPlan;
   let buyerPlan = getBuyerPlan;
+
+  // console.log("getBuyerPlan", getBuyerPlan);
 
   // const web3ModalRef = useRef();
 
@@ -254,18 +257,16 @@ function ProfileDrawer({
     const provider = await getProviderOrSigner();
 
     let _buyerPercent;
-    console.log("buyerPlan", buyerPlan);
+    console.log("buyerPlan asd", buyerPlan);
 
-    if (buyerPlan < 3) {
-      _buyerPercent = 1.5;
-    } else if (buyerPlan == 3) {
-      _buyerPercent = 1.5;
-      1;
-    } else if (buyerPlan == 4) {
+    if (buyerPlan == 4) {
       _buyerPercent = 0;
+    } else if (buyerPlan == 3) {
+      _buyerPercent = 1;
     } else {
       _buyerPercent = 1.5;
     }
+
     console.log("_buyerPercent", _buyerPercent);
 
     const marketplaceContract = new Contract(

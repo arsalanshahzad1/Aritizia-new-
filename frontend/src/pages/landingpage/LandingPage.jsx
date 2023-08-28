@@ -51,6 +51,21 @@ const LandingPage = ({ search, setSearch }) => {
   //   }
   // };
 
+  async function getBalance() {
+    const provider = await getProviderOrSigner();
+
+    // Create a provider using any Ethereum node URL
+    provider
+      .getBalance(MARKETPLACE_CONTRACT_ADDRESS.address)
+      .then((balanceWei) => {
+        const balanceEther = ethers.utils.formatEther(balanceWei);
+        console.log(`Balance ${balanceEther} ETH`);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   async function getProvider() {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
@@ -436,6 +451,7 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
+                    <button onClick={getBalance}>Get Balance</button>
                     <div className="left">NFT</div>
                     <Link to="/search">
                       <div className="right">View more</div>
