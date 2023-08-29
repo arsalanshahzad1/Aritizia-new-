@@ -199,11 +199,13 @@ function ChatPage({ search, setSearch }) {
                                     </div>
                                     <div className='username'>
                                         {/* FAHAD */}
-                                        {userDetails?.first_name == null ?
+                                        {userDetails?.username
+                                        }
+                                        {/* {userDetails?.first_name == null ?
                                             'User' + activeUserId
                                             :
                                             userDetails?.first_name
-                                        }
+                                        } */}
                                         <div>
                                             Active
                                             <span>
