@@ -66,7 +66,7 @@ console.log(JSON.stringify(response) , 'response');
         < div >
             <Header search={search} setSearch={setSearch} />
             <section className="home-first-section">
-                <div className="home-first-wraper">
+                <div className="home-first-wraper" style={{top : '38%'}}>
                     <div className="search" id="prompt">
 
                         <button>Prompt</button>

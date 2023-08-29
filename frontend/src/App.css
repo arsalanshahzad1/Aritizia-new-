@@ -3,10 +3,14 @@
   /* Color */
   --black: #000;
   --white: #fff;
-  --bg-gradient: linear-gradient(90deg, rgba(36, 56, 203, 1) 0%, rgba(182, 0, 209, 1) 100%);
-  --primary: #B600D1;
-  --secoundary: #2438CB;
-  --lightGray: #B6B6B6;
+  --bg-gradient: linear-gradient(
+    90deg,
+    rgba(36, 56, 203, 1) 0%,
+    rgba(182, 0, 209, 1) 100%
+  );
+  --primary: #b600d1;
+  --secoundary: #2438cb;
+  --lightGray: #b6b6b6;
   /* --orange: #f68d29;
     --light: #F6F6F6;
     --lighter: #F6F6F655;
@@ -39,189 +43,188 @@
 
 /* Poppins Font */
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-Black.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-Black.ttf");
   font-weight: 200;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-Light.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-Light.ttf");
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-Regular.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-Regular.ttf");
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-Medium.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-Medium.ttf");
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-SemiBold.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-SemiBold.ttf");
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-Bold.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-Bold.ttf");
   font-weight: 700;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-ExtraBold.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-ExtraBold.ttf");
   font-weight: 800;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('../src/assets/fonts/Poppins/Poppins-Black.ttf');
+  font-family: "Poppins";
+  src: url("../src/assets/fonts/Poppins/Poppins-Black.ttf");
   font-weight: 900;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-Black.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-Black.ttf");
   font-weight: 900;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-Bold.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-Bold.ttf");
   font-weight: 700;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-BoldItalic.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-BoldItalic.ttf");
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-ExtraBold.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-ExtraBold.ttf");
   font-weight: 800;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-ExtraLight.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-ExtraLight.ttf");
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-Medium.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-Medium.ttf");
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-Regular.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-Regular.ttf");
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'Jost';
-  src: url('../src/assets/fonts/Jost/Jost-SemiBold.ttf');
+  font-family: "Jost";
+  src: url("../src/assets/fonts/Jost/Jost-SemiBold.ttf");
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-Black.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-Black.ttf");
   font-weight: 900;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-BlackItalic.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-BlackItalic.ttf");
   font-weight: 900;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-Bold.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-Bold.ttf");
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-BoldItalic.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-BoldItalic.ttf");
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-ExtraBold.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-ExtraBold.ttf");
   font-weight: 800;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-ExtraBoldItalic.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-ExtraBoldItalic.ttf");
   font-weight: 800;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-ExtraLight.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-ExtraLight.ttf");
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-ExtraLightItalic.ttf');
-  font-weight: 300;
-}
-
-
-@font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-Light.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-ExtraLightItalic.ttf");
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-LightItalic.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-Light.ttf");
   font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-Medium.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-LightItalic.ttf");
+  font-weight: 300;
+}
+
+@font-face {
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-Medium.ttf");
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-MediumItalic.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-MediumItalic.ttf");
   font-weight: 500;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-Regular.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-Regular.ttf");
   font-weight: 400;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-SemiBold.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-SemiBold.ttf");
   font-weight: 600;
 }
 
 @font-face {
-  font-family: 'Work-Sans';
-  src: url('../src/assets/fonts/Work_Sans/WorkSans-SemiBoldItalic.ttf');
+  font-family: "Work-Sans";
+  src: url("../src/assets/fonts/Work_Sans/WorkSans-SemiBoldItalic.ttf");
   font-weight: 600;
 }
 
@@ -274,7 +277,7 @@ p {
 }
 
 .home-first-sec {
-  background-image: url('../public/assets/images/home-one.png');
+  background-image: url("../public/assets/images/home-one.png");
   height: 530px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -349,7 +352,7 @@ header .left button.white-color {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -365,7 +368,7 @@ header .left button.black-color {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -377,10 +380,10 @@ header .left button.black-color {
 }
 
 .header-message.white-color::before {
-  content: '';
+  content: "";
   height: 55%;
   width: 2px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   position: absolute;
   left: -20px;
   top: 50%;
@@ -397,7 +400,7 @@ header .left button.black-color {
 }
 
 .header-message.black-color::before {
-  content: '';
+  content: "";
   height: 55%;
   width: 2px;
   background-color: #111111;
@@ -453,7 +456,7 @@ header .left img {
 }
 
 .home-first-wrap h1 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 600;
   line-height: 58px;
@@ -463,7 +466,7 @@ header .left img {
   text-align: center;
 }
 .home-first-wraper h1 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 600;
   line-height: 58px;
@@ -494,7 +497,7 @@ header .left img {
   border: none;
   outline: none;
   background: transparent;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 22px;
   font-weight: 500;
   line-height: 38px;
@@ -509,7 +512,7 @@ header .left img {
   border: none;
   outline: none;
   background: #9c9c9c4a;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 22px;
   font-weight: 500;
   line-height: 38px;
@@ -521,26 +524,25 @@ header .left img {
 }
 
 .home-first-wrap .search input::-webkit-input-placeholder {
-  color: #9F9F9F;
+  color: #9f9f9f;
   transition: color 0.5s ease;
   font-size: 16px;
 }
 .home-first-wraper .search input::-webkit-input-placeholder {
-  color: #9F9F9F;
+  color: #9f9f9f;
   transition: color 0.5s ease;
   font-size: 16px;
 }
 
 .home-first-wrap .search input:focus::-webkit-input-placeholder {
-  color: #9F9F9F;
+  color: #9f9f9f;
 }
 .home-first-wraper .search input:focus::-webkit-input-placeholder {
-  color: #9F9F9F;
+  color: #9f9f9f;
 }
 
-
 .home-first-wrap .search button {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 26px;
   font-weight: 400;
   line-height: 38px;
@@ -553,7 +555,7 @@ header .left img {
   border: none;
 }
 .home-first-wraper .search button {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 26px;
   font-weight: 400;
   line-height: 38px;
@@ -567,7 +569,7 @@ header .left img {
 }
 
 .home-first-wrap p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 29px;
@@ -603,7 +605,7 @@ header .left img {
 }
 
 .home-second-sec .title {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 700;
   line-height: 58px;
@@ -613,7 +615,7 @@ header .left img {
 }
 
 .home-second-sec .para {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 29px;
@@ -624,14 +626,13 @@ header .left img {
   padding-top: 10px !important;
 }
 
-
 .home-second-sec .inner-wrap {
   text-align: center;
 }
 
 .home-second-sec .inner-wrap h3 {
   text-align: center;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 44px;
   font-weight: 900;
   line-height: 64px;
@@ -641,7 +642,7 @@ header .left img {
 
 .home-second-sec .inner-wrap p {
   text-align: center;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 26px;
   font-weight: 500;
   line-height: 38px;
@@ -663,17 +664,16 @@ header .left img {
 }
 
 .home-three-sec .header .left {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 500;
   line-height: 58px;
   letter-spacing: 0em;
   text-align: left;
-
 }
 
 .home-three-sec .header .right {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -697,7 +697,6 @@ header .left img {
   top: 15px;
   opacity: 0;
   transition: all 0.1s ease-out;
-
 }
 
 .home-three-sec .card-wrap:hover .buy-logo {
@@ -714,8 +713,6 @@ header .left img {
   width: 100%;
 }
 
-
-
 .home-four-sec .header {
   display: flex;
   justify-content: space-between;
@@ -724,17 +721,16 @@ header .left img {
 }
 
 .home-four-sec .header .left {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 500;
   line-height: 58px;
   letter-spacing: 0em;
   text-align: left;
-
 }
 
 .home-four-sec .header .right {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -761,7 +757,7 @@ header .left img {
 }
 
 .home-four-sec .logo-title p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -770,10 +766,11 @@ header .left img {
   margin-left: 15px !important;
 }
 
-.home-four-sec .two {}
+.home-four-sec .two {
+}
 
 .home-four-sec .two .price {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 24px;
   font-weight: 400;
   line-height: 28px;
@@ -782,17 +779,16 @@ header .left img {
 }
 
 .home-four-sec .two .percentage {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 20px;
   font-weight: 400;
   line-height: 23px;
   letter-spacing: 0em;
   text-align: right;
-
 }
 
 .home-four-sec .two .red {
-  color: #F74542;
+  color: #f74542;
 }
 
 .home-four-sec .two .purple {
@@ -804,8 +800,7 @@ header .left img {
   border: none !important;
 }
 
-
-.table>:not(caption)>*>* {
+.table > :not(caption) > * > * {
   box-shadow: none !important;
 }
 
@@ -819,7 +814,7 @@ header .left img {
 
 .home-four-sec .table th {
   border: none !important;
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 24px;
   font-weight: 400;
   line-height: 28px;
@@ -838,7 +833,7 @@ header .left img {
 
 .pruchase .table th {
   border: none !important;
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 24px;
   font-weight: 400;
   line-height: 28px;
@@ -848,7 +843,7 @@ header .left img {
 }
 
 .pruchase .logo-title p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -857,14 +852,13 @@ header .left img {
 }
 
 .pruchase .two .price {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 24px;
   font-weight: 400;
   line-height: 28px;
   letter-spacing: 0em;
   text-align: left;
 }
-
 
 .home-five-sec .header {
   display: flex;
@@ -874,17 +868,16 @@ header .left img {
 }
 
 .home-five-sec .header .left {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 500;
   line-height: 58px;
   letter-spacing: 0em;
   text-align: left;
-
 }
 
 .home-five-sec .header .right {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -903,7 +896,6 @@ header .left img {
 
 .sec-five-wrap:hover {
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.363);
-
 }
 
 .sec-five-wrap .image {
@@ -922,7 +914,7 @@ header .left img {
   top: -15px;
   right: 0px;
   z-index: 99;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -954,10 +946,11 @@ header .left img {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 5px solid #FFF;
+  border: 5px solid #fff;
   width: 60px;
   height: 60px;
   object-fit: cover;
+  background-color: white;
 }
 
 .new-item-card .detail-wrap .center-icon .icon img:last-child {
@@ -974,10 +967,11 @@ header .left img {
   padding: 10px 0px;
 }
 
-.new-item-card .detail-wrap .topsection .left {}
+.new-item-card .detail-wrap .topsection .left {
+}
 
 .new-item-card .detail-wrap .topsection .left p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 600;
   line-height: 29px;
@@ -987,23 +981,23 @@ header .left img {
 }
 
 .new-item-card .detail-wrap .topsection .left span {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
   letter-spacing: 0em;
   text-align: left;
-  color: #4A4949;
+  color: #4a4949;
 }
 
 .new-item-card .detail-wrap .topsection .right p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 900;
   line-height: 23px;
   letter-spacing: 0em;
   text-align: left;
-  color: #4A4949;
+  color: #4a4949;
 }
 
 .new-item-card .bottom {
@@ -1019,7 +1013,7 @@ header .left img {
 }
 
 .new-item-card .bottom .left p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -1034,34 +1028,36 @@ header .left img {
 }
 
 .new-item-card .bottom .right svg {
-  color: #C2C2C2;
+  color: #c2c2c2;
   margin-right: 5px;
 }
 
 .new-item-card .bottom .right span {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
-  color: #8E8E8E;
+  color: #8e8e8e;
 }
 
 /* Footer css */
 
 footer {
-  background-image: url('../public/assets/images/footer.png');
+  background-image: url("../public/assets/images/footer.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-footer span {}
+footer span {
+}
 
-footer span svg {}
+footer span svg {
+}
 
 footer h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -1071,7 +1067,7 @@ footer h2 {
 }
 
 footer p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 400;
   line-height: 26px;
@@ -1081,7 +1077,7 @@ footer p {
 }
 
 footer h1 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 500;
   line-height: 58px;
@@ -1107,7 +1103,7 @@ footer h1 {
 }
 
 .footer-wrap h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 400;
   line-height: 35px;
@@ -1118,7 +1114,7 @@ footer h1 {
 }
 
 .footer-wrap p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 400;
   line-height: 26px;
@@ -1173,7 +1169,6 @@ footer h1 {
   left: 50%;
   transform: translateX(-50%);
   top: -108px;
-
 }
 
 .profile-first-section .detail {
@@ -1182,7 +1177,7 @@ footer h1 {
 }
 
 .profile-first-section .user-name {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 40px;
   font-weight: 600;
   line-height: 58px;
@@ -1198,13 +1193,13 @@ footer h1 {
 }
 
 .share-links-social span {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 28px;
   font-weight: 500;
   line-height: 40px;
   letter-spacing: 0em;
   text-align: left;
-  color: #9D9D9D;
+  color: #9d9d9d;
 }
 
 .share-links-social svg:nth-child(2) {
@@ -1229,7 +1224,7 @@ footer h1 {
 }
 
 .profile-first-section .user-email {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 30px;
   font-weight: 500;
   line-height: 43px;
@@ -1264,7 +1259,7 @@ footer h1 {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 30px;
   font-weight: 500;
   line-height: 43px;
@@ -1273,7 +1268,7 @@ footer h1 {
 }
 
 .profile-first-section .copy-url button {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   font-size: 18px;
   font-weight: 500;
   line-height: 27px;
@@ -1292,13 +1287,13 @@ footer h1 {
 }
 
 .profile-first-section .message-btn button {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 29px;
   letter-spacing: 0em;
   color: #737373;
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
   border: none;
   padding: 7px 20px;
   border-radius: 6px;
@@ -1321,14 +1316,14 @@ footer h1 {
 }
 
 .profile-first-section .profile-tabs button {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 24px;
   font-weight: 600;
   line-height: 28px;
   letter-spacing: 0em;
   text-align: center;
-  border: 2px solid #9D9D9D;
-  color: #9D9D9D;
+  border: 2px solid #9d9d9d;
+  color: #9d9d9d;
   padding: 5px 16px;
   background-color: transparent;
   border-radius: 6px;
@@ -1356,7 +1351,8 @@ footer h1 {
   left: -142px;
   top: 50px;
   width: 185px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .action-drop-down {
@@ -1382,7 +1378,7 @@ footer h1 {
 }
 
 .user-login-dropdown li {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 22px;
   font-weight: 600;
   line-height: 38px;
@@ -1392,7 +1388,8 @@ footer h1 {
   cursor: pointer;
 }
 
-.user-login-dropdown li.active {}
+.user-login-dropdown li.active {
+}
 
 .user-login-dropdown li:hover {
   background: var(--bg-gradient);
@@ -1401,7 +1398,6 @@ footer h1 {
 
 .user-login-dropdown li a {
   color: #000;
-
 }
 
 .user-login-dropdown .setting div ul li:nth-child(1) {
@@ -1409,7 +1405,7 @@ footer h1 {
 }
 
 .user-login-dropdown .setting div ul li {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 600;
   line-height: 29px;
@@ -1422,7 +1418,7 @@ footer h1 {
 }
 
 .user-login-dropdown .setting div ul li a {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 600;
   line-height: 29px;
@@ -1450,9 +1446,8 @@ footer h1 {
   color: var(--white);
 }
 
-
 .user-login-dropdown .setting ul li a {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 600;
   line-height: 29px;
@@ -1490,7 +1485,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -1637,7 +1632,7 @@ footer h1 {
 
 .search-page .search-input input {
   width: 100%;
-  background: #F2F2F2;
+  background: #f2f2f2;
   border: none;
   outline: none;
   border-radius: 100px;
@@ -1652,20 +1647,21 @@ footer h1 {
 }
 
 .search-page .search-input input::placeholder {
-  color: #B1B1B1;
+  color: #b1b1b1;
   opacity: 1;
 }
 
 .search-page .search-input input:-ms-input-placeholder {
-  color: #B1B1B1;
+  color: #b1b1b1;
 }
 
 .search-page .search-input input::-ms-input-placeholder {
-  color: #B1B1B1;
+  color: #b1b1b1;
 }
 
 .search-page .search-filter {
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
   border-radius: 6px;
   padding: 20px;
 }
@@ -1695,7 +1691,7 @@ footer h1 {
 .search-filter .l-7 p,
 .search-filter .l-8 p,
 .search-filter .l-9 p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -1711,13 +1707,13 @@ footer h1 {
 }
 
 .search-filter .l-1 span {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 26px;
   font-weight: 500;
   line-height: 38px;
   letter-spacing: 0em;
   text-align: left;
-  color: #2636D9;
+  color: #2636d9;
 }
 
 .search-filter .l-8 .range-number {
@@ -1727,7 +1723,7 @@ footer h1 {
 }
 
 .search-filter .l-8 .range-number div {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
@@ -1737,7 +1733,7 @@ footer h1 {
 }
 
 .search-filter .l-8 .rc-slider-rail {
-  background-color: #BEBEBE;
+  background-color: #bebebe;
 }
 
 .search-filter .l-8 .rc-slider-handle {
@@ -1756,7 +1752,7 @@ footer h1 {
 }
 
 .search-filter .Dropdown-placeholder {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -1767,21 +1763,21 @@ footer h1 {
 
 .search-filter .Dropdown-control {
   border: none;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   padding: 8px 52px 8px 15px;
 }
 
 .search-filter .Dropdown-menu {
   z-index: 7;
   border: none;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .search-filter .Dropdown-arrow {
   border-color: var(--primary) transparent transparent;
   border-style: solid;
   border-width: 7px 7px 0;
-  content: ' ';
+  content: " ";
   display: block;
   height: 0;
   margin-top: -ceil(2.5);
@@ -1798,7 +1794,7 @@ footer h1 {
   cursor: pointer;
   display: block;
   padding: 8px 14px;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -1834,7 +1830,7 @@ footer h1 {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 60px;
   font-weight: 600;
   line-height: 101px;
@@ -1844,7 +1840,8 @@ footer h1 {
   width: 100%;
 }
 
-.setting-tabs {}
+.setting-tabs {
+}
 
 .setting-tabs ul {
   display: flex;
@@ -1857,17 +1854,18 @@ footer h1 {
   flex-wrap: wrap;
 }
 
-.setting-tabs ul li {}
+.setting-tabs ul li {
+}
 
 .setting-tabs ul li button {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0em;
   text-align: center;
-  color: #9D9D9D;
-  border: 2px solid #9D9D9D;
+  color: #9d9d9d;
+  border: 2px solid #9d9d9d;
   background: transparent;
   width: 200px;
   padding: 8px 0px;
@@ -1909,9 +1907,10 @@ footer h1 {
   padding: 50px 0px;
 }
 
-.inputfield-edit-profile {}
+.inputfield-edit-profile {
+}
 
-.inputfield-edit-profile>div {
+.inputfield-edit-profile > div {
   padding-bottom: 30px;
 }
 
@@ -1920,7 +1919,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -1935,7 +1934,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -1952,7 +1951,7 @@ footer h1 {
 }
 
 .inputfield-edit-profile div div p:nth-child(1) {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
@@ -1963,7 +1962,7 @@ footer h1 {
 }
 
 .inputfield-edit-profile div div p:nth-child(2) {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
@@ -1975,13 +1974,13 @@ footer h1 {
 
 .inputfield-edit-profile div input {
   width: 100%;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: left;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border: none;
   outline: none;
   padding: 5px 20px;
@@ -1997,7 +1996,7 @@ footer h1 {
 }
 
 .upload-img h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 30px;
   font-weight: 500;
   line-height: 43px;
@@ -2022,14 +2021,14 @@ footer h1 {
 }
 
 .upload-img button {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0em;
   text-align: center;
-  color: #9D9D9D;
-  border: 2px solid #9D9D9D;
+  color: #9d9d9d;
+  border: 2px solid #9d9d9d;
   background: transparent;
   padding: 4px 20px;
   margin-inline: auto;
@@ -2041,7 +2040,7 @@ footer h1 {
 }
 
 .notification-sec-wrap {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   padding: 30px 20px 30px 30px;
   margin-bottom: 22px;
   height: 85%;
@@ -2054,7 +2053,7 @@ footer h1 {
 }
 
 .notification-sec-wrap h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
@@ -2072,14 +2071,14 @@ footer h1 {
 }
 
 .notification-sec-wrap .form-switch .form-check-input:focus {
-  background-image: url('../public/assets/svg/gray-circle.svg');
-  border: 1px solid rgba(0, 0, 0, .25);
+  background-image: url("../public/assets/svg/gray-circle.svg");
+  border: 1px solid rgba(0, 0, 0, 0.25);
   box-shadow: none;
 }
 
 .notification-sec-wrap .form-switch .form-check-input:checked {
   background-position: right center;
-  background-image: url('../public/assets/svg/white-circle.svg');
+  background-image: url("../public/assets/svg/white-circle.svg");
   /* background: var(--secoundary); */
 }
 
@@ -2088,15 +2087,14 @@ footer h1 {
   border-color: var(--primary);
 }
 
-
 .notification-sec-wrap p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
-  color: #A5A5A5;
+  color: #a5a5a5;
   padding-right: 80px !important;
 }
 
@@ -2105,7 +2103,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -2119,10 +2117,11 @@ footer h1 {
   padding-top: 10px;
 }
 
-.apperance-section-wrap {}
+.apperance-section-wrap {
+}
 
 .apperance-section-wrap h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
@@ -2132,18 +2131,18 @@ footer h1 {
 }
 
 .apperance-section-wrap p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 29px;
   letter-spacing: 0em;
   text-align: left;
-  color: #A5A5A5;
+  color: #a5a5a5;
   padding: 0px 0px 15px 0px !important;
 }
 
 .apperance-section-wrap .Dropdown-control {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border: none;
   outline: none;
   padding: 10px 52px 10px 15px;
@@ -2151,7 +2150,7 @@ footer h1 {
 }
 
 .apperance-section-wrap .Dropdown-placeholder {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
@@ -2184,46 +2183,43 @@ footer h1 {
 
 .earning-box div:nth-child(1) {
   padding: 34px 30px;
-  background: #F2F2F2;
+  background: #f2f2f2;
   border-radius: 20px;
-  border: 2px solid #F2F2F2;
-
+  border: 2px solid #f2f2f2;
 }
 
 .earning-box div:nth-child(2) {
   padding: 20px 30px;
-  background: #F2F2F2;
+  background: #f2f2f2;
   border-radius: 20px;
-  border: 2px solid #F2F2F2;
-
+  border: 2px solid #f2f2f2;
 }
 
 .earning-box div:nth-child(3) {
   padding: 34px 45px;
-  background: #F2F2F2;
+  background: #f2f2f2;
   border-radius: 20px;
-  border: 2px solid #F2F2F2;
-
+  border: 2px solid #f2f2f2;
 }
 
 .earning-box div:hover {
   border: 2px solid var(--primary);
-  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
 }
 
 .earning-box div p:nth-child(1) {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
   text-align: left;
-  color: #A5A5A5;
+  color: #a5a5a5;
   padding-bottom: 5px !important;
 }
 
 .earning-box div p:nth-child(2) {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
@@ -2233,13 +2229,13 @@ footer h1 {
 }
 
 .earning-box div p:nth-child(3) {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
   text-align: left;
-  color: #A5A5A5;
+  color: #a5a5a5;
 }
 
 .earning-map {
@@ -2259,25 +2255,26 @@ footer h1 {
 .coinbase-waller-card {
   position: relative;
   padding: 35px 25px;
-  background: #F4F4F4;
+  background: #f4f4f4;
   border-radius: 10px;
   margin: 15px 10px;
   height: 300px;
-  border: 2px solid #F4F4F4;
+  border: 2px solid #f4f4f4;
   cursor: pointer;
 }
 
 .metamask-waller-card:hover,
 .coinbase-waller-card:hover {
-  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
   border: 2px solid var(--primary);
 }
 
-.metamask-waller-card img {}
+.metamask-waller-card img {
+}
 
 .metamask-waller-card h2,
 .coinbase-waller-card h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 26px;
   font-weight: 500;
   line-height: 38px;
@@ -2289,14 +2286,13 @@ footer h1 {
 
 .metamask-waller-card p,
 .coinbase-waller-card p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
   text-align: left;
-  color: #A5A5A5;
-
+  color: #a5a5a5;
 }
 
 .metamask-waller-card span {
@@ -2307,13 +2303,12 @@ footer h1 {
   color: var(--white);
   padding: 0px 10px;
   border-radius: 8px;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 14px;
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
   text-align: center;
-
 }
 
 .subscription .subscription-wrap {
@@ -2321,7 +2316,7 @@ footer h1 {
 }
 
 .subscription .subscription-wrap .subscription-card-wrap .title {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 26px;
   font-weight: 600;
   line-height: 38px;
@@ -2329,12 +2324,11 @@ footer h1 {
   text-align: center;
   color: #121212;
   padding-bottom: 10px;
-
 }
 
 .subscription .subscription-wrap .subscription-card-wrap {
   padding: 30px 20px;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   height: 100%;
   border-radius: 20px;
   border: 2px solid var(--primary);
@@ -2351,7 +2345,7 @@ footer h1 {
   width: 360px;
   height: 220px;
   border: 2px solid var(--secoundary);
-  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
   border-radius: 10px;
 }
 
@@ -2359,7 +2353,7 @@ footer h1 {
   position: absolute;
   right: 5px;
   top: 5px;
-  background: #2438CB;
+  background: #2438cb;
   color: white;
   font-size: 16px;
   font-weight: 600;
@@ -2374,11 +2368,14 @@ footer h1 {
 }
 
 .subscription .subscription-wrap .subscription-card-wrap:hover {
-  background: linear-gradient(120deg, rgba(36, 56, 203, 1) 0%, rgba(182, 0, 209, 1) 100%);
-  ;
+  background: linear-gradient(
+    120deg,
+    rgba(36, 56, 203, 1) 0%,
+    rgba(182, 0, 209, 1) 100%
+  );
 }
 
-.subscription .subscription-wrap .subscription-card-wrap:hover .title{
+.subscription .subscription-wrap .subscription-card-wrap:hover .title {
   color: #fff;
 }
 
@@ -2402,10 +2399,11 @@ footer h1 {
   fill: #fff;
 }
 
-.subscription .subscription-wrap .subscription-card-wrap:hover {}
+.subscription .subscription-wrap .subscription-card-wrap:hover {
+}
 
 .subscription .subscription-wrap .subscription-card-wrap .p1 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -2416,7 +2414,7 @@ footer h1 {
 }
 
 .subscription .subscription-wrap .subscription-card-wrap .p2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -2426,19 +2424,18 @@ footer h1 {
 }
 
 .subscription .subscription-wrap .subscription-card-wrap .span-1 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 22px;
   letter-spacing: 0em;
   text-align: center;
   color: #121212;
-
 }
 
 .subscription .subscription-wrap .subscription-card-wrap .span-2 {
   color: rgba(117, 117, 117, 0.7);
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 22px;
@@ -2453,30 +2450,31 @@ footer h1 {
   padding: 10px 0px;
 }
 
-.create {}
+.create {
+}
 
 .create .create-section-wrap {
   padding-bottom: 80px;
 }
 
 .create .create-section-wrap p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 500;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: center;
-  color: #7B7B7B;
+  color: #7b7b7b;
   padding: 90px 0px !important;
 }
 
 .create .create-section-wrap .create-card {
-  background: #F4F4F4;
+  background: #f4f4f4;
   text-align: center;
   padding: 40px 40px 20px 40px;
   border-radius: 10px;
   margin: 0px 20px;
-  border: 2px solid #F4F4F4;
+  border: 2px solid #f4f4f4;
 }
 
 .create .create-section-wrap .create-card img {
@@ -2490,11 +2488,11 @@ footer h1 {
 
 .create .create-section-wrap .create-card:hover {
   border: 2px solid var(--primary);
-  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
 }
 
 .create .create-section-wrap .create-card h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 30px;
   font-weight: 500;
   line-height: 43px;
@@ -2504,7 +2502,8 @@ footer h1 {
   padding-top: 20px;
 }
 
-.create .create-section-wrap .create-card img {}
+.create .create-section-wrap .create-card img {
+}
 
 .range-bar {
   width: 300px;
@@ -2554,14 +2553,15 @@ footer h1 {
   margin-top: 10px;
 }
 
-.create-single {}
+.create-single {
+}
 
 .create-single .create-single-section-wrap {
   padding: 60px 0px;
 }
 
 .create-single .Create-collection-wrap h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 19px;
   font-weight: 600 !important;
   line-height: 29px;
@@ -2571,25 +2571,25 @@ footer h1 {
 }
 
 .create-single .create-single-section-wrap p {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 19px;
   font-weight: 500;
   line-height: 29px;
   letter-spacing: 0em;
   text-align: left !important;
-  color: #A5A5A5;
+  color: #a5a5a5;
   padding-bottom: 0px !important;
 }
 
 .create-single .create-single-section-wrap input {
   width: 100%;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: left;
-  background: #EBEBEB;
+  background: #ebebeb;
   border: none;
   outline: none;
   padding: 6px 0px 6px 15px;
@@ -2598,17 +2598,18 @@ footer h1 {
 }
 
 .create-single .create-single-section-wrap input::-webkit-input-placeholder {
-  color: #9F9F9F;
+  color: #9f9f9f;
   transition: color 0.5s ease;
 }
 
-.create-single .create-single-section-wrap input:focus::-webkit-input-placeholder {
-  color: #9F9F9F;
+.create-single
+  .create-single-section-wrap
+  input:focus::-webkit-input-placeholder {
+  color: #9f9f9f;
 }
 
-
 .create-single .Create-collection-wrap .Dropdown-placeholder {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 19px;
   font-weight: 500;
   line-height: 30.5px;
@@ -2623,7 +2624,7 @@ footer h1 {
   border-color: var(--primary) transparent transparent;
   border-style: solid;
   border-width: 7px 7px 0;
-  content: ' ';
+  content: " ";
   display: block;
   height: 0;
   margin-top: -ceil(2.5);
@@ -2637,7 +2638,7 @@ footer h1 {
 .create-single .Create-collection-wrap .Dropdown-control {
   position: relative;
   overflow: hidden;
-  background: #EBEBEB;
+  background: #ebebeb;
   border: none;
   border-radius: 6px;
   box-sizing: border-box;
@@ -2657,7 +2658,7 @@ footer h1 {
   min-width: 100%;
   max-width: 100%;
   height: 200px;
-  border: 3px dashed #CBCBCB;
+  border: 3px dashed #cbcbcb;
   padding: 8px 16px 8px 8px;
   border-radius: 5px;
   cursor: pointer;
@@ -2691,7 +2692,6 @@ footer h1 {
   text-decoration: none;
 }
 
-
 .create-single .single-button {
   position: absolute;
   top: 65%;
@@ -2701,7 +2701,7 @@ footer h1 {
 
 .create-single .create-single-card {
   text-align: center;
-  border: 2px solid #CBCBCB;
+  border: 2px solid #cbcbcb;
   border-radius: 10px;
   padding: 30px 0px;
   cursor: pointer;
@@ -2709,7 +2709,7 @@ footer h1 {
 
 .create-single .create-single-card:hover {
   border: 2px solid var(--secoundary);
-  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
 }
 
 .create-single .create-single-card:hover h3,
@@ -2719,7 +2719,7 @@ footer h1 {
 
 .create-single .create-single-card.active {
   border: 2px solid var(--secoundary);
-  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, .2);
+  box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
   cursor: pointer;
 }
 
@@ -2733,18 +2733,18 @@ footer h1 {
 } */
 
 .create-single .create-single-card h3 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
   text-align: center;
-  color: #CBCBCB;
+  color: #cbcbcb;
 }
 
 .create-single .create-single-card svg {
   font-size: 45px;
-  color: #CBCBCB;
+  color: #cbcbcb;
 }
 
 .create-single .upload-file,
@@ -2761,7 +2761,6 @@ footer h1 {
   padding-top: 30px;
 }
 
-
 .create-single .line-six .rc-slider {
   width: 95%;
   margin-inline: auto;
@@ -2769,7 +2768,7 @@ footer h1 {
 
 .create-single .line-six .rc-slider-rail {
   height: 8px;
-  background-color: #BEBEBE;
+  background-color: #bebebe;
   cursor: pointer;
 }
 
@@ -2780,14 +2779,14 @@ footer h1 {
 .create-single .line-six .rc-slider-track {
   position: absolute;
   height: 8px;
-  background-color: #B600D1;
+  background-color: #b600d1;
   border-radius: 6px;
 }
 
 .create-single .line-six .rc-slider-handle {
   width: 22px;
   height: 22px;
-  background-color: #B600D1;
+  background-color: #b600d1;
   border: solid 2px #fff;
   margin-top: -8px;
   opacity: 1;
@@ -2800,13 +2799,13 @@ footer h1 {
   height: 12px;
   vertical-align: middle;
   background-color: #fff;
-  border: 2px solid #B600D1;
+  border: 2px solid #b600d1;
   border-radius: 50%;
   cursor: pointer;
 }
 
 .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
-  border-color: #B600D1 !important;
+  border-color: #b600d1 !important;
   box-shadow: none;
 }
 
@@ -2838,13 +2837,13 @@ footer h1 {
 }
 
 .user-profile-line-one h2 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 24px;
   font-weight: 600;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: left;
-  color: #4A4A4A;
+  color: #4a4a4a;
 }
 
 .user-profile-line-two {
@@ -2856,7 +2855,7 @@ footer h1 {
 }
 
 .user-profile-line-two h2 {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 28px;
   font-weight: 500;
   line-height: 33px;
@@ -2865,16 +2864,18 @@ footer h1 {
   color: #121212;
 }
 
-.user-profile-line-two {}
+.user-profile-line-two {
+}
 
 .user-profile-buy-card {
   padding: 60px 60px;
 }
 
-.user-profile-buy-card .left {}
+.user-profile-buy-card .left {
+}
 
 .user-profile-buy-card .left h2 {
-  font-family: 'Work-Sans';
+  font-family: "Work-Sans";
   font-size: 40px;
   font-weight: 600;
   line-height: 47px;
@@ -2900,7 +2901,7 @@ footer h1 {
   padding: 5px 10px 5px 42px;
   line-height: 36px;
   color: #121212;
-  border: 1px solid #C6C6C6;
+  border: 1px solid #c6c6c6;
   outline: none;
   border-radius: 12px;
 }
@@ -2910,7 +2911,7 @@ footer h1 {
   top: 50%;
   transform: translateY(-50%);
   left: 10px;
-  color: #C6C6C6;
+  color: #c6c6c6;
   font-size: 28px;
 }
 
@@ -2922,7 +2923,7 @@ footer h1 {
   position: absolute;
   background: red;
   z-index: 99;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -2939,7 +2940,7 @@ footer h1 {
   position: absolute;
   background: yellow;
   z-index: 99;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -2956,7 +2957,7 @@ footer h1 {
   position: absolute;
   background: green;
   z-index: 99;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
@@ -2972,7 +2973,7 @@ footer h1 {
 .seven-line-nft-cardd span:nth-child(1) {
   width: 21px;
   height: 21px;
-  border: 3px solid #B600D1;
+  border: 3px solid #b600d1;
   border-radius: 6px;
   margin-right: 10px;
   cursor: pointer;
@@ -2985,19 +2986,19 @@ footer h1 {
   /* color: var(--primary); */
 }
 
-
 @keyframes scroll {
   to {
     background-position: -500px 0;
   }
 }
 
-@media only screen and (min-width: 1399px) {}
+@media only screen and (min-width: 1399px) {
+}
 
-@media only screen and (max-width: 1399px) {}
+@media only screen and (max-width: 1399px) {
+}
 
 @media only screen and (max-width: 992px) {
-
   .metamask-waller-card,
   .coinbase-waller-card {
     height: 280px;
@@ -3082,15 +3083,9 @@ footer h1 {
     align-items: center;
     gap: 10px;
   }
-
-
-
-
 }
 
-
 @media only screen and (max-width: 768px) {
-
   .user-profile-buy-card .left h2 {
     font-size: 28px;
   }
@@ -3170,19 +3165,16 @@ footer h1 {
   .earning-box div:nth-child(1) {
     width: 100%;
     text-align: center;
-
   }
 
   .earning-box div:nth-child(2) {
     width: 100%;
     text-align: center;
-
   }
 
   .earning-box div:nth-child(3) {
     width: 100%;
     text-align: center;
-
   }
 
   .earning-box div p:nth-child(1) {
@@ -3228,7 +3220,6 @@ footer h1 {
     justify-content: space-between;
     align-items: center;
   }
-
 
   .home-first-wrap {
     width: 100%;
@@ -3344,7 +3335,8 @@ footer h1 {
   .sec-five-wrap {
     padding: 0;
     margin-bottom: 40px;
-    box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
+    box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px,
+      rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
     border-radius: 12px;
   }
 
@@ -3443,11 +3435,9 @@ footer h1 {
     font-size: 40px;
     line-height: 40px;
   }
-
 }
 
 @media only screen and (max-width: 568px) {
-
   .user-profile-buy-card {
     padding: 50px 1px;
   }
@@ -3612,7 +3602,6 @@ footer h1 {
 }
 
 @media only screen and (max-width: 450px) {
-
   .create-single .create-single-section-wrap h2 {
     font-size: 16px;
     margin-bottom: 0px;
@@ -3635,9 +3624,7 @@ footer h1 {
   }
 }
 
-
 @media screen and (min-width: 1023px) {
-
   .css-1x6j51d {
     top: 12px;
     right: 12px;
@@ -3655,7 +3642,6 @@ footer h1 {
 }
 
 @media screen and (min-width: 767px) {
-
   .css-1x6j51d {
     top: 12px;
     right: 12px;
@@ -3690,18 +3676,18 @@ footer h1 {
   margin: 1.75rem auto;
 }
 
-.data-not-avaliable{
+.data-not-avaliable {
   height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .data-not-avaliable h2 {
   font-weight: 600;
   font-size: 22px;
-  font-family: 'Jost';
-  color: #B600D1;
+  font-family: "Jost";
+  color: #b600d1;
 }
 
 @media (min-width: 576px) {
@@ -3716,7 +3702,6 @@ footer h1 {
 
 .modal.left_modal .modal-content,
 .modal.right_modal .modal-content {
-
   height: 100vh !important;
 }
 
@@ -3740,7 +3725,7 @@ footer h1 {
 
 .modal.left_modal.fade.show .modal-dialog {
   left: 0;
-  box-shadow: 0px 0px 19px rgba(0, 0, 0, .5);
+  box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.5);
 }
 
 /*Right*/
@@ -3752,11 +3737,9 @@ footer h1 {
   transition: opacity 0.3s linear, right 0.3s ease-out;
 }
 
-
-
 .modal.right_modal.fade.show .modal-dialog {
   right: 0;
-  box-shadow: 0px 0px 19px rgba(0, 0, 0, .5);
+  box-shadow: 0px 0px 19px rgba(0, 0, 0, 0.5);
 }
 
 /* ----- MODAL STYLE ----- */
@@ -3765,14 +3748,11 @@ footer h1 {
   border: none;
 }
 
-
-
 .modal-header.left_modal,
 .modal-header.right_modal {
-
   padding: 10px 15px;
-  border-bottom-color: #EEEEEE;
-  background-color: #FAFAFA;
+  border-bottom-color: #eeeeee;
+  background-color: #fafafa;
 }
 
 .modal_outer .modal-body {
@@ -3783,7 +3763,7 @@ footer h1 {
 }
 
 .Custom-tool-tip {
-  background-color: #2438CB;
+  background-color: #2438cb;
   width: 130px;
   height: 100px;
   border-radius: 20px;
@@ -3804,13 +3784,13 @@ footer h1 {
 }
 
 .Earning-filter-text {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
   text-align: left;
-  color: #A5A5A5;
+  color: #a5a5a5;
   padding-bottom: 5px !important;
 }
 
@@ -3819,7 +3799,6 @@ footer h1 {
   -webkit-box-pack: justify;
   justify-content: space-between;
 }
-
 
 .hNrWqi [class^="AuctionCountdownContainer"] {
   width: fit-content;
@@ -3845,7 +3824,7 @@ footer h1 {
   flex: 1 1 0%;
 }
 
-.iqGEMd div>p {
+.iqGEMd div > p {
   font-size: 10px;
 }
 
@@ -3873,26 +3852,34 @@ footer h1 {
   text-transform: initial;
 }
 
-.sub-card-chack-box{
+.sub-card-chack-box {
 }
-.sub-card-chack-box .left{
+.sub-card-chack-box .left {
   display: flex;
   gap: 10px;
-  font-family: 'Jost';
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 23px;
-    letter-spacing: 0em;
-    text-align: center;
-    color: rgba(117, 117, 117, 0.5);
-    justify-content: space-between;
-    align-items: center;
+  font-family: "Jost";
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: rgba(117, 117, 117, 0.5);
+  justify-content: space-between;
+  align-items: center;
 }
 
-.subscription .subscription-wrap .subscription-card-wrap:hover .sub-card-chack-box .left{
+.subscription
+  .subscription-wrap
+  .subscription-card-wrap:hover
+  .sub-card-chack-box
+  .left {
   color: #fff;
 }
-.subscription .subscription-wrap .subscription-card-wrap:hover .seven-line-nft-cardd span:nth-child(1) {
+.subscription
+  .subscription-wrap
+  .subscription-card-wrap:hover
+  .seven-line-nft-cardd
+  span:nth-child(1) {
   border: 3px solid #fff;
 }
 
@@ -3901,7 +3888,6 @@ footer h1 {
     height: 28px;
   }
 }
-
 
 .lccacU {
   background: rgb(0, 0, 0);
@@ -3945,7 +3931,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -3965,7 +3951,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -3978,7 +3964,6 @@ footer h1 {
 
 .succes-modal-wrap .modal-dialog {
   width: 450px;
-
 }
 
 .succes-modal-wrap .modal-body {
@@ -4004,11 +3989,11 @@ footer h1 {
 }
 
 .fade.succes-modal-wrap.modal.show {
-  background: rgba(0, 0, 0, 0.5)
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .create-collection-btn {
-  color: #2638CC;
+  color: #2638cc;
   font-weight: 500;
   font-size: 18px;
   cursor: pointer;
@@ -4018,8 +4003,8 @@ footer h1 {
 }
 
 .create-collection-btn line {
-  stroke: #2638CC !important;
-  fill: #2638CC !important;
+  stroke: #2638cc !important;
+  fill: #2638cc !important;
 }
 
 .Create-collection-popup {
@@ -4047,7 +4032,7 @@ footer h1 {
   margin-top: 20px !important;
 }
 
-@media (max-width:767px) {
+@media (max-width: 767px) {
   .Create-collection-popup-inner {
     width: 95%;
   }
@@ -4070,7 +4055,11 @@ footer h1 {
 
 .button-styling-outline {
   border: none;
-  background: linear-gradient(90deg, rgba(36, 56, 203, 1) 0%, rgba(182, 0, 209, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(36, 56, 203, 1) 0%,
+    rgba(182, 0, 209, 1) 100%
+  );
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -4082,7 +4071,6 @@ footer h1 {
   margin: 1px 3px;
   border-radius: 60px;
   font-weight: 500;
-
 }
 
 .popUp-btn-group {
@@ -4095,12 +4083,11 @@ footer h1 {
 .popUp-btn-group .btnCC {
   margin-inline: 10px;
   cursor: pointer;
-
 }
 
 .Create-Collection-div {
   width: 100%;
-  border: 2px dashed #CBCBCB;
+  border: 2px dashed #cbcbcb;
   padding: 40px;
   display: flex;
   align-items: center;
@@ -4110,7 +4097,6 @@ footer h1 {
 
 .profile-nft-row1 {
   display: flex;
-
 }
 
 .NFT-image-holder {
@@ -4151,12 +4137,12 @@ footer h1 {
 }
 
 .royality-value {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   padding: 5px;
   display: flex;
   align-items: center;
   width: 50px;
-  color: #A5A5A5;
+  color: #a5a5a5;
   margin-bottom: -20px;
   margin-top: 20px;
   justify-content: center;
@@ -4164,10 +4150,8 @@ footer h1 {
 }
 
 .NFT-thumbnail-holder {
-
-
   padding: 20px;
-  border: 2px dashed #CBCBCB;
+  border: 2px dashed #cbcbcb;
 }
 
 .NFT-inner {
@@ -4194,17 +4178,17 @@ footer h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #FFFFFF80;
-  background-color: #B600D180;
+  color: #ffffff80;
+  background-color: #b600d180;
   font-size: 18px;
   font-weight: 500;
-  font-family: 'Jost';
+  font-family: "Jost";
   border-radius: 10px;
 }
 
 .nft-is-clicked {
   border-radius: 15px;
-  border: 3px solid #B501D1;
+  border: 3px solid #b501d1;
 }
 
 .NFT-inner .remove-nft-image {
@@ -4218,13 +4202,12 @@ footer h1 {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background-color: #B600D1;
+  background-color: #b600d1;
   color: white;
   font-size: 16px;
   font-weight: 600;
   border-radius: 5px;
   z-index: 8;
-
 }
 
 .NFT-inner div img {
@@ -4296,7 +4279,7 @@ footer h1 {
 }
 
 .edit-nft-items input {
-  background-color: #3D3D3D;
+  background-color: #3d3d3d;
   border-radius: 5px;
   padding: 7px 10px;
   color: white;
@@ -4313,7 +4296,7 @@ footer h1 {
 }
 
 .desc-input {
-  background-color: #3D3D3D;
+  background-color: #3d3d3d;
   border-radius: 5px;
   padding: 7px 10px;
   color: white;
@@ -4333,8 +4316,8 @@ footer h1 {
 }
 
 .Btns-edit-nft-sidebar button:nth-child(1) {
-  background-color: #E7E7E7;
-  color: #6C6C6C;
+  background-color: #e7e7e7;
+  color: #6c6c6c;
   padding: 5px 10px;
   border-radius: 5px;
   border: none;
@@ -4343,7 +4326,7 @@ footer h1 {
 }
 
 .Btns-edit-nft-sidebar button:nth-child(2) {
-  background-color: #B600D1;
+  background-color: #b600d1;
   color: white;
   padding: 5px 20px;
   border-radius: 5px;
@@ -4352,12 +4335,10 @@ footer h1 {
   font-weight: 500;
 }
 
-
-
 .Collection-tabs {
   display: flex;
   justify-content: center;
-  border-bottom: #E7E7E7 1px solid;
+  border-bottom: #e7e7e7 1px solid;
   width: 100%;
   margin: 0% auto 4% auto;
 }
@@ -4366,15 +4347,15 @@ footer h1 {
   margin-inline: 25px;
   font-size: 22px;
   font-weight: 600;
-  color: #9D9D9D;
+  color: #9d9d9d;
   cursor: pointer;
   width: 130px;
   text-align: center;
 }
 
 .Collection-tabs .active-tab {
-  color: #B600D1 !important;
-  border-bottom: #B600D1 2px solid !important;
+  color: #b600d1 !important;
+  border-bottom: #b600d1 2px solid !important;
 }
 
 .nft-drawer-dp {
@@ -4427,13 +4408,11 @@ footer h1 {
   font-size: 26px;
   font-weight: 500;
   color: #121212;
-  font-family: 'Jost';
+  font-family: "Jost";
   margin: 0;
   padding: 0;
   line-height: 20px;
 }
-
-
 
 .Follow-row .left .txt p:nth-child(2) {
   font-size: 20px;
@@ -4454,7 +4433,6 @@ footer h1 {
   display: flex;
   align-items: center;
   position: relative;
-
 }
 
 .Follow-row .right button {
@@ -4462,7 +4440,7 @@ footer h1 {
   border-radius: 30px;
   padding: 10px 25px;
   border: none;
-  background-color: #B600D1;
+  background-color: #b600d1;
   color: white;
   font-size: 20px;
   font-weight: 500;
@@ -4473,9 +4451,9 @@ footer h1 {
   width: max-content;
   border-radius: 30px;
   padding: 10px 25px;
-  border: #B600D1 2px solid;
+  border: #b600d1 2px solid;
   background-color: transparent;
-  color: #B600D1;
+  color: #b600d1;
   font-size: 20px;
   font-weight: 500;
   margin-right: 15px;
@@ -4517,7 +4495,7 @@ footer h1 {
 }
 
 .Follow-row .right .options div:hover {
-  background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+  background: linear-gradient(90deg, #2636d9 0%, #b600d1 100.01%);
   color: white;
 }
 
@@ -4529,22 +4507,22 @@ footer h1 {
   color: #fff;
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Jost';
+  font-family: "Jost";
   padding: 4px 25px;
   height: max-content;
-  border: #B600D1 2px solid;
-  background-color: #B600D1;
+  border: #b600d1 2px solid;
+  background-color: #b600d1;
   border-radius: 6px;
 }
 
 .followers-div div:nth-child(1).active {
-  color: #B600D1;
+  color: #b600d1;
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Jost';
+  font-family: "Jost";
   padding: 4px 25px;
   height: max-content;
-  border: #B600D1 2px solid;
+  border: #b600d1 2px solid;
   border-radius: 6px;
 }
 
@@ -4552,7 +4530,7 @@ footer h1 {
   color: #747474;
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Jost';
+  font-family: "Jost";
   padding: 4px 20px;
   height: max-content;
   border: 2px solid transparent;
@@ -4588,7 +4566,7 @@ footer h1 {
 }
 
 .CollectionCard .bottom .title {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 600;
 }
@@ -4605,7 +4583,7 @@ footer h1 {
 }
 
 .CollectionCard .bottom .details div p:nth-child(1) {
-  color: #4A4949;
+  color: #4a4949;
   font-weight: 500;
   font-size: 12px;
   line-height: 18px;
@@ -4642,7 +4620,7 @@ footer h1 {
 .Notification-in-header {
   padding: 3.5px 10px;
   display: flex;
-  font-family: 'Jost';
+  font-family: "Jost";
   color: #121212;
   background: #fff;
 }
@@ -4652,7 +4630,7 @@ footer h1 {
 }
 
 .Notification-in-header:hover {
-  background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+  background: linear-gradient(90deg, #2636d9 0%, #b600d1 100.01%);
   color: white !important;
   cursor: pointer;
 }
@@ -4709,7 +4687,7 @@ footer h1 {
 
 .browseforSingle {
   width: 100%;
-  border: 2px dashed #CBCBCB;
+  border: 2px dashed #cbcbcb;
   padding: 5%;
   display: flex;
   flex-direction: column;
@@ -4718,15 +4696,14 @@ footer h1 {
 }
 
 .disabledButton {
-  color: #7E7E7E;
+  color: #7e7e7e;
   border-radius: 25px;
   padding: 10px 25px;
-  border: #7E7E7E 2px solid;
-  font-family: 'Jost';
+  border: #7e7e7e 2px solid;
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 600;
   pointer-events: none;
-
 }
 
 .collectionDivPreview {
@@ -4742,15 +4719,15 @@ footer h1 {
 .collectionDivPreview .title {
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Jost';
-  color: #A5A5A5;
+  font-family: "Jost";
+  color: #a5a5a5;
 }
 
 .collectionDivPreview .title-txt {
   font-size: 22px;
   font-weight: 600;
   margin-top: 10px;
-  font-family: 'Jost';
+  font-family: "Jost";
   color: #121212;
 }
 
@@ -4768,13 +4745,13 @@ footer h1 {
 
 .showBuyNow-step2 input {
   width: 100%;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 20px;
   font-weight: 500;
   line-height: 35px;
   letter-spacing: 0em;
   text-align: left;
-  background: #EBEBEB;
+  background: #ebebeb;
   border: none;
   outline: none;
   padding: 6px 0px 6px 15px;
@@ -4783,7 +4760,6 @@ footer h1 {
 .btn-holder-for-showBuyNow {
   margin: 10px auto 0px auto;
 }
-
 
 .sec-loading {
   height: 100%;
@@ -4796,7 +4772,7 @@ footer h1 {
 .sec-loading .one {
   height: 80px;
   width: 80px;
-  border: 7px solid #B600D1;
+  border: 7px solid #b600d1;
   transform: rotate(45deg);
   border-radius: 0 50% 50% 50%;
   position: relative;
@@ -4810,8 +4786,8 @@ footer h1 {
   width: 55%;
   border-radius: 50%;
   border: 7px solid transparent;
-  border-top-color: #B600D1;
-  border-bottom-color: #B600D1;
+  border-top-color: #b600d1;
+  border-bottom-color: #b600d1;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -4838,7 +4814,7 @@ footer h1 {
   padding: 10px 0px;
   font-size: 18px;
   font-weight: 600;
-  color: #B600D1;
+  color: #b600d1;
 }
 
 .no-message-selected {
@@ -4848,7 +4824,7 @@ footer h1 {
   transform: translate(-50%, -50%);
   font-size: 18px;
   font-weight: 600;
-  color: #B600D1;
+  color: #b600d1;
 }
 
 .discount-popup {
@@ -4874,7 +4850,7 @@ footer h1 {
 }
 
 .discount-popup-inner h3 {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-weight: 600;
   font-size: 26px;
   margin: 15px auto 30px auto;
@@ -4889,7 +4865,7 @@ footer h1 {
 
 .discount-text {
   font-weight: 500;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   color: #000000;
   width: 40%;
@@ -4897,11 +4873,11 @@ footer h1 {
 }
 
 .total-value-div {
-  background-color: #2438CB;
+  background-color: #2438cb;
   padding: 5px 10px;
   text-align: left;
   font-weight: 500;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   color: white;
   width: 40%;
@@ -4911,13 +4887,13 @@ footer h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   padding: 5px 10px;
   text-align: left;
   font-weight: 500;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
-  color: #AFAFAF;
+  color: #afafaf;
   width: 40%;
 }
 
@@ -4928,7 +4904,7 @@ footer h1 {
   padding: 5px 10px;
   text-align: left;
   font-weight: 500;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   color: #000000;
   width: 40%;
@@ -4940,18 +4916,16 @@ footer h1 {
   outline: none;
   background-color: transparent;
   font-weight: 500;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 18px;
   color: #000000;
 }
-
-
 
 .Add-Fan-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: linear-gradient(180deg, #2538CB 0%, #B501D1 100%);
+  background: linear-gradient(180deg, #2538cb 0%, #b501d1 100%);
   border-radius: 50px;
   padding: 15px;
   cursor: pointer;
@@ -4976,7 +4950,7 @@ footer h1 {
   padding: 20px 40px;
   background-color: white;
   position: relative;
-  font-family: 'Jost';
+  font-family: "Jost";
 }
 
 .choose-add-fan-method .close-btn {
@@ -4999,10 +4973,10 @@ footer h1 {
 }
 
 .choose-add-fan-method .method-holder div {
-  color: #A5A5A5;
+  color: #a5a5a5;
   font-size: 18px;
   font-weight: 500;
-  border: #A5A5A5 2px solid;
+  border: #a5a5a5 2px solid;
   border-radius: 10px;
   width: 140px;
   height: 80px;
@@ -5015,8 +4989,8 @@ footer h1 {
 }
 
 .choose-add-fan-method .method-holder div:hover {
-  color: #2636D9;
-  border: #2636D9 2px solid;
+  color: #2636d9;
+  border: #2636d9 2px solid;
   box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.349);
 }
 
@@ -5025,7 +4999,7 @@ footer h1 {
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.404);
   border-radius: 10px;
   padding: 25px 0;
-  font-family: 'Jost';
+  font-family: "Jost";
 }
 
 .Custom-add-fan .Address-holder {
@@ -5036,7 +5010,6 @@ footer h1 {
 
 .center-align {
   text-align: center;
-
 }
 
 .wallet-text {
@@ -5047,7 +5020,7 @@ footer h1 {
 
 .add-more-fan {
   font-weight: 500;
-  color: #2636D9;
+  color: #2636d9;
   padding: 10px !important;
   cursor: pointer;
 }
@@ -5059,7 +5032,7 @@ footer h1 {
 .Address-holder input {
   width: 95%;
   padding: 10px;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   outline: none;
   border: none;
   color: #000;
@@ -5124,15 +5097,16 @@ footer h1 {
   color: #777777;
 }
 
-.separate-checkbox-follower {}
+.separate-checkbox-follower {
+}
 
 .disabled-input-only-view h2 {
-  color: #B1B1B1 !important;
+  color: #b1b1b1 !important;
 }
 
 .disabled-input-only-view input {
-  color: #B1B1B1 !important;
-  background-color: #F3F3F3;
+  color: #b1b1b1 !important;
+  background-color: #f3f3f3;
 }
 
 .disabled-input-only-view .rc-slider-disabled {
@@ -5140,22 +5114,21 @@ footer h1 {
 }
 
 .disabled-input-only-view .rc-slider-handle {
-  background-color: #B1B1B1 !important;
+  background-color: #b1b1b1 !important;
 }
 
 .disabled-input-only-view .rc-slider-track {
-  background-color: #B1B1B1 !important;
+  background-color: #b1b1b1 !important;
 }
 
 .disabled-input-only-view .rc-slider-rail {
-  background-color: #DADADA !important;
+  background-color: #dadada !important;
 }
-
 
 /* Art Page */
 
 .Arts-holder {
-  margin: 3% 5%;
+  margin: 9% 5% 3% 5%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -5196,7 +5169,7 @@ footer h1 {
   top: 0;
   border-radius: 10px;
   left: 0;
-  background-color: #B600D180;
+  background-color: #b600d180;
 }
 
 .save-art-btn {
@@ -5204,7 +5177,7 @@ footer h1 {
   margin: 2% auto;
   padding: 7px 14px;
   border-radius: 5px;
-  background-color: #B600D1;
+  background-color: #b600d1;
   color: white;
   font-weight: 600;
   border: none;
@@ -5228,7 +5201,7 @@ footer h1 {
   top: 0;
   left: 0;
   border-radius: 10px;
-  background-color: #B600D180;
+  background-color: #b600d180;
   width: 100%;
   height: 100%;
   display: flex;
@@ -5243,7 +5216,7 @@ footer h1 {
   font-weight: 500;
   line-height: 26px;
   letter-spacing: 0em;
-  color: #FFFFFFB2;
+  color: #ffffffb2;
   margin: 5px auto;
 }
 
@@ -5271,7 +5244,8 @@ footer h1 {
   width: 50%;
 }
 
-.custom-drop-down {}
+.custom-drop-down {
+}
 
 .custom-drop-down .drop-down-select {
   position: relative;
@@ -5293,7 +5267,7 @@ footer h1 {
   top: 50%;
   transform: translateY(-50%);
   font-size: 30px;
-  color: #2638CC;
+  color: #2638cc;
 }
 
 .custom-drop-down .drop-down-select p {
@@ -5318,7 +5292,8 @@ footer h1 {
   z-index: 1000;
 }
 
-.custom-drop-down .dropdown-list-wrap {}
+.custom-drop-down .dropdown-list-wrap {
+}
 
 .custom-drop-down .dropdown-list-wrap ul {
   margin: 0;
@@ -5380,7 +5355,7 @@ footer h1 {
   padding: 12px 32px;
   border-radius: 66px;
   border: none;
-  font-family: 'Jost';
+  font-family: "Jost";
   font-size: 16px;
   font-weight: 500;
   line-height: 23px;
@@ -5391,7 +5366,8 @@ footer h1 {
 
 .stripe-payment-form button:active {
   background-color: #d782d9;
-  box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08), inset 0 1px 0 #e298d8;
+  box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 #e298d8;
   transform: scale(0.99);
 }
 
@@ -5404,4 +5380,26 @@ footer h1 {
 h1,
 h3 {
   text-align: center;
+}
+
+.css-fwx73e .detail-wrap .center-icon .icon img:first-child {
+  background-color: white;
+}
+
+.nft-buy-btn:disabled {
+  background: grey !important;
+}
+
+.header-empty-record {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.header-empty-record span {
+  font-weight: 600;
+  font-size: 22px;
+  font-family: "Jost";
+  color: #b600d1;
 }

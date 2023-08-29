@@ -22,6 +22,7 @@ import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import Modal from "react-bootstrap/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineClose } from "react-icons/ai";
+import { Link, useLocation } from "react-router-dom";
 import {
   Area,
   AreaChart,
@@ -39,6 +40,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import NftCountdown from "./NftCountdown";
 
 const Monthly_data = [
   {
@@ -979,7 +981,11 @@ const PlaceABidDrawer = ({
                               src="data:image/gif;base64,R0lGODlhEgASANUAAAwMDNzc3NTU1Hx8fCQkJHR0dPT09CwsLBQUFJycnGxsbOTk5MzMzKSkpOzs7JSUlBwcHMTExERERDw8PISEhFRUVDMzM1xcXGRkZExMTIyMjLy8vLS0tKysrPz8/AQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDcuMS1jMDAwIDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMi41IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkEzRkFCNEY5NDE2RDExRUM4MjRFQ0FCMDA3RUI4MTlFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkEzRkFCNEZBNDE2RDExRUM4MjRFQ0FCMDA3RUI4MTlFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTNGQUI0Rjc0MTZEMTFFQzgyNEVDQUIwMDdFQjgxOUUiIHN0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"
                               alt="running auction"
                             />
-                            <span> 1:12:47:29</span>
+                            <span>
+                              {
+                                <NftCountdown endDateTime={endTime} />
+                              }
+                            </span>
                           </button>
                         </div>
                       </div>
@@ -988,7 +994,18 @@ const PlaceABidDrawer = ({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by <span>Enotic11daday</span>
+                    Owned by {" "}
+                    {
+                      userData?.wallet_address ==
+                        nftDetails?.user?.wallet_address ? (
+                        <Link to={"/profile"}>
+                          <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
+                        </Link>
+                      ) : (
+                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`)}>{nftDetails?.owner?.username}</span>
+                      )
+                    }
+
                   </p>
                 </div>
                 <div className="three-line">
@@ -1002,26 +1019,26 @@ const PlaceABidDrawer = ({
                   </div>
                 </div>
                 <div className="four-line">
-                  <p>{description}</p>
-                </div>
-                <div className="four-line">
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
                         {
                           userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address ? (
+                            nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
-                              <span>{nftDetails?.user?.username}</span>
-                              <br />
-                              <span>{userData?.wallet_address}</span>
-                              <br />
-                              <span>{nftDetails?.user?.wallet_address}</span>
+                              {nftDetails?.user?.profile_image ?
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                                :
+                                <img
+                                  src={'/public/assets/images/user-none.png'}
+                                  alt=""
+                                />
+                              }
+                              <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
                             </Link>
                           ) : (
                             <div
@@ -1047,21 +1064,25 @@ const PlaceABidDrawer = ({
                           //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
+
                         }
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
-                      <div className="logo-name">
-                        <img
-                          src={nftDetails?.collection?.media[0]?.original_url}
-                          alt=""
-                        />{" "}
-                        <span>{nftDetails?.collection?.name}</span>
-                      </div>
+                      <Link to={`collection?id=${nftDetails?.collection?.id}`}>
+                        <div className="logo-name">
+                          <img
+                            src={nftDetails?.collection?.media[0]?.original_url}
+                            alt=""
+                          />{" "}
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
+
                 <div className="five-line">
                   <div className="row">
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
@@ -1104,7 +1125,7 @@ const PlaceABidDrawer = ({
                 <div className="six-line">
                   <h3>Base Price</h3>
                   <div className="row">
-                    <div className="col-lg-6 col-md-8 col-8">
+                    <div className="col-lg-12 col-md-8 col-8">
                       <div className="left">
                         <p>
                           {price} ETH
@@ -1139,6 +1160,8 @@ const PlaceABidDrawer = ({
                 <div className="eight-line">
                   {bidButton ? (
                     <button
+                      className="nft-buy-btn"
+                      disabled={!chack}
                       onClick={() => {
                         setSucess(true);
                       }}
@@ -1146,7 +1169,8 @@ const PlaceABidDrawer = ({
                       Bid Now
                     </button>
                   ) : (
-                    <button disabled={bidDisable} onClick={claimAuction}>
+                    <button className="nft-buy-btn"
+                      disabled={bidDisable || !chack} onClick={claimAuction}>
                       Claim
                     </button>
                   )}

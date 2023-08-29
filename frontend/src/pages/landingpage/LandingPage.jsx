@@ -24,6 +24,7 @@ import {
   getProviderOrSigner,
 } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
+import { Link } from "react-router-dom";
 // import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
@@ -49,6 +50,21 @@ const LandingPage = ({ search, setSearch }) => {
   //     console.error(error);
   //   }
   // };
+
+  async function getBalance() {
+    const provider = await getProviderOrSigner();
+
+    // Create a provider using any Ethereum node URL
+    provider
+      .getBalance(MARKETPLACE_CONTRACT_ADDRESS.address)
+      .then((balanceWei) => {
+        const balanceEther = ethers.utils.formatEther(balanceWei);
+        console.log(`Balance ${balanceEther} ETH`);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   async function getProvider() {
     // Create a provider using any Ethereum node URL
@@ -161,6 +177,7 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("metaData", metaData);
         console.log("structData", structData);
         console.log("firstownerr", mintedTokens[i].firstOwner);
+        let collectionId = structData.collectionId.toString();
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -177,17 +194,14 @@ const LandingPage = ({ search, setSearch }) => {
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()
         );
-  
-
 
         listingType = structData.listingType;
         let listed = structData.listed;
 
-        let collectionId = structData.collectionId.toString();
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
-        console.log(response.data, "saad");
+        console.log(response.data, "saad landing");
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         console.log(
           response?.data?.data?.media?.[0]?.original_url,
@@ -201,7 +215,7 @@ const LandingPage = ({ search, setSearch }) => {
           .get(metaData)
           .then((response) => {
             const meta = response.data;
-            console.log("first")
+            console.log("first");
             let data = JSON.stringify(meta);
 
             data = data.slice(2, -5);
@@ -251,6 +265,7 @@ const LandingPage = ({ search, setSearch }) => {
                 highestBid: highestBid,
                 highestBidder: auctionData.highestBidder.toString(),
                 // isLive: auctionData.isLive.toString(),
+                collectionImages: collectionImages,
                 seller: auctionData.seller.toString(),
               };
 
@@ -436,42 +451,44 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                    <div className="left">NFT Collection</div>
-                    <div className="right">View more</div>
+                    <button onClick={getBalance}>Get Balance</button>
+                    <div className="left">NFT</div>
+                    <Link to="/search">
+                      <div className="right">View more</div>
+                    </Link>
                   </div>
                 </div>
                 <div>
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
-                {nftListFP.length > 0 ?
-                <>
-                 {nftListFP.map((item) => (
-                  <BuyNow
-                    key={item?.id}
-                    id={item?.id}
-                    title={item?.title}
-                    image={item?.image}
-                    price={item?.price}
-                    discountPrice={item?.discountPrice}
-                    crypto={item?.crypto}
-                    royalty={item?.royalty}
-                    description={item?.description}
-                    collection={item?.collection}
-                    collectionImages={item?.collectionImages}
-                    userAddress={userAddress}
-                    seller={item?.seller} 
-                  />
-                ))}
-                </>
-               
-              :
-              <>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              </>
-              }
+                {nftListFP.length > 0 ? (
+                  <>
+                    {nftListFP.map((item) => (
+                      <BuyNow
+                        key={item?.id}
+                        id={item?.id}
+                        title={item?.title}
+                        image={item?.image}
+                        price={item?.price}
+                        discountPrice={item?.discountPrice}
+                        crypto={item?.crypto}
+                        royalty={item?.royalty}
+                        description={item?.description}
+                        collection={item?.collection}
+                        collectionImages={item?.collectionImages}
+                        userAddress={userAddress}
+                        seller={item?.seller}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -482,7 +499,9 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="col-lg-12">
                 <div className="header">
                   <div className="left">Top Collection</div>
-                  <div className="right">View more markets</div>
+                  <Link to="/search">
+                    <div className="right">View more markets</div>
+                  </Link>
                 </div>
               </div>
               <div className="col-lg-12">
@@ -496,37 +515,41 @@ const LandingPage = ({ search, setSearch }) => {
             <div className="row mb-5">
               <div className="col-lg-12">
                 <div className="header">
-                  <div className="left">New Items</div>
+                  <div className="left">Auction NFTs</div>
+                  <Link to="/search">
+                    <div className="right">View more</div>
+                  </Link>
                   {/* <div className="right">View more markets</div> */}
                 </div>
               </div>
-              {nftListAuction.length > 0 ?
-              <>
-              {nftListAuction.map((item) => (
-                <NewItemCard
-                  key={item.id}
-                  id={item.id}
-                  title={item?.title}
-                  image={item?.image}
-                  price={item?.price}
-                  highestBid={item?.highestBid}
-                  isLive={item?.isLive}
-                  endTime={item?.endTime}
-                  startTime={item?.startTime}
-                  description={item?.description}
-                  collectionImages={item?.collectionImages}
-                  userAddress={userAddress}
-                />
-              ))}
-              </>
-              :
-              <>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              <DummyCard/>
-              </>
-            }
+              {nftListAuction.length > 0 ? (
+                <>
+                  {console.log(nftListAuction, "nft list auction")}
+                  {nftListAuction.map((item) => (
+                    <NewItemCard
+                      key={item.id}
+                      id={item.id}
+                      title={item?.title}
+                      image={item?.image}
+                      price={item?.price}
+                      highestBid={item?.highestBid}
+                      isLive={item?.isLive}
+                      endTime={item?.endTime}
+                      startTime={item?.startTime}
+                      description={item?.description}
+                      collectionImages={item?.collectionImages}
+                      userAddress={userAddress}
+                    />
+                  ))}
+                </>
+              ) : (
+                <>
+                  <DummyCard />
+                  <DummyCard />
+                  <DummyCard />
+                  <DummyCard />
+                </>
+              )}
             </div>
           </div>
         </section>

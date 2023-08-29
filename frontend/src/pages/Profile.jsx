@@ -57,6 +57,7 @@ const Profile = ({ search, setSearch }) => {
   const navigate = useNavigate();
 
   const getNFTlikeListing = async () => {
+    console.log("getNFTlikeListing");
     const response = await apis.getLikeNFTListing(userData?.id);
     setLikedNfts(response?.data?.data);
     console.log(response, "other-users");
@@ -143,7 +144,7 @@ const Profile = ({ search, setSearch }) => {
         // let listingType = structData.listingType;
 
         const price = ethers.utils.formatEther(structData.price.toString());
-
+        console.log("likednfts price", price);
         axios
           .get(metaData)
           .then((response) => {
@@ -154,6 +155,8 @@ const Profile = ({ search, setSearch }) => {
             data = data.replace(/\\/g, "");
 
             data = JSON.parse(data);
+            console.log("likednfts data", data);
+
             // Extracting values using dot notation
             // const price = data.price;
             // listingType = data.listingType;
@@ -208,7 +211,6 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  
   const addFanList = async () => {
     const signer = await getProviderOrSigner(true);
 
@@ -218,10 +220,10 @@ const Profile = ({ search, setSearch }) => {
       signer
     );
 
-    //  0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
+    // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
     // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
     // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-    //
+    // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 
     console.log("FansAddress", FansAddress);
 
@@ -306,6 +308,8 @@ const Profile = ({ search, setSearch }) => {
     console.log("333333");
 
     let listingType;
+
+    console.log("userAddress", userAddress);
 
     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
 
@@ -460,6 +464,8 @@ const Profile = ({ search, setSearch }) => {
       console.log(response.data, "workig");
 
       const structData = await marketplaceContract._idToNFT(id);
+
+      console.log(structData, "structDataABC");
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
@@ -650,7 +656,7 @@ const Profile = ({ search, setSearch }) => {
 
   return (
     <>
-    {/* <MetaDecorator
+      {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
         imageAlt={'Artizia'}
@@ -963,7 +969,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                            <Followers id={userId}/>
+                            <Followers id={userId} />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
                             <Follow followed={true} />
@@ -974,7 +980,7 @@ const Profile = ({ search, setSearch }) => {
                           </>
                         ) : (
                           <>
-                            <Following id={userId}/>
+                            <Following id={userId} />
                             {/* <Follow followed={false} />
                             <Follow followed={false} />
                             <Follow followed={false} />
@@ -989,7 +995,7 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
-                    <Fan id={userId}/>
+                    <Fan id={userId} />
 
                     <div
                       onClick={() => {
@@ -1106,8 +1112,7 @@ const Profile = ({ search, setSearch }) => {
                             <h3 className="center-align">ADD TO FAN LIST</h3>
                             <div className="line-1-selector">
                               <div>No.</div>
-                              <div>
-                              </div>
+                              <div></div>
                             </div>
                             <div className="Address-holder">
                               {addFanlisting.length > 0 ? (
@@ -1155,7 +1160,6 @@ const Profile = ({ search, setSearch }) => {
                               ) : (
                                 <div>List is Empty</div>
                               )}
-                              
                             </div>
                             <div className="popUp-btn-group">
                               <div
@@ -1182,13 +1186,13 @@ const Profile = ({ search, setSearch }) => {
                     )}
                   </>
                 )}
-               
+
                 {tabs === 6 && (
-                   <>
-                   <div className="row">
-                       <RejectedNFTSCard userId={userId}/>
-                   </div>
-                 </>
+                  <>
+                    <div className="row">
+                      <RejectedNFTSCard userId={userId} />
+                    </div>
+                  </>
                 )}
               </div>
             </div>

@@ -36,6 +36,7 @@ const { ethereum } = window;
 // import Web3Modal from "web3modal";
 
 const OtherProfile = ({ search, setSearch }) => {
+
   const [tabs, setTabs] = useState(0);
   const [collectionTabs, setCollectionTabs] = useState(0);
   const [FollowersTab, setFollowersTab] = useState(0);
@@ -76,7 +77,7 @@ const OtherProfile = ({ search, setSearch }) => {
 
   console.log("state", state.address);
   useEffect(() => {
-    getOtherUsersDetails(state?.address);
+    getOtherUsersDetails(userADDRESS);
   }, []);
 
   // const getProviderOrSigner = async (needSigner = false) => {
@@ -101,7 +102,7 @@ const OtherProfile = ({ search, setSearch }) => {
   console.log("state", state.address);
   useEffect(() => {
     //  navigate("/other-profile")
-    getOtherUsersDetails(state?.address);
+    getOtherUsersDetails(userADDRESS);
   }, []);
 
   // const getProviderOrSigner = async (needSigner = false) => {
@@ -285,7 +286,7 @@ const OtherProfile = ({ search, setSearch }) => {
   useEffect(() => {
     // connectWallet();
     getMyListedNfts();
-  }, [userAddress]);
+  }, [userADDRESS]);
 
   useEffect(() => {
     getAddress();
@@ -451,7 +452,7 @@ const OtherProfile = ({ search, setSearch }) => {
                               description={item?.description}
                               collection={item?.collection}
                               collectionImages={item?.collectionImages}
-                              userAddress
+                              userADDRESS = {userADDRESS}
                             />
                           ))}
                         </>
@@ -470,7 +471,7 @@ const OtherProfile = ({ search, setSearch }) => {
                               endTime={item?.endTime}
                               startTime={item?.startTime}
                               description={item?.description}
-                              userAddress={userAddress}
+                              userAddress={userADDRESS}
                             />
                           ))}
                         </>
@@ -493,7 +494,7 @@ const OtherProfile = ({ search, setSearch }) => {
                           description={item?.description}
                           collection={item?.collection}
                           collectionImage={item?.collectionImage}
-                          userAddress
+                          userADDRESS = {userADDRESS}
                         />
                       ))}
                     </div>

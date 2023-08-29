@@ -14,10 +14,8 @@ const Wallet = ({ search, setSearch }) => {
         <PageTopSection title={"Wallet"} />
         <div className="wallet-card-wrap">
           <div className="container">
-            <div className="row">
+            <div className="row justify-content-center">
               <MetaMaskWalletCard />
-              <CoinBaseWalletCard />
-              <CoinBaseWalletCard />
               <CoinBaseWalletCard />
               {/* <MetaMaskWalletCard />
                             <MetaMaskWalletCard />

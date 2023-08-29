@@ -84,6 +84,7 @@ function ProfileDrawer({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
+  console.log("getBuyerPlan", getBuyerPlan);
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -159,6 +160,8 @@ function ProfileDrawer({
   let sellerPlan = getSellerPlan;
   let buyerPlan = getBuyerPlan;
 
+  // console.log("getBuyerPlan", getBuyerPlan);
+
   // const web3ModalRef = useRef();
 
   // const connectWallet = async () => {
@@ -208,18 +211,20 @@ function ProfileDrawer({
   // };
 
   const handleNFTSoldEvent = async (
-    nftContract,
+    // nftContract,
     tokenId,
     seller,
     owner,
     price
   ) => {
+    console.log("handleNFTSoldEvent");
     let soldData = {
       token_id: tokenId.toString(),
       seller: seller.toString(),
       buyer: owner.toString(),
       price: ethers.utils.formatEther(price.toString()),
     };
+    console.log("soldData", soldData);
 
     if (ethPurchase || usdtPurchase) {
       nftSoldPost(soldData);
@@ -252,18 +257,16 @@ function ProfileDrawer({
     const provider = await getProviderOrSigner();
 
     let _buyerPercent;
-    console.log("buyerPlan", buyerPlan);
+    console.log("buyerPlan asd", buyerPlan);
 
-    if (buyerPlan < 3) {
-      _buyerPercent = 1.5;
-    } else if (buyerPlan == 3) {
-      _buyerPercent = 1.5;
-      1;
-    } else if (buyerPlan == 4) {
+    if (buyerPlan == 4) {
       _buyerPercent = 0;
+    } else if (buyerPlan == 3) {
+      _buyerPercent = 1;
     } else {
       _buyerPercent = 1.5;
     }
+
     console.log("_buyerPercent", _buyerPercent);
 
     const marketplaceContract = new Contract(
@@ -460,6 +463,8 @@ function ProfileDrawer({
 
     if (checkFan) {
       fee = +discountedPlatformFeeUSDT;
+      console.log("fee", fee);
+
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
       amountInWei = amountInWei.toString();
@@ -468,11 +473,16 @@ function ProfileDrawer({
       console.log("amount", amount);
       console.log("amountInWei", amountInWei);
     }
+    console.log("amountInWei  ", amountInWei);
+    console.log(
+      "MARKETPLACE_CONTRACT_ADDRESS.address  ",
+      MARKETPLACE_CONTRACT_ADDRESS.address
+    );
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       amountInWei,
-      { gasLimit: ethers.BigNumber.from("5000000") }
+      { gasLimit: ethers.BigNumber.from("50000") }
     );
 
     appprove.wait();
@@ -961,7 +971,18 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by <span>{nftDetails?.owner?.username}</span>
+                    Owned by {" "}
+                    {
+                      userData?.wallet_address ==
+                        nftDetails?.user?.wallet_address ? (
+                        <Link to={"/profile"}>
+                          <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
+                        </Link>
+                      ) : (
+                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`)}>{nftDetails?.owner?.username}</span>
+                      )
+                    }
+
                   </p>
                 </div>
                 <div className="three-line">
@@ -998,26 +1019,32 @@ function ProfileDrawer({
                       <div className="logo-name">
                         {
                           userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address ? (
+                            nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
-                              <span>{nftDetails?.user?.username}</span>
-                              <br />
-                              <span>{userData?.wallet_address}</span>
-                              <br />
-                              <span>{nftDetails?.user?.wallet_address}</span>
+                              {nftDetails?.user?.profile_image ?
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                                :
+                                <img
+                                  src={'/public/assets/images/user-none.png'}
+                                  alt=""
+                                />
+                              }
+                              <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
                             </Link>
                           ) : (
                             <div
                               onClick={() =>
-                                navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`, {
-                                  state: {
-                                    address: nftDetails?.user?.wallet_address,
-                                  },
-                                })
+                                navigate(
+                                  `/other-profile?add=${nftDetails?.user?.wallet_address}`,
+                                  {
+                                    state: {
+                                      address: nftDetails?.user?.wallet_address,
+                                    },
+                                  }
+                                )
                               }
                             >
                               <img
@@ -1031,18 +1058,21 @@ function ProfileDrawer({
                           //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
+
                         }
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
-                      <div className="logo-name">
-                        <img
-                          src={nftDetails?.collection?.media[0]?.original_url}
-                          alt=""
-                        />{" "}
-                        <span>{nftDetails?.collection?.name}</span>
-                      </div>
+                      <Link to={`collection?id=${nftDetails?.collection?.id}`}>
+                        <div className="logo-name">
+                          <img
+                            src={nftDetails?.collection?.media[0]?.original_url}
+                            alt=""
+                          />{" "}
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -1158,6 +1188,8 @@ function ProfileDrawer({
                     <div className="eight-line">
                       {buyButton ? (
                         <button
+                          className="nft-buy-btn"
+                          disabled={!chack}
                           onClick={() => {
                             setSucess(true);
                           }}

@@ -147,21 +147,21 @@ const Single = ({ search, setSearch }) => {
     }
   }, [startingDate, endingDate]);
 
-  useEffect(() => {
-    if (listingType == 1) {
-      const today = new Date();
-      today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
-      const selectedStartDate = new Date(startingDate);
+  // useEffect(() => {
+  //   if (listingType == 1) {
+  //     const today = new Date();
+  //     today.setDate(today.getDate()-1); // Subtract 1 day from today's date
+  //     const selectedStartDate = new Date(startingDate);
 
-      if (selectedStartDate < today) {
-        toast.warning("Start date should not be before today's date", {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        // alert("Start date should not be before today's date");
-        setStartingDate("");
-      }
-    }
-  }, [startingDate]);
+  //     if (selectedStartDate < today) {
+  //       toast.warning("Start date should not be before today's date", {
+  //         position: toast.POSITION.TOP_CENTER,
+  //       });
+  //       // alert("Start date should not be before today's date");
+  //       setStartingDate("");
+  //     }
+  //   }
+  // }, [startingDate]);
 
   const web3ModalRef = useRef();
 
@@ -898,6 +898,7 @@ const Single = ({ search, setSearch }) => {
                                 <input
                                   ref={fileInputRef}
                                   type="file"
+                                  accept="image/*"
                                   style={{ display: "none" }}
                                   onChange={handleImageUpload}
                                 />

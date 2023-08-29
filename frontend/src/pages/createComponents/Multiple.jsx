@@ -1682,6 +1682,7 @@ const Multiple = ({ search, setSearch }) => {
                                     <input
                                       ref={fileInputRef2}
                                       type="file"
+                                      accept="image/*"
                                       style={{ display: "none" }}
                                       multiple
                                       onChange={handleFileUpload}
@@ -1732,6 +1733,7 @@ const Multiple = ({ search, setSearch }) => {
                                         type="file"
                                         style={{ display: "none" }}
                                         multiple
+                                        accept="image/*"
                                         onChange={handleFileUpload}
                                       />
                                       <button

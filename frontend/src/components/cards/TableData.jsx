@@ -68,7 +68,7 @@ const TableData = () => {
                 </td>
                 <td>
                   <div className="two">
-                    <p className="price">{res?.eth_volume} ETH</p>
+                    {/* <p className="price">{res?.eth_volume} ETH</p> */}
                     <p className="purple percentage">
                       {res?.coll_status == null ? (
                         <>N/A</>

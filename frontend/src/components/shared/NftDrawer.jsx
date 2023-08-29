@@ -444,6 +444,7 @@ const ProfileDrawer = ({
 
     const structData = await marketplaceContract._idToNFT(id);
 
+    console.log("structData", structData);
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
       NFT_CONTRACT_ABI.abi,
@@ -469,9 +470,7 @@ const ProfileDrawer = ({
         ethers.utils.parseEther(item.price),
         item.listingType,
         item.startTime,
-        item.endTime,
-        userAddress
-        // crypto
+        item.endTime
       )
     ).wait();
 
