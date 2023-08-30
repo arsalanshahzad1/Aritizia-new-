@@ -31,6 +31,7 @@ import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -74,10 +75,6 @@ const OtherProfile = ({ search, setSearch }) => {
     getNFTlikeListing(response?.data?.data?.id);
   };
 
-  useEffect(() => {
-    getOtherUsersDetails(userADDRESS);
-  }, []);
-
   // const getProviderOrSigner = async (needSigner = false) => {
   //   const provider = await web3ModalRef.current.connect();
   //   const web3Provider = new providers.Web3Provider(provider);
@@ -98,10 +95,10 @@ const OtherProfile = ({ search, setSearch }) => {
   // };
 
   // console.log("state", state.address);
-  useEffect(() => {
-    //  navigate("/other-profile")
-    getOtherUsersDetails(userADDRESS);
-  }, []);
+  // useEffect(() => {
+  //   //  navigate("/other-profile")
+  //   getOtherUsersDetails(userADDRESS);
+  // }, []);
 
   // const getProviderOrSigner = async (needSigner = false) => {
   //   console.log("getProviderOrSigner");
@@ -327,9 +324,28 @@ const OtherProfile = ({ search, setSearch }) => {
     console.log(FollowStatus, "this is follow status");
   };
   useEffect(() => {
-    console.log(userDetails?.data?.is_follow, "this is good");
-    setFollowStatus(userDetails?.data?.is_follow);
+    console.log(userDetails, "this is user");
+    console.log(userDetails?.followers, "this is followers");
+    const flag = userDetails?.followers?.some(
+      (follower) => follower.id === RealUserId
+    );
+
+    console.log(flag, "flag");
+    setFollowStatus(flag ? 1 : 0);
   }, [userDetails]);
+
+  useEffect(() => {
+    getOtherUsersDetails(userADDRESS);
+  }, [FollowStatus]);
+
+  const copyToClipboard = (link) => {
+    console.log(link);
+    navigator.clipboard.writeText(link);
+    toast.success(`Copied Successfully`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -410,7 +426,13 @@ const OtherProfile = ({ search, setSearch }) => {
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="copy-url">
                     <span>{userDetails?.wallet_address}</span>
-                    <button>Copy</button>
+                    <button
+                      onClick={() => {
+                        copyToClipboard(userDetails?.wallet_address);
+                      }}
+                    >
+                      Copy
+                    </button>
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
@@ -462,11 +484,11 @@ const OtherProfile = ({ search, setSearch }) => {
                           Auction
                         </div>
                       </div>
-                      <div className="d-flex">
+                      <div className="d-flex other-profile-cards">
                         {collectionTabs === 0 && (
                           <>
                             {nftListFP.map((item) => (
-                              <SimpleCard
+                              <BuyNow
                                 onOpen={onOpen}
                                 // onClose={onClose}
                                 key={item.id}
@@ -536,6 +558,7 @@ const OtherProfile = ({ search, setSearch }) => {
         </div>
         <Search search={search} setSearch={setSearch} />
         <Footer />
+        <ToastContainer />
       </div>
       {/* <ProfileDrawer  isVisible={isVisible} onClose={onClose} /> */}
     </>

@@ -684,6 +684,9 @@ img {
   .css-vurnku {
     height: 330px !important;
   }
+  .other-profile-cards .css-vurnku {
+    height: 315px !important;
+  }
 }
 
 @media only screen and (max-width: 992px) {

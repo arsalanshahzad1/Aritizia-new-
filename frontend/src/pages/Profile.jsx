@@ -30,6 +30,7 @@ import Gallery from "./Gallery";
 import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import RejectedNFTSCard from "../components/cards/RejectedNFTSCard";
+import { ToastContainer, toast } from "react-toastify";
 // import MetaDecorator from "../Meta/MetaDecorator";
 
 const { ethereum } = window;
@@ -212,29 +213,46 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
+  const validateFanAddresses = (addresses) => {
+    for (const address of addresses) {
+      if (address === "") {
+        return false; // Found an empty string, validation fails
+      }
+    }
+    return true; // No empty strings found, validation passes
+  };
   const addFanList = async () => {
-    const signer = await getProviderOrSigner(true);
+    if (validateFanAddresses(FansAddress)) {
+      const signer = await getProviderOrSigner(true);
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
+      const marketplaceContract = new Contract(
+        MARKETPLACE_CONTRACT_ADDRESS.address,
+        MARKETPLACE_CONTRACT_ABI.abi,
+        signer
+      );
 
-    // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
-    // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
-    // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-    // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+      // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
+      // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
+      // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+      // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
 
-    console.log("FansAddress", FansAddress);
+      console.log("FansAddress", FansAddress);
 
-    let fanadd = await (await marketplaceContract.addFans(FansAddress)).wait();
-    console.log("fanadd", fanadd);
-    console.log("asdasdasd");
+      let fanadd = await (
+        await marketplaceContract.addFans(FansAddress)
+      ).wait();
+      console.log("fanadd", fanadd);
+      console.log("asdasdasd");
 
-    let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
+      let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
 
-    console.log("Response of addedFans event", response);
+      console.log("Response of addedFans event", response);
+      setshowAddFanPopUp(0);
+    } else {
+      toast.warning("There is an empty wallet address", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
   };
 
   const handleAddedFansEvent = async (fanList) => {
@@ -593,8 +611,8 @@ const Profile = ({ search, setSearch }) => {
   const [addingFanList, setAddingFanList] = useState([]);
 
   const handleCheckboxChange = (id) => {
-    console.log(addingFanList,"idddddddddd")
-    setFollwers((prevCheckboxes) => {
+    console.log(addingFanList, "idddddddddd");
+    setAddFanlisting((prevCheckboxes) => {
       const updatedCheckboxes = prevCheckboxes.map((data) => {
         if (data?.user_id === id) {
           // Check if the user_id is already in the addingFanList
@@ -604,6 +622,7 @@ const Profile = ({ search, setSearch }) => {
             setAddingFanList((prev) => [...prev, id]);
           }
           console.log(addingFanList, "addingFanList");
+          console.log(data, "important");
 
           return {
             ...data,
@@ -658,8 +677,18 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
+
+  const copyToClipboard = (link) => {
+    console.log(link);
+    navigator.clipboard.writeText(link);
+    toast.success(`Copied Successfully`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
   return (
     <>
+      
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
@@ -730,7 +759,15 @@ const Profile = ({ search, setSearch }) => {
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="copy-url">
                     <span>{userData?.wallet_address}</span>
-                    <button>Copy</button>
+                    <button
+                      onClick={() => {
+                        copyToClipboard(
+                          userData?.wallet_address
+                        );
+                      }}
+                    >
+                      Copy
+                    </button>
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto"></div>
@@ -1147,6 +1184,10 @@ const Profile = ({ search, setSearch }) => {
                                         </div>
                                       </div>
                                       <div>
+                                        {console.log(
+                                          data?.is_check,
+                                          "is check state"
+                                        )}
                                         <input
                                           checked={data?.is_check}
                                           onChange={() =>
@@ -1206,6 +1247,7 @@ const Profile = ({ search, setSearch }) => {
         <Footer />
       </div>
       {/* <ProfileDrawer  isVisible={isVisible} onClose={onClose} /> */}
+      <ToastContainer />
     </>
   );
 };

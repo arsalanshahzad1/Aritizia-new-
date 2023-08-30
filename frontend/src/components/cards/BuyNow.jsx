@@ -167,7 +167,7 @@ const BuyNow = ({
                 className="J-bottom css-1xg74gr"
                 style={{ position: "relative" }}
               >
-                <BiDotsHorizontalRounded className="doted-icon" />
+                {/* <BiDotsHorizontalRounded className="doted-icon" /> */}
                 <div className="css-fwx73e">
                   <div className="css-10nf7hq detail-wrap">
                     <div className="center-icon">

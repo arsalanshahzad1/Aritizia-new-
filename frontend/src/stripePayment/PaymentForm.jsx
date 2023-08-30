@@ -72,6 +72,7 @@ const PaymentForm = ({
         toast.success("Plan purchased!", {
           position: toast.POSITION.TOP_RIGHT,
         });
+        setShowPaymentForm(false)
       }
         // {
         //     amout : 1000,
