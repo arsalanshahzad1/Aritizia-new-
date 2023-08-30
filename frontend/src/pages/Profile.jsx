@@ -593,8 +593,8 @@ const Profile = ({ search, setSearch }) => {
   const [addingFanList, setAddingFanList] = useState([]);
 
   const handleCheckboxChange = (id) => {
-    console.log(addingFanList,"idddddddddd")
-    setFollwers((prevCheckboxes) => {
+    console.log(addingFanList, "idddddddddd");
+    setAddFanlisting((prevCheckboxes) => {
       const updatedCheckboxes = prevCheckboxes.map((data) => {
         if (data?.user_id === id) {
           // Check if the user_id is already in the addingFanList
@@ -604,6 +604,7 @@ const Profile = ({ search, setSearch }) => {
             setAddingFanList((prev) => [...prev, id]);
           }
           console.log(addingFanList, "addingFanList");
+          console.log(data, "important");
 
           return {
             ...data,
