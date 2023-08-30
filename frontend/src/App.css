@@ -454,6 +454,11 @@ header .left img {
   transform: translate(-50%, -50%);
   width: 760px;
 }
+.home-first-wraperr {
+  margin-inline: auto;
+  width: 760px;
+  margin-top: 30px;
+}
 
 .home-first-wrap h1 {
   font-family: "Jost";
@@ -475,6 +480,16 @@ header .left img {
   color: var(--white);
   text-align: center;
 }
+.home-first-wraperr h1 {
+  font-family: "Jost";
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 58px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  text-align: center;
+}
 
 .home-first-wrap .search {
   display: flex;
@@ -484,6 +499,13 @@ header .left img {
   margin: 15px 0px;
 }
 .home-first-wraper .search {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  border-radius: 6px;
+  margin: 15px 0px;
+}
+.home-first-wraperr .search {
   display: flex;
   justify-content: center;
   background: #fff;
@@ -522,6 +544,22 @@ header .left img {
   color: var(--primary);
   border-radius: 6px;
 }
+.home-first-wraperr .search input {
+  width: 100%;
+  display: inline-block;
+  border: none;
+  outline: none;
+  background: #9c9c9c4a;
+  font-family: "Jost";
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: left;
+  padding: 0px 15px;
+  color: var(--primary);
+  border-radius: 6px;
+}
 
 .home-first-wrap .search input::-webkit-input-placeholder {
   color: #9f9f9f;
@@ -533,11 +571,19 @@ header .left img {
   transition: color 0.5s ease;
   font-size: 16px;
 }
+.home-first-wraperr .search input::-webkit-input-placeholder {
+  color: #9f9f9f;
+  transition: color 0.5s ease;
+  font-size: 16px;
+}
 
 .home-first-wrap .search input:focus::-webkit-input-placeholder {
   color: #9f9f9f;
 }
 .home-first-wraper .search input:focus::-webkit-input-placeholder {
+  color: #9f9f9f;
+}
+.home-first-wraperr .search input:focus::-webkit-input-placeholder {
   color: #9f9f9f;
 }
 
@@ -555,6 +601,19 @@ header .left img {
   border: none;
 }
 .home-first-wraper .search button {
+  font-family: "Jost";
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  background: var(--primary);
+  padding: 8px 30px;
+  border-radius: 6px;
+  border: none;
+}
+.home-first-wraperr .search button {
   font-family: "Jost";
   font-size: 26px;
   font-weight: 400;
@@ -1138,6 +1197,11 @@ footer h1 {
   /* padding: 0px 45px; */
   margin-top: 107px;
   background: #a308d126;
+  border-radius: 12px;
+}
+
+.art-page{
+  margin-top: 120px;
 }
 
 .margin-top-35px {
@@ -5128,7 +5192,7 @@ footer h1 {
 /* Art Page */
 
 .Arts-holder {
-  margin: 9% 5% 3% 5%;
+  margin-top: 30px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

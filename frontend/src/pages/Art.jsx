@@ -10,9 +10,9 @@ const Art = ({ search, setSearch }) => {
     const TNL_API_KEY = '79717817-c7c3-46a3-af8b-75843d6f7bfb';
     const tnl = new TNL(TNL_API_KEY);
     const promptt = 'a cat playing the piano';
-const response =  tnl.imagine(promptt);
+    const response = tnl.imagine(promptt);
 
-console.log(JSON.stringify(response) , 'response');
+    console.log(JSON.stringify(response), 'response');
     const navigate = useNavigate()
 
     const { prompt, setprompt } = useContext(GlobalContext)
@@ -63,10 +63,11 @@ console.log(JSON.stringify(response) , 'response');
     }
 
     return (
-        < div >
+        < div className='art-page'>
             <Header search={search} setSearch={setSearch} />
+            <h1 style={{ textAlign: 'center' }}>Your Generated Art</h1>
             <section className="home-first-section">
-                <div className="home-first-wraper" style={{top : '38%'}}>
+                <div className="home-first-wraperr">
                     <div className="search" id="prompt">
 
                         <button>Prompt</button>
@@ -89,10 +90,7 @@ console.log(JSON.stringify(response) , 'response');
                     </button>
                 </div>
             </section>
-            <br /><br /><br /><br />
-            <br /><br />
-            <h1 style={{ textAlign: 'center' }}>Your Generated Art</h1>
-            <div className='Arts-holder'>
+            {/* <div className='Arts-holder'>
                 {generatedArts.length > 0 &&
 
                     generatedArts.map((item, Index) => {
@@ -100,11 +98,11 @@ console.log(JSON.stringify(response) , 'response');
                     })
 
                 }
-            </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            </div> */}
+            {/* <div style={{ display: "flex", justifyContent: "center" }}>
 
                 <button onClick={saveToGallery} disabled={selectCount < 1} className='save-art-btn'>Save to Gallery ({selectCount})</button>
-            </div>
+            </div> */}
         </ div>
     )
 }
