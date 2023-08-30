@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import apis from "../../service";
 const Followers = ({ data  , id}) => {
-  const [showOptions, setshowOptions] = useState(false);
   const [followers, setFollwers] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
@@ -49,7 +48,7 @@ const Followers = ({ data  , id}) => {
                 <div className="right">
                   <button onClick={() => followOther(data?.user_id)}>Follow</button>
 
-                  <span
+                  {/* <span
                     onClick={() => {
                       setshowOptions(!showOptions);
                     }}
@@ -66,7 +65,7 @@ const Followers = ({ data  , id}) => {
                       <div>Report</div>
                       <div>Block</div>
                     </div>
-                  )}
+                  )} */}
                 </div>
               </div>
             );

@@ -544,6 +544,7 @@ img {
     border-radius: 10px;
     position: relative;
     margin-top: 25px;
+    margin-inline: 10px;
 }
 
 .J-buynow .button p {

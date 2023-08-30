@@ -74,9 +74,8 @@ const OtherProfile = ({ search, setSearch }) => {
     getNFTlikeListing(response?.data?.data?.id);
   };
 
-  console.log("state", state.address);
   useEffect(() => {
-    getOtherUsersDetails(state?.address);
+    getOtherUsersDetails(userADDRESS);
   }, []);
 
   // const getProviderOrSigner = async (needSigner = false) => {
@@ -98,10 +97,10 @@ const OtherProfile = ({ search, setSearch }) => {
   //   return web3Provider;
   // };
 
-  console.log("state", state.address);
+  // console.log("state", state.address);
   useEffect(() => {
     //  navigate("/other-profile")
-    getOtherUsersDetails(state?.address);
+    getOtherUsersDetails(userADDRESS);
   }, []);
 
   // const getProviderOrSigner = async (needSigner = false) => {
@@ -285,7 +284,7 @@ const OtherProfile = ({ search, setSearch }) => {
   useEffect(() => {
     // connectWallet();
     getMyListedNfts();
-  }, [userAddress]);
+  }, [userADDRESS]);
 
   useEffect(() => {
     getAddress();
@@ -298,6 +297,7 @@ const OtherProfile = ({ search, setSearch }) => {
   const onOpen = (action) => {
     setIsVisible(action);
   };
+  const [FollowStatus, setFollowStatus] = useState(0);
 
   const postChatMeaage = async () => {
     console.log("clicking");
@@ -320,27 +320,54 @@ const OtherProfile = ({ search, setSearch }) => {
       follow_by: RealUserId,
       follow_to: userDetails?.id,
     });
+    if (response.status === 201) {
+      setFollowStatus(response.data.data.is_follow);
+    }
+    console.log(response, "this is reponse");
+    console.log(FollowStatus, "this is follow status");
   };
-
+  useEffect(() => {
+    console.log(userDetails?.data?.is_follow, "this is good");
+    setFollowStatus(userDetails?.data?.is_follow);
+  }, [userDetails]);
   return (
     <>
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
-          <img
-            className="big-image"
-            src={userDetails?.cover_image}
-            alt=""
-            width={"100%"}
-          />
+          {userDetails?.cover_image ? (
+            <img
+              className="big-image"
+              src={userDetails?.cover_image}
+              alt=""
+              width={"100%"}
+            />
+          ) : (
+            <img
+              className="big-image"
+              src="assets/images/profile-1.png"
+              alt=""
+              width={"100%"}
+            />
+          )}
           <div className="user">
             <div className="user-wrap">
-              <img
-                className="user-pic"
-                src={userDetails?.profile_image}
-                alt=""
-                width={"90%"}
-              />
+              {userDetails?.profile_image ? (
+                <img
+                  className="user-pic"
+                  src={userDetails?.profile_image}
+                  alt=""
+                  width={"90%"}
+                />
+              ) : (
+                <img
+                  className="user-pic"
+                  src="assets/images/user-none.png"
+                  alt=""
+                  width={"90%"}
+                />
+              )}
+
               <img
                 className="big-chack"
                 src="/assets/images/big-chack.png"
@@ -352,7 +379,7 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {userDetails.is_follow == 0 ? (
+                  {FollowStatus === 0 ? (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
                       Follow
                     </div>
@@ -362,7 +389,7 @@ const OtherProfile = ({ search, setSearch }) => {
                     </div>
                   )}
                   {/* <div>Following</div> */}
-                  <div>Followers {userDetails?.followers?.[0]?.follow_by}</div>
+                  <div>Followers {userDetails?.followers?.length}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
                   <h2 className="user-name">
@@ -435,46 +462,50 @@ const OtherProfile = ({ search, setSearch }) => {
                           Auction
                         </div>
                       </div>
-                      {collectionTabs === 0 && (
-                        <>
-                          {nftListFP.map((item) => (
-                            <SimpleCard
-                              onOpen={onOpen}
-                              // onClose={onClose}
-                              key={item.id}
-                              id={item.id}
-                              title={item?.title}
-                              image={item?.image}
-                              price={item?.price}
-                              crypto={item?.crypto}
-                              royalty={item?.royalty}
-                              description={item?.description}
-                              collection={item?.collection}
-                              collectionImages={item?.collectionImages}
-                              userAddress
-                            />
-                          ))}
-                        </>
-                      )}
-                      {collectionTabs === 1 && (
-                        <>
-                          {nftListAuction.map((item) => (
-                            <NewItemCard
-                              key={item.id}
-                              id={item.id}
-                              title={item?.title}
-                              image={item?.image}
-                              price={item?.price}
-                              highestBid={item?.highestBid}
-                              isLive={item?.isLive}
-                              endTime={item?.endTime}
-                              startTime={item?.startTime}
-                              description={item?.description}
-                              userAddress={userAddress}
-                            />
-                          ))}
-                        </>
-                      )}
+                      <div className="d-flex">
+                        {collectionTabs === 0 && (
+                          <>
+                            {nftListFP.map((item) => (
+                              <SimpleCard
+                                onOpen={onOpen}
+                                // onClose={onClose}
+                                key={item.id}
+                                id={item.id}
+                                title={item?.title}
+                                image={item?.image}
+                                price={item?.price}
+                                crypto={item?.crypto}
+                                royalty={item?.royalty}
+                                description={item?.description}
+                                collection={item?.collection}
+                                collectionImages={item?.collectionImages}
+                                userADDRESS={userADDRESS}
+                              />
+                            ))}
+                          </>
+                        )}
+                      </div>
+                      <div className="d-flex">
+                        {collectionTabs === 1 && (
+                          <>
+                            {nftListAuction.map((item) => (
+                              <NewItemCard
+                                key={item.id}
+                                id={item.id}
+                                title={item?.title}
+                                image={item?.image}
+                                price={item?.price}
+                                highestBid={item?.highestBid}
+                                isLive={item?.isLive}
+                                endTime={item?.endTime}
+                                startTime={item?.startTime}
+                                description={item?.description}
+                                userAddress={userADDRESS}
+                              />
+                            ))}
+                          </>
+                        )}
+                      </div>
                     </div>
                   </>
                 )}
@@ -493,7 +524,7 @@ const OtherProfile = ({ search, setSearch }) => {
                           description={item?.description}
                           collection={item?.collection}
                           collectionImage={item?.collectionImage}
-                          userAddress
+                          userADDRESS={userADDRESS}
                         />
                       ))}
                     </div>

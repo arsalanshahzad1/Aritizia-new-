@@ -419,7 +419,7 @@ function ProfileDrawer({
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
+        paymentMethod.value,
         id,
         sellerPlan, //  must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent
@@ -980,7 +980,18 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by <span>{nftDetails?.owner?.username}</span>
+                    Owned by {" "}
+                    {
+                      userData?.wallet_address ==
+                        nftDetails?.user?.wallet_address ? (
+                        <Link to={"/profile"}>
+                          <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
+                        </Link>
+                      ) : (
+                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`)}>{nftDetails?.owner?.username}</span>
+                      )
+                    }
+
                   </p>
                 </div>
                 <div className="three-line">
@@ -1017,13 +1028,20 @@ function ProfileDrawer({
                       <div className="logo-name">
                         {
                           userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address ? (
+                            nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
-                              <span>{nftDetails?.user?.username}</span>
+                              {nftDetails?.user?.profile_image ?
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                                :
+                                <img
+                                  src={'/public/assets/images/user-none.png'}
+                                  alt=""
+                                />
+                              }
+                              <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
                             </Link>
                           ) : (
                             <div
@@ -1049,18 +1067,21 @@ function ProfileDrawer({
                           //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
+
                         }
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
-                      <div className="logo-name">
-                        <img
-                          src={nftDetails?.collection?.media[0]?.original_url}
-                          alt=""
-                        />{" "}
-                        <span>{nftDetails?.collection?.name}</span>
-                      </div>
+                      <Link to={`collection?id=${nftDetails?.collection?.id}`}>
+                        <div className="logo-name">
+                          <img
+                            src={nftDetails?.collection?.media[0]?.original_url}
+                            alt=""
+                          />{" "}
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -1176,6 +1197,8 @@ function ProfileDrawer({
                     <div className="eight-line">
                       {buyButton ? (
                         <button
+                          className="nft-buy-btn"
+                          disabled={!chack}
                           onClick={() => {
                             setSucess(true);
                           }}
