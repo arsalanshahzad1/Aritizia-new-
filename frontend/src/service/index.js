@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const apiKey = import.meta.env.VITE_NEXT_LEG_SECRET_KEY;
+
 const createBackendServer = (baseURL) => {
   const api = axios.create({
     baseURL: `${baseURL}/api/`,
@@ -42,6 +44,10 @@ const createBackendServer = (baseURL) => {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
+  const headers2 = { 
+    'Content-Type': 'application/json', 
+    'Authorization': 'Bearer '+apiKey
+  }
 
   const postListNft = async (body) => await api.post("list-nft", body);
 
@@ -166,6 +172,16 @@ const createBackendServer = (baseURL) => {
   const viewNftTopCollections = async () =>
     await api.get(`view-nft-top-collections`);
 
+
+    const getMidjourneyId = async (body) => await api.post(`https://api.thenextleg.io/v2/imagine`, body ,{
+      headers: headers2, // Pass headers here
+    });
+
+    const getMidjourneyImagesFromId = async (id) => await api.get(`https://api.thenextleg.io/v2/message/${id}`,{
+      headers: headers2, // Pass headers here
+    });
+
+    
   //Returning all the API
   return {
     editProfile,
@@ -223,6 +239,9 @@ const createBackendServer = (baseURL) => {
     viewNftCollectionStock,
     viewNftCollectionProfile,
     viewNftTopCollections,
+
+    getMidjourneyId,
+    getMidjourneyImagesFromId
   };
 };
 
