@@ -41,7 +41,7 @@ const postWalletAddress = async (address) => {
       window.location.reload();
     }
   } else {
-    // console.log("check4");
+    // console.log("check4"); 
     const response = await apis.postWalletAddress({
       wallet_address: address,
     });

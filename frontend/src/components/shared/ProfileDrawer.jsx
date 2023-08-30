@@ -85,6 +85,7 @@ function ProfileDrawer({
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
   console.log("getBuyerPlan", getBuyerPlan);
+  console.log("Zayyan connected user ka subscription plan", userData);
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -109,9 +110,13 @@ function ProfileDrawer({
 
     const structData = await marketplaceContract._idToNFT(id);
     let seller = structData.seller;
+    let royaltyPrice = structData.royaltyPrice.toString();
+    console.log("checkSeller royaltyPrice", royaltyPrice);
     console.log("checkSeller Seller", seller);
     console.log("checkSeller userAddress", userAddress);
     console.log("checkSeller Seller == userAddress", seller == userAddress);
+    console.log("checkSeller sellerPlan", sellerPlan);
+    console.log("checkSeller buyerPlan", buyerPlan);
 
     if (userAddress != seller) {
       // show buy button
@@ -140,6 +145,7 @@ function ProfileDrawer({
     });
     getNFTLike();
   };
+
   const postNFTView = async () => {
     var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
@@ -529,7 +535,10 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
-    console.log("Zayyan", response?.data?.data?.subscription_plan);
+    console.log(
+      "Zayyan nft ki detail sey subscription plan",
+      response?.data?.data?.subscription_plan
+    );
     setNftDetails(response?.data?.data);
     setSellerPlan(response?.data?.data?.subscription_plan);
   };
@@ -1180,6 +1189,7 @@ function ProfileDrawer({
               </div>
             </div>
           </div>
+          <button onClick={checkSeller}>checkSeller </button>
         </div>
       </Drawer>
       <Modal

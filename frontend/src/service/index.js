@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const createBackendServer = (baseURL) => {
-
   const api = axios.create({
     baseURL: `${baseURL}/api/`,
     withCredentials: false,
@@ -48,38 +47,48 @@ const createBackendServer = (baseURL) => {
 
   const postNftSold = async (body) => await api.post("sold-nft", body);
 
-  const postWalletAddress = async (body) => await api.post(`connect-wallet`, body);
-  
-  const postAddFans = async (body) => await api.post("add-custom-user-fans", body);
+  const postWalletAddress = async (body) =>
+    await api.post(`connect-wallet`, body);
+
+  const postAddFans = async (body) =>
+    await api.post("add-custom-user-fans", body);
 
   const postBid = async (body) => await api.post("bidding-nft", body);
 
-
   //Returning all the API
 
-  const editProfile = async (body) => await api.post(`update-profile`, body, headers);
+  const editProfile = async (body) =>
+    await api.post(`update-profile`, body, headers);
 
-  const getChatNotification = async (user_id, count) => await api.get(`view-chat-notifications/${user_id}?last_count=${count}`);
+  const getChatNotification = async (user_id, count) =>
+    await api.get(`view-chat-notifications/${user_id}?last_count=${count}`);
 
-  const getChatUsers = async (user_id) => await api.get(`view-chat-users/${user_id}`);
+  const getChatUsers = async (user_id) =>
+    await api.get(`view-chat-users/${user_id}`);
 
-  const getChatMessages = async (user_id,id) => await api.get(`view-chat-messages/${user_id}/${id}`);
+  const getChatMessages = async (user_id, id) =>
+    await api.get(`view-chat-messages/${user_id}/${id}`);
 
-  const postChatMessages = async (body) => await api.post(`send-chat-message`, body, headers);
+  const postChatMessages = async (body) =>
+    await api.post(`send-chat-message`, body, headers);
 
   const viewNotification = async () => await api.get(`view-notifications/8`);
 
   const ReadNotification = async () => await api.get(`read-notification/7`);
 
-  const sendNotification = async (body) => await api.post(`send-notification`, body);
+  const sendNotification = async (body) =>
+    await api.post(`send-notification`, body);
 
-  const getLikeNFT = async (user_id, NFTTokenId) => await api.get(`/count-like-nft/${user_id}/${NFTTokenId}`);
+  const getLikeNFT = async (user_id, NFTTokenId) =>
+    await api.get(`/count-like-nft/${user_id}/${NFTTokenId}`);
 
-  const getLikeNFTList = async (userId) => await api.get(`user-liked-nfts/${userId}`);
+  const getLikeNFTList = async (userId) =>
+    await api.get(`user-liked-nfts/${userId}`);
 
   const postLikeNFT = async (body) => await api.post(`user-like-nft`, body);
 
-  const getViewNFT = async (NFTTokenId) => await api.get(`/show-view-nft/${NFTTokenId}`);
+  const getViewNFT = async (NFTTokenId) =>
+    await api.get(`/show-view-nft/${NFTTokenId}`);
 
   const postViewNFT = async (body) => await api.post(`user-view-nft`, body);
 
@@ -108,11 +117,14 @@ const createBackendServer = (baseURL) => {
   const getNFTCollectionImage = async (collectionId) =>
     await api.get(`view-nft-collection-stock/${collectionId}`);
 
-  const getNFTByTokenId = async (tokenId) => await api.get(`view-nft-by-token/${tokenId}`);
+  const getNFTByTokenId = async (tokenId) =>
+    await api.get(`view-nft-by-token/${tokenId}`);
 
-  const getOtherUser = async (userAddress) => await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
+  const getOtherUser = async (userAddress) =>
+    await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
 
-  const getLikeNFTListing = async (userId) => await api.get(`view-liked-nfts/${userId}`);
+  const getLikeNFTListing = async (userId) =>
+    await api.get(`view-liked-nfts/${userId}`);
 
   const postUserFans = async (body) => await api.post(`add-user-fans`, body);
 
@@ -127,25 +139,32 @@ const createBackendServer = (baseURL) => {
   const getFollowersForFan = async () =>
     await api.get(`view-followers-for-fan/${RealUserId}`);
 
-  const getSalesHistory = async () => await api.get(`sale-history/${RealUserId}`);
+  const getSalesHistory = async () =>
+    await api.get(`sale-history/${RealUserId}`);
 
-  const getPurchaseHistory = async () => await api.get(`purchase-history/${RealUserId}`);
-
+  const getPurchaseHistory = async () =>
+    await api.get(`purchase-history/${RealUserId}`);
 
   // User Subscription //
 
   const userSubscribe = async (body) => await api.post(`subscribe`, body);
-  const cancelSubscription = async (body) => await api.post(`cancel-subscription`, body);
-  const viewSubscriptions = async (userId) => await api.get(`view-subscriptions/${userId}`);
-  const autoRecursionOnoff = async (body) => await api.post(`auto-recursion-onoff` , body);
+  const cancelSubscription = async (body) =>
+    await api.post(`cancel-subscription`, body);
+  const viewSubscriptions = async (userId) =>
+    await api.get(`view-subscriptions/${userId}`);
+  const autoRecursionOnoff = async (body) =>
+    await api.post(`auto-recursion-onoff`, body);
 
-  const viewRejectedNftList = async (userId) => await api.get(`view-rejected-nft-list/${userId}`);
-
+  const viewRejectedNftList = async (userId) =>
+    await api.get(`view-rejected-nft-list/${userId}`);
 
   // NFT Collection//
-  const viewNftCollectionStock = async (collectionID) => await api.get(`view-nft-collection-stock/${collectionID}`);
-  const viewNftCollectionProfile = async (collectionID) => await api.get(`view-nft-collection-profile/${collectionID}`);
-  const viewNftTopCollections = async () => await api.get(`view-nft-top-collections`);
+  const viewNftCollectionStock = async (collectionID) =>
+    await api.get(`view-nft-collection-stock/${collectionID}`);
+  const viewNftCollectionProfile = async (collectionID) =>
+    await api.get(`view-nft-collection-profile/${collectionID}`);
+  const viewNftTopCollections = async () =>
+    await api.get(`view-nft-top-collections`);
 
   //Returning all the API
   return {
@@ -203,11 +222,13 @@ const createBackendServer = (baseURL) => {
 
     viewNftCollectionStock,
     viewNftCollectionProfile,
-    viewNftTopCollections
-
+    viewNftTopCollections,
   };
 };
 
-const apis = createBackendServer("http://143.198.70.237");
+const apis = createBackendServer("http://165.232.142.3");
+
+//     Testing DB: http://165.232.142.3
+// Development DB: http://143.198.70.237
 
 export default apis;

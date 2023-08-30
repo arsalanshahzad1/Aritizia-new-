@@ -1028,8 +1028,7 @@ const Multiple = ({ search, setSearch }) => {
 
       setSelectedUploadNFTImage((prevState) => [...prevState, file]);
     }
-    console.log("selectedUploadNFTImage", selectedUploadNFTImage);
-    console.log("selectedUploadNFTImage[0]", selectedUploadNFTImage[0]);
+    console.log("selectedUploadNFTImage", selectedUploadNFTImage); 
   };
 
   const handleRemoveImage = (index) => {
