@@ -45,72 +45,88 @@ const createBackendServer = (baseURL) => {
 
   // User Section Apis //
 
-    // User Section Apis //
+  // User Section Apis //
 
-    const viewUserList = async (count, filter, search) => await api.get(`view-user-list?page=${count}&filter=${filter}&search=${search}`);
-    const viewUserDetails = async (userId) => await api.get(`view-user-detail/${userId}`);
-    const viewUserLikedNfts = async (userId) => await api.get(`view-user-liked-nfts/${userId}`);
-    const viewNftCollection = async (userId) => await api.get(`view-nft-collection/${userId}`);
-    const updateUserStatus = async (userId) => await api.get(`update-user-status/${userId}`);
-    const editUserProfile = async (body) => await api.post(`edit-user-profile`, body);
+  const viewUserList = async (count, filter, search) =>
+    await api.get(
+      `view-user-list?page=${count}&filter=${filter}&search=${search}`
+    );
+  const viewUserDetails = async (userId) =>
+    await api.get(`view-user-detail/${userId}`);
+  const viewUserLikedNfts = async (userId) =>
+    await api.get(`view-user-liked-nfts/${userId}`);
+  const viewNftCollection = async (userId) =>
+    await api.get(`view-nft-collection/${userId}`);
+  const updateUserStatus = async (userId) =>
+    await api.get(`update-user-status/${userId}`);
+  const editUserProfile = async (body) =>
+    await api.post(`edit-user-profile`, body);
 
-    // NFT Section Apis //
+  // NFT Section Apis //
 
-    const viewNftDetails = async (userId) => await api.get(`nft-detail-by-token/${userId}`);
+  const viewNftDetails = async (userId) =>
+    await api.get(`nft-detail-by-token/${userId}`);
 
-    // Art Gallery Section Apis //
+  // Art Gallery Section Apis //
 
-    const viewArtGalleyList = async (count) => await api.get(`view-art-gallery-images?last_count=${count}`);
-    const approvedUnapprovedArtGalleryImages = async (artGalleryId) => await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
+  const viewArtGalleyList = async (count) =>
+    await api.get(`view-art-gallery-images?last_count=${count}`);
+  const approvedUnapprovedArtGalleryImages = async (artGalleryId) =>
+    await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 
-    // Subscription Section Apis //
+  // Subscription Section Apis //
 
-    const viewPlans = async () => await api.get(`subscriptions`);
-    const addPlan = async (body) => await api.post(`subscriptions`, body);
-    const updatePlan = async (planId, body) => await api.post(`subscriptions/${planId}`, body);
-    const deletePlan = async (planId) => await api.delete(`subscriptions/${planId}`);
+  const viewPlans = async () => await api.get(`subscriptions`);
+  const addPlan = async (body) => await api.post(`subscriptions`, body);
+  const updatePlan = async (planId, body) =>
+    await api.post(`subscriptions/${planId}`, body);
+  const deletePlan = async (planId) =>
+    await api.delete(`subscriptions/${planId}`);
 
-    // Analytics Section Apis //
+  // Analytics Section Apis //
 
-    const viewAnalyticUsers = async () => await api.get(`view-analytic-users`);
-    const viewAnalyticTransaction = async (count) => await api.get(`view-analytic-transaction?page=${count}&filter=yearly`);
+  const viewAnalyticUsers = async () => await api.get(`view-analytic-users`);
+  const viewAnalyticTransaction = async (count) =>
+    await api.get(`view-analytic-transaction?page=${count}&filter=yearly`);
 
-    // Admin NFT Section Apis //
+  // Admin NFT Section Apis //
 
-    let page_size = 8
+  let page_size = 8;
 
-    const viewNftList = async (count, filter, search) => await api.get(`view-nft-list?page=${count}&filter=${filter}&search=${search}&page_size=${page_size}`);
-    const nftDetailByToken = async (tokenId) => await api.get(`nft-detail-by-token/${tokenId}`);
-  
-    const approveNfts = async (body) => await api.post(`approve-nfts`, body);
-    const rejectNfts = async (body) => await api.post(`reject-nfts`, body);
-    
-     
-    //Returning all the API
-    return {
-        viewUserList,
-        viewUserDetails,
-        viewUserLikedNfts,
-        viewNftCollection,
-        updateUserStatus,
-        editUserProfile,
-        viewNftDetails,
-        viewArtGalleyList,
-        approvedUnapprovedArtGalleryImages,
-        viewPlans,
-        addPlan,
-        updatePlan,
-        deletePlan,
-        viewAnalyticUsers,
-        viewAnalyticTransaction,
-        viewNftList,
-        nftDetailByToken,
-        approveNfts,
-        rejectNfts,
+  const viewNftList = async (count, filter, search) =>
+    await api.get(
+      `view-nft-list?page=${count}&filter=${filter}&search=${search}&page_size=${page_size}`
+    );
+  const nftDetailByToken = async (tokenId) =>
+    await api.get(`nft-detail-by-token/${tokenId}`);
 
-    };
+  const approveNfts = async (body) => await api.post(`approve-nfts`, body);
+  const rejectNfts = async (body) => await api.post(`reject-nfts`, body);
+
+  //Returning all the API
+  return {
+    viewUserList,
+    viewUserDetails,
+    viewUserLikedNfts,
+    viewNftCollection,
+    updateUserStatus,
+    editUserProfile,
+    viewNftDetails,
+    viewArtGalleyList,
+    approvedUnapprovedArtGalleryImages,
+    viewPlans,
+    addPlan,
+    updatePlan,
+    deletePlan,
+    viewAnalyticUsers,
+    viewAnalyticTransaction,
+    viewNftList,
+    nftDetailByToken,
+    approveNfts,
+    rejectNfts,
+  };
 };
 
-const adminApis = createBackendServer("http://143.198.70.237");
+const adminApis = createBackendServer("http://165.232.142.3");
 
 export default adminApis;

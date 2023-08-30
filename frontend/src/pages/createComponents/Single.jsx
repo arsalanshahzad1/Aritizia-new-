@@ -234,6 +234,7 @@ const Single = ({ search, setSearch }) => {
       let description = item.description;
 
       console.log("collection", collection);
+      console.log("royalty", royalty);
 
       try {
         const dataInJSON = JSON.stringify({
@@ -348,22 +349,21 @@ const Single = ({ search, setSearch }) => {
       // let addedTime = currentTime + 500000;
       // console.log("aaa addedTime:", addedTime);
 
-      let currentTime = 1690440477;
-      let addedTime = currentTime + 400;
-      console.log(" collection.collection_id",  collection.collection_id);
+     
+      console.log(" collection.collection_id", collection.collection_id);
       console.log("collection.crypto", collection.crypto);
       await (
         await marketplaceContract.listNft(
           nftContract.address,
           [mintedTokens],
           [ethers.utils.parseEther(item.price)], // list
-          royalty,
+          [royalty],
           listingType,
           // [currentTime],
           // [addedTime],
           [startTime], // list
           [endTime], // list
-           collection.collection_id, // collection number
+          collection.collection_id, // collection number
           collection.crypto,
           {
             gasLimit: ethers.BigNumber.from("5000000"),
@@ -646,7 +646,7 @@ const Single = ({ search, setSearch }) => {
 
     let time = await marketplaceContract.getCurrentTimestamp();
 
-    console.log("GGGG  collection.collection_id",  collection.collection_id);
+    console.log("GGGG  collection.collection_id", collection.collection_id);
     console.log("GGGG collection.crypto", collection.crypto);
     // console.log("block.timestamp", time);
     console.log("block.timestamp", time.toString());

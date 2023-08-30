@@ -60,7 +60,7 @@ const Profile = ({ search, setSearch }) => {
     console.log("getNFTlikeListing");
     const response = await apis.getLikeNFTListing(userData?.id);
     setLikedNfts(response?.data?.data);
-    console.log(response, "other-users");
+    console.log(response, "liked-nfts");
   };
 
   useEffect(() => {
@@ -88,6 +88,7 @@ const Profile = ({ search, setSearch }) => {
       provider
     );
     let NFTId = await getLikedNftsList();
+    console.log("NFTId", NFTId);
 
     let liked = [];
     let myAuctions = [];
@@ -436,11 +437,12 @@ const Profile = ({ search, setSearch }) => {
     // console.log("MYADDRESS", address);
 
     let listingType;
+    console.log("userAddress", userAddress);
 
     let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
     console.log("five");
     // let mintedTokens = [1, 4, 2];
-    // console.log("mintedTokens", mintedTokens);
+    console.log("mintedTokens mynft", mintedTokens);
     let NFTId = await getLikedNftsList();
     let myNFTs = [];
     // let myAuctions = [];
@@ -552,6 +554,7 @@ const Profile = ({ search, setSearch }) => {
 
   const getLikedNftsList = async () => {
     const response = await apis.getLikeNFTList(userId);
+    console.log("NFTId", response);
     return response.data.data;
   };
 
@@ -590,7 +593,8 @@ const Profile = ({ search, setSearch }) => {
   const [addingFanList, setAddingFanList] = useState([]);
 
   const handleCheckboxChange = (id) => {
-    setFollwers((prevCheckboxes) => {
+    console.log(addingFanList, "idddddddddd");
+    setAddFanlisting((prevCheckboxes) => {
       const updatedCheckboxes = prevCheckboxes.map((data) => {
         if (data?.user_id === id) {
           // Check if the user_id is already in the addingFanList
@@ -600,6 +604,7 @@ const Profile = ({ search, setSearch }) => {
             setAddingFanList((prev) => [...prev, id]);
           }
           console.log(addingFanList, "addingFanList");
+          console.log(data, "important");
 
           return {
             ...data,
