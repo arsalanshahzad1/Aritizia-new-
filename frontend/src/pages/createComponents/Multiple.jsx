@@ -73,7 +73,7 @@ const Multiple = ({ search, setSearch }) => {
           setcollectionOptions((previousOptions) => [
             ...previousOptions,
             {
-              value: response?.data?.data[i]?.id,
+              collection_id: response?.data?.data[i]?.id,
               label: response?.data?.data[i]?.name,
               image: response?.data?.data[i]?.media[0]?.original_url,
               crypto: 1,
@@ -316,8 +316,8 @@ const Multiple = ({ search, setSearch }) => {
       let image = ipfsImageList[i];
       let price = priceList[i];
       console.log("priceList in createa", priceList);
-      let crypto = 0;
-      let collection = 0;
+      let crypto = collection.crypto;
+      let collection = collection.collection_id;
       let title = titleList[i];
       let description = descriptionList[i];
 
@@ -409,7 +409,7 @@ const Multiple = ({ search, setSearch }) => {
   }
 
   const [getMintedTokenss, setMintedTokensList] = useState([]);
-  
+
   let marketplaceContractGlobal;
   let nftContractGlobal;
   let listedddd = [];
@@ -491,7 +491,23 @@ const Multiple = ({ search, setSearch }) => {
         ethParsedList.push(ethPrice);
       }
       if (!listCalled) {
-     
+        console.log("yeet collection", collection);
+        console.log(
+          "yeet",
+          nftContract.address,
+          multi ? mintedTokens : [mintedTokens],
+          ethParsedList,
+          royaltyList,
+          listingType,
+          startingDateList,
+          endingDateList,
+          // [startingDateList[0] + 5 * 60 * 1000],
+          collection.collection_id, // collection number
+          collection.crypto
+        );
+        console.log("zzz listingType", listingType);
+        console.log("zzz collection.crypto", collection.crypto);
+
         console.log("listcount actually listing", mintedTokens);
         await (
           await marketplaceContract.listNft(
@@ -1028,7 +1044,7 @@ const Multiple = ({ search, setSearch }) => {
 
       setSelectedUploadNFTImage((prevState) => [...prevState, file]);
     }
-    console.log("selectedUploadNFTImage", selectedUploadNFTImage); 
+    console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
 
   const handleRemoveImage = (index) => {
@@ -1303,7 +1319,11 @@ const Multiple = ({ search, setSearch }) => {
                                             setCollection(
                                               collectionOptions[index]
                                             );
-                                            console.log("collection select",collection);
+                                            console.log(
+                                              "collection select",
+                                              collection
+                                            );
+                                            setCrypto(collection.crypto);
                                           }}
                                         >
                                           {value?.label}
@@ -1381,6 +1401,7 @@ const Multiple = ({ search, setSearch }) => {
                                         options={cryptoOptions}
                                         onChange={(e) => {
                                           setCrypto(e);
+                                          console.log("ALIMONIS", crypto);
                                         }}
                                         value={defaultCrypto.value}
                                       />

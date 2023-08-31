@@ -46,7 +46,7 @@ const Following = ({ data, id }) => {
                     }
                   </div>
                   <div className="txt">
-                    <p>{data?.first_name}</p>
+                    <p>{data?.username}</p>
                     <p>{data?.count_follower} Followers</p>
                   </div>
                 </div>
@@ -57,30 +57,6 @@ const Following = ({ data, id }) => {
                   >
                     Unfollow
                   </button>
-
-                  <span
-                    onClick={() => {
-                      setshowOptions(!showOptions);
-                    }}
-                  >
-                    <svg
-                      width="10"
-                      height="38"
-                      viewBox="0 0 10 38"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle cx="5" cy="5" r="5" fill="#B5B5B5" />
-                      <circle cx="5" cy="19" r="5" fill="#B5B5B5" />
-                      <circle cx="5" cy="33" r="5" fill="#B5B5B5" />
-                    </svg>
-                  </span>
-                  {showOptions && (
-                    <div className="options">
-                      <div>Report</div>
-                      <div>Block</div>
-                    </div>
-                  )}
                 </div>
               </div>
             );
