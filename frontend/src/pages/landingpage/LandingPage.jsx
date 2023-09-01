@@ -198,7 +198,6 @@ const LandingPage = ({ search, setSearch }) => {
         listingType = structData.listingType;
         let listed = structData.listed;
 
-
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
         console.log(response.data, "saad landing");
@@ -522,34 +521,36 @@ const LandingPage = ({ search, setSearch }) => {
                   {/* <div className="right">View more markets</div> */}
                 </div>
               </div>
-              {nftListAuction.length > 0 ? (
-                <>
-                  {console.log(nftListAuction, "nft list auction")}
-                  {nftListAuction.map((item) => (
-                    <NewItemCard
-                      key={item.id}
-                      id={item.id}
-                      title={item?.title}
-                      image={item?.image}
-                      price={item?.price}
-                      highestBid={item?.highestBid}
-                      isLive={item?.isLive}
-                      endTime={item?.endTime}
-                      startTime={item?.startTime}
-                      description={item?.description}
-                      collectionImages={item?.collectionImages}
-                      userAddress={userAddress}
-                    />
-                  ))}
-                </>
-              ) : (
-                <>
-                  <DummyCard />
-                  <DummyCard />
-                  <DummyCard />
-                  <DummyCard />
-                </>
-              )}
+              <div className="d-flex">
+                {nftListAuction.length > 0 ? (
+                  <>
+                    {console.log(nftListAuction, "nft list auction")}
+                    {nftListAuction.map((item) => (
+                      <NewItemCard
+                        key={item.id}
+                        id={item.id}
+                        title={item?.title}
+                        image={item?.image}
+                        price={item?.price}
+                        highestBid={item?.highestBid}
+                        isLive={item?.isLive}
+                        endTime={item?.endTime}
+                        startTime={item?.startTime}
+                        description={item?.description}
+                        collectionImages={item?.collectionImages}
+                        userAddress={userAddress}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </section>

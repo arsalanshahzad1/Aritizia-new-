@@ -58,16 +58,16 @@ function Fan({ id }) {
 
   const handleRemoveFansEvent = async (removedFan) => {
     console.log("removedFan", removedFan);
-    getRemoveFan();
+    getRemoveFan(selectedUser);
   };
 
-  const getRemoveFan = async () => {
+  const getRemoveFan = async (selectedUser) => {
     console.log("figetRemoveFanrst");
     console.log("selectedUser", selectedUser);
     const response = await apis.getremovedFan(selectedUser);
     console.log("response from getRemoveFan", response);
-    // setFanListing(response?.data?.data);
-    // getFanListing();
+    setFanListing(response?.data?.data);
+    getFanListing();
     // setFanListing([]);
   };
 
