@@ -189,7 +189,7 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("discountOnNFT", discountOnNFT);
         console.log("discountOnNFT", typeof discountOnNFT);
 
-        let auctionData = await marketplaceContract._idToAuction(id);
+        let auctionData = await marketplaceContract._idToAuction(id);     
 
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()

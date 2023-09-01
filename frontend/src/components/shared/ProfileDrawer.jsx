@@ -117,6 +117,7 @@ function ProfileDrawer({
     console.log("checkSeller Seller == userAddress", seller == userAddress);
     console.log("checkSeller sellerPlan", sellerPlan);
     console.log("checkSeller buyerPlan", buyerPlan);
+    console.log("checkSeller paymentMethod", paymentMethod);
 
     if (userAddress != seller) {
       // show buy button
@@ -248,9 +249,9 @@ function ProfileDrawer({
     // alert("NFT bought");
     setSucess(false);
     await onClose(false);
-    setTimeout(() => {
-      navigate("/profile");
-    }, 1500);
+    // setTimeout(() => {
+    //   navigate("/profile");
+    // }, 1500);
   };
 
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
@@ -402,24 +403,22 @@ function ProfileDrawer({
       fee = +discountedPlatformFeeETH;
       console.log("666666666666666");
 
+      // check this
       amount = +discountedEth + fee;
       value = amount.toString();
     }
-    console.log("www amount", amount);
-    console.log("www value", value);
-    // console.log("www sellerPercent", sellerPercent);
-    // console.log("www buyerPercent", buyerPercent);
-    console.log("www paymentMethod.value", paymentMethod.value);
+
     console.log("www paymentMethod", paymentMethod);
     console.log("www id", id);
     console.log("www sellerPlan", sellerPlan);
     console.log("www buyerPlan", buyerPlan);
     console.log("www address", NFT_CONTRACT_ADDRESS.address);
+    console.log("www value", value);
 
     await (
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
-        paymentMethod.value,
+        paymentMethod,
         id,
         sellerPlan, //  must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent
@@ -493,19 +492,12 @@ function ProfileDrawer({
 
     appprove.wait();
 
-    console.log("paymentmethod", paymentMethod);
-    console.log("paymentmethod.value", paymentMethod.value);
-    console.log("Data", NFT_CONTRACT_ADDRESS.address, paymentMethod, id, "20");
-    console.log("amountUSD typeof", typeof amountUSD);
-    console.log("amountUSD", amountUSD);
-    console.log("amount", amount);
-    console.log("id", id);
-    // console.log("sellerPercent", sellerPercent);
-    // console.log("buyerPercent", buyerPercent);
-    console.log("amountInWei  ", amountInWei);
-    console.log("amountInWei typeof ", typeof amountInWei);
-
-    // console.log("Check", check);
+    console.log("www paymentMethod", paymentMethod);
+    console.log("www id", id);
+    console.log("www sellerPlan", sellerPlan);
+    console.log("www buyerPlan", buyerPlan);
+    console.log("www address", NFT_CONTRACT_ADDRESS.address);
+    console.log("www amountInWei", amountInWei);
 
     await (
       await marketplaceContract.buyWithUSDT(
@@ -980,18 +972,26 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by {" "}
-                    {
-                      userData?.wallet_address ==
-                        nftDetails?.user?.wallet_address ? (
-                        <Link to={"/profile"}>
-                          <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
-                        </Link>
-                      ) : (
-                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`)}>{nftDetails?.owner?.username}</span>
-                      )
-                    }
-
+                    Owned by{" "}
+                    {userData?.wallet_address ==
+                    nftDetails?.user?.wallet_address ? (
+                      <Link to={"/profile"}>
+                        <span>
+                          {nftDetails?.user?.first_name}{" "}
+                          {nftDetails?.user?.last_name}
+                        </span>
+                      </Link>
+                    ) : (
+                      <span
+                        onClick={() =>
+                          navigate(
+                            `/other-profile?add=${nftDetails?.user?.wallet_address}`
+                          )
+                        }
+                      >
+                        {nftDetails?.owner?.username}
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="three-line">
@@ -1028,20 +1028,23 @@ function ProfileDrawer({
                       <div className="logo-name">
                         {
                           userData?.wallet_address ==
-                            nftDetails?.user?.wallet_address ? (
+                          nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              {nftDetails?.user?.profile_image ?
+                              {nftDetails?.user?.profile_image ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""
                                 />
-                                :
+                              ) : (
                                 <img
-                                  src={'/public/assets/images/user-none.png'}
+                                  src={"/public/assets/images/user-none.png"}
                                   alt=""
                                 />
-                              }
-                              <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
+                              )}
+                              <span>
+                                {nftDetails?.user?.first_name}{" "}
+                                {nftDetails?.user?.last_name}
+                              </span>
                             </Link>
                           ) : (
                             <div
@@ -1067,7 +1070,6 @@ function ProfileDrawer({
                           //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
-
                         }
                       </div>
                     </div>

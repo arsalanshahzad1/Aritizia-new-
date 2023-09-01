@@ -349,7 +349,6 @@ const Single = ({ search, setSearch }) => {
       // let addedTime = currentTime + 500000;
       // console.log("aaa addedTime:", addedTime);
 
-     
       console.log(" collection.collection_id", collection.collection_id);
       console.log("collection.crypto", collection.crypto);
       await (
@@ -520,9 +519,9 @@ const Single = ({ search, setSearch }) => {
       title: title.current.value,
       price: price,
       description: description.current.value,
-      crypto: crypto,
+      crypto: collection.crypto, 
       file: selectedImage,
-      collection: demoCollection,
+      collection: collection.collection_id,
     };
 
     console.log("item", item);

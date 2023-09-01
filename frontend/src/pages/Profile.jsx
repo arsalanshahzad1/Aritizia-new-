@@ -487,6 +487,8 @@ const Profile = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
+          console.log("Dataa", data);
+
           const crypto = data.crypto;
           const title = data.title;
           const image = data.image;

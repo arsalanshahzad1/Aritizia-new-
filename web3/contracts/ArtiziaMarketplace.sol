@@ -1378,8 +1378,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _buyerPercent
     ) internal pure returns (uint256) {
         uint256 _amountToDeduct;
-        _amountToDeduct = (_amount * _sellerPercent) / 1000;
-        _amountToDeduct = _amountToDeduct + (_amount * _buyerPercent) / 1000;
+        _amountToDeduct = (_amount * _sellerPercent) / 10000;
+        _amountToDeduct = _amountToDeduct + (_amount * _buyerPercent) / 10000;
         return _amountToDeduct;
     }
 
