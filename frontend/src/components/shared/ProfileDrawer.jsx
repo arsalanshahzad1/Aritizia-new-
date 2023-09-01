@@ -424,7 +424,7 @@ function ProfileDrawer({
         buyerPlan, // must be multiple of 10 of the users percent
         {
           value: ethers.utils.parseEther(value),
-          gasLimit: ethers.BigNumber.from("5000000"),
+          gasLimit: ethers.BigNumber.from("30000000"),
         }
       )
     ).wait();
