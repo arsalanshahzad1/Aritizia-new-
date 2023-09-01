@@ -39,15 +39,39 @@ const Multiple = ({ search, setSearch }) => {
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
   const [isMinted, setIsMinted] = useState(false);
+  const [getMintedTokenss, setMintedTokensList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [royalty, setRoyalty] = useState(0);
+  const [showProfileNFT, setshowProfileNFT] = useState(false);
+  const [ShowMore, setShowMore] = useState(false);
+  const [showCreateCollection, setshowCreateCollection] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImagesNFT, setSelectedImagesNFT] = useState("");
+  const [selectedUploadNFTImage, setSelectedUploadNFTImage] = useState([]);
+  const [NFts, setNfts] = useState("");
+  const [currentNFT, setCurrentNFT] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [choosenCollection, setChoosenCollection] = useState({});
+  const [selectedImage2, setSelectedImage2] = useState(null);
+  const [collectionFinalized, setcollectionFinalized] = useState(false);
+  const [collectionOptions, setcollectionOptions] = useState([]);
+  const [crypto, setCrypto] = useState({
+    value: 0,
+    label: "ETH",
+  });
 
+  const [collection, setCollection] = useState("");
+
+  const [nftForm, setnftForm] = useState("");
+  const [file, setFile] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [showWarning, setShowWarning] = useState(false);
   const [showCollection, setshowcollection] = useState(false);
+  const [collectionName, setCreateCollection] = useState("");
 
   const navigate = useNavigate();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
-  const [collectionName, setCreateCollection] = useState("");
   const getCollection = async () => {
     const response = await apis.getNFTCollection();
     console.log("collection api", response);
@@ -170,27 +194,16 @@ const Multiple = ({ search, setSearch }) => {
   let startingDateList = useRef([]);
   let endingDateList = useRef([]);
 
-  const [crypto, setCrypto] = useState({
-    value: 0,
-    label: "ETH",
-  });
-
-  const [collection, setCollection] = useState("");
-  // const collection = useRef("");
-
   const cryptoOptions = [
     { value: "", label: "Select Crypto" },
     { value: 0, label: "ETH" },
     { value: 1, label: "USDT" },
   ];
 
-  const [collectionOptions, setcollectionOptions] = useState([]);
-
   const defaultOption = collectionOptions[0];
   const defaultCrypto = cryptoOptions[0];
 
   // const item = {};
-  const [loading, setLoading] = useState(false);
 
   const addURLInList = (newValue) => {
     urlList.push(newValue);
@@ -310,82 +323,6 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   // Upload image and data to IPFS
-  const createNFT = async () => {
-    for (let i = 0; i < imageList.length; i++) {
-      console.log(" ipfsImageList[i] in createNFT", ipfsImageList[i]);
-      let image = ipfsImageList[i];
-      let price = priceList[i];
-      console.log("priceList in createa", priceList);
-      let crypto = collection.crypto;
-      let collection = collection.collection_id;
-      let title = titleList[i];
-      let description = descriptionList[i];
-
-      // console.log("listingType", listingType);
-      if (listingType == 0) {
-        try {
-          console.log("image", image);
-
-          const dataInJSON = JSON.stringify({
-            image,
-            listingType,
-            price,
-            crypto,
-            collection,
-            title,
-            description,
-            royalty,
-          });
-          console.log("dataInJSON", dataInJSON);
-          const result = await uploadJSONToIPFS(dataInJSON);
-          console.log("result", result);
-          addDataIPFSInList(result.pinataURL);
-          console.log("ipfsList. from fun", ipfsList);
-
-          console.log("result.pinataURL", result.pinataURL);
-        } catch (error) {
-          console.log("ipfs uri upload error: ", error);
-        }
-      } else {
-        let startingDate = startingDateList[i];
-        let endingDate = endingDateList[i];
-        try {
-          const dataInJSON = JSON.stringify({
-            image,
-            listingType,
-            price,
-            startingDate,
-            endingDate,
-            crypto,
-            collection,
-            title,
-            description,
-            royalty,
-          });
-
-          const result = await uploadJSONToIPFS(dataInJSON);
-
-          addDataIPFSInList(result.pinataURL);
-
-          console.log("RESULT.pinataURL", result.pinataURL);
-        } catch (error) {
-          console.log("ipfs uri upload error: ", error);
-        }
-      }
-    }
-
-    console.log("test1");
-
-    if (ipfsList.length != 0) {
-      console.log("test2");
-      mintThenList();
-    } else {
-      toast.warning(`IPFS list is empty`, {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      // window.alert("IPFS list is empty");
-    }
-  };
 
   async function mintNFT(nftContract) {
     try {
@@ -407,8 +344,6 @@ const Multiple = ({ search, setSearch }) => {
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
   }
-
-  const [getMintedTokenss, setMintedTokensList] = useState([]);
 
   let marketplaceContractGlobal;
   let nftContractGlobal;
@@ -768,13 +703,10 @@ const Multiple = ({ search, setSearch }) => {
     // }, 3000);
   };
 
-  const [file, setFile] = useState(null);
-
   const handlechange = (file) => {
     setFile(file);
   };
 
-  const [royalty, setRoyalty] = useState(0);
   const handleSliderChange = (value) => {
     // Update the value or perform any other actions
     console.log("Slider value:", value);
@@ -984,11 +916,6 @@ const Multiple = ({ search, setSearch }) => {
   //   { value: "usdt", label: "USDT" },
   // ]);
 
-  const [showProfileNFT, setshowProfileNFT] = useState(false);
-  const [ShowMore, setShowMore] = useState(false);
-  // const [CreateCollection, setCreateCollection] = useState("");
-  const [showCreateCollection, setshowCreateCollection] = useState(false);
-
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
       toast.warning(`Input Collection Name to Create`, {
@@ -1009,8 +936,6 @@ const Multiple = ({ search, setSearch }) => {
     setshowCreateCollection(false);
   };
 
-  const [selectedImage, setSelectedImage] = useState(null);
-
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setSelectedImage(URL.createObjectURL(file));
@@ -1022,15 +947,11 @@ const Multiple = ({ search, setSearch }) => {
     fileInputRef.current.click();
   };
 
-  const [selectedImagesNFT, setSelectedImagesNFT] = useState("");
-
   const fileInputRef2 = useRef(null);
 
   const handleButtonClick2 = () => {
     fileInputRef2.current.click();
   };
-
-  const [selectedUploadNFTImage, setSelectedUploadNFTImage] = useState([]);
 
   const handleFileUpload = (event) => {
     const files = event.target.files;
@@ -1052,8 +973,6 @@ const Multiple = ({ search, setSearch }) => {
     newArray.splice(index, 1);
     setSelectedImagesNFT(newArray);
   };
-
-  const [NFts, setNfts] = useState("");
 
   useEffect(() => {
     if (selectedImagesNFT.length > 0) {
@@ -1095,9 +1014,7 @@ const Multiple = ({ search, setSearch }) => {
     newArray.splice(index, 1);
     setNfts(newArray);
   };
-  const [currentNFT, setCurrentNFT] = useState(0);
 
-  const [nftForm, setnftForm] = useState("");
   useEffect(() => {
     if (listingType === 0) {
       setnftForm({
@@ -1184,6 +1101,93 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
+  const createNFT = async () => {
+    console.log("collection  in createNFT", collection);
+
+    let tempCollection = collection;
+    
+    for (let i = 0; i < imageList.length; i++) {
+      console.log(" ipfsImageList[i] in createNFT", ipfsImageList[i]);
+      let image = ipfsImageList[i];
+      let price = priceList[i];
+      console.log("priceList in createNFT", priceList);
+
+      console.log(
+        "collection.collection_id in createNFT",
+        tempCollection.collection_id
+      );
+      console.log("collection.crypto in createNFT", tempCollection.crypto);
+      let crypto = tempCollection.crypto;
+      let collection = tempCollection.collection_id;
+      let title = titleList[i];
+      let description = descriptionList[i];
+
+      // console.log("listingType", listingType);
+      if (listingType == 0) {
+        try {
+          console.log("image", image);
+
+          const dataInJSON = JSON.stringify({
+            image,
+            listingType,
+            price,
+            crypto,
+            collection,
+            title,
+            description,
+            royalty,
+          });
+          console.log("dataInJSON", dataInJSON);
+          const result = await uploadJSONToIPFS(dataInJSON);
+          console.log("result", result);
+          addDataIPFSInList(result.pinataURL);
+          console.log("ipfsList. from fun", ipfsList);
+
+          console.log("result.pinataURL", result.pinataURL);
+        } catch (error) {
+          console.log("ipfs uri upload error: ", error);
+        }
+      } else {
+        let startingDate = startingDateList[i];
+        let endingDate = endingDateList[i];
+        try {
+          const dataInJSON = JSON.stringify({
+            image,
+            listingType,
+            price,
+            startingDate,
+            endingDate,
+            crypto,
+            collection,
+            title,
+            description,
+            royalty,
+          });
+
+          const result = await uploadJSONToIPFS(dataInJSON);
+
+          addDataIPFSInList(result.pinataURL);
+
+          console.log("RESULT.pinataURL", result.pinataURL);
+        } catch (error) {
+          console.log("ipfs uri upload error: ", error);
+        }
+      }
+    }
+
+    console.log("test1");
+
+    if (ipfsList.length != 0) {
+      console.log("test2");
+      mintThenList();
+    } else {
+      toast.warning(`IPFS list is empty`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      // window.alert("IPFS list is empty");
+    }
+  };
+
   useEffect(() => {
     console.log(NFts, "final data");
     console.log(currentNFT, "Current NFT");
@@ -1197,7 +1201,6 @@ const Multiple = ({ search, setSearch }) => {
     });
   };
 
-  const [tabIndex, setTabIndex] = useState(0);
   useEffect(() => {
     if (NFts.length > 0) {
       if (NFts[0].status !== "completed") {
@@ -1256,18 +1259,15 @@ const Multiple = ({ search, setSearch }) => {
     }
   }, [nftForm.startDate]);
 
-  const [choosenCollection, setChoosenCollection] = useState({});
   useEffect(() => {
     setChoosenCollection(collection);
     console.log("choosen", choosenCollection);
   }, [collection]);
 
-  const [selectedImage2, setSelectedImage2] = useState(null);
   const handleInputChange2 = (e) => {
     const file = e.target.files[0];
     setSelectedImage2(file);
   };
-  const [collectionFinalized, setcollectionFinalized] = useState(false);
 
   return (
     <>
@@ -1319,11 +1319,12 @@ const Multiple = ({ search, setSearch }) => {
                                             setCollection(
                                               collectionOptions[index]
                                             );
+
                                             console.log(
                                               "collection select",
                                               collection
                                             );
-                                            setCrypto(collection.crypto);
+                                            // setCrypto(collection.crypto);
                                           }}
                                         >
                                           {value?.label}
