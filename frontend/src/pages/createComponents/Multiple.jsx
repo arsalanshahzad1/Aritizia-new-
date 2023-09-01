@@ -1117,8 +1117,19 @@ const Multiple = ({ search, setSearch }) => {
   }, [listingType]);
 
   const handleNftForm = (e) => {
-    console.log("handling", e.target.name, e.target.value);
-    setnftForm({ ...nftForm, [e.target.name]: e.target.value });
+    if(e.target.name == 'price' || e.target.name == 'bid'){
+      console.log("handling", e.target.name, e.target.value);
+      const value = e.target.value;
+      if (/^\d*\.?\d*$/.test(value) || value === "") {
+        setnftForm({ ...nftForm, [e.target.name]: e.target.value });
+        setShowWarning(false);
+      }else {
+        setShowWarning(true);
+      }
+    }else{
+      console.log("handling", e.target.name, e.target.value);
+      setnftForm({ ...nftForm, [e.target.name]: e.target.value });
+    }
   };
   const saveNFT = () => {
     if (listingType === 0) {
@@ -2070,10 +2081,10 @@ const Multiple = ({ search, setSearch }) => {
                                           <div className="col-lg-8">
                                             <h2>Minimum bid</h2>
                                             <input
-                                              type="number"
+                                              type="text"
                                               value={nftForm.bid}
-                                              name="bid"
                                               onChange={handleNftForm}
+                                              name="bid"
                                               // type="number"
                                               // placeholder="0.00"
                                               // ref={price}

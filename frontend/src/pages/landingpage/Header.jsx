@@ -644,10 +644,10 @@ const Header = ({ search, setSearch }) => {
                                   <Link to={"/setting"}>
                                     <li
                                       onClick={() =>
-                                        setactiveTabsSetting("Appearance")
+                                        setactiveTabsSetting("Purchase")
                                       }
                                     >
-                                      Appearance
+                                      Purchase
                                     </li>
                                   </Link>
                                   <Link to={"/setting"}>

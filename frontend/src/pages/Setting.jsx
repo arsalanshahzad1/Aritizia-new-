@@ -37,18 +37,18 @@ const Setting = ({ search, setSearch }) => {
                             <div className="row">
                                 <ul>
                                     <li onClick={() => { setActiveTabs('Notification') }}><button className={`${activeTabs === 'Notification' ? 'active' : ''}`}><ImNotification />Notification</button></li>
-                                    <li onClick={() => { setActiveTabs('Appearance') }}><button className={`${activeTabs === 'Appearance' ? 'active' : ''}`}><IoMdColorPalette />Appearance</button></li>
+                                    {/* <li onClick={() => { setActiveTabs('Appearance') }}><button className={`${activeTabs === 'Appearance' ? 'active' : ''}`}><IoMdColorPalette />Appearance</button></li> */}
                                     <li onClick={() => { setActiveTabs('Earnings') }}><button className={`${activeTabs === 'Earnings' ? 'active' : ''}`}><FaHandHoldingUsd />Earnings</button> </li>
-                                    <li onClick={() => { setActiveTabs('Pruchase') }}><button className={`${activeTabs === 'Pruchase' ? 'active' : ''}`}><FaHandHoldingUsd />Pruchase</button> </li>
+                                    <li onClick={() => { setActiveTabs('Purchase') }}><button className={`${activeTabs === 'Purchase' ? 'active' : ''}`}><FaHandHoldingUsd />Purchase</button> </li>
                                     <li onClick={() => { setActiveTabs('Edit') }}><button className={`${activeTabs === 'Edit' ? 'active' : ''}`}><FaEdit />Edit</button></li>
                                 </ul>
                             </div>
                             <div className='seeting-tabs-parent'>
                                 <div className="row">
                                     {activeTabs === 'Notification' && <Notification />}
-                                    {activeTabs === 'Appearance' && <Appearance />}
+                                    {/* {activeTabs === 'Appearance' && <Appearance />} */}
                                     {activeTabs === 'Earnings' && <Earnings />}
-                                    {activeTabs === 'Pruchase' && <Purchase />}
+                                    {activeTabs === 'Purchase' && <Purchase />}
                                     {activeTabs === 'Edit' && <EditProfile />}
                                 </div>
                             </div>

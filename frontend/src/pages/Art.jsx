@@ -68,8 +68,8 @@ const Art = ({ search, setSearch }) => {
     const getMidjourneyImagesFromId = async () => {
         console.log(midjourneyId, 'id');
         try {
-            // const response = await apis.getMidjourneyImagesFromId()
-            const response = await apis.getMidjourneyImagesFromId(midjourneyId)
+            const response = await apis.getMidjourneyImagesFromId()
+            // const response = await apis.getMidjourneyImagesFromId(midjourneyId)
             if (response?.data?.progress < 100 || response?.data?.progress == 'incomplete') {
                 getMidjourneyImagesFromId()
             } else {
@@ -113,11 +113,11 @@ const Art = ({ search, setSearch }) => {
         const body = {
             width: 512,
             height: 512,
-            steps: 10,
-            seed: 0,
-            cfg_scale: 0,
-            samples: 4,
-            style_preset: "anime",
+            steps: 50,
+            seed: 10,
+            cfg_scale: 10,
+            samples: 1,
+            style_preset: "digital-art",
             text_prompts: [
                 {
                     text: prompt,

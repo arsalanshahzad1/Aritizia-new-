@@ -1220,8 +1220,9 @@ footer h1 {
 
 .profile-first-section .big-chack {
   position: absolute;
-  bottom: 15px;
-  right: 9px;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
 }
 
 .profile-first-section .user {
@@ -2074,7 +2075,7 @@ footer h1 {
   width: 218px;
   height: 218px;
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .upload-img svg {
