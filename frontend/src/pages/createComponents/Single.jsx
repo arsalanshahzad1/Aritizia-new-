@@ -70,7 +70,7 @@ const Single = ({ search, setSearch }) => {
           setcollectionOptions((previousOptions) => [
             ...previousOptions,
             {
-              value: response?.data?.data[i]?.id,
+              collection_id: response?.data?.data[i]?.id,
               label: response?.data?.data[i]?.name,
               image: response?.data?.data[i]?.media[0]?.original_url,
               crypto: 1,
@@ -207,7 +207,10 @@ const Single = ({ search, setSearch }) => {
         setLoading(true);
         console.log("this is image selectedImage ", selectedImage);
         console.log("this is image item.file ", item.file);
+        // const resut = await uploadFileToIPFS(item.file);
+        
         const resut = await uploadFileToIPFS(item.file);
+
         //const result = await client.add(file)
         console.log("!!!!!!!!!!!!!!!!!!", resut);
         console.log("Result.pinata", resut.pinataURL);
@@ -451,10 +454,10 @@ const Single = ({ search, setSearch }) => {
     console.log("response", response);
 
     // alert("Nft listed");
-    setTimeout(() => {
-      navigate("/profile");
-      window.location.reload();
-    }, 3000);
+    // setTimeout(() => {
+      // navigate("/profile");
+      // window.location.reload();
+    // }, 3000);
     // navigate("/profile");
   };
 
@@ -489,6 +492,9 @@ const Single = ({ search, setSearch }) => {
     price = inputValue;
     singleMinting = true;
 
+    console.log("collection  in createNFT", collection);
+    let tempCollection = collection;
+
     console.log("crypto in check", crypto);
 
     console.log("startTimestamp in if", startingDate);
@@ -519,9 +525,9 @@ const Single = ({ search, setSearch }) => {
       title: title.current.value,
       price: price,
       description: description.current.value,
-      crypto: collection.crypto, 
+      crypto: collection.crypto,
       file: selectedImage,
-      collection: collection.collection_id,
+      collection: tempCollection.collection_id,
     };
 
     console.log("item", item);
@@ -535,6 +541,8 @@ const Single = ({ search, setSearch }) => {
       item.collection != null
     ) {
       //  UNCOMMENT THIS
+    console.log("filezz", file);
+
       uploadToIPFS(file);
     } else {
       toast.warning("Fill all the fields to continue", {

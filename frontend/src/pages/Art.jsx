@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { TNL } from 'tnl-midjourney-api';
 import apis from '../service'
 import Loader from '../components/shared/Loader'
+import { ToastContainer, toast } from "react-toastify";
 const Art = ({ search, setSearch }) => {
     const navigate = useNavigate()
     const [loader, setLoader] = useState(false)
@@ -16,13 +17,34 @@ const Art = ({ search, setSearch }) => {
     const [generatedArts, setgeneratedArts] = useState([])
     const [base64Images, setBase64Images] = useState()
     const [selectCount, setSelectCount] = useState(0)
+    const [promptCalculator, setPromptCalculator] = useState('')
     const buttonRef = useRef(null);
     const id = JSON.parse(localStorage.getItem("data"));
     const user_id = id?.id;
+
+    const viewRemainingArtGallery = async (user_id) =>{
+        const response = await apis.viewRemainingArtGallery(user_id)
+        console.log(response?.data?.data);
+        setPromptCalculator(response?.data?.data)
+    }
+    const generateArtGalleryImages = async (user_id , total_generates) =>{
+        try {
+            const response = await apis.generateArtGalleryImages({user_id : user_id , total_generates :total_generates});
+            setPromptCalculator(response?.data?.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    // useEffect(() =>{
+    //     viewRemainingArtGallery(user_id)
+    // } , [])
+
     useEffect(() => {
         const count = generatedArts.filter(item => item.selected).length;
         setSelectCount(count)
     }, [generatedArts])
+
     const handleSelectArt = (index) => {
         console.log("I'm being selected", index);
         const updatedArts = [...generatedArts];
@@ -42,8 +64,8 @@ const Art = ({ search, setSearch }) => {
     const [midjourneyId, setMidjourneyId] = useState('')
 
     const getMidjourneyId = async (event) => {
-        // console.log(event , 'adasdasdas');
-        event.preventDefault();
+        if((promptCalculator?.remaining/4) != 0){
+            event.preventDefault();
         setLoader(true)
         try {
             const response = await apis.getMidjourneyId({
@@ -63,45 +85,57 @@ const Art = ({ search, setSearch }) => {
             getStabilityImages()
             // setLoader(false)
         }
+        }else{
+            toast.error("No prompt avaliable", {
+                position: toast.POSITION.TOP_CENTER,
+              });
+        }
+        
     };
 
     const getMidjourneyImagesFromId = async () => {
         console.log(midjourneyId, 'id');
-        try {
-            const response = await apis.getMidjourneyImagesFromId()
-            // const response = await apis.getMidjourneyImagesFromId(midjourneyId)
-            if (response?.data?.progress < 100 || response?.data?.progress == 'incomplete') {
-                getMidjourneyImagesFromId()
-            } else {
-                let tempImages = []
-                for (let index = 0; index < response?.data?.response?.imageUrls?.length; index++) {
-                    tempImages.push({ image: response?.data?.response?.imageUrls?.[index], selected: false })
+        if((promptCalculator?.remaining/4) != 0){
+            try {
+                // const response = await apis.getMidjourneyImagesFromId()
+                const response = await apis.getMidjourneyImagesFromId(midjourneyId)
+                if (response?.data?.progress < 100 || response?.data?.progress == 'incomplete') {
+                    getMidjourneyImagesFromId()
+                } else {
+                    let tempImages = []
+                    for (let index = 0; index < response?.data?.response?.imageUrls?.length; index++) {
+                        tempImages.push({ image: response?.data?.response?.imageUrls?.[index], selected: false })
+                    }
+                    setgeneratedArts(tempImages)
+                    setprompt('')
+                    generateArtGalleryImages(user_id , 4)
+                    setLoader(false)
+                    setMidjourneyId('')
                 }
-                setgeneratedArts(tempImages)
-                setprompt('')
-                setLoader(false)
+            } catch (error) {
+                console.log('error');
+                getStabilityImages()
                 setMidjourneyId('')
             }
-        } catch (error) {
-            console.log('error');
-            getStabilityImages()
-            setMidjourneyId('')
-            // setLoader(false)
-
+        }else{
+            toast.error("No prompt avaliable", {
+                position: toast.POSITION.TOP_CENTER,
+              });
         }
     }
 
 
     useEffect(() => {
-        if (midjourneyId !== '') {
+        if (midjourneyId !== '' && promptCalculator?.remaining != 0) {
             getMidjourneyImagesFromId()
         }
 
     }, [midjourneyId])
 
-    useEffect(() => {
+    useEffect( () => {
         console.log('outslide');
         if (prompt !== '') {
+            viewRemainingArtGallery(user_id)
             buttonRef.current.click();
         }
 
@@ -109,14 +143,14 @@ const Art = ({ search, setSearch }) => {
 
 
     const getStabilityImages = async () => {
-
+        if((promptCalculator?.remaining/4) != 0){
         const body = {
             width: 512,
             height: 512,
             steps: 50,
             seed: 10,
             cfg_scale: 10,
-            samples: 1,
+            samples: 4,
             style_preset: "digital-art",
             text_prompts: [
                 {
@@ -128,13 +162,6 @@ const Art = ({ search, setSearch }) => {
 
         try {
             const response = await apis.getStabilityImages(body);
-            // let tempimages = []
-            // for (let i = 0; i < response?.data?.artifacts.length; i++) {
-            //     tempimages.push(response?.data?.artifacts?.[i]?.base64)
-            // }
-            // setBase64Images(tempimages)
-            // console.log(response, 'dddddd');
-            // console.log(base64Images, 'dddddd');
             const urls = response.data.artifacts.map((image) => {
                 const byteCharacters = atob(image.base64);
                 const byteNumbers = new Array(byteCharacters.length);
@@ -156,13 +183,19 @@ const Art = ({ search, setSearch }) => {
             setgeneratedArts(tempImages);
             setprompt('')
             setLoader(false)
+            generateArtGalleryImages(user_id , 4)
         } catch (error) {
             console.error("Error fetching data:", error);
             setgeneratedArts([])
             setErrorMessage('Oops something went wrong, please try again')
             setLoader(false)
             setprompt('')
+        }}else{
+            toast.error("No prompt avaliable", {
+                position: toast.POSITION.TOP_CENTER,
+              });
         }
+
     };
 
     const saveToGallery = async () => {
@@ -202,11 +235,13 @@ const Art = ({ search, setSearch }) => {
     // }, [imageUrls]);
 
     return (
+        <>
         < div className='art-page'>
             {loader && <Loader />}
 
             <Header search={search} setSearch={setSearch} />
             <h1 style={{ textAlign: 'center' }}>Your Generated Art</h1>
+            <h3 className='remaining-prompt' >Your remaining prompt is {promptCalculator?.remaining/4}</h3>
             <section className="home-first-section">
                 <div className="home-first-wraperr">
                     <div className="search" id="prompt">
@@ -246,6 +281,8 @@ const Art = ({ search, setSearch }) => {
                 <p className='art-error'>{errorMessage}</p>
             }
         </ div>
+        <ToastContainer />
+        </>
     )
 }
 

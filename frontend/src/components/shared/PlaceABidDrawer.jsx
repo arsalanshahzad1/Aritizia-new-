@@ -857,19 +857,28 @@ const PlaceABidDrawer = ({
   const [bidFunction, setBidFunction] = useState("");
 
   const bid = () => {
-    console.log("ETH za", bidFunction);
-    console.log("USDT za", buyNowPrice);
-    if (bidFunction == 0) {
-      console.log("bidding with ETH");
-      bidWithETH();
-    } else if (bidFunction == 1) {
-      console.log("bidding with USDT");
-      bidWithUSDT();
-    } else if (bidFunction == 2) {
-      console.log("bidding with FIAT");
-      bidWithFIAT();
+    if (buyNowPrice >= Number(highestBid).toFixed(3)) {
+      console.log("ETH za", bidFunction);
+      console.log("USDT za", buyNowPrice);
+      if (bidFunction == 0) {
+        console.log("bidding with ETH");
+        bidWithETH();
+        setSucess(false)
+      } else if (bidFunction == 1) {
+        console.log("bidding with USDT");
+        bidWithUSDT();
+        setSucess(false)
+      } else if (bidFunction == 2) {
+        console.log("bidding with FIAT");
+        bidWithFIAT();
+        setSucess(false)
+      } else {
+        console.log("please select a bid method first");
+      }
     } else {
-      console.log("please select a bid method first");
+      toast.warning("your bid must be greater than last bid", {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -982,9 +991,7 @@ const PlaceABidDrawer = ({
                               alt="running auction"
                             />
                             <span>
-                              {
-                                <NftCountdown endDateTime={endTime} />
-                              }
+                              {<NftCountdown endDateTime={endTime} />}
                             </span>
                           </button>
                         </div>
@@ -994,18 +1001,26 @@ const PlaceABidDrawer = ({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by {" "}
-                    {
-                      userData?.wallet_address ==
-                        nftDetails?.user?.wallet_address ? (
-                        <Link to={"/profile"}>
-                          <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
-                        </Link>
-                      ) : (
-                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.wallet_address}`)}>{nftDetails?.owner?.username}</span>
-                      )
-                    }
-
+                    Owned by{" "}
+                    {userData?.wallet_address ==
+                    nftDetails?.user?.wallet_address ? (
+                      <Link to={"/profile"}>
+                        <span>
+                          {nftDetails?.user?.first_name}{" "}
+                          {nftDetails?.user?.last_name}
+                        </span>
+                      </Link>
+                    ) : (
+                      <span
+                        onClick={() =>
+                          navigate(
+                            `/other-profile?add=${nftDetails?.user?.wallet_address}`
+                          )
+                        }
+                      >
+                        {nftDetails?.owner?.username}
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="three-line">
@@ -1025,20 +1040,23 @@ const PlaceABidDrawer = ({
                       <div className="logo-name">
                         {
                           userData?.wallet_address ==
-                            nftDetails?.user?.wallet_address ? (
+                          nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              {nftDetails?.user?.profile_image ?
+                              {nftDetails?.user?.profile_image ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""
                                 />
-                                :
+                              ) : (
                                 <img
-                                  src={'/public/assets/images/user-none.png'}
+                                  src={"/public/assets/images/user-none.png"}
                                   alt=""
                                 />
-                              }
-                              <span>{nftDetails?.user?.first_name} {nftDetails?.user?.last_name}</span>
+                              )}
+                              <span>
+                                {nftDetails?.user?.first_name}{" "}
+                                {nftDetails?.user?.last_name}
+                              </span>
                             </Link>
                           ) : (
                             <div
@@ -1064,7 +1082,6 @@ const PlaceABidDrawer = ({
                           //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
-
                         }
                       </div>
                     </div>
@@ -1169,8 +1186,11 @@ const PlaceABidDrawer = ({
                       Bid Now
                     </button>
                   ) : (
-                    <button className="nft-buy-btn"
-                      disabled={bidDisable || !chack} onClick={claimAuction}>
+                    <button
+                      className="nft-buy-btn"
+                      disabled={bidDisable || !chack}
+                      onClick={claimAuction}
+                    >
                       Claim
                     </button>
                   )}
@@ -1252,7 +1272,7 @@ const PlaceABidDrawer = ({
             <>
               <div className="showBuyNow-step2">
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Enter Price"
                   value={buyNowPrice}
                   onChange={(e) => setBuyNowPrice(e.target.value)}
@@ -1282,9 +1302,9 @@ const PlaceABidDrawer = ({
               </div>
             </>
           )}
+      <ToastContainer />
         </div>
       </Modal>
-      <ToastContainer />
     </>
   );
 };

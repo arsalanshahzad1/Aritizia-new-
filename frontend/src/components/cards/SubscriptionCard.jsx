@@ -160,7 +160,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 </div>
                             </div>
                             :
-                            <div className="subscription-card-wrap" key={i} >
+                            <div key={i} className={`subscription-card-wrap ${res?.user_subs.length != 0 ? 'active' : ''}`}>
                                 <div onClick={() => { setShowPaymentForm(true); setPlanName(res?.name); setIndex(i) }}>
                                     <h2 className='title'>{res?.name}</h2>
                                     <div>
@@ -284,7 +284,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                         }
                                     </div>
                                 </div>
-                                {res?.user_subs.length === 0 ? null :
+                                {/* {res?.user_subs.length === 0 ? null :
                                     <div className='sub-card-chack-box' style={{ marginBottom: '-30px' }}>
                                         <div className="left">
                                             <div style={{display : 'flex' , justifyContent : 'space-between' , gap: '5px'}}>
@@ -297,8 +297,9 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                             </div>
                                                 <DateDisplay datetime={res?.user_subs?.next_renewal_date} />
                                         </div>
+                                        
                                     </div>
-                                }
+                                } */}
                             </div>
                         }
                     </div>

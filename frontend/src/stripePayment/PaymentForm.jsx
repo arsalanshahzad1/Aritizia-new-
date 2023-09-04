@@ -35,6 +35,7 @@ const PaymentForm = ({
   setShowPaymentForm,
   showResponseMessage,
   index,
+  viewSubscriptions
 }) => {
   console.log(index, "index");
   const [success, setSuccess] = useState(false);
@@ -72,6 +73,8 @@ const PaymentForm = ({
         toast.success("Plan purchased!", {
           position: toast.POSITION.TOP_RIGHT,
         });
+        setShowPaymentForm(false)
+        viewSubscriptions(user_id)
       }
         // {
         //     amout : 1000,

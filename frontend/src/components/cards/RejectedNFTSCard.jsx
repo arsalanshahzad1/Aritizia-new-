@@ -170,7 +170,8 @@ const RejectedNFTSCard = ({
             };
             console.log("nftData", nftData);
             rejected.push(nftData);
-            setRejectedNfts(rejected);
+            // setRejectedNfts(rejected);
+            setRejectedNfts((prev) => [...prev , nftData]);
           })
 
           .catch((error) => {

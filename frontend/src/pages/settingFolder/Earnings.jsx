@@ -525,7 +525,7 @@ const Earnings = () => {
         <div>
           <p>Total Sales Value</p>
           <h2>{earning?.total_sale_values} ETH</h2>
-          <p>-5,6K USD</p>
+          {/* <p>-5,6K USD</p> */}
         </div>
         <div>
           <p>No. of Sales</p>

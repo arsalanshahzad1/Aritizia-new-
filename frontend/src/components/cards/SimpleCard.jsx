@@ -240,9 +240,6 @@ const SimpleCard = ({
               </div>
 
               <div className="popUp-btn-group">
-                <div onClick={giveDiscount} className="button-styling btnCC">
-                  Add
-                </div>
                 <div
                   onClick={() => {
                     setshowDiscountPopUp(false), setdiscountPercentage(0);
@@ -251,8 +248,12 @@ const SimpleCard = ({
                 >
                   <div className="btnCCin">Cancel</div>
                 </div>
+                <div onClick={giveDiscount} className="button-styling btnCC">
+                  Add
+                </div>
               </div>
             </div>
+            <ToastContainer />
           </div>
         </>
       )}
@@ -270,7 +271,7 @@ const SimpleCard = ({
         collection={collection}
         userAddress={userAddress}
       />
-      <ToastContainer />
+      
     </>
   );
 };
