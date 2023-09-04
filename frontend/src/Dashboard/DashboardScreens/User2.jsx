@@ -127,8 +127,10 @@ function User2({ search, setSearch }) {
             collectionImages: collectionImages,
           };
           console.log(nftData);
-          myNFTs.push(nftData);
-          setNftList(myNFTs);
+          // myNFTs.push(nftData);
+
+          // setNftList(myNFTs);
+          setNftList((prev) => [...prev, nftData]);
 
           // } else if (listingType === 1) {
           //   const nftData = {

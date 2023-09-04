@@ -185,6 +185,8 @@ const RejectedNFTSCard = ({
     viewRejectedNftList(userId);
   }, []);
 
+  useEffect(() => {}, [rejectedNfts]);
+
   return (
     <>
       {rejectedNfts.length > 0 ? (

@@ -247,9 +247,10 @@ const OtherProfile = ({ search, setSearch }) => {
               collection: collection,
             };
 
-            console.log(nftData);
-            myNFTs.push(nftData);
-            setNftListFP(myNFTs);
+            // console.log(nftData);
+            // myNFTs.push(nftData);
+            // setNftListFP(myNFTs);
+            setNftListFP((prev) => [...prev, nftData]);
             console.log("myNFTs in function", myNFTs);
           } else if (listingType === 1) {
             const nftData = {
@@ -266,9 +267,10 @@ const OtherProfile = ({ search, setSearch }) => {
               startTime: auctionData.startTime.toString(),
             };
 
-            myAuctions.push(nftData);
-            console.log("auction in function", myAuctions);
-            setNftListAuction(myAuctions);
+            // myAuctions.push(nftData);
+            // console.log("auction in function", myAuctions);
+            // setNftListAuction(myAuctions);
+            setNftListAuction((prev) => [...prev, nftData]);
           }
         })
 

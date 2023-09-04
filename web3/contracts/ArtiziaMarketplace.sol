@@ -655,11 +655,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         );
 
         uint256 ethPriceInUsdt = getLatestUSDTPrice();
-
         uint256 _sellerPercent = getSubscriptionFee(_sellerPlan);
         uint256 _buyerPercent = getSubscriptionFee(_buyerPlan);
-
         uint256 _amountInETHInWei = _amount * 10 ** 12;
+
         _amountInETHInWei = _amountInETHInWei * ethPriceInUsdt;
         _amountInETHInWei = _amountInETHInWei / 10 ** 18;
         require(
