@@ -70,7 +70,7 @@ const Single = ({ search, setSearch }) => {
           setcollectionOptions((previousOptions) => [
             ...previousOptions,
             {
-              value: response?.data?.data[i]?.id,
+              collection_id: response?.data?.data[i]?.id,
               label: response?.data?.data[i]?.name,
               image: response?.data?.data[i]?.media[0]?.original_url,
               crypto: 1,
@@ -489,6 +489,9 @@ const Single = ({ search, setSearch }) => {
     price = inputValue;
     singleMinting = true;
 
+    console.log("collection  in createNFT", collection);
+    let tempCollection = collection;
+
     console.log("crypto in check", crypto);
 
     console.log("startTimestamp in if", startingDate);
@@ -519,9 +522,9 @@ const Single = ({ search, setSearch }) => {
       title: title.current.value,
       price: price,
       description: description.current.value,
-      crypto: collection.crypto, 
+      crypto: collection.crypto,
       file: selectedImage,
-      collection: collection.collection_id,
+      collection: tempCollection.collection_id,
     };
 
     console.log("item", item);

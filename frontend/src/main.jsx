@@ -5,10 +5,10 @@ import { hydrate, render } from "react-dom";
 // import Connector from "./connector";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-    {/* <Connector /> */}
-  </React.StrictMode>
+  // <React.StrictMode>
+  <App />
+
+  // </React.StrictMode>
 );
 
 // const rootElement = document.getElementById("root");

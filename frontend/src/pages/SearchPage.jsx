@@ -295,10 +295,13 @@ const SearchPage = ({ search, setSearch }) => {
 
           console.log("in getListedNfts");
           // console.log(nftData);
-          myNFTs.push(nftData);
+          // myNFTs.push(nftData);
           console.log("Setting list");
-          setNftListFP(myNFTs);
-          console.log("myNFTs in function", myNFTs);
+          
+          // setNftListFP(myNFTs);
+          setNftListFP((prev) => [...prev, nftData]);
+
+          // console.log("myNFTs in function", myNFTs);
           // if (listingType === 0) {
           //   const nftData = {
           //     id: id, //

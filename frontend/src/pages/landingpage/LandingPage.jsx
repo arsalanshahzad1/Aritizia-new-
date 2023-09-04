@@ -189,7 +189,7 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("discountOnNFT", discountOnNFT);
         console.log("discountOnNFT", typeof discountOnNFT);
 
-        let auctionData = await marketplaceContract._idToAuction(id);     
+        let auctionData = await marketplaceContract._idToAuction(id);
 
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()
@@ -197,7 +197,6 @@ const LandingPage = ({ search, setSearch }) => {
 
         listingType = structData.listingType;
         let listed = structData.listed;
-
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
@@ -251,7 +250,8 @@ const LandingPage = ({ search, setSearch }) => {
               };
 
               myNFTs.push(nftData);
-              setNftListFP(myNFTs);
+              // setNftListFP(myNFTs);
+              setNftListFP((prev) => [...prev, nftData]);
             } else if (listingType === 1) {
               const nftData = {
                 id: id, //
@@ -270,7 +270,8 @@ const LandingPage = ({ search, setSearch }) => {
               };
 
               myAuctions.push(nftData);
-              setNftListAuction(myAuctions);
+              // setNftListAuction(myAuctions);
+              setNftListAuction((prev) => [...prev, nftData]);
             }
           })
 
@@ -451,7 +452,7 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                    <button onClick={getBalance}>Get Balance</button>
+                    {/* <button onClick={getBalance}>Get Balance</button> */}
                     <div className="left">NFT</div>
                     <Link to="/search">
                       <div className="right">View more</div>

@@ -169,8 +169,8 @@ const RejectedNFTSCard = ({
               collectionImages: collectionImages,
             };
             console.log("nftData", nftData);
-            rejected.push(nftData);
-            setRejectedNfts(rejected);
+            // rejected.push(nftData);
+            setRejectedNfts((prev) => [...prev, nftData]);
           })
 
           .catch((error) => {
@@ -183,6 +183,8 @@ const RejectedNFTSCard = ({
   useEffect(() => {
     viewRejectedNftList(userId);
   }, []);
+
+  useEffect(() => {}, [rejectedNfts]);
 
   return (
     <>

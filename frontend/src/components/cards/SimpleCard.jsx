@@ -44,17 +44,6 @@ const SimpleCard = ({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-  // const openDrawer = () => {
-  //   if (showLinks === true) {
-  //     return onOpen(false);
-  //   } else {
-  //     setIsVisible(true);
-  //   }
-  // };
-  // const getProviderOrSigner = async () => {
-  //   console.log("getProviderOrSigner")
-  // }
-
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
@@ -93,12 +82,13 @@ const SimpleCard = ({
     );
 
     console.log("marketplaceContract", marketplaceContract);
-
     console.log("TokenId", id);
-    console.log("Discount", discountPercentage);
-
+    console.log("discountedValue", discountedValue);
+    console.log("discountPercentage", discountPercentage);
+    console.log("discount to give Percentage", 100 - discountPercentage);
+    let discountToGive = 100 - discountPercentage;
     await (
-      await marketplaceContract.changeFanDiscountPercent(id, discountPercentage)
+      await marketplaceContract.changeFanDiscountPercent(id, discountToGive)
     ).wait();
     setshowDiscountPopUp(false);
     setdiscountPercentage(0);

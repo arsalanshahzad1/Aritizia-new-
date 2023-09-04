@@ -861,7 +861,7 @@ function ProfileDrawerAdmin({
                   </>
                 )} */}
               </div>
-              <button onClick={checkSeller}>Check approve</button>
+              {/* <button onClick={checkSeller}>Check approve</button> */}
             </div>
           </div>
         </div>

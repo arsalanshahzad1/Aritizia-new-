@@ -369,6 +369,8 @@ function CollectionProfile({ search, setSearch }) {
     const provider = await getProviderOrSigner();
     console.log("Connected wallet", userAddress);
     console.log("provider", provider);
+    console.log("collectionData", collectionData);
+    console.log("collectionData.nfts", collectionData.nfts);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -387,7 +389,7 @@ function CollectionProfile({ search, setSearch }) {
 
     let listingType;
 
-    let mintedTokens = await marketplaceContract.getListedNfts();
+    let mintedTokens = collectionData.nfts;
 
     // let collectionTokens = await marketplaceContract.collection(0, 0);
 
@@ -400,14 +402,17 @@ function CollectionProfile({ search, setSearch }) {
     let myAuctions = [];
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
-      id = +mintedTokens[i].tokenId.toString();
+      id = mintedTokens[i];
       // id = mintedTokens[i];
+      console.log("id", id);
       console.log("YESS");
       let firstOwner = mintedTokens[i].firstOwner;
       if (firstOwner != "0x0000000000000000000000000000000000000000") {
         const metaData = await nftContract.tokenURI(id);
 
         const structData = await marketplaceContract._idToNFT(id);
+
+        console.log("structData", structData);
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -454,45 +459,46 @@ function CollectionProfile({ search, setSearch }) {
             ///////////////////////////
             ///////////////////////////
 
-            if (collection == 0) {
-              if (listingType === 0) {
-                const nftData = {
-                  id: id, //
-                  title: title,
-                  image: image,
-                  price: price,
-                  crypto: crypto,
-                  royalty: royalty,
-                  description: description,
-                  collection: collection,
-                  collectionImages: collectionImages,
-                  seller: seller,
-                };
+            if (listingType === 0) {
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+                seller: seller,
+              };
 
-                console.log(nftData);
-                myNFTs.push(nftData);
-                setNftListFP(myNFTs);
-                console.log("myNFTs in function", myNFTs);
-              } else if (listingType === 1) {
-                const nftData = {
-                  id: id, //
-                  title: title,
-                  image: image,
-                  price: price,
-                  paymentMethod: crypto,
-                  basePrice: price,
-                  startTime: auctionData.startTime.toString(),
-                  endTime: auctionData.endTime.toString(),
-                  highestBid: highestBid,
-                  highestBidder: auctionData.highestBidder.toString(),
-                  // isLive: auctionData.isLive.toString(),
-                  seller: auctionData.seller.toString(),
-                };
+              console.log("nftData", nftData);
 
-                myAuctions.push(nftData);
-                console.log("auction in function", myAuctions);
-                setNftListAuction(myAuctions);
-              }
+              // myNFTs.push(nftData);
+              // setNftListFP(myNFTs);
+              setNftListFP((prev) => [...prev, nftData]);
+              // console.log("myNFTs in function", myNFTs);
+            } else if (listingType === 1) {
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                paymentMethod: crypto,
+                basePrice: price,
+                startTime: auctionData.startTime.toString(),
+                endTime: auctionData.endTime.toString(),
+                highestBid: highestBid,
+                highestBidder: auctionData.highestBidder.toString(),
+                // isLive: auctionData.isLive.toString(),
+                seller: auctionData.seller.toString(),
+              };
+
+              // myAuctions.push(nftData);
+              // console.log("auction in function", myAuctions);
+              // setNftListAuction(myAuctions);
+              setNftListAuction((prev) => [...prev, nftData]);
             }
           })
 

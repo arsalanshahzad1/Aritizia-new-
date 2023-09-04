@@ -312,6 +312,8 @@ function ProfileDrawer({
     // let fee = Math.ceil((priceInUSD * 3) / 100);
     // setPlatformFee(fee);
 
+    console.log("discount", discount);
+
     if (discount != 0) {
       let discountedEthPrice = (nftEthPrice * discount) / 100;
       // let discountedEthPrice = (nftEthPrice * discount) / 100;
@@ -324,8 +326,11 @@ function ProfileDrawer({
       let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
       let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
-
-      setDiscountedPlatformFeeETH(Math.ceil(feeETH));
+      console.log("ssss feeETH", feeETH);
+      console.log("ssss priceInETH", priceInETH);
+      // setDiscountedPlatformFeeETH(Math.ceil(feeETH));
+      setDiscountedPlatformFeeETH(feeETH);
+      console.log("ssss Math.ceil(feeETH)", Math.ceil(feeETH));
       let oneETHInUSD = 1 / priceInETH;
       let priceInUSD = priceETH;
       priceInUSD = oneETHInUSD * priceInUSD;
@@ -355,21 +360,6 @@ function ProfileDrawer({
     let checkFan = await marketplaceContract.checkFan(id);
 
     console.log("checkFan", checkFan);
-
-    let fanlist = await marketplaceContract.getFans(
-      "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-    );
-    console.log("fanlist", fanlist);
-
-    let fanlist2 = await marketplaceContract.getFans(
-      "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"
-    );
-    console.log("fanlist2", fanlist2);
-
-    console.log("fanlist2", fanlist2);
-    console.log("fanlist2", fanlist2);
-    console.log("fanlist2", fanlist2);
-    console.log("fanlist2", fanlist2);
   };
 
   let ethPurchase = false;
@@ -399,9 +389,13 @@ function ProfileDrawer({
     var value = amount.toString();
     let checkFan = await marketplaceContract.checkFan(id);
 
-    if (checkFan) {
+    const structData2 = await marketplaceContract._idToNFT2(id);
+    let discount = +structData2.fanDiscountPercent.toString();
+
+    if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeETH;
-      console.log("666666666666666");
+      console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
+      console.log("www discountedEth", discountedEth);
 
       // check this
       amount = +discountedEth + fee;
@@ -465,18 +459,25 @@ function ProfileDrawer({
 
     let checkFan = await marketplaceContract.checkFan(id);
     console.log("checkFan  ", checkFan);
+    const structData2 = await marketplaceContract._idToNFT2(id);
+    let discount = +structData2.fanDiscountPercent.toString();
 
-    if (checkFan) {
+    if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeUSDT;
       console.log("fee", fee);
+      console.log("www platformFeeUSDT", platformFeeUSDT);
+      console.log("www amountUSD", fee);
+
+      console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
+      console.log("www discountedAmountUSD", discountedAmountUSD);
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
       amountInWei = amountInWei.toString();
 
-      console.log("fee", fee);
-      console.log("amount", amount);
-      console.log("amountInWei", amountInWei);
+      console.log("www fee", fee);
+      console.log("www amount", amount);
+      console.log("www amountInWei", amountInWei);
     }
     console.log("amountInWei  ", amountInWei);
     console.log(
@@ -886,6 +887,7 @@ function ProfileDrawer({
       Date: "May 07 at 5:00 PM",
     },
   ];
+
   useEffect(() => {
     if (isVisible) {
       getNFTDetailByNFTTokenId();
@@ -916,6 +918,7 @@ function ProfileDrawer({
                 <div className="d-flex align-items-center">
                   <p className="Earning-filter-text">Price History</p>
                 </div>
+
                 <div className="search-filter">
                   <div className="l-2">
                     <Dropdown
@@ -1214,7 +1217,7 @@ function ProfileDrawer({
               </div>
             </div>
           </div>
-          <button onClick={checkSeller}>checkSeller </button>
+          {/* <button onClick={checkSeller}>checkSeller </button> */}
         </div>
       </Drawer>
       <Modal
