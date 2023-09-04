@@ -2022,6 +2022,9 @@ const Multiple = ({ search, setSearch }) => {
                                           value={nftForm.title}
                                           onChange={handleNftForm}
                                           name="title"
+                                          minLength={3}
+                                          maxLength={20}
+
                                           // onChange={(e) => setTitle(e.target.value)}
                                         />
                                       </div>
@@ -2032,6 +2035,8 @@ const Multiple = ({ search, setSearch }) => {
                                       <div className="col-lg-9">
                                         <h2>Description</h2>
                                         <input
+                                        minLength={3}
+                                        maxLength={50}
                                           type="text"
                                           placeholder="e.g. ‘This is very limited item’"
                                           value={nftForm.desc}
@@ -2047,7 +2052,7 @@ const Multiple = ({ search, setSearch }) => {
                                         <div className="col-lg-8 col-md-8 col-6">
                                           <h2>Price</h2>
                                           <input
-                                            type="text"
+                                            type="number"
                                             value={nftForm.price}
                                             onChange={handleNftForm}
                                             name="price"

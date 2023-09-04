@@ -2189,7 +2189,7 @@ footer h1 {
 }
 
 .earning-box div:nth-child(2) {
-  padding: 20px 30px;
+  padding: 34px 45px;
   background: #f2f2f2;
   border-radius: 20px;
   border: 2px solid #f2f2f2;
@@ -5402,4 +5402,33 @@ h3 {
   font-size: 22px;
   font-family: "Jost";
   color: #b600d1;
+}
+.transition-div {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  min-width: 96px;
+  min-height: 0;
+  padding: 8px 12px;
+  background-color: rgba(50, 50, 51, 0.88);
+  border-radius: 8px;
+  z-index: 9999;
+}
+
+.transition-div p {
+  color: #fff !important;
+  font-size: 14px !important;
+  line-height: 20px;
+  white-space: pre-wrap;
+  text-align: center;
+  word-wrap: break-word;
+  margin: 0 !important;
+}
+
+.transition-div.show {
+  opacity: 1;
 }
