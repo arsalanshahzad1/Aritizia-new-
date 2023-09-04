@@ -36,6 +36,7 @@ const
     isVisible,
     setIsVisible,
     openDrawer,
+    collectionImages
     // userAddress,
   }) => {
     const [showLinks, setShowLinks] = useState(false);
@@ -180,7 +181,7 @@ const
                     <div className="css-10nf7hq detail-wrap">
                       <div className="center-icon">
                         <div className="icon">
-                          <img src="/assets/images/duck.png" alt="" />
+                          <img src={collectionImages} alt="" />
                           <img src="/assets/images/chack.png" alt="" />
                         </div>
                       </div>

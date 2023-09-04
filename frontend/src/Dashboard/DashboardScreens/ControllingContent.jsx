@@ -24,6 +24,7 @@ import {
 } from "../../methods/walletManager";
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
 import DashboardCard2 from "./DashboardCard2";
+import apis from "../../service";
 
 function ControllingContent({ search, setSearch }) {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
@@ -85,19 +86,22 @@ function ControllingContent({ search, setSearch }) {
       let id = mintedTokens[i];
       // id = +mintedTokens[i].tokenId.toString();
 
-      // let collectionId;
-      // collectionId = +mintedTokens[i].collectionId.toString();
+      const structData = await marketplaceContract._idToNFT(id);
+      
+
+      let collectionId = structData.collectionId.toString();
+
       // console.log("YESS", id);
 
-      // const response = await apis.getNFTCollectionImage(collectionId);
-      // console.log(response, "responses");
-      // const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+
+      const response = await apis.getNFTCollectionImage(collectionId);
+      console.log(response, "responses");
+      const collectionImages = response?.data?.data?.media?.[0]?.original_url;
       // console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
       // console.log(collectionImages, "trrrr");
 
       const metaData = await nftContract.tokenURI(id);
 
-      const structData = await marketplaceContract._idToNFT(id);
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -116,6 +120,7 @@ function ControllingContent({ search, setSearch }) {
         .then((response) => {
           const meta = response.data;
           let data = JSON.stringify(meta);
+          console.log(data , 'dasdasd');
 
           data = data.slice(2, -5);
           data = data.replace(/\\/g, "");
@@ -126,7 +131,7 @@ function ControllingContent({ search, setSearch }) {
           const image = data.image;
           const royalty = data.royalty;
           const description = data.description;
-          // const collection = data.collection;
+          const collection = data.collection;
 
           // if (listingType === 0) {
           const nftData = {
@@ -137,8 +142,8 @@ function ControllingContent({ search, setSearch }) {
             crypto: crypto,
             royalty: royalty,
             description: description,
-            // collection: collection,
-            // collectionImages: collectionImages,
+            collection: collection,
+            collectionImages: collectionImages,
           };
           // console.log(nftData);
           // myNFTs.push(nftData);
@@ -394,7 +399,7 @@ function ControllingContent({ search, setSearch }) {
                         setIsVisible={setIsVisible}
                         openDrawer={openDrawer}
                         // collection={item?.collection}
-                        // collectionImages={item?.collectionImages}
+                        collectionImages={item?.collectionImages}
                       />
                     ))}
                   </div>

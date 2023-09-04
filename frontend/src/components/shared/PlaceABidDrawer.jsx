@@ -1003,7 +1003,7 @@ const PlaceABidDrawer = ({
                   <p>
                     Owned by{" "}
                     {userData?.wallet_address ==
-                    nftDetails?.user?.wallet_address ? (
+                      nftDetails?.user?.wallet_address ? (
                       <Link to={"/profile"}>
                         <span>
                           {nftDetails?.user?.first_name}{" "}
@@ -1039,10 +1039,9 @@ const PlaceABidDrawer = ({
                       <h3>Creator</h3>
                       <div className="logo-name">
                         {
-                          userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address ? (
+                          userData?.wallet_address == nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              {nftDetails?.user?.profile_image ? (
+                              {nftDetails?.user?.profile_image? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""
@@ -1071,10 +1070,17 @@ const PlaceABidDrawer = ({
                                 )
                               }
                             >
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
+                              {nftDetails?.user?.profile_image === null ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
                               <span>{nftDetails?.user?.username}</span>
                             </div>
                           )
@@ -1302,7 +1308,7 @@ const PlaceABidDrawer = ({
               </div>
             </>
           )}
-      <ToastContainer />
+          <ToastContainer />
         </div>
       </Modal>
     </>

@@ -202,7 +202,7 @@ const createBackendServer = (baseURL) => {
   const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
   const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
   const removeArtGallery = async (RealUserId) => await api.get(`remove-art-gallery/${RealUserId}`);
-
+  const getUrlImage = async (url) => await api.get(url)
 
 
 
@@ -279,7 +279,7 @@ const createBackendServer = (baseURL) => {
     viewRemainingArtGallery,
     removeArtGallery,
 
-
+    getUrlImage
 
   };
 };

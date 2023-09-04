@@ -90,38 +90,44 @@ function Fan({ id }) {
   }, []);
   return (
     <>
-      {fanListing.map((data, index) => {
-        return (
-          <div className="Follow-row" key={index}>
-            <Link to={`/other-profile?add=${data?.wallet_address}`}>
-              <div className="left">
-                <div className="img-holder">
-                  {data?.profile_image ? (
-                    <img src={data?.profile_image} alt="" />
-                  ) : (
-                    <img src="assets/images/user-none.png" alt="" />
-                  )}
-                </div>
-                <div className="txt">
-                  <p>{data?.username}</p>
-                  <p>{data?.count_fan} Fans</p>
-                </div>
+    {fanListing.length > 0 ?
+    <>
+    {fanListing.map((data, index) => {
+      return (
+        <div className="Follow-row" key={index}>
+          <Link to={`/other-profile?add=${data?.wallet_address}`}>
+            <div className="left">
+              <div className="img-holder">
+                {data?.profile_image ? (
+                  <img src={data?.profile_image} alt="" />
+                ) : (
+                  <img src="assets/images/user-none.png" alt="" />
+                )}
               </div>
-            </Link>
-            <div className="right">
-              <button
-                className="unfollow"
-                onClick={() => {
-                  removeFan(data?.fan_id);
-                }}
-              >
-                Remove
-              </button>
+              <div className="txt">
+                <p>{data?.username}</p>
+                <p>{data?.count_fan} Fans</p>
+              </div>
             </div>
-            {/* <button onClick={getFansBC}>getBC</button> */}
+          </Link>
+          <div className="right">
+            <button
+              className="unfollow"
+              onClick={() => {
+                removeFan(data?.fan_id);
+              }}
+            >
+              Remove
+            </button>
           </div>
-        );
-      })}
+          {/* <button onClick={getFansBC}>getBC</button> */}
+        </div>
+      );
+    })}
+    </>
+    :
+    <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+  }
     </>
   );
 }

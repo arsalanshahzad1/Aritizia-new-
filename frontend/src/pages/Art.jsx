@@ -97,8 +97,8 @@ const Art = ({ search, setSearch }) => {
         console.log(midjourneyId, 'id');
         if((promptCalculator?.remaining/4) != 0){
             try {
-                // const response = await apis.getMidjourneyImagesFromId()
-                const response = await apis.getMidjourneyImagesFromId(midjourneyId)
+                const response = await apis.getMidjourneyImagesFromId()
+                // const response = await apis.getMidjourneyImagesFromId(midjourneyId)
                 if (response?.data?.progress < 100 || response?.data?.progress == 'incomplete') {
                     getMidjourneyImagesFromId()
                 } else {

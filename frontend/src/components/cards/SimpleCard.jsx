@@ -102,6 +102,21 @@ const SimpleCard = ({
     const discountvalue = (value / 100) * discountPercentage;
     setdiscountedValue(value - discountvalue);
   };
+  let pricee = useRef(0);
+  const [showWarning, setShowWarning] = useState(false);
+  const handleInputChange = (event) => {
+    console.log(event);
+    const value = event.target.value;
+    console.log(value);
+    if (/^\d*\.?\d*$/.test(value) || value === "") {
+      pricee = Number(value);
+      console.log("Price", pricee);
+      setdiscountPercentage(value);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
+    }
+  };
   return (
     <>
       <div className="col-lg-3 col-md-4">
@@ -215,15 +230,19 @@ const SimpleCard = ({
                   <input
                     placeholder="0"
                     value={discountPercentage}
-                    onChange={(e) => {
-                      setdiscountPercentage(e.target.value);
-                    }}
-                    type="number"
+             
+                    onChange={handleInputChange}
+                    type="text"
                     className="input-percent"
                   />
                   <div>%</div>
                 </div>
               </div>
+                {showWarning && (
+                  <p style={{ color: "red" , fontSize : '14px' }}>
+                    Please enter a valid positive number.
+                  </p>
+                )}
               <div className="line-2">
                 <div className="discount-text">Value</div>
                 <div className="value-div">{discountedValue} ETH</div>
@@ -261,7 +280,7 @@ const SimpleCard = ({
         collection={collection}
         userAddress={userAddress}
       />
-      
+
     </>
   );
 };

@@ -951,8 +951,10 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const handleFileUpload = (event) => {
+
     const files = event.target.files;
-    const imageUrls = Array.from(files).map((file) =>
+    // const im
+    ageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
     );
     setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);

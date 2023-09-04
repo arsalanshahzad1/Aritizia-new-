@@ -29,6 +29,39 @@ import {
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
+// const [imageUrl, setImageUrl] = useState('');
+//   const [imageFile, setImageFile] = useState(null);
+
+  const convertImageUrlToImageFile = async (url) => {
+    try {
+      // Download the image from the URL
+      const imageUrl = url;
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image. Status: ${response.status}`);
+      }
+
+      // Convert the response data to a Blob
+      const imageBlob = await response.blob();
+
+      // Extract the file name from the URL or specify a custom name
+      const urlParts = imageUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
+
+      // Create a File object from the Blob
+      const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+      return(
+        file
+      )
+      // console.log(file);
+      // Set the image file in state
+      // setImageFile(file);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
 const Single = ({ search, setSearch }) => {
   let image = "";
   const [listingType, setListingType] = useState(0);
@@ -45,6 +78,10 @@ const Single = ({ search, setSearch }) => {
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
   const navigate = useNavigate();
+
+  // useEffect(() =>{
+  //   convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
+  // } ,[])
 
   const getCollection = async () => {
     const response = await apis.getNFTCollection();
@@ -201,15 +238,18 @@ const Single = ({ search, setSearch }) => {
   // };
 
   // Upload image to IPFS
+
+
   const uploadToIPFS = async (event) => {
     if (typeof selectedImage !== "undefined") {
       try {
         setLoading(true);
         console.log("this is image selectedImage ", selectedImage);
         console.log("this is image item.file ", item.file);
-        // const resut = await uploadFileToIPFS(item.file);
-        
+        // const file = await convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
+
         const resut = await uploadFileToIPFS(item.file);
+        // const resut = await uploadFileToIPFS(file);
 
         //const result = await client.add(file)
         console.log("!!!!!!!!!!!!!!!!!!", resut);
@@ -909,9 +949,10 @@ const Single = ({ search, setSearch }) => {
                                   style={{ display: "none" }}
                                   onChange={handleImageUpload}
                                 />
+                                <br/>
                                 <div
                                   onClick={handleButtonClick}
-                                  className="button-styling browse-btn"
+                                  className="button-styling"
                                 >
                                   Browse
                                 </div>
@@ -1089,10 +1130,12 @@ const Single = ({ search, setSearch }) => {
                         </div>
                         <div className="line-seven">
                           <div className="row">
-                            <div className="col-lg-8">
-                              <button type="submit" className="button-styling">
+                            <div className="col-lg-12">
+                              <div  style={{textAlign : 'right'}}>
+                              <button type="submit" className="button-styling" >
                                 Create Item
                               </button>
+                              </div>
                             </div>
                           </div>
                         </div>
