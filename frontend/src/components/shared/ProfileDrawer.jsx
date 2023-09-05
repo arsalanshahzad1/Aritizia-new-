@@ -226,7 +226,7 @@ function ProfileDrawer({
   ) => {
     console.log("handleNFTSoldEvent");
     let soldData = {
-      token_id: tokenId.toString(),
+      token_id: +(tokenId.toString()),
       seller: seller.toString(),
       buyer: owner.toString(),
       price: ethers.utils.formatEther(price.toString()),
@@ -492,6 +492,8 @@ function ProfileDrawer({
     );
 
     appprove.wait();
+    console.log("www ");
+    console.log("wwwasda ");
 
     console.log("www paymentMethod", paymentMethod);
     console.log("www id", id);
@@ -527,13 +529,14 @@ function ProfileDrawer({
   ];
 
   const getNFTDetailByNFTTokenId = async () => {
+    try{
     const response = await apis.getNFTByTokenId(id);
-    console.log(
-      "Zayyan nft ki detail sey subscription plan",
-      response?.data?.data?.subscription_plan
-    );
+    console.log("ressss", response?.data?.data?.subscription_plan);
     setNftDetails(response?.data?.data);
     setSellerPlan(response?.data?.data?.subscription_plan);
+    } catch(e){
+      console.log("Error: ",e);
+    }
   };
 
   const Monthly_data = [
@@ -890,6 +893,7 @@ function ProfileDrawer({
 
   useEffect(() => {
     if (isVisible) {
+
       getNFTDetailByNFTTokenId();
     }
   }, [isVisible]);
