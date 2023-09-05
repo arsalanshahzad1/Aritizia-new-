@@ -365,7 +365,7 @@ const Profile = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          const crypto = data.crypto;
+          const crypto = data.crypto;ro
           const title = data.title;
           const image = data.image;
           const royalty = data.royalty;

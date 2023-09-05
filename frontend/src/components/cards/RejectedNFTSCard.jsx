@@ -55,13 +55,17 @@ const RejectedNFTSCard = ({
 
   const viewRejectedNftList = async (userId) => {
     console.log("userId", userId);
-    const response = await apis.viewRejectedNftList(userId);
-    console.log("response.data.data", response.data.data);
+    try {
+      const response = await apis.viewRejectedNftList(userId);
+      console.log("response.data.data", response.data.data);
 
-    if (response.status) {
-      // setRejectedList(response.data.data);
-      getRejecteNfts(response.data.data);
-    } else {
+      if (response.status) {
+        // setRejectedList(response.data.data);
+        getRejecteNfts(response.data.data);
+      } else {
+      }
+    } catch (e) {
+      console.log("Error: ", e);
     }
   };
 
@@ -122,60 +126,65 @@ const RejectedNFTSCard = ({
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
-        console.log(response.data, "saad");
-        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-        console.log(
-          response?.data?.data?.media?.[0]?.original_url,
-          "collectionImagesss"
-        );
+        if (response.status) {
+          console.log(response.data, "saad");
+          const collectionImages =
+            response?.data?.data?.media?.[0]?.original_url;
+          console.log(
+            response?.data?.data?.media?.[0]?.original_url,
+            "collectionImagesss"
+          );
 
-        console.log("zayyan", id);
+          console.log("zayyan", id);
 
-        // let auctionData = await marketplaceContract._idToAuction(id);
+          // let auctionData = await marketplaceContract._idToAuction(id);
 
-        // let listingType = structData.listingType;
+          // let listingType = structData.listingType;
 
-        const price = ethers.utils.formatEther(structData.price.toString());
+          const price = ethers.utils.formatEther(structData.price.toString());
 
-        axios
-          .get(metaData)
-          .then((response) => {
-            const meta = response.data;
-            let data = JSON.stringify(meta);
+          axios
+            .get(metaData)
+            .then((response) => {
+              const meta = response.data;
+              let data = JSON.stringify(meta);
 
-            data = data.slice(2, -5);
-            data = data.replace(/\\/g, "");
+              data = data.slice(2, -5);
+              data = data.replace(/\\/g, "");
 
-            data = JSON.parse(data);
-            // Extracting values using dot notation
-            // const price = data.price;
-            // listingType = data.listingType;
-            const crypto = data.crypto;
-            const title = data.title;
-            const image = data.image;
-            const royalty = data.royalty;
-            const description = data.description;
-            const collection = data.collection;
+              data = JSON.parse(data);
+              // Extracting values using dot notation
+              // const price = data.price;
+              // listingType = data.listingType;
+              const crypto = data.crypto;
+              const title = data.title;
+              const image = data.image;
+              const royalty = data.royalty;
+              const description = data.description;
+              const collection = data.collection;
 
-            const nftData = {
-              id: id, //
-              title: title,
-              image: image,
-              price: price,
-              crypto: crypto,
-              royalty: royalty,
-              description: description,
-              collection: collection,
-              collectionImages: collectionImages,
-            };
-            console.log("nftData", nftData);
-            // rejected.push(nftData);
-            setRejectedNfts((prev) => [...prev, nftData]);
-          })
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+              };
+              console.log("nftData", nftData);
+              // rejected.push(nftData);
+              setRejectedNfts((prev) => [...prev, nftData]);
+            })
 
-          .catch((error) => {
-            console.error("Error fetching metadata:", error);
-          });
+            .catch((error) => {
+              console.error("Error fetching metadata:", error);
+            });
+        } else {
+          console.log("error:", response?.data?.message);
+        }
       }
     }
   };
