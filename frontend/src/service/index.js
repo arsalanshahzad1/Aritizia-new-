@@ -159,15 +159,21 @@ const createBackendServer = (baseURL) => {
     await api.get(`view-rejected-nft-list/${userId}`);
 
   // NFT Collection//
-  const viewNftCollectionStock = async (collectionID) =>
-    await api.get(`view-nft-collection-stock/${collectionID}`);
-  const viewNftCollectionProfile = async (collectionID) =>
-    await api.get(`view-nft-collection-profile/${collectionID}`);
-  const viewNftTopCollections = async () =>
-    await api.get(`view-nft-top-collections`);
+
+  const viewNftCollectionStock = async (collectionID) => await api.get(`view-nft-collection-stock/${collectionID}`);
+  const viewNftCollectionProfile = async (collectionID) => await api.get(`view-nft-collection-profile/${collectionID}`);
+  const viewNftTopCollections = async () => await api.get(`view-nft-top-collections`);
+  
+  
+  
+  // NFT Collection//
+  const getCurrentNotificationSettings = async (userId) => await api.get(`view-notification-setting/${userId}`);
+  const updateNotificationSettings = async (body) => await api.post(`update-notification-setting`,body);
 
   //Returning all the API
   return {
+    getCurrentNotificationSettings,
+    updateNotificationSettings,
     editProfile,
     postListNft,
     postNftSold,

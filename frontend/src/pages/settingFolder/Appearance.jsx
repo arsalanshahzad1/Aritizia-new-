@@ -8,7 +8,7 @@ const Appearance = () => {
 
   const languageOptions = [
       { value: 'one', label: 'English' },
-      { value: 'two', label: 'Chaines' },
+      { value: 'two', label: 'Chinese' },
       { value: 'three', label: 'Spanish' },
   ]
   const SchemeOptions = [
