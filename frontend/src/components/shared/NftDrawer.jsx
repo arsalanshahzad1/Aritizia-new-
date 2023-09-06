@@ -673,25 +673,28 @@ const ProfileDrawer = ({
   // }, [walletConnected]);
 
   const getItem = async () => {
-    try {
-      const provider = await getProviderOrSigner();
+    const provider = await getProviderOrSigner();
 
-      const marketplaceContract = new Contract(
-        MARKETPLACE_CONTRACT_ADDRESS.address,
-        MARKETPLACE_CONTRACT_ABI.abi,
-        provider
-      );
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+    const structData = await marketplaceContract._idToNFT(id);
+    let seller = structData.seller;
+    let owner = structData.owner;
 
-      const _listedNfts = await marketplaceContract.getListedNfts();
+    console.log("seller", seller);
+    console.log("owner", owner);
 
-      console.log("listedNfts", _listedNfts);
+    //   const _listedNfts = await marketplaceContract.getListedNfts();
 
-      for (let i = 0; i < _listedNfts.length; i++) {
-        console.log("_listedNfts", _listedNfts[i]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    //   for (let i = 0; i < _listedNfts.length; i++) {
+    //     console.log("_listedNfts", _listedNfts[i]);
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // }
   };
 
   const [CreateCollection, setCreateCollection] = useState("");
@@ -910,9 +913,9 @@ const ProfileDrawer = ({
                 </div>
               </form>
               <br></br>
-              {/* <button onClick={getItem} className="button-styling">
-            Get NFTS data
-          </button> */}
+              <button onClick={getItem} className="button-styling">
+                Get NFTS data
+              </button>
             </div>
           </div>
         </div>

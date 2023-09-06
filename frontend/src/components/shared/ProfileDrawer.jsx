@@ -108,16 +108,35 @@ function ProfileDrawer({
       provider
     );
 
+    let getUsdPrice = await marketplaceContract.getLatestUSDTPrice();
+    let usdtEntered = 1639;
+    let OneUSDMeItnaEth = getUsdPrice / 10 ** 18;
+    console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
+    console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
+
+    // console.log("eth price check", (usdPrice / 10 ** 8) * 10 ** 18);
+    // let ethTest = (usdPrice / 10 ** 8) * 10 ** 18;
+    // console.log("ETH ethTest", ethTest);
+
+    // console.log("ethTest", ethers.utils.parseEther(ethTest).toString());
+    // console.log("usdPrice", usdPrice.toString());
+
+    var amount = +priceETH;
+    var value = amount.toString();
+
+    console.log("ETH amount", ethers.utils.parseEther(value).toString());
+    console.log("ETH amount", value);
+
     const structData = await marketplaceContract._idToNFT(id);
     let seller = structData.seller;
-    let royaltyPrice = structData.royaltyPrice.toString();
-    console.log("checkSeller royaltyPrice", royaltyPrice);
-    console.log("checkSeller Seller", seller);
-    console.log("checkSeller userAddress", userAddress);
-    console.log("checkSeller Seller == userAddress", seller == userAddress);
-    console.log("checkSeller sellerPlan", sellerPlan);
-    console.log("checkSeller buyerPlan", buyerPlan);
-    console.log("checkSeller paymentMethod", paymentMethod);
+    // let royaltyPrice = structData.royaltyPrice.toString();
+    // console.log("checkSeller royaltyPrice", royaltyPrice);
+    // console.log("checkSeller Seller", seller);
+    // console.log("checkSeller userAddress", userAddress);
+    // console.log("checkSeller Seller == userAddress", seller == userAddress);
+    // console.log("checkSeller sellerPlan", sellerPlan);
+    // console.log("checkSeller buyerPlan", buyerPlan);
+    // console.log("checkSeller paymentMethod", paymentMethod);
 
     if (userAddress != seller) {
       // show buy button
@@ -226,7 +245,7 @@ function ProfileDrawer({
   ) => {
     console.log("handleNFTSoldEvent");
     let soldData = {
-      token_id: +(tokenId.toString()),
+      token_id: +tokenId.toString(),
       seller: seller.toString(),
       buyer: owner.toString(),
       price: ethers.utils.formatEther(price.toString()),
@@ -387,6 +406,8 @@ function ProfileDrawer({
     var fee = +platformFeeETH;
     var amount = +priceETH + fee;
     var value = amount.toString();
+    console.log("ETH amount", value);
+
     let checkFan = await marketplaceContract.checkFan(id);
 
     const structData2 = await marketplaceContract._idToNFT2(id);
@@ -494,6 +515,9 @@ function ProfileDrawer({
     appprove.wait();
     console.log("www ");
     console.log("wwwasda ");
+    var amountETH = +priceETH + +platformFeeETH;
+    var value = amountETH.toString();
+    console.log("www amountETH", value);
 
     console.log("www paymentMethod", paymentMethod);
     console.log("www id", id);
@@ -501,7 +525,7 @@ function ProfileDrawer({
     console.log("www buyerPlan", buyerPlan);
     console.log("www address", NFT_CONTRACT_ADDRESS.address);
     console.log("www amountInWei", amountInWei);
-
+    let amountInETHInWei = ethers.utils.parseEther(value).toString();
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
@@ -510,6 +534,7 @@ function ProfileDrawer({
         sellerPlan, // must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent
         amountInWei,
+        amountInETHInWei,
         { gasLimit: ethers.BigNumber.from("5000000") }
       )
     ).wait();
@@ -529,13 +554,13 @@ function ProfileDrawer({
   ];
 
   const getNFTDetailByNFTTokenId = async () => {
-    try{
-    const response = await apis.getNFTByTokenId(id);
-    console.log("ressss", response?.data?.data?.subscription_plan);
-    setNftDetails(response?.data?.data);
-    setSellerPlan(response?.data?.data?.subscription_plan);
-    } catch(e){
-      console.log("Error: ",e);
+    try {
+      const response = await apis.getNFTByTokenId(id);
+      console.log("ressss", response?.data?.data?.subscription_plan);
+      setNftDetails(response?.data?.data);
+      setSellerPlan(response?.data?.data?.subscription_plan);
+    } catch (e) {
+      console.log("Error: ", e);
     }
   };
 
@@ -893,7 +918,6 @@ function ProfileDrawer({
 
   useEffect(() => {
     if (isVisible) {
-
       getNFTDetailByNFTTokenId();
     }
   }, [isVisible]);

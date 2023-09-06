@@ -231,12 +231,12 @@ const Profile = ({ search, setSearch }) => {
         signer
       );
 
-    // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
-    // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
-    // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-    // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-    // 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f  account 8
-    // 0x71bE63f3384f5fb98995898A86B02Fb2426c5788  account 9
+      // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
+      // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
+      // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+      // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+      // 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f  account 8
+      // 0x71bE63f3384f5fb98995898A86B02Fb2426c5788  account 9
 
       console.log("FansAddress", FansAddress);
 
@@ -383,7 +383,7 @@ const Profile = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          const crypto = data.crypto;ro
+          const crypto = data.crypto;
           const title = data.title;
           const image = data.image;
           const royalty = data.royalty;
@@ -683,7 +683,6 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-
   const copyToClipboard = (link) => {
     console.log(link);
     navigator.clipboard.writeText(link);
@@ -694,7 +693,6 @@ const Profile = ({ search, setSearch }) => {
 
   return (
     <>
-      
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
@@ -767,9 +765,7 @@ const Profile = ({ search, setSearch }) => {
                     <span>{userData?.wallet_address}</span>
                     <button
                       onClick={() => {
-                        copyToClipboard(
-                          userData?.wallet_address
-                        );
+                        copyToClipboard(userData?.wallet_address);
                       }}
                     >
                       Copy

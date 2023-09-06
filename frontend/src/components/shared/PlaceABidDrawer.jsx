@@ -803,12 +803,19 @@ const PlaceABidDrawer = ({
     // get the price of dollar from smartcontract and convert this value
     // let dollarPriceOfETH = 1831;
 
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    console.log("HEre");
 
     let USDPrice = buyNowPrice;
     let USDPriceInWei = USDPrice * 10 ** 6;
     USDPrice = USDPrice.toString();
+
+    let getUsdPrice = await marketplaceContract.getLatestUSDTPrice();
+    let usdtEntered = USDPrice;
+    let OneUSDMeItnaEth = getUsdPrice / 10 ** 18;
+    console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
+    console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
+    let ethEquivalentToUSDT = OneUSDMeItnaEth * usdtEntered;
+    ethEquivalentToUSDT = ethEquivalentToUSDT.toString();
+    let amountInETHInWei = ethers.utils.parseEther(ethEquivalentToUSDT).toString();
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -827,7 +834,7 @@ const PlaceABidDrawer = ({
 
     // console.log("paymentmethod", paymentMethod);
 
-    const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, {
+    const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, amountInETHInWei, {
       gasLimit: ethers.BigNumber.from("2000000"),
     });
 
@@ -863,15 +870,15 @@ const PlaceABidDrawer = ({
       if (bidFunction == 0) {
         console.log("bidding with ETH");
         bidWithETH();
-        setSucess(false)
+        setSucess(false);
       } else if (bidFunction == 1) {
         console.log("bidding with USDT");
         bidWithUSDT();
-        setSucess(false)
+        setSucess(false);
       } else if (bidFunction == 2) {
         console.log("bidding with FIAT");
         bidWithFIAT();
-        setSucess(false)
+        setSucess(false);
       } else {
         console.log("please select a bid method first");
       }
