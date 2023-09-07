@@ -25,6 +25,7 @@ const NewItemCard = ({
   const userAddress = userData?.wallet_address;
 
   console.log("highestBiddd", highestBid);
+  console.log("pricezzz", price);
   console.log("collectionImagestt", collectionImages);
   console.log("highestBiddd", typeof highestBid);
 
@@ -92,7 +93,7 @@ const NewItemCard = ({
               <div className="left">
                 <p>{title}</p>
                 <span>
-                  {highestBid === 0 ? `${price} ETH` : `${highestBid} ETH`}
+                  {highestBid == 0 ? `${price} ETH` : `${highestBid} ETH`}
                 </span>
               </div>
               <div

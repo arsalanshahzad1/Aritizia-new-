@@ -1311,7 +1311,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     // payable(nft.seller).transfer(_amountToBePaid);
                 } else {
                     _royaltyFee = royaltyCalculate(
-                        auction.highestBid,
+                        auction.highestBid, // highest bid's price should be in USDT
                         nft.royaltyPrice
                     );
                     _amountToBePaid =
@@ -1458,12 +1458,44 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         bool _decision
     ) public onlyOwner returns (bool) {
         uint256 id;
+
         for (uint256 i = 0; i < _tokenId.length; i++) {
             id = _tokenId[i];
             _idToNFT[id].approve = _decision;
+
+            if (
+                _decision == false &&
+                _idToNFT[id].listingType == ListingType.Auction
+            ) {
+                // if decsion == false and listingType == 1 && highest bidder != 0x0000
+                // then return highestBid to highest Bidder
+                Auction storage auction = _idToAuction[id];
+                if (auction.highestBidder != address(0)) {
+                    address payable prevBidder = auction.highestBidder;
+
+                    uint256 prevBid = auction.highestBid;
+                    if (auction.highestBidder != address(0)) {
+                        if (auction.highestBidCurrency == PaymentMethod.USDT) {
+                            // converting eth into usdt .... this will discard the decimal though
+                            uint256 usdtToReturn = prevBid /
+                                (getLatestUSDTPrice());
+
+                            // in wei
+                            usdtToReturn = usdtToReturn * 10 ** 6;
+
+                            USDTtoken.transfer(prevBidder, usdtToReturn);
+                        } else if (
+                            auction.highestBidCurrency == PaymentMethod.ETHER
+                        ) {
+                            payable(prevBidder).transfer(prevBid);
+                        }
+                    }
+                }
+            }
+
             emit approvalUpdate(id, _decision);
         }
-        return true;
+        return _decision;
     }
 
     ///////////////////////////////////////////////

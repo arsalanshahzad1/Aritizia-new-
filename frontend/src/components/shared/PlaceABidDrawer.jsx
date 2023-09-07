@@ -602,11 +602,14 @@ const PlaceABidDrawer = ({
       bidding_price: ethers.utils.formatEther(highestBid.toString()),
     };
 
-    console.log("bidData", bidData);
+    console.log("bidData", bidData.bidding_price);
+    setHighestBid(bidData.bidding_price);
     ethBid = false;
     usdtBid = false;
     bidEventPost(bidData);
   };
+
+  // useEffect(() => {}, [highestBid]);
 
   const bidEventPost = async (bidData) => {
     console.log("bidEventPost");
@@ -803,7 +806,6 @@ const PlaceABidDrawer = ({
     // get the price of dollar from smartcontract and convert this value
     // let dollarPriceOfETH = 1831;
 
-
     let USDPrice = buyNowPrice;
     let USDPriceInWei = USDPrice * 10 ** 6;
     USDPrice = USDPrice.toString();
@@ -815,7 +817,9 @@ const PlaceABidDrawer = ({
     console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
     let ethEquivalentToUSDT = OneUSDMeItnaEth * usdtEntered;
     ethEquivalentToUSDT = ethEquivalentToUSDT.toString();
-    let amountInETHInWei = ethers.utils.parseEther(ethEquivalentToUSDT).toString();
+    let amountInETHInWei = ethers.utils
+      .parseEther(ethEquivalentToUSDT)
+      .toString();
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -834,9 +838,15 @@ const PlaceABidDrawer = ({
 
     // console.log("paymentmethod", paymentMethod);
 
-    const tx = await marketplaceContract.bidInUSDT(id, USDPriceInWei, 1, amountInETHInWei, {
-      gasLimit: ethers.BigNumber.from("2000000"),
-    });
+    const tx = await marketplaceContract.bidInUSDT(
+      id,
+      USDPriceInWei,
+      1,
+      amountInETHInWei,
+      {
+        gasLimit: ethers.BigNumber.from("2000000"),
+      }
+    );
 
     // Wait for the transaction to be mined
     await tx.wait();
