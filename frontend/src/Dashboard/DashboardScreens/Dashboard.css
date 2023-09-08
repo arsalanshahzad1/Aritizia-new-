@@ -447,19 +447,24 @@
     margin-top: 10px !important;
 }
 
-.dashboard-drop-down {
+.dashboard-drop-down select{
     border-radius: 5px;
     border: 2px solid #929292;
     padding: 5px 10px;
     color: #929292;
     font-family: poppins;
     font-weight: 500;
-    font-size: 16px
+    font-size: 16px;
+    cursor:pointer
+}
+.dashboard-drop-down select:focus{
+    outline: none;
+    /* border: none; */
 }
 
-.dashboard-drop-down svg {
+/* .dashboard-drop-down svg {
     margin-left: 5px;
-}
+} */
 
 .df-row-3 {
     top: 100px;
@@ -577,6 +582,16 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     height: 100%;
+}
+.table-for-user-management .data-table-empty{
+    color: #B600D1;
+    font-size: 40px;
+    font-weight: 700;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 

@@ -1,12 +1,41 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactApexChart from 'react-apexcharts';
 import './Dashboard.css';
+import adminApis from "../../service/adminIndex";
 
 const colors = ['#2636D9'];
 
-const SalesHistoryChart = () => {
+const SalesHistoryChart = ({chartData}) => {
+
+  const [transactionHistory, setTransactionHistory] = useState([]);
+
+  const fetchTransectionHistory = async () => {
+    try {
+      const response = await adminApis?.viewAnalyticDashboard();
+      if (response?.status) {
+        setTransactionHistory(response?.data.data.transaction_history);
+        // setUserSubscription(response?.data.data.user_subscription);
+        
+      } else {
+        console.log("API request failed");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransectionHistory();
+  }, []);
+
+  useEffect(() => {
+    console.log(transactionHistory.all_months, "user Transections");
+  }, [transactionHistory]);
+
+  console.log(chartData, "chart data")
+
   const series = [{
-    data: [10000, 50000, 15000, 50000, 60000, 10000, 60000, 15000, 30000, 60000, 10000, 55000]
+    data: chartData == "Monthly_data" ? transactionHistory?.all_months : chartData == "Weekly_data" ? transactionHistory?.last_month_all_days : transactionHistory?.last_week_all_days
   }];
 
   const options = {
@@ -44,7 +73,7 @@ const SalesHistoryChart = () => {
       show: false
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      categories: chartData == "Monthly_data" ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] : chartData == "Weekly_data" ? transactionHistory?.last_month_all_days.map((e, index)=> index+1) : transactionHistory?.last_week_all_days.map((e, index)=> index+1),
       labels: {
         style: {
           colors: '#929292',

@@ -627,7 +627,7 @@ function AnalyticsTool({ search, setSearch }) {
                             </tr>
                             <hr className='space-between-rows'></hr>
                         </thead>
-                        <tbody className='data-table-2 data-table-3'>
+                            <tbody className='data-table-2 data-table-3'>
                             {userTransactionDetails?.data?.map((data, index) => {
                                 return (
                                     <>
@@ -669,8 +669,15 @@ function AnalyticsTool({ search, setSearch }) {
                             <hr className='space-between-rows'></hr> */}
 
 
-                        </tbody>
+                            </tbody>            
                     </table>
+                    {userTransactionDetails?.dat?.length > 0 ?
+                        "" : 
+                            <div className='data-table-empty'>
+                                <p>No data availaible</p>
+                            </div>
+                        }
+
                     <div className='user-management-table-contorls'>
                         <div>
                             <div>{userTransactionDetails?.pagination?.total_pages}</div>

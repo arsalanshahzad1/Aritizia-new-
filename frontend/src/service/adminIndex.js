@@ -84,7 +84,7 @@ const createBackendServer = (baseURL) => {
     await api.delete(`subscriptions/${planId}`);
 
   // Analytics Section Apis //
-
+  const viewAnalyticDashboard = async () => await api.get(`view-analytic-dashboard`);
   const viewAnalyticUsers = async () => await api.get(`view-analytic-users`);
   const viewAnalyticTransaction = async (count) =>
     await api.get(`view-analytic-transaction?page=${count}&filter=yearly`);
@@ -124,6 +124,7 @@ const createBackendServer = (baseURL) => {
     nftDetailByToken,
     approveNfts,
     rejectNfts,
+    viewAnalyticDashboard,
   };
 };
 
