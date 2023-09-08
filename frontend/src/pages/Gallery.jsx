@@ -27,13 +27,110 @@ const Gallery = () => {
         updatedArts[index].selected = false;
         setGalleryItems(updatedArts);
     };
-    const ListGallery = () => {
+    const ListGallery = async () => {
         const readyTobeListed = GalleryItems.filter(item => item.selected).map(item => item.image)
         console.log(readyTobeListed, "we are ready to travel to Database")
-        navigate('/create/multiple')
-        setGalleryItems([])
-        setprompt('')
+        // const imageDataObject = {};
+        const imageDataObject = [];
+        for (let i = 0; i < readyTobeListed.length; i++) {
+            try {
+                const imageUrl = readyTobeListed[i];
+                console.log(imageUrl, 'bbbbbb');
+                const imageFile = await convertImageUrlToImageFile(imageUrl , i);
+                console.log(imageFile , 'nnnnn');
+                // Use the index `i` as the key and the image File as the value
+                // imageDataObject[i] = imageFile;
+                imageDataObject.push(imageFile);
+
+
+            } catch (error) {
+                console.error(`Error fetching image for URL ${readyTobeListed[i]}:`, error);
+            }
+            console.log(imageDataObject);
+
+        }
+
+        // console.log(imageDataObject);
+        // navigate('/create/multiple')
+        navigate(
+            '/create/multiple',
+            {
+              state: {
+                artGallery: imageDataObject
+              },
+            }
+          )
+        // setGalleryItems([])
+        // setprompt('')
     }
+
+    const convertImageUrlToImageFile = async (url , i) => {
+        try {
+            if (url.includes("http")) {
+                // Download the image from the URL
+                const imageUrl = url;
+                const response = await fetch(url);
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                }
+
+                // Convert the response data to a Blob
+                const imageBlob = await response.blob();
+
+                // Extract the file name from the URL or specify a custom name
+                const urlParts = imageUrl.split('/');
+                const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
+
+                // Create a File object from the Blob
+                const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+                return (
+                    file
+                )
+            } else {
+                // console.log('base64');
+                // const base64url = `data:image/png;base64,${url}`;
+                // fetch(base64url)
+                //     .then(res => res.blob())
+                //     .then(blob => {
+                //         const file = new File([blob], `image${i}.png`, { type: "image/png" });
+                //         console.log(file , 'fileee');
+                //         return (
+                //             file
+                //         )
+                //     })
+                // Download the image from the URL
+                const imageUrl = url;
+                const response = await fetch(`data:image/png;base64,${url}`);
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                }
+
+                // Convert the response data to a Blob
+                const imageBlob = await response.blob();
+
+                // Extract the file name from the URL or specify a custom name
+                const urlParts = imageUrl.split('/');
+                const fileName = `image${i}.png`;
+
+                // Create a File object from the Blob
+                const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+                return (
+                    file
+                )
+                    
+            }
+
+            // console.log(file);
+            // Set the image file in state
+            // setImageFile(file);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     const scrollToPrompt = () => {
         document.getElementById('prompt').scrollIntoView({
             behavior: 'smooth',
@@ -54,9 +151,9 @@ const Gallery = () => {
         }
     }
 
-    useEffect(() =>{
+    useEffect(() => {
         saveToGallery()
-    },[])
+    }, [])
     return (
         < div >
             <div className='Arts-holder'>

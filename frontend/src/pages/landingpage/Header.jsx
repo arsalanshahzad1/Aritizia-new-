@@ -317,8 +317,8 @@ const Header = ({ search, setSearch }) => {
                       <div className="notification-card" style={{ left: "2%" }}>
                         <>
                           {loader ? (
-                            <section class="sec-loading">
-                              <div class="one"></div>
+                            <section className="sec-loading">
+                              <div className="one"></div>
                             </section>
                           ) : (
                             <>
@@ -387,8 +387,8 @@ const Header = ({ search, setSearch }) => {
                       >
                         <>
                           {loader ? (
-                            <section class="sec-loading">
-                              <div class="one"></div>
+                            <section className="sec-loading">
+                              <div className="one"></div>
                             </section>
                           ) : (
                             <>
@@ -478,8 +478,8 @@ const Header = ({ search, setSearch }) => {
                       <div className="notification-card" style={{ left: "2%" }}>
                         <>
                           {loader ? (
-                            <section class="sec-loading">
-                              <div class="one"></div>
+                            <section className="sec-loading">
+                              <div className="one"></div>
                             </section>
                           ) : (
                             <>
@@ -543,8 +543,8 @@ const Header = ({ search, setSearch }) => {
                       >
                         <>
                           {loader ? (
-                            <section class="sec-loading">
-                              <div class="one"></div>
+                            <section className="sec-loading">
+                              <div className="one"></div>
                             </section>
                           ) : (
                             <>

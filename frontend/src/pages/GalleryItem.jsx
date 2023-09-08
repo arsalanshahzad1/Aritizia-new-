@@ -19,8 +19,8 @@ const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selecte
     const [showSocialIcons, setshowSocialIcons] = useState(false)
     return (
         <div
-            onMouseEnter={() => setshowIcon(true)}
-            onMouseLeave={() => { setshowIcon(false), setshowSocialIcons(false) }}
+            
+            
             className='art-img-div'>
             {showIcon &&
                 <span onClick={() => setshowSocialIcons(!showSocialIcons)} className='show-social-icon-btn'>
@@ -51,7 +51,7 @@ const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selecte
             {Image.includes("http") ?
             <img src={Image} alt="" />
             :
-            <img src={`http://143.198.70.237/${Image}`} alt="Red dot" />
+            <img src={`data:image/jpeg;base64,${Image}`} alt="Red dot" />
             // <h2>hellow</h2>
         }
         </div>

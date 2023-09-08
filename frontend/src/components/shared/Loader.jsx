@@ -10,8 +10,8 @@ const Loader = () => {
             background : 'rgba(0, 0, 0, 0.5)',
             zIndex : '9999'
             }}> 
-            <section class="sec-loading">
-                <div class="one"></div>
+            <section className="sec-loading">
+                <div className="one"></div>
             </section>
         </div>
     )

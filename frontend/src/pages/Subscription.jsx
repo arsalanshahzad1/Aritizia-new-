@@ -42,7 +42,7 @@ const Subscription = ({ search, setSearch }) => {
         });
     };
 
-    const autoRecursionOnoff = async () => {
+    const autoRecursionOnoff = async (userSebData) => {
         const response = await apis.autoRecursionOnoff(userSebData)
         if (response.status) {
             console.log(response);
@@ -72,6 +72,7 @@ const Subscription = ({ search, setSearch }) => {
     const cancelSubscription = (id, subId) =>{
         setUserSebData({ user_id: id, subscription_id: subId })
         setCancleSubscription(!cancleSubscription)
+        autoRecursionOnoff(userSebData)
     }
 
     useEffect(() => {
@@ -88,7 +89,7 @@ const Subscription = ({ search, setSearch }) => {
                             {subscriptionData.map((res, index) => {
                                 if (res?.user_subs?.length != 0) {
                                     return (
-                                        <div className="subscription-purchase-details">
+                                        <div className="subscription-purchase-details" key={index}>
                                             {res?.user_subs?.auto_recursion ?
                                                 <div className="left">
                                                     Renewal date : <DateDisplay datetime={res?.user_subs?.next_renewal_date} />
@@ -99,6 +100,9 @@ const Subscription = ({ search, setSearch }) => {
                                                 </div>
                                             }
                                             <div className="right">
+                                                {res?.user_subs?.is_cancel == 0 &&
+                                                <>
+                                                
                                                 <div >
                                                     <div className="title" style={{ display: 'flex', justifyContent: 'space-between', gap: '5px' }}>
                                                         Auto renewal
@@ -113,6 +117,8 @@ const Subscription = ({ search, setSearch }) => {
                                                 <div >
                                                     <button onClick={() =>cancelSubscription(userId, res?.user_subs?.subscription_id)}>Cancel Subscription</button>
                                                 </div>
+                                                </>
+                                            }
                                             </div>
                                         </div>
                                     )
@@ -172,7 +178,7 @@ const Subscription = ({ search, setSearch }) => {
                         <h2>Renewal Confirmation</h2>
                         <div>
                             <button onClick={() =>setreneval(false)}>Cancle</button>
-                            <button onClick={autoRecursionOnoff}>Confirm</button>
+                            <button onClick={() =>autoRecursionOnoff(userSebData)}>Confirm</button>
                         </div>
                     </div>
                 </Modal>
