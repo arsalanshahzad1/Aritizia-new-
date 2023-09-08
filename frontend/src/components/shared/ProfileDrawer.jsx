@@ -108,11 +108,12 @@ function ProfileDrawer({
       provider
     );
 
-    let getUsdPrice = await marketplaceContract.getLatestUSDTPrice();
+    let getLatestUSDTPrice = await marketplaceContract.getLatestUSDTPrice();
     let usdtEntered = 1639;
-    let OneUSDMeItnaEth = getUsdPrice / 10 ** 18;
-    console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
-    console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
+    let OneUSDMeItnaEth = getLatestUSDTPrice / 10 ** 18;
+    // console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
+    console.log("getLatestUSDTPrice", getLatestUSDTPrice.toString());
+    // console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
 
     // console.log("eth price check", (usdPrice / 10 ** 8) * 10 ** 18);
     // let ethTest = (usdPrice / 10 ** 8) * 10 ** 18;
@@ -125,7 +126,6 @@ function ProfileDrawer({
     var value = amount.toString();
 
     console.log("ETH amount", ethers.utils.parseEther(value).toString());
-    console.log("ETH amount", value);
 
     const structData = await marketplaceContract._idToNFT(id);
     let seller = structData.seller;
@@ -1252,7 +1252,7 @@ function ProfileDrawer({
               </div>
             </div>
           </div>
-          {/* <button onClick={checkSeller}>checkSeller </button> */}
+          <button onClick={checkSeller}>checkSeller </button>
         </div>
       </Drawer>
       <Modal
