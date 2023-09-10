@@ -496,6 +496,32 @@ const PlaceABidDrawer = ({
 
   let auctionPurchase = false;
 
+  const checkSeller = async () => {
+    const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let getLatestUSDTPrice = await marketplaceContract.getLatestUSDTPrice();
+    console.log("getLatestUSDTPrice", getLatestUSDTPrice.toString());
+
+    let ethWei = 1929000000 * getLatestUSDTPrice;
+
+    ethWei = ethWei / 10 ** 6;
+
+    console.log("ethWei", ethWei);
+
+    provider
+      .getBalance(MARKETPLACE_CONTRACT_ADDRESS.address)
+      .then((balanceWei) => {
+        const balanceEther = ethers.utils.formatEther(balanceWei);
+        console.log(`Balance ${balanceEther} ETH`);
+      });
+  };
+
   const claimAuction = async () => {
     const signer = await getProviderOrSigner(true);
 
@@ -515,7 +541,10 @@ const PlaceABidDrawer = ({
         NFT_CONTRACT_ADDRESS.address,
         id,
         sellerPlan,
-        buyerPlan
+        buyerPlan,
+        {
+          gasLimit: ethers.BigNumber.from("30000000"),
+        }
       )
     ).wait();
 
@@ -1221,6 +1250,8 @@ const PlaceABidDrawer = ({
               </div>
             </div>
           </div>
+          <button onClick={checkSeller}>checkSeller </button>
+
           {/* <button onClick={getStatusOfAuction}>getStatusOfAuction</button> */}
         </div>
       </Drawer>
