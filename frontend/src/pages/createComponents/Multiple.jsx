@@ -1670,8 +1670,6 @@ const Multiple = ({ search, setSearch }) => {
                               </div>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-
-                              aliiiii
                               {!location?.state?.artGallery ?
                                 <button
                                   className="button-styling"

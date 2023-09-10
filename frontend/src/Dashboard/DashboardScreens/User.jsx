@@ -943,7 +943,7 @@ const User = ({ search, setSearch }) => {
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {userNFTs.map((item) => (
+                      {userNFTs.length > 0 ? userNFTs.map((item) => (
                         <MyNftCard
                           onOpen={onOpen}
                           key={item.id}
@@ -959,7 +959,11 @@ const User = ({ search, setSearch }) => {
                           getMyNfts={getMyNfts}
                           userAddress
                         />
-                      ))}
+                      )) : 
+                      <div className="data-not-avaliable">
+                        <h2>No data avaliable</h2>
+                      </div>
+                    }
                     </div>
                   </>
                 )}

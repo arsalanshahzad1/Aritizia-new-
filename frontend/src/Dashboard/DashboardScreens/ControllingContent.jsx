@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import Header from "../../pages/landingpage/Header";
+import AdminHeader from "../../pages/landingpage/AdminHeader";
 import { useState } from "react";
 import UserDataRows from "./UserDataRows";
 import ControllingDataRows from "./ContollingDataRows";
@@ -290,7 +290,7 @@ function ControllingContent({ search, setSearch }) {
 
   return (
     <div className="user-management">
-      <Header search={search} setSearch={setSearch} />
+      <AdminHeader search={search} setSearch={setSearch} />
       <div className="user-management-after-header">
         <div className="dashboard-front-section-2">
           <div className="dashboard-front-section-2-row-1">

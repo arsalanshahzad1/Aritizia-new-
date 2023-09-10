@@ -339,10 +339,10 @@ function NftControllingDrawer({
                       <h3>Creator</h3>
                       <div className="logo-name">
                         {userData?.wallet_address ==
-                        drawerData?.user?.wallet_address ? (
-                          <Link to={"/profile"}>
+                          drawerData?.user?.wallet_address ? (
+                          <Link to={`/other-profile?add=${drawerData?.user?.wallet_address}`}>
                             {/* <img src={drawerData?.user?.profile_image} alt="" />{" "} */}
-                            {nftDetails?.user?.profile_image === null ? (
+                            {nftDetails?.user?.profile_image !== null ? (
                                 <img
                                   src={drawerData?.user?.profile_image}
                                   alt=""
@@ -388,10 +388,12 @@ function NftControllingDrawer({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
                       <div className="logo-name">
+                        <Link to={`/collection?id=${drawerData?.collection?.id}`}>
                         <img
                           src={drawerData?.collection?.media[0]?.original_url}
                           alt=""
                         />{" "}
+                        </Link>
                         <span>{drawerData?.collection?.name}</span>
                       </div>
                     </div>

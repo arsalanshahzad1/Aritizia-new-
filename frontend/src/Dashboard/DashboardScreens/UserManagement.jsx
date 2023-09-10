@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Header from "../../pages/landingpage/Header";
+import AdminHeader from "../../pages/landingpage/AdminHeader";
 import { useState } from "react";
 import UserDataRows from "./UserDataRows";
 import adminApis from "../../service/adminIndex";
@@ -42,7 +43,7 @@ function UserManagement({ search, setSearch }) {
   };
 
   useEffect(() => {
-    if (searchInput.length < 3) {
+    if (searchInput.length < 2) {
       viewUserList(1, "yearly", ""); // Fetch all data
     } else {
       viewUserList(1, filter, searchInput); // Fetch search-specific data
@@ -51,7 +52,8 @@ function UserManagement({ search, setSearch }) {
 
   return (
     <div className="user-management">
-      <Header search={search} setSearch={setSearch} />
+      {/* <Header search={search} setSearch={setSearch} /> */}
+      <AdminHeader />
       <div className="user-management-after-header">
         <div className="dashboard-front-section-2">
           <div className="dashboard-front-section-2-row-1">
@@ -63,9 +65,9 @@ function UserManagement({ search, setSearch }) {
                 className="user-sub-dd"
                 onClick={() => setShowFilter(!showfilter)}
               >
-                <div className="title">
+                {/* <div className="title">
                   {filter} <MdKeyboardArrowDown />
-                </div>
+                </div> */}
                 {showfilter && (
                   <div className="options">
                     <h2
@@ -133,9 +135,6 @@ function UserManagement({ search, setSearch }) {
               <hr className="space-between-rows"></hr>
             </thead>
             <tbody>
-              {/* {userList?.data?.map((data , index) =>{
-                                return(
-                                    <> */}
               <UserDataRows
                 data={userList}
                 listCount={listCount}

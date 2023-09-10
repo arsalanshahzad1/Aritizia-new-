@@ -47,9 +47,9 @@ const Art = ({ search, setSearch }) => {
         }
     }
 
-    // useEffect(() =>{
-    //     viewRemainingArtGallery(user_id)
-    // } , [])
+    useEffect(() =>{
+        viewRemainingArtGallery(user_id)
+    } , [])
 
     useEffect(() => {
         const count = generatedArts.filter(item => item.selected).length;

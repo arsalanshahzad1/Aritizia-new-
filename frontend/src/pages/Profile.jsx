@@ -884,7 +884,7 @@ const Profile = ({ search, setSearch }) => {
                 )}
                 {tabs === 1 && (
                   <>
-                    <Gallery />
+                    <Gallery user="admin"/>
                   </>
                 )}
                 {tabs === 2 && (

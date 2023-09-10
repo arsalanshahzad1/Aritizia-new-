@@ -5,7 +5,9 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import GalleryItem from './GalleryItem'
 import apis from '../service'
-const Gallery = () => {
+const Gallery = ({user}) => {
+
+    console.log(user=="admin" ? "yes admin":"not admin")
     const navigate = useNavigate()
     const id = JSON.parse(localStorage.getItem("data"));
     const user_id = id?.id;
@@ -159,13 +161,17 @@ const Gallery = () => {
             <div className='Arts-holder'>
                 {GalleryItems.length > 0 &&
                     GalleryItems.map((item, Index) => {
-                        return < GalleryItem handleUnselectArt={handleUnselectArt} handleSelectArt={handleSelectArt} Image={item.image} selected={item.selected} Index={Index} />
+                        return <GalleryItem handleUnselectArt={handleUnselectArt} handleSelectArt={handleSelectArt} Image={item.image} selected={item.selected} Index={Index} user={user}/>
                     })
                 }
             </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            {user === "admin" ? 
+                <div style={{ display: "flex", justifyContent: "center" }}>
                 <button onClick={ListGallery} disabled={selectCount < 1} className='save-art-btn'>Listing ({selectCount})</button>
-            </div>
+                </div>
+                : ""
+            }
+            
             <Link to='/' onClick={scrollToPrompt}>
                 <div className='create-nft-button'>
                     <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">

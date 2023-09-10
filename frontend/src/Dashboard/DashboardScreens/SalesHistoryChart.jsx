@@ -35,7 +35,7 @@ const SalesHistoryChart = ({chartData}) => {
   console.log(chartData, "chart data")
 
   const series = [{
-    data: chartData == "Monthly_data" ? transactionHistory?.all_months : chartData == "Weekly_data" ? transactionHistory?.last_month_all_days : transactionHistory?.last_week_all_days
+    data: chartData == "Monthly" ? transactionHistory?.all_months : chartData == "Weekly" ? transactionHistory?.last_month_all_days : transactionHistory?.last_week_all_days
   }];
 
   const options = {
@@ -73,7 +73,7 @@ const SalesHistoryChart = ({chartData}) => {
       show: false
     },
     xaxis: {
-      categories: chartData == "Monthly_data" ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] : chartData == "Weekly_data" ? transactionHistory?.last_month_all_days.map((e, index)=> index+1) : transactionHistory?.last_week_all_days.map((e, index)=> index+1),
+      categories: chartData == "Monthly" ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] : chartData == "Weekly" ? transactionHistory?.last_month_all_days.map((e, index)=> index+1) : transactionHistory?.last_week_all_days.map((e, index)=> index+1),
       labels: {
         style: {
           colors: '#929292',

@@ -406,7 +406,6 @@ const OtherProfile = ({ search, setSearch }) => {
                       Unfollow
                     </div>
                   )}
-                  {/* <div>Following</div> */}
                   <div>Followers {userDetails?.followers?.length}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">

@@ -92,7 +92,7 @@ function FanUserDaskboard({id}) {
   }, []);
   return (
     <>
-      {fanListing.map((data, index) => {
+      {fanListing.length > 0 ? fanListing.map((data, index) => {
         return (
           <div className="Follow-row" key={index}>
             <div className="left">
@@ -110,7 +110,10 @@ function FanUserDaskboard({id}) {
             {/* <button onClick={getFansBC}>getBC</button> */}
           </div>
         );
-      })}
+      }) : 
+      <div className="data-not-avaliable">
+          <h2>No data avaliable</h2>
+      </div>}
     </>
   );
 }

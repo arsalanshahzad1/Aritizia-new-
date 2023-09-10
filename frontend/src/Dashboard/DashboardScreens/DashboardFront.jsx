@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../../pages/landingpage/Header'
+import AdminHeader from '../../pages/landingpage/AdminHeader'
 import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
 import SalesHistoryChart from './SalesHistoryChart';
-import apis from '../../service/adminIndex';
 import adminApis from "../../service/adminIndex";
+import Dropdown from "react-dropdown";
+import "react-dropdown/style.css";
+import Header from '../../pages/landingpage/Header';
 
 function DashboardFront({ search, setSearch }) {
 
     const [dashboardAnalytics, setDashboardAnalytics] = useState([]);
     const [userSubscription, setUserSubscription] = useState([]);
     const [current, SetCurrent] = useState("free_trail");
-    const [graphData, setGraphData] = useState("Monthly_data")
-    const [chartData, setChartData] = useState("Monthly_data")
+    const [graphData, setGraphData] = useState("Monthly")
+    const [chartData, setChartData] = useState("Monthly")
+
+    const userSubscriptionyptoOptions = [
+        { value: 0, label: "Monthly" },
+        { value: 1, label: "Weekly" },
+        { value: 2, label: "Daily" },
+    ];
+    const saleHistoryOptions = [
+        { value: 0, label: "Monthly" },
+        { value: 1, label: "Weekly" },
+        { value: 2, label: "Daily" },
+    ];
+
+    const defaultUserSubscription = userSubscriptionyptoOptions[0];
+    const defaultSaleHistory = saleHistoryOptions[0];
 
     console.log(graphData, "graph data")
 
@@ -23,7 +39,6 @@ function DashboardFront({ search, setSearch }) {
       if (response?.status) {
         setDashboardAnalytics(response?.data.data.dashboard_analytics);
         setUserSubscription(response?.data.data.user_subscription);
-        
       } else {
         console.log("API request failed");
       }
@@ -41,7 +56,7 @@ function DashboardFront({ search, setSearch }) {
   }, [dashboardAnalytics]);
 
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
-    const Monthly_data = userSubscription?.[current]?.all_months?.map((month_data, index)=>{
+    const Monthly = userSubscription?.[current]?.all_months?.map((month_data, index)=>{
         return {
             data: months[index],
             value: month_data,
@@ -141,7 +156,7 @@ function DashboardFront({ search, setSearch }) {
     // ];
 
 
-    const Weekly_data = userSubscription?.[current]?.last_month_all_days?.map((weekly_data, index)=>{
+    const Weekly = userSubscription?.[current]?.last_month_all_days?.map((weekly_data, index)=>{
         return {
             data: index,
             value: weekly_data,
@@ -237,7 +252,7 @@ function DashboardFront({ search, setSearch }) {
     //         Date: "May 07 at 5:00 PM"
     //     },
     // ];
-    const Daily_data = userSubscription?.[current]?.last_week_all_days?.map((daily_data, index)=>{
+    const Daily = userSubscription?.[current]?.last_week_all_days?.map((daily_data, index)=>{
         return {
             data: index,
             value: daily_data,
@@ -335,14 +350,15 @@ function DashboardFront({ search, setSearch }) {
     // ];
     return (
         <div className='Dashboard-front'>
-            <Header
-
+            {/* <Header
                 search={search}
                 setSearch={setSearch}
+            /> */}
+            <AdminHeader
+            search={search}
+            setSearch={setSearch}
             />
             <div className='position-absolute-top'>
-
-
                 <div className='dashboard-front-section-1'>
                     <div className='dashboard-card'>
                         <div>Total Users</div>
@@ -426,30 +442,25 @@ function DashboardFront({ search, setSearch }) {
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
                             <div>User Subscription</div>
-                            <div onClick={()=> SetCurrent("free_trail")}>Free Trial</div>
-                            <div onClick={()=> SetCurrent("gold")}>Gold</div>
-                            <div onClick={()=> SetCurrent("platinum")}>Platinum</div>
-                            <div onClick={()=> SetCurrent("diamond")}>Daimond</div>
+                            <div className={`${current == 'free_trail' ? 'active' : ''}`} onClick={()=> SetCurrent("free_trail")}>Free Trial</div>
+                            <div className={`${current == 'gold' ? 'active' : ''}`} onClick={()=> SetCurrent("gold")}>Gold</div>
+                            <div className={`${current == 'platinum' ? 'active' : ''}`} onClick={()=> SetCurrent("platinum")}>Platinum</div>
+                            <div className={`${current == 'diamond' ? 'active' : ''}`} onClick={()=> SetCurrent("diamond")}>Daimond</div>
                         </div>
                         <div>
-                            <div className='dashboard-drop-down'>
-                                {/* Monthly */}
-                                <select 
-                                    name="subscription" 
-                                    className='dashboard-drop-down-subscription'
-                                    onChange={(e)=>{setGraphData(e.target.value)}} 
-                                >
-                                    <option value="Monthly_data">monthly</option>
-                                    <option value="Weekly_data">weekly</option>
-                                    <option value="Daily_data">daily</option>
-                                </select>
+                            <div className='dashboard-drop-down user-sub-dd'>
+                                <Dropdown
+                                    options={userSubscriptionyptoOptions}
+                                    onChange={(e) => { setGraphData(e.label)}}
+                                    value={defaultUserSubscription.label}
+                                />
 
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className='df-row-3'>
-                    <ChartForEarning data={ graphData==="Monthly_data"? Monthly_data: graphData=="Weekly_data"?Weekly_data: Daily_data} />
+                    <ChartForEarning data={graphData && graphData==="Monthly"? Monthly: graphData && graphData =="Weekly"?Weekly: Daily} />
                 </div>
                 <br /><br /><br /><br /> <br /> <br />
                 <div className='dashboard-front-section-2'>
@@ -460,7 +471,7 @@ function DashboardFront({ search, setSearch }) {
                         <div>
                         <div className='dashboard-drop-down'>
                                 {/* Monthly */}
-                                <select 
+                                {/* <select 
                                     name="subscription" 
                                     className='dashboard-drop-down-subscription'
                                     onChange={(e)=>{setChartData(e.target.value)}} 
@@ -468,7 +479,12 @@ function DashboardFront({ search, setSearch }) {
                                     <option value="Monthly_data">monthly</option>
                                     <option value="Weekly_data">weekly</option>
                                     <option value="Daily_data">daily</option>
-                                </select>
+                                </select> */}
+                                 <Dropdown
+                                    options={saleHistoryOptions}
+                                    onChange={(e) => { console.log(e.label)}}
+                                    value={defaultUserSubscription.label}
+                                />
                             </div>
                         </div>
                     </div>

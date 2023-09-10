@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Header from '../../pages/landingpage/Header'
+import AdminHeader from '../../pages/landingpage/AdminHeader'
 import ChartForEarning from '../../pages/settingFolder/ChartForEarning'
 import SalesHistoryChart from './SalesHistoryChart';
 import ControllingDataRows from './ContollingDataRows';
@@ -418,14 +418,11 @@ function AnalyticsTool({ search, setSearch }) {
     }, [analyticsDetails])
     return (
         <div className='Dashboard-front'>
-            <Header
-
+            <AdminHeader
                 search={search}
                 setSearch={setSearch}
             />
             <div className='position-absolute-top'>
-
-
                 <div className='dashboard-front-section-1 dashboard-front-section-2'>
                     <div className='dashboard-card'>
                         <div>Free Trail Total Users</div>
@@ -606,9 +603,9 @@ function AnalyticsTool({ search, setSearch }) {
                     </div>
                 </div>
                 <div className='df-row-3'>
-                    {saleHistory.value == 0 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.all_months} option={months} />}
-                    {saleHistory.value == 1 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_week_all_day} option={weekly} />}
-                    {saleHistory.value == 2 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_month_all_days} option={daily} />}
+                    {saleHistory?.value == 0 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.all_months} option={months} />}
+                    {saleHistory?.value == 1 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_week_all_day} option={weekly} />}
+                    {saleHistory?.value == 2 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_month_all_days} option={daily} />}
 
                 </div>
 
