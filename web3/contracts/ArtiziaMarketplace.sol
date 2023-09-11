@@ -974,62 +974,62 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     }
 
     // Resell an NFT purchased from the marketplace
-    // function resellNft(
-    //     address _nftContract,
-    //     uint256 _tokenId,
-    //     uint256 _price,
-    //     uint256 _listingType,
-    //     uint256 _startTime,
-    //     uint256 _endTime
-    // )
-    //     public
-    //     // uint256 _paymentMethod
-    //     isUserBanned
-    //     nonReentrant
-    // {
-    //     NFT storage nft = _idToNFT[_tokenId];
+    function resellNft(
+        address _nftContract,
+        uint256 _tokenId,
+        uint256 _price,
+        uint256 _listingType,
+        uint256 _startTime,
+        uint256 _endTime
+    )
+        public
+        // uint256 _paymentMethod
+        isUserBanned
+        nonReentrant
+    {
+        NFT storage nft = _idToNFT[_tokenId];
 
-    //     require(_price > 0, "Price must be at least 1 wei");
+        require(_price > 0, "Price must be at least 1 wei");
 
-    //     require(
-    //         nft.owner == msg.sender,
-    //         "Only the owner of an nft can list the nft."
-    //     );
+        require(
+            nft.owner == msg.sender,
+            "Only the owner of an nft can list the nft."
+        );
 
-    //     IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
+        IERC721(_nftContract).transferFrom(msg.sender, address(this), _tokenId);
 
-    //     nft.seller = payable(msg.sender);
-    //     nft.owner = payable(address(this));
-    //     nft.price = _price;
-    //     nft.listed = true;
-    //     nft.listingType = ListingType(_listingType);
-    //     // nft.paymentMethod = PaymentMethod(_paymentMethod);
+        nft.seller = payable(msg.sender);
+        nft.owner = payable(address(this));
+        nft.price = _price;
+        nft.listed = true;
+        nft.listingType = ListingType(_listingType);
+        // nft.paymentMethod = PaymentMethod(_paymentMethod);
 
-    //     if (_listingType == uint256(ListingType.Auction)) {
-    //         _idToAuction[_tokenId] = Auction(
-    //             _tokenId, // tokenId
-    //             payable(msg.sender), // seller
-    //             _price, // basePrice
-    //             _startTime, // startTime
-    //             _endTime, // endTime
-    //             0, // highestBid
-    //             payable(address(0)), // highestBidder
-    //             nft.paymentMethod
-    //             // false // isLive
-    //         );
-    //     }
+        if (_listingType == uint256(ListingType.Auction)) {
+            _idToAuction[_tokenId] = Auction(
+                _tokenId, // tokenId
+                payable(msg.sender), // seller
+                _price, // basePrice
+                _startTime, // startTime
+                _endTime, // endTime
+                0, // highestBid
+                payable(address(0)), // highestBidder
+                nft.paymentMethod
+                // false // isLive
+            );
+        }
 
-    //     _nftsSold.decrement();
-    //     emit NFTListed(
-    //         _nftContract,
-    //         _tokenId,
-    //         msg.sender,
-    //         address(this),
-    //         _price,
-    //         nft.collectionId,
-    //         _listingType
-    //     );
-    // }
+        _nftsSold.decrement();
+        emit NFTListed(
+            _nftContract,
+            _tokenId,
+            msg.sender,
+            address(this),
+            _price,
+            nft.collectionId,
+            _listingType
+        );
+    }
 
     function bidInETH(
         uint256 _tokenId,
