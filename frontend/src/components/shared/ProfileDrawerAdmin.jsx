@@ -706,10 +706,17 @@ function ProfileDrawerAdmin({
                           userData?.wallet_address ==
                           nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
+                              {nftDetails?.user?.profile_image === null  ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
                               <span>{nftDetails?.user?.username}</span>
                               <br />
                               <span>{userData?.wallet_address}</span>
@@ -726,10 +733,17 @@ function ProfileDrawerAdmin({
                                 })
                               }
                             >
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
+                              {nftDetails?.user?.profile_image === null ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
                               <span>{nftDetails?.user?.username}</span>
                             </div>
                           )

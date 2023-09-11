@@ -7,10 +7,10 @@ const PUBLIC_KEY = "pk_test_51NSaCXCt3RaL5WVcM0wwsKmoPMRRZRK9mM217g2t36lIlTk3POR
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY)
 
-const StripeContainer = ({planName , setShowPaymentForm , showResponseMessage , index}) => {
+const StripeContainer = ({planName , setShowPaymentForm , showResponseMessage , index , viewSubscriptions}) => {
   return (
     <Elements stripe={stripeTestPromise}>
-        <PaymentForm planName={planName} index={index} setShowPaymentForm={setShowPaymentForm} showResponseMessage={showResponseMessage}/>
+        <PaymentForm planName={planName} viewSubscriptions={viewSubscriptions} index={index} setShowPaymentForm={setShowPaymentForm} showResponseMessage={showResponseMessage}/>
     </Elements >
   )
 }

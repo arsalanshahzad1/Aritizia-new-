@@ -3,11 +3,9 @@
   /* Color */
   --black: #000;
   --white: #fff;
-  --bg-gradient: linear-gradient(
-    90deg,
-    rgba(36, 56, 203, 1) 0%,
-    rgba(182, 0, 209, 1) 100%
-  );
+  --bg-gradient: linear-gradient(90deg,
+      rgba(36, 56, 203, 1) 0%,
+      rgba(182, 0, 209, 1) 100%);
   --primary: #b600d1;
   --secoundary: #2438cb;
   --lightGray: #b6b6b6;
@@ -284,8 +282,7 @@ p {
   position: relative;
 }
 
-.home-first-section {
-}
+.home-first-section {}
 
 header {
   padding: 30px 0px;
@@ -447,12 +444,19 @@ header .left img {
   transform: translate(-50%, -50%);
   width: 760px;
 }
+
 .home-first-wraper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 760px;
+}
+
+.home-first-wraperr {
+  margin-inline: auto;
+  width: 760px;
+  margin-top: 10px;
 }
 
 .home-first-wrap h1 {
@@ -465,7 +469,19 @@ header .left img {
   color: var(--white);
   text-align: center;
 }
+
 .home-first-wraper h1 {
+  font-family: "Jost";
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 58px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  text-align: center;
+}
+
+.home-first-wraperr h1 {
   font-family: "Jost";
   font-size: 40px;
   font-weight: 600;
@@ -483,7 +499,16 @@ header .left img {
   border-radius: 6px;
   margin: 15px 0px;
 }
+
 .home-first-wraper .search {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  border-radius: 6px;
+  margin: 15px 0px;
+}
+
+.home-first-wraperr .search {
   display: flex;
   justify-content: center;
   background: #fff;
@@ -506,7 +531,25 @@ header .left img {
   padding: 0px 15px;
   color: var(--primary);
 }
+
 .home-first-wraper .search input {
+  width: 100%;
+  display: inline-block;
+  border: none;
+  outline: none;
+  background: #9c9c9c4a;
+  font-family: "Jost";
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: left;
+  padding: 0px 15px;
+  color: var(--primary);
+  border-radius: 6px;
+}
+
+.home-first-wraperr .search input {
   width: 100%;
   display: inline-block;
   border: none;
@@ -528,7 +571,14 @@ header .left img {
   transition: color 0.5s ease;
   font-size: 16px;
 }
+
 .home-first-wraper .search input::-webkit-input-placeholder {
+  color: #9f9f9f;
+  transition: color 0.5s ease;
+  font-size: 16px;
+}
+
+.home-first-wraperr .search input::-webkit-input-placeholder {
   color: #9f9f9f;
   transition: color 0.5s ease;
   font-size: 16px;
@@ -537,7 +587,12 @@ header .left img {
 .home-first-wrap .search input:focus::-webkit-input-placeholder {
   color: #9f9f9f;
 }
+
 .home-first-wraper .search input:focus::-webkit-input-placeholder {
+  color: #9f9f9f;
+}
+
+.home-first-wraperr .search input:focus::-webkit-input-placeholder {
   color: #9f9f9f;
 }
 
@@ -554,7 +609,22 @@ header .left img {
   border-radius: 6px;
   border: none;
 }
+
 .home-first-wraper .search button {
+  font-family: "Jost";
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  background: var(--primary);
+  padding: 8px 30px;
+  border-radius: 6px;
+  border: none;
+}
+
+.home-first-wraperr .search button {
   font-family: "Jost";
   font-size: 26px;
   font-weight: 400;
@@ -766,8 +836,7 @@ header .left img {
   margin-left: 15px !important;
 }
 
-.home-four-sec .two {
-}
+.home-four-sec .two {}
 
 .home-four-sec .two .price {
   font-family: "Work-Sans";
@@ -800,7 +869,7 @@ header .left img {
   border: none !important;
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
   box-shadow: none !important;
 }
 
@@ -967,8 +1036,7 @@ header .left img {
   padding: 10px 0px;
 }
 
-.new-item-card .detail-wrap .topsection .left {
-}
+.new-item-card .detail-wrap .topsection .left {}
 
 .new-item-card .detail-wrap .topsection .left p {
   font-family: "Jost";
@@ -1050,11 +1118,9 @@ footer {
   background-size: cover;
 }
 
-footer span {
-}
+footer span {}
 
-footer span svg {
-}
+footer span svg {}
 
 footer h2 {
   font-family: "Jost";
@@ -1087,7 +1153,7 @@ footer h1 {
 }
 
 .footer-wrap {
-  padding: 50px 0px;
+  padding: 50px 0px 10px 0px;
 }
 
 .footer-wrap .icon {
@@ -1127,6 +1193,67 @@ footer h1 {
   padding: 50px 50px 20px 0px;
 }
 
+footer .footer-bottom {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 18px 0px;
+}
+
+footer .footer-bottom .footer-bottom-wrap {
+  max-width: 1140px;
+  margin-inline: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+footer .footer-bottom .footer-bottom-wrap .one {
+}
+footer .footer-bottom .footer-bottom-wrap .one a{
+  display: flex;
+  align-items: baseline;
+  gap: 13.7px;
+}
+
+footer .footer-bottom .footer-bottom-wrap .two {
+
+}
+footer .footer-bottom .footer-bottom-wrap .two ul{
+display: flex;
+margin: 0;
+padding: 0;
+gap: 26px;
+}
+footer .footer-bottom .footer-bottom-wrap .two ul li{
+list-style: none;
+}
+
+footer .footer-bottom .footer-bottom-wrap .three {}
+footer .footer-bottom .footer-bottom-wrap .three ul{
+  display: flex;
+margin: 0;
+padding: 0;
+gap: 27px;
+}
+footer .footer-bottom .footer-bottom-wrap .three ul li{
+  list-style: none;
+}
+footer .footer-bottom .footer-bottom-wrap .three ul li a{
+  
+}
+footer .footer-bottom .footer-bottom-wrap .three ul li a p{
+  font-family: 'Jost';
+font-size: 18px;
+font-weight: 600;
+line-height: 26px;
+letter-spacing: 0em;
+text-align: left;
+color: rgba(182, 0, 209, 1);
+}
+footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
+  color: #fff;
+  font-weight: 400;
+}
+
 .profile-first-section {
   margin-inline: 45px;
 }
@@ -1138,6 +1265,17 @@ footer h1 {
   /* padding: 0px 45px; */
   margin-top: 107px;
   background: #a308d126;
+  border-radius: 12px;
+}
+
+.art-page {
+  margin-top: 120px;
+}
+
+.art-page .remaining-prompt {
+  margin-top: 0px;
+  font-size: 20px;
+  color: #a5a5a5;
 }
 
 .margin-top-35px {
@@ -1156,8 +1294,9 @@ footer h1 {
 
 .profile-first-section .big-chack {
   position: absolute;
-  bottom: 15px;
-  right: 9px;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
 }
 
 .profile-first-section .user {
@@ -1388,8 +1527,7 @@ footer h1 {
   cursor: pointer;
 }
 
-.user-login-dropdown li.active {
-}
+.user-login-dropdown li.active {}
 
 .user-login-dropdown li:hover {
   background: var(--bg-gradient);
@@ -1840,8 +1978,7 @@ footer h1 {
   width: 100%;
 }
 
-.setting-tabs {
-}
+.setting-tabs {}
 
 .setting-tabs ul {
   display: flex;
@@ -1854,8 +1991,7 @@ footer h1 {
   flex-wrap: wrap;
 }
 
-.setting-tabs ul li {
-}
+.setting-tabs ul li {}
 
 .setting-tabs ul li button {
   font-family: "Work-Sans";
@@ -1907,10 +2043,9 @@ footer h1 {
   padding: 50px 0px;
 }
 
-.inputfield-edit-profile {
-}
+.inputfield-edit-profile {}
 
-.inputfield-edit-profile > div {
+.inputfield-edit-profile>div {
   padding-bottom: 30px;
 }
 
@@ -2010,7 +2145,7 @@ footer h1 {
   width: 218px;
   height: 218px;
   border-radius: 50%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .upload-img svg {
@@ -2117,8 +2252,7 @@ footer h1 {
   padding-top: 10px;
 }
 
-.apperance-section-wrap {
-}
+.apperance-section-wrap {}
 
 .apperance-section-wrap h2 {
   font-family: "Jost";
@@ -2269,8 +2403,7 @@ footer h1 {
   border: 2px solid var(--primary);
 }
 
-.metamask-waller-card img {
-}
+.metamask-waller-card img {}
 
 .metamask-waller-card h2,
 .coinbase-waller-card h2 {
@@ -2312,7 +2445,7 @@ footer h1 {
 }
 
 .subscription .subscription-wrap {
-  margin: 40px;
+  margin: 20px 40px 40px 40px;
 }
 
 .subscription .subscription-wrap .subscription-card-wrap .title {
@@ -2368,11 +2501,9 @@ footer h1 {
 }
 
 .subscription .subscription-wrap .subscription-card-wrap:hover {
-  background: linear-gradient(
-    120deg,
-    rgba(36, 56, 203, 1) 0%,
-    rgba(182, 0, 209, 1) 100%
-  );
+  background: linear-gradient(120deg,
+      rgba(36, 56, 203, 1) 0%,
+      rgba(182, 0, 209, 1) 100%);
 }
 
 .subscription .subscription-wrap .subscription-card-wrap:hover .title {
@@ -2399,8 +2530,42 @@ footer h1 {
   fill: #fff;
 }
 
-.subscription .subscription-wrap .subscription-card-wrap:hover {
+.subscription .subscription-wrap .subscription-card-wrap:hover {}
+
+
+
+
+.subscription .subscription-wrap .subscription-card-wrap.active {
+  background: linear-gradient(120deg,
+      rgba(36, 56, 203, 1) 0%,
+      rgba(182, 0, 209, 1) 100%);
 }
+
+.subscription .subscription-wrap .subscription-card-wrap.active .title {
+  color: #fff;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active .p1 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active .p2 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active .span-1 {
+  color: #fff;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active .span-2 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active svg path {
+  fill: #fff;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active {}
 
 .subscription .subscription-wrap .subscription-card-wrap .p1 {
   font-family: "Jost";
@@ -2450,8 +2615,7 @@ footer h1 {
   padding: 10px 0px;
 }
 
-.create {
-}
+.create {}
 
 .create .create-section-wrap {
   padding-bottom: 80px;
@@ -2502,8 +2666,7 @@ footer h1 {
   padding-top: 20px;
 }
 
-.create .create-section-wrap .create-card img {
-}
+.create .create-section-wrap .create-card img {}
 
 .range-bar {
   width: 300px;
@@ -2553,8 +2716,7 @@ footer h1 {
   margin-top: 10px;
 }
 
-.create-single {
-}
+.create-single {}
 
 .create-single .create-single-section-wrap {
   padding: 60px 0px;
@@ -2602,9 +2764,7 @@ footer h1 {
   transition: color 0.5s ease;
 }
 
-.create-single
-  .create-single-section-wrap
-  input:focus::-webkit-input-placeholder {
+.create-single .create-single-section-wrap input:focus::-webkit-input-placeholder {
   color: #9f9f9f;
 }
 
@@ -2864,15 +3024,13 @@ footer h1 {
   color: #121212;
 }
 
-.user-profile-line-two {
-}
+.user-profile-line-two {}
 
 .user-profile-buy-card {
   padding: 60px 60px;
 }
 
-.user-profile-buy-card .left {
-}
+.user-profile-buy-card .left {}
 
 .user-profile-buy-card .left h2 {
   font-family: "Work-Sans";
@@ -2992,13 +3150,12 @@ footer h1 {
   }
 }
 
-@media only screen and (min-width: 1399px) {
-}
+@media only screen and (min-width: 1399px) {}
 
-@media only screen and (max-width: 1399px) {
-}
+@media only screen and (max-width: 1399px) {}
 
 @media only screen and (max-width: 992px) {
+
   .metamask-waller-card,
   .coinbase-waller-card {
     height: 280px;
@@ -3824,7 +3981,7 @@ footer h1 {
   flex: 1 1 0%;
 }
 
-.iqGEMd div > p {
+.iqGEMd div>p {
   font-size: 10px;
 }
 
@@ -3852,9 +4009,9 @@ footer h1 {
   text-transform: initial;
 }
 
+.sub-card-chack-box {}
+
 .sub-card-chack-box {
-}
-.sub-card-chack-box .left {
   display: flex;
   gap: 10px;
   font-family: "Jost";
@@ -3868,18 +4025,23 @@ footer h1 {
   align-items: center;
 }
 
-.subscription
-  .subscription-wrap
-  .subscription-card-wrap:hover
-  .sub-card-chack-box
-  .left {
+.subscription .subscription-wrap .subscription-card-wrap:hover .sub-card-chack-box .left {
   color: #fff;
 }
-.subscription
-  .subscription-wrap
-  .subscription-card-wrap:hover
-  .seven-line-nft-cardd
-  span:nth-child(1) {
+
+.subscription .subscription-wrap .subscription-card-wrap.active .sub-card-chack-box .left {
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap:hover .seven-line-nft-cardd span:nth-child(1) {
+  border: 3px solid #fff;
+}
+
+.subscription .subscription-wrap .subscription-card-wrap.active .seven-line-nft-cardd span:nth-child(1) {
   border: 3px solid #fff;
 }
 
@@ -4055,11 +4217,9 @@ footer h1 {
 
 .button-styling-outline {
   border: none;
-  background: linear-gradient(
-    90deg,
-    rgba(36, 56, 203, 1) 0%,
-    rgba(182, 0, 209, 1) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(36, 56, 203, 1) 0%,
+      rgba(182, 0, 209, 1) 100%);
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -4127,6 +4287,14 @@ footer h1 {
   text-align: center;
   width: max-content;
   cursor: pointer;
+  margin-left: auto;
+}
+
+.browse-center {
+  text-align: center;
+  width: max-content;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 .Button-holding-div {
@@ -4134,6 +4302,7 @@ footer h1 {
   display: flex;
   justify-content: space-between;
   width: 100%;
+
 }
 
 .royality-value {
@@ -5097,8 +5266,7 @@ footer h1 {
   color: #777777;
 }
 
-.separate-checkbox-follower {
-}
+.separate-checkbox-follower {}
 
 .disabled-input-only-view h2 {
   color: #b1b1b1 !important;
@@ -5128,7 +5296,7 @@ footer h1 {
 /* Art Page */
 
 .Arts-holder {
-  margin: 9% 5% 3% 5%;
+  margin-top: 30px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -5244,8 +5412,7 @@ footer h1 {
   width: 50%;
 }
 
-.custom-drop-down {
-}
+.custom-drop-down {}
 
 .custom-drop-down .drop-down-select {
   position: relative;
@@ -5292,8 +5459,7 @@ footer h1 {
   z-index: 1000;
 }
 
-.custom-drop-down .dropdown-list-wrap {
-}
+.custom-drop-down .dropdown-list-wrap {}
 
 .custom-drop-down .dropdown-list-wrap ul {
   margin: 0;
@@ -5364,7 +5530,7 @@ footer h1 {
   color: var(--white);
 }
 
-.stripe-payment-form button:active {
+.stripe-payment-form button.active {
   background-color: #d782d9;
   box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 #e298d8;
@@ -5397,12 +5563,25 @@ h3 {
   justify-content: center;
   align-items: center;
 }
+
 .header-empty-record span {
   font-weight: 600;
   font-size: 22px;
   font-family: "Jost";
   color: #b600d1;
 }
+
+.art-error {
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 22px;
+  font-family: "Jost";
+  color: #B6B6B6
+}
+
 .transition-div {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -5431,4 +5610,121 @@ h3 {
 
 .transition-div.show {
   opacity: 1;
+}
+
+.subscription-purchase-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.subscription-purchase-details .left {
+  font-family: "Jost";
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.subscription-purchase-details .right {
+  display: flex;
+  align-items: center;
+}
+
+.subscription-purchase-details .right div:nth-child(1) {}
+
+.subscription-purchase-details .right div:nth-child(2) {}
+
+.subscription-purchase-details .right div:nth-child(2) button {
+  background: var(--bg-gradient);
+  padding: 8px 15px;
+  border-radius: 6px;
+  border: none;
+  font-family: "Jost";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  position: relative;
+}
+
+.subscription-purchase-details .right .title {
+  font-family: "Jost";
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+}
+
+.renewalconfirmation-close {}
+
+.renewalconfirmation-close svg {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.renewalconfirmation-close div:nth-child(1) {}
+
+.renewalconfirmation-close div:nth-child(3) {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.renewalconfirmation-close h2 {
+  font-family: "Jost";
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #121212;
+  padding-bottom: 10px;
+}
+
+.renewalconfirmation-close div button:nth-child(1) {
+  background: transparent;
+  padding: 6px 20px;
+  border-radius: 6px;
+  border: 2px solid #B600D1;
+  font-family: "Jost";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #B600D1;
+  position: relative;
+}
+
+.renewalconfirmation-close div button:nth-child(2) {
+
+  background: var(--bg-gradient);
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: none;
+  font-family: "Jost";
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: var(--white);
+  position: relative;
+}
+
+@media (min-width: 1400px) {
+  footer .footer-bottom .footer-bottom-wrap {
+    max-width: 1320px;
+  }
 }

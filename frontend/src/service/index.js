@@ -1,5 +1,8 @@
 import axios from "axios";
 
+const midjourneyapiKey = import.meta.env.VITE_NEXT_LEG_SECRET_KEY;
+const stabilityapiKey = import.meta.env.VITE_STABILITY_SECRET_KEY;
+
 const createBackendServer = (baseURL) => {
   const api = axios.create({
     baseURL: `${baseURL}/api/`,
@@ -10,10 +13,9 @@ const createBackendServer = (baseURL) => {
     timeout: 60 * 1000,
   });
 
-  const userId = 2;
+  // const userId = 2;
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
-  console.log(RealUserId, "RealUserId");
 
   //Interceptor
   api.interceptors.response.use(
@@ -42,6 +44,15 @@ const createBackendServer = (baseURL) => {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
+ 
+  const headers2 = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + midjourneyapiKey
+  }
+  const headers3 = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + stabilityapiKey
+  }
 
   const postListNft = async (body) => await api.post("list-nft", body);
 
@@ -170,6 +181,34 @@ const createBackendServer = (baseURL) => {
   const getCurrentNotificationSettings = async (userId) => await api.get(`view-notification-setting/${userId}`);
   const updateNotificationSettings = async (body) => await api.post(`update-notification-setting`,body);
 
+
+  const getMidjourneyId = async (body) => await api.post(`https://api.thenextleg.io/v2/imagine`, body, {
+    headers: headers2, // Pass headers here
+  });
+
+  const getMidjourneyImagesFromId = async (id) => await api.get(`https://api.thenextleg.io/v2/message/${id}`, {
+    headers: headers2, // Pass headers here
+  });
+
+  const getStabilityImages = async (body) =>
+    await api.post(`https://api.stability.ai/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image`, body, {
+      headers: headers3, // Pass headers here
+    });
+
+  // Art Gallery //
+
+  const createArtGalleryImages = async (body) => await api.post(`create-art-gallery`,body,{headers : headers});
+  const generateArtGalleryImages = async (body) => await api.post(`generate-art-gallery`, body);
+  const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
+  const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
+  const removeArtGallery = async (RealUserId) => await api.get(`remove-art-gallery/${RealUserId}`);
+
+
+
+  const viewLandingPageDetail = async () => await api.get(`view-landing-page-detail`);
+
+
+
   //Returning all the API
   return {
     getCurrentNotificationSettings,
@@ -229,10 +268,26 @@ const createBackendServer = (baseURL) => {
     viewNftCollectionStock,
     viewNftCollectionProfile,
     viewNftTopCollections,
+
+    getMidjourneyId,
+    getMidjourneyImagesFromId,
+
+    getStabilityImages,
+
+    //Art Gallery//
+
+    createArtGalleryImages,
+    generateArtGalleryImages,
+    viewArtGallery,
+    viewRemainingArtGallery,
+    removeArtGallery,
+
+    viewLandingPageDetail
+
   };
 };
 
-const apis = createBackendServer("http://165.232.142.3");
+const apis = createBackendServer("http://143.198.70.237");
 
 //     Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237

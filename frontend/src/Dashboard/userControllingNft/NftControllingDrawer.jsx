@@ -341,12 +341,23 @@ function NftControllingDrawer({
                         {userData?.wallet_address ==
                         drawerData?.user?.wallet_address ? (
                           <Link to={"/profile"}>
-                            <img src={drawerData?.user?.profile_image} alt="" />{" "}
+                            {/* <img src={drawerData?.user?.profile_image} alt="" />{" "} */}
+                            {nftDetails?.user?.profile_image === null ? (
+                                <img
+                                  src={drawerData?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
                             <span>{drawerData?.user?.username}</span>
                             <br />
-                            <span>{userData?.wallet_address}</span>
+                            {/* <span>{userData?.wallet_address}</span> */}
                             <br />
-                            <span>{nftDetails?.user?.wallet_address}</span>
+                            {/* <span>{nftDetails?.user?.wallet_address}</span> */}
                           </Link>
                         ) : (
                           <div
@@ -358,7 +369,17 @@ function NftControllingDrawer({
                               })
                             }
                           >
-                            <img src={drawerData?.user?.profile_image} alt="" />{" "}
+                           {nftDetails?.user?.profile_image === null ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
                             <span>{drawerData?.user?.username}</span>
                           </div>
                         )}

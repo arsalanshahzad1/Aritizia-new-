@@ -823,7 +823,7 @@ img {
 .simple-card-main .top .image-holder img {
   width: 100%;
   height: 180px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .simple-card-main .bottom .nft-icon {

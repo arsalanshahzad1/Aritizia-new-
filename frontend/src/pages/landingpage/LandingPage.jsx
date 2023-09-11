@@ -386,6 +386,21 @@ const LandingPage = ({ search, setSearch }) => {
       observer.disconnect();
     };
   }, []);
+const [counterData , setCounterData] = useState('')
+  const viewLandingPageDetail = async () =>{
+    try {
+      const response = await apis.viewLandingPageDetail()
+      console.log(response?.data?.data , 'ccccccc');
+      setCounterData(response?.data?.data)
+
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(() =>{
+    viewLandingPageDetail()
+  }, [])
 
   return (
     <>
@@ -421,22 +436,23 @@ const LandingPage = ({ search, setSearch }) => {
                     <div className="row">
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
-                          <h3>{isVisible ? <CountUp end={10} /> : 0}K+</h3>
-                          <p>RARE NFT</p>
+                          {/* <h3>{isVisible ? <CountUp end={counterData?.total_users} /> : 0}K+</h3> */}
+                          <h3>{isVisible ? <CountUp end={counterData?.total_users} prefix="0"/> : 0}</h3>
+                          <p>Total Users</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
-                          <h3>{isVisible ? <CountUp end={70} /> : 0}K+</h3>
-                          <p>RARE NFT</p>
+                          <h3>{isVisible ? <CountUp end={counterData?.total_nfts} prefix="0"/> : 0}</h3>
+                          <p>Total NFTs</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-12">
                         <div className="inner-wrap">
                           <h3>
-                            {isVisible ? <CountUp end={5} prefix="0" /> : 0}K+
+                            {isVisible ? <CountUp end={counterData?.total_artgallery} prefix="0" /> : 0}
                           </h3>
-                          <p>RARE NFT</p>
+                          <p>Total Arts</p>
                         </div>
                       </div>
                     </div>

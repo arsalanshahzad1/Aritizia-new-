@@ -749,3 +749,95 @@
 .transaction-row td {
     color: #111111 !important;
 }
+
+.select-crypto-to-create-collection{
+    position: relative;
+}
+.select-crypto-to-create-collection .title{
+    border-radius: 5px;
+    /* border: 2px solid #929292; */
+    background: #ebebeb;
+    padding: 7px 10px;
+    width: 100%;
+    color: #000;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    text-transform: capitalize;
+    height: 47px;
+    display: flex;
+    align-items: center;
+}
+
+.select-crypto-to-create-collection .title svg{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right:5px;
+    font-size: 22px;
+}
+
+.select-crypto-to-create-collection .options{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    background: #fff;
+    width: 100%;
+    position: absolute;
+}
+.select-crypto-to-create-collection .options h2{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500 !important;
+    font-size: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    padding: 10px 10px !important;
+    cursor: pointer;
+}
+.select-crypto-to-create-collection .Dropdown-control{
+    border-radius: 5px;
+    border: 2px solid #929292;
+    padding: 5px 10px;
+    width: 130px;
+}
+.select-crypto-to-create-collection .Dropdown-menu{
+    border-radius: 5px;
+    border: 2px solid #929292;
+}
+.select-crypto-to-create-collection .Dropdown-placeholder{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+.select-crypto-to-create-collection .Dropdown-option{
+    color: #929292;
+    font-family: 'poppins';
+    font-weight: 500;
+    font-size: 16px
+}
+
+.select-crypto-to-create-collection .Dropdown-arrow {
+    border-width: 6px 7px 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.payment-modal-wrap .select-crypto-to-create-collection{}
+.payment-modal-wrap .select-crypto-to-create-collection p{
+    font-family: 'Jost';
+    font-size: 19px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left !important;
+    color: #121212;
+    padding-bottom: 0px !important;
+}
+
+.payment-dd-wrap .select-crypto-to-create-collection{
+    flex: 1;
+}

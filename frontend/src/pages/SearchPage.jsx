@@ -616,30 +616,30 @@ const SearchPage = ({ search, setSearch }) => {
       </div>
 
       <div
-        class="modal modal_outer left_modal fade"
+        className="modal modal_outer left_modal fade"
         id="get_quote_modal"
         tabindex="-1"
         role="dialog"
         aria-labelledby="myModalLabel2"
       >
-        <div class="modal-dialog" role="document">
+        <div className="modal-dialog" role="document">
           <form method="post" id="get_quote_frm">
-            <div class="modal-content ">
-              <div class="modal-header">
+            <div className="modal-content ">
+              <div className="modal-header">
                 <div className="l-1">
                   <img src="/assets/images/filter.png" alt="" />{" "}
                   <span>Filter</span>
                 </div>
                 <button
                   type="button"
-                  class="close"
+                  className="close"
                   data-dismiss="modal"
                   aria-label="Close"
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body get_quote_view_modal_body">
+              <div className="modal-body get_quote_view_modal_body">
                 <div className="search-filter">
                   <div className="l-2">
                     <p>Status</p>

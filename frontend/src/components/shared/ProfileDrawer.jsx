@@ -1059,9 +1059,9 @@ function ProfileDrawer({
                       <div className="logo-name">
                         {
                           userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address ? (
+                          nftDetails?.user?.wallet_address === null ? (
                             <Link to={"/profile"}>
-                              {nftDetails?.user?.profile_image ? (
+                              {nftDetails?.user?.profile_image  ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""
@@ -1090,10 +1090,17 @@ function ProfileDrawer({
                                 )
                               }
                             >
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />{" "}
+                              {nftDetails?.user?.profile_image === null ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
                               <span>{nftDetails?.user?.username}</span>
                             </div>
                           )

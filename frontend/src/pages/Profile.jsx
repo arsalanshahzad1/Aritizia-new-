@@ -890,6 +890,8 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 2 && (
                   <>
                     <div className="row">
+                      {userNFTs.length > 0 ?
+                      <>
                       {userNFTs.map((item) => (
                         <MyNftCard
                           onOpen={onOpen}
@@ -908,6 +910,10 @@ const Profile = ({ search, setSearch }) => {
                           userAddress
                         />
                       ))}
+                      </>
+                      :
+                      <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                    }
                     </div>
                   </>
                 )}
@@ -931,43 +937,55 @@ const Profile = ({ search, setSearch }) => {
                       </div>
                       {collectionTabs === 0 && (
                         <>
-                          {likedNfts.map((item) => (
-                            <SimpleCard
-                              onOpen={onOpen}
-                              // onClose={onClose}
-                              key={item.id}
-                              id={item.id}
-                              title={item?.title}
-                              image={item?.image}
-                              price={item?.price}
-                              crypto={item?.crypto}
-                              royalty={item?.royalty}
-                              description={item?.description}
-                              collection={item?.collection}
-                              collectionImages={item?.collectionImages}
-                              userAddress
-                            />
-                          ))}
+                        {likedNfts.length > 0 ?
+                        <>
+                        {likedNfts.map((item) => (
+                          <SimpleCard
+                            onOpen={onOpen}
+                            // onClose={onClose}
+                            key={item.id}
+                            id={item.id}
+                            title={item?.title}
+                            image={item?.image}
+                            price={item?.price}
+                            crypto={item?.crypto}
+                            royalty={item?.royalty}
+                            description={item?.description}
+                            collection={item?.collection}
+                            collectionImages={item?.collectionImages}
+                            userAddress
+                          />
+                        ))}
+                        </>
+                        :
+                        <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                         </>
                       )}
                       {collectionTabs === 1 && (
                         <>
-                          {likedNftsAuction.map((item) => (
-                            <NewItemCard
-                              key={item.id}
-                              id={item.id}
-                              title={item?.title}
-                              image={item?.image}
-                              price={item?.price}
-                              highestBid={item?.highestBid}
-                              isLive={item?.isLive}
-                              endTime={item?.endTime}
-                              startTime={item?.startTime}
-                              description={item?.description}
-                              collectionImages={item?.collectionImages}
-                              userAddress={userAddress}
-                            />
-                          ))}
+                        {likedNftsAuction.length > 0 ?
+                      <>
+                      {likedNftsAuction.map((item) => (
+                        <NewItemCard
+                          key={item.id}
+                          id={item.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                          highestBid={item?.highestBid}
+                          isLive={item?.isLive}
+                          endTime={item?.endTime}
+                          startTime={item?.startTime}
+                          description={item?.description}
+                          collectionImages={item?.collectionImages}
+                          userAddress={userAddress}
+                        />
+                      ))}
+                      </>
+                      :
+                      <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                         </>
                       )}
                     </div>

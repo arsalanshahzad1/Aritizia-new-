@@ -4,26 +4,12 @@ import ArtItem from './ArtItem'
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import GalleryItem from './GalleryItem'
+import apis from '../service'
 const Gallery = () => {
     const navigate = useNavigate()
-    const [GalleryItems, setGalleryItems] = useState([
-        {
-            image: bird,
-            selected: false
-        },
-        {
-            image: bird,
-            selected: false
-        },
-        {
-            image: bird,
-            selected: false
-        },
-        {
-            image: bird,
-            selected: false
-        },
-    ])
+    const id = JSON.parse(localStorage.getItem("data"));
+    const user_id = id?.id;
+    const [GalleryItems, setGalleryItems] = useState([])
     const [selectCount, setSelectCount] = useState(0)
     useEffect(() => {
         const count = GalleryItems.filter(item => item.selected).length;
@@ -41,19 +27,133 @@ const Gallery = () => {
         updatedArts[index].selected = false;
         setGalleryItems(updatedArts);
     };
-    const ListGallery = () => {
+    const ListGallery = async () => {
         const readyTobeListed = GalleryItems.filter(item => item.selected).map(item => item.image)
         console.log(readyTobeListed, "we are ready to travel to Database")
-        navigate('/create/multiple')
-        setGalleryItems([])
-        setprompt('')
+        // const imageDataObject = {};
+        const imageDataObject = [];
+        for (let i = 0; i < readyTobeListed.length; i++) {
+            try {
+                const imageUrl = readyTobeListed[i];
+                console.log(imageUrl, 'bbbbbb');
+                const imageFile = await convertImageUrlToImageFile(imageUrl , i);
+                console.log(imageFile , 'nnnnn');
+                // Use the index `i` as the key and the image File as the value
+                // imageDataObject[i] = imageFile;
+                imageDataObject.push(imageFile);
+
+
+            } catch (error) {
+                console.error(`Error fetching image for URL ${readyTobeListed[i]}:`, error);
+            }
+            console.log(imageDataObject);
+
+        }
+
+        // console.log(imageDataObject);
+        // navigate('/create/multiple')
+        navigate(
+            '/create/multiple',
+            {
+              state: {
+                artGallery: imageDataObject
+              },
+            }
+          )
+        // setGalleryItems([])
+        // setprompt('')
     }
+
+    const convertImageUrlToImageFile = async (url , i) => {
+        try {
+            if (url.includes("http")) {
+                // Download the image from the URL
+                const imageUrl = url;
+                const response = await fetch(url);
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                }
+
+                // Convert the response data to a Blob
+                const imageBlob = await response.blob();
+
+                // Extract the file name from the URL or specify a custom name
+                const urlParts = imageUrl.split('/');
+                const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
+
+                // Create a File object from the Blob
+                const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+                return (
+                    file
+                )
+            } else {
+                // console.log('base64');
+                // const base64url = `data:image/png;base64,${url}`;
+                // fetch(base64url)
+                //     .then(res => res.blob())
+                //     .then(blob => {
+                //         const file = new File([blob], `image${i}.png`, { type: "image/png" });
+                //         console.log(file , 'fileee');
+                //         return (
+                //             file
+                //         )
+                //     })
+                // Download the image from the URL
+                const imageUrl = url;
+                const response = await fetch(`data:image/png;base64,${url}`);
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                }
+
+                // Convert the response data to a Blob
+                const imageBlob = await response.blob();
+
+                // Extract the file name from the URL or specify a custom name
+                const urlParts = imageUrl.split('/');
+                const fileName = `image${i}.png`;
+
+                // Create a File object from the Blob
+                const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+                return (
+                    file
+                )
+                    
+            }
+
+            // console.log(file);
+            // Set the image file in state
+            // setImageFile(file);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     const scrollToPrompt = () => {
         document.getElementById('prompt').scrollIntoView({
             behavior: 'smooth',
             block: 'start',
         })
     }
+
+    const saveToGallery = async () => {
+        try {
+            const response = await apis.viewArtGallery(user_id);
+            console.log(response, 'sdasdsad');
+            let tempImages = []
+            for (let index = 0; index < response?.data?.data?.length; index++) {
+                tempImages.push({ image: response?.data?.data?.[index]?.image_url, selected: false })
+            }
+            setGalleryItems(tempImages)
+        } catch (error) {
+        }
+    }
+
+    useEffect(() => {
+        saveToGallery()
+    }, [])
     return (
         < div >
             <div className='Arts-holder'>
@@ -76,8 +176,8 @@ const Gallery = () => {
                         <path d="M66.7453 43.6913V44.2259C66.7453 46.529 66.7453 48.832 66.7453 51.135C66.7618 51.3791 66.7266 51.6239 66.642 51.8535C66.5574 52.0832 66.4252 52.2927 66.2542 52.4684C66.0831 52.6441 65.8769 52.7821 65.6489 52.8735C65.4209 52.9648 65.176 53.0076 64.9304 52.9989C64.6847 52.9902 64.4436 52.9303 64.2227 52.8231C64.0017 52.7158 63.8059 52.5636 63.6478 52.3763C63.4897 52.189 63.3727 51.9707 63.3047 51.7356C63.2367 51.5006 63.2192 51.2539 63.253 51.0116V43.6913H55.7931C55.5012 43.7009 55.2117 43.6371 54.9512 43.5057C54.6907 43.3744 54.4677 43.1797 54.3029 42.9399C54.1381 42.7 54.0368 42.4226 54.0083 42.1334C53.9798 41.8443 54.0251 41.5526 54.14 41.2855C54.2725 40.9419 54.5131 40.6501 54.826 40.4537C55.1388 40.2573 55.5071 40.1668 55.8758 40.1957H63.253V39.6816C63.253 37.3786 63.253 35.0755 63.253 32.7725C63.2453 32.4811 63.3118 32.1926 63.4464 31.9337C63.5809 31.6749 63.7791 31.4541 64.0225 31.292C64.2659 31.1298 64.5465 31.0316 64.8383 31.0064C65.1301 30.9813 65.4236 31.03 65.6914 31.1481C66.0257 31.2813 66.3094 31.5158 66.5023 31.8185C66.6951 32.1211 66.7873 32.4764 66.7659 32.8342C66.7659 35.1166 66.7659 37.3785 66.7659 39.661V40.1957H74.2051C74.4943 40.1893 74.7806 40.2542 75.0386 40.3845C75.2965 40.5148 75.5181 40.7064 75.6837 40.9424C75.8493 41.1784 75.9537 41.4515 75.9878 41.7373C76.0218 42.0231 75.9845 42.3129 75.8789 42.5809C75.7481 42.9229 75.5115 43.2148 75.2033 43.4144C74.895 43.6139 74.531 43.7109 74.1637 43.6913H66.7659H66.7453Z" fill="white" />
                         <defs>
                             <linearGradient id="paint0_linear_1307_227" x1="41.7127" y1="0.501953" x2="41.7127" y2="83.9395" gradientUnits="userSpaceOnUse">
-                                <stop stop-color="#2538CB" />
-                                <stop offset="1" stop-color="#B501D1" />
+                                <stop stopcolor="#2538CB" />
+                                <stop offset="1" stopcolor="#B501D1" />
                             </linearGradient>
                         </defs>
                     </svg>
