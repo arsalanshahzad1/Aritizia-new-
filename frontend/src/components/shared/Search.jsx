@@ -2,14 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { FaSearch } from "react-icons/fa";
+import { getAddress } from "../../methods/methods";
 
 const Search = ({ search, setSearch }) => {
-
   const [searchText, setSearchText] = useState("");
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
   };
+
+  useEffect(() => {
+    getAddress();
+  }, []);
 
   return (
     <>

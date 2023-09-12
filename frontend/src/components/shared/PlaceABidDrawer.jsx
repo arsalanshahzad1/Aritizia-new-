@@ -505,6 +505,16 @@ const PlaceABidDrawer = ({
       provider
     );
 
+    let auctionData = await marketplaceContract._idToAuction(id);
+
+    let startTime = auctionData.startTime.toString();
+    let endTime = auctionData.endTime.toString();
+    console.log("auctionData", auctionData);
+    console.log("startTime", startTime);
+    console.log("getSellerPlan", getSellerPlan);
+    console.log("endTime", endTime);
+    console.log("zzzz sellerPlan", sellerPlan);
+    console.log("zzzz buyerPlan", buyerPlan);
     let getLatestUSDTPrice = await marketplaceContract.getLatestUSDTPrice();
     console.log("getLatestUSDTPrice", getLatestUSDTPrice.toString());
 
@@ -529,6 +539,8 @@ const PlaceABidDrawer = ({
 
     console.log("Claim auction");
     console.log("auctionPurchase", auctionPurchase);
+    console.log("zzzz sellerPlan", sellerPlan);
+    console.log("zzzz buyerPlan", buyerPlan);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -1049,7 +1061,7 @@ const PlaceABidDrawer = ({
                   <p>
                     Owned by{" "}
                     {userData?.wallet_address ==
-                      nftDetails?.user?.wallet_address ? (
+                    nftDetails?.user?.wallet_address ? (
                       <Link to={"/profile"}>
                         <span>
                           {nftDetails?.user?.first_name}{" "}
@@ -1085,9 +1097,10 @@ const PlaceABidDrawer = ({
                       <h3>Creator</h3>
                       <div className="logo-name">
                         {
-                          userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                          userData?.wallet_address ==
+                          nftDetails?.user?.wallet_address ? (
                             <Link to={"/profile"}>
-                              {nftDetails?.user?.profile_image? (
+                              {nftDetails?.user?.profile_image ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""

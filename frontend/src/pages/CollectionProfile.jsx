@@ -386,6 +386,7 @@ function CollectionProfile({ search, setSearch }) {
     const address = await signer.getAddress();
 
     console.log("MYADDRESS", address);
+    console.log("collectionData", collectionData);
 
     let listingType;
 
@@ -512,8 +513,8 @@ function CollectionProfile({ search, setSearch }) {
   const viewNftCollectionProfile = async (id) => {
     const response = await apis.viewNftCollectionProfile(id);
     if (response.status) {
-      console.log(response?.data?.data);
-      setCollectionData(response?.data?.data);
+      console.log("viewNftCollectionProfile", response?.data?.data);
+      setCollectionData(response?.nfts);
     } else {
       alert("error");
     }

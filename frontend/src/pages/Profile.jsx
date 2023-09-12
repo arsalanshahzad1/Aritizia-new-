@@ -57,16 +57,15 @@ const Profile = ({ search, setSearch }) => {
   // const [followers, setFollwers] = useState([]);
   const navigate = useNavigate();
 
-  const getNFTlikeListing = async () => {
-    console.log("getNFTlikeListing");
-    const response = await apis.getLikeNFTListing(userData?.id);
-    setLikedNfts(response?.data?.data);
-    console.log(response, "liked-nfts");
-  };
+  // const getNFTlikeListing = async () => {
+  //   const response = await apis.getLikeNFTListing(userData?.id);
+  //   setLikedNfts(response?.data?.data);
+  //   console.log(response?.data?.data, "liked-nfts");
+  // };
 
-  useEffect(() => {
-    getNFTlikeListing();
-  }, []);
+  // useEffect(() => {
+  //   getNFTlikeListing();
+  // }, []);
 
   let likedNftsFromDB = [];
 
@@ -88,8 +87,12 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    let NFTId = await getLikedNftsList();
-    console.log("NFTId", NFTId);
+
+    const responses = await apis.getLikeNFTListing(userData?.id);
+
+    console.log("cccc NFTId", responses?.data?.data);
+
+    let NFTId = responses?.data?.data;
 
     let liked = [];
     let myAuctions = [];
@@ -100,17 +103,18 @@ const Profile = ({ search, setSearch }) => {
 
     // console.log("NFTId", NFTId);
 
-    console.log("Running");
+    console.log("cccc Running");
     if (NFTId.length > 0 && NFTId != "") {
       for (let i = 0; i < NFTId.length; i++) {
         let id;
-        let collectionImage = NFTId[i].collection_image;
-        id = +NFTId[i].token_id;
+        // let collectionImage = NFTId[i].collection_image;
+        id = +NFTId[i];
         // id =i;
 
         const metaData = await nftContract.tokenURI(id);
 
         const structData = await marketplaceContract._idToNFT(id);
+        console.log("cccc structData", structData);
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -130,9 +134,9 @@ const Profile = ({ search, setSearch }) => {
 
         let collectionId = structData.collectionId.toString();
 
-        console.log("collectionId", collectionId);
+        console.log("cccc collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
-        console.log(response.data, "saad");
+        console.log(response?.data, "cccc response.data");
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         console.log(
           response?.data?.data?.media?.[0]?.original_url,
@@ -222,6 +226,7 @@ const Profile = ({ search, setSearch }) => {
     return true; // No empty strings found, validation passes
   };
   const addFanList = async () => {
+    console.log("ALIMONIS");
     if (validateFanAddresses(FansAddress)) {
       const signer = await getProviderOrSigner(true);
 
@@ -322,8 +327,7 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
+    const signer = provider.getSigner(); 
 
     // console.log("MYADDRESS", address);
     console.log("333333");
@@ -336,7 +340,6 @@ const Profile = ({ search, setSearch }) => {
 
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);
-    let NFTId = await getLikedNftsList();
     let myNFTs = [];
     let myAuctions = [];
     for (let i = 0; i < mintedTokens.length; i++) {
@@ -452,7 +455,7 @@ const Profile = ({ search, setSearch }) => {
 
     console.log("four");
     const signer = provider.getSigner();
-    const address = await signer.getAddress();
+   
 
     // console.log("MYADDRESS", address);
 
@@ -463,7 +466,6 @@ const Profile = ({ search, setSearch }) => {
     console.log("five");
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens mynft", mintedTokens);
-    let NFTId = await getLikedNftsList();
     let myNFTs = [];
     // let myAuctions = [];
     console.log(mintedTokens.length);
@@ -582,16 +584,6 @@ const Profile = ({ search, setSearch }) => {
     return response.data.data;
   };
 
-  // const getFollowersList = async () => {
-  //   const response = await apis.getFollowersList();
-  //   if(response.status){
-  //   console.log(response.data.data, "followers");
-  //   setFollwers(response.data.data);
-  //   }else{
-  //     setFollwers('');
-  //   }
-  // };
-
   useEffect(() => {
     getLikedNfts();
   }, []);
@@ -669,6 +661,8 @@ const Profile = ({ search, setSearch }) => {
   }, []);
 
   const addFans = async () => {
+    console.log("addingFanListP", addingFanList);
+
     if (addingFanList.length > 0) {
       const response = await apis.postUserFans({
         fan_by: userData?.id,
@@ -884,36 +878,38 @@ const Profile = ({ search, setSearch }) => {
                 )}
                 {tabs === 1 && (
                   <>
-                    <Gallery user="admin"/>
+                    <Gallery user="admin" />
                   </>
                 )}
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {userNFTs.length > 0 ?
-                      <>
-                      {userNFTs.map((item) => (
-                        <MyNftCard
-                          onOpen={onOpen}
-                          // onClose={onClose}
-                          key={item.id}
-                          id={item.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                          crypto={item?.crypto}
-                          royalty={item?.royalty}
-                          description={item?.description}
-                          collection={item?.collection}
-                          collectionImages={item?.collectionImages}
-                          getMyNfts={getMyNfts}
-                          userAddress
-                        />
-                      ))}
-                      </>
-                      :
-                      <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                    }
+                      {userNFTs.length > 0 ? (
+                        <>
+                          {userNFTs.map((item) => (
+                            <MyNftCard
+                              onOpen={onOpen}
+                              // onClose={onClose}
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              getMyNfts={getMyNfts}
+                              userAddress
+                            />
+                          ))}
+                        </>
+                      ) : (
+                        <div className="data-not-avaliable">
+                          <h2>No data avaliable</h2>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
@@ -937,55 +933,59 @@ const Profile = ({ search, setSearch }) => {
                       </div>
                       {collectionTabs === 0 && (
                         <>
-                        {likedNfts.length > 0 ?
-                        <>
-                        {likedNfts.map((item) => (
-                          <SimpleCard
-                            onOpen={onOpen}
-                            // onClose={onClose}
-                            key={item.id}
-                            id={item.id}
-                            title={item?.title}
-                            image={item?.image}
-                            price={item?.price}
-                            crypto={item?.crypto}
-                            royalty={item?.royalty}
-                            description={item?.description}
-                            collection={item?.collection}
-                            collectionImages={item?.collectionImages}
-                            userAddress
-                          />
-                        ))}
-                        </>
-                        :
-                        <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                      }
+                          {likedNfts.length > 0 ? (
+                            <>
+                              {likedNfts.map((item) => (
+                                <SimpleCard
+                                  onOpen={onOpen}
+                                  // onClose={onClose}
+                                  key={item.id}
+                                  id={item.id}
+                                  title={item?.title}
+                                  image={item?.image}
+                                  price={item?.price}
+                                  crypto={item?.crypto}
+                                  royalty={item?.royalty}
+                                  description={item?.description}
+                                  collection={item?.collection}
+                                  collectionImages={item?.collectionImages}
+                                  userAddress
+                                />
+                              ))}
+                            </>
+                          ) : (
+                            <div className="data-not-avaliable">
+                              <h2>No data avaliable</h2>
+                            </div>
+                          )}
                         </>
                       )}
                       {collectionTabs === 1 && (
                         <>
-                        {likedNftsAuction.length > 0 ?
-                      <>
-                      {likedNftsAuction.map((item) => (
-                        <NewItemCard
-                          key={item.id}
-                          id={item.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                          highestBid={item?.highestBid}
-                          isLive={item?.isLive}
-                          endTime={item?.endTime}
-                          startTime={item?.startTime}
-                          description={item?.description}
-                          collectionImages={item?.collectionImages}
-                          userAddress={userAddress}
-                        />
-                      ))}
-                      </>
-                      :
-                      <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                      }
+                          {likedNftsAuction.length > 0 ? (
+                            <>
+                              {likedNftsAuction.map((item) => (
+                                <NewItemCard
+                                  key={item.id}
+                                  id={item.id}
+                                  title={item?.title}
+                                  image={item?.image}
+                                  price={item?.price}
+                                  highestBid={item?.highestBid}
+                                  isLive={item?.isLive}
+                                  endTime={item?.endTime}
+                                  startTime={item?.startTime}
+                                  description={item?.description}
+                                  collectionImages={item?.collectionImages}
+                                  userAddress={userAddress}
+                                />
+                              ))}
+                            </>
+                          ) : (
+                            <div className="data-not-avaliable">
+                              <h2>No data avaliable</h2>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
