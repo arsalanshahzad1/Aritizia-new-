@@ -1,9 +1,28 @@
 import { useEffect, useState } from "react";
 import apis from "../../service";
+import { useNavigate } from "react-router-dom";
+
+
 const Followers = ({ data  , id}) => {
   const [followers, setFollwers] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
+
+  // get user wallet address
+  const [userWalletAddress, SetUserWalletAddress] = useState("");
+  const navigate = useNavigate();
+
+  const handleUserVisit = async (id)=> {
+    const response = await apis.getUserData(id);
+    SetUserWalletAddress( response?.data?.data?.wallet_address);
+  }
+
+  useEffect(()=>{
+    if(userWalletAddress !== ""){
+        navigate(`/other-profile?add=${userWalletAddress}`)
+    }
+  },[userWalletAddress])
+
 
   const getFollowersList = async () => {
     const response = await apis.getFollowersList(id);
@@ -33,7 +52,7 @@ const Followers = ({ data  , id}) => {
             return (
               <div className="Follow-row" key={i}>
                 <div className="left">
-                  <div className="img-holder">
+                  <div className="img-holder" onClick={()=> handleUserVisit(data.user_id)}>
                     {data?.profile_image == null ?
                       <img src='/assets/images/user-none.png' alt=""/>
                       :

@@ -575,7 +575,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     _royaltyPrice[i],
                     ListingType(_listingType),
                     PaymentMethod(_paymentMethod),
-                    false,
+                    true,
                     _collectionId
                 );
 

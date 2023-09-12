@@ -23,17 +23,32 @@ const Earnings = () => {
     const response = await apis.getSalesHistory();
     console.log(response?.data?.data);
     setEarning(response?.data?.data);
+    
   };
 
   useEffect(() => {
     getEarning();
   }, []);
 
+  useEffect(()=>{
+    console.log(earning, "arsalan")
+  },[earning])
+
   const statusOptions = [
     { value: "Monthly", label: "Monthly" },
     { value: "Weekly", label: "Weekly" },
     { value: "Daily", label: "Daily" },
   ];
+
+   var today = new Date(); // Get the current date and time
+  var last30Days = [];
+
+  for (var i = 0; i < 30; i++) {
+    var day = new Date(today);
+    day.setDate(today.getDate() - i);
+    var dayOfMonth = day.getDate(); // Get the day of the month
+    last30Days.push(dayOfMonth);
+  }
 
   const Monthly_data = [
     {
@@ -122,263 +137,275 @@ const Earnings = () => {
     },
   ];
   const Weekly_data = [
+    // {
+    //   data: "1",
+    //   value: earning?.lastWeek_earning?.[0],
+    //   Average_price: "0.62 ETH",
+    //   Num_sales: "1",
+    //   Date: "May 07 at 5:00 PM",
+    // },
     {
-      data: "1",
-      value: earning?.lastWeek_earning?.[0],
+      data: last30Days[6],
+      value: earning?.lastWeek_earning?.[6],
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
     {
-      data: "2",
-      value: earning?.lastWeek_earning?.[1],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "3",
-      value: earning?.lastWeek_earning?.[2],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "4",
-      value: earning?.lastWeek_earning?.[3],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "5",
-      value: earning?.lastWeek_earning?.[4],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "6",
+      data: last30Days[5],
       value: earning?.lastWeek_earning?.[5],
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
     {
-      data: "7",
-      value: earning?.lastWeek_earning?.[6],
+      data:last30Days[4],
+      value: earning?.lastWeek_earning?.[4],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[3],
+      value: earning?.lastWeek_earning?.[3],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[2],
+      value: earning?.lastWeek_earning?.[2],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    
+    {
+      data: last30Days[1],
+      value: earning?.lastWeek_earning?.[1],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+   
+    {
+      data: last30Days[0],
+      value: earning?.lastWeek_earning?.[0],
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
   ];
+
   const Daily_data = [
     {
-      data: "1",
-      value: earning?.LastMonth_earning?.[0],
+      data: last30Days[29],
+      value: earning?.LastMonth_earning?.[29],
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
     {
-      data: "2",
-      value: earning?.LastMonth_earning?.[1],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "3",
-      value: earning?.LastMonth_earning?.[2],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "4",
-      value: earning?.LastMonth_earning?.[3],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "5",
-      value: earning?.LastMonth_earning?.[4],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "6",
-      value: earning?.LastMonth_earning?.[5],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "7",
-      value: earning?.LastMonth_earning?.[6],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "8",
-      value: earning?.LastMonth_earning?.[7],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "9",
-      value: earning?.LastMonth_earning?.[8],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "10",
-      value: earning?.LastMonth_earning?.[9],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "11",
-      value: earning?.LastMonth_earning?.[10],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "12",
-      value: earning?.LastMonth_earning?.[11],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "13",
-      value: earning?.LastMonth_earning?.[12],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "14",
-      value: earning?.LastMonth_earning?.[13],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "15",
-      value: earning?.LastMonth_earning?.[14],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "16",
-      value: earning?.LastMonth_earning?.[15],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "17",
-      value: earning?.LastMonth_earning?.[16],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "18",
-      value: earning?.LastMonth_earning?.[17],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "19",
-      value: earning?.LastMonth_earning?.[18],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "20",
-      value: earning?.LastMonth_earning?.[19],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "21",
-      value: earning?.LastMonth_earning?.[20],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "22",
-      value: earning?.LastMonth_earning?.[21],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "23",
-      value: earning?.LastMonth_earning?.[22],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "24",
-      value: earning?.LastMonth_earning?.[23],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "25",
-      value: earning?.LastMonth_earning?.[24],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "26",
-      value: earning?.LastMonth_earning?.[25],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "27",
-      value: earning?.LastMonth_earning?.[26],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "28",
-      value: earning?.LastMonth_earning?.[27],
-      Average_price: "0.62 ETH",
-      Num_sales: "1",
-      Date: "May 07 at 5:00 PM",
-    },
-    {
-      data: "29",
+      data: last30Days[28],
       value: earning?.LastMonth_earning?.[28],
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
     {
-      data: "30",
-      value: earning?.LastMonth_earning?.[29],
+      data:  last30Days[27],
+      value: earning?.LastMonth_earning?.[27],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[26],
+      value: earning?.LastMonth_earning?.[26],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[25],
+      value: earning?.LastMonth_earning?.[25],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[24],
+      value: earning?.LastMonth_earning?.[24],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[23],
+      value: earning?.LastMonth_earning?.[23],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[22],
+      value: earning?.LastMonth_earning?.[22],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[21],
+      value: earning?.LastMonth_earning?.[21],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[20],
+      value: earning?.LastMonth_earning?.[20],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[19],
+      value: earning?.LastMonth_earning?.[19],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[18],
+      value: earning?.LastMonth_earning?.[18],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[17],
+      value: earning?.LastMonth_earning?.[17],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[16],
+      value: earning?.LastMonth_earning?.[16],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[15],
+      value: earning?.LastMonth_earning?.[15],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[14],
+      value: earning?.LastMonth_earning?.[14],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[13],
+      value: earning?.LastMonth_earning?.[13],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[12],
+      value: earning?.LastMonth_earning?.[12],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[11],
+      value: earning?.LastMonth_earning?.[11],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[10],
+      value: earning?.LastMonth_earning?.[10],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[9],
+      value: earning?.LastMonth_earning?.[9],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[8],
+      value: earning?.LastMonth_earning?.[8],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[7],
+      value: earning?.LastMonth_earning?.[7],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[6],
+      value: earning?.LastMonth_earning?.[6],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[5],
+      value: earning?.LastMonth_earning?.[5],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data:last30Days[4],
+      value: earning?.LastMonth_earning?.[4],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[3],
+      value: earning?.LastMonth_earning?.[3],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    {
+      data: last30Days[2],
+      value: earning?.LastMonth_earning?.[2],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+    
+    {
+      data: last30Days[1],
+      value: earning?.LastMonth_earning?.[1],
+      Average_price: "0.62 ETH",
+      Num_sales: "1",
+      Date: "May 07 at 5:00 PM",
+    },
+   
+    {
+      data: last30Days[0],
+      value: earning?.LastMonth_earning?.[0],
       Average_price: "0.62 ETH",
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
@@ -520,7 +547,7 @@ const Earnings = () => {
       <div className="earning-box">
         <div>
           <p>Your Balance</p>
-          <h2>{totalPrice} ETH</h2>
+          <h2>{totalPrice ? totalPrice : 0} ETH</h2>
         </div>
         <div>
           <p>Total Sales Value</p>
@@ -567,17 +594,17 @@ const Earnings = () => {
           >
             {/* <Chart options={data.options} series={data.series} type="line" height={400} /> */}
             {status.value === "Monthly" ? (
-              <ChartForEarning data={Monthly_data} />
+              <ChartForEarning data={Monthly_data} chartLabel="Total Earning" />
             ) : (
               <div></div>
             )}
             {status.value === "Weekly" ? (
-              <ChartForEarning data={Weekly_data} />
+              <ChartForEarning data={Weekly_data} chartLabel="Total Earning" />
             ) : (
               <div></div>
             )}
             {status.value === "Daily" ? (
-              <ChartForEarning data={Daily_data} />
+              <ChartForEarning data={Daily_data} chartLabel="Total Earning"/>
             ) : (
               <div></div>
             )}

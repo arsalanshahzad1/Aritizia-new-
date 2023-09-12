@@ -25,7 +25,6 @@ const Setting = ({ search, setSearch }) => {
     return (
         <>
             <Header
-
                 search={search}
                 setSearch={setSearch}
             />

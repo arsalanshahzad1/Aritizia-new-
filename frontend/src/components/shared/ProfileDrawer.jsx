@@ -71,6 +71,7 @@ function ProfileDrawer({
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
   const [nftDetails, setNftDetails] = useState("");
 
+  console.log("user id: ", id)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -922,6 +923,27 @@ function ProfileDrawer({
     }
   }, [isVisible]);
 
+  // user router
+
+  const [userWalletAddress, SetUserWalletAddress] = useState("");
+  // const navigate = useNavigate();
+
+  const handleUserVisit = async ()=> {
+    navigate(
+      `/other-profile?add=${nftDetails?.user?.wallet_address}`
+    )
+    // console.log(id, "user, id")
+    // const response = await apis.getUserData(id);
+    // SetUserWalletAddress( response?.data?.data?.wallet_address);
+  }
+
+  useEffect(()=>{
+    console.log(userWalletAddress)
+    // if(userWalletAddress){
+    //     navigate(`/other-profile?add=${userWalletAddress}`)
+    // }
+  },[userWalletAddress])
+
   return (
     <>
       <Drawer
@@ -1056,11 +1078,11 @@ function ProfileDrawer({
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
-                      <div className="logo-name">
+                      <div className="logo-name"
+                      >
                         {
-                          userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address === null ? (
-                            <Link to={"/profile"}>
+                          userData?.wallet_address == nftDetails?.user?.wallet_address  ? (
+                            <Link to={ `/profile`}>
                               {nftDetails?.user?.profile_image  ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
@@ -1090,7 +1112,7 @@ function ProfileDrawer({
                                 )
                               }
                             >
-                              {nftDetails?.user?.profile_image === null ? (
+                              {nftDetails?.user?.profile_image  ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""

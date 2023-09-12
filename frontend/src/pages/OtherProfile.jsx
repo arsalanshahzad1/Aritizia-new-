@@ -296,6 +296,7 @@ const OtherProfile = ({ search, setSearch }) => {
   const onOpen = (action) => {
     setIsVisible(action);
   };
+
   const [FollowStatus, setFollowStatus] = useState(0);
 
   const postChatMeaage = async () => {
@@ -397,7 +398,7 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {FollowStatus === 0 ? (
+                  {FollowStatus ? (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
                       Follow
                     </div>
@@ -488,7 +489,7 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex other-profile-cards">
                         {collectionTabs === 0 && (
                           <>
-                            {nftListFP.map((item) => (
+                            {nftListFP.length > 0 ? nftListFP.map((item) => (
                               <BuyNow
                                 onOpen={onOpen}
                                 // onClose={onClose}
@@ -504,14 +505,16 @@ const OtherProfile = ({ search, setSearch }) => {
                                 collectionImages={item?.collectionImages}
                                 userADDRESS={userADDRESS}
                               />
-                            ))}
+                            )) : 
+                            <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                            }
                           </>
                         )}
                       </div>
                       <div className="d-flex">
                         {collectionTabs === 1 && (
                           <>
-                            {nftListAuction.map((item) => (
+                            {nftListAuction.length > 0 ? nftListAuction.map((item) => (
                               <NewItemCard
                                 key={item.id}
                                 id={item.id}
@@ -525,7 +528,9 @@ const OtherProfile = ({ search, setSearch }) => {
                                 description={item?.description}
                                 userAddress={userADDRESS}
                               />
-                            ))}
+                            )):
+                            <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                            }
                           </>
                         )}
                       </div>
@@ -535,7 +540,7 @@ const OtherProfile = ({ search, setSearch }) => {
                 {tabs === 1 && (
                   <>
                     <div className="row">
-                      {likedNfts?.map((item) => (
+                      {likedNfts?.length > 0 ? likedNfts?.map((item) => (
                         <NewItemCard
                           key={item?.id}
                           id={item?.id}
@@ -549,7 +554,9 @@ const OtherProfile = ({ search, setSearch }) => {
                           collectionImage={item?.collectionImage}
                           userADDRESS={userADDRESS}
                         />
-                      ))}
+                      )):
+                      <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                     </div>
                   </>
                 )}

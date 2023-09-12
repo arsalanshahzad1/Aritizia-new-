@@ -668,7 +668,7 @@ function AnalyticsTool({ search, setSearch }) {
 
                             </tbody>            
                     </table>
-                    {userTransactionDetails?.dat?.length > 0 ?
+                    {userTransactionDetails?.data?.length > 0 ?
                         "" : 
                             <div className='data-table-empty'>
                                 <p>No data availaible</p>

@@ -172,7 +172,12 @@ const BuyNow = ({
                   <div className="css-10nf7hq detail-wrap">
                     <div className="center-icon">
                       <div className="icon">
-                        <img src={collectionImages} alt="" />
+                        {/* <img src={collectionImages && collectionImages} alt="" /> */}
+                            {collectionImages == null ?
+                                <img src='/assets/images/user-none.png' alt="" />
+                                :
+                                <img src={collectionImages} alt="" />
+                            }
                         <img src="/assets/images/chack.png" alt="" />
                       </div>
                     </div>

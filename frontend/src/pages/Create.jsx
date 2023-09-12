@@ -51,7 +51,7 @@ const Create = ({ search, setSearch }) => {
                                         </Link>
                                     </div>
                                     <div className="col-lg-4 col-md-4 col-12">
-                                        <Link to={'/'} onClick={scrollToPrompt}>
+                                        <Link to={'/art'} onClick={scrollToPrompt}>
                                             <div className="create-card">
                                                 <div className='image-holder'>
                                                     <img src="/assets/images/Generate.png" alt="" />

@@ -605,6 +605,12 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const [FansAddress, setFansAddress] = useState([""]);
+
+  const fansAddressHandle = () =>{
+    if(FansAddress[FansAddress.length - 1]){
+      setFansAddress([...FansAddress, ""])
+    }
+  }
   const [showAddFanPopUp, setshowAddFanPopUp] = useState(0);
 
   const handleChangeAddressInput = (e, index) => {
@@ -1137,7 +1143,7 @@ const Profile = ({ search, setSearch }) => {
                             </div>
                             <p
                               onClick={() =>
-                                setFansAddress([...FansAddress, ""])
+                                fansAddressHandle()
                               }
                               className="add-more-fan"
                             >
