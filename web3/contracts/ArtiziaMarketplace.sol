@@ -381,7 +381,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ////////////    INITIALIZERS    ///////////////
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////// 
 
     address public UNISWAP_ROUTER_ADDRESS =
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
@@ -1259,10 +1259,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
             // UNCOMMENT THIS REQUIRE STATEMENT
 
-            // require(
-            //     block.timestamp > _idToAuction[_tokenId].endTime,
-            //     "Auction has not ended yet."
-            // );
+            require(
+                block.timestamp > _idToAuction[_tokenId].endTime,
+                "Auction has not ended yet."
+            );
 
             // auction.isLive = false;
             // console.log("Test 8");

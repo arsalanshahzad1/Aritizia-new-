@@ -33,16 +33,7 @@ const BuyNow = ({
   const [buyButton, showBuyButton] = useState(false);
 
   const checkSeller = async () => {
-    // const provider = await getProviderOrSigner();
-
-    // const marketplaceContract = new Contract(
-    //   MARKETPLACE_CONTRACT_ADDRESS.address,
-    //   MARKETPLACE_CONTRACT_ABI.abi,
-    //   provider
-    // );
-
-    // const structData = await marketplaceContract._idToNFT(id);
-    // let seller = structData.seller;
+    
     console.log("checkSeller Seller", seller);
     console.log("checkSeller userAddress", userAddress);
     console.log("checkSeller Seller == userAddress", seller == userAddress);

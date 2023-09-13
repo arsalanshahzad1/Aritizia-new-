@@ -91,18 +91,7 @@ const Gallery = ({user}) => {
                     file
                 )
             } else {
-                // console.log('base64');
-                // const base64url = `data:image/png;base64,${url}`;
-                // fetch(base64url)
-                //     .then(res => res.blob())
-                //     .then(blob => {
-                //         const file = new File([blob], `image${i}.png`, { type: "image/png" });
-                //         console.log(file , 'fileee');
-                //         return (
-                //             file
-                //         )
-                //     })
-                // Download the image from the URL
+                
                 const imageUrl = url;
                 const response = await fetch(`data:image/png;base64,${url}`);
                 console.log(response);

@@ -388,31 +388,12 @@ const PlaceABidDrawer = ({
     // console.log("currentTime:", currentTime);
 
     const auctionLive = await marketplaceContract.getStatusOfAuction(id);
-    // console.log("getStatusOfAuction", auctionLive);
-    // setAuctionStatus(auctionLive);
-
-    // console.log("eee auctionLive", auctionLive);
-    // console.log("eee userAddress != seller", userAddress != seller);
-    // console.log("eee highestBid == 0", highestBid == 0);
-    // console.log("eee userAddress == seller", userAddress == seller);
-    // console.log(
-    //   "eee userAddress == highestBidder",
-    //   userAddress == highestBidder
-    // );
+    
     console.log(
       "eee userAddress == seller",
       userAddress.toString() == seller.toString()
     );
-    // console.log("eee auctionLive", auctionLive);
-
-    // if (userAddress = seller) {
-    // // which button to show
-    //   showBidButton(true);
-    // } else {
-    //   if(currentTime < startTime){
-    //   showBidButton(false);
-    //   }
-    // }
+   
 
     if (auctionLive) {
       if (userAddress != seller) {
@@ -458,12 +439,7 @@ const PlaceABidDrawer = ({
       auctionData?.highestBid.toString()
     );
 
-    // let startTime = auctionData.startTime.toString();
-
-    // let endTime = auctionData.endTime.toString();
-
-    // console.log("startTime", startTime);
-    // console.log("endTime", endTime);
+   
 
     let basePrice = ethers.utils.formatEther(auctionData.basePrice.toString());
 
@@ -606,34 +582,7 @@ const PlaceABidDrawer = ({
     // navigate("/profile");
   };
 
-  // const getProviderOrSigner = async () => {
-  //   console.log("getProviderOrSigner");
-  // };
-
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("getProviderOrSigner");
-
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   const { chainId } = await web3Provider.getNetwork();
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-
-  //     return signer;
-  //   }
-
-  //   return web3Provider;
-  // };
+ 
 
   const handleBidEvent = async (tokenId, seller, highestBidder, highestBid) => {
     let bidData = {
@@ -667,26 +616,7 @@ const PlaceABidDrawer = ({
     // }, 3000);
   };
 
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //   }
-  // }, [walletConnected]);
+ 
 
   useEffect(() => {
     getAuctionData();
@@ -721,21 +651,16 @@ const PlaceABidDrawer = ({
       setHighestBid(highestBid);
     }
 
-    // let dollarPriceOfETH = 1831;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
-    // console.log("priceInUSD", priceInUSD);
     priceInUSD = priceInUSD.toFixed(2);
 
     setDollarPrice(priceInUSD.toString());
-    // console.log("priceInUSD", priceInUSD);
 
-    // let highBid = Number(highestBid.toString()) / 1e18;
-    // console.log("HighestBidaaa", highBid);
   };
 
   const getValues = async () => {
@@ -743,10 +668,7 @@ const PlaceABidDrawer = ({
   };
 
   const bidWithFIAT = async () => {
-    // console.log("startTime", startTime);
-    // console.log("endTime", endTime);
-    // console.log("price", price);
-    // console.log("isLive", isLive);
+
     const provider = await getProviderOrSigner();
 
     const marketplaceContract = new Contract(
@@ -844,8 +766,7 @@ const PlaceABidDrawer = ({
     console.log("id", id);
     console.log("id", typeof id);
 
-    // get the price of dollar from smartcontract and convert this value
-    // let dollarPriceOfETH = 1831;
+
 
     let USDPrice = buyNowPrice;
     let USDPriceInWei = USDPrice * 10 ** 6;

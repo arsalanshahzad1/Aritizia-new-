@@ -230,39 +230,7 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const web3ModalRef = useRef();
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("test1QWER");
-  //   const provider = await web3ModalRef.current.connect();
-  //   console.log("test1qq");
-
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   const { chainId } = await web3Provider.getNetwork();
-
-  //   // if (chainId !== 31337) {
-  //   //   window.alert("Change the network to Sepolia");
-  //   //   throw new Error("Change network to Sepolia");
-  //   // }
-
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-  //     // console.log("getSigner");
-
-  //     return signer;
-  //   }
-  //   // console.log("getProvider");
-  //   return web3Provider;
-  // };
+ 
 
   // Upload image to IPFS
   const uploadToIPFS = async () => {
@@ -271,19 +239,7 @@ const Multiple = ({ search, setSearch }) => {
       console.log("uploadToIPFS1", imageList);
 
       for (let i = 0; i < imageList.length; i++) {
-        // try {
-        //   console.log("uploadToIPFS2");
-
-        //   console.log("this is imageList", i, imageList[i]);
-        //   const result = await uploadFileToIPFS(imageList[i]);
-        //   console.log("resut", result);
-        //   console.log("resut.pinataURL image", result.pinataURL);
-
-        //   addImageIPFSInList(result.pinataURL);
-        //   console.log("uploadToIPFS3");
-        // } catch (error) {
-        //   console.log("ipfs image upload error: ", error);
-        // }
+      
         try {
           console.log("uploadToIPFS2");
           console.log("imageListtt", imageList);
@@ -314,11 +270,7 @@ const Multiple = ({ search, setSearch }) => {
 
       createNFT();
 
-      // if (imageList.length != 0) {
-      // createNFT();
-      // } else {
-      //   window.alert("imageList list is empty");
-      // }
+      
     }
   };
 
@@ -340,7 +292,6 @@ const Multiple = ({ search, setSearch }) => {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
-      // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
   }
@@ -398,11 +349,7 @@ const Multiple = ({ search, setSearch }) => {
         console.log("minAndList 3");
 
         multi = true;
-        // let listOfTokens = [];
-        // for (let i = 0; i < mintedTokens.length; i++) {
-        //   console.log("mintedTokens[i]", mintedTokens[i].toString());
-        //   listOfTokens.push(Number(mintedTokens[i].toString()));
-        // }
+        
         mintedTokens = listOfTokens;
         console.log("listOfTokensInIFFF", listOfTokens);
       } else {
@@ -468,7 +415,6 @@ const Multiple = ({ search, setSearch }) => {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
-      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
 
@@ -498,102 +444,13 @@ const Multiple = ({ search, setSearch }) => {
 
     console.log("ipfsList", ipfsList);
 
-    // await (await nftContract.mint(ipfsList.current)).wait();
-    // console.log("minAndList 1");
-
-    // let mintedTokens = await nftContract.getMintedTokensList();
-    // console.log("mintedTokens ", mintedTokens);
-    // console.log("mintedTokens.length ", mintedTokens.length);
-    // console.log("minAndList 2");
-
-    // let multi = false;
-    // if (mintedTokens.length > 1) {
-    //   console.log("minAndList 3");
-
-    //   multi = true;
-    //   let listOfTokens = [];
-    //   for (let i = 0; i < mintedTokens.length; i++) {
-    //     console.log("mintedTokens[i]", mintedTokens[i].toString());
-    //     listOfTokens.push(Number(mintedTokens[i].toString()));
-    //   }
-    //   mintedTokens = listOfTokens;
-    //   console.log("listOfTokens", listOfTokens);
-    // } else {
-    //   mintedTokens = Number(mintedTokens);
-    // }
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    // console.log("Yahoo2");
-
-    // // console.log("startTimestamp in if", startingDate);
-    // // console.log("endTimestamp in if", startingDate);
-
-    // // if (listingType == 0) {
-    // //   console.log("startTimestamp in if", startingDate);
-    // //   console.log("endTimestamp in if", startingDate);
-    // //   setStartingDate(0);
-    // //   setEndingDate(0);
-    // // } else if (listingType == 1) {
-    // //   const startDate = new Date(startingDate);
-    // //   const endDate = new Date(endingDate);
-
-    // //   // Convert start date to Unix timestamp (seconds)
-    // //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
-
-    // //   // Convert end date to Unix timestamp (seconds)
-    // //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
-
-    // //   console.log("startTimestamp in else", startTimestamp);
-    // //   console.log("endTimestamp in else", endTimestamp);
-    // // }
-
-    // // console.log("mintedTokens", mintedTokens);
-    // // console.log("item.price", item.price);
-    // // console.log("royalty", royalty);
-    // // console.log("listingType", listingType);
-    // // console.log("item.crypto", crypto);
-
-    // // // UNCOMMENT this
-    // let ethParsedList = [];
-    // console.log("Yahoo3");
-
-    // for (let i = 0; i < priceList.length; i++) {
-    //   console.log("Yahoo4");
-    //   console.log("priceList[i]", priceList[i]);
-    //   let ethPrice = ethers.utils.parseEther(priceList[i]);
-    //   ethParsedList.push(ethPrice);
-    // }
-
-    // console.log("nftContract.address", nftContract.address);
-    // console.log("mintedTokens", mintedTokens);
-    // console.log("priceList", priceList);
-    // console.log("ethParsedList", ethParsedList);
-    // console.log("royaltyList", royaltyList);
-    // console.log("listingType", listingType);
-    // console.log("startingDateList", startingDateList);
-    // console.log("endingDateList", endingDateList);
-    // console.log("crypto", crypto);
-    // console.log("PAyment method", crypto);
-
-    // await (
-    //   await marketplaceContract.listNft(
-    //     nftContract.address,
-    //     multi ? mintedTokens : [mintedTokens],
-    //     ethParsedList,
-    //     royaltyList,
-    //     listingType,
-    //     startingDateList,
-    //     endingDateList,
-    //     // [startingDateList[0] + 5 * 60 * 1000],
-    //     0,
-    //     crypto
-    //   )
-    // ).wait();
-    // setLoading(false);
+    
 
     marketplaceContractGlobal = marketplaceContract;
     nftContractGlobal = nftContract;
@@ -609,18 +466,11 @@ const Multiple = ({ search, setSearch }) => {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
-      // console.error("Error while minting and listing NFT:", error);
     }
 
-    // let response = await marketplaceContract.on(
-    //   "NFTListed",
-    //   handleNFTListedEvent
-    // );
-
-    // console.log("Response of list event", response);
+   
   };
   let listOfListedTokens = [];
-  // const [listToPost, setListToPost] = useState([]);
 
   let listToPost = useRef([]);
   let count = 0;
@@ -654,7 +504,6 @@ const Multiple = ({ search, setSearch }) => {
       listOfListedTokens.push(listedData);
       addListToPost(listedData);
 
-      // console.log("qqq ipfsList", ipfsList.current.length);
 
       if (ipfsList.current.length == listOfListedTokens.length) {
         nftDataPost();
@@ -705,16 +554,7 @@ const Multiple = ({ search, setSearch }) => {
     setRoyalty(value);
     // ...
   };
-  // const handleSliderChange = (value) => {
-  //   // setRoyalty(value);
-  //   if (value === 33) {
-  //     setRoyalty(5);
-  //   } else if (value === 66) {
-  //     setRoyalty(10);
-  //   } else if (value === 100) {
-  //     setRoyalty(15);
-  //   }
-  // };
+  
 
   useEffect(() => {}, [
     price,
@@ -809,38 +649,6 @@ const Multiple = ({ search, setSearch }) => {
     e.preventDefault();
     price = inputValue;
 
-    // console.log("crypto in check", crypto);
-
-    // console.log("startTimestamp in if", startingDate);
-    // console.log("endTimestamp in if", endingDate);
-
-    // if (listingType == 0) {
-    //   console.log("startTimestamp in if", startingDate);
-    //   console.log("endTimestamp in if", endingDate);
-    //   setStartingDate(0);
-    //   setEndingDate(0);
-    //   startTime = 0;
-    //   endTime = 0;
-    // } else if (listingType == 1) {
-    //   const startDate = new Date(startingDate);
-    //   const endDate = new Date(endingDate);
-
-    //   // Convert start date to Unix timestamp (seconds)
-    //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
-
-    //   // Convert end date to Unix timestamp (seconds)
-    //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
-
-    //   console.log("startTimestamp in else", startTimestamp);
-    //   console.log("endTimestamp in else", endTimestamp);
-    //   setStartingDate(startTimestamp);
-    //   setEndingDate(endTimestamp);
-    //   startTime = startTimestamp;
-    //   endTime = startTimestamp;
-    // }
-
-    // console.log("CHECK startingDate", startTime);
-    // console.log("CHECK endingDate", endTime);
 
     imageList = [];
     ipfsList = [];
@@ -858,27 +666,6 @@ const Multiple = ({ search, setSearch }) => {
     uploadToIPFS(file);
   };
 
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected, price]);
 
   const getItem = async () => {
     try {
@@ -903,10 +690,7 @@ const Multiple = ({ search, setSearch }) => {
       console.error(err);
     }
   };
-  // const [collectionOptions, setcollectionOptions] = useState([
-  //   { value: "", label: "Select Collection" },
-  //   { value: "usdt", label: "USDT" },
-  // ]);
+ 
 
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
@@ -983,11 +767,6 @@ const Multiple = ({ search, setSearch }) => {
     console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
 
-  // useEffect(() => {
-  //   if(location?.state?.artGallery){
-  //     handleArtGalleryUpload(location?.state?.artGallery)
-  //   }
-  // }, [selectedUploadNFTImage])
 
   const handleRemoveImage = (index) => {
     const newArray = [...selectedImagesNFT];
@@ -1367,12 +1146,7 @@ const Multiple = ({ search, setSearch }) => {
                                 )}
                               </div>
                             </div>
-                            {/* <Dropdown
-                           options={collectionOptions}
-                           onChange={(e) => {
-                           }}
-                           defaultValue={collection.collection_id}
-                         /> */}
+                           
                             <div
                               className="create-collection-btn"
                               onClick={() => setshowCreateCollection(true)}
@@ -1529,122 +1303,7 @@ const Multiple = ({ search, setSearch }) => {
                             <br />
                             <br />
 
-                            {/* <div className="line-three">
-                          <div className="row">
-                            <div className="col-lg-12">
-                              <h2>Choose collection</h2>
-                              <div className="row">
-                                <div className="col-lg-9">
-                                  <p>
-                                    This is the collection where your item will appear.
-                                  </p>
-                                  <Dropdown
-                                    options={collectionOptions}
-                                    onChange={(e) => {
-                                      setCollection(e.value);
-                                    }}
-                                    value={defaultOption.value}
-                                  />
-                                  <div
-                                    className="create-collection-btn"
-                                    onClick={() => setshowCreateCollection(true)}
-                                  >
-                                    <svg
-                                      enable-background="new 0 0 50 50"
-                                      height="25px"
-                                      id="Layer_1"
-                                      version="1.1"
-                                      viewBox="0 0 50 50"
-                                      width="25px"
-                                      xml: space="preserve"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      xmlns: xlink="http://www.w3.org/1999/xlink"
-                                    >
-                                      <rect fill="none" height="50" width="50" />
-                                      <line
-                                        fill="#2638CC"
-                                        stroke="#2638CC"
-                                        stroke-miterlimit="10"
-                                        strokeWidth="4"
-                                        x1="9"
-                                        x2="41"
-                                        y1="25"
-                                        y2="25"
-                                      />
-                                      <line
-                                        fill="#2638CC"
-                                        stroke="#2638CC"
-                                        stroke-miterlimit="10"
-                                        strokeWidth="4"
-                                        x1="25"
-                                        x2="25"
-                                        y1="9"
-                                        y2="41"
-                                      />
-                                    </svg>
-                                    Create Collection
-                                  </div>
-                                </div>
-                                <div className="col-lg-3 col-md-3 col-5">
-                                  <p>Crypto</p>
-                                  <Dropdown
-                                    options={cryptoOptions}
-                                    onChange={(e) => {
-                                      setCrypto(e.value);
-                                    }}
-                                    value={defaultCrypto.value}
-                                  />
-                                </div>
-                              </div>
-
-
-                              {showCreateCollection && (
-                                <div className="Create-collection-popup">
-                                  <div className="Create-collection-popup-inner">
-                                    <p>Collection Name</p>
-                                    <input
-                                      value={CreateCollection}
-                                      onChange={(e) =>
-                                        setCreateCollection(e.target.value)
-                                      }
-                                      type="text"
-                                      placeholder="Enter collection name"
-                                    />
-                                    <div className="popUp-btn-group">
-                                      <button
-                                        className="button-styling"
-                                        onClick={() => AddCollection()}
-                                      >
-                                        Next
-                                      </button>
-                                      <button
-                                        onClick={hideCreateCollection}
-                                        className="button-styling-outline"
-                                      >
-                                        <div>Cancel</div>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-
-                          </div>
-                        </div> */}
-                            {/* <div className="line-four">
-                              <div className="row">
-                                <div className="col-lg-9">
-                                  <h2>Title</h2>
-                                  <input
-                                    type="text"
-                                    placeholder="e.g. ‘Crypto Funk"
-                                    // defaultValue={title.current.value}
-                                    ref={title}
-                                  // onChange={(e) => setTitle(e.target.value)}
-                                  />
-                                </div>
-                              </div>
-                            </div> */}
+                    
                             <div className="line-six">
                               <div className="row">
                                 <div className="col-lg-9">
@@ -1663,16 +1322,7 @@ const Multiple = ({ search, setSearch }) => {
                                     {royalty} %
                                   </div>
                                 </div>
-                                {/* <div className="col-lg-4 col-md-4 col-5 mt-5">
-                                  <p>Crypto</p>
-                                  <Dropdown
-                                    options={cryptoOptions}
-                                    onChange={(e) => {
-                                      setCrypto(e.value);
-                                    }}
-                                    value={defaultCrypto.value}
-                                  />
-                                </div> */}
+                               
                               </div>
                             </div>
                             <div style={{ textAlign: "right" }}>
@@ -1701,41 +1351,13 @@ const Multiple = ({ search, setSearch }) => {
                         )}
                         {showProfileNFT && (
                           <div>
-                            {/* <h2>Profile NFT</h2> */}
-                            {/* <div className="profile-nft-row1">
-                              <div className="NFT-image-holder">
-                                <input
-                                  ref={fileInputRef}
-                                  type="file"
-                                  style={{ display: "none" }}
-                                  onChange={handleImageUpload}
-                                />
-                                {selectedImage ? (
-                                  <img src={selectedImage} alt="Uploaded" />
-                                ) : (
-                                  <img src={Duck} alt="" />
-                                )}
-                              </div>
-                              <div className="NFT-image-upload-txt">
-                                <p>
-                                  PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
-                                </p>
-                                <button
-                                  onClick={handleButtonClick}
-                                  className="button-styling browse-btn"
-                                >
-                                  Browse
-                                </button>
-                              </div>
-                            </div> */}
+                          
 
                             <div className="col-lg-8 mx-auto collectionDivPreview">
                               <div className="img-holder">
                                 <img src={collection.image} alt="" />
                               </div>
-                              {/* <div className="title">
-                            Collection Name
-                          </div> */}
+                              
                               <div className="title-txt">
                                 {choosenCollection.label}
                               </div>
@@ -2195,15 +1817,7 @@ const Multiple = ({ search, setSearch }) => {
                                       </div>
                                     </>
                                   )}
-                                  {/* <div className="line-seven">
-                                <div className="row">
-                                  <div className="col-lg-8">
-                                    <button type="submit" className="button-styling">
-                                      Create Item
-                                    </button>
-                                  </div>
-                                </div>
-                              </div> */}
+                                 
                                 </div>
                               )}
                             {!ShowMore ? (

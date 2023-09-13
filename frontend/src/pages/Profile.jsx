@@ -30,13 +30,9 @@ import Gallery from "./Gallery";
 import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import RejectedNFTSCard from "../components/cards/RejectedNFTSCard";
-import { ToastContainer, toast } from "react-toastify";
-// import MetaDecorator from "../Meta/MetaDecorator";
+import { ToastContainer, toast } from "react-toastify"; 
 
-const { ethereum } = window;
-// import Web3 from "web3";
-// import Web3Modal from "web3modal";
-
+const { ethereum } = window; 
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
   const [collectionTabs, setCollectionTabs] = useState(0);
@@ -50,22 +46,16 @@ const Profile = ({ search, setSearch }) => {
   const [userNFTs, setUserNfts] = useState([]);
   const [likedNfts, setLikedNfts] = useState([]);
   const [likedNftsAuction, setLikedNftsAuction] = useState([]);
-  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [addedFans, setAddedFans] = useState({});
 
-  // const [followers, setFollwers] = useState([]);
   const navigate = useNavigate();
 
-  // const getNFTlikeListing = async () => {
-  //   const response = await apis.getLikeNFTListing(userData?.id);
-  //   setLikedNfts(response?.data?.data);
-  //   console.log(response?.data?.data, "liked-nfts");
-  // };
+  
 
-  // useEffect(() => {
-  //   getNFTlikeListing();
-  // }, []);
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, []);
 
   let likedNftsFromDB = [];
 
@@ -101,15 +91,12 @@ const Profile = ({ search, setSearch }) => {
     setLikedNfts(emptyList);
     setLikedNftsAuction(emptyList);
 
-    // console.log("NFTId", NFTId);
 
     console.log("cccc Running");
     if (NFTId.length > 0 && NFTId != "") {
       for (let i = 0; i < NFTId.length; i++) {
         let id;
-        // let collectionImage = NFTId[i].collection_image;
         id = +NFTId[i];
-        // id =i;
 
         const metaData = await nftContract.tokenURI(id);
 
@@ -143,11 +130,7 @@ const Profile = ({ search, setSearch }) => {
           "collectionImagesss"
         );
 
-        console.log("zayyan", id);
 
-        // let auctionData = await marketplaceContract._idToAuction(id);
-
-        // let listingType = structData.listingType;
 
         const price = ethers.utils.formatEther(structData.price.toString());
         console.log("likednfts price", price);
@@ -163,9 +146,6 @@ const Profile = ({ search, setSearch }) => {
             data = JSON.parse(data);
             console.log("likednfts data", data);
 
-            // Extracting values using dot notation
-            // const price = data.price;
-            // listingType = data.listingType;
             const crypto = data.crypto;
             const title = data.title;
             const image = data.image;
@@ -186,11 +166,10 @@ const Profile = ({ search, setSearch }) => {
                 collectionImages: collectionImages,
               };
               console.log("nftData", nftData);
-              // liked.push(nftData);
               setLikedNfts((prev) => [...prev, nftData]);
             } else if (listingType === 1) {
               const nftData = {
-                id: id, //
+                id: id, 
                 title: title,
                 image: image,
                 price: price,
@@ -202,12 +181,10 @@ const Profile = ({ search, setSearch }) => {
                 seller: auctionData.seller.toString(),
                 startTime: auctionData.startTime.toString(),
               };
-              // myAuctions.push(nftData);
               setLikedNftsAuction((prev) => [...prev, nftData]);
               console.log(nftListAuction, "nftData");
             }
 
-            // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
           })
 
           .catch((error) => {
@@ -235,13 +212,7 @@ const Profile = ({ search, setSearch }) => {
         MARKETPLACE_CONTRACT_ABI.abi,
         signer
       );
-
-      // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
-      // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
-      // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-      // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-      // 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f  account 8
-      // 0x71bE63f3384f5fb98995898A86B02Fb2426c5788  account 9
+ 
 
       console.log("FansAddress", FansAddress);
 
@@ -263,14 +234,10 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const handleAddedFansEvent = async (fanList) => {
-    // let fanList2 = {
-    //   fanList: fanList.toString(),
-    // };
 
-    // fansTesting = fanList.toString();
+
     setAddedFans(fanList);
     console.log("fanList", fanList);
-    // console.log("fanList2", fanList2);
     postFanList();
   };
 
@@ -301,7 +268,6 @@ const Profile = ({ search, setSearch }) => {
 
     setTimeout(() => {
       navigate("/profile");
-      // window.location.reload();
     }, 1000);
   };
 
@@ -313,7 +279,6 @@ const Profile = ({ search, setSearch }) => {
     setNftListFP(emptyList);
     const provider = await getProviderOrSigner();
     console.log("111111");
-    // console.log("provider", provider);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -329,7 +294,6 @@ const Profile = ({ search, setSearch }) => {
     );
     const signer = provider.getSigner(); 
 
-    // console.log("MYADDRESS", address);
     console.log("333333");
 
     let listingType;
@@ -338,7 +302,6 @@ const Profile = ({ search, setSearch }) => {
 
     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
 
-    // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
@@ -406,11 +369,10 @@ const Profile = ({ search, setSearch }) => {
               collectionImages: collectionImages,
             };
             console.log(nftData);
-            // myNFTs.push(nftData);
             setNftListFP((prev) => [...prev, nftData]);
           } else if (listingType === 1) {
             const nftData = {
-              id: id, //
+              id: id,
               title: title,
               image: image,
               price: price,
@@ -422,7 +384,6 @@ const Profile = ({ search, setSearch }) => {
               seller: auctionData.seller.toString(),
               startTime: auctionData.startTime.toString(),
             };
-            // myAuctions.push(nftData);
             setNftListAuction((prev) => [...prev, nftData]);
             console.log(nftListAuction, "nftData");
           }
@@ -457,17 +418,14 @@ const Profile = ({ search, setSearch }) => {
     const signer = provider.getSigner();
    
 
-    // console.log("MYADDRESS", address);
 
     let listingType;
     console.log("userAddress", userAddress);
 
     let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
     console.log("five");
-    // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens mynft", mintedTokens);
     let myNFTs = [];
-    // let myAuctions = [];
     console.log(mintedTokens.length);
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
@@ -530,30 +488,11 @@ const Profile = ({ search, setSearch }) => {
             collectionImages: collectionImages,
           };
 
-          // myNFTs.push(nftData);
-          // setUserNfts(myNFTs);
+
           setUserNfts((prev) => [...prev, nftData]);
 
           console.log("myNFTs in function", myNFTs);
-          // } else if (listingType === 1) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     basePrice: auctionData.basePrice.toString(),
-          //     endTime: auctionData.endTime.toString(),
-          //     highestBid: auctionData.highestBid.toString(),
-          //     highestBidder: auctionData.highestBidder.toString(),
-          //     isLive: auctionData.isLive.toString(),
-          //     seller: auctionData.seller.toString(),
-          //     startTime: auctionData.startTime.toString(),
-          //   };
-
-          //   myAuctions.push(nftData);
-          //   console.log("auction in function", myAuctions);
-          //   setNftListAuction(myAuctions);
-          // }
+       
         })
 
         .catch((error) => {
@@ -562,9 +501,7 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  // useEffect(() => {
-  //   window.scroll(0, 0);
-  // });
+;
 
   useEffect(() => {
     getAddress();
@@ -572,7 +509,6 @@ const Profile = ({ search, setSearch }) => {
   }, []);
 
   useEffect(() => {
-    // connectWallet();
     getMyListedNfts();
     getMyNfts();
     getLikedNfts();
@@ -613,7 +549,6 @@ const Profile = ({ search, setSearch }) => {
     setAddFanlisting((prevCheckboxes) => {
       const updatedCheckboxes = prevCheckboxes.map((data) => {
         if (data?.user_id === id) {
-          // Check if the user_id is already in the addingFanList
           if (addingFanList.includes(id)) {
             setAddingFanList((prev) => prev.filter((userId) => userId !== id));
           } else {
@@ -657,7 +592,6 @@ const Profile = ({ search, setSearch }) => {
 
   useEffect(() => {
     getFollowersList(userId);
-    // getFollowersForFan('')
   }, []);
 
   const addFans = async () => {
@@ -687,11 +621,7 @@ const Profile = ({ search, setSearch }) => {
 
   return (
     <>
-      {/* <MetaDecorator
-        title={'Artizia'}
-        description={'The Best NFT Marketplace In The World'}
-        imageAlt={'Artizia'}
-        url={userData?.cover_image} /> */}
+     
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
@@ -990,25 +920,7 @@ const Profile = ({ search, setSearch }) => {
                       )}
                     </div>
                   </>
-                  // <>
-                  //   <div className="row">
-                  //     {likedNfts?.map((item) => (
-                  //       <NewItemCard
-                  //         key={item?.id}
-                  //         id={item?.id}
-                  //         title={item?.title}
-                  //         image={item?.image}
-                  //         price={item?.price}
-                  //         crypto={item?.crypto}
-                  //         royalty={item?.royalty}
-                  //         description={item?.description}
-                  //         collection={item?.collection}
-                  //         collectionImages={item?.collectionImages}
-                  //         userAddress
-                  //       />
-                  //     ))}
-                  //   </div>
-                  // </>
+                 
                 )}
                 {tabs === 4 && (
                   <>
@@ -1031,22 +943,12 @@ const Profile = ({ search, setSearch }) => {
                         {FollowersTab === 0 ? (
                           <>
                             <Followers id={userId} />
-                            {/* <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} />
-                            <Follow followed={true} /> */}
+                           
                           </>
                         ) : (
                           <>
                             <Following id={userId} />
-                            {/* <Follow followed={false} />
-                            <Follow followed={false} />
-                            <Follow followed={false} />
-                            <Follow followed={false} />
-                            <Follow followed={false} /> */}
+                            
                           </>
                         )}
                       </div>

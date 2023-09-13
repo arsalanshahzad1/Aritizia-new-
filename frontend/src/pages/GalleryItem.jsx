@@ -42,15 +42,7 @@ const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selecte
             {isSelected &&
                 <div className='selected-tint-art'></div>
             }
-            {/* {
-                showIcon && showSocialIcons &&
-                <div className='social-links-for-art'>
-                    <a href="">Instagram</a>
-                    <a href="">Twitter</a>
-                    <a href="">Facebook</a>
-                </div>
-
-            } */}
+            
             {Image.includes("http") ?
             <img src={Image} alt="" />
             :
