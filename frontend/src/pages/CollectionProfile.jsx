@@ -535,6 +535,7 @@ function CollectionProfile({ search, setSearch }) {
   };
   return (
     <>
+    {window.scrollTo(0, 0)}
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">

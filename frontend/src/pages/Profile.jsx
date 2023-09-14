@@ -560,9 +560,9 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  // useEffect(() => {
-  //   window.scroll(0, 0);
-  // });
+  useEffect(() => {
+    window.scroll(0, 0);
+  });
 
   useEffect(() => {
     getAddress();
@@ -699,6 +699,7 @@ const Profile = ({ search, setSearch }) => {
 
   return (
     <>
+    {/* {window.scrollTo(0, 0)} */}
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}

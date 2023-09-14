@@ -298,6 +298,7 @@ const OtherProfile = ({ search, setSearch }) => {
   };
 
   const [FollowStatus, setFollowStatus] = useState(0);
+  
 
   const postChatMeaage = async () => {
     console.log("clicking");
@@ -315,16 +316,21 @@ const OtherProfile = ({ search, setSearch }) => {
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
 
+  console.log(userDetails?.id, "arsalan data")
+
+ 
+
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
       follow_by: RealUserId,
       follow_to: userDetails?.id,
     });
-    if (response.status === 201) {
-      setFollowStatus(response.data.data.is_follow);
+    if (response?.status === 201) {
+      setFollowStatus(response?.data?.data?.is_follow);
     }
     console.log(response, "this is reponse");
     console.log(FollowStatus, "this is follow status");
+    
   };
   useEffect(() => {
     console.log(userDetails, "this is user");
@@ -348,6 +354,39 @@ const OtherProfile = ({ search, setSearch }) => {
       position: toast.POSITION.TOP_CENTER,
     });
   };
+
+
+  const [followersList, SetFollowersList] = useState([])
+  const [didFollow, setDidFollow] = useState(true);
+  const [totalFollowers, setTotalFollowers] = useState(0);
+
+  const ViewFollowersList = async () =>{
+    const response = await apis.getFollowersList(userDetails?.id)
+    // setDidFollow(response?.data?)
+    console.log(response?.data?.data,"arsalan here")
+    SetFollowersList(response?.data?.data)
+    followersList.forEach(e=> e.user_id == RealUserId ? setDidFollow(e.is_follow) : "")
+  }
+ 
+  const countFollowers = () => {
+    let followers = 0; 
+    followersList?.forEach(e => {
+        if (e?.is_follow) {
+            followers += 1;
+        }
+    });
+   setTotalFollowers(followers)
+}
+  useEffect(()=>{
+    ViewFollowersList()
+    countFollowers()
+  },[])
+
+  useEffect(()=>{
+    ViewFollowersList()
+    countFollowers()
+  }, [userDetails, followersList, didFollow ])
+
 
   return (
     <>
@@ -398,16 +437,18 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {FollowStatus ? (
-                    <div onClick={followOther} style={{ cursor: "pointer" }}>
-                      Follow
-                    </div>
-                  ) : (
+                  {/* {FollowStatus ? ( */}
+                  { didFollow ? (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
                       Unfollow
                     </div>
+                  ) : (
+                    <div onClick={followOther} style={{ cursor: "pointer" }}>
+                      Follow
+                    </div>
                   )}
-                  <div>Followers {userDetails?.followers?.length}</div>
+                  {/* <div>Followers {userDetails?.followers?.length}</div> */}
+                  <div>Followers {totalFollowers}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
                   <h2 className="user-name">

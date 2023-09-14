@@ -70,12 +70,13 @@ const PaymentForm = ({
        
         if (response.status) {
 
-        toast.success("Plan purchased!", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        setShowPaymentForm(false)
-        viewSubscriptions(user_id)
-      }
+          toast.success("Plan purchased!", {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          setShowPaymentForm(false)
+          viewSubscriptions(user_id)
+          // localStorage.setItem('data', {...data, plan_name, plan_type});
+        }
         // {
         //     amout : 1000,
         //     id
@@ -197,7 +198,7 @@ const PaymentForm = ({
                   </h2>
                   <h2
                     onClick={() => {
-                      setPaymentMode("one_time");
+                      setPaymentMode("one time");
                     }}
                   >
                     One time

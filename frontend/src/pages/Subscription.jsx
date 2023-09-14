@@ -90,7 +90,7 @@ const Subscription = ({ search, setSearch }) => {
                                 if (res?.user_subs?.length != 0) {
                                     return (
                                         <div className="subscription-purchase-details" key={index}>
-                                            {res?.user_subs?.auto_recursion ?
+                                            {res?.user_subs?.auto_recursion && !res?.user_subs?.is_cancel ?
                                                 <div className="left">
                                                     Renewal date : <DateDisplay datetime={res?.user_subs?.next_renewal_date} />
                                                 </div>

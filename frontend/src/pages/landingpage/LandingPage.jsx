@@ -480,7 +480,7 @@ const [counterData , setCounterData] = useState('')
                 </div>
                 {nftListFP.length > 0 ? (
                   <>
-                    {nftListFP.map((item) => (
+                    {nftListFP.slice(0, 4).map((item, index) => (
                       <BuyNow
                         key={item?.id}
                         id={item?.id}
@@ -543,7 +543,7 @@ const [counterData , setCounterData] = useState('')
                 {nftListAuction.length > 0 ? (
                   <>
                     {console.log(nftListAuction, "nft list auction")}
-                    {nftListAuction.map((item) => (
+                    {nftListAuction.slice(0, 4).map((item) => (
                       <NewItemCard
                         key={item.id}
                         id={item.id}

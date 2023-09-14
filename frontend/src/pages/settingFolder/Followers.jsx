@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Followers = ({ data  , id}) => {
   const [followers, setFollwers] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
+  const [followStatus, setFollowStatus] = useState(false)
   const RealUserId = localStoragedata?.id;
 
   // get user wallet address
@@ -27,7 +28,8 @@ const Followers = ({ data  , id}) => {
   const getFollowersList = async () => {
     const response = await apis.getFollowersList(id);
     if(response.status){
-    setFollwers(response?.data?.data);
+      setFollwers(response?.data?.data);
+      console.log(followers)
     }else{
       setFollwers('');
     }
@@ -38,11 +40,13 @@ const Followers = ({ data  , id}) => {
       follow_by: RealUserId,
       follow_to: id,
     });
+    console.log(response?.data, "new data loading")
+    setFollowStatus(!followStatus)
   };
 
   useEffect(() => {
-    getFollowersList()
-}, [])
+   getFollowersList()
+  }, [followStatus])
   return (
     <>
       {followers != ''
@@ -65,7 +69,8 @@ const Followers = ({ data  , id}) => {
                   </div>
                 </div>
                 <div className="right">
-                  <button onClick={() => followOther(data?.user_id)}>Follow</button>
+                  <button onClick={() => followOther(data?.user_id)}>{data?.is_follow === true ? "Unfollow" : "Follow"}</button>
+                  {console.log(data?.is_follow, "data")}
 
                   {/* <span
                     onClick={() => {
