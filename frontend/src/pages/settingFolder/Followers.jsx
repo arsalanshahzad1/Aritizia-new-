@@ -37,8 +37,8 @@ const Followers = ({ data  , id}) => {
 
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
-      follow_by: RealUserId,
-      follow_to: id,
+      follow_by: id,
+      follow_to: RealUserId,
     });
     console.log(response?.data, "new data loading")
     setFollowStatus(!followStatus)

@@ -199,19 +199,22 @@ const BuyNow = ({
                   {/* <div className="button css-pxd23z">
                                         <p>Read More</p>
                                     </div> */}
-                  {buyButton ? (
+                  {userAddress.toUpperCase() !== seller.toUpperCase() ? (
                     <div className="button css-pxd23z">
+                      {/* {console.log(JSON.parse(localStorage.getItem("data")).wallet_address, "arsalan")} */}
                       <p>Buy Now</p>
 
                       <span>
                         <img src="/assets/icons/shop.png" alt="" />
                       </span>
                     </div>
-                  ) : (
-                    <div className="button css-pxd23z">
-                      <p>Your nft</p>
-                    </div>
-                  )}
+                  ) : null
+                  // : (
+                  //   <div className="button css-pxd23z">
+                  //     <p>Your nft</p>
+                  //   </div>
+                  // )
+                  }
                 </div>
               </div>
             </a>
@@ -245,6 +248,7 @@ const BuyNow = ({
         description={description}
         collection={collection}
         userAddress={userAddress}
+        sellerWallet={seller}
       />
     </>
   );

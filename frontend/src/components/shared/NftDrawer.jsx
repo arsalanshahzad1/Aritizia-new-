@@ -635,7 +635,7 @@ const ProfileDrawer = ({
 
     if (
       //   item.title != null &&
-      item.price != null
+      item.price != null && startingDate !== "" && endingDate !== ""
       //   item.description != null &&
       //   item.crypto != null &&
       //   item.file != null &&
@@ -747,6 +747,7 @@ const ProfileDrawer = ({
                                   // type="number"
                                   // placeholder="0.00"
                                   // ref={price}
+                                  // required
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -779,6 +780,7 @@ const ProfileDrawer = ({
                                     // type="number"
                                     // placeholder="0.00"
                                     // ref={price}
+                                    // required
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -812,6 +814,7 @@ const ProfileDrawer = ({
                                       setStartingDate(e.target.value)
                                     }
                                     min={new Date().toISOString().split("T")[0]}
+                                    // required
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -826,6 +829,7 @@ const ProfileDrawer = ({
                                       setEndingDate(e.target.value)
                                     }
                                     min={startingDate}
+                                    // required
                                   />
                                 </div>
                               </div>

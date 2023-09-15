@@ -70,7 +70,8 @@ const createBackendServer = (baseURL) => {
   // Art Gallery Section Apis //
 
   const viewArtGalleyList = async (count) =>
-    await api.get(`view-art-gallery-images?last_count=${count}`);
+    await api.get(`view-art-gallery-images?page=${count}`);
+  
   const approvedUnapprovedArtGalleryImages = async (artGalleryId) =>
     await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 

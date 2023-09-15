@@ -1008,7 +1008,7 @@ const PlaceABidDrawer = ({
                               alt="running auction"
                             />
                             <span>
-                              {<NftCountdown endDateTime={endTime} />}
+                              {<NftCountdown endDateTime={endTime * 1000} />}
                             </span>
                           </button>
                         </div>

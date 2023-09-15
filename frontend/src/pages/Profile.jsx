@@ -560,9 +560,9 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {
-    window.scroll(0, 0);
-  });
+  // useEffect(() => {
+  //   window.scroll(0, 0);
+  // });
 
   useEffect(() => {
     getAddress();
@@ -902,7 +902,6 @@ const Profile = ({ search, setSearch }) => {
                       {userNFTs.map((item) => (
                         <MyNftCard
                           onOpen={onOpen}
-                          // onClose={onClose}
                           key={item.id}
                           id={item.id}
                           title={item?.title}

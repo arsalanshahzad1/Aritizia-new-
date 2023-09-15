@@ -481,6 +481,8 @@ const [counterData , setCounterData] = useState('')
                 {nftListFP.length > 0 ? (
                   <>
                     {nftListFP.slice(0, 4).map((item, index) => (
+                      <>
+                      {console.log(item.seller, userAddress, JSON.parse(localStorage.getItem("data")).wallet_address, "items here")}
                       <BuyNow
                         key={item?.id}
                         id={item?.id}
@@ -496,6 +498,7 @@ const [counterData , setCounterData] = useState('')
                         userAddress={userAddress}
                         seller={item?.seller}
                       />
+                      </>
                     ))}
                   </>
                 ) : (

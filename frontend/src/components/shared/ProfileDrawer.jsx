@@ -56,6 +56,7 @@ function ProfileDrawer({
   // userAddress,
   showBuyNow,
   ShowAcceptbtn,
+  sellerWallet
 }) {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -999,17 +1000,17 @@ function ProfileDrawer({
                     }}
                   >
                     {status.value === "Monthly" ? (
-                      <ChartForEarning data={Monthly_data} />
+                      <ChartForEarning data={Monthly_data} chartLabel="Total Earning" />
                     ) : (
                       <div></div>
                     )}
                     {status.value === "Weekly" ? (
-                      <ChartForEarning data={Weekly_data} />
+                      <ChartForEarning data={Weekly_data} chartLabel="Total Earning" />
                     ) : (
                       <div></div>
                     )}
                     {status.value === "Daily" ? (
-                      <ChartForEarning data={Daily_data} />
+                      <ChartForEarning data={Daily_data} chartLabel="Total Earning" />
                     ) : (
                       <div></div>
                     )}
@@ -1245,7 +1246,7 @@ function ProfileDrawer({
                     </div>
                   </div>
                 )}
-                {!showBuyNow && (
+                {!showBuyNow && userAddress.toUpperCase() !== sellerWallet.toUpperCase() && (
                   <>
                     <div
                       className="seven-line"
