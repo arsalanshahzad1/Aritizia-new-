@@ -230,7 +230,6 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const web3ModalRef = useRef();
- 
 
   // Upload image to IPFS
   const uploadToIPFS = async () => {
@@ -239,7 +238,6 @@ const Multiple = ({ search, setSearch }) => {
       console.log("uploadToIPFS1", imageList);
 
       for (let i = 0; i < imageList.length; i++) {
-      
         try {
           console.log("uploadToIPFS2");
           console.log("imageListtt", imageList);
@@ -269,8 +267,6 @@ const Multiple = ({ search, setSearch }) => {
       console.log("ipfsImageList", ipfsImageList);
 
       createNFT();
-
-      
     }
   };
 
@@ -349,7 +345,7 @@ const Multiple = ({ search, setSearch }) => {
         console.log("minAndList 3");
 
         multi = true;
-        
+
         mintedTokens = listOfTokens;
         console.log("listOfTokensInIFFF", listOfTokens);
       } else {
@@ -430,11 +426,11 @@ const Multiple = ({ search, setSearch }) => {
 
   // mint the NFT then list
   const mintThenList = async () => {
-    console.log("test1");
+ 
 
     const signer = await getProviderOrSigner(true);
     // console.log("Get the signer", signer);
-    console.log("test3");
+ 
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -444,13 +440,11 @@ const Multiple = ({ search, setSearch }) => {
 
     console.log("ipfsList", ipfsList);
 
-
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    
 
     marketplaceContractGlobal = marketplaceContract;
     nftContractGlobal = nftContract;
@@ -467,8 +461,6 @@ const Multiple = ({ search, setSearch }) => {
         position: toast.POSITION.TOP_CENTER,
       });
     }
-
-   
   };
   let listOfListedTokens = [];
 
@@ -503,7 +495,6 @@ const Multiple = ({ search, setSearch }) => {
       // testVariable =
       listOfListedTokens.push(listedData);
       addListToPost(listedData);
-
 
       if (ipfsList.current.length == listOfListedTokens.length) {
         nftDataPost();
@@ -554,7 +545,6 @@ const Multiple = ({ search, setSearch }) => {
     setRoyalty(value);
     // ...
   };
-  
 
   useEffect(() => {}, [
     price,
@@ -649,7 +639,6 @@ const Multiple = ({ search, setSearch }) => {
     e.preventDefault();
     price = inputValue;
 
-
     imageList = [];
     ipfsList = [];
     urlList = [];
@@ -665,7 +654,6 @@ const Multiple = ({ search, setSearch }) => {
 
     uploadToIPFS(file);
   };
-
 
   const getItem = async () => {
     try {
@@ -690,7 +678,6 @@ const Multiple = ({ search, setSearch }) => {
       console.error(err);
     }
   };
- 
 
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
@@ -766,7 +753,6 @@ const Multiple = ({ search, setSearch }) => {
     }
     console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
-
 
   const handleRemoveImage = (index) => {
     const newArray = [...selectedImagesNFT];
@@ -1146,7 +1132,7 @@ const Multiple = ({ search, setSearch }) => {
                                 )}
                               </div>
                             </div>
-                           
+
                             <div
                               className="create-collection-btn"
                               onClick={() => setshowCreateCollection(true)}
@@ -1303,7 +1289,6 @@ const Multiple = ({ search, setSearch }) => {
                             <br />
                             <br />
 
-                    
                             <div className="line-six">
                               <div className="row">
                                 <div className="col-lg-9">
@@ -1322,7 +1307,6 @@ const Multiple = ({ search, setSearch }) => {
                                     {royalty} %
                                   </div>
                                 </div>
-                               
                               </div>
                             </div>
                             <div style={{ textAlign: "right" }}>
@@ -1351,13 +1335,11 @@ const Multiple = ({ search, setSearch }) => {
                         )}
                         {showProfileNFT && (
                           <div>
-                          
-
                             <div className="col-lg-8 mx-auto collectionDivPreview">
                               <div className="img-holder">
                                 <img src={collection.image} alt="" />
                               </div>
-                              
+
                               <div className="title-txt">
                                 {choosenCollection.label}
                               </div>
@@ -1817,7 +1799,6 @@ const Multiple = ({ search, setSearch }) => {
                                       </div>
                                     </>
                                   )}
-                                 
                                 </div>
                               )}
                             {!ShowMore ? (

@@ -233,7 +233,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ///////////////    MAPPINGS    ////////////////
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////// 
 
     mapping(uint256 => NFT) public _idToNFT;
 
@@ -286,7 +286,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ///////////////    STRUCTS    /////////////////
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////// 
 
     struct Auction {
         uint256 tokenId;
@@ -381,7 +381,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ////////////    INITIALIZERS    ///////////////
     ///////////////////////////////////////////////
-    /////////////////////////////////////////////// 
+    ///////////////////////////////////////////////
 
     address public UNISWAP_ROUTER_ADDRESS =
         0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
@@ -630,7 +630,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     function getLatestUSDTPrice() public view returns (uint256) {
         // Commenting for testing
 
-        // 0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46 USDt/ETH Ethereum mainnet
         AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
             0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
         ); // Mainnet contract address for USDT price feed
@@ -638,7 +637,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
         return uint256(price);
 
-        // return 531391650000000;
+        // Uncomment for testnet
+        // return 627758691588469;
     }
 
     function buyWithUSDT(
@@ -1573,7 +1573,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ////////////    GETTER FUNCTIONS    ///////////
     ///////////////////////////////////////////////
-    ///////////////////////////////////////////////
+    /////////////////////////////////////////////// 
 
     function getFans(
         address user

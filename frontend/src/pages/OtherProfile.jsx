@@ -105,8 +105,7 @@ const OtherProfile = ({ search, setSearch }) => {
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-      // id = mintedTokens[i];
-      console.log("YESS");
+    
 
       const metaData = await nftContract.tokenURI(id);
 

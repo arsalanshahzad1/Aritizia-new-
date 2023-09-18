@@ -30,8 +30,7 @@ const Header = ({ search, setSearch }) => {
   const [loader, setloader] = useState(false);
   const location = useLocation();
   const path = location.pathname;
-  const [countLength, setCountLength] = useState('');
-
+  const [countLength, setCountLength] = useState(''); 
 
   const userData = JSON.parse(localStorage.getItem("data"));
 

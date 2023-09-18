@@ -61,7 +61,6 @@ export const getLatestUSDTPrice = async () => {
 };
 
 const WalletManager = ({ setWalletConnected }) => {
-
   return <></>;
 };
 

@@ -31,8 +31,7 @@ const Header = ({ search, setSearch }) => {
   const location = useLocation();
   const path = location.pathname;
   const [countLength, setCountLength] = useState('');
-
-
+ 
   const userData = JSON.parse(localStorage.getItem("data"));
 
   const [walletConnected, setWalletConnected] = useState(false);
@@ -65,8 +64,7 @@ const Header = ({ search, setSearch }) => {
     };
   }, []);
 
-  const [accountChange, setAccountChange] = useState(false);
-
+  const [accountChange, setAccountChange] = useState(false); 
 
   useEffect(() => {
     setInterval(getAddress, 3000);

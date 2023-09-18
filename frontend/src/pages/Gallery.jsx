@@ -40,8 +40,7 @@ const Gallery = ({user}) => {
                 console.log(imageUrl, 'bbbbbb');
                 const imageFile = await convertImageUrlToImageFile(imageUrl , i);
                 console.log(imageFile , 'nnnnn');
-                // Use the index `i` as the key and the image File as the value
-                // imageDataObject[i] = imageFile;
+        
                 imageDataObject.push(imageFile);
 
 

@@ -40,13 +40,9 @@ function CollectionProfile({ search, setSearch }) {
   const searchParams = new URLSearchParams(location.search);
   const [collectionID, setCollectionID] = useState(searchParams.get("id"));
   const [collectionData, setCollectionData] = useState([]);
-
   const [isVisible, setIsVisible] = useState(false);
-  //   const [walletConnected, setWalletConnected] = useState(false);
-  //   const web3ModalRef = useRef();
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  //   const [likedNfts, setLikedNfts] = useState([]);
   const [discountPrice, setDiscountPrice] = useState(0);
 
   const userData = JSON.parse(localStorage.getItem("data"));

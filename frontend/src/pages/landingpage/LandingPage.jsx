@@ -42,7 +42,6 @@ const LandingPage = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-
   async function getBalance() {
     const provider = await getProviderOrSigner();
 
@@ -61,23 +60,21 @@ const LandingPage = ({ search, setSearch }) => {
   async function getProvider() {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
-      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
+      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"   // Eth mainnet
       // "http://localhost:8545"
-      "https://rpc.sepolia.org"
+      "https://rpc.ankr.com/eth_goerli" //Goerli
+      // "https://rpc.sepolia.org"   // Sepolia
     );
 
     return provider;
   }
-
 
   const getListedNfts = async () => {
     // const provider = await getProvider();
     const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     let addr = await getAddress();
-    console.log("ZZZZZZ", addr);
-
-    console.log("Provider", provider);
+    
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -106,10 +103,8 @@ const LandingPage = ({ search, setSearch }) => {
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     console.log("dollarPriceOfETH", dollarPriceOfETH);
 
-
-
     let demo = await marketplaceContract.owner();
-    console.log("demo", demo);
+    console.log("owner of MP", demo);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     console.log("mintedTokens", mintedTokens);
@@ -144,13 +139,16 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("discountOnNFT", typeof discountOnNFT);
 
         let auctionData = await marketplaceContract._idToAuction(id);
+        console.log("111");
 
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()
         );
+        console.log("2222");
 
         listingType = structData.listingType;
         let listed = structData.listed;
+        console.log("3333");
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
@@ -234,10 +232,7 @@ const LandingPage = ({ search, setSearch }) => {
           });
       }
     }
-
   };
-
- 
 
   useEffect(() => {
     connectWallet();
@@ -267,25 +262,23 @@ const LandingPage = ({ search, setSearch }) => {
       observer.disconnect();
     };
   }, []);
-const [counterData , setCounterData] = useState('')
-  const viewLandingPageDetail = async () =>{
+
+  
+  const [counterData, setCounterData] = useState("");
+  const viewLandingPageDetail = async () => {
     try {
-      const response = await apis.viewLandingPageDetail()
-      console.log(response?.data?.data , 'ccccccc');
-      setCounterData(response?.data?.data)
+      const response = await apis.viewLandingPageDetail();
+      console.log(response?.data?.data, "ccccccc");
+      setCounterData(response?.data?.data);
+    } catch (error) {}
+  };
 
-    } catch (error) {
-      
-    }
-  }
-
-  useEffect(() =>{
-    viewLandingPageDetail()
-  }, [])
+  useEffect(() => {
+    viewLandingPageDetail();
+  }, []);
 
   return (
     <>
-     
       <Header
         connectWallet={connectWallet}
         search={search}
@@ -313,20 +306,45 @@ const [counterData , setCounterData] = useState('')
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
                           {/* <h3>{isVisible ? <CountUp end={counterData?.total_users} /> : 0}K+</h3> */}
-                          <h3>{isVisible ? <CountUp end={counterData?.total_users} prefix="0"/> : 0}</h3>
+                          <h3>
+                            {isVisible ? (
+                              <CountUp
+                                end={counterData?.total_users}
+                                prefix="0"
+                              />
+                            ) : (
+                              0
+                            )}
+                          </h3>
                           <p>Total Users</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
-                          <h3>{isVisible ? <CountUp end={counterData?.total_nfts} prefix="0"/> : 0}</h3>
+                          <h3>
+                            {isVisible ? (
+                              <CountUp
+                                end={counterData?.total_nfts}
+                                prefix="0"
+                              />
+                            ) : (
+                              0
+                            )}
+                          </h3>
                           <p>Total NFTs</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-12">
                         <div className="inner-wrap">
                           <h3>
-                            {isVisible ? <CountUp end={counterData?.total_artgallery} prefix="0" /> : 0}
+                            {isVisible ? (
+                              <CountUp
+                                end={counterData?.total_artgallery}
+                                prefix="0"
+                              />
+                            ) : (
+                              0
+                            )}
                           </h3>
                           <p>Total Arts</p>
                         </div>

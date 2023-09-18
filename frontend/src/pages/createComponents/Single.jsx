@@ -32,34 +32,33 @@ const fileTypes = ["JPG", "PNG", "GIF"];
 // const [imageUrl, setImageUrl] = useState('');
 //   const [imageFile, setImageFile] = useState(null);
 
-  const convertImageUrlToImageFile = async (url) => {
-    try {
-      // Download the image from the URL
-      const imageUrl = url;
-      const response = await fetch(url);
-      console.log(response);
+const convertImageUrlToImageFile = async (url) => {
+  try {
+    // Download the image from the URL
+    const imageUrl = url;
+    const response = await fetch(url);
+    console.log(response);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image. Status: ${response.status}`);
-      }
-
-      // Convert the response data to a Blob
-      const imageBlob = await response.blob();
-
-      // Extract the file name from the URL or specify a custom name
-      const urlParts = imageUrl.split('/');
-      const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
-
-      // Create a File object from the Blob
-      const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
-      return(
-        file
-      )
-
-    } catch (error) {
-      console.error('Error:', error);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image. Status: ${response.status}`);
     }
-  };
+
+    // Convert the response data to a Blob
+    const imageBlob = await response.blob();
+
+    // Extract the file name from the URL or specify a custom name
+    const urlParts = imageUrl.split("/");
+    const fileName = urlParts[urlParts.length - 1] || "image.jpg";
+
+    // Create a File object from the Blob
+    const file = new File([imageBlob], fileName, {
+      type: response.headers.get("content-type"),
+    });
+    return file;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 const Single = ({ search, setSearch }) => {
   let image = "";
@@ -77,8 +76,6 @@ const Single = ({ search, setSearch }) => {
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
   const navigate = useNavigate();
-
- 
 
   const getCollection = async () => {
     const response = await apis.getNFTCollection();
@@ -141,7 +138,6 @@ const Single = ({ search, setSearch }) => {
         getCollection();
         setshowCreateCollection(false);
       }
-
     }
   };
 
@@ -173,7 +169,6 @@ const Single = ({ search, setSearch }) => {
     }
   }, [startingDate, endingDate]);
 
-
   const web3ModalRef = useRef();
 
   var item = {};
@@ -185,17 +180,15 @@ const Single = ({ search, setSearch }) => {
   let mintcounter = 0;
   let listcounter = 0;
 
-
-
   const uploadToIPFS = async (event) => {
     if (typeof selectedImage !== "undefined") {
       try {
         setLoading(true);
         console.log("this is image selectedImage ", selectedImage);
         console.log("this is image item.file ", item.file);
-        const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
+        // const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
 
-      
+        const resut = await uploadFileToIPFS(item.file);
         console.log("!!!!!!!!!!!!!!!!!!", resut);
         console.log("Result.pinata", resut.pinataURL);
         // setImage(resut.pinataURL);
@@ -327,7 +320,6 @@ const Single = ({ search, setSearch }) => {
       console.log("qqq startTime", startTime);
       console.log("startTime typeof", typeof startTime);
       console.log("qqq endTime", endTime);
-     
 
       console.log(" collection.collection_id", collection.collection_id);
       console.log("collection.crypto", collection.crypto);
@@ -429,8 +421,8 @@ const Single = ({ search, setSearch }) => {
 
     // alert("Nft listed");
     // setTimeout(() => {
-      // navigate("/profile");
-      // window.location.reload();
+    // navigate("/profile");
+    // window.location.reload();
     // }, 3000);
     // navigate("/profile");
   };
@@ -515,7 +507,7 @@ const Single = ({ search, setSearch }) => {
       item.collection != null
     ) {
       //  UNCOMMENT THIS
-    console.log("filezz", file);
+      console.log("filezz", file);
 
       uploadToIPFS(file);
     } else {
@@ -525,7 +517,6 @@ const Single = ({ search, setSearch }) => {
       // window.alert("Fill all the fields to continue");
     }
   }
-
 
   const getItem = async () => {
     try {
@@ -549,9 +540,7 @@ const Single = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
-  const AddCollection = () => {
-   
-  };
+  const AddCollection = () => {};
 
   const hideCreateCollection = () => {
     setCreateCollection("");
@@ -844,7 +833,7 @@ const Single = ({ search, setSearch }) => {
                                   style={{ display: "none" }}
                                   onChange={handleImageUpload}
                                 />
-                                <br/>
+                                <br />
                                 <div
                                   onClick={handleButtonClick}
                                   className="button-styling"
@@ -1026,10 +1015,13 @@ const Single = ({ search, setSearch }) => {
                         <div className="line-seven">
                           <div className="row">
                             <div className="col-lg-12">
-                              <div  style={{textAlign : 'right'}}>
-                              <button type="submit" className="button-styling" >
-                                Create Item
-                              </button>
+                              <div style={{ textAlign: "right" }}>
+                                <button
+                                  type="submit"
+                                  className="button-styling"
+                                >
+                                  Create Item
+                                </button>
                               </div>
                             </div>
                           </div>
