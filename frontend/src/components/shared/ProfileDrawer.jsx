@@ -72,7 +72,7 @@ function ProfileDrawer({
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
   const [nftDetails, setNftDetails] = useState("");
 
-  console.log("user id: ", id)
+  // console.log("user id: ", id)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,8 +86,11 @@ function ProfileDrawer({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
-  console.log("getBuyerPlan", getBuyerPlan);
-  console.log("Zayyan connected user ka subscription plan", userData);
+  console.log(userAddress, "")
+
+  // console.log(userAddress, sellerWallet, "uppercase")
+  // console.log("getBuyerPlan", getBuyerPlan);
+  // console.log("Zayyan connected user ka subscription plan", userData);
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -1246,12 +1249,13 @@ function ProfileDrawer({
                     </div>
                   </div>
                 )}
-                {!showBuyNow && userAddress.toUpperCase() !== sellerWallet.toUpperCase() && (
+                {!showBuyNow && userAddress?.toUpperCase() !== sellerWallet?.toUpperCase() && (
                   <>
                     <div
                       className="seven-line"
                       onClick={() => setChack(!chack)}
-                    >
+                      >
+                      {/* {console.log(userAddress.toUpperCase(), " ", sellerWallet.toUpperCase(), "uppercase")} */}
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}
@@ -1271,7 +1275,7 @@ function ProfileDrawer({
                       ) : null}
                     </div>
                   </>
-                )}
+                ) }
               </div>
             </div>
           </div>

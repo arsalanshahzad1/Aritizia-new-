@@ -313,6 +313,7 @@ const Multiple = ({ search, setSearch }) => {
       console.log("ipfsImageList", ipfsImageList);
 
       createNFT();
+      setMyList(false)
 
       // if (imageList.length != 0) {
       // createNFT();
@@ -662,6 +663,8 @@ const Multiple = ({ search, setSearch }) => {
         toast.success(`NFTs minted`, {
           position: toast.POSITION.TOP_CENTER,
         });
+      
+        // navigate('/')
         // alert("NFTs minted");
 
         // setTimeout(() => {
@@ -724,9 +727,11 @@ const Multiple = ({ search, setSearch }) => {
     ipfsList,
     imageList,
   ]);
+  const [myList, setMyList] = useState(false)
 
   let multiListing = false;
   const createItemMulti = (e) => {
+    setMyList(true)
     multiListing = true;
     listOfMintedTokens = [];
 
@@ -766,6 +771,7 @@ const Multiple = ({ search, setSearch }) => {
 
         startingDateList.push(0);
         endingDateList.push(0);
+        // setMyList(false)
       } else {
         // listingType
         console.log("Iterating nfts startingDate", NFts[i].startingDate);
@@ -791,6 +797,7 @@ const Multiple = ({ search, setSearch }) => {
         royaltyList.push(NFts[i].royalty);
         startingDateList.push(NFts[i].startingDate);
         endingDateList.push(NFts[i].endingDate);
+        // setMyList(false)
       }
     }
 
@@ -801,6 +808,7 @@ const Multiple = ({ search, setSearch }) => {
     console.log("royaltyList", royaltyList);
 
     uploadToIPFS();
+    
   };
 
   const createItemOld = (e) => {
@@ -1675,14 +1683,14 @@ const Multiple = ({ search, setSearch }) => {
                                   className="button-styling"
                                   onClick={() => setshowProfileNFT(true)}
                                 >
-                                  Nextt
+                                  Next
                                 </button>
                                 :
                                 <button
                                   className="button-styling"
                                   onClick={() => { setshowProfileNFT(true); handleArtGalleryUpload(location?.state?.artGallery) }}
                                 >
-                                  Nextt
+                                  Next
                                 </button>
                               }
                             </div>
@@ -2207,9 +2215,10 @@ const Multiple = ({ search, setSearch }) => {
                                   </button>
                                 )}
                                 {NFts.length > 0 &&
-                                  NFts[NFts.length - 1].status === "completed" ? (
+                                  NFts[NFts.length - 1].status === "completed" && !myList ? (
                                   <button
                                     onClick={createItemMulti}
+                                    // disabled={myList}
                                     className="button-styling ml-auto"
                                   >
                                     <div>List</div>

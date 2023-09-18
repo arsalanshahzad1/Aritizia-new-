@@ -248,9 +248,9 @@ const Single = ({ search, setSearch }) => {
         console.log("this is image selectedImage ", selectedImage);
         console.log("this is image item.file ", item.file);
         // const file = await convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
-        const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
+        // const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
 
-        // const resut = await uploadFileToIPFS(item.file);
+        const resut = await uploadFileToIPFS(item.file);
         // const resut = await uploadFileToIPFS(file);
 
         //const result = await client.add(file)

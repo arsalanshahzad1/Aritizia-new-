@@ -370,7 +370,7 @@ function CollectionProfile({ search, setSearch }) {
     console.log("Connected wallet", userAddress);
     console.log("provider", provider);
     console.log("collectionData", collectionData);
-    console.log("collectionData.nfts", collectionData.nfts);
+    console.log("collectionData.nfts", collectionData?.nfts);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -512,7 +512,7 @@ function CollectionProfile({ search, setSearch }) {
   const viewNftCollectionProfile = async (id) => {
     const response = await apis.viewNftCollectionProfile(id);
     if (response.status) {
-      console.log(response?.data?.data);
+      console.log("viewNftCollectionProfile",response?.data?.data);
       setCollectionData(response?.data?.data);
     } else {
       alert("error");
@@ -535,7 +535,6 @@ function CollectionProfile({ search, setSearch }) {
   };
   return (
     <>
-    {window.scrollTo(0, 0)}
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
@@ -641,7 +640,8 @@ function CollectionProfile({ search, setSearch }) {
                     </div>
                     {collectionTabs === 0 && (
                       <>
-                        {nftListFP.map((item) => (
+                        { nftListFP.length > 0 ?
+                        nftListFP?.map((item) => (
                           <BuyNow
                             onOpen={onOpen}
                             // onClose={onClose}
@@ -657,12 +657,14 @@ function CollectionProfile({ search, setSearch }) {
                             collectionImages={item?.collectionImages}
                             userAddress
                           />
-                        ))}
+                        )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                       </>
                     )}
                     {collectionTabs === 1 && (
                       <>
-                        {nftListAuction.map((item) => (
+                        { nftListAuction.length > 0 ?
+                        nftListAuction.map((item) => (
                           <NewItemCard
                             key={item.id}
                             id={item.id}
@@ -677,7 +679,8 @@ function CollectionProfile({ search, setSearch }) {
                             collectionImages={item?.collectionImages}
                             userAddress={userAddress}
                           />
-                        ))}
+                        )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        }
                       </>
                     )}
                   </div>

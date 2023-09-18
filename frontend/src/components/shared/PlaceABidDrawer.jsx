@@ -307,6 +307,7 @@ const PlaceABidDrawer = ({
   title,
   image,
   price,
+  sellerWallet,
   crypto,
   description,
   // collection,
@@ -959,17 +960,17 @@ const PlaceABidDrawer = ({
                     }}
                   >
                     {status.value === "Monthly" ? (
-                      <ChartForEarning data={Monthly_data} />
+                      <ChartForEarning data={Monthly_data} chartLabel="Total Earning"/>
                     ) : (
                       <div></div>
                     )}
                     {status.value === "Weekly" ? (
-                      <ChartForEarning data={Weekly_data} />
+                      <ChartForEarning data={Weekly_data} chartLabel="Total Earning"/>
                     ) : (
                       <div></div>
                     )}
                     {status.value === "Daily" ? (
-                      <ChartForEarning data={Daily_data} />
+                      <ChartForEarning data={Daily_data} chartLabel="Total Earning"/>
                     ) : (
                       <div></div>
                     )}
@@ -1191,33 +1192,36 @@ const PlaceABidDrawer = ({
                     style={{ marginTop: "20px", marginBottom: "20px" }}
                   />
                 </div>
-                <div className="seven-line" onClick={() => setChack(!chack)}>
-                  <span>
-                    <BsCheck className={`${chack ? "red" : "black"}`} />
-                  </span>{" "}
-                  <span>I agree all Terms & Conditions.</span>
-                </div>
-                <div className="eight-line">
-                  {bidButton ? (
-                    <button
-                      className="nft-buy-btn"
-                      disabled={!chack}
-                      onClick={() => {
-                        setSucess(true);
-                      }}
-                    >
-                      Bid Now
-                    </button>
-                  ) : (
-                    <button
-                      className="nft-buy-btn"
-                      disabled={bidDisable || !chack}
-                      onClick={claimAuction}
-                    >
-                      Claim
-                    </button>
-                  )}
-                </div>
+                {userAddress?.toUpperCase() !== sellerWallet?.toUpperCase() && <>
+                  <div className="seven-line" onClick={() => setChack(!chack)}>
+                    <span>
+                      <BsCheck className={`${chack ? "red" : "black"}`} />
+                    </span>{" "}
+                    <span>I agree all Terms & Conditions.</span>
+                  </div>
+                  <div className="eight-line">
+                    {bidButton ? (
+                      <button
+                        className="nft-buy-btn"
+                        disabled={!chack}
+                        onClick={() => {
+                          setSucess(true);
+                        }}
+                      >
+                        Bid Now
+                      </button>
+                    ) : (
+                      <button
+                        className="nft-buy-btn"
+                        disabled={bidDisable || !chack}
+                        onClick={claimAuction}
+                      >
+                        Claim
+                      </button>
+                    )}
+                  </div>
+                </>
+                }
               </div>
             </div>
           </div>

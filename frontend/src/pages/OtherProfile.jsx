@@ -316,7 +316,7 @@ const OtherProfile = ({ search, setSearch }) => {
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
 
-  console.log(userDetails?.id, "arsalan data")
+  // console.log(userDetails?.id, "arsalan data")
 
  
 
@@ -363,7 +363,7 @@ const OtherProfile = ({ search, setSearch }) => {
   const ViewFollowersList = async () =>{
     const response = await apis.getFollowersList(userDetails?.id)
     // setDidFollow(response?.data?)
-    console.log(response?.data?.data,"arsalan here")
+    // console.log(response?.data?.data,"arsalan here")
     SetFollowersList(response?.data?.data)
     followersList.forEach(e=> e.user_id == RealUserId ? setDidFollow(e.is_follow) : "")
   }
@@ -530,7 +530,7 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex other-profile-cards">
                         {collectionTabs === 0 && (
                           <>
-                            {nftListFP.length > 0 ? nftListFP.map((item) => (
+                            {nftListFP?.length > 0 ? nftListFP?.map((item) => (
                               <BuyNow
                                 onOpen={onOpen}
                                 // onClose={onClose}
@@ -555,7 +555,7 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex">
                         {collectionTabs === 1 && (
                           <>
-                            {nftListAuction.length > 0 ? nftListAuction.map((item) => (
+                            {nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
                               <NewItemCard
                                 key={item.id}
                                 id={item.id}

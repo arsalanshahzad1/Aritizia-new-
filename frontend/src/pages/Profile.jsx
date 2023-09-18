@@ -402,8 +402,10 @@ const Profile = ({ search, setSearch }) => {
               collection: collection,
               collectionImages: collectionImages,
             };
-            console.log(nftData);
+            console.log(nftData, "data here");
+
             // myNFTs.push(nftData);
+            // nftData && setNftListFP(nftData)
             setNftListFP((prev) => [...prev, nftData]);
           } else if (listingType === 1) {
             const nftData = {
@@ -847,12 +849,13 @@ const Profile = ({ search, setSearch }) => {
                       </div>
                       {collectionTabs === 0 && (
                         <>
-                          {nftListFP.map((item) => (
+                          {nftListFP.length > 0 ?
+                          nftListFP?.map((item) => (
                             <SimpleCard
                               onOpen={onOpen}
                               // onClose={onClose}
-                              key={item.id}
-                              id={item.id}
+                              key={item?.id}
+                              id={item?.id}
                               title={item?.title}
                               image={item?.image}
                               price={item?.price}
@@ -862,13 +865,16 @@ const Profile = ({ search, setSearch }) => {
                               collection={item?.collection}
                               collectionImages={item?.collectionImages}
                               userAddress
+                              sellerWallet={userAddress}
                             />
-                          ))}
+                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        }
                         </>
                       )}
                       {collectionTabs === 1 && (
                         <>
-                          {nftListAuction.map((item) => (
+                          { nftListAuction.length > 0 ?
+                          nftListAuction.map((item) => (
                             <NewItemCard
                               key={item.id}
                               id={item.id}
@@ -883,7 +889,8 @@ const Profile = ({ search, setSearch }) => {
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
                             />
-                          ))}
+                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                          }
                         </>
                       )}
                     </div>
@@ -1182,7 +1189,7 @@ const Profile = ({ search, setSearch }) => {
                               <div></div>
                             </div>
                             <div className="Address-holder">
-                              {addFanlisting.length > 0 ? (
+                              {addFanlisting?.length > 0 ? (
                                 <>
                                   {addFanlisting.map((data, Index) => (
                                     <div
@@ -1229,7 +1236,7 @@ const Profile = ({ search, setSearch }) => {
                                   ))}
                                 </>
                               ) : (
-                                <div>List is Empty</div>
+                                <div className="data-not-avaliable"> <h2>List is Empty</h2></div>
                               )}
                             </div>
                             <div className="popUp-btn-group">

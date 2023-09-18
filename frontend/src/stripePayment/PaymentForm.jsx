@@ -75,6 +75,12 @@ const PaymentForm = ({
           });
           setShowPaymentForm(false)
           viewSubscriptions(user_id)
+          const response = await apis.postWalletAddress({
+            wallet_address: JSON.parse(localStorage.getItem('data')).wallet_address,
+          });
+          localStorage.removeItem("data");
+          localStorage.setItem("data", JSON.stringify(response?.data?.data));
+          console.log(JSON.parse(localStorage.getItem('data')), "me here")
           // localStorage.setItem('data', {...data, plan_name, plan_type});
         }
         // {

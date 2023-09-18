@@ -162,6 +162,7 @@ const Subscription = ({ search, setSearch }) => {
                         </div>
                     </div>
                 </Modal>
+                {console.log("arsalan :", JSON.parse(localStorage.getItem('data')).wallet_address)}
                 <Modal
                     show={reneval}
                     onHide={() => setreneval(false)}

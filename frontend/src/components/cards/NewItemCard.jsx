@@ -14,6 +14,7 @@ const NewItemCard = ({
   endTime,
   description,
   // userAddress,
+  seller,
   collectionImages,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -132,6 +133,7 @@ const NewItemCard = ({
         endTime={endTime}
         isLive={isLive}
         highestBid={highestBid}
+        sellerWallet={seller}
       />
     </>
   );
