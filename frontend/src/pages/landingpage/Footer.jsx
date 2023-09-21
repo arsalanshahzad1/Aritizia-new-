@@ -1,7 +1,6 @@
 import React from 'react'
 import { footerData } from '../../StaticData'
-import { Link } from 'react-router-dom'
-
+import { Link } from 'react-router-dom' 
 const Footer = () => {
   return (
     <footer>
@@ -22,8 +21,7 @@ const Footer = () => {
                 </div>
               )
             })}
-          </div>
-         
+          </div> 
         </div>
       </div>
       <div className="footer-bottom">

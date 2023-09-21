@@ -58,11 +58,6 @@ const OtherProfile = ({ search, setSearch }) => {
   const [userID, setUserID] = useState(searchParams.get("id"));
   const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
 
-  // const getOtherUsersDetails = async (address) => {
-  //   const response = await apis.getOtherUser(address);
-  //   setUserDetails(response?.data?.data);
-  //   console.log(response, "other-users");
-
   const getNFTlikeListing = async (id) => {
     const response = await apis.getLikeNFTListing(id);
     setLikedNfts(response?.data?.data);
@@ -74,104 +69,6 @@ const OtherProfile = ({ search, setSearch }) => {
     setUserDetails(response?.data?.data);
     getNFTlikeListing(response?.data?.data?.id);
   };
-
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   const { chainId } = await web3Provider.getNetwork();
-
-  //   if (chainId !== 31337) {
-  //     window.alert("Change the network to Sepolia");
-  //     throw new Error("Change network to Sepolia");
-  //   }
-
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-
-  //     return signer;
-  //   }
-
-  //   return web3Provider;
-  // };
-
-  // console.log("state", state.address);
-  // useEffect(() => {
-  //   //  navigate("/other-profile")
-  //   getOtherUsersDetails(userADDRESS);
-  // }, []);
-
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("getProviderOrSigner");
-
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   const { chainId } = await web3Provider.getNetwork();
-
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-
-  //     return signer;
-  //   }
-
-  //   return web3Provider;
-  // };
-
-  // const connectWallet = async () => {
-  //   try {
-  //     // Get the provider from web3Modal, which in our case is MetaMask
-  //     // When used for the first time, it prompts the user to connect their wallet
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
-  //     // The `current` value is persisted throughout as long as this page is open
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
-
-  // const getAddress = async () => {
-  //     const accounts = await window.ethereum.request({
-  //         method: "eth_requestAccounts",
-  //     });
-  //     setUserAddress(accounts[0]);
-  //     // console.log("getAddress", accounts[0]);
-  //     postWalletAddress(accounts[0]);
-
-  // };
-
-  // const postWalletAddress  = async (address) => {
-  //     if (localStorage.getItem("data")) {
-  //       return console.log("data is avaliable");
-  //     } else {
-  //     const response = await apis.postWalletAddress({wallet_address:  address})
-  //     localStorage.setItem("data", JSON.stringify(response.data.data));
-  //     window.location.reload();
-  //     }
-
-  //   };
 
   const getMyListedNfts = async () => {
     let emptyList = [];
@@ -208,8 +105,7 @@ const OtherProfile = ({ search, setSearch }) => {
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-      // id = mintedTokens[i];
-      console.log("YESS");
+    
 
       const metaData = await nftContract.tokenURI(id);
 
@@ -247,9 +143,6 @@ const OtherProfile = ({ search, setSearch }) => {
               collection: collection,
             };
 
-            // console.log(nftData);
-            // myNFTs.push(nftData);
-            // setNftListFP(myNFTs);
             setNftListFP((prev) => [...prev, nftData]);
             console.log("myNFTs in function", myNFTs);
           } else if (listingType === 1) {
@@ -267,9 +160,6 @@ const OtherProfile = ({ search, setSearch }) => {
               startTime: auctionData.startTime.toString(),
             };
 
-            // myAuctions.push(nftData);
-            // console.log("auction in function", myAuctions);
-            // setNftListAuction(myAuctions);
             setNftListAuction((prev) => [...prev, nftData]);
           }
         })
@@ -281,7 +171,6 @@ const OtherProfile = ({ search, setSearch }) => {
   };
 
   useEffect(() => {
-    // connectWallet();
     getMyListedNfts();
   }, [userADDRESS]);
 

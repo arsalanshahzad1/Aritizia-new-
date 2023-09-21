@@ -61,13 +61,6 @@ export const getLatestUSDTPrice = async () => {
 };
 
 const WalletManager = ({ setWalletConnected }) => {
-  // useEffect(() => {
-  //   if (!setWalletConnected) return;
-  //   if (!setWalletConnected) {
-  //     connectWallet(setWalletConnected);
-  //   }
-  // }, [setWalletConnected]);
-
   return <></>;
 };
 

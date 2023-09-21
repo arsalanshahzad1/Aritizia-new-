@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import PageTopSection from '../components/shared/PageTopSection'
-import Header from './landingpage/Header'
-import Footer from './landingpage/Footer'
-import { ImNotification } from 'react-icons/im'
-import { IoMdColorPalette } from 'react-icons/io'
-import { FaHandHoldingUsd, FaEdit } from 'react-icons/fa'
-import EditProfile from './settingFolder/EditProfile'
-import Earnings from './settingFolder/Earnings'
-import Appearance from './settingFolder/Appearance'
-import Notification from './settingFolder/Notification'
-import { useContext } from 'react'
-import { GlobalContext } from '../Context/GlobalContext'
+import React, { useState, useEffect } from "react";
+import PageTopSection from "../components/shared/PageTopSection";
+import Header from "./landingpage/Header";
+import Footer from "./landingpage/Footer";
+import { ImNotification } from "react-icons/im";
+import { IoMdColorPalette } from "react-icons/io";
+import { FaHandHoldingUsd, FaEdit } from "react-icons/fa";
+import EditProfile from "./settingFolder/EditProfile";
+import Earnings from "./settingFolder/Earnings";
+import Appearance from "./settingFolder/Appearance";
+import Notification from "./settingFolder/Notification";
+import { useContext } from "react";
+import { GlobalContext } from "../Context/GlobalContext";
 import Search from "../components/shared/Search";
-import Purchase from './settingFolder/Purchase'
-
+import Purchase from "./settingFolder/Purchase";
+import { getAddress } from "../methods/methods";
 
 const Setting = ({ search, setSearch }) => {
-    const { activeTabsSetting } = useContext(GlobalContext)
-    const [activeTabs, setActiveTabs] = useState(activeTabsSetting)
-    useEffect(() => {
-        setActiveTabs(activeTabsSetting)
+  const { activeTabsSetting } = useContext(GlobalContext);
+  const [activeTabs, setActiveTabs] = useState(activeTabsSetting);
+  useEffect(() => {
+    setActiveTabs(activeTabsSetting);
+  }, [activeTabsSetting]);
 
-    }, [activeTabsSetting])
     return (
         <>
             <Header
@@ -56,9 +56,9 @@ const Setting = ({ search, setSearch }) => {
                 </section>
                 <Search search={search} setSearch={setSearch} />
                 <Footer />
-            </div>
-        </>
-    )
-}
+      </div>
+    </>
+  );
+};
 
-export default Setting
+export default Setting;

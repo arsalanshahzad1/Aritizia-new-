@@ -32,36 +32,33 @@ const fileTypes = ["JPG", "PNG", "GIF"];
 // const [imageUrl, setImageUrl] = useState('');
 //   const [imageFile, setImageFile] = useState(null);
 
-  const convertImageUrlToImageFile = async (url) => {
-    try {
-      // Download the image from the URL
-      const imageUrl = url;
-      const response = await fetch(url);
-      console.log(response);
+const convertImageUrlToImageFile = async (url) => {
+  try {
+    // Download the image from the URL
+    const imageUrl = url;
+    const response = await fetch(url);
+    console.log(response);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image. Status: ${response.status}`);
-      }
-
-      // Convert the response data to a Blob
-      const imageBlob = await response.blob();
-
-      // Extract the file name from the URL or specify a custom name
-      const urlParts = imageUrl.split('/');
-      const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
-
-      // Create a File object from the Blob
-      const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
-      return(
-        file
-      )
-      // console.log(file);
-      // Set the image file in state
-      // setImageFile(file);
-    } catch (error) {
-      console.error('Error:', error);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image. Status: ${response.status}`);
     }
-  };
+
+    // Convert the response data to a Blob
+    const imageBlob = await response.blob();
+
+    // Extract the file name from the URL or specify a custom name
+    const urlParts = imageUrl.split("/");
+    const fileName = urlParts[urlParts.length - 1] || "image.jpg";
+
+    // Create a File object from the Blob
+    const file = new File([imageBlob], fileName, {
+      type: response.headers.get("content-type"),
+    });
+    return file;
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
 
 const Single = ({ search, setSearch }) => {
   let image = "";
@@ -79,10 +76,6 @@ const Single = ({ search, setSearch }) => {
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
   const navigate = useNavigate();
-
-  // useEffect(() =>{
-  //   convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
-  // } ,[])
 
   const getCollection = async () => {
     const response = await apis.getNFTCollection();
@@ -145,15 +138,6 @@ const Single = ({ search, setSearch }) => {
         getCollection();
         setshowCreateCollection(false);
       }
-
-      // setcollectionOptions((previousOptions) => [
-      //   ...previousOptions,
-      //   {
-      //     value: response?.data?.data?.id,
-      //     label: response?.data?.data?.name,
-      //     image: response?.data?.data?.media[0]?.original_url,
-      //   },
-      // ]);
     }
   };
 
@@ -185,22 +169,6 @@ const Single = ({ search, setSearch }) => {
     }
   }, [startingDate, endingDate]);
 
-  // useEffect(() => {
-  //   if (listingType == 1) {
-  //     const today = new Date();
-  //     today.setDate(today.getDate()-1); // Subtract 1 day from today's date
-  //     const selectedStartDate = new Date(startingDate);
-
-  //     if (selectedStartDate < today) {
-  //       toast.warning("Start date should not be before today's date", {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       // alert("Start date should not be before today's date");
-  //       setStartingDate("");
-  //     }
-  //   }
-  // }, [startingDate]);
-
   const web3ModalRef = useRef();
 
   var item = {};
@@ -211,35 +179,6 @@ const Single = ({ search, setSearch }) => {
 
   let mintcounter = 0;
   let listcounter = 0;
-
-  // Helper function to fetch a Provider/Signer instance from Metamask
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("In provider");
-  //   const provider = await web3ModalRef.current.connect();
-  //   console.log("In provider2");
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   console.log("In provider3");
-  //   const { chainId } = await web3Provider.getNetwork();
-  //   if (chainId !== 31337) {
-  //     toast.warning("Change the network to Sepolia", {
-  //       position: toast.POSITION.TOP_CENTER,
-  //     });
-  //     // window.alert("Change the network to Sepolia");
-  //     throw new Error("Change network to Sepolia");
-  //   }
-
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-  //     // console.log("getSigner");
-
-  //     return signer;
-  //   }
-  //   // console.log("getProvider");
-  //   return web3Provider;
-  // };
-
-  // Upload image to IPFS
-
 
   const uploadToIPFS = async (event) => {
     if (typeof selectedImage !== "undefined") {
@@ -385,14 +324,6 @@ const Single = ({ search, setSearch }) => {
       console.log("qqq startTime", startTime);
       console.log("startTime typeof", typeof startTime);
       console.log("qqq endTime", endTime);
-      // let currentTime = Date.now();
-      // console.log("aaa f currentTime:", currentTime);
-      // let addedTime = currentTime + 300000;
-
-      // currentTime = Math.floor(currentTime / 1000);
-      // console.log("aaa currentTime:", currentTime);
-      // let addedTime = currentTime + 500000;
-      // console.log("aaa addedTime:", addedTime);
 
       console.log(" collection.collection_id", collection.collection_id);
       console.log("collection.crypto", collection.crypto);
@@ -403,8 +334,6 @@ const Single = ({ search, setSearch }) => {
           [ethers.utils.parseEther(item.price)], // list
           [royalty],
           listingType,
-          // [currentTime],
-          // [addedTime],
           [startTime], // list
           [endTime], // list
           collection.collection_id, // collection number
@@ -426,7 +355,6 @@ const Single = ({ search, setSearch }) => {
       toast.error(`Error while listing NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
-      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
     console.log("singleMinting", singleMinting);
@@ -497,8 +425,8 @@ const Single = ({ search, setSearch }) => {
 
     // alert("Nft listed");
     // setTimeout(() => {
-      // navigate("/profile");
-      // window.location.reload();
+    // navigate("/profile");
+    // window.location.reload();
     // }, 3000);
     // navigate("/profile");
   };
@@ -583,7 +511,7 @@ const Single = ({ search, setSearch }) => {
       item.collection != null
     ) {
       //  UNCOMMENT THIS
-    console.log("filezz", file);
+      console.log("filezz", file);
 
       uploadToIPFS(file);
     } else {
@@ -593,28 +521,6 @@ const Single = ({ search, setSearch }) => {
       // window.alert("Fill all the fields to continue");
     }
   }
-
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
 
   const getItem = async () => {
     try {
@@ -638,27 +544,7 @@ const Single = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
-  const AddCollection = () => {
-    // if (collectionName.length < 1 || !selectedImage2) {
-    //   toast.warning("Input Collection Name and image to Create", {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    // } else {
-    //   setcollectionOptions((previousOptions) => [
-    //     ...previousOptions,
-    //     {
-    //       value: collectionName.toLowerCase(),
-    //       label: collectionName,
-    //       image: selectedImage2,
-    //     },
-    //   ]);
-    //   console.log(collectionOptions, "collection updated");
-    //   hideCreateCollection();
-    // }
-  };
-  // useEffect(() => {
-  //   console.log("collection updated", collectionOptions);
-  // }, [collectionOptions]);
+  const AddCollection = () => {};
 
   const hideCreateCollection = () => {
     setCreateCollection("");
@@ -951,7 +837,7 @@ const Single = ({ search, setSearch }) => {
                                   style={{ display: "none" }}
                                   onChange={handleImageUpload}
                                 />
-                                <br/>
+                                <br />
                                 <div
                                   onClick={handleButtonClick}
                                   className="button-styling"
@@ -1133,10 +1019,13 @@ const Single = ({ search, setSearch }) => {
                         <div className="line-seven">
                           <div className="row">
                             <div className="col-lg-12">
-                              <div  style={{textAlign : 'right'}}>
-                              <button type="submit" className="button-styling" >
-                                Create Item
-                              </button>
+                              <div style={{ textAlign: "right" }}>
+                                <button
+                                  type="submit"
+                                  className="button-styling"
+                                >
+                                  Create Item
+                                </button>
                               </div>
                             </div>
                           </div>

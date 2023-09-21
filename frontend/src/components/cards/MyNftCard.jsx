@@ -57,22 +57,6 @@ const MyNftCard = ({
   const [CreateCollection, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
-  // const AddCollection = () => {
-  //   if (CreateCollection.length < 1) {
-  //     alert("Input Collection Name to Create");
-  //   } else {
-  //     setcollectionOptions((previousOptions) => [
-  //       ...previousOptions,
-  //       { value: CreateCollection.toLowerCase(), label: CreateCollection },
-  //     ]);
-  //     console.log(collectionOptions, "collection updated");
-  //     hideCreateCollection();
-  //   }
-  // };
-  // const hideCreateCollection = () => {
-  //   setCreateCollection("");
-  //   setshowCreateCollection(false);
-  // };
 
   const [timedAuction, setTimedAuction] = useState(false);
 

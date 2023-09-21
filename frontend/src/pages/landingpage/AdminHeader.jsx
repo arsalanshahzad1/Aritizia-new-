@@ -31,56 +31,11 @@ const Header = ({ search, setSearch }) => {
   const location = useLocation();
   const path = location.pathname;
   const [countLength, setCountLength] = useState('');
-
-  // let countLength;
-
+ 
   const userData = JSON.parse(localStorage.getItem("data"));
 
   const [walletConnected, setWalletConnected] = useState(false);
 
-  const web3ModalRef = useRef();
-
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "sepolia",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //   }
-  // }, [walletConnected]);
-
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
-
-  //   // If user is not connected to the Sepolia network, let them know and throw an error
-  //   const { chainId } = await web3Provider.getNetwork();
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-  //     return signer;
-  //   }
-  //   return web3Provider;
-  // };
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
 
@@ -109,8 +64,7 @@ const Header = ({ search, setSearch }) => {
     };
   }, []);
 
-  const [accountChange, setAccountChange] = useState(false);
-
+  const [accountChange, setAccountChange] = useState(false); 
 
   useEffect(() => {
     setInterval(getAddress, 3000);
@@ -585,103 +539,7 @@ const Header = ({ search, setSearch }) => {
                     </button>
                   </>
                 )}
-                {/* {user && (
-                  <div className="login-user-profile">
-                    {userData?.profile_image == null ? (
-                      <img
-                        src="/assets/images/user-none.png"
-                        alt="profile-image"
-                        onClick={() => {
-                          setToggleUserDropdown(!toggleUserDropdown);
-                        }}
-                      />
-                    ) : (
-                      <img
-                        src={userData?.profile_image}
-                        alt=""
-                        onClick={() => {
-                          setToggleUserDropdown(!toggleUserDropdown);
-                        }}
-                      />
-                    )}
-                    {toggleUserDropdown && (
-                      <div
-                        className={`user-login-dropdown ${
-                          scrolled ? "active" : ""
-                        }`}
-                      >
-                        <ul>
-                          <li>
-                            <Link to={"/profile"}>My Profile</Link>
-                          </li>
-                          <li>
-                            <Link to={"/wallet"}>Wallet</Link>
-                          </li>
-                          <li>
-                            <Link to={"/create"}>Create</Link>
-                          </li>
-                          <li
-                            className={`setting ${
-                              toggleSettingDropdown ? "seeting-active" : ""
-                            }`}
-                            onClick={() =>
-                              setToggleSettingDropdown(!toggleSettingDropdown)
-                            }
-                          >
-                            Setting +
-                            {toggleSettingDropdown ? (
-                              <div>
-                                <ul>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Notification")
-                                      }
-                                    >
-                                      Notifications
-                                    </li>
-                                  </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Purchase")
-                                      }
-                                    >
-                                      Purchase
-                                    </li>
-                                  </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Earnings")
-                                      }
-                                    >
-                                      Earning
-                                    </li>
-                                  </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Edit")
-                                      }
-                                    >
-                                      Edit
-                                    </li>
-                                  </Link>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </li>
-                          <li>
-                            <Link to={"/subscription"}>Subscription</Link>
-                          </li>
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                )} */}
+               
               </div>
             </div>
           </div>
