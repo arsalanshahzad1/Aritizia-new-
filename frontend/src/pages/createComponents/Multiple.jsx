@@ -313,7 +313,7 @@ const Multiple = ({ search, setSearch }) => {
       console.log("ipfsImageList", ipfsImageList);
 
       createNFT();
-      setMyList(false)
+      // setMyList(false)
 
       // if (imageList.length != 0) {
       // createNFT();
@@ -337,12 +337,14 @@ const Multiple = ({ search, setSearch }) => {
         multiListing ? handleNFTMintedEvent : null
       );
       console.log("Response of mint event", response);
+      setMyList(false)
     } catch (error) {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
       // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
+      setMyList(false)
     }
   }
 
@@ -664,7 +666,7 @@ const Multiple = ({ search, setSearch }) => {
           position: toast.POSITION.TOP_CENTER,
         });
       
-        // navigate('/')
+        navigate('/')
         // alert("NFTs minted");
 
         // setTimeout(() => {
@@ -799,6 +801,7 @@ const Multiple = ({ search, setSearch }) => {
         endingDateList.push(NFts[i].endingDate);
         // setMyList(false)
       }
+      // setMyList(false)
     }
 
     console.log("imageList", imageList);
@@ -808,6 +811,7 @@ const Multiple = ({ search, setSearch }) => {
     console.log("royaltyList", royaltyList);
 
     uploadToIPFS();
+    
     
   };
 
@@ -1213,6 +1217,7 @@ const Multiple = ({ search, setSearch }) => {
           console.log("ipfs uri upload error: ", error);
         }
       }
+      // setMyList(false)
     }
 
     console.log("test1");

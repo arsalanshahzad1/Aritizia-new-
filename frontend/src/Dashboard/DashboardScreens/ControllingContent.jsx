@@ -374,12 +374,15 @@ function ControllingContent({ search, setSearch }) {
           className="table-for-user-management"
           style={{ top: selectedNTFIds.length > 0 ? "160px" : "120px" }}
         >
+
+          {console.log(list,"list data")}
           {list?.data?.length > 0 ? (
             <>
               <div className="row">
                 <div className="col-lg-10 mx-auto">
                   <div className="row">
-                    {nftList.map((item, index) => (
+                    {console.log(nftList,"nftList")}
+                    {nftList?.map((item, index) => (
                       <DashboardCard2
                         onOpen={onOpen}
                         index={index}
@@ -427,7 +430,8 @@ function ControllingContent({ search, setSearch }) {
                 </button>
               </div>
             </>
-          ) : (
+          ) 
+          : (
             <div className="empty-messahe">
               <h2>No data avaliable</h2>
             </div>

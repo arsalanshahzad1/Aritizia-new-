@@ -34,6 +34,8 @@ const SimpleCard = ({
   description,
   collection,
   collectionImages,
+  // userAddress,
+  sellerWallet
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
@@ -266,6 +268,7 @@ const SimpleCard = ({
           </div>
         </>
       )}
+      {console.log(sellerWallet,"sellerWaller")}
 
       <ProfileDrawer
         isVisible={isVisible}
@@ -279,6 +282,7 @@ const SimpleCard = ({
         description={description}
         collection={collection}
         userAddress={userAddress}
+        sellerWallet={sellerWallet}
       />
 
     </>

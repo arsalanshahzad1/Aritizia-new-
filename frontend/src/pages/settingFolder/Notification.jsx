@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 const Notification = () => {
   const [data, setData] = useState("");
   const userData = JSON.parse(localStorage.getItem("data"));
+
   const getNotificationSetting = async () => {
     const response = await apis.getCurrentNotificationSettings(userData?.id);
     console.log(response?.status, "igotit");
@@ -13,6 +14,7 @@ const Notification = () => {
       setData(response.data.data);
     }
   };
+
   const updateNotificationSetting = async (e) => {
     e.preventDefault();
     const settings = data;
@@ -20,6 +22,7 @@ const Notification = () => {
     console.log(settings, "settings data");
     const response = await apis.updateNotificationSettings(settings);
     console.log(response, "igotitupdated");
+
     if (response?.status === 201) {
       toast.success("Notification settings updated", {
         position: toast.POSITION.TOP_CENTER,
@@ -30,16 +33,21 @@ const Notification = () => {
         position: toast.POSITION.TOP_CENTER,
       });
     }
+
   };
+
   useEffect(() => {
     getNotificationSetting();
   }, []);
+
   const handleSwitchChange = (e) => {
     const { checked, name } = e.target;
     console.log(data, "this is checked");
     const newValue = checked ? 1 : 0;
     setData((prevData) => ({ ...prevData, [name]: newValue }));
   };
+
+  console.log(data)
   return (
     <div className="col-lg-10 mx-auto">
       <Form>

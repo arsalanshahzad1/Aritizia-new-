@@ -47,6 +47,7 @@ function App() {
               element={<Navigate to={'/'} replace />}
               // element={<LandingPage search={search} setSearch={setSearch} />}
             />
+            
             <Route
               path="/"
               element={<LandingPage search={search} setSearch={setSearch} />}

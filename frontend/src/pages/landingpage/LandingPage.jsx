@@ -480,8 +480,9 @@ const [counterData , setCounterData] = useState('')
                 </div>
                 {nftListFP.length > 0 ? (
                   <>
-                    {nftListFP?.map((item, index) => (
+                    {nftListFP?.slice(0,nftListFP.length>4? 4 : nftListFP.list).map((item, index) => (
                       <>
+                      {console.log(nftListFP,"list")}
                       {/* {console.log(item.seller, userAddress, JSON.parse(localStorage.getItem("data")).wallet_address, "items here")} */}
                       <BuyNow
                         key={item?.id}
@@ -546,7 +547,7 @@ const [counterData , setCounterData] = useState('')
                 {nftListAuction.length > 0 ? (
                   <>
                     {console.log(nftListAuction, "nft list auction")}
-                    {nftListAuction.slice(0, 4).map((item) => (
+                    {nftListAuction.slice(0,nftListAuction.length > 4 ? 4 : nftListAuction.length ).map((item) => (
                       <>
                       {console.log(item?.seller, userAddress, "seller now")}
                       <NewItemCard
@@ -561,7 +562,6 @@ const [counterData , setCounterData] = useState('')
                         startTime={item?.startTime}
                         description={item?.description}
                         collectionImages={item?.collectionImages}
-                        // userAddress={userAddress}
                         seller={item?.seller}
                       />
                       </>

@@ -1043,6 +1043,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
+                            {/* {console.log(userId,"id here")} */}
                             <Followers id={userId} />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
@@ -1189,9 +1190,10 @@ const Profile = ({ search, setSearch }) => {
                               <div></div>
                             </div>
                             <div className="Address-holder">
-                              {addFanlisting?.length > 0 ? (
+                              {console.log(followers,"get followers")}
+                              {follwers?.length > 0 ? (
                                 <>
-                                  {addFanlisting.map((data, Index) => (
+                                  {follwers.map((data, Index) => (
                                     <div
                                       key={Index}
                                       className="follower-in-fan-list"
@@ -1206,11 +1208,11 @@ const Profile = ({ search, setSearch }) => {
                                             />
                                           </div>
                                           <div className="Text-follower-fan">
-                                            {data?.username} <br />{" "}
+                                            {/* {data?.username} <br />{" "} */}
                                             <span>
                                               {" "}
                                               {
-                                                data?.count_follower
+                                                // data?.count_follower
                                               } Followers{" "}
                                             </span>
                                           </div>
@@ -1218,14 +1220,14 @@ const Profile = ({ search, setSearch }) => {
                                       </div>
                                       <div>
                                         {console.log(
-                                          data?.is_check,
+                                          // data?.is_check,
                                           "is check state"
                                         )}
                                         <input
-                                          checked={data?.is_check}
-                                          onChange={() =>
-                                            handleCheckboxChange(data?.user_id)
-                                          }
+                                          // checked={data?.is_check}
+                                          // onChange={() =>
+                                          //   handleCheckboxChange(data?.user_id)
+                                          // }
                                           className="separate-checkbox-follower"
                                           type="checkbox"
                                           name=""

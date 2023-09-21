@@ -35,17 +35,17 @@ const Followers = ({ data  , id}) => {
     }
   };
 
-  const followOther = async (id) => {
+  const followOther = async (newId) => {
     const response = await apis.postFollowAndUnfollow({
       follow_by: id,
-      follow_to: RealUserId,
+      follow_to: newId,
     });
     console.log(response?.data, "new data loading")
     setFollowStatus(!followStatus)
   };
-
+  
   useEffect(() => {
-   getFollowersList()
+    getFollowersList()
   }, [followStatus])
   return (
     <>
@@ -53,6 +53,7 @@ const Followers = ({ data  , id}) => {
         ?
         <>
           {followers?.map((data, i) => {
+            {console.log(data,"id data")}
             return (
               <div className="Follow-row" key={i}>
                 <div className="left">

@@ -527,7 +527,7 @@ const OtherProfile = ({ search, setSearch }) => {
                           Auction
                         </div>
                       </div>
-                      <div className="d-flex other-profile-cards">
+                      <div className="d-flex other-profile-cards d-flex flex-wrap">
                         {collectionTabs === 0 && (
                           <>
                             {nftListFP?.length > 0 ? nftListFP?.map((item) => (

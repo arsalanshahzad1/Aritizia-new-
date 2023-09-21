@@ -331,11 +331,14 @@ import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import SimpleCard from "../components/cards/SimpleCard";
 
 const DateDisplay = ({ datetime }) => {
+
+  
   const parsedDate = new Date(datetime);
   const year = parsedDate.getFullYear();
   const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
   const day = String(parsedDate.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
+  console.log(formattedDate," end time now")
   return formattedDate;
 };
 

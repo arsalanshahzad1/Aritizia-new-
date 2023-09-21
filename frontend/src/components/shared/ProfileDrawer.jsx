@@ -1249,12 +1249,13 @@ function ProfileDrawer({
                     </div>
                   </div>
                 )}
-                {!showBuyNow && userAddress?.toUpperCase() !== sellerWallet?.toUpperCase() && (
+                {!showBuyNow && userAddress?.toString().toUpperCase() !== sellerWallet?.toString().toUpperCase() && (
                   <>
                     <div
                       className="seven-line"
                       onClick={() => setChack(!chack)}
                       >
+                        {console.log(sellerWallet, "sellerWallet")}
                       {/* {console.log(userAddress.toUpperCase(), " ", sellerWallet.toUpperCase(), "uppercase")} */}
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
