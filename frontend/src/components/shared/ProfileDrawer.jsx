@@ -116,8 +116,16 @@ function ProfileDrawer({
     let getLatestUSDTPrice = await marketplaceContract.getLatestUSDTPrice();
     let usdtEntered = 1639;
     let OneUSDMeItnaEth = getLatestUSDTPrice / 10 ** 18;
+    // console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
     console.log("getLatestUSDTPrice", getLatestUSDTPrice.toString());
- 
+    // console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
+
+    // console.log("eth price check", (usdPrice / 10 ** 8) * 10 ** 18);
+    // let ethTest = (usdPrice / 10 ** 8) * 10 ** 18;
+    // console.log("ETH ethTest", ethTest);
+
+    // console.log("ethTest", ethers.utils.parseEther(ethTest).toString());
+    // console.log("usdPrice", usdPrice.toString());
 
     var amount = +priceETH;
     var value = amount.toString();
@@ -126,13 +134,23 @@ function ProfileDrawer({
 
     const structData = await marketplaceContract._idToNFT(id);
     let seller = structData.seller;
-   
+    // let royaltyPrice = structData.royaltyPrice.toString();
+    // console.log("checkSeller royaltyPrice", royaltyPrice);
+    // console.log("checkSeller Seller", seller);
+    // console.log("checkSeller userAddress", userAddress);
+    // console.log("checkSeller Seller == userAddress", seller == userAddress);
+    // console.log("checkSeller sellerPlan", sellerPlan);
+    // console.log("checkSeller buyerPlan", buyerPlan);
+    // console.log("checkSeller paymentMethod", paymentMethod);
 
     if (userAddress != seller) {
       // show buy button
       showBuyButton(true);
+      // console.log("WWW Bid");
     } else {
+      // console.log("WWW show claim");
       showBuyButton(false);
+      // show claim
     }
   };
 
@@ -173,6 +191,55 @@ function ProfileDrawer({
   let sellerPlan = getSellerPlan;
   let buyerPlan = getBuyerPlan;
 
+  // console.log("getBuyerPlan", getBuyerPlan);
+
+  // const web3ModalRef = useRef();
+
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //   }
+  // }, [walletConnected]);
+
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
+
+  //   const provider = await web3ModalRef.current.connect();
+
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+
+  //     return signer;
+  //   }
+  //   return web3Provider;
+  // };
 
   const handleNFTSoldEvent = async (
     // nftContract,

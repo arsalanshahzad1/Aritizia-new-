@@ -24,7 +24,7 @@ import apis from "../../service/index";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 import {
   connectWallet,
   getProviderOrSigner,
@@ -70,7 +70,7 @@ const Multiple = ({ search, setSearch }) => {
   const [showCollection, setshowcollection] = useState(false);
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
-  console.log(location?.state?.artGallery, "asasasas");
+  console.log(location?.state?.artGallery, 'asasasas');
 
   const navigate = useNavigate();
   const id = JSON.parse(localStorage.getItem("data"));
@@ -230,14 +230,60 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const web3ModalRef = useRef();
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("test1QWER");
+  //   const provider = await web3ModalRef.current.connect();
+  //   console.log("test1qq");
+
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+
+  //   // if (chainId !== 31337) {
+  //   //   window.alert("Change the network to Sepolia");
+  //   //   throw new Error("Change network to Sepolia");
+  //   // }
+
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     // console.log("getSigner");
+
+  //     return signer;
+  //   }
+  //   // console.log("getProvider");
+  //   return web3Provider;
+  // };
 
   // Upload image to IPFS
   const uploadToIPFS = async () => {
     // console.log("file in uploadTOIpfs", file);
     if (typeof imageList !== "undefined") {
-      console.log("uploadToIPFS1", imageList);
+      console.log("uploadToIPFS1" ,imageList);
 
       for (let i = 0; i < imageList.length; i++) {
+        // try {
+        //   console.log("uploadToIPFS2");
+
+        //   console.log("this is imageList", i, imageList[i]);
+        //   const result = await uploadFileToIPFS(imageList[i]);
+        //   console.log("resut", result);
+        //   console.log("resut.pinataURL image", result.pinataURL);
+
+        //   addImageIPFSInList(result.pinataURL);
+        //   console.log("uploadToIPFS3");
+        // } catch (error) {
+        //   console.log("ipfs image upload error: ", error);
+        // }
         try {
           console.log("uploadToIPFS2");
           console.log("imageListtt", imageList);
@@ -267,6 +313,13 @@ const Multiple = ({ search, setSearch }) => {
       console.log("ipfsImageList", ipfsImageList);
 
       createNFT();
+      // setMyList(false)
+
+      // if (imageList.length != 0) {
+      // createNFT();
+      // } else {
+      //   window.alert("imageList list is empty");
+      // }
     }
   };
 
@@ -289,6 +342,7 @@ const Multiple = ({ search, setSearch }) => {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
+      // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
       setMyList(false)
     }
@@ -347,7 +401,11 @@ const Multiple = ({ search, setSearch }) => {
         console.log("minAndList 3");
 
         multi = true;
-
+        // let listOfTokens = [];
+        // for (let i = 0; i < mintedTokens.length; i++) {
+        //   console.log("mintedTokens[i]", mintedTokens[i].toString());
+        //   listOfTokens.push(Number(mintedTokens[i].toString()));
+        // }
         mintedTokens = listOfTokens;
         console.log("listOfTokensInIFFF", listOfTokens);
       } else {
@@ -386,8 +444,6 @@ const Multiple = ({ search, setSearch }) => {
           collection.crypto
         );
         console.log("zzz listingType", listingType);
-        console.log("zzz startingDateList", startingDateList);
-        console.log("zzz endingDateList", endingDateList);
         console.log("zzz collection.crypto", collection.crypto);
 
         console.log("listcount actually listing", mintedTokens);
@@ -413,6 +469,7 @@ const Multiple = ({ search, setSearch }) => {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
+      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
 
@@ -428,11 +485,11 @@ const Multiple = ({ search, setSearch }) => {
 
   // mint the NFT then list
   const mintThenList = async () => {
- 
+    console.log("test1");
 
     const signer = await getProviderOrSigner(true);
     // console.log("Get the signer", signer);
- 
+    console.log("test3");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -442,11 +499,102 @@ const Multiple = ({ search, setSearch }) => {
 
     console.log("ipfsList", ipfsList);
 
+    // await (await nftContract.mint(ipfsList.current)).wait();
+    // console.log("minAndList 1");
+
+    // let mintedTokens = await nftContract.getMintedTokensList();
+    // console.log("mintedTokens ", mintedTokens);
+    // console.log("mintedTokens.length ", mintedTokens.length);
+    // console.log("minAndList 2");
+
+    // let multi = false;
+    // if (mintedTokens.length > 1) {
+    //   console.log("minAndList 3");
+
+    //   multi = true;
+    //   let listOfTokens = [];
+    //   for (let i = 0; i < mintedTokens.length; i++) {
+    //     console.log("mintedTokens[i]", mintedTokens[i].toString());
+    //     listOfTokens.push(Number(mintedTokens[i].toString()));
+    //   }
+    //   mintedTokens = listOfTokens;
+    //   console.log("listOfTokens", listOfTokens);
+    // } else {
+    //   mintedTokens = Number(mintedTokens);
+    // }
+
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
+    // console.log("Yahoo2");
+
+    // // console.log("startTimestamp in if", startingDate);
+    // // console.log("endTimestamp in if", startingDate);
+
+    // // if (listingType == 0) {
+    // //   console.log("startTimestamp in if", startingDate);
+    // //   console.log("endTimestamp in if", startingDate);
+    // //   setStartingDate(0);
+    // //   setEndingDate(0);
+    // // } else if (listingType == 1) {
+    // //   const startDate = new Date(startingDate);
+    // //   const endDate = new Date(endingDate);
+
+    // //   // Convert start date to Unix timestamp (seconds)
+    // //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
+
+    // //   // Convert end date to Unix timestamp (seconds)
+    // //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
+
+    // //   console.log("startTimestamp in else", startTimestamp);
+    // //   console.log("endTimestamp in else", endTimestamp);
+    // // }
+
+    // // console.log("mintedTokens", mintedTokens);
+    // // console.log("item.price", item.price);
+    // // console.log("royalty", royalty);
+    // // console.log("listingType", listingType);
+    // // console.log("item.crypto", crypto);
+
+    // // // UNCOMMENT this
+    // let ethParsedList = [];
+    // console.log("Yahoo3");
+
+    // for (let i = 0; i < priceList.length; i++) {
+    //   console.log("Yahoo4");
+    //   console.log("priceList[i]", priceList[i]);
+    //   let ethPrice = ethers.utils.parseEther(priceList[i]);
+    //   ethParsedList.push(ethPrice);
+    // }
+
+    // console.log("nftContract.address", nftContract.address);
+    // console.log("mintedTokens", mintedTokens);
+    // console.log("priceList", priceList);
+    // console.log("ethParsedList", ethParsedList);
+    // console.log("royaltyList", royaltyList);
+    // console.log("listingType", listingType);
+    // console.log("startingDateList", startingDateList);
+    // console.log("endingDateList", endingDateList);
+    // console.log("crypto", crypto);
+    // console.log("PAyment method", crypto);
+
+    // await (
+    //   await marketplaceContract.listNft(
+    //     nftContract.address,
+    //     multi ? mintedTokens : [mintedTokens],
+    //     ethParsedList,
+    //     royaltyList,
+    //     listingType,
+    //     startingDateList,
+    //     endingDateList,
+    //     // [startingDateList[0] + 5 * 60 * 1000],
+    //     0,
+    //     crypto
+    //   )
+    // ).wait();
+    // setLoading(false);
 
     marketplaceContractGlobal = marketplaceContract;
     nftContractGlobal = nftContract;
@@ -462,9 +610,18 @@ const Multiple = ({ search, setSearch }) => {
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
+      // console.error("Error while minting and listing NFT:", error);
     }
+
+    // let response = await marketplaceContract.on(
+    //   "NFTListed",
+    //   handleNFTListedEvent
+    // );
+
+    // console.log("Response of list event", response);
   };
   let listOfListedTokens = [];
+  // const [listToPost, setListToPost] = useState([]);
 
   let listToPost = useRef([]);
   let count = 0;
@@ -498,7 +655,10 @@ const Multiple = ({ search, setSearch }) => {
       listOfListedTokens.push(listedData);
       addListToPost(listedData);
 
+      // console.log("qqq ipfsList", ipfsList.current.length);
+
       if (ipfsList.current.length == listOfListedTokens.length) {
+
         nftDataPost();
 
         multiListing = false;
@@ -549,8 +709,18 @@ const Multiple = ({ search, setSearch }) => {
     setRoyalty(value);
     // ...
   };
+  // const handleSliderChange = (value) => {
+  //   // setRoyalty(value);
+  //   if (value === 33) {
+  //     setRoyalty(5);
+  //   } else if (value === 66) {
+  //     setRoyalty(10);
+  //   } else if (value === 100) {
+  //     setRoyalty(15);
+  //   }
+  // };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     price,
     title,
     description,
@@ -650,6 +820,39 @@ const Multiple = ({ search, setSearch }) => {
     e.preventDefault();
     price = inputValue;
 
+    // console.log("crypto in check", crypto);
+
+    // console.log("startTimestamp in if", startingDate);
+    // console.log("endTimestamp in if", endingDate);
+
+    // if (listingType == 0) {
+    //   console.log("startTimestamp in if", startingDate);
+    //   console.log("endTimestamp in if", endingDate);
+    //   setStartingDate(0);
+    //   setEndingDate(0);
+    //   startTime = 0;
+    //   endTime = 0;
+    // } else if (listingType == 1) {
+    //   const startDate = new Date(startingDate);
+    //   const endDate = new Date(endingDate);
+
+    //   // Convert start date to Unix timestamp (seconds)
+    //   const startTimestamp = Math.floor(startDate.getTime() / 1000);
+
+    //   // Convert end date to Unix timestamp (seconds)
+    //   const endTimestamp = Math.floor(endDate.getTime() / 1000);
+
+    //   console.log("startTimestamp in else", startTimestamp);
+    //   console.log("endTimestamp in else", endTimestamp);
+    //   setStartingDate(startTimestamp);
+    //   setEndingDate(endTimestamp);
+    //   startTime = startTimestamp;
+    //   endTime = startTimestamp;
+    // }
+
+    // console.log("CHECK startingDate", startTime);
+    // console.log("CHECK endingDate", endTime);
+
     imageList = [];
     ipfsList = [];
     urlList = [];
@@ -665,6 +868,28 @@ const Multiple = ({ search, setSearch }) => {
 
     uploadToIPFS(file);
   };
+
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected, price]);
 
   const getItem = async () => {
     try {
@@ -689,6 +914,10 @@ const Multiple = ({ search, setSearch }) => {
       console.error(err);
     }
   };
+  // const [collectionOptions, setcollectionOptions] = useState([
+  //   { value: "", label: "Select Collection" },
+  //   { value: "usdt", label: "USDT" },
+  // ]);
 
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
@@ -728,28 +957,29 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const handleFileUpload = (event) => {
-    console.log("calling");
+    console.log('calling');
     const files = event.target.files;
-    console.log(files, "event");
+    console.log(files, 'event');
     // const im
     const imageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
     );
 
-    console.log(imageUrls, "eventttt");
+    console.log(imageUrls, 'eventttt');
     setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      console.log(files[i], "files[i]");
+      console.log(files[i] ,'files[i]');
       setSelectedUploadNFTImage((prevState) => [...prevState, file]);
     }
     console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
 
+
   const handleArtGalleryUpload = (event) => {
     const files = event;
-    console.log(files, "event");
+    console.log(files, 'event');
     // const im
     const imageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
@@ -758,12 +988,18 @@ const Multiple = ({ search, setSearch }) => {
     console.log("selectedUploadNFTImage", selectedImagesNFT);
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      console.log(files[i], "files[i]");
-      console.log("working");
+      console.log(files[i] ,'files[i]');
+      console.log('working');
       setSelectedUploadNFTImage((prevState) => [...prevState, file]);
     }
     console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
+
+  // useEffect(() => {
+  //   if(location?.state?.artGallery){
+  //     handleArtGalleryUpload(location?.state?.artGallery)
+  //   }
+  // }, [selectedUploadNFTImage])
 
   const handleRemoveImage = (index) => {
     const newArray = [...selectedImagesNFT];
@@ -831,7 +1067,7 @@ const Multiple = ({ search, setSearch }) => {
   }, [listingType]);
 
   const handleNftForm = (e) => {
-    if (e.target.name == "price" || e.target.name == "bid") {
+    if (e.target.name == 'price' || e.target.name == 'bid') {
       console.log("handling", e.target.name, e.target.value);
       const value = e.target.value;
       if (/^\d*\.?\d*$/.test(value) || value === "") {
@@ -1119,11 +1355,10 @@ const Multiple = ({ search, setSearch }) => {
                                       return (
                                         <li
                                           key={index}
-                                          className={`${
-                                            collection?.label === value?.label
-                                              ? "is-selected"
-                                              : ""
-                                          }`}
+                                          className={`${collection?.label === value?.label
+                                            ? "is-selected"
+                                            : ""
+                                            }`}
                                           onClick={() => {
                                             setCollection(
                                               collectionOptions[index]
@@ -1144,7 +1379,12 @@ const Multiple = ({ search, setSearch }) => {
                                 )}
                               </div>
                             </div>
-
+                            {/* <Dropdown
+                           options={collectionOptions}
+                           onChange={(e) => {
+                           }}
+                           defaultValue={collection.collection_id}
+                         /> */}
                             <div
                               className="create-collection-btn"
                               onClick={() => setshowCreateCollection(true)}
@@ -1156,9 +1396,9 @@ const Multiple = ({ search, setSearch }) => {
                                 version="1.1"
                                 viewBox="0 0 50 50"
                                 width="25px"
-                                xml:space="preserve"
+                                xml: space="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xmlns: xlink="http://www.w3.org/1999/xlink"
                               >
                                 <rect fill="none" height="50" width="50" />
                                 <line
@@ -1239,10 +1479,7 @@ const Multiple = ({ search, setSearch }) => {
                             {collection == "" ? (
                               <div
                                 className="browse-btn my-5 button-styling"
-                                style={{
-                                  background: "gray",
-                                  marginLeft: "auto",
-                                }}
+                                style={{ background: "gray", marginLeft: 'auto' }}
                               >
                                 Next
                               </div>
@@ -1276,9 +1513,8 @@ const Multiple = ({ search, setSearch }) => {
                                   onClick={() => {
                                     setlistingType(0);
                                   }}
-                                  className={` create-single-card ${
-                                    listingType === 0 ? "active" : ""
-                                  }`}
+                                  className={` create-single-card ${listingType === 0 ? "active" : ""
+                                    }`}
                                 >
                                   <AiFillTag />
                                   <h3>Fixed Price</h3>
@@ -1289,9 +1525,8 @@ const Multiple = ({ search, setSearch }) => {
                                   onClick={() => {
                                     setlistingType(1);
                                   }}
-                                  className={` create-single-card ${
-                                    listingType === 1 ? "active" : ""
-                                  }`}
+                                  className={` create-single-card ${listingType === 1 ? "active" : ""
+                                    }`}
                                 >
                                   <BsFillClockFill />
                                   <h3>Timed Auction</h3>
@@ -1301,6 +1536,122 @@ const Multiple = ({ search, setSearch }) => {
                             <br />
                             <br />
 
+                            {/* <div className="line-three">
+                          <div className="row">
+                            <div className="col-lg-12">
+                              <h2>Choose collection</h2>
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <p>
+                                    This is the collection where your item will appear.
+                                  </p>
+                                  <Dropdown
+                                    options={collectionOptions}
+                                    onChange={(e) => {
+                                      setCollection(e.value);
+                                    }}
+                                    value={defaultOption.value}
+                                  />
+                                  <div
+                                    className="create-collection-btn"
+                                    onClick={() => setshowCreateCollection(true)}
+                                  >
+                                    <svg
+                                      enable-background="new 0 0 50 50"
+                                      height="25px"
+                                      id="Layer_1"
+                                      version="1.1"
+                                      viewBox="0 0 50 50"
+                                      width="25px"
+                                      xml: space="preserve"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      xmlns: xlink="http://www.w3.org/1999/xlink"
+                                    >
+                                      <rect fill="none" height="50" width="50" />
+                                      <line
+                                        fill="#2638CC"
+                                        stroke="#2638CC"
+                                        stroke-miterlimit="10"
+                                        strokeWidth="4"
+                                        x1="9"
+                                        x2="41"
+                                        y1="25"
+                                        y2="25"
+                                      />
+                                      <line
+                                        fill="#2638CC"
+                                        stroke="#2638CC"
+                                        stroke-miterlimit="10"
+                                        strokeWidth="4"
+                                        x1="25"
+                                        x2="25"
+                                        y1="9"
+                                        y2="41"
+                                      />
+                                    </svg>
+                                    Create Collection
+                                  </div>
+                                </div>
+                                <div className="col-lg-3 col-md-3 col-5">
+                                  <p>Crypto</p>
+                                  <Dropdown
+                                    options={cryptoOptions}
+                                    onChange={(e) => {
+                                      setCrypto(e.value);
+                                    }}
+                                    value={defaultCrypto.value}
+                                  />
+                                </div>
+                              </div>
+
+
+                              {showCreateCollection && (
+                                <div className="Create-collection-popup">
+                                  <div className="Create-collection-popup-inner">
+                                    <p>Collection Name</p>
+                                    <input
+                                      value={CreateCollection}
+                                      onChange={(e) =>
+                                        setCreateCollection(e.target.value)
+                                      }
+                                      type="text"
+                                      placeholder="Enter collection name"
+                                    />
+                                    <div className="popUp-btn-group">
+                                      <button
+                                        className="button-styling"
+                                        onClick={() => AddCollection()}
+                                      >
+                                        Next
+                                      </button>
+                                      <button
+                                        onClick={hideCreateCollection}
+                                        className="button-styling-outline"
+                                      >
+                                        <div>Cancel</div>
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                          </div>
+                        </div> */}
+                            {/* <div className="line-four">
+                              <div className="row">
+                                <div className="col-lg-9">
+                                  <h2>Title</h2>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g. ‘Crypto Funk"
+                                    // defaultValue={title.current.value}
+                                    ref={title}
+                                  // onChange={(e) => setTitle(e.target.value)}
+                                  />
+                                </div>
+                              </div>
+                            </div> */}
                             <div className="line-six">
                               <div className="row">
                                 <div className="col-lg-9">
@@ -1319,39 +1670,74 @@ const Multiple = ({ search, setSearch }) => {
                                     {royalty} %
                                   </div>
                                 </div>
+                                {/* <div className="col-lg-4 col-md-4 col-5 mt-5">
+                                  <p>Crypto</p>
+                                  <Dropdown
+                                    options={cryptoOptions}
+                                    onChange={(e) => {
+                                      setCrypto(e.value);
+                                    }}
+                                    value={defaultCrypto.value}
+                                  />
+                                </div> */}
                               </div>
                             </div>
-                            <div style={{ textAlign: "right" }}>
-                              {!location?.state?.artGallery ? (
+                            <div style={{ textAlign: 'right' }}>
+                              {!location?.state?.artGallery ?
                                 <button
                                   className="button-styling"
                                   onClick={() => setshowProfileNFT(true)}
                                 >
                                   Next
                                 </button>
-                              ) : (
+                                :
                                 <button
                                   className="button-styling"
-                                  onClick={() => {
-                                    setshowProfileNFT(true);
-                                    handleArtGalleryUpload(
-                                      location?.state?.artGallery
-                                    );
-                                  }}
+                                  onClick={() => { setshowProfileNFT(true); handleArtGalleryUpload(location?.state?.artGallery) }}
                                 >
                                   Next
                                 </button>
-                              )}
+                              }
                             </div>
                           </>
                         )}
                         {showProfileNFT && (
                           <div>
+                            {/* <h2>Profile NFT</h2> */}
+                            {/* <div className="profile-nft-row1">
+                              <div className="NFT-image-holder">
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  style={{ display: "none" }}
+                                  onChange={handleImageUpload}
+                                />
+                                {selectedImage ? (
+                                  <img src={selectedImage} alt="Uploaded" />
+                                ) : (
+                                  <img src={Duck} alt="" />
+                                )}
+                              </div>
+                              <div className="NFT-image-upload-txt">
+                                <p>
+                                  PNG, JPG, GIF, WEBP <br /> or MP4. Max 200mb.
+                                </p>
+                                <button
+                                  onClick={handleButtonClick}
+                                  className="button-styling browse-btn"
+                                >
+                                  Browse
+                                </button>
+                              </div>
+                            </div> */}
+
                             <div className="col-lg-8 mx-auto collectionDivPreview">
                               <div className="img-holder">
                                 <img src={collection.image} alt="" />
                               </div>
-
+                              {/* <div className="title">
+                            Collection Name
+                          </div> */}
                               <div className="title-txt">
                                 {choosenCollection.label}
                               </div>
@@ -1423,12 +1809,7 @@ const Multiple = ({ search, setSearch }) => {
                                         accept="image/*"
                                         onChange={handleFileUpload}
                                       />
-                                      <div
-                                        style={{
-                                          textAlign: "right",
-                                          width: "100%",
-                                        }}
-                                      >
+                                      <div style={{ textAlign: 'right', width: '100%' }}>
                                         <button
                                           onClick={handleButtonClick2}
                                           className="button-styling "
@@ -1452,11 +1833,10 @@ const Multiple = ({ search, setSearch }) => {
                                                   cx="7"
                                                   cy="7"
                                                   r="7"
-                                                  fill={`${
-                                                    tabIndex === 0
-                                                      ? "#B601D1"
-                                                      : "#D9D9D9"
-                                                  }`}
+                                                  fill={`${tabIndex === 0
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                    }`}
                                                 />
                                               </svg>
                                               <svg
@@ -1471,11 +1851,10 @@ const Multiple = ({ search, setSearch }) => {
                                                   cx="7"
                                                   cy="7"
                                                   r="7"
-                                                  fill={`${
-                                                    tabIndex === 10
-                                                      ? "#B601D1"
-                                                      : "#D9D9D9"
-                                                  }`}
+                                                  fill={`${tabIndex === 10
+                                                    ? "#B601D1"
+                                                    : "#D9D9D9"
+                                                    }`}
                                                 />
                                               </svg>
                                             </>
@@ -1494,11 +1873,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 20
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 20
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1515,11 +1893,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 30
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 30
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1536,11 +1913,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 40
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 40
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1557,11 +1933,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 50
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 50
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1578,11 +1953,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 60
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 60
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1599,11 +1973,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 70
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 70
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1620,11 +1993,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 80
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 80
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1641,11 +2013,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 90
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 90
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1662,11 +2033,10 @@ const Multiple = ({ search, setSearch }) => {
                                                 cx="7"
                                                 cy="7"
                                                 r="7"
-                                                fill={`${
-                                                  tabIndex === 100
-                                                    ? "#B601D1"
-                                                    : "#D9D9D9"
-                                                }`}
+                                                fill={`${tabIndex === 100
+                                                  ? "#B601D1"
+                                                  : "#D9D9D9"
+                                                  }`}
                                               />
                                             </svg>
                                           )}
@@ -1698,7 +2068,7 @@ const Multiple = ({ search, setSearch }) => {
                                           minLength={3}
                                           maxLength={20}
 
-                                          // onChange={(e) => setTitle(e.target.value)}
+                                        // onChange={(e) => setTitle(e.target.value)}
                                         />
                                       </div>
                                     </div>
@@ -1729,9 +2099,9 @@ const Multiple = ({ search, setSearch }) => {
                                             value={nftForm.price}
                                             onChange={handleNftForm}
                                             name="price"
-                                            // type="number"
-                                            // placeholder="0.00"
-                                            // ref={price}
+                                          // type="number"
+                                          // placeholder="0.00"
+                                          // ref={price}
                                           />
                                           {showWarning && (
                                             <p style={{ color: "red" }}>
@@ -1753,9 +2123,9 @@ const Multiple = ({ search, setSearch }) => {
                                               value={nftForm.bid}
                                               onChange={handleNftForm}
                                               name="bid"
-                                              // type="number"
-                                              // placeholder="0.00"
-                                              // ref={price}
+                                            // type="number"
+                                            // placeholder="0.00"
+                                            // ref={price}
                                             />
                                             {showWarning && (
                                               <p style={{ color: "red" }}>
@@ -1811,13 +2181,19 @@ const Multiple = ({ search, setSearch }) => {
                                       </div>
                                     </>
                                   )}
+                                  {/* <div className="line-seven">
+                                <div className="row">
+                                  <div className="col-lg-8">
+                                    <button type="submit" className="button-styling">
+                                      Create Item
+                                    </button>
+                                  </div>
+                                </div>
+                              </div> */}
                                 </div>
                               )}
                             {!ShowMore ? (
-                              <div
-                                className="Button-holding-div"
-                                style={{ justifyContent: "end" }}
-                              >
+                              <div className="Button-holding-div" style={{ justifyContent: 'end' }}>
                                 <button
                                   className="button-styling"
                                   onClick={() => setShowMore(true)}
@@ -1831,7 +2207,7 @@ const Multiple = ({ search, setSearch }) => {
                             ) : (
                               <div className="Button-holding-div">
                                 {NFts.length > 0 &&
-                                NFts[NFts.length - 1].status !== "completed" ? (
+                                  NFts[NFts.length - 1].status !== "completed" ? (
                                   <button
                                     onClick={saveNFT}
                                     className="button-styling"
@@ -1844,7 +2220,7 @@ const Multiple = ({ search, setSearch }) => {
                                   </button>
                                 )}
                                 {NFts.length > 0 &&
-                                  NFts[NFts.length - 1].status === "completed" ? (
+                                  NFts[NFts.length - 1].status === "completed" && !myList ? (
                                   <button
                                     onClick={createItemMulti}
                                     // disabled={myList}
@@ -1855,7 +2231,7 @@ const Multiple = ({ search, setSearch }) => {
                                 ) : (
                                   <button
                                     className="disabledButton"
-                                    // onClick={createItem}
+                                  // onClick={createItem}
                                   >
                                     List
                                   </button>

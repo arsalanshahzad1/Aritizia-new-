@@ -11,11 +11,6 @@ import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import { getAddress } from "../../methods/methods";
 import apis from "../../service";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
-
 
 const Earnings = () => {
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
@@ -444,13 +439,44 @@ const Earnings = () => {
 
     return provider;
   }
- 
+
+  // const getAddress = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   localStorage.setItem("walletAddress", accounts[0]);
+
+  //   postWalletAddress(accounts[0]);
+  //   // console.log("getAddress", accounts[0]);
+  // };
+
+  // const postWalletAddress = (address) => {
+  //   console.log("in post wallet ");
+  //   const postData = {
+  //     // Specify the data you want to send in the POST request
+  //     // For example:
+  //     walletAddress: address,
+  //   };
+
+  //   axios
+  //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+  //     .then((response) => {
+  //       // Handle the response from the server/API
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       // Handle any errors that occurred during the request
+  //       console.error(error);
+  //     });
+  //   console.log("in post wallet 1");
+  // };
+
+  //
 
   const getTotalBalance = async () => {
     let total = 0;
-    // const provider = await getProvider();
-    const provider = await getProviderOrSigner();
-
+    const provider = await getProvider();
     console.log("provider", provider);
 
     const marketplaceContract = new Contract(
@@ -470,8 +496,10 @@ const Earnings = () => {
     console.log("provider3");
 
     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
+    console.log("asd111asdasd");
 
     let myListedTokens = await marketplaceContract.getMyListedNfts(userAddress);
+    console.log("22222222");
 
     let myTokens = await marketplaceContract.getMyNfts(userAddress);
 

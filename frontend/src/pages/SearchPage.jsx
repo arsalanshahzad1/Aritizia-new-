@@ -74,6 +74,41 @@ const SearchPage = ({ search, setSearch }) => {
     }
   }, []);
 
+  // const web3ModalRef = useRef();
+
+  // const connectWallet = async () => {
+  //   // console.log("Connect wallet");
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
+
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     return signer;
+  //   }
+  //   return web3Provider;
+  // };
 
   const getSearchedNfts = async () => {
     const provider = await getProviderOrSigner();
@@ -83,6 +118,7 @@ const SearchPage = ({ search, setSearch }) => {
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
+    // let dollarPriceOfETH = 1831;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
     let priceETH = 0.00000002;
@@ -105,7 +141,11 @@ const SearchPage = ({ search, setSearch }) => {
 
     // Fix front end then call those functions
 
-  
+    let listingCheck = false;
+    let priceCheck = false;
+    let selectedListingType = 0;
+    let minRange = 100;
+    let maxRange = 1000;
     console.log("searchText", searchText);
 
     console.log("Check1");
@@ -144,14 +184,33 @@ const SearchPage = ({ search, setSearch }) => {
         /////////////////////////  Uncomment the below comments to add the logics
         /////////////////////////
 
-        
+        // listing block
+        // if (selectedListingType == 100) {
+        //   // true
+        //   listingCheck = true;
+        // } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
+        //   listingCheck = true;
+        // } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
+        //   listingCheck = true;
+        // }
+
+        // if (priceInUSD >= minRange && priceInUSD <= maxRange) {
+        //   priceCheck = true;
+        // }
+
+        // if (priceCheck && listingCheck) {
+        //   nfts.push(nftListFP[i]);
+        // }
       }
 
       // price block
     }
 
     setSearchedNfts(nfts);
-   
+    // searchedNft = nfts;
+
+    // if (title.toLowerCase().includes(searchText.toLowerCase())) {
+    //   console.log("Name of nft", title);
   };
 
   const getListedNfts = async () => {
@@ -172,7 +231,8 @@ const SearchPage = ({ search, setSearch }) => {
     let listingType;
 
     let mintedTokens = await marketplaceContract.getListedNfts();
-
+    let myNFTs = [];
+    let myAuctions = [];
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
@@ -285,7 +345,52 @@ const SearchPage = ({ search, setSearch }) => {
     }
   };
 
+  // const getAddress = async () => {
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   localStorage.setItem("walletAddress", accounts[0]);
+  //   // console.log("getAddress", accounts[0]);
+  //   postWalletAddress(accounts[0]);
 
+  // };
+
+  // const postWalletAddress  = async (address) => {
+  //   if (localStorage.getItem("data")) {
+  //     return console.log("data is avaliable");
+  //   } else {
+  //   const response = await apis.postWalletAddress({wallet_address:  address})
+  //   localStorage.setItem("data", JSON.stringify(response.data.data));
+  //   window.location.reload();
+  //   }
+  //   // if (localStorage.getItem("data")) {
+  //   //   return console.log("data is avaliable");
+  //   // } else {
+  //   //   const postData = {
+  //   //     wallet_address: address,
+  //   //   };
+
+  //   //   axios
+  //   //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
+  //   //     .then((response) => {
+  //   //       localStorage.setItem("data", JSON.stringify(response.data.data));
+  //   //     })
+  //   //     .catch((error) => {
+  //   //       console.error(error);
+  //   //     });
+  //   // }
+  // };nftListFP
+
+  // useEffect(() => {
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "sepolia",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //   }
+  // }, [walletConnected]);
 
   useEffect(() => {}, [nftListFP]);
   useEffect(() => {

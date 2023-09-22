@@ -747,7 +747,10 @@ function ProfileDrawerAdmin({
                               <span>{nftDetails?.user?.username}</span>
                             </div>
                           )
-              
+                          // <Link to={`/other-profile?address=${nftDetails?.user?.wallet_address}`}>
+                          //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
+                          //   <span>{nftDetails?.user?.username}</span>
+                          // </Link>
                         }
                       </div>
                     </div>
@@ -770,7 +773,26 @@ function ProfileDrawerAdmin({
                         style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
-              
+                    {/* <div className="col-lg-8 col-md-8 col-12">
+                      <button
+                        className={`${propertyTabs === 0 ? "active" : ""}`}
+                        onClick={() => setPropertyTabs(0)}
+                      >
+                        Details
+                      </button>
+                      <button
+                        className={`${propertyTabs === 1 ? "active" : ""}`}
+                        onClick={() => setPropertyTabs(1)}
+                      >
+                        Bids
+                      </button>
+                      <button
+                        className={`${propertyTabs === 2 ? "active" : ""}`}
+                        onClick={() => setPropertyTabs(2)}
+                      >
+                        History
+                      </button>
+                    </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -778,7 +800,11 @@ function ProfileDrawerAdmin({
                     </div>
                   </div>
                 </div>
-               
+                {/* <div>
+                  {propertyTabs === 0 && <Details />}
+                  {propertyTabs === 1 && <Bids />}
+                  {propertyTabs === 2 && <History />}
+                </div> */}
                 <div className="six-line">
                   <div className="row">
                     <div className="col-lg-6 col-md-8 col-8">
@@ -824,7 +850,30 @@ function ProfileDrawerAdmin({
                     </div>
                   </div>
                 )}
-          
+                {/* {!showBuyNow && (
+                  <>
+                    <div
+                      className="seven-line"
+                      onClick={() => setChack(!chack)}
+                    >
+                      <span>
+                        <BsCheck className={`${chack ? "red" : "black"}`} />
+                      </span>{" "}
+                      <span>I agree all Terms & Conditions.</span>
+                    </div>
+                    <div className="eight-line">
+                      {buyButton ? (
+                        <button
+                          onClick={() => {
+                            setSucess(true);
+                          }}
+                        >
+                          Buy Now
+                        </button>
+                      ) : null}
+                    </div>
+                  </>
+                )} */}
               </div>
               {/* <button onClick={checkSeller}>Check approve</button> */}
             </div>

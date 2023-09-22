@@ -42,6 +42,15 @@ const LandingPage = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   async function getBalance() {
     const provider = await getProviderOrSigner();
 
@@ -60,21 +69,59 @@ const LandingPage = ({ search, setSearch }) => {
   async function getProvider() {
     // Create a provider using any Ethereum node URL
     const provider = new ethers.providers.JsonRpcProvider(
-      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"   // Eth mainnet
+      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
       // "http://localhost:8545"
-      "https://rpc.ankr.com/eth_goerli" //Goerli
-      // "https://rpc.sepolia.org"   // Sepolia
+      "https://rpc.sepolia.org"
     );
 
     return provider;
   }
+
+  // Helper function to fetch a Provider/Signer instance from Metamask
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("In get provider or signer1");
+
+  //   // console.log("In try");
+  //   const provider = await web3ModalRef.current.connect();
+  //   console.log("In get provider or signer12");
+
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   // console.log("In get provider or signer");
+  //   console.log("In get provider or signer13");
+
+  //   // If user is not connected to the Sepolia network, let them know and throw an error
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   console.log("In get provider or signer14");
+
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //     console.log("In get provider or signer15");
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+  //   console.log("In get provider or signer16");
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     return signer;
+  //   }
+  //   console.log("In get provider or signer7");
+
+  //   return web3Provider;
+  // };
 
   const getListedNfts = async () => {
     // const provider = await getProvider();
     const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     let addr = await getAddress();
-    
+    console.log("ZZZZZZ", addr);
+
+    console.log("Provider", provider);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -90,6 +137,7 @@ const LandingPage = ({ search, setSearch }) => {
 
     console.log("nftContract", nftContract);
     console.log("marketplaceContract", marketplaceContract);
+    // console.log("zayyan", await (await nftContract.mintedTokensList()).wait());
 
     let listingType;
     // console.log("Active Method", listingType);
@@ -103,8 +151,11 @@ const LandingPage = ({ search, setSearch }) => {
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
     console.log("dollarPriceOfETH", dollarPriceOfETH);
 
+    let oneETHInUSD = 1 / priceInETH;
+    let priceInUSD = 1.3;
+
     let demo = await marketplaceContract.owner();
-    console.log("owner of MP", demo);
+    console.log("demo", demo);
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     console.log("mintedTokens", mintedTokens);
@@ -139,16 +190,13 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("discountOnNFT", typeof discountOnNFT);
 
         let auctionData = await marketplaceContract._idToAuction(id);
-        console.log("111");
 
         let highestBid = ethers.utils.formatEther(
           auctionData.highestBid.toString()
         );
-        console.log("2222");
 
         listingType = structData.listingType;
         let listed = structData.listed;
-        console.log("3333");
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
@@ -232,7 +280,83 @@ const LandingPage = ({ search, setSearch }) => {
           });
       }
     }
+    // console.log("nftListFPmain", myNFTs);
+    // console.log("nftListAuctionmain", myAuctions);
   };
+
+  // const getAddress = async () => {
+  //   const meth = await getAddresss();
+  //   console.log("methods", meth);
+  //   const accounts = await window.ethereum.request({
+  //     method: "eth_requestAccounts",
+  //   });
+  //   setUserAddress(accounts[0]);
+  //   postWalletAddress(accounts[0]);
+  // };
+
+  // const postWalletAddress = async (address) => {
+  //   console.log("postWalletAddress");
+  //   if (localStorage.getItem("data")) {
+  //     let storedWallet = JSON.parse(
+  //       localStorage.getItem("data")
+  //     ).wallet_address;
+  //     // console.log("fffbb StoredWallet", storedWallet == address);
+  //     storedWallet = storedWallet.toLowerCase();
+  //     address = address.toLowerCase();
+
+  //     // if (localStorage.getItem("data")) {
+  //     if (storedWallet == address) {
+  //       return console.log("data is avaliable");
+  //     } else {
+  //       const response = await apis.postWalletAddress({
+  //         wallet_address: address,
+  //       });
+  //       localStorage.setItem("data", JSON.stringify(response.data.data));
+  //       window.location.reload();
+  //     }
+  //   } else {
+  //     const response = await apis.postWalletAddress({
+  //       wallet_address: address,
+  //     });
+  //     localStorage.setItem("data", JSON.stringify(response.data.data));
+  //     window.location.reload();
+  //   }
+  // };
+
+  // const swapUSDTForETH = async () => {
+  //   const signer = await getProviderOrSigner(true);
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+
+  //   await marketplaceContract.swapUSDTForETH(20);
+  // };
+
+  // const swapETHForUSDT = async () => {
+  //   const signer = await getProviderOrSigner(true);
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+
+  //   await marketplaceContract.swapETHForUSDT(20);
+  // localStorage.removeItem("data");
+  // };
+
+  // useEffect(() => {
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "sepolia",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //   }
+  // }, [walletConnected]);
 
   useEffect(() => {
     connectWallet();
@@ -262,23 +386,30 @@ const LandingPage = ({ search, setSearch }) => {
       observer.disconnect();
     };
   }, []);
-
-  
-  const [counterData, setCounterData] = useState("");
-  const viewLandingPageDetail = async () => {
+const [counterData , setCounterData] = useState('')
+  const viewLandingPageDetail = async () =>{
     try {
-      const response = await apis.viewLandingPageDetail();
-      console.log(response?.data?.data, "ccccccc");
-      setCounterData(response?.data?.data);
-    } catch (error) {}
-  };
+      const response = await apis.viewLandingPageDetail()
+      console.log(response?.data?.data , 'ccccccc');
+      setCounterData(response?.data?.data)
 
-  useEffect(() => {
-    viewLandingPageDetail();
-  }, []);
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(() =>{
+    viewLandingPageDetail()
+  }, [])
 
   return (
     <>
+      {/* <MetaDecorator/> */}
+      {/* <MetaDecorator
+        title={'Artizia'}
+        description={'The Best NFT Marketplace In The World'}
+        imageAlt={'Artizia'}
+        url={'https://www.youtube.com/img/desktop/yt_1200.png'} /> */}
       <Header
         connectWallet={connectWallet}
         search={search}
@@ -306,45 +437,20 @@ const LandingPage = ({ search, setSearch }) => {
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
                           {/* <h3>{isVisible ? <CountUp end={counterData?.total_users} /> : 0}K+</h3> */}
-                          <h3>
-                            {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_users}
-                                prefix="0"
-                              />
-                            ) : (
-                              0
-                            )}
-                          </h3>
+                          <h3>{isVisible ? <CountUp end={counterData?.total_users} prefix="0"/> : 0}</h3>
                           <p>Total Users</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
-                          <h3>
-                            {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_nfts}
-                                prefix="0"
-                              />
-                            ) : (
-                              0
-                            )}
-                          </h3>
+                          <h3>{isVisible ? <CountUp end={counterData?.total_nfts} prefix="0"/> : 0}</h3>
                           <p>Total NFTs</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-12">
                         <div className="inner-wrap">
                           <h3>
-                            {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_artgallery}
-                                prefix="0"
-                              />
-                            ) : (
-                              0
-                            )}
+                            {isVisible ? <CountUp end={counterData?.total_artgallery} prefix="0" /> : 0}
                           </h3>
                           <p>Total Arts</p>
                         </div>

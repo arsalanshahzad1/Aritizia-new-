@@ -40,7 +40,8 @@ const Gallery = ({user}) => {
                 console.log(imageUrl, 'bbbbbb');
                 const imageFile = await convertImageUrlToImageFile(imageUrl , i);
                 console.log(imageFile , 'nnnnn');
-        
+                // Use the index `i` as the key and the image File as the value
+                // imageDataObject[i] = imageFile;
                 imageDataObject.push(imageFile);
 
 
@@ -90,7 +91,18 @@ const Gallery = ({user}) => {
                     file
                 )
             } else {
-                
+                // console.log('base64');
+                // const base64url = `data:image/png;base64,${url}`;
+                // fetch(base64url)
+                //     .then(res => res.blob())
+                //     .then(blob => {
+                //         const file = new File([blob], `image${i}.png`, { type: "image/png" });
+                //         console.log(file , 'fileee');
+                //         return (
+                //             file
+                //         )
+                //     })
+                // Download the image from the URL
                 const imageUrl = url;
                 const response = await fetch(`data:image/png;base64,${url}`);
                 console.log(response);
