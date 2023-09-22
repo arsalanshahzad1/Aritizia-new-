@@ -382,6 +382,7 @@ const LandingPage = ({ search, setSearch }) => {
                 <div>
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
+                <div className="row">
                 {nftListFP.length > 0 ? (
                   <>
                     {nftListFP.map((item) => (
@@ -410,6 +411,7 @@ const LandingPage = ({ search, setSearch }) => {
                     <DummyCard />
                   </>
                 )}
+                </div>
               </div>
             </div>
           </div>

@@ -62,7 +62,6 @@ const Multiple = ({ search, setSearch }) => {
   });
 
   const [collection, setCollection] = useState("");
-
   const [nftForm, setnftForm] = useState("");
   const [file, setFile] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -70,6 +69,12 @@ const Multiple = ({ search, setSearch }) => {
   const [showCollection, setshowcollection] = useState(false);
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
+
+  useEffect(() =>{
+    window.scrollTo(0,0)
+  } ,[])
+
+
   console.log(location?.state?.artGallery, "asasasas");
 
   const navigate = useNavigate();
@@ -147,6 +152,9 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, []);
   useEffect(() => {
     getCollection();
   }, []);
@@ -1135,21 +1143,21 @@ const Multiple = ({ search, setSearch }) => {
                               onClick={() => setshowCreateCollection(true)}
                             >
                               <svg
-                                enable-background="new 0 0 50 50"
+                                enableBackground="new 0 0 50 50"
                                 height="25px"
                                 id="Layer_1"
                                 version="1.1"
                                 viewBox="0 0 50 50"
                                 width="25px"
-                                xml:space="preserve"
+                                xmlSpace="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                xmlnsXlink="http://www.w3.org/1999/xlink"
                               >
                                 <rect fill="none" height="50" width="50" />
                                 <line
                                   fill="#2638CC"
                                   stroke="#2638CC"
-                                  stroke-miterlimit="10"
+                                  strokeMiterlimit="10"
                                   strokeWidth="4"
                                   x1="9"
                                   x2="41"
@@ -1159,7 +1167,7 @@ const Multiple = ({ search, setSearch }) => {
                                 <line
                                   fill="#2638CC"
                                   stroke="#2638CC"
-                                  stroke-miterlimit="10"
+                                  strokeMiterlimit="10"
                                   strokeWidth="4"
                                   x1="25"
                                   x2="25"

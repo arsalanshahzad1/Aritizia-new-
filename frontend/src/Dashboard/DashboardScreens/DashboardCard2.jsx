@@ -36,7 +36,8 @@ const
     isVisible,
     setIsVisible,
     openDrawer,
-    collectionImages
+    collectionImages,
+    is_unapproved
     // userAddress,
   }) => {
     const [showLinks, setShowLinks] = useState(false);
@@ -44,7 +45,6 @@ const
     // const [isVisible, setIsVisible] = useState(false);
     const userData = JSON.parse(localStorage.getItem("data"));
     const userAddress = userData?.wallet_address;
-
     // const onClose = useCallback(() => {
     //   setIsVisible(false);
     // }, []);
@@ -132,12 +132,14 @@ const
       <>
         <div className="col-lg-3 col-md-4" key={index}>
           <div
-            className="seven-line-nft-card" onClick={() => {setChack(!chack); getSelectedId(id);}}>
+            className="seven-line-nft-card" onClick={() => { setChack(!chack); getSelectedId(id); }}>
             <span>
               <BsCheck className={`${selectedNTFIds.includes(id) ? "red" : "transparent"}`} />
             </span>
           </div>
-          <Link to={path}>
+          <Link to={path} style={{ position: 'relative' }}>
+            {is_unapproved && <div className="disable-nft-card"></div>}
+
             <div className="css-vurnkuu" style={{ position: "relative", height: "auto !important" }}>
               <a className="css-118gt75">
                 <div className="css-15eyh94" onMouseEnter={() => setShowLinks(true)} onMouseLeave={() => setShowLinks(false)}>
@@ -153,21 +155,20 @@ const
                         }}
                       >
                         <img src={image} className="J-image" />
+                        {!is_unapproved &&
+                          <>
+                            {showLinks && (
+                              <div className="social-links1">
+                                <ul>
+                                  <li onClick={() => openDrawer()}>
+                                    <a href="">VIEW</a>
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </>
+                        }
 
-                        {showLinks && (
-                          <div className="social-links1"
-
-                          >
-                            <ul>
-                              <li onClick={() => openDrawer()}>
-                                <a href="">VIEW</a>
-                              </li>
-                              {/* <li onClick={() => setshowEditSidebar(true)}>
-                              <a href="">EDIT</a>
-                            </li> */}
-                            </ul>
-                          </div>
-                        )}
                       </span>
                     </div>
                   </div>
@@ -200,12 +201,10 @@ const
                     </div>
                     {selectedNTFIds?.length > 0 ? null : (
                       <div className="nft-card-btn-holder">
-                        <button onClick={() => approveNFT(false, [id])}>
+                        {/* <button onClick={() => approveNFT(false, [id])}>
                           Decline
-                        </button>
-                        <button onClick={() => approveNFT(true, [id])}>
-                          Accept
-                        </button>
+                        </button> */}
+                        {!is_unapproved &&  <button onClick={() => approveNFT(false, [id])}>Unapprove</button>}
                       </div>
                     )}
                   </div>
