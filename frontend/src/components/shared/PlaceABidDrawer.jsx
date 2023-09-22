@@ -368,9 +368,9 @@ const PlaceABidDrawer = ({
     // console.log("auctionData", auctionData);
     // console.log("startTime", auctionData.startTime.toString());
 
-    let startTime = auctionData?.startTime.toString();
-    let highestBidd = auctionData?.highestBid.toString();
-    let endTime = auctionData?.endTime.toString();
+    // let startTime = auctionData?.startTime.toString();
+    // let highestBidd = auctionData?.highestBid.toString();
+    // let endTime = auctionData?.endTime.toString();
     let seller = auctionData?.seller.toString();
     seller = seller.toLowerCase();
     let highestBidder = auctionData?.highestBidder.toString();
@@ -378,22 +378,21 @@ const PlaceABidDrawer = ({
     userAddress = userAddress.toLowerCase();
     let currentTime = Date.now();
 
-    console.log("highestBidder:", highestBidder);
-    console.log("highestBidd:", highestBidd);
-    // console.log("currentTime:", currentTime);
-    console.log("seller:", seller);
-    console.log("userAddress:", userAddress);
+    // console.log("highestBidder:", highestBidder);
+    // console.log("highestBidd:", highestBidd);
+    // // console.log("currentTime:", currentTime);
+    // console.log("seller:", seller);
+    // console.log("userAddress:", userAddress);
 
     currentTime = Math.floor(currentTime / 1000);
     // console.log("currentTime:", currentTime);
 
     const auctionLive = await marketplaceContract.getStatusOfAuction(id);
-    
-    console.log(
-      "eee userAddress == seller",
-      userAddress.toString() == seller.toString()
-    );
-   
+
+    // console.log(
+    //   "eee userAddress == seller",
+    //   userAddress.toString() == seller.toString()
+    // );
 
     if (auctionLive) {
       if (userAddress != seller) {
@@ -438,8 +437,6 @@ const PlaceABidDrawer = ({
     let highestBid = ethers.utils.formatEther(
       auctionData?.highestBid.toString()
     );
-
-   
 
     let basePrice = ethers.utils.formatEther(auctionData.basePrice.toString());
 
@@ -582,8 +579,6 @@ const PlaceABidDrawer = ({
     // navigate("/profile");
   };
 
- 
-
   const handleBidEvent = async (tokenId, seller, highestBidder, highestBid) => {
     let bidData = {
       token_id: tokenId.toString(),
@@ -615,8 +610,6 @@ const PlaceABidDrawer = ({
     //   window.location.reload();
     // }, 3000);
   };
-
- 
 
   useEffect(() => {
     getAuctionData();
@@ -660,56 +653,39 @@ const PlaceABidDrawer = ({
     priceInUSD = priceInUSD.toFixed(2);
 
     setDollarPrice(priceInUSD.toString());
-
   };
 
   const getValues = async () => {
     console.log(buyNowPrice, "buyNowPrice");
   };
 
-  const bidWithFIAT = async () => {
+  // let fiatBid = false;
 
-    const provider = await getProviderOrSigner();
+  // const bidWithFIAT = async () => {
+  //   fiatBid = true;
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-    let time = await marketplaceContract.getCurrentTimestamp();
+  //   const signer = await getProviderOrSigner(true);
 
-    // console.log("block.timestamp", time);
-    let auctionData = await marketplaceContract._idToAuction(id);
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
 
-    const structData = await marketplaceContract._idToNFT(id);
+  //   let price = buyNowPrice.toString();
+  //   console.log("price", ethers.utils.parseEther(price));
 
-    const getStatusOfAuction = await marketplaceContract.getStatusOfAuction(id);
-    console.log("ooo getStatusOfAuction ", getStatusOfAuction);
+  //   await marketplaceContract.bidInFIAT(id, 0, ethers.utils.parseEther(price));
+  //   // console.log("Payment made");
 
-    let highestBid = ethers.utils.formatEther(
-      auctionData.highestBid.toString()
-    );
+  //   let response = marketplaceContract.on(
+  //     "receivedABid",
+  //     fiatBid ? handleBidEvent : null
+  //   );
 
-    let startTime = auctionData?.startTime.toString();
-
-    let endTime = auctionData?.endTime.toString();
-
-    const unixTimestamp = Date.now();
-
-    const currentDate = new Date(unixTimestamp);
-
-    // Get the current time in hours, minutes, and seconds
-    const hours = currentDate.getHours();
-    const minutes = currentDate.getMinutes();
-    const seconds = currentDate.getSeconds();
-
-    // Format the time with leading zeros if necessary
-    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
-      minutes
-    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-    console.log("Formatted time:", formattedTime);
-  };
+  //   console.log("Response of bid even", response);
+  //   fiatBid = false;
+  // };
 
   let ethBid = false;
   const bidWithETH = async () => {
@@ -765,8 +741,6 @@ const PlaceABidDrawer = ({
 
     console.log("id", id);
     console.log("id", typeof id);
-
-
 
     let USDPrice = buyNowPrice;
     let USDPriceInWei = USDPrice * 10 ** 6;
@@ -849,7 +823,7 @@ const PlaceABidDrawer = ({
         setSucess(false);
       } else if (bidFunction == 2) {
         console.log("bidding with FIAT");
-        bidWithFIAT();
+        // bidWithFIAT();
         setSucess(false);
       } else {
         console.log("please select a bid method first");
@@ -1246,7 +1220,7 @@ const PlaceABidDrawer = ({
                   Bid with USDT
                 </button>
               </div>
-              <div className="mobal-button-2">
+              {/* <div className="mobal-button-2">
                 <button
                   onClick={() => {
                     setBidFunction(2), setShowBuyOptionsStep2(true);
@@ -1254,7 +1228,7 @@ const PlaceABidDrawer = ({
                 >
                   Bid with FIAT
                 </button>
-              </div>
+              </div> */}
             </>
           ) : (
             <>

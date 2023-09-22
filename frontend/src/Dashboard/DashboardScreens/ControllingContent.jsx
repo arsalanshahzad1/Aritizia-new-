@@ -83,16 +83,14 @@ function ControllingContent({ search, setSearch }) {
     let myNFTs = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
-      let id = mintedTokens[i];
+      let id = mintedTokens[i]?.token_id;
       // id = +mintedTokens[i].tokenId.toString();
 
       const structData = await marketplaceContract._idToNFT(id);
-      
 
       let collectionId = structData.collectionId.toString();
 
       // console.log("YESS", id);
-
 
       const response = await apis.getNFTCollectionImage(collectionId);
       console.log(response, "responses");
@@ -101,7 +99,6 @@ function ControllingContent({ search, setSearch }) {
       // console.log(collectionImages, "trrrr");
 
       const metaData = await nftContract.tokenURI(id);
-
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -120,7 +117,7 @@ function ControllingContent({ search, setSearch }) {
         .then((response) => {
           const meta = response.data;
           let data = JSON.stringify(meta);
-          console.log(data , 'dasdasd');
+          console.log(data, "dasdasd");
 
           data = data.slice(2, -5);
           data = data.replace(/\\/g, "");

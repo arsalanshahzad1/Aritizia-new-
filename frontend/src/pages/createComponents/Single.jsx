@@ -1020,7 +1020,7 @@ const Single = ({ search, setSearch }) => {
                                   type="submit"
                                   className="button-styling"
                                 >
-                                  Create Item
+                                  List
                                 </button>
                               </div>
                             </div>

@@ -71,19 +71,7 @@ function Fan({ id }) {
     // setFanListing([]);
   };
 
-  const getFansBC = async () => {
-    const provider = await getProviderOrSigner();
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-
-    const fans = await marketplaceContract.getFans(userAddress);
-
-    console.log("fans", fans);
-  };
+ 
 
   useEffect(() => {
     getFanListing();

@@ -426,11 +426,8 @@ const Multiple = ({ search, setSearch }) => {
 
   // mint the NFT then list
   const mintThenList = async () => {
- 
-
     const signer = await getProviderOrSigner(true);
     // console.log("Get the signer", signer);
- 
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,

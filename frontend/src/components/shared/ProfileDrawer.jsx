@@ -112,7 +112,6 @@ function ProfileDrawer({
     let usdtEntered = 1639;
     let OneUSDMeItnaEth = getLatestUSDTPrice / 10 ** 18;
     console.log("getLatestUSDTPrice", getLatestUSDTPrice.toString());
- 
 
     var amount = +priceETH;
     var value = amount.toString();
@@ -121,7 +120,6 @@ function ProfileDrawer({
 
     const structData = await marketplaceContract._idToNFT(id);
     let seller = structData.seller;
-   
 
     if (userAddress != seller) {
       // show buy button
@@ -168,7 +166,6 @@ function ProfileDrawer({
   let sellerPlan = getSellerPlan;
   let buyerPlan = getBuyerPlan;
 
-
   const handleNFTSoldEvent = async (
     // nftContract,
     tokenId,
@@ -185,10 +182,11 @@ function ProfileDrawer({
     };
     console.log("soldData", soldData);
 
-    if (ethPurchase || usdtPurchase) {
+    if (ethPurchase || usdtPurchase || fiatPurchase) {
       nftSoldPost(soldData);
       ethPurchase = false;
       usdtPurchase = false;
+      fiatPurchase = false;
     }
   };
 
@@ -296,22 +294,71 @@ function ProfileDrawer({
     }
   };
 
+  let fiatPurchase = false;
+
   const buyWithFIAT = async () => {
+    console.log("11111111111111");
+
+    fiatPurchase = true;
     const signer = await getProviderOrSigner(true);
+    console.log("2222222222222");
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    console.log("discountedAmountUSD ooo", discountedAmountUSD);
-    console.log("discountedEth ooo", discountedEth);
+    console.log("3333333333333");
 
     const structData = await marketplaceContract._idToNFT(id);
+    console.log("4444444444444");
+
+    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    console.log("555555555555");
+
+    var fee = +platformFeeETH;
+    var amount = +priceETH + fee;
+    var value = amount.toString();
+    console.log("ETH amount", value);
 
     let checkFan = await marketplaceContract.checkFan(id);
 
-    console.log("checkFan", checkFan);
+    const structData2 = await marketplaceContract._idToNFT2(id);
+    let discount = +structData2.fanDiscountPercent.toString();
+
+    if (checkFan && discount != 0) {
+      fee = +discountedPlatformFeeETH;
+      console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
+      console.log("www discountedEth", discountedEth);
+      // check this
+      amount = +discountedEth + fee;
+      value = amount.toString();
+    }
+    console.log("www paymentMethod", paymentMethod);
+    console.log("www id", id);
+    console.log("www sellerPlan", sellerPlan);
+    console.log("www buyerPlan", buyerPlan);
+    console.log("www address", NFT_CONTRACT_ADDRESS.address);
+    console.log("www value", value);
+
+    await (
+      await marketplaceContract.buyWithFIAT(
+        NFT_CONTRACT_ADDRESS.address,
+        paymentMethod,
+        id,
+        sellerPlan, //  must be multiple of 10 of the users percent
+        buyerPlan, // must be multiple of 10 of the users percent
+        ethers.utils.parseEther(value)
+      )
+    ).wait();
+    console.log("buyWithETH");
+
+    let response = marketplaceContract.on(
+      "NFTSold",
+      fiatPurchase ? handleNFTSoldEvent : null
+    );
+
+    console.log("Response of bid even", response);
   };
 
   let ethPurchase = false;
@@ -991,10 +1038,11 @@ function ProfileDrawer({
                       <h3>Creator</h3>
                       <div className="logo-name">
                         {
-                          userData?.wallet_address ==
-                          nftDetails?.user?.wallet_address === null ? (
+                          (userData?.wallet_address ==
+                            nftDetails?.user?.wallet_address) ===
+                          null ? (
                             <Link to={"/profile"}>
-                              {nftDetails?.user?.profile_image  ? (
+                              {nftDetails?.user?.profile_image ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""

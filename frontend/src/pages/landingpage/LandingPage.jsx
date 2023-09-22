@@ -42,6 +42,11 @@ const LandingPage = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
+
+
+
+  // CALL THIS FUNCTION RECURSIVELY TO CHECK LIQUIDITY AND SEND NOTIF TO ADMIN 
+ 
   async function getBalance() {
     const provider = await getProviderOrSigner();
 
@@ -49,8 +54,13 @@ const LandingPage = ({ search, setSearch }) => {
     provider
       .getBalance(MARKETPLACE_CONTRACT_ADDRESS.address)
       .then((balanceWei) => {
-        const balanceEther = ethers.utils.formatEther(balanceWei);
+        var balanceEther = ethers.utils.formatEther(balanceWei);
         console.log(`Balance ${balanceEther} ETH`);
+
+        if(+balanceEther < 10){
+          // hit api for admin
+          console.log("ADMIN KI API HIT KAR LOW LQUIDITY KI");
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -362,7 +372,7 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                    {/* <button onClick={getBalance}>Get Balance</button> */}
+                   <button onClick={getBalance}>Get Balance</button> 
                     <div className="left">NFT</div>
                     <Link to="/search">
                       <div className="right">View more</div>

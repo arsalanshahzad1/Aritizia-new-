@@ -10,18 +10,13 @@
 // Route  frontend\src\methods\walletManager.jsx
 
 // In the getProviderOrSigner() function, uncomment the desired chain id and comment the rest
-
-
-
-
-
-
+ 
+ 
 // How to deploy on testnet 
 
 // In the terminal, from web3 file, compile with the command
 
 // npm hardhat compile
 
-// then
-
-// npx hardhat run scripts/deployTestnet.js --network goerli
+// then 
+// npx hardhat run scripts/deployTestnet.js --network goerli 

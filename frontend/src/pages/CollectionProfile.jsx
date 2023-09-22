@@ -146,7 +146,7 @@ function CollectionProfile({ search, setSearch }) {
             // wo database sey ayega
             ///////////////////////////
             ///////////////////////////
-
+ 
             if (listingType === 0) {
               const nftData = {
                 id: id, //
@@ -214,6 +214,8 @@ function CollectionProfile({ search, setSearch }) {
     getProviderOrSigner();
     getCollectionNfts();
   }, []);
+
+
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
