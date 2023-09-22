@@ -303,14 +303,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     struct NFT {
         address nftContract;
         uint256 tokenId;
-        address payable firstOwner;
+        address payable firstOwner; //creator
         address payable seller;
         address payable owner;
-        uint256 price;
+        uint256 price; // price in eth wei
         bool listed;
         uint256 royaltyPrice;
-        ListingType listingType;
-        PaymentMethod paymentMethod;
+        ListingType listingType; // Auction or FixedPrice
+        PaymentMethod paymentMethod; // ETH or USDT
         bool approve;
         uint256 collectionId;
     }
@@ -370,7 +370,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     );
 
     event NFTSold(
-        // address nftContract,
+        //address nftContract,
         uint256 tokenId,
         address seller,
         address buyer,
@@ -435,6 +435,39 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
     ///////////////    MODIFIERS    ///////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+    modifier auctionIsLive(uint256 _tokenId) {
+        require(
+            block.timestamp > _idToAuction[_tokenId].startTime &&
+                block.timestamp < _idToAuction[_tokenId].endTime,
+            "This NFT is not on auction at the moment."
+        );
+        _;
+    }
+
+    modifier isApproved(uint256 _tokenId) {
+        // Put this modifier in the following functions:
+        // BuyWithETH
+        // BuyWithUSDT
+        // BidInUSDT
+        // BidInETH
+        require(
+            _idToNFT[_tokenId].approve == true,
+            "This NFT is not approved yet from the admin for purchase"
+        );
+        _;
+    }
+
+    modifier isUserBanned() {
+        require(!bannedUsers[msg.sender], "You are banned on this platform.");
+        _;
+    }
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ///////////////    FUNCTIONS    ///////////////
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
@@ -522,31 +555,18 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     //     return address(this).balance;
     // }
 
-    modifier auctionIsLive(uint256 _tokenId) {
-        require(
-            block.timestamp > _idToAuction[_tokenId].startTime &&
-                block.timestamp < _idToAuction[_tokenId].endTime,
-            "This NFT is not on auction at the moment."
-        );
-        _;
-    }
+    function getLatestUSDTPrice() public view returns (uint256) {
+        // Commenting for testing
 
-    modifier isApproved(uint256 _tokenId) {
-        // Put this modifier in the following functions:
-        // BuyWithETH
-        // BuyWithUSDT
-        // BidInUSDT
-        // BidInETH
-        require(
-            _idToNFT[_tokenId].approve == true,
-            "This NFT is not approved yet from the admin for purchase"
-        );
-        _;
-    }
+        AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
+            0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
+        ); // Mainnet contract address for USDT price feed
+        (, int256 price, , , ) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
+        require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
+        return uint256(price);
 
-    modifier isUserBanned() {
-        require(!bannedUsers[msg.sender], "You are banned on this platform.");
-        _;
+        // Uncomment for testnet
+        // return 627758691588469;
     }
 
     // List the NFT on the marketplace
@@ -622,20 +642,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 );
             }
         }
-    }
-
-    function getLatestUSDTPrice() public view returns (uint256) {
-        // Commenting for testing
-
-        AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
-            0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
-        ); // Mainnet contract address for USDT price feed
-        (, int256 price, , , ) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
-        require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
-        return uint256(price);
-
-        // Uncomment for testnet
-        // return 627758691588469;
     }
 
     function buyWithUSDT(
@@ -1700,7 +1706,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         for (uint256 i = 0; i < fans.length; i++) {
             address fan = fans[i];
-            // require(fan != address(0), "Invalid fan address");           
+            // require(fan != address(0), "Invalid fan address");
             // require(!isFan[msg.sender][fan], "Address is already a fan");
             if (fan == address(0)) {
                 // console.log("Invalid fan address");
@@ -1944,7 +1950,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     //     return nfts;
     // }
 
-    function w(uint256 _tokenId) public view returns (bool) {
+    function getStatusOfAuction(uint256 _tokenId) public view returns (bool) {
         if (
             block.timestamp > _idToAuction[_tokenId].startTime &&
             block.timestamp < _idToAuction[_tokenId].endTime
