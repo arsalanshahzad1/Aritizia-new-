@@ -41,9 +41,11 @@ import {
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import FiatStripeContainer from "../../stripePayment/FiatStripeContainer";
 
 function ProfileDrawer({
   isVisible,
+  setIsVisible,
   onClose,
   id,
   title,
@@ -62,6 +64,7 @@ function ProfileDrawer({
   const [walletConnected, setWalletConnected] = useState(false);
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
+  const [fiatAmount, setFiatAmount] = useState("");
   const [platformFee, setPlatformFee] = useState("");
   const [discountedEth, setDiscountedEth] = useState(0);
   const [discountedAmountUSD, setDiscountedAmountUSD] = useState(0);
@@ -70,6 +73,7 @@ function ProfileDrawer({
   const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState(0);
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
   const [nftDetails, setNftDetails] = useState("");
+  const [showFiatPaymentForm, setShowFiatPaymentForm] = useState(false);
 
   const navigate = useNavigate();
 
@@ -363,7 +367,8 @@ function ProfileDrawer({
     }
   };
 
-  const buyWithFIAT = async () => {
+  const getFiatAmount = async () => {
+
     const signer = await getProviderOrSigner(true);
 
     const marketplaceContract = new Contract(
@@ -371,14 +376,46 @@ function ProfileDrawer({
       MARKETPLACE_CONTRACT_ABI.abi,
       signer
     );
-    console.log("discountedAmountUSD ooo", discountedAmountUSD);
-    console.log("discountedEth ooo", discountedEth);
 
-    const structData = await marketplaceContract._idToNFT(id);
+    const USDTContract = new Contract(
+      TETHER_CONTRACT_ADDRESS.address,
+      TETHER_CONTRACT_ABI.abi,
+      signer
+    );
+
+    let fee = +platformFeeUSDT;
+    let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
+    let amountInWei = amount * 10 ** 6;
+    amountInWei = amountInWei.toString();
 
     let checkFan = await marketplaceContract.checkFan(id);
+    console.log("checkFan  ", checkFan);
+    const structData2 = await marketplaceContract._idToNFT2(id);
+    let discount = +structData2.fanDiscountPercent.toString();
 
-    console.log("checkFan", checkFan);
+    if (checkFan && discount != 0) {
+      fee = +discountedPlatformFeeUSDT;
+      console.log("fee", fee);
+      console.log("www platformFeeUSDT", platformFeeUSDT);
+      console.log("www amountUSD", fee);
+
+      console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
+      console.log("www discountedAmountUSD", discountedAmountUSD);
+
+      amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
+      amountInWei = amount * 10 ** 6;
+      amountInWei = amountInWei.toString();
+
+      console.log("www fee", fee);
+      console.log("www amount", amount);
+      console.log("www amountInWei", amountInWei);
+    }
+
+    // ye wala bhej USD ki amount h ye 
+    console.log("ye usd ki amount h",amount);
+    // setShowFiatPaymentForm(true)
+    setFiatAmount(amount)
+
   };
 
   let ethPurchase = false;
@@ -922,6 +959,13 @@ function ProfileDrawer({
     }
   }, [isVisible]);
 
+  const showResponseMessage = (message) => {
+    setShowFiatPaymentForm(false);
+    toast.success(message, {
+      position: toast.POSITION.TOP_RIGHT,
+    });
+  };
+
   return (
     <>
       <Drawer
@@ -1240,6 +1284,7 @@ function ProfileDrawer({
                           className="nft-buy-btn"
                           disabled={!chack}
                           onClick={() => {
+                            getFiatAmount(); 
                             setSucess(true);
                           }}
                         >
@@ -1273,7 +1318,40 @@ function ProfileDrawer({
             <button onClick={buyWithUSDT}>Buy with USDT</button>
           </div>
           <div className="mobal-button-2">
-            <button onClick={buyWithFIAT}>Buy with FIAT</button>
+            <button onClick={() =>setShowFiatPaymentForm(true)}>Buy with FIAT</button>
+            {/* <button onClick={buyWithFIAT}>Buy with FIAT</button> */}
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        show={showFiatPaymentForm}
+        onHide={() => setShowFiatPaymentForm(false)}
+        centered
+        size="lg"
+        className="payment-modal-wrap"
+        backdrop="static"
+        keyboard={false}
+      >
+        <div className="modal-body">
+          <div className="payment-close">
+            <AiOutlineClose onClick={() => setShowFiatPaymentForm(false)} />
+          </div>
+          <div className="sucess-data">
+            <p className="card-title">PAY WITH STRIPE</p>
+            <div>
+              <p>Nft Title: {title}</p>
+            </div>
+            <div>
+              <p>Nft Price: ${fiatAmount}</p>
+            </div>
+            <FiatStripeContainer
+              id={id}
+              amount={fiatAmount}
+              setShowPaymentForm={setShowFiatPaymentForm}
+              showResponseMessage={showResponseMessage}
+              setSucess={setSucess}
+              setIsVisible={setIsVisible}
+            />
           </div>
         </div>
       </Modal>

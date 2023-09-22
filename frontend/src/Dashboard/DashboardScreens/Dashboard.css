@@ -123,7 +123,7 @@
 }
 
 .dashboard-card {
-    width: 260px;
+    width: 19%;
     margin: 5px;
     display: flex;
     flex-direction: column;
@@ -132,6 +132,7 @@
     padding: 15px;
     background-color: #F2F2F2;
     border-radius: 10px;
+    flex-wrap: wrap;
 }
 
 .dashboard-card div:nth-child(1) {
@@ -175,6 +176,12 @@
     font-weight: 500;
     font-size: 14px;
     margin-left: 5px;
+}
+
+.dashboard-card svg{
+    width: 10px;
+    margin-top: -4px;
+    margin-right: 5px;
 }
 
 .pink {

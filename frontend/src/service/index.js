@@ -159,6 +159,7 @@ const createBackendServer = (baseURL) => {
   // User Subscription //
 
   const userSubscribe = async (body) => await api.post(`subscribe`, body);
+  const payNftByFiat = async (body) => await api.post(`pay-nft-by-fiat`, body);
   const cancelSubscription = async (body) =>
     await api.post(`cancel-subscription`, body);
   const viewSubscriptions = async (userId) =>
@@ -282,12 +283,14 @@ const createBackendServer = (baseURL) => {
     viewRemainingArtGallery,
     removeArtGallery,
 
-    viewLandingPageDetail
+    viewLandingPageDetail,
+
+    payNftByFiat
 
   };
 };
 
-const apis = createBackendServer("http://165.232.142.3");
+const apis = createBackendServer(" http://143.198.70.237");
 
 //     Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237

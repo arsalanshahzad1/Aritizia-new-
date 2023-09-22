@@ -80,9 +80,9 @@ const Single = ({ search, setSearch }) => {
   const user_id = id?.id;
   const navigate = useNavigate();
 
-  // useEffect(() =>{
-  //   convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
-  // } ,[])
+  useEffect(() =>{
+    window.scrollTo(0,0)
+  } ,[])
 
   const getCollection = async () => {
     const response = await apis.getNFTCollection();
@@ -248,9 +248,9 @@ const Single = ({ search, setSearch }) => {
         console.log("this is image selectedImage ", selectedImage);
         console.log("this is image item.file ", item.file);
         // const file = await convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
-        const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
+        // const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
 
-        // const resut = await uploadFileToIPFS(item.file);
+        const resut = await uploadFileToIPFS(item.file);
         // const resut = await uploadFileToIPFS(file);
 
         //const result = await client.add(file)
@@ -808,21 +808,21 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => setshowCreateCollection(true)}
                               >
                                 <svg
-                                  enable-background="new 0 0 50 50"
+                                  enableBackground="new 0 0 50 50"
                                   height="25px"
                                   id="Layer_1"
                                   version="1.1"
                                   viewBox="0 0 50 50"
                                   width="25px"
-                                  xml:space="preserve"
+                                  xmlSpace="preserve"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                  xmlnsXlink="http://www.w3.org/1999/xlink"
                                 >
                                   <rect fill="none" height="50" width="50" />
                                   <line
                                     fill="#2638CC"
                                     stroke="#2638CC"
-                                    stroke-miterlimit="10"
+                                    strokeMiterlimit="10"
                                     strokeWidth="4"
                                     x1="9"
                                     x2="41"
@@ -832,7 +832,7 @@ const Single = ({ search, setSearch }) => {
                                   <line
                                     fill="#2638CC"
                                     stroke="#2638CC"
-                                    stroke-miterlimit="10"
+                                    strokeMiterlimit="10"
                                     strokeWidth="4"
                                     x1="25"
                                     x2="25"
