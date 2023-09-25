@@ -6,7 +6,8 @@ const Loader = () => {
             width: '100%' , 
             height : '100vh' , 
             top : '0' , 
-            position : 'absolute' , 
+            position : 'fixed',
+            top:"0", 
             background : 'rgba(0, 0, 0, 0.5)',
             zIndex : '9999'
             }}> 

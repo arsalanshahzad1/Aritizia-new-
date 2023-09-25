@@ -6,6 +6,7 @@ import User from './User'
 import ControllingContent from './ControllingContent'
 import User2 from './User2'
 import AnalyticsTool from './AnalyticsTool'
+import ArtWorkManagement from './ArtworkManagement'
 function DashboardArea({ search, setSearch }) {
     return (
         <div className='pos-rel'>
@@ -31,8 +32,8 @@ function DashboardArea({ search, setSearch }) {
 
                 } />
                 <Route path='/artwork-management' element={
-                    <div>artwork-management</div>
-
+                    // <div>artwork-management</div>
+                    <ArtWorkManagement />
                 } />
                 <Route path='/analytic-tool' element={
                     <AnalyticsTool />

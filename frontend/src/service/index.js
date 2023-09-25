@@ -107,7 +107,7 @@ const createBackendServer = (baseURL) => {
   const postFollowAndUnfollow = async (body) =>
     await api.post(`user-follow-unfollow`, body);
 
-  const getCountFollow = async (userId, otherUserId) =>
+  const getCountFollow = async (otherUserId) =>
     await api.get(`count-follow-unfollow/${RealUserId}/${otherUserId}`);
 
   const getFollowingList = async (userId) =>
@@ -130,6 +130,10 @@ const createBackendServer = (baseURL) => {
 
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
+
+  
+  const getUserData = async (id) =>
+    await api.get(`get-user-data/${id}`);
 
   const getOtherUser = async (userAddress) =>
     await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
@@ -254,6 +258,8 @@ const createBackendServer = (baseURL) => {
     getNFTCollectionImage,
 
     getNFTByTokenId,
+    
+    getUserData,
 
     getOtherUser,
 

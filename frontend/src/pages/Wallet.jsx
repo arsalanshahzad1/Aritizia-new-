@@ -17,7 +17,10 @@ const Wallet = ({ search, setSearch }) => {
             <div className="row justify-content-center">
               <MetaMaskWalletCard />
               <CoinBaseWalletCard />
-     
+              {/* <MetaMaskWalletCard />
+                            <MetaMaskWalletCard />
+                            <MetaMaskWalletCard />
+                            <MetaMaskWalletCard /> */}
             </div>
           </div>
         </div>

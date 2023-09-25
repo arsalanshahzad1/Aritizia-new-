@@ -67,6 +67,7 @@ const RejectedNFTSCard = ({
     } catch (e) {
       console.log("Error: ", e);
     }
+    setLoader(false)
   };
 
   const getRejecteNfts = async (rejectedList) => {
@@ -194,6 +195,18 @@ const RejectedNFTSCard = ({
   }, []);
 
   useEffect(() => {}, [rejectedNfts]);
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
 
   return (
     <>

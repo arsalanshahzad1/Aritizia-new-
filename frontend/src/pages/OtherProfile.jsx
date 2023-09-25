@@ -58,10 +58,16 @@ const OtherProfile = ({ search, setSearch }) => {
   const [userID, setUserID] = useState(searchParams.get("id"));
   const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
 
+  // const getOtherUsersDetails = async (address) => {
+  //   const response = await apis.getOtherUser(address);
+  //   setUserDetails(response?.data?.data);
+  //   console.log(response, "other-users");
+
   const getNFTlikeListing = async (id) => {
     const response = await apis.getLikeNFTListing(id);
     setLikedNfts(response?.data?.data);
     console.log(response, "other-users");
+    setLikedNftLoader(false)
   };
 
   const getOtherUsersDetails = async (address) => {
@@ -69,6 +75,106 @@ const OtherProfile = ({ search, setSearch }) => {
     setUserDetails(response?.data?.data);
     getNFTlikeListing(response?.data?.data?.id);
   };
+
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+
+  //   if (chainId !== 31337) {
+  //     window.alert("Change the network to Sepolia");
+  //     throw new Error("Change network to Sepolia");
+  //   }
+
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+
+  //     return signer;
+  //   }
+
+  //   return web3Provider;
+  // };
+
+  // console.log("state", state.address);
+  // useEffect(() => {
+  //   //  navigate("/other-profile")
+  //   getOtherUsersDetails(userADDRESS);
+  // }, []);
+
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("getProviderOrSigner");
+
+  //   const provider = await web3ModalRef.current.connect();
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   const { chainId } = await web3Provider.getNetwork();
+
+  //   try {
+  //     await ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
+  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
+  //     });
+  //   } catch (error) {
+  //     // User rejected the network change or there was an error
+  //     throw new Error("Change network to Sepolia to proceed.");
+  //   }
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+
+  //     return signer;
+  //   }
+
+  //   return web3Provider;
+  // };
+
+  // const connectWallet = async () => {
+  //   try {
+  //     // Get the provider from web3Modal, which in our case is MetaMask
+  //     // When used for the first time, it prompts the user to connect their wallet
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     // Assign the Web3Modal class to the reference object by setting it's `current` value
+  //     // The `current` value is persisted throughout as long as this page is open
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
+
+  // const getAddress = async () => {
+  //     const accounts = await window.ethereum.request({
+  //         method: "eth_requestAccounts",
+  //     });
+  //     setUserAddress(accounts[0]);
+  //     // console.log("getAddress", accounts[0]);
+  //     postWalletAddress(accounts[0]);
+
+  // };
+
+  // const postWalletAddress  = async (address) => {
+  //     if (localStorage.getItem("data")) {
+  //       return console.log("data is avaliable");
+  //     } else {
+  //     const response = await apis.postWalletAddress({wallet_address:  address})
+  //     localStorage.setItem("data", JSON.stringify(response.data.data));
+  //     window.location.reload();
+  //     }
+
+  //   };
+
+  // console.log(userDetails, "userDetails")
 
   const getMyListedNfts = async () => {
     let emptyList = [];
@@ -105,7 +211,8 @@ const OtherProfile = ({ search, setSearch }) => {
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-    
+      // id = mintedTokens[i];
+      console.log("YESS");
 
       const metaData = await nftContract.tokenURI(id);
 
@@ -143,6 +250,9 @@ const OtherProfile = ({ search, setSearch }) => {
               collection: collection,
             };
 
+            // console.log(nftData);
+            // myNFTs.push(nftData);
+            // setNftListFP(myNFTs);
             setNftListFP((prev) => [...prev, nftData]);
             console.log("myNFTs in function", myNFTs);
           } else if (listingType === 1) {
@@ -160,8 +270,12 @@ const OtherProfile = ({ search, setSearch }) => {
               startTime: auctionData.startTime.toString(),
             };
 
+            // myAuctions.push(nftData);
+            // console.log("auction in function", myAuctions);
+            // setNftListAuction(myAuctions);
             setNftListAuction((prev) => [...prev, nftData]);
           }
+          setNftLoader(false)
         })
 
         .catch((error) => {
@@ -171,6 +285,7 @@ const OtherProfile = ({ search, setSearch }) => {
   };
 
   useEffect(() => {
+    // connectWallet();
     getMyListedNfts();
   }, [userADDRESS]);
 
@@ -185,7 +300,9 @@ const OtherProfile = ({ search, setSearch }) => {
   const onOpen = (action) => {
     setIsVisible(action);
   };
+
   const [FollowStatus, setFollowStatus] = useState(0);
+  
 
   const postChatMeaage = async () => {
     console.log("clicking");
@@ -203,16 +320,22 @@ const OtherProfile = ({ search, setSearch }) => {
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
 
+  // console.log(userDetails?.id, "arsalan data")
+
+ 
+  const [currentState, setCurrentState] = useState(false)
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
       follow_by: RealUserId,
       follow_to: userDetails?.id,
     });
-    if (response.status === 201) {
-      setFollowStatus(response.data.data.is_follow);
+    if (response?.status === 201) {
+      setFollowStatus(response?.data?.data?.is_follow);
+      setCurrentState(!currentState)
     }
     console.log(response, "this is reponse");
     console.log(FollowStatus, "this is follow status");
+    
   };
   useEffect(() => {
     console.log(userDetails, "this is user");
@@ -227,6 +350,10 @@ const OtherProfile = ({ search, setSearch }) => {
 
   useEffect(() => {
     getOtherUsersDetails(userADDRESS);
+  }, []);
+
+  useEffect(() => {
+    getOtherUsersDetails(userADDRESS);
   }, [FollowStatus]);
 
   const copyToClipboard = (link) => {
@@ -236,6 +363,27 @@ const OtherProfile = ({ search, setSearch }) => {
       position: toast.POSITION.TOP_CENTER,
     });
   };
+
+  const [totalFollowers, setTotalFollowers] = useState(0);
+  const [isFollow, setIsFollow] = useState(false)
+
+  const getTotalFollowers = async () =>{
+    const response = await apis.getCountFollow(userDetails?.id)
+    setTotalFollowers(response?.data?.data?.follower_count)
+    setIsFollow(response?.data?.data?.is_follow)
+  }
+
+  useEffect(()=>{
+    getTotalFollowers()
+  },[])
+
+  useEffect(()=>{
+    getTotalFollowers()
+  },[currentState, isFollow])
+
+  const [nftLoader, setNftLoader] = useState(true)
+  const [likedNftLoader, setLikedNftLoader] = useState(true)
+
 
   return (
     <>
@@ -286,16 +434,16 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {FollowStatus === 0 ? (
-                    <div onClick={followOther} style={{ cursor: "pointer" }}>
-                      Follow
-                    </div>
-                  ) : (
+                  {isFollow ? (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
                       Unfollow
                     </div>
+                  ) : (
+                    <div onClick={followOther} style={{ cursor: "pointer" }}>
+                      Follow 
+                    </div>
                   )}
-                  <div>Followers {userDetails?.followers?.length}</div>
+                  <div>Followers {totalFollowers}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
                   <h2 className="user-name">
@@ -374,10 +522,15 @@ const OtherProfile = ({ search, setSearch }) => {
                           Auction
                         </div>
                       </div>
-                      <div className="d-flex other-profile-cards">
+                      <div className="d-flex other-profile-cards d-flex flex-wrap">
                         {collectionTabs === 0 && (
                           <>
-                            {nftListFP.map((item) => (
+                            { nftLoader ?
+                              <section className="sec-loading">
+                                <div className="one"></div>
+                              </section>
+                              :
+                            nftListFP?.length > 0 ? nftListFP?.map((item) => (
                               <BuyNow
                                 onOpen={onOpen}
                                 // onClose={onClose}
@@ -393,14 +546,21 @@ const OtherProfile = ({ search, setSearch }) => {
                                 collectionImages={item?.collectionImages}
                                 userADDRESS={userADDRESS}
                               />
-                            ))}
+                            )) : 
+                            <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                            }
                           </>
                         )}
                       </div>
                       <div className="d-flex">
                         {collectionTabs === 1 && (
                           <>
-                            {nftListAuction.map((item) => (
+                            { nftLoader ?
+                              <section className="sec-loading">
+                                <div className="one"></div>
+                              </section>
+                              :
+                            nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
                               <NewItemCard
                                 key={item.id}
                                 id={item.id}
@@ -414,7 +574,9 @@ const OtherProfile = ({ search, setSearch }) => {
                                 description={item?.description}
                                 userAddress={userADDRESS}
                               />
-                            ))}
+                            )):
+                            <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                            }
                           </>
                         )}
                       </div>
@@ -424,7 +586,12 @@ const OtherProfile = ({ search, setSearch }) => {
                 {tabs === 1 && (
                   <>
                     <div className="row">
-                      {likedNfts?.map((item) => (
+                      {likedNftLoader ? 
+                        <section className="sec-loading">
+                          <div className="one"></div>
+                        </section>
+                      :
+                      likedNfts?.length > 0 ? likedNfts?.map((item) => (
                         <NewItemCard
                           key={item?.id}
                           id={item?.id}
@@ -438,7 +605,9 @@ const OtherProfile = ({ search, setSearch }) => {
                           collectionImage={item?.collectionImage}
                           userADDRESS={userADDRESS}
                         />
-                      ))}
+                      )):
+                      <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                     </div>
                   </>
                 )}

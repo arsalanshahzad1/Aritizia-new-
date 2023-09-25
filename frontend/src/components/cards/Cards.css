@@ -424,7 +424,7 @@ img {
   border-radius: 8px 8px 0px 0px !important;
   background: none 0% 0% / contain;
   position: relative;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .css-118gt74:hover .J-bottom {

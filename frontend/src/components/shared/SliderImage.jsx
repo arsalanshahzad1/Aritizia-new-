@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { GlobalContext } from "../../Context/GlobalContext";
 import { Link } from "react-router-dom";
+
 const SliderImage = () => {
   const { prompt, setprompt } = useContext(GlobalContext);
   const [count, setCount] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
+  const [user, setUser] = useState(localStorage.getItem("data"));
 
   // const connectWallet = async () => {
   //   // console.log("Connect wallet");
@@ -67,7 +69,8 @@ const SliderImage = () => {
           className={`connect-wallet`}
         >
           {/*  className="connect-wallet"> */}
-          Connect Wallet
+          {/* Connect Wallet */}
+          {user ? "Connected" : "Connect Wallet"}
         </button>
       </div>
     </section>
