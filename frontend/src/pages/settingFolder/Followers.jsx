@@ -16,8 +16,8 @@ const Followers = ({ data  , id}) => {
 
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
-      follow_by: RealUserId,
-      follow_to: id,
+      follow_by: id,
+      follow_to: newId,
     });
   };
 
@@ -46,7 +46,8 @@ const Followers = ({ data  , id}) => {
                   </div>
                 </div>
                 <div className="right">
-                  <button onClick={() => followOther(data?.user_id)}>Follow</button>
+                  <button onClick={() => followOther(data?.user_id)}>{data?.is_follow === true ? "Unfollow" : "Follow"}</button>
+                  {console.log(data?.is_follow, "data")}
 
                  
                 </div>
