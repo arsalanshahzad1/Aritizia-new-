@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import "./Cards.css";
 import PlaceABidDrawer from "../shared/PlaceABidDrawer";
+import NftCountdown from "../shared/NftCountdown";
 
 const NewItemCard = ({
   id,
@@ -66,7 +67,10 @@ const NewItemCard = ({
         <div className="sec-five-wrap">
           <div className="image">
             <img src={image} alt="" width={"100%"} />
-            <span>{endDate}</span>
+            {/* <span>{endDate}</span> */}
+            <span>
+              <NftCountdown endDateTime={new Date(endTime * 1000)} />
+            </span>
             {showLinks && (
               <div className="social-links">
                 <ul>

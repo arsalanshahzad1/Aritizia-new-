@@ -182,8 +182,9 @@ const Profile = ({ search, setSearch }) => {
                 collectionImages: collectionImages,
               };
               console.log("nftData", nftData);
-              // liked.push(nftData);
-              setLikedNfts((prev) => [...prev, nftData]);
+              liked.push(nftData);
+              // setLikedNfts((prev) => [...prev, nftData]);
+              setLikedNfts(liked)
             } else if (listingType === 1) {
               const nftData = {
                 id: id, //
@@ -1043,7 +1044,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
-                            {/* {console.log(userId,"id here")} */}
+                            {console.log(userId,"id here")}
                             <Followers id={userId} />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />

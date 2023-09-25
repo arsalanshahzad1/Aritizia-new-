@@ -546,7 +546,6 @@ const [counterData , setCounterData] = useState('')
               <div className="d-flex">
                 {nftListAuction.length > 0 ? (
                   <>
-                    {console.log(nftListAuction, "nft list auction")}
                     {nftListAuction.slice(0,nftListAuction.length > 4 ? 4 : nftListAuction.length ).map((item) => (
                       <>
                       {console.log(item?.seller, userAddress, "seller now")}

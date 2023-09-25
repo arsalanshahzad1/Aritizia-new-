@@ -721,6 +721,7 @@ const Single = ({ search, setSearch }) => {
 
   const [collectionFinalized, setcollectionFinalized] = useState(false);
 
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -1134,7 +1135,7 @@ const Single = ({ search, setSearch }) => {
                           <div className="row">
                             <div className="col-lg-12">
                               <div  style={{textAlign : 'right'}}>
-                              <button type="submit" className="button-styling" >
+                              <button type="submit" className="button-styling">
                                 Create Item
                               </button>
                               </div>

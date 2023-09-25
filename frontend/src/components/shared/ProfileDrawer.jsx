@@ -86,7 +86,9 @@ function ProfileDrawer({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
-  console.log(userAddress, "")
+  const getBuyerPlan2 = userData;
+  // console.log(userAddress, "")
+  // console.log(getBuyerPlan2, "getBuyerPlan")
 
   // console.log(userAddress, sellerWallet, "uppercase")
   // console.log("getBuyerPlan", getBuyerPlan);
@@ -490,26 +492,26 @@ function ProfileDrawer({
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeUSDT;
-      console.log("fee", fee);
-      console.log("www platformFeeUSDT", platformFeeUSDT);
-      console.log("www amountUSD", fee);
+      // console.log("fee", fee);
+      // console.log("www platformFeeUSDT", platformFeeUSDT);
+      // console.log("www amountUSD", fee);
 
-      console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
-      console.log("www discountedAmountUSD", discountedAmountUSD);
+      // console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
+      // console.log("www discountedAmountUSD", discountedAmountUSD);
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
       amountInWei = amountInWei.toString();
 
-      console.log("www fee", fee);
-      console.log("www amount", amount);
-      console.log("www amountInWei", amountInWei);
+      // console.log("www fee", fee);
+      // console.log("www amount", amount);
+      // console.log("www amountInWei", amountInWei);
     }
-    console.log("amountInWei  ", amountInWei);
-    console.log(
-      "MARKETPLACE_CONTRACT_ADDRESS.address  ",
-      MARKETPLACE_CONTRACT_ADDRESS.address
-    );
+    // console.log("amountInWei  ", amountInWei);
+    // console.log(
+    //   "MARKETPLACE_CONTRACT_ADDRESS.address  ",
+    //   MARKETPLACE_CONTRACT_ADDRESS.address
+    // );
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -518,18 +520,18 @@ function ProfileDrawer({
     );
 
     appprove.wait();
-    console.log("www ");
-    console.log("wwwasda ");
+    // console.log("www ");
+    // console.log("wwwasda ");
     var amountETH = +priceETH + +platformFeeETH;
     var value = amountETH.toString();
-    console.log("www amountETH", value);
+    // console.log("www amountETH", value);
 
-    console.log("www paymentMethod", paymentMethod);
-    console.log("www id", id);
-    console.log("www sellerPlan", sellerPlan);
-    console.log("www buyerPlan", buyerPlan);
-    console.log("www address", NFT_CONTRACT_ADDRESS.address);
-    console.log("www amountInWei", amountInWei);
+    // console.log("www paymentMethod", paymentMethod);
+    // console.log("www id", id);
+    // console.log("www sellerPlan", sellerPlan);
+    // console.log("www buyerPlan", buyerPlan);
+    // console.log("www address", NFT_CONTRACT_ADDRESS.address);
+    // console.log("www amountInWei", amountInWei);
     let amountInETHInWei = ethers.utils.parseEther(value).toString();
     await (
       await marketplaceContract.buyWithUSDT(
@@ -1087,6 +1089,7 @@ function ProfileDrawer({
                         {
                           userData?.wallet_address == nftDetails?.user?.wallet_address  ? (
                             <Link to={ `/profile`}>
+                             
                               {nftDetails?.user?.profile_image  ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
@@ -1135,6 +1138,7 @@ function ProfileDrawer({
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
                         }
+                         {/* {console.log(nftDetails, "ndt")} */}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
@@ -1152,7 +1156,7 @@ function ProfileDrawer({
                   </div>
                 </div>
                 <div className="five-line">
-                  <div className="row">
+                  <div className="row d-flex">
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -1180,7 +1184,7 @@ function ProfileDrawer({
                     </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
-                        style={{ fontSize: "18px", marginRight: "10px" }}
+                        style={{ fontSize: "18px", marginRight: "10px"}}
                       />
                     </div>
                   </div>
@@ -1255,7 +1259,7 @@ function ProfileDrawer({
                       className="seven-line"
                       onClick={() => setChack(!chack)}
                       >
-                        {console.log(sellerWallet, "sellerWallet")}
+                        {/* {console.log(sellerWallet, "sellerWallet")} */}
                       {/* {console.log(userAddress.toUpperCase(), " ", sellerWallet.toUpperCase(), "uppercase")} */}
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
