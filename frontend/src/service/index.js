@@ -107,7 +107,7 @@ const createBackendServer = (baseURL) => {
   const postFollowAndUnfollow = async (body) =>
     await api.post(`user-follow-unfollow`, body);
 
-  const getCountFollow = async (userId, otherUserId) =>
+  const getCountFollow = async (otherUserId) =>
     await api.get(`count-follow-unfollow/${RealUserId}/${otherUserId}`);
 
   const getFollowingList = async (userId) =>

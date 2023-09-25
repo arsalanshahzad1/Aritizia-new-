@@ -13,6 +13,7 @@ import { useContext } from 'react'
 import { GlobalContext } from '../Context/GlobalContext'
 import Search from "../components/shared/Search";
 import Purchase from './settingFolder/Purchase'
+import Loader from '../components/shared/Loader'
 
 
 const Setting = ({ search, setSearch }) => {
@@ -20,10 +21,13 @@ const Setting = ({ search, setSearch }) => {
     const [activeTabs, setActiveTabs] = useState(activeTabsSetting)
     useEffect(() => {
         setActiveTabs(activeTabsSetting)
-
+        setLoader(false)
     }, [activeTabsSetting])
+
+    const [loader, setLoader] = useState(true)
     return (
         <>
+        {loader && <Loader />}
             <Header
                 search={search}
                 setSearch={setSearch}

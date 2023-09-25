@@ -11,6 +11,7 @@ import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import { getAddress } from "../../methods/methods";
 import apis from "../../service";
+import Loader from "../../components/shared/Loader";
 
 const Earnings = () => {
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
@@ -23,6 +24,7 @@ const Earnings = () => {
     const response = await apis.getSalesHistory();
     console.log(response?.data?.data);
     setEarning(response?.data?.data);
+    setLoader(false)
     
   };
 
@@ -542,7 +544,10 @@ const Earnings = () => {
     // setTotalPrice(getTotalBalance);
   }, [totalPrice]);
 
+  const [loader, setLoader] = useState(true)
   return (
+    <>
+    {loader && <Loader/>}
     <div className="col-lg-10 mx-auto">
       <div className="earning-box">
         <div>
@@ -612,6 +617,7 @@ const Earnings = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

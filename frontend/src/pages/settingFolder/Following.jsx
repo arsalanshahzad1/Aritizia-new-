@@ -43,12 +43,26 @@ const Following = ({ data, id }) => {
     else {
       setFollwing([]);
     }
+    setLoader(false)
   };
 
 
   useEffect(() => {
     getFollowingList(id);
   }, [])
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
+  
   return (
     <>
       {following != "" ? (
