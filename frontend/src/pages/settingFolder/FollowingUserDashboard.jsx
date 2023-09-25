@@ -53,14 +53,14 @@ const FollowingUserDashboard = ({ data, id }) => {
                                     </div>
                                 </div>
                                 <div className="right">
-                                    {/* <button
+                                    <button
                                         className="unfollow"
-                                        onClick={()=> followOther(data?.user_id)}
+                                        
                                     >
-                                        Unfollow
+                                        
                                     </button>
 
-                                    <span
+                                    {/* <span
                                         onClick={() => {
                                             setshowOptions(!showOptions);
                                         }}

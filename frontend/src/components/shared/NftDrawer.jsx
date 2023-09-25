@@ -324,12 +324,7 @@ const ProfileDrawer = ({
   console.log(royalty, "royalty");
   console.log(descriptionn, "description");
   console.log(collectionn, "collectionn");
-  // const [image, setImage] = useState("");
-  // let image = "";
-  // const [price, setPrice] = useState(null);
-  // const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [minimumBid, setMinimumBid] = useState("");
+
   const [listingType, setlistingType] = useState(0);
   useEffect(() => {
     console.log("timed auction value=> ", timedAuction);
@@ -378,49 +373,10 @@ const ProfileDrawer = ({
   const title = useRef("");
   const description = useRef("");
 
-  // const getAddress = async () => {
-  //   const accounts = await window.ethereum.request({
-  //     method: "eth_requestAccounts",
-  //   });
-  //   setUserAddress(accounts[0]);
-  //   console.log("getAddress", accounts[0]);
-  // };
+ 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
-  // const [userAddress, setUserAddress] = useState("0x000000....");
-
-  // const getProviderOrSigner = async () => {
-  //   console.log("getProviderOrSigner");
-  // };
-
-  // Helper function to fetch a Provider/Signer instance from Metamask
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("getProviderOrSigner");
-
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   const { chainId } = await web3Provider.getNetwork();
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-  //     // console.log("getSigner");
-
-  //     return signer;
-  //   }
-  //   // console.log("getProvider");
-  //   return web3Provider;
-  // };
-
+ 
   // List NFT
   const mintThenList = async (result) => {
     console.log("In mintThenList");
@@ -460,8 +416,9 @@ const ProfileDrawer = ({
     );
     await tx.wait();
     console.log("userAddress", userAddress);
-    console.log("item.startTime", item.startTime);
-    console.log("item.endTime", item.endTime);
+    console.log("zzz item.startTime", item.startTime);
+    console.log("zzz item.endTime", item.endTime);
+    console.log("zzz item.tokenId,", item.tokenId);
 
     await (
       await marketplaceContract.resellNft(
@@ -470,7 +427,10 @@ const ProfileDrawer = ({
         ethers.utils.parseEther(item.price),
         item.listingType,
         item.startTime,
-        item.endTime
+        item.endTime,
+        {
+          gasLimit: ethers.BigNumber.from("30000000"),
+        }
       )
     ).wait();
 
@@ -524,9 +484,7 @@ const ProfileDrawer = ({
     console.log("postListNft");
     console.log("listToPost.current[0]", listToPost.current[0]);
 
-    // const response = await apis.postListNft(listToPost.current[0]);
-    // console.log("2222222222222222");
-    // console.log("response", response);
+
     relist = false;
     await onClose(false);
     // setTimeout(() => {
@@ -536,51 +494,7 @@ const ProfileDrawer = ({
     // }, 500);
   };
 
-  //   const [file, setFile] = useState(null);
-  //   const [crypto, setCrypto] = useState({ value: 0, label: "ETH" });
-
-  //   const [collection, setCollection] = useState({
-  //     value: "USDT",
-  //     label: "Select Collection",
-  //   });
-
-  //   const handlechange = (file) => {
-  //     setFile(file);
-  //   };
-
-  //   const [royalty, setRoyalty] = useState(0);
-
-  //   const cryptoOptions = [
-  //     { value: "", label: "Select Crypto" },
-  //     { value: 0, label: "ETH" },
-  //     { value: 1, label: "USDT" },
-  //   ];
-
-  //   const [collectionOptions, setcollectionOptions] = useState([
-  //     { value: "", label: "Select Collection" },
-  //     { value: "usdt", label: "USDT" },
-  //   ]);
-
-  //   const defaultOption = collectionOptions[0];
-  //   const defaultCrypto = cryptoOptions[0];
-
-  //   const handleSliderChange = (value) => {
-  //     // Update the value or perform any other actions
-  //     console.log("Slider value:", value);
-  //     setRoyalty(value);
-  //     // ...
-  //   };
-  // const handleSliderChange = (value) => {
-  //     // setRoyalty(value);
-  //     if (value === 33) {
-  //         setRoyalty(5);
-  //     } else if (value === 66) {
-  //         setRoyalty(10);
-  //     } else if (value === 100) {
-  //         setRoyalty(15);
-  //     }
-  // };
-
+ 
   useEffect(() => {}, [price, title, description]);
 
   useEffect(() => {
@@ -615,7 +529,7 @@ const ProfileDrawer = ({
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;
-      endTime = startTimestamp;
+      endTime = endTimestamp;
     }
 
     console.log("CHECK startingDate", startTime);
@@ -624,7 +538,7 @@ const ProfileDrawer = ({
     console.log("price", price);
 
     item = {
-      tokenId: 0,
+      tokenId: id,
       price: price,
       listingType: listingType,
       startTime: startTime,
@@ -635,7 +549,7 @@ const ProfileDrawer = ({
 
     if (
       //   item.title != null &&
-      item.price != null && startingDate !== "" && endingDate !== ""
+      item.price != null
       //   item.description != null &&
       //   item.crypto != null &&
       //   item.file != null &&
@@ -649,31 +563,10 @@ const ProfileDrawer = ({
     }
   }
 
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     getAddress();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
 
   const getItem = async () => {
     const provider = await getProviderOrSigner();
+    console.log("item.tokenId,", item.tokenId);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -684,9 +577,12 @@ const ProfileDrawer = ({
     let seller = structData.seller;
     let owner = structData.owner;
 
+    console.log("id", id);
     console.log("seller", seller);
     console.log("owner", owner);
-
+    console.log("zzz item.startTime", item.startTime);
+    console.log("zzz item.endTime", item.endTime);
+    console.log("zzz item.tokenId,", item.tokenId);
     //   const _listedNfts = await marketplaceContract.getListedNfts();
 
     //   for (let i = 0; i < _listedNfts.length; i++) {
@@ -747,7 +643,6 @@ const ProfileDrawer = ({
                                   // type="number"
                                   // placeholder="0.00"
                                   // ref={price}
-                                  // required
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -755,16 +650,7 @@ const ProfileDrawer = ({
                                   </p>
                                 )}
                               </div>
-                              {/* <div className="col-lg-3 col-md-3 col-5">
-                                                                <h2>Crypto</h2>
-                                                                <Dropdown
-                                                                    options={cryptoOptions}
-                                                                    onChange={(e) => {
-                                                                        setCrypto(e.value);
-                                                                    }}
-                                                                    value={defaultCrypto.value}
-                                                                />
-                                                            </div> */}
+                        
                             </div>
                           </div>
                         ) : (
@@ -777,10 +663,7 @@ const ProfileDrawer = ({
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
-                                    // required
+                                   
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -788,16 +671,7 @@ const ProfileDrawer = ({
                                     </p>
                                   )}
                                 </div>
-                                {/* <div className="col-lg-3 col-md-3 col-5">
-                                                                    <h2>Crypto</h2>
-                                                                    <Dropdown
-                                                                        options={cryptoOptions}
-                                                                        onChange={(e) => {
-                                                                            setCrypto(e.value);
-                                                                        }}
-                                                                        value={defaultCrypto.value}
-                                                                    />
-                                                                </div> */}
+                             
                               </div>
                             </div>
                             <div className="line-two">
@@ -814,7 +688,6 @@ const ProfileDrawer = ({
                                       setStartingDate(e.target.value)
                                     }
                                     min={new Date().toISOString().split("T")[0]}
-                                    // required
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -829,7 +702,6 @@ const ProfileDrawer = ({
                                       setEndingDate(e.target.value)
                                     }
                                     min={startingDate}
-                                    // required
                                   />
                                 </div>
                               </div>
@@ -884,9 +756,7 @@ const ProfileDrawer = ({
                                 min={0}
                                 max={15}
                                 defaultValue={royalty}
-                                // step={null}
-                                // onChange={handleSliderChange}
-                                // value={royalty}
+                            
                               />
                             </div>
                             <div className="col-lg-3 ">

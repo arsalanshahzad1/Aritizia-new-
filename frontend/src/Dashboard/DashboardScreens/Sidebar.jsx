@@ -68,7 +68,7 @@ function Sidebar() {
                             }
                         </div>
                     </NavLink>
-                    {/* <NavLink to='/dashboard/artwork-management'>
+                    <NavLink to='/dashboard/artwork-management'>
                         <div onClick={() => setDashboardActiveTab("artwork-management")} className={`sidebar-nav-item ${location.pathname === '/dashboard/artwork-management' ? "active-sidebar-item" : ""}`}>
                             <div className='svg-div'>
                                 <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,7 +82,7 @@ function Sidebar() {
                                 </div>
                             }
                         </div>
-                    </NavLink> */}
+                    </NavLink>
                     <NavLink to='/dashboard/analytic-tool'>
                         <div onClick={() => setDashboardActiveTab("analytic-tool")} className={`sidebar-nav-item ${location.pathname === '/dashboard/analytic-tool' ? "active-sidebar-item" : ""}`}>
                             <div className='svg-div'>

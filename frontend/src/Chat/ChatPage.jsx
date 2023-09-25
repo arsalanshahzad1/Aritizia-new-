@@ -199,9 +199,7 @@ function ChatPage({ search, setSearch }) {
                   })}
                 </>
               ) : (
-                <div className="chat-loading">
-                  <p>No Chats </p>
-                </div>    
+                "Loading..."
               )}
             </>
           </div>

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route , Navigate } from "react-router-dom";
 import LandingPage from "./pages/landingpage/LandingPage";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -39,91 +39,87 @@ function App() {
   return (
     <>
       <WalletManager setWalletConnected={setWalletConnected} />
-
       <Router>
         <GlobalProvider>
-          <Suspense fallback={'Loading...'}>
-            <Routes>
-              <Route
-                path="*"
-                element={<Navigate to={'/'} replace />}
-                // element={<LandingPage search={search} setSearch={setSearch} />}
-              />
-              
-              <Route
-                path="/"
-                element={<LandingPage search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/profile"
-                element={<Profile search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/other-profile"
-                element={<OtherProfile search={search} setSearch={setSearch} />}
-              />
-              {/* <Route
-                path="/user-profile"
-                element={<UserProfile search={search} setSearch={setSearch} />}
-              /> */}
-              <Route
-                path="/collection"
-                element={
-                  <CollectionProfile search={search} setSearch={setSearch} />
-                }
-              />
-              <Route
-                path="/search/"
-                element={<SearchPage search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/setting"
-                element={<Setting search={search} setSearch={setSearch} />}
-              />
+          <Routes>
+            <Route
+              path="*"
+              element={<Navigate to={'/'} replace />}
+              // element={<LandingPage search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/"
+              element={<LandingPage search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/profile"
+              element={<Profile search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/other-profile"
+              element={<OtherProfile search={search} setSearch={setSearch} />}
+            />
+            {/* <Route
+              path="/user-profile"
+              element={<UserProfile search={search} setSearch={setSearch} />}
+            /> */}
+            <Route
+              path="/collection"
+              element={
+                <CollectionProfile search={search} setSearch={setSearch} />
+              }
+            />
+            <Route
+              path="/search/"
+              element={<SearchPage search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/setting"
+              element={<Setting search={search} setSearch={setSearch} />}
+            />
 
-              <Route
-                path="/wallet"
-                element={<Wallet search={search} setSearch={setSearch} />}
-              />
+            <Route
+              path="/wallet"
+              element={<Wallet search={search} setSearch={setSearch} />}
+            />
 
-              <Route
-                path="/subscription"
-                element={<Subscription search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/create"
-                element={<Create search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/create/single"
-                element={<Single search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/create/multiple"
-                element={<Multiple search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/buy"
-                element={<BuyNow search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/dashboard"
-                element={<DashboardMain search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/dashboard/*"
-                element={<DashboardMain search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/art"
-                element={<Art search={search} setSearch={setSearch} />}
-              />
-              <Route
-                path="/chat/:id"
-                element={<ChatPage search={search} setSearch={setSearch} />}
-              />
-            </Routes>
-          </Suspense>
+            <Route
+              path="/subscription"
+              element={<Subscription search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/create"
+              element={<Create search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/create/single"
+              element={<Single search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/create/multiple"
+              element={<Multiple search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/buy"
+              element={<BuyNow search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/dashboard"
+              element={<DashboardMain search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/dashboard/*"
+              element={<DashboardMain search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/art"
+              element={<Art search={search} setSearch={setSearch} />}
+            />
+            <Route
+              path="/chat/:id"
+              element={<ChatPage search={search} setSearch={setSearch} />}
+            />
+          </Routes>
         </GlobalProvider>
       </Router>
       <ToastContainer />

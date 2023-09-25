@@ -70,19 +70,12 @@ const PaymentForm = ({
        
         if (response.status) {
 
-          toast.success("Plan purchased!", {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-          setShowPaymentForm(false)
-          viewSubscriptions(user_id)
-          const response = await apis.postWalletAddress({
-            wallet_address: JSON.parse(localStorage.getItem('data')).wallet_address,
-          });
-          localStorage.removeItem("data");
-          localStorage.setItem("data", JSON.stringify(response?.data?.data));
-          console.log(JSON.parse(localStorage.getItem('data')), "me here")
-          // localStorage.setItem('data', {...data, plan_name, plan_type});
-        }
+        toast.success("Plan purchased!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setShowPaymentForm(false)
+        viewSubscriptions(user_id)
+      }
         // {
         //     amout : 1000,
         //     id
@@ -204,7 +197,7 @@ const PaymentForm = ({
                   </h2>
                   <h2
                     onClick={() => {
-                      setPaymentMode("one time");
+                      setPaymentMode("one_time");
                     }}
                   >
                     One time

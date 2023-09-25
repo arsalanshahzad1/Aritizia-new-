@@ -11,7 +11,8 @@ import {
     YAxis,
     Label
 } from "recharts";
-function ChartForEarning({data, chartLabel}) {
+function ChartForEarning({data}) {
+    console.log(data, "graph data chart value")
     const gradientColor = "#2438CB"
     return (
         <div>
@@ -83,8 +84,7 @@ function ChartForEarning({data, chartLabel}) {
             return (
                 <div className='Custom-tool-tip'>
                     <p>
-                        {/* {label} */}
-                       {chartLabel ? chartLabel: "Total Subscribers"} : {payload[0]?.payload?.value}
+                        Total Subscribers: {payload[0]?.payload?.value}
                     </p>
                 </div>
             )
