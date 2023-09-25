@@ -65,6 +65,7 @@ function ProfileDrawer({
   const [sucess, setSucess] = useState(false);
   const [amount, setAmount] = useState("");
   const [fiatAmount, setFiatAmount] = useState("");
+  const [ethWeiForFiat, setEthWeiForFiat] = useState("");
   const [platformFee, setPlatformFee] = useState("");
   const [discountedEth, setDiscountedEth] = useState(0);
   const [discountedAmountUSD, setDiscountedAmountUSD] = useState(0);
@@ -299,7 +300,6 @@ function ProfileDrawer({
   };
 
   const getFiatAmount = async () => {
-
     const signer = await getProviderOrSigner(true);
 
     const marketplaceContract = new Contract(
@@ -308,21 +308,14 @@ function ProfileDrawer({
       signer
     );
 
-    const USDTContract = new Contract(
-      TETHER_CONTRACT_ADDRESS.address,
-      TETHER_CONTRACT_ABI.abi,
-      signer
-    );
-
     let fee = +platformFeeUSDT;
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
-    let amountInWei = amount * 10 ** 6;
-    amountInWei = amountInWei.toString();
 
     let checkFan = await marketplaceContract.checkFan(id);
-    console.log("checkFan  ", checkFan);
+    console.log("checkFan ", checkFan);
     const structData2 = await marketplaceContract._idToNFT2(id);
     let discount = +structData2.fanDiscountPercent.toString();
+    var amountETH = +priceETH + +platformFeeETH;
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeUSDT;
@@ -334,87 +327,84 @@ function ProfileDrawer({
       console.log("www discountedAmountUSD", discountedAmountUSD);
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
-      amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei.toString();
 
-      console.log("www fee", fee);
       console.log("www amount", amount);
-      console.log("www amountInWei", amountInWei);
+
+      amountETH = +discountedEth + +discountedPlatformFeeETH;
     }
 
-    // ye wala bhej USD ki amount h ye 
-    console.log("ye usd ki amount h",amount);
+    // ye wala bhej USD ki amount h ye
+    console.log("ye usd ki amount h", amount);
     // setShowFiatPaymentForm(true)
-    setFiatAmount(amount)
-
+    setFiatAmount(amount);
   };
 
   let fiatPurchase = false;
 
-  const buyWithFIAT = async () => {
-    console.log("11111111111111");
+  // const buyWithFIAT = async () => {
+  //   console.log("11111111111111");
 
-    fiatPurchase = true;
-    const signer = await getProviderOrSigner(true);
-    console.log("2222222222222");
+  //   fiatPurchase = true;
+  //   const signer = await getProviderOrSigner(true);
+  //   console.log("2222222222222");
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
-    console.log("3333333333333");
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     signer
+  //   );
+  //   console.log("3333333333333");
 
-    const structData = await marketplaceContract._idToNFT(id);
-    console.log("4444444444444");
+  //   const structData = await marketplaceContract._idToNFT(id);
+  //   console.log("4444444444444");
 
-    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
-    console.log("555555555555");
+  //   let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+  //   console.log("555555555555");
 
-    var fee = +platformFeeETH;
-    var amount = +priceETH + fee;
-    var value = amount.toString();
-    console.log("ETH amount", value);
+  //   var fee = +platformFeeETH;
+  //   var amount = +priceETH + fee;
+  //   var value = amount.toString();
+  //   console.log("ETH amount", value);
 
-    let checkFan = await marketplaceContract.checkFan(id);
+  //   let checkFan = await marketplaceContract.checkFan(id);
 
-    const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2.fanDiscountPercent.toString();
+  //   const structData2 = await marketplaceContract._idToNFT2(id);
+  //   let discount = +structData2.fanDiscountPercent.toString();
 
-    if (checkFan && discount != 0) {
-      fee = +discountedPlatformFeeETH;
-      console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
-      console.log("www discountedEth", discountedEth);
-      // check this
-      amount = +discountedEth + fee;
-      value = amount.toString();
-    }
-    console.log("www paymentMethod", paymentMethod);
-    console.log("www id", id);
-    console.log("www sellerPlan", sellerPlan);
-    console.log("www buyerPlan", buyerPlan);
-    console.log("www address", NFT_CONTRACT_ADDRESS.address);
-    console.log("www value", value);
+  //   if (checkFan && discount != 0) {
+  //     fee = +discountedPlatformFeeETH;
+  //     console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
+  //     console.log("www discountedEth", discountedEth);
+  //     // check this
+  //     amount = +discountedEth + fee;
+  //     value = amount.toString();
+  //   }
+  //   console.log("www paymentMethod", paymentMethod);
+  //   console.log("www id", id);
+  //   console.log("www sellerPlan", sellerPlan);
+  //   console.log("www buyerPlan", buyerPlan);
+  //   console.log("www address", NFT_CONTRACT_ADDRESS.address);
+  //   console.log("www value", value);
 
-    await (
-      await marketplaceContract.buyWithFIAT(
-        NFT_CONTRACT_ADDRESS.address,
-        paymentMethod,
-        id,
-        sellerPlan, //  must be multiple of 10 of the users percent
-        buyerPlan, // must be multiple of 10 of the users percent
-        ethers.utils.parseEther(value)
-      )
-    ).wait();
-    console.log("buyWithETH");
+  //   await (
+  //     await marketplaceContract.buyWithFIAT(
+  //       NFT_CONTRACT_ADDRESS.address,
+  //       paymentMethod,
+  //       id,
+  //       sellerPlan, //  must be multiple of 10 of the users percent
+  //       buyerPlan, // must be multiple of 10 of the users percent
+  //       ethers.utils.parseEther(value)
+  //     )
+  //   ).wait();
+  //   console.log("buyWithETH");
 
-    let response = marketplaceContract.on(
-      "NFTSold",
-      fiatPurchase ? handleNFTSoldEvent : null
-    );
+  //   let response = marketplaceContract.on(
+  //     "NFTSold",
+  //     fiatPurchase ? handleNFTSoldEvent : null
+  //   );
 
-    console.log("Response of bid even", response);
-  };
+  //   console.log("Response of bid even", response);
+  // };
 
   let ethPurchase = false;
 
@@ -458,11 +448,12 @@ function ProfileDrawer({
       value = amount.toString();
     }
 
-    console.log("www paymentMethod", paymentMethod);
-    console.log("www id", id);
-    console.log("www sellerPlan", sellerPlan);
-    console.log("www buyerPlan", buyerPlan);
-    console.log("www address", NFT_CONTRACT_ADDRESS.address);
+    console.log("www paymentMethod", typeof paymentMethod);
+    console.log("www id", typeof id);
+    console.log("www sellerPlan", typeof sellerPlan);
+    console.log("www buyerPlan", typeof buyerPlan);
+    console.log("www address", typeof NFT_CONTRACT_ADDRESS.address);
+    console.log("www value", typeof value);
     console.log("www value", value);
 
     await (
@@ -589,6 +580,7 @@ function ProfileDrawer({
   ];
 
   const getNFTDetailByNFTTokenId = async () => {
+    console.log("ress");
     try {
       const response = await apis.getNFTByTokenId(id);
       console.log("ressss", response?.data?.data?.subscription_plan);
@@ -1283,7 +1275,7 @@ function ProfileDrawer({
                           className="nft-buy-btn"
                           disabled={!chack}
                           onClick={() => {
-                            getFiatAmount(); 
+                            getFiatAmount();
                             setSucess(true);
                           }}
                         >
@@ -1317,7 +1309,9 @@ function ProfileDrawer({
             <button onClick={buyWithUSDT}>Buy with USDT</button>
           </div>
           <div className="mobal-button-2">
-            <button onClick={() =>setShowFiatPaymentForm(true)}>Buy with FIAT</button>
+            <button onClick={() => setShowFiatPaymentForm(true)}>
+              Buy with FIAT
+            </button>
             {/* <button onClick={buyWithFIAT}>Buy with FIAT</button> */}
           </div>
         </div>
@@ -1346,6 +1340,10 @@ function ProfileDrawer({
             <FiatStripeContainer
               id={id}
               amount={fiatAmount}
+              paymentMethod={paymentMethod}
+              sellerPlan={getSellerPlan}
+              buyerPlan={buyerPlan}
+              ethWeiForFiat={ethWeiForFiat}
               setShowPaymentForm={setShowFiatPaymentForm}
               showResponseMessage={showResponseMessage}
               setSucess={setSucess}

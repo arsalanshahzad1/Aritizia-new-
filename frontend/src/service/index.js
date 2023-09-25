@@ -44,15 +44,15 @@ const createBackendServer = (baseURL) => {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
- 
+
   const headers2 = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + midjourneyapiKey
-  }
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + midjourneyapiKey,
+  };
   const headers3 = {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + stabilityapiKey
-  }
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + stabilityapiKey,
+  };
 
   const postListNft = async (body) => await api.post("list-nft", body);
 
@@ -172,43 +172,53 @@ const createBackendServer = (baseURL) => {
 
   // NFT Collection//
 
-  const viewNftCollectionStock = async (collectionID) => await api.get(`view-nft-collection-stock/${collectionID}`);
-  const viewNftCollectionProfile = async (collectionID) => await api.get(`view-nft-collection-profile/${collectionID}`);
-  const viewNftTopCollections = async () => await api.get(`view-nft-top-collections`);
-  
-  
-  
+  const viewNftCollectionStock = async (collectionID) =>
+    await api.get(`view-nft-collection-stock/${collectionID}`);
+  const viewNftCollectionProfile = async (collectionID) =>
+    await api.get(`view-nft-collection-profile/${collectionID}`);
+  const viewNftTopCollections = async () =>
+    await api.get(`view-nft-top-collections`);
+
   // NFT Collection//
-  const getCurrentNotificationSettings = async (userId) => await api.get(`view-notification-setting/${userId}`);
-  const updateNotificationSettings = async (body) => await api.post(`update-notification-setting`,body);
+  const getCurrentNotificationSettings = async (userId) =>
+    await api.get(`view-notification-setting/${userId}`);
+  const updateNotificationSettings = async (body) =>
+    await api.post(`update-notification-setting`, body);
 
+  const getMidjourneyId = async (body) =>
+    await api.post(`https://api.thenextleg.io/v2/imagine`, body, {
+      headers: headers2, // Pass headers here
+    });
 
-  const getMidjourneyId = async (body) => await api.post(`https://api.thenextleg.io/v2/imagine`, body, {
-    headers: headers2, // Pass headers here
-  });
-
-  const getMidjourneyImagesFromId = async (id) => await api.get(`https://api.thenextleg.io/v2/message/${id}`, {
-    headers: headers2, // Pass headers here
-  });
+  const getMidjourneyImagesFromId = async (id) =>
+    await api.get(`https://api.thenextleg.io/v2/message/${id}`, {
+      headers: headers2, // Pass headers here
+    });
 
   const getStabilityImages = async (body) =>
-    await api.post(`https://api.stability.ai/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image`, body, {
-      headers: headers3, // Pass headers here
-    });
+    await api.post(
+      `https://api.stability.ai/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image`,
+      body,
+      {
+        headers: headers3, // Pass headers here
+      }
+    );
 
   // Art Gallery //
 
-  const createArtGalleryImages = async (body) => await api.post(`create-art-gallery`,body,{headers : headers});
-  const generateArtGalleryImages = async (body) => await api.post(`generate-art-gallery`, body);
-  const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
-  const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
-  const removeArtGallery = async (RealUserId) => await api.get(`remove-art-gallery/${RealUserId}`);
+  const createArtGalleryImages = async (body) =>
+    await api.post(`create-art-gallery`, body, { headers: headers });
+  const generateArtGalleryImages = async (body) =>
+    await api.post(`generate-art-gallery`, body);
+  const viewArtGallery = async (RealUserId) =>
+    await api.get(`view-art-gallery/${RealUserId}`);
+  const viewRemainingArtGallery = async (RealUserId) =>
+    await api.get(`view-remaining-art-gallery/${RealUserId}`);
+  const removeArtGallery = async (RealUserId) =>
+    await api.get(`remove-art-gallery/${RealUserId}`);
 
-
-
-  const viewLandingPageDetail = async () => await api.get(`view-landing-page-detail`);
-
-
+  const viewLandingPageDetail = async () =>
+    await api.get(`view-landing-page-detail`);
 
   //Returning all the API
   return {
@@ -285,14 +295,11 @@ const createBackendServer = (baseURL) => {
 
     viewLandingPageDetail,
 
-    payNftByFiat
-
+    payNftByFiat,
   };
 };
 
-const apis = createBackendServer(" http://143.198.70.237");
-
-//     Testing DB: http://165.232.142.3
-// Development DB: http://143.198.70.237
+// const apis = createBackendServer(" http://143.198.70.237"); // Development DB
+const apis = createBackendServer("http://165.232.142.3"); //   Testing DB
 
 export default apis;
