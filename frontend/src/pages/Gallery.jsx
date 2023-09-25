@@ -13,10 +13,12 @@ const Gallery = ({user}) => {
     const user_id = id?.id;
     const [GalleryItems, setGalleryItems] = useState([])
     const [selectCount, setSelectCount] = useState(0)
+
     useEffect(() => {
         const count = GalleryItems.filter(item => item.selected).length;
         setSelectCount(count)
     }, [GalleryItems])
+
     const handleSelectArt = (index) => {
         console.log("I'm being selected", index);
         const updatedArts = [...GalleryItems];
@@ -151,13 +153,28 @@ const Gallery = ({user}) => {
             setGalleryItems(tempImages)
         } catch (error) {
         }
+        setLoader(false)
     }
 
     useEffect(() => {
         saveToGallery()
     }, [])
+
+    const [loader, setLoader] = useState(true)
+
+    if(loader){
+      return(
+        <>
+          <section className="sec-loading">
+            <div className="one"></div>
+          </section>
+        </>
+      )
+    }
+    
     return (
         < div >
+        
             <div className='Arts-holder'>
                 {GalleryItems.length >= 0 ?
                     GalleryItems.map((item, Index) => {

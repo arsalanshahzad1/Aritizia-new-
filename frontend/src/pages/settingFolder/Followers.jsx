@@ -33,6 +33,7 @@ const Followers = ({ data  , id}) => {
     }else{
       setFollwers('');
     }
+    setLoader(false)
   };
 
   const followOther = async (newId) => {
@@ -47,8 +48,23 @@ const Followers = ({ data  , id}) => {
   useEffect(() => {
     getFollowersList()
   }, [followStatus])
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
+  
   return (
     <>
+
+
       {followers != ''
         ?
         <>

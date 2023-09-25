@@ -67,6 +67,7 @@ const OtherProfile = ({ search, setSearch }) => {
     const response = await apis.getLikeNFTListing(id);
     setLikedNfts(response?.data?.data);
     console.log(response, "other-users");
+    setLikedNftLoader(false)
   };
 
   const getOtherUsersDetails = async (address) => {
@@ -173,6 +174,8 @@ const OtherProfile = ({ search, setSearch }) => {
 
   //   };
 
+  // console.log(userDetails, "userDetails")
+
   const getMyListedNfts = async () => {
     let emptyList = [];
     setNftListAuction(emptyList);
@@ -272,6 +275,7 @@ const OtherProfile = ({ search, setSearch }) => {
             // setNftListAuction(myAuctions);
             setNftListAuction((prev) => [...prev, nftData]);
           }
+          setNftLoader(false)
         })
 
         .catch((error) => {
@@ -319,7 +323,7 @@ const OtherProfile = ({ search, setSearch }) => {
   // console.log(userDetails?.id, "arsalan data")
 
  
-
+  const [currentState, setCurrentState] = useState(false)
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
       follow_by: RealUserId,
@@ -327,6 +331,7 @@ const OtherProfile = ({ search, setSearch }) => {
     });
     if (response?.status === 201) {
       setFollowStatus(response?.data?.data?.is_follow);
+      setCurrentState(!currentState)
     }
     console.log(response, "this is reponse");
     console.log(FollowStatus, "this is follow status");
@@ -345,6 +350,10 @@ const OtherProfile = ({ search, setSearch }) => {
 
   useEffect(() => {
     getOtherUsersDetails(userADDRESS);
+  }, []);
+
+  useEffect(() => {
+    getOtherUsersDetails(userADDRESS);
   }, [FollowStatus]);
 
   const copyToClipboard = (link) => {
@@ -355,37 +364,25 @@ const OtherProfile = ({ search, setSearch }) => {
     });
   };
 
-
-  const [followersList, SetFollowersList] = useState([])
-  const [didFollow, setDidFollow] = useState(true);
   const [totalFollowers, setTotalFollowers] = useState(0);
+  const [isFollow, setIsFollow] = useState(false)
 
-  const ViewFollowersList = async () =>{
-    const response = await apis.getFollowersList(userDetails?.id)
-    // setDidFollow(response?.data?)
-    // console.log(response?.data?.data,"arsalan here")
-    SetFollowersList(response?.data?.data)
-    followersList.forEach(e=> e.user_id == RealUserId ? setDidFollow(e.is_follow) : "")
+  const getTotalFollowers = async () =>{
+    const response = await apis.getCountFollow(userDetails?.id)
+    setTotalFollowers(response?.data?.data?.follower_count)
+    setIsFollow(response?.data?.data?.is_follow)
   }
- 
-  const countFollowers = () => {
-    let followers = 0; 
-    followersList?.forEach(e => {
-        if (e?.is_follow) {
-            followers += 1;
-        }
-    });
-   setTotalFollowers(followers)
-}
+
   useEffect(()=>{
-    ViewFollowersList()
-    countFollowers()
+    getTotalFollowers()
   },[])
 
   useEffect(()=>{
-    ViewFollowersList()
-    countFollowers()
-  }, [userDetails, followersList, didFollow ])
+    getTotalFollowers()
+  },[currentState, isFollow])
+
+  const [nftLoader, setNftLoader] = useState(true)
+  const [likedNftLoader, setLikedNftLoader] = useState(true)
 
 
   return (
@@ -437,17 +434,15 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {/* {FollowStatus ? ( */}
-                  { didFollow ? (
+                  {isFollow ? (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
                       Unfollow
                     </div>
                   ) : (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
-                      Follow
+                      Follow 
                     </div>
                   )}
-                  {/* <div>Followers {userDetails?.followers?.length}</div> */}
                   <div>Followers {totalFollowers}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
@@ -530,7 +525,12 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex other-profile-cards d-flex flex-wrap">
                         {collectionTabs === 0 && (
                           <>
-                            {nftListFP?.length > 0 ? nftListFP?.map((item) => (
+                            { nftLoader ?
+                              <section className="sec-loading">
+                                <div className="one"></div>
+                              </section>
+                              :
+                            nftListFP?.length > 0 ? nftListFP?.map((item) => (
                               <BuyNow
                                 onOpen={onOpen}
                                 // onClose={onClose}
@@ -555,7 +555,12 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex">
                         {collectionTabs === 1 && (
                           <>
-                            {nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
+                            { nftLoader ?
+                              <section className="sec-loading">
+                                <div className="one"></div>
+                              </section>
+                              :
+                            nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
                               <NewItemCard
                                 key={item.id}
                                 id={item.id}
@@ -581,7 +586,12 @@ const OtherProfile = ({ search, setSearch }) => {
                 {tabs === 1 && (
                   <>
                     <div className="row">
-                      {likedNfts?.length > 0 ? likedNfts?.map((item) => (
+                      {likedNftLoader ? 
+                        <section className="sec-loading">
+                          <div className="one"></div>
+                        </section>
+                      :
+                      likedNfts?.length > 0 ? likedNfts?.map((item) => (
                         <NewItemCard
                           key={item?.id}
                           id={item?.id}

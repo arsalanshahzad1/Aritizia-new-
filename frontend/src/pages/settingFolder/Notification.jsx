@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import apis from "../../service";
 import { ToastContainer, toast } from "react-toastify";
+import Loader from "../../components/shared/Loader";
 
 const Notification = () => {
   const [data, setData] = useState("");
@@ -13,6 +14,7 @@ const Notification = () => {
     if (response?.status === 200) {
       setData(response.data.data);
     }
+    setLoader(false)
   };
 
   const updateNotificationSetting = async (e) => {
@@ -47,8 +49,10 @@ const Notification = () => {
     setData((prevData) => ({ ...prevData, [name]: newValue }));
   };
 
-  console.log(data)
+  const [loader, setLoader] = useState(true)
   return (
+    <>
+    {loader && <Loader/>}
     <div className="col-lg-10 mx-auto">
       <Form>
         <div className="row">
@@ -168,6 +172,7 @@ const Notification = () => {
       </Form>
       <ToastContainer />
     </div>
+    </>
   );
 };
 

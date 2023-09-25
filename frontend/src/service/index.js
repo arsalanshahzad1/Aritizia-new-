@@ -107,7 +107,7 @@ const createBackendServer = (baseURL) => {
   const postFollowAndUnfollow = async (body) =>
     await api.post(`user-follow-unfollow`, body);
 
-  const getCountFollow = async (userId, otherUserId) =>
+  const getCountFollow = async (otherUserId) =>
     await api.get(`count-follow-unfollow/${RealUserId}/${otherUserId}`);
 
   const getFollowingList = async (userId) =>
@@ -293,7 +293,7 @@ const createBackendServer = (baseURL) => {
   };
 };
 
-const apis = createBackendServer("http://143.198.70.237");
+const apis = createBackendServer("http://165.232.142.3");
 
 //     Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237

@@ -25,6 +25,7 @@ import {
 } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
 import { Link } from "react-router-dom";
+import Loader from "../../components/shared/Loader";
 // import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
@@ -396,14 +397,18 @@ const [counterData , setCounterData] = useState('')
     } catch (error) {
       
     }
+    setLoader(false)
   }
 
   useEffect(() =>{
     viewLandingPageDetail()
   }, [])
 
+  const [loader, setLoader] = useState(true)
+
   return (
     <>
+      {loader && <Loader />}
       {/* <MetaDecorator/> */}
       {/* <MetaDecorator
         title={'Artizia'}
@@ -482,9 +487,7 @@ const [counterData , setCounterData] = useState('')
                   <>
                     {nftListFP?.slice(0,nftListFP.length>4? 4 : nftListFP.list).map((item, index) => (
                       <>
-                      {console.log(nftListFP,"list")}
-                      {/* {console.log(item.seller, userAddress, JSON.parse(localStorage.getItem("data")).wallet_address, "items here")} */}
-                      <BuyNow
+                     <BuyNow
                         key={item?.id}
                         id={item?.id}
                         title={item?.title}

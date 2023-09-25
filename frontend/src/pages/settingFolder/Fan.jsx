@@ -9,7 +9,7 @@ import {
 } from "../../methods/walletManager";
 import { Link } from "react-router-dom";
 
-function Fan({ id }) {
+function Fan({ id, fanToggle }) {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
@@ -19,7 +19,14 @@ function Fan({ id }) {
     const response = await apis.getFanList(id);
     setFanListing(response?.data?.data);
     console.log(response?.data?.data, "fanlist");
+    setLoader(false)
   };
+
+  useEffect(()=>{
+    setLoader(true)
+    getFanListing()
+  }
+  ,[fanToggle])
 
   let selectedUser;
   const removeFan = async (id) => {
@@ -71,6 +78,7 @@ function Fan({ id }) {
     // setFanListing([]);
   };
 
+
   const getFansBC = async () => {
     const provider = await getProviderOrSigner();
 
@@ -88,6 +96,19 @@ function Fan({ id }) {
   useEffect(() => {
     getFanListing();
   }, []);
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
+  
   return (
     <>
     {fanListing.length > 0 ?

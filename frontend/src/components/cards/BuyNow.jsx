@@ -48,13 +48,9 @@ const BuyNow = ({
     console.log("checkSeller Seller == userAddress", seller == userAddress);
 
     if (userAddress != seller) {
-      // show buy button
       showBuyButton(true);
-      // console.log("WWW Bid");
     } else {
-      // console.log("WWW show claim");
       showBuyButton(false);
-      // show claim
     }
   };
 
