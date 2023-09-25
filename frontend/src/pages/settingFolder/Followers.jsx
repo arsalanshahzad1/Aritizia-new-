@@ -38,8 +38,8 @@ const Followers = ({ data  , id}) => {
 
   const followOther = async (newId) => {
     const response = await apis.postFollowAndUnfollow({
-      follow_by: newId,
-      follow_to: RealUserId,
+      follow_by: id,
+      follow_to: newId,
     });
     console.log(response?.data, "new data loading")
     setFollowStatus(!followStatus)
@@ -86,10 +86,8 @@ const Followers = ({ data  , id}) => {
                   </div>
                 </div>
                 <div className="right">
-                  <button onClick={() => followOther(data?.user_id)}>
-                    {data?.is_follow === true ? "Unfollow" : "Follow"}
-                  </button>
-                  {console.log(data, "dataid")}
+                  <button onClick={() => followOther(data?.user_id)}>{data?.is_follow === true ? "Unfollow" : "Follow"}</button>
+                  {console.log(data?.is_follow, "data")}
 
                   {/* <span
                     onClick={() => {
