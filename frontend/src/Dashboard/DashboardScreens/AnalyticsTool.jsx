@@ -554,14 +554,14 @@ function AnalyticsTool({ search, setSearch }) {
                     </div>
 
                 </div>
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
+                <br className='small-scr'/>
+                <br className='small-scr'/>
+                <br className='small-scr'/>
+                <br className='small-scr'/> 
+                <br className='small-scr'/> 
+                <br className='small-scr'/>
+                <br className='small-scr'/> 
+                <br className='small-scr'/>
                 <div className='dashboard-front-section-2'>
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
@@ -586,7 +586,12 @@ function AnalyticsTool({ search, setSearch }) {
                     {userSubscription.value == 2 && <ChartForEarning data={Daily_data} />}
                     {/* <ChartForEarning data={Monthly_data} /> */}
                 </div>
-                <br /><br /><br /><br /> <br /> <br />
+                <br className='small-scr'/>
+                <br className='small-scr'/>
+                <br className='small-scr'/>
+                <br className='small-scr'/> 
+                <br className='small-scr'/> 
+                <br className='small-scr'/>
                 <div className='dashboard-front-section-2'>
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
@@ -668,12 +673,11 @@ function AnalyticsTool({ search, setSearch }) {
 
                             </tbody>            
                     </table>
-                    {userTransactionDetails?.dat?.length > 0 ?
-                        "" : 
-                            <div className='data-table-empty'>
-                                <p>No data availaible</p>
-                            </div>
-                        }
+                    {userTransactionDetails?.data?.length >= 0 ?
+                        <div className='data-table-empty'>
+                            <p>No data availaible</p>
+                        </div> : ""
+                    }
 
                     <div className='user-management-table-contorls'>
                         <div>

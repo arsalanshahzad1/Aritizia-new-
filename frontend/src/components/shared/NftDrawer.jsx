@@ -460,9 +460,8 @@ const ProfileDrawer = ({
     );
     await tx.wait();
     console.log("userAddress", userAddress);
-    console.log("zzz item.startTime", item.startTime);
-    console.log("zzz item.endTime", item.endTime);
-    console.log("zzz item.tokenId,", item.tokenId);
+    console.log("item.startTime", item.startTime);
+    console.log("item.endTime", item.endTime);
 
     await (
       await marketplaceContract.resellNft(
@@ -471,10 +470,7 @@ const ProfileDrawer = ({
         ethers.utils.parseEther(item.price),
         item.listingType,
         item.startTime,
-        item.endTime,
-        {
-          gasLimit: ethers.BigNumber.from("30000000"),
-        }
+        item.endTime
       )
     ).wait();
 
@@ -619,7 +615,7 @@ const ProfileDrawer = ({
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;
-      endTime = endTimestamp;
+      endTime = startTimestamp;
     }
 
     console.log("CHECK startingDate", startTime);
@@ -628,7 +624,7 @@ const ProfileDrawer = ({
     console.log("price", price);
 
     item = {
-      tokenId: id,
+      tokenId: 0,
       price: price,
       listingType: listingType,
       startTime: startTime,
@@ -639,7 +635,7 @@ const ProfileDrawer = ({
 
     if (
       //   item.title != null &&
-      item.price != null
+      item.price != null && startingDate !== "" && endingDate !== ""
       //   item.description != null &&
       //   item.crypto != null &&
       //   item.file != null &&
@@ -678,7 +674,6 @@ const ProfileDrawer = ({
 
   const getItem = async () => {
     const provider = await getProviderOrSigner();
-    console.log("item.tokenId,", item.tokenId);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -689,12 +684,9 @@ const ProfileDrawer = ({
     let seller = structData.seller;
     let owner = structData.owner;
 
-    console.log("id", id);
     console.log("seller", seller);
     console.log("owner", owner);
-    console.log("zzz item.startTime", item.startTime);
-    console.log("zzz item.endTime", item.endTime);
-    console.log("zzz item.tokenId,", item.tokenId);
+
     //   const _listedNfts = await marketplaceContract.getListedNfts();
 
     //   for (let i = 0; i < _listedNfts.length; i++) {
@@ -755,6 +747,7 @@ const ProfileDrawer = ({
                                   // type="number"
                                   // placeholder="0.00"
                                   // ref={price}
+                                  // required
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -787,6 +780,7 @@ const ProfileDrawer = ({
                                     // type="number"
                                     // placeholder="0.00"
                                     // ref={price}
+                                    // required
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -820,6 +814,7 @@ const ProfileDrawer = ({
                                       setStartingDate(e.target.value)
                                     }
                                     min={new Date().toISOString().split("T")[0]}
+                                    // required
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -834,6 +829,7 @@ const ProfileDrawer = ({
                                       setEndingDate(e.target.value)
                                     }
                                     min={startingDate}
+                                    // required
                                   />
                                 </div>
                               </div>

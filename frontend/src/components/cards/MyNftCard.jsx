@@ -185,7 +185,7 @@ const MyNftCard = ({
         collectionn={collection}
         getMyNfts={getMyNfts}
       />
-      <ProfileDrawer
+      {/* <ProfileDrawer
         isVisible={isVisible2}
         onClose={onClose2}
         id={id}
@@ -197,7 +197,7 @@ const MyNftCard = ({
         description={description}
         collection={collection}
         userAddress={userAddress}
-      />
+      /> */}
     </>
   );
 };

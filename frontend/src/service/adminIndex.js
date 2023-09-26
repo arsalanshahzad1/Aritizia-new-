@@ -70,7 +70,8 @@ const createBackendServer = (baseURL) => {
   // Art Gallery Section Apis //
 
   const viewArtGalleyList = async (count) =>
-    await api.get(`view-art-gallery-images?last_count=${count}`);
+    await api.get(`view-art-gallery-images?page=${count}`);
+  
   const approvedUnapprovedArtGalleryImages = async (artGalleryId) =>
     await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 
@@ -84,8 +85,7 @@ const createBackendServer = (baseURL) => {
     await api.delete(`subscriptions/${planId}`);
 
   // Analytics Section Apis //
-  const viewAnalyticDashboard = async () =>
-    await api.get(`view-analytic-dashboard`);
+  const viewAnalyticDashboard = async () => await api.get(`view-analytic-dashboard`);
   const viewAnalyticUsers = async () => await api.get(`view-analytic-users`);
   const viewAnalyticTransaction = async (count) =>
     await api.get(`view-analytic-transaction?page=${count}&filter=yearly`);
@@ -130,6 +130,7 @@ const createBackendServer = (baseURL) => {
 };
 
 const adminApis = createBackendServer("http://165.232.142.3");
+
 
 //     Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237

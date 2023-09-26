@@ -1,10 +1,25 @@
-
-
 import { useEffect, useState } from "react";
 import apis from "../../service";
+import { useNavigate } from "react-router-dom";
+// import apis from "../../service";
+
 const FollowersUserDashboard = ({ data, id }) => {
     const [showOptions, setshowOptions] = useState(false);
     const [followers, setFollwers] = useState([]);
+    const [userWalletAddress, SetUserWalletAddress] = useState("");
+    const navigate = useNavigate();
+
+    const handleUserVisit = async (id)=> {
+    const response = await apis.getUserData(id);
+    SetUserWalletAddress( response?.data?.data?.wallet_address);
+    }
+
+    useEffect(()=>{
+    if(userWalletAddress){
+        navigate(`/other-profile?add=${userWalletAddress}`)
+    }
+    },[userWalletAddress])
+
     const localStoragedata = JSON.parse(localStorage.getItem("data"));
     const RealUserId = localStoragedata?.id;
 
@@ -27,16 +42,24 @@ const FollowersUserDashboard = ({ data, id }) => {
     useEffect(() => {
         getFollowersList()
     }, [])
+
+    
     return (
         <>
             {followers != ''
                 ?
                 <>
                     {followers?.map((data, i) => {
+                        console.log(data, "data value")
                         return (
                             <div className="Follow-row" key={i}>
                                 <div className="left">
-                                    <div className="img-holder">
+                                    <div className="img-holder" 
+                                        onClick={() =>{
+                                            handleUserVisit(data?.user_id)
+                                            }
+                                          }
+                                    >
                                         {data?.profile_image == null ?
                                             <img src='/assets/images/user-none.png' alt="" />
                                             :
@@ -49,7 +72,7 @@ const FollowersUserDashboard = ({ data, id }) => {
                                     </div>
                                 </div>
                                 <div className="right">
-                                    <button></button>
+                                    {/* <button></button> */}
                                     {/* <button onClick={() => followOther(data?.user_id)}>Follow</button> */}
 
                                     {/* <span

@@ -29,6 +29,20 @@
     background-color: transparent;
 }
 
+.chat-loading{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-loading p{
+    font-size: 20px;
+    font-weight: 500;
+    color: #B600D1;
+}
+
 .chat-title {
     margin: 5px 0;
     font-size: 38px;

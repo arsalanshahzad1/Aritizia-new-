@@ -169,13 +169,9 @@ const BuyNow = ({
 
 
     if (userAddress != seller) {
-      // show buy button
       showBuyButton(true);
-      // console.log("WWW Bid");
     } else {
-      // console.log("WWW show claim");
       showBuyButton(false);
-      // show claim
     }
   };
 
@@ -536,7 +532,12 @@ const BuyNow = ({
                   <div className="css-10nf7hq detail-wrap" onClick={() => openDrawer()}>
                     <div className="center-icon">
                       <div className="icon">
-                        <img src={collectionImages} alt="" />
+                        {/* <img src={collectionImages && collectionImages} alt="" /> */}
+                            {collectionImages == null ?
+                                <img src='/assets/images/user-none.png' alt="" />
+                                :
+                                <img src={collectionImages} alt="" />
+                            }
                         <img src="/assets/images/chack.png" alt="" />
                       </div>
                     </div>
@@ -558,7 +559,7 @@ const BuyNow = ({
                   {/* <div className="button css-pxd23z">
                                         <p>Read More</p>
                                     </div> */}
-                  {buyButton ? (
+                  {userAddress?.toUpperCase() !== seller?.toUpperCase() ? (
                     <div className="button css-pxd23z" onClick={() => {
                       setSucess(true);
                       getNFTDetailByNFTTokenId(id)
@@ -570,11 +571,13 @@ const BuyNow = ({
                         <img src="/assets/icons/shop.png" alt="" />
                       </span>
                     </div>
-                  ) : (
-                    <div className="button css-pxd23z">
+                  )
+                  : (
+                    <div className="button css-pxd23z" style={{display: "flex", justifyContent:"center"}}>
                       <p>Your nft</p>
                     </div>
-                  )}
+                  )
+                  }
                 </div>
               </div>
             </a>
@@ -609,6 +612,7 @@ const BuyNow = ({
         collection={collection}
         userAddress={userAddress}
         setIsVisible={setIsVisible}
+        sellerWallet={seller}
       />
       <Modal
         show={sucess}

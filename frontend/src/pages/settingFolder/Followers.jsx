@@ -1,39 +1,79 @@
 import { useEffect, useState } from "react";
 import apis from "../../service";
+import { useNavigate } from "react-router-dom";
+
+
 const Followers = ({ data  , id}) => {
   const [followers, setFollwers] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
+  const [followStatus, setFollowStatus] = useState(false)
   const RealUserId = localStoragedata?.id;
+
+  // get user wallet address
+  const [userWalletAddress, SetUserWalletAddress] = useState("");
+  const navigate = useNavigate();
+
+  const handleUserVisit = async (id)=> {
+    const response = await apis.getUserData(id);
+    SetUserWalletAddress( response?.data?.data?.wallet_address);
+  }
+
+  useEffect(()=>{
+    if(userWalletAddress !== ""){
+        navigate(`/other-profile?add=${userWalletAddress}`)
+    }
+  },[userWalletAddress])
+
 
   const getFollowersList = async () => {
     const response = await apis.getFollowersList(id);
     if(response.status){
-    setFollwers(response?.data?.data);
+      setFollwers(response?.data?.data);
+      console.log(followers)
     }else{
       setFollwers('');
     }
+    setLoader(false)
   };
 
-  const followOther = async (id) => {
+  const followOther = async (newId) => {
     const response = await apis.postFollowAndUnfollow({
-      follow_by: RealUserId,
-      follow_to: id,
+      follow_by: id,
+      follow_to: newId,
     });
+    console.log(response?.data, "new data loading")
+    setFollowStatus(!followStatus)
   };
-
+  
   useEffect(() => {
     getFollowersList()
-}, [])
+  }, [followStatus])
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
+  
   return (
     <>
+
+
       {followers != ''
         ?
         <>
           {followers?.map((data, i) => {
+            {console.log(data,"id data")}
             return (
               <div className="Follow-row" key={i}>
                 <div className="left">
-                  <div className="img-holder">
+                  <div className="img-holder" onClick={()=> handleUserVisit(data.user_id)}>
                     {data?.profile_image == null ?
                       <img src='/assets/images/user-none.png' alt=""/>
                       :
@@ -46,7 +86,8 @@ const Followers = ({ data  , id}) => {
                   </div>
                 </div>
                 <div className="right">
-                  <button onClick={() => followOther(data?.user_id)}>Follow</button>
+                  <button onClick={() => followOther(data?.user_id)}>{data?.is_follow === true ? "Unfollow" : "Follow"}</button>
+                  {console.log(data?.is_follow, "data")}
 
                   {/* <span
                     onClick={() => {

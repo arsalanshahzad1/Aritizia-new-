@@ -31,6 +31,7 @@ import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import RejectedNFTSCard from "../components/cards/RejectedNFTSCard";
 import { ToastContainer, toast } from "react-toastify";
+import Loader from "../components/shared/Loader";
 // import MetaDecorator from "../Meta/MetaDecorator";
 
 const { ethereum } = window;
@@ -57,15 +58,18 @@ const Profile = ({ search, setSearch }) => {
   // const [followers, setFollwers] = useState([]);
   const navigate = useNavigate();
 
-  // const getNFTlikeListing = async () => {
-  //   const response = await apis.getLikeNFTListing(userData?.id);
-  //   setLikedNfts(response?.data?.data);
-  //   console.log(response?.data?.data, "liked-nfts");
-  // };
+  const getNFTlikeListing = async () => {
+    console.log("getNFTlikeListing");
+    const response = await apis.getLikeNFTListing(userData?.id);
+    setLikedNfts(response?.data?.data);
+    console.log(response, "liked-nfts");
 
-  // useEffect(() => {
-  //   getNFTlikeListing();
-  // }, []);
+    setLikedNftLoader(false)
+  };
+
+  useEffect(() => {
+    getNFTlikeListing();
+  }, []);
 
   let likedNftsFromDB = [];
 
@@ -87,12 +91,8 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-
-    const responses = await apis.getLikeNFTListing(userData?.id);
-
-    console.log("cccc NFTId", responses?.data?.data);
-
-    let NFTId = responses?.data?.data;
+    let NFTId = await getLikedNftsList();
+    console.log("NFTId", NFTId);
 
     let liked = [];
     let myAuctions = [];
@@ -103,18 +103,17 @@ const Profile = ({ search, setSearch }) => {
 
     // console.log("NFTId", NFTId);
 
-    console.log("cccc Running");
+    console.log("Running");
     if (NFTId.length > 0 && NFTId != "") {
       for (let i = 0; i < NFTId.length; i++) {
         let id;
-        // let collectionImage = NFTId[i].collection_image;
-        id = +NFTId[i];
+        let collectionImage = NFTId[i].collection_image;
+        id = +NFTId[i].token_id;
         // id =i;
 
         const metaData = await nftContract.tokenURI(id);
 
         const structData = await marketplaceContract._idToNFT(id);
-        console.log("cccc structData", structData);
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -134,9 +133,9 @@ const Profile = ({ search, setSearch }) => {
 
         let collectionId = structData.collectionId.toString();
 
-        console.log("cccc collectionId", collectionId);
+        console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
-        console.log(response?.data, "cccc response.data");
+        console.log(response.data, "saad");
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         console.log(
           response?.data?.data?.media?.[0]?.original_url,
@@ -186,8 +185,9 @@ const Profile = ({ search, setSearch }) => {
                 collectionImages: collectionImages,
               };
               console.log("nftData", nftData);
-              // liked.push(nftData);
-              setLikedNfts((prev) => [...prev, nftData]);
+              liked.push(nftData);
+              // setLikedNfts((prev) => [...prev, nftData]);
+              setLikedNfts(liked)
             } else if (listingType === 1) {
               const nftData = {
                 id: id, //
@@ -205,18 +205,22 @@ const Profile = ({ search, setSearch }) => {
               // myAuctions.push(nftData);
               setLikedNftsAuction((prev) => [...prev, nftData]);
               console.log(nftListAuction, "nftData");
+              // setLikedNftAuctionLoader(false)
             }
-
+            
             // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
           })
-
+          
           .catch((error) => {
             console.error("Error fetching metadata:", error);
           });
+
+        }
       }
-    }
+      setLikedNftAuctionLoader(false)
   };
 
+  
   const validateFanAddresses = (addresses) => {
     for (const address of addresses) {
       if (address === "") {
@@ -226,7 +230,6 @@ const Profile = ({ search, setSearch }) => {
     return true; // No empty strings found, validation passes
   };
   const addFanList = async () => {
-    console.log("ALIMONIS");
     if (validateFanAddresses(FansAddress)) {
       const signer = await getProviderOrSigner(true);
 
@@ -327,7 +330,8 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    const signer = provider.getSigner(); 
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
 
     // console.log("MYADDRESS", address);
     console.log("333333");
@@ -340,6 +344,7 @@ const Profile = ({ search, setSearch }) => {
 
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);
+    let NFTId = await getLikedNftsList();
     let myNFTs = [];
     let myAuctions = [];
     for (let i = 0; i < mintedTokens.length; i++) {
@@ -405,8 +410,10 @@ const Profile = ({ search, setSearch }) => {
               collection: collection,
               collectionImages: collectionImages,
             };
-            console.log(nftData);
+            console.log(nftData, "data here");
+
             // myNFTs.push(nftData);
+            // nftData && setNftListFP(nftData)
             setNftListFP((prev) => [...prev, nftData]);
           } else if (listingType === 1) {
             const nftData = {
@@ -431,6 +438,7 @@ const Profile = ({ search, setSearch }) => {
         .catch((error) => {
           console.error("Error fetching metadata:", error);
         });
+        setNftAuctionLoader(false)
     }
   };
 
@@ -455,7 +463,7 @@ const Profile = ({ search, setSearch }) => {
 
     console.log("four");
     const signer = provider.getSigner();
-   
+    const address = await signer.getAddress();
 
     // console.log("MYADDRESS", address);
 
@@ -466,6 +474,7 @@ const Profile = ({ search, setSearch }) => {
     console.log("five");
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens mynft", mintedTokens);
+    let NFTId = await getLikedNftsList();
     let myNFTs = [];
     // let myAuctions = [];
     console.log(mintedTokens.length);
@@ -560,6 +569,7 @@ const Profile = ({ search, setSearch }) => {
           console.error("Error fetching metadata:", error);
         });
     }
+    setNftLoader(false)
   };
 
   // useEffect(() => {
@@ -576,6 +586,7 @@ const Profile = ({ search, setSearch }) => {
     getMyListedNfts();
     getMyNfts();
     getLikedNfts();
+    setLoader(false)
   }, [userAddress]);
 
   const getLikedNftsList = async () => {
@@ -583,6 +594,16 @@ const Profile = ({ search, setSearch }) => {
     console.log("NFTId", response);
     return response.data.data;
   };
+
+  // const getFollowersList = async () => {
+  //   const response = await apis.getFollowersList();
+  //   if(response.status){
+  //   console.log(response.data.data, "followers");
+  //   setFollwers(response.data.data);
+  //   }else{
+  //     setFollwers('');
+  //   }
+  // };
 
   useEffect(() => {
     getLikedNfts();
@@ -597,6 +618,12 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const [FansAddress, setFansAddress] = useState([""]);
+
+  const fansAddressHandle = () =>{
+    if(FansAddress[FansAddress.length - 1]){
+      setFansAddress([...FansAddress, ""])
+    }
+  }
   const [showAddFanPopUp, setshowAddFanPopUp] = useState(0);
 
   const handleChangeAddressInput = (e, index) => {
@@ -645,6 +672,7 @@ const Profile = ({ search, setSearch }) => {
       setFollwers("");
     }
   };
+
   const getFollowersForFan = async () => {
     const response = await apis.getFollowersForFan();
     if (response.status) {
@@ -661,8 +689,6 @@ const Profile = ({ search, setSearch }) => {
   }, []);
 
   const addFans = async () => {
-    console.log("addingFanListP", addingFanList);
-
     if (addingFanList.length > 0) {
       const response = await apis.postUserFans({
         fan_by: userData?.id,
@@ -675,6 +701,10 @@ const Profile = ({ search, setSearch }) => {
     } else {
       console.log("empty");
     }
+    setshowAddFanPopUp(0)
+    setFanToggle(!fanToggle)
+    // getFollowersForFan()
+    // get
   };
 
   const copyToClipboard = (link) => {
@@ -684,9 +714,20 @@ const Profile = ({ search, setSearch }) => {
       position: toast.POSITION.TOP_CENTER,
     });
   };
+  const [loader, setLoader] = useState(true)
+  const [nftLoader, setNftLoader] = useState(true)
+  const [nftAuctionLoader, setNftAuctionLoader] = useState(true)
+  const [likedNftLoader, setLikedNftLoader] = useState(true) 
+  const [likedNftAuctionLoader, setLikedNftAuctionLoader] = useState(true) 
+
+  const [fanToggle, setFanToggle] = useState(false)
+  // const changeinList = () =>{
+  //   setFanToggle(!fanToggle)
+  // }
 
   return (
     <>
+    {/* {loader && <Loader />} */}
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
@@ -834,12 +875,18 @@ const Profile = ({ search, setSearch }) => {
                       </div>
                       {collectionTabs === 0 && (
                         <>
-                          {nftListFP.map((item) => (
+                          { nftLoader ?
+                          <section className="sec-loading">
+                            <div className="one"></div>
+                          </section>
+                          :
+                          nftListFP.length > 0 ?
+                          nftListFP?.map((item) => (
                             <SimpleCard
                               onOpen={onOpen}
                               // onClose={onClose}
-                              key={item.id}
-                              id={item.id}
+                              key={item?.id}
+                              id={item?.id}
                               title={item?.title}
                               image={item?.image}
                               price={item?.price}
@@ -849,13 +896,21 @@ const Profile = ({ search, setSearch }) => {
                               collection={item?.collection}
                               collectionImages={item?.collectionImages}
                               userAddress
+                              sellerWallet={userAddress}
                             />
-                          ))}
+                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        }
                         </>
                       )}
                       {collectionTabs === 1 && (
                         <>
-                          {nftListAuction.map((item) => (
+                          { nftAuctionLoader ? 
+                            <section className="sec-loading">
+                              <div className="one"></div>
+                            </section>
+                          :
+                          nftListAuction.length > 0 ?
+                          nftListAuction.map((item) => (
                             <NewItemCard
                               key={item.id}
                               id={item.id}
@@ -870,7 +925,8 @@ const Profile = ({ search, setSearch }) => {
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
                             />
-                          ))}
+                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                          }
                         </>
                       )}
                     </div>
@@ -878,18 +934,22 @@ const Profile = ({ search, setSearch }) => {
                 )}
                 {tabs === 1 && (
                   <>
-                    <Gallery user="admin" />
+                    <Gallery user="admin"/>
                   </>
                 )}
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {userNFTs.length > 0 ? (
-                        <>
+                      {
+                        nftLoader ?
+                        <section className="sec-loading">
+                          <div className="one"></div>
+                        </section> :
+                        userNFTs.length > 0 ?
+                          <>
                           {userNFTs.map((item) => (
                             <MyNftCard
                               onOpen={onOpen}
-                              // onClose={onClose}
                               key={item.id}
                               id={item.id}
                               title={item?.title}
@@ -904,12 +964,10 @@ const Profile = ({ search, setSearch }) => {
                               userAddress
                             />
                           ))}
-                        </>
-                      ) : (
-                        <div className="data-not-avaliable">
-                          <h2>No data avaliable</h2>
-                        </div>
-                      )}
+                          </>
+                          :
+                          <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                     </div>
                   </>
                 )}
@@ -933,59 +991,65 @@ const Profile = ({ search, setSearch }) => {
                       </div>
                       {collectionTabs === 0 && (
                         <>
-                          {likedNfts.length > 0 ? (
-                            <>
-                              {likedNfts.map((item) => (
-                                <SimpleCard
-                                  onOpen={onOpen}
-                                  // onClose={onClose}
-                                  key={item.id}
-                                  id={item.id}
-                                  title={item?.title}
-                                  image={item?.image}
-                                  price={item?.price}
-                                  crypto={item?.crypto}
-                                  royalty={item?.royalty}
-                                  description={item?.description}
-                                  collection={item?.collection}
-                                  collectionImages={item?.collectionImages}
-                                  userAddress
-                                />
-                              ))}
-                            </>
-                          ) : (
-                            <div className="data-not-avaliable">
-                              <h2>No data avaliable</h2>
-                            </div>
-                          )}
+                        { likedNftLoader ? 
+                          <section className="sec-loading">
+                            <div className="one"></div>
+                          </section>
+                        :
+                        likedNfts.length > 0 ?
+                        <>
+                        {likedNfts.map((item) => (
+                          <SimpleCard
+                            onOpen={onOpen}
+                            // onClose={onClose}
+                            key={item.id}
+                            id={item.id}
+                            title={item?.title}
+                            image={item?.image}
+                            price={item?.price}
+                            crypto={item?.crypto}
+                            royalty={item?.royalty}
+                            description={item?.description}
+                            collection={item?.collection}
+                            collectionImages={item?.collectionImages}
+                            userAddress
+                          />
+                        ))}
+                        </>
+                        :
+                        <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                         </>
                       )}
                       {collectionTabs === 1 && (
                         <>
-                          {likedNftsAuction.length > 0 ? (
-                            <>
-                              {likedNftsAuction.map((item) => (
-                                <NewItemCard
-                                  key={item.id}
-                                  id={item.id}
-                                  title={item?.title}
-                                  image={item?.image}
-                                  price={item?.price}
-                                  highestBid={item?.highestBid}
-                                  isLive={item?.isLive}
-                                  endTime={item?.endTime}
-                                  startTime={item?.startTime}
-                                  description={item?.description}
-                                  collectionImages={item?.collectionImages}
-                                  userAddress={userAddress}
-                                />
-                              ))}
-                            </>
-                          ) : (
-                            <div className="data-not-avaliable">
-                              <h2>No data avaliable</h2>
-                            </div>
-                          )}
+                        { likedNftAuctionLoader ? 
+                          <section className="sec-loading">
+                            <div className="one"></div>
+                          </section>
+                        :
+                        likedNftsAuction.length > 0 ?
+                      <>
+                      {likedNftsAuction.map((item) => (
+                        <NewItemCard
+                          key={item.id}
+                          id={item.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                          highestBid={item?.highestBid}
+                          isLive={item?.isLive}
+                          endTime={item?.endTime}
+                          startTime={item?.startTime}
+                          description={item?.description}
+                          collectionImages={item?.collectionImages}
+                          userAddress={userAddress}
+                        />
+                      ))}
+                      </>
+                      :
+                      <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                         </>
                       )}
                     </div>
@@ -1030,6 +1094,7 @@ const Profile = ({ search, setSearch }) => {
                       <div className="followers-tab">
                         {FollowersTab === 0 ? (
                           <>
+                            {console.log(userId,"id here")}
                             <Followers id={userId} />
                             {/* <Follow followed={true} />
                             <Follow followed={true} />
@@ -1056,28 +1121,28 @@ const Profile = ({ search, setSearch }) => {
                 {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
-                    <Fan id={userId} />
+                      <Fan id={userId} fanToggle={fanToggle}/>
 
-                    <div
-                      onClick={() => {
-                        setshowAddFanPopUp(1);
-                        getFollowersForFan();
-                      }}
-                      className="Add-Fan-btn"
-                    >
-                      <svg
-                        width="30"
-                        height="31"
-                        viewBox="0 0 44 45"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+                      <div
+                        onClick={() => {
+                          setshowAddFanPopUp(1);
+                          getFollowersForFan();
+                        }}
+                        className="Add-Fan-btn"
                       >
-                        <path
-                          d="M25.3432 25.6915V26.7529C25.3432 31.3246 25.3432 35.8964 25.3432 40.4681C25.3758 40.9526 25.3063 41.4385 25.1392 41.8945C24.9721 42.3504 24.711 42.7662 24.3731 43.115C24.0352 43.4637 23.6279 43.7377 23.1775 43.9191C22.727 44.1005 22.2434 44.1853 21.7581 44.1681C21.2728 44.1509 20.7966 44.0319 20.3602 43.8191C19.9237 43.6062 19.5369 43.3041 19.2246 42.9322C18.9123 42.5604 18.6813 42.127 18.5469 41.6604C18.4126 41.1937 18.378 40.7041 18.4448 40.2231V25.6915H3.70893C3.13241 25.7106 2.56045 25.5839 2.04592 25.3232C1.53138 25.0624 1.09092 24.6761 0.765339 24.1999C0.439761 23.7238 0.23962 23.1732 0.183349 22.5991C0.127079 22.025 0.216526 21.4461 0.443451 20.9158C0.705285 20.2337 1.1806 19.6545 1.79852 19.2646C2.41644 18.8747 3.14397 18.695 3.87236 18.7524H18.4448V17.7319C18.4448 13.1601 18.4448 8.58835 18.4448 4.01662C18.4296 3.43826 18.5609 2.86551 18.8267 2.35162C19.0925 1.83773 19.484 1.3995 19.9648 1.07764C20.4456 0.755776 20.9998 0.560789 21.5762 0.510847C22.1526 0.460904 22.7325 0.557625 23.2614 0.792001C23.9218 1.05643 24.4822 1.52201 24.8631 2.12278C25.2441 2.72355 25.4262 3.42895 25.3838 4.13907C25.3838 8.66998 25.3838 13.1601 25.3838 17.691V18.7524H40.0788C40.6501 18.7398 41.2156 18.8686 41.7252 19.1272C42.2347 19.3858 42.6724 19.7663 42.9995 20.2347C43.3266 20.7032 43.5329 21.2452 43.6002 21.8127C43.6674 22.3801 43.5937 22.9554 43.3852 23.4874C43.1268 24.1663 42.6594 24.7456 42.0505 25.1418C41.4416 25.538 40.7225 25.7304 39.9971 25.6915H25.3838H25.3432Z"
-                          fill="white"
-                        />
-                      </svg>
-                    </div>
+                        <svg
+                          width="30"
+                          height="31"
+                          viewBox="0 0 44 45"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M25.3432 25.6915V26.7529C25.3432 31.3246 25.3432 35.8964 25.3432 40.4681C25.3758 40.9526 25.3063 41.4385 25.1392 41.8945C24.9721 42.3504 24.711 42.7662 24.3731 43.115C24.0352 43.4637 23.6279 43.7377 23.1775 43.9191C22.727 44.1005 22.2434 44.1853 21.7581 44.1681C21.2728 44.1509 20.7966 44.0319 20.3602 43.8191C19.9237 43.6062 19.5369 43.3041 19.2246 42.9322C18.9123 42.5604 18.6813 42.127 18.5469 41.6604C18.4126 41.1937 18.378 40.7041 18.4448 40.2231V25.6915H3.70893C3.13241 25.7106 2.56045 25.5839 2.04592 25.3232C1.53138 25.0624 1.09092 24.6761 0.765339 24.1999C0.439761 23.7238 0.23962 23.1732 0.183349 22.5991C0.127079 22.025 0.216526 21.4461 0.443451 20.9158C0.705285 20.2337 1.1806 19.6545 1.79852 19.2646C2.41644 18.8747 3.14397 18.695 3.87236 18.7524H18.4448V17.7319C18.4448 13.1601 18.4448 8.58835 18.4448 4.01662C18.4296 3.43826 18.5609 2.86551 18.8267 2.35162C19.0925 1.83773 19.484 1.3995 19.9648 1.07764C20.4456 0.755776 20.9998 0.560789 21.5762 0.510847C22.1526 0.460904 22.7325 0.557625 23.2614 0.792001C23.9218 1.05643 24.4822 1.52201 24.8631 2.12278C25.2441 2.72355 25.4262 3.42895 25.3838 4.13907C25.3838 8.66998 25.3838 13.1601 25.3838 17.691V18.7524H40.0788C40.6501 18.7398 41.2156 18.8686 41.7252 19.1272C42.2347 19.3858 42.6724 19.7663 42.9995 20.2347C43.3266 20.7032 43.5329 21.2452 43.6002 21.8127C43.6674 22.3801 43.5937 22.9554 43.3852 23.4874C43.1268 24.1663 42.6594 24.7456 42.0505 25.1418C41.4416 25.538 40.7225 25.7304 39.9971 25.6915H25.3838H25.3432Z"
+                            fill="white"
+                          />
+                        </svg>
+                      </div>
 
                     {showAddFanPopUp === 1 && (
                       <>
@@ -1137,7 +1202,7 @@ const Profile = ({ search, setSearch }) => {
                             </div>
                             <p
                               onClick={() =>
-                                setFansAddress([...FansAddress, ""])
+                                fansAddressHandle()
                               }
                               className="add-more-fan"
                             >
@@ -1176,9 +1241,9 @@ const Profile = ({ search, setSearch }) => {
                               <div></div>
                             </div>
                             <div className="Address-holder">
-                              {addFanlisting.length > 0 ? (
+                              {addFanlisting?.length > 0 ? (
                                 <>
-                                  {addFanlisting.map((data, Index) => (
+                                  {addFanlisting?.map((data, Index) => (
                                     <div
                                       key={Index}
                                       className="follower-in-fan-list"
@@ -1223,7 +1288,7 @@ const Profile = ({ search, setSearch }) => {
                                   ))}
                                 </>
                               ) : (
-                                <div>List is Empty</div>
+                                <div className="data-not-avaliable"> <h2>List is Empty</h2></div>
                               )}
                             </div>
                             <div className="popUp-btn-group">

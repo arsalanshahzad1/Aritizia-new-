@@ -13,10 +13,12 @@ const Gallery = ({user}) => {
     const user_id = id?.id;
     const [GalleryItems, setGalleryItems] = useState([])
     const [selectCount, setSelectCount] = useState(0)
+
     useEffect(() => {
         const count = GalleryItems.filter(item => item.selected).length;
         setSelectCount(count)
     }, [GalleryItems])
+
     const handleSelectArt = (index) => {
         console.log("I'm being selected", index);
         const updatedArts = [...GalleryItems];
@@ -151,18 +153,36 @@ const Gallery = ({user}) => {
             setGalleryItems(tempImages)
         } catch (error) {
         }
+        setLoader(false)
     }
 
     useEffect(() => {
         saveToGallery()
     }, [])
+
+    const [loader, setLoader] = useState(true)
+
+    if(loader){
+      return(
+        <>
+          <section className="sec-loading">
+            <div className="one"></div>
+          </section>
+        </>
+      )
+    }
+    
     return (
         < div >
+        
             <div className='Arts-holder'>
-                {GalleryItems.length > 0 &&
+                {GalleryItems.length >= 0 ?
                     GalleryItems.map((item, Index) => {
                         return <GalleryItem handleUnselectArt={handleUnselectArt} handleSelectArt={handleSelectArt} Image={item.image} selected={item.selected} Index={Index} user={user}/>
-                    })
+                    }) : 
+                    <div className="data-not-avaliable">
+                        <h2>No data avaliable</h2>
+                    </div>
                 }
             </div>
             {user === "admin" ? 
@@ -172,7 +192,7 @@ const Gallery = ({user}) => {
                 : ""
             }
             
-            <Link to='/' onClick={scrollToPrompt}>
+            {/* <Link to='/' onClick={scrollToPrompt}>
                 <div className='create-nft-button'>
                     <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M39.2592 0.501953H44.4842C45.8721 0.706048 47.3007 0.828441 48.5661 1.07336C57.0739 2.51569 64.9278 6.55337 71.0515 12.6332C77.1751 18.713 81.2691 26.5376 82.7725 35.0348C83.0582 36.5451 83.2214 38.0962 83.4255 39.6066V44.8314L83.0583 47.8112C82.1724 54.3639 79.7415 60.6121 75.9662 66.0406C72.191 71.4692 67.1794 75.9228 61.3447 79.0338C55.51 82.1448 49.0192 83.8242 42.4079 83.9337C35.7965 84.0432 29.2538 82.5796 23.3193 79.6635C17.3848 76.7474 12.2284 72.4624 8.27548 67.1618C4.32251 61.8612 1.68613 55.6969 0.58379 49.1771C-0.518551 42.6574 -0.0552623 35.969 1.93537 29.6635C3.92601 23.358 7.38704 17.6159 12.033 12.9109C18.0906 6.70199 25.9686 2.58426 34.5243 1.15495C36.1979 0.869215 37.7489 0.706048 39.2592 0.501953Z" fill="url(#paint0_linear_1307_227)" />
@@ -189,7 +209,7 @@ const Gallery = ({user}) => {
                     </svg>
 
                 </div>
-            </Link>
+            </Link> */}
 
         </ div>
     )

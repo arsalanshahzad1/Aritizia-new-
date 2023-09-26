@@ -25,6 +25,7 @@ import {
 } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
 import { Link } from "react-router-dom";
+import Loader from "../../components/shared/Loader";
 // import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
@@ -396,14 +397,18 @@ const [counterData , setCounterData] = useState('')
     } catch (error) {
       
     }
+    setLoader(false)
   }
 
   useEffect(() =>{
     viewLandingPageDetail()
   }, [])
 
+  const [loader, setLoader] = useState(true)
+
   return (
     <>
+      {loader && <Loader />}
       {/* <MetaDecorator/> */}
       {/* <MetaDecorator
         title={'Artizia'}
@@ -481,8 +486,9 @@ const [counterData , setCounterData] = useState('')
                 <div className="row">
                 {nftListFP.length > 0 ? (
                   <>
-                    {nftListFP.map((item) => (
-                      <BuyNow
+                    {nftListFP?.slice(0,nftListFP.length>4? 4 : nftListFP.list).map((item, index) => (
+                      <>
+                     <BuyNow
                         key={item?.id}
                         id={item?.id}
                         title={item?.title}
@@ -497,6 +503,7 @@ const [counterData , setCounterData] = useState('')
                         userAddress={userAddress}
                         seller={item?.seller}
                       />
+                      </>
                     ))}
                   </>
                 ) : (
@@ -544,8 +551,9 @@ const [counterData , setCounterData] = useState('')
               <div className="d-flex">
                 {nftListAuction.length > 0 ? (
                   <>
-                    {console.log(nftListAuction, "nft list auction")}
-                    {nftListAuction.map((item) => (
+                    {nftListAuction.slice(0,nftListAuction.length > 4 ? 4 : nftListAuction.length ).map((item) => (
+                      <>
+                      {console.log(item?.seller, userAddress, "seller now")}
                       <NewItemCard
                         key={item.id}
                         id={item.id}
@@ -558,8 +566,9 @@ const [counterData , setCounterData] = useState('')
                         startTime={item?.startTime}
                         description={item?.description}
                         collectionImages={item?.collectionImages}
-                        userAddress={userAddress}
+                        seller={item?.seller}
                       />
+                      </>
                     ))}
                   </>
                 ) : (
