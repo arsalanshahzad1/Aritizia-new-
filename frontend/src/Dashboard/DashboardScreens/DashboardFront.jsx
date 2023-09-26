@@ -6,6 +6,7 @@ import adminApis from "../../service/adminIndex";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import Header from '../../pages/landingpage/Header';
+import Loader from '../../components/shared/Loader';
 
 function DashboardFront({ search, setSearch }) {
 
@@ -42,6 +43,7 @@ function DashboardFront({ search, setSearch }) {
       } else {
         console.log("API request failed");
       }
+      setLoader(false)
     } catch (error) {
       console.error("Error:", error);
     }
@@ -348,12 +350,15 @@ function DashboardFront({ search, setSearch }) {
     //         Date: "May 07 at 5:00 PM"
     //     },
     // ];
+
+    const [loader, setLoader] = useState(true)
     return (
         <div className='Dashboard-front'>
             {/* <Header
                 search={search}
                 setSearch={setSearch}
             /> */}
+            {loader && <Loader/>}
             <AdminHeader
             search={search}
             setSearch={setSearch}

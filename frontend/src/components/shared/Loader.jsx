@@ -5,9 +5,9 @@ const Loader = () => {
         <div style={{
             width: '100%' , 
             height : '100vh' , 
-            top : '0' , 
             position : 'fixed',
             top:"0", 
+            left: "0",
             background : 'rgba(0, 0, 0, 0.5)',
             zIndex : '9999'
             }}> 

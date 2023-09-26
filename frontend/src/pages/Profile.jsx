@@ -60,11 +60,15 @@ const Profile = ({ search, setSearch }) => {
 
   const getNFTlikeListing = async () => {
     console.log("getNFTlikeListing");
-    const response = await apis.getLikeNFTListing(userData?.id);
-    setLikedNfts(response?.data?.data);
-    console.log(response, "liked-nfts");
-
-    setLikedNftLoader(false)
+    try {
+      const response = await apis.getLikeNFTListing(userData?.id);
+      setLikedNfts(response?.data?.data);
+      console.log(response, "liked-nfts");
+      setLikedNftLoader(false)
+      
+    } catch (error) {
+      setLikedNftLoader(false)
+    }
   };
 
   useEffect(() => {
@@ -205,13 +209,13 @@ const Profile = ({ search, setSearch }) => {
               // myAuctions.push(nftData);
               setLikedNftsAuction((prev) => [...prev, nftData]);
               console.log(nftListAuction, "nftData");
-              // setLikedNftAuctionLoader(false)
             }
             
             // setLikedNfts((prevState) => ([ ...prevState, nftData ]));
           })
           
           .catch((error) => {
+            setLikedNftAuctionLoader(false)
             console.error("Error fetching metadata:", error);
           });
 
@@ -308,7 +312,24 @@ const Profile = ({ search, setSearch }) => {
     }, 1000);
   };
 
-  const getMyListedNfts = async () => {
+  const viewAllNfts = async () => {
+    try {
+      const response = await apis.viewAllMyNfts(userData.id);
+      getMyListedNfts(response?.data?.data)
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+  const fetchData = async () => {
+    await viewAllNfts();
+  };
+
+  fetchData();
+}, []);
+
+  const getMyListedNfts = async (allNftIds) => {
     console.log("aaaa");
     console.log("Connected wallet", userAddress);
     let emptyList = [];
@@ -347,9 +368,12 @@ const Profile = ({ search, setSearch }) => {
     let NFTId = await getLikedNftsList();
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < mintedTokens.length; i++) {
+
+    // arsalan
+    for (let i = 0; i < allNftIds.length ; i++) {
+      console.log(allNftIds[i],"nnnnnn")
       let id;
-      id = +mintedTokens[i].tokenId.toString();
+      id = allNftIds[i]
 
       let collectionId;
       collectionId = +mintedTokens[i].collectionId.toString();
@@ -431,14 +455,17 @@ const Profile = ({ search, setSearch }) => {
             };
             // myAuctions.push(nftData);
             setNftListAuction((prev) => [...prev, nftData]);
-            console.log(nftListAuction, "nftData");
+            console.log(nftData, "nftData", i);
           }
-        })
+          setNftAuctionLoader(false)
+        }
+        )
 
         .catch((error) => {
+          setNftAuctionLoader(false)
           console.error("Error fetching metadata:", error);
         });
-        setNftAuctionLoader(false)
+        
     }
   };
 
@@ -563,9 +590,11 @@ const Profile = ({ search, setSearch }) => {
           //   console.log("auction in function", myAuctions);
           //   setNftListAuction(myAuctions);
           // }
+          
         })
 
         .catch((error) => {
+          setNftLoader(false)
           console.error("Error fetching metadata:", error);
         });
     }
@@ -725,9 +754,27 @@ const Profile = ({ search, setSearch }) => {
   //   setFanToggle(!fanToggle)
   // }
 
+  // const [allNftIds, setAllNftIds] = useState([])
+
+  // const viewAllNfts = async () =>{
+  //   const response = await apis.viewAllNfts(userData.id)
+  //   if(response.status){
+  //     console.log("yes nnnnnn")
+  //   }
+  //   setAllNftIds(response?.data?.data)
+  // }
+
+  // useEffect(()=>{
+  //   viewAllNfts()
+  // },[])
+
+  // useEffect(()=>{
+  //   console.log(allNftIds,"nnnnnn")
+  // },[allNftIds])
+
   return (
     <>
-    {/* {loader && <Loader />} */}
+    {loader && <Loader />}
       {/* <MetaDecorator
         title={'Artizia'}
         description={'The Best NFT Marketplace In The World'}
@@ -786,7 +833,7 @@ const Profile = ({ search, setSearch }) => {
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <SocialShare
-                    style={{ fontSize: "28px", marginRight: "0px" }}
+                    style={{ fontSize: "22px", marginRight: "10px" }}
                   />
                 </div>
               </div>
@@ -924,6 +971,7 @@ const Profile = ({ search, setSearch }) => {
                               description={item?.description}
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
+                              seller={item?.seller}
                             />
                           )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }
@@ -995,30 +1043,29 @@ const Profile = ({ search, setSearch }) => {
                           <section className="sec-loading">
                             <div className="one"></div>
                           </section>
-                        :
-                        likedNfts.length > 0 ?
-                        <>
-                        {likedNfts.map((item) => (
-                          <SimpleCard
-                            onOpen={onOpen}
-                            // onClose={onClose}
-                            key={item.id}
-                            id={item.id}
-                            title={item?.title}
-                            image={item?.image}
-                            price={item?.price}
-                            crypto={item?.crypto}
-                            royalty={item?.royalty}
-                            description={item?.description}
-                            collection={item?.collection}
-                            collectionImages={item?.collectionImages}
-                            userAddress
-                          />
-                        ))}
-                        </>
-                        :
-                        <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                      }
+                          :
+                          likedNfts.length > 0 ?
+                          <>
+                          {likedNfts.map((item) => (
+                            <SimpleCard
+                              onOpen={onOpen}
+                              // onClose={onClose}
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              userAddress
+                            />
+                          ))}
+                          </> :
+                            <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        }
                         </>
                       )}
                       {collectionTabs === 1 && (

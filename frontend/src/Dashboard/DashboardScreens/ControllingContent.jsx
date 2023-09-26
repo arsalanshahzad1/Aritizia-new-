@@ -25,6 +25,7 @@ import {
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
 import DashboardCard2 from "./DashboardCard2";
 import apis from "../../service";
+import Loader from "../../components/shared/Loader";
 
 function ControllingContent({ search, setSearch }) {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
@@ -145,10 +146,11 @@ function ControllingContent({ search, setSearch }) {
             collection: collection,
             collectionImages: collectionImages,
           };
-          // console.log(nftData);
+          console.log(nftData,"new data");
           // myNFTs.push(nftData);
           if (!nftList.some((item) => item.id === nftData.id)) {
             setNftList((prev) => [...prev, nftData]);
+            // console.log(nftData,"new data")
           }
 
           // } else if (listingType === 1) {
@@ -288,9 +290,12 @@ function ControllingContent({ search, setSearch }) {
 
   useEffect(() => {}, []);
 
+  const [loader, setLoader] = useState(true)
+
   return (
     <div className="user-management">
       <AdminHeader search={search} setSearch={setSearch} />
+      {/* {loader && <Loader/>} */}
       <div className="user-management-after-header">
         <div className="dashboard-front-section-2">
           <div className="dashboard-front-section-2-row-1">

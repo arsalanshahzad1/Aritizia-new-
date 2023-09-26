@@ -29,6 +29,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import Loader from "../../components/shared/Loader";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -62,7 +63,6 @@ const Multiple = ({ search, setSearch }) => {
   });
 
   const [collection, setCollection] = useState("");
-
   const [nftForm, setnftForm] = useState("");
   const [file, setFile] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -70,7 +70,13 @@ const Multiple = ({ search, setSearch }) => {
   const [showCollection, setshowcollection] = useState(false);
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
-  console.log(location?.state?.artGallery, 'asasasas');
+
+  useEffect(() =>{
+    window.scrollTo(0,0)
+  } ,[])
+
+
+  console.log(location?.state?.artGallery, "asasasas");
 
   const navigate = useNavigate();
   const id = JSON.parse(localStorage.getItem("data"));
@@ -147,6 +153,9 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0,0)
+  }, []);
   useEffect(() => {
     getCollection();
   }, []);
@@ -337,14 +346,15 @@ const Multiple = ({ search, setSearch }) => {
         multiListing ? handleNFTMintedEvent : null
       );
       console.log("Response of mint event", response);
-      setMyList(false)
+      // setMyList(false)
     } catch (error) {
+      setMyList(false)
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
       // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
-      setMyList(false)
+      
     }
   }
 
@@ -497,32 +507,6 @@ const Multiple = ({ search, setSearch }) => {
       signer
     );
 
-    console.log("ipfsList", ipfsList);
-
-    // await (await nftContract.mint(ipfsList.current)).wait();
-    // console.log("minAndList 1");
-
-    // let mintedTokens = await nftContract.getMintedTokensList();
-    // console.log("mintedTokens ", mintedTokens);
-    // console.log("mintedTokens.length ", mintedTokens.length);
-    // console.log("minAndList 2");
-
-    // let multi = false;
-    // if (mintedTokens.length > 1) {
-    //   console.log("minAndList 3");
-
-    //   multi = true;
-    //   let listOfTokens = [];
-    //   for (let i = 0; i < mintedTokens.length; i++) {
-    //     console.log("mintedTokens[i]", mintedTokens[i].toString());
-    //     listOfTokens.push(Number(mintedTokens[i].toString()));
-    //   }
-    //   mintedTokens = listOfTokens;
-    //   console.log("listOfTokens", listOfTokens);
-    // } else {
-    //   mintedTokens = Number(mintedTokens);
-    // }
-
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -662,11 +646,11 @@ const Multiple = ({ search, setSearch }) => {
         nftDataPost();
 
         multiListing = false;
-        toast.success(`NFTs minted`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
+        // toast.success(`NFTs minted`, {
+        //   position: toast.POSITION.TOP_CENTER,
+        // });
       
-        navigate('/')
+        // navigate('/')
         // alert("NFTs minted");
 
         // setTimeout(() => {
@@ -683,21 +667,33 @@ const Multiple = ({ search, setSearch }) => {
   //   console.log("listToPost", listToPost);
   // };
 
+  const [navigateTrue , setNavigateTrue] = useState(false)
+
   const nftDataPost = async () => {
-    console.log("postListNft");
-    console.log("listToPost.current", listToPost.current);
-    console.log("listToPost.current", listToPost.current.length);
-    console.log("listToPost.current.length", listToPost.current.length);
 
     for (let i = 0; i < listToPost.current.length; i++) {
       console.log("listToPost.current[i]", listToPost.current[i]);
       const response = await apis.postListNft(listToPost.current[i]);
       console.log("response", response);
     }
-    // setTimeout(() => {
-    //   navigate("/profile");
-    // }, 3000);
+
+    // setMyList(false)
+    setNavigateTrue(true)
+    
   };
+
+  useEffect(() =>{
+    if(navigateTrue){
+      setMyList(false)
+      toast.success(`NFTs minted`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+     setTimeout(() => {
+      navigate("/profile");
+    }, 2000);
+    }
+  } , [navigateTrue])
 
   const handlechange = (file) => {
     setFile(file);
@@ -1316,6 +1312,8 @@ const Multiple = ({ search, setSearch }) => {
 
   return (
     <>
+
+      {myList && <Loader />}
       <Header search={search} setSearch={setSearch} />
       <div className="create-single">
         <PageTopSection title={"Create Multiple Collectible"} />
@@ -1390,21 +1388,21 @@ const Multiple = ({ search, setSearch }) => {
                               onClick={() => setshowCreateCollection(true)}
                             >
                               <svg
-                                enable-background="new 0 0 50 50"
+                                enableBackground="new 0 0 50 50"
                                 height="25px"
                                 id="Layer_1"
                                 version="1.1"
                                 viewBox="0 0 50 50"
                                 width="25px"
-                                xml: space="preserve"
+                                xmlSpace="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                xmlns: xlink="http://www.w3.org/1999/xlink"
+                                xmlnsXlink="http://www.w3.org/1999/xlink"
                               >
                                 <rect fill="none" height="50" width="50" />
                                 <line
                                   fill="#2638CC"
                                   stroke="#2638CC"
-                                  stroke-miterlimit="10"
+                                  strokeMiterlimit="10"
                                   strokeWidth="4"
                                   x1="9"
                                   x2="41"
@@ -1414,7 +1412,7 @@ const Multiple = ({ search, setSearch }) => {
                                 <line
                                   fill="#2638CC"
                                   stroke="#2638CC"
-                                  stroke-miterlimit="10"
+                                  strokeMiterlimit="10"
                                   strokeWidth="4"
                                   x1="25"
                                   x2="25"
@@ -1571,7 +1569,7 @@ const Multiple = ({ search, setSearch }) => {
                                       <line
                                         fill="#2638CC"
                                         stroke="#2638CC"
-                                        stroke-miterlimit="10"
+                                        strokeMiterlimit="10"
                                         strokeWidth="4"
                                         x1="9"
                                         x2="41"
@@ -1581,7 +1579,7 @@ const Multiple = ({ search, setSearch }) => {
                                       <line
                                         fill="#2638CC"
                                         stroke="#2638CC"
-                                        stroke-miterlimit="10"
+                                        strokeMiterlimit="10"
                                         strokeWidth="4"
                                         x1="25"
                                         x2="25"

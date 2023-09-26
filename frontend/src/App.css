@@ -2483,6 +2483,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
   box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
   border-radius: 10px;
   object-fit: cover;
+  /* color: rgb(138, 138, 138); */
 }
 
 .single-net-image span {

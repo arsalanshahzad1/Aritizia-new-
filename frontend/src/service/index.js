@@ -128,6 +128,12 @@ const createBackendServer = (baseURL) => {
   const getNFTCollectionImage = async (collectionId) =>
     await api.get(`view-nft-collection-stock/${collectionId}`);
 
+  const viewAllNfts = async () =>
+    await api.get(`view-all-nfts`)
+
+  const viewAllMyNfts = async (newid) =>
+    await api.get(`view-all-nfts?user_id=${newid}`)
+
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
 
@@ -245,6 +251,8 @@ const createBackendServer = (baseURL) => {
     getNFTCollection,
     postNFTCollection,
     getNFTCollectionImage,
+    viewAllNfts,
+    viewAllMyNfts,
 
     getNFTByTokenId,
     

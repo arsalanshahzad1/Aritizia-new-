@@ -26,42 +26,43 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import Loader from "../../components/shared/Loader";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 // const [imageUrl, setImageUrl] = useState('');
 //   const [imageFile, setImageFile] = useState(null);
 
-  const convertImageUrlToImageFile = async (url) => {
-    try {
-      // Download the image from the URL
-      const imageUrl = url;
-      const response = await fetch(url);
-      console.log(response);
+const convertImageUrlToImageFile = async (url) => {
+  try {
+    // Download the image from the URL
+    const imageUrl = url;
+    const response = await fetch(url);
+    console.log(response);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image. Status: ${response.status}`);
-      }
-
-      // Convert the response data to a Blob
-      const imageBlob = await response.blob();
-
-      // Extract the file name from the URL or specify a custom name
-      const urlParts = imageUrl.split('/');
-      const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
-
-      // Create a File object from the Blob
-      const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
-      return(
-        file
-      )
-      // console.log(file);
-      // Set the image file in state
-      // setImageFile(file);
-    } catch (error) {
-      console.error('Error:', error);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch image. Status: ${response.status}`);
     }
-  };
+
+    // Convert the response data to a Blob
+    const imageBlob = await response.blob();
+
+    // Extract the file name from the URL or specify a custom name
+    const urlParts = imageUrl.split('/');
+    const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
+
+    // Create a File object from the Blob
+    const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+    return (
+      file
+    )
+    // console.log(file);
+    // Set the image file in state
+    // setImageFile(file);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
 const Single = ({ search, setSearch }) => {
   let image = "";
@@ -296,10 +297,12 @@ const Single = ({ search, setSearch }) => {
         const result = await uploadJSONToIPFS(dataInJSON);
         console.log("uploadJSONToIPFS", result.pinataURL);
         mintThenList(result.pinataURL);
+        // setIsSingleSubmit(false)
 
         //   }
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
+        // setIsSingleSubmit(false)
       }
     } else {
       let price = item.price;
@@ -327,8 +330,10 @@ const Single = ({ search, setSearch }) => {
 
         console.log("RESULT", result);
         mintThenList(result.pinataURL);
+        // setIsSingleSubmit(false)
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
+        // setIsSingleSubmit(false)
       }
     }
   };
@@ -353,7 +358,9 @@ const Single = ({ search, setSearch }) => {
       );
 
       console.log("Response of mint event", response);
+      // setIsSingleSubmit(false)
     } catch (error) {
+      setIsSingleSubmit(false)
       console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
@@ -423,6 +430,7 @@ const Single = ({ search, setSearch }) => {
 
       console.log("response", response);
     } catch (error) {
+      setIsSingleSubmit(false)
       toast.error(`Error while listing NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
@@ -485,22 +493,30 @@ const Single = ({ search, setSearch }) => {
       singleMinting = false;
       console.log("singleMinting", singleMinting);
       nftDataPost();
+    } else {
+      setIsSingleSubmit(false)
     }
   };
 
   const nftDataPost = async () => {
-    toast.success("Nft listed", {
-      position: toast.POSITION.TOP_CENTER,
-    });
     const response = await apis.postListNft(listToPost.current[0]);
-    console.log("response", response);
+    if (response) {
+      toast.success("Nft listed", {
+        position: toast.POSITION.TOP_CENTER,
+      });
 
-    // alert("Nft listed");
-    // setTimeout(() => {
-      // navigate("/profile");
-      // window.location.reload();
-    // }, 3000);
-    // navigate("/profile");
+      console.log("response", response);
+      setIsSingleSubmit(false)
+
+      setTimeout(() => {
+        navigate("/profile");
+        window.location.reload();
+      }, 2000);
+      navigate("/profile");
+    } else {
+      setIsSingleSubmit(false)
+
+    }
   };
 
   const [file, setFile] = useState(null);
@@ -526,10 +542,12 @@ const Single = ({ search, setSearch }) => {
     // ...
   };
 
-  useEffect(() => {}, [price, title, description]);
+  useEffect(() => { }, [price, title, description]);
   let singleMinting = false;
 
   function createItem(e) {
+  
+    setIsSingleSubmit(true)
     e.preventDefault();
     price = inputValue;
     singleMinting = true;
@@ -583,7 +601,7 @@ const Single = ({ search, setSearch }) => {
       item.collection != null
     ) {
       //  UNCOMMENT THIS
-    console.log("filezz", file);
+      console.log("filezz", file);
 
       uploadToIPFS(file);
     } else {
@@ -592,6 +610,7 @@ const Single = ({ search, setSearch }) => {
       });
       // window.alert("Fill all the fields to continue");
     }
+    // setIsSingleSubmit(false)
   }
 
   // const connectWallet = async () => {
@@ -721,9 +740,12 @@ const Single = ({ search, setSearch }) => {
 
   const [collectionFinalized, setcollectionFinalized] = useState(false);
 
+  const [isSingleSubmit, setIsSingleSubmit] = useState(false)
+
 
   return (
     <>
+      {isSingleSubmit && <Loader />}
       <Header search={search} setSearch={setSearch} />
       <div className="create-single">
         <PageTopSection title={"Create Single Collectible"} />
@@ -769,12 +791,11 @@ const Single = ({ search, setSearch }) => {
                                               return (
                                                 <li
                                                   key={index}
-                                                  className={`${
-                                                    collection?.label ===
-                                                    value?.label
+                                                  className={`${collection?.label ===
+                                                      value?.label
                                                       ? "is-selected"
                                                       : ""
-                                                  }`}
+                                                    }`}
                                                   onClick={() => {
                                                     setCollection(
                                                       collectionOptions[index]
@@ -815,9 +836,9 @@ const Single = ({ search, setSearch }) => {
                                   version="1.1"
                                   viewBox="0 0 50 50"
                                   width="25px"
-                                  xml:space="preserve"
+                                  xml: space="preserve"
                                   xmlns="http://www.w3.org/2000/svg"
-                                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                                  xmlns: xlink="http://www.w3.org/1999/xlink"
                                 >
                                   <rect fill="none" height="50" width="50" />
                                   <line
@@ -952,7 +973,7 @@ const Single = ({ search, setSearch }) => {
                                   style={{ display: "none" }}
                                   onChange={handleImageUpload}
                                 />
-                                <br/>
+                                <br />
                                 <div
                                   onClick={handleButtonClick}
                                   className="button-styling"
@@ -986,9 +1007,8 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(0);
                                 }}
-                                className={` create-single-card ${
-                                  listingType === 0 ? "active" : ""
-                                }`}
+                                className={` create-single-card ${listingType === 0 ? "active" : ""
+                                  }`}
                               >
                                 <AiFillTag />
                                 <h3>Fixed Price</h3>
@@ -999,9 +1019,8 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(1);
                                 }}
-                                className={` create-single-card ${
-                                  listingType === 1 ? "active" : ""
-                                }`}
+                                className={` create-single-card ${listingType === 1 ? "active" : ""
+                                  }`}
                               >
                                 <BsFillClockFill />
                                 <h3>Timed Auction</h3>
@@ -1018,7 +1037,7 @@ const Single = ({ search, setSearch }) => {
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                                // onChange={(e) => setTitle(e.target.value)}
+                              // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
@@ -1044,9 +1063,9 @@ const Single = ({ search, setSearch }) => {
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
+                                // type="number"
+                                // placeholder="0.00"
+                                // ref={price}
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -1066,9 +1085,9 @@ const Single = ({ search, setSearch }) => {
                                     type="number"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -1134,10 +1153,17 @@ const Single = ({ search, setSearch }) => {
                         <div className="line-seven">
                           <div className="row">
                             <div className="col-lg-12">
-                              <div  style={{textAlign : 'right'}}>
-                              <button type="submit" className="button-styling">
-                                Create Item
-                              </button>
+                              <div style={{ textAlign: 'right' }}>
+                                {
+                                  !isSingleSubmit ?
+                                    <button type="submit" className="button-styling">
+                                      Create Item
+                                    </button> :
+                                    <button className="button-styling" style={{ background: "gray" }} disabled>
+                                      Create Item
+                                    </button>
+                                }
+
                               </div>
                             </div>
                           </div>

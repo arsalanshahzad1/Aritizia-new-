@@ -10,6 +10,7 @@ import { HiOutlineArrowNarrowUp, HiOutlineArrowNarrowDown } from 'react-icons/hi
 import { TbArrowsDownUp } from 'react-icons/tb'
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import Loader from '../../components/shared/Loader';
 
 function AnalyticsTool({ search, setSearch }) {
 
@@ -37,22 +38,33 @@ function AnalyticsTool({ search, setSearch }) {
     const defaultSaleHistory = saleHistoryOptions[0];
 
     const viewAnalyticUsers = async () => {
-
-        const response = await adminApis.viewAnalyticUsers()
-        if (response?.status) {
-            setAnalyticsDetails(response?.data.data)
-        } else {
-            console.log('error');
+        try {
+            const response = await adminApis.viewAnalyticUsers()
+            if (response?.status) {
+                setAnalyticsDetails(response?.data.data)
+            } else {
+                console.log('error');
+            }
+            setLoader(false)
+        } catch (error) {
+            setLoader(false)
         }
     }
     const viewAnalyticTransaction = async (count) => {
         setListCount(count * 10 - 10)
-        const response = await adminApis.viewAnalyticTransaction(count)
-        if (response?.status) {
-            setUserTransactionDetails(response?.data)
-            console.log(response?.data, 'error');
-        } else {
-            console.log('error');
+        try {
+            const response = await adminApis.viewAnalyticTransaction(count)
+            if (response?.status) {
+                setUserTransactionDetails(response?.data)
+                console.log(response?.data, 'error');
+            } else {
+                console.log('error');
+            }
+            // setGraphLoader(false)
+            setUserTransactionLoader(false)
+        } catch (error) {
+            // setGraphLoader(false)
+            setUserTransactionLoader(false)
         }
     }
 
@@ -416,8 +428,15 @@ function AnalyticsTool({ search, setSearch }) {
     }, [])
     useEffect(() => {
     }, [analyticsDetails])
+
+    const [loader, setLoader] = useState(true)
+    // const [graphLoader, setGraphLoader] = useState(true)
+    const [userTransactionLoader, setUserTransactionLoader] = useState(true)
+    // userTransactionDetails
+
     return (
         <div className='Dashboard-front'>
+            {loader && <Loader/>}
             <AdminHeader
                 search={search}
                 setSearch={setSearch}
@@ -554,14 +573,14 @@ function AnalyticsTool({ search, setSearch }) {
                     </div>
 
                 </div>
-                <br className='small-scr'/>
-                <br className='small-scr'/>
-                <br className='small-scr'/>
-                <br className='small-scr'/> 
-                <br className='small-scr'/> 
-                <br className='small-scr'/>
-                <br className='small-scr'/> 
-                <br className='small-scr'/>
+                <br />
+                <br />
+                <br />
+                <br /> 
+                <br /> 
+                <br />
+                <br /> 
+                <br />
                 <div className='dashboard-front-section-2'>
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
@@ -581,17 +600,25 @@ function AnalyticsTool({ search, setSearch }) {
                     </div>
                 </div>
                 <div className='df-row-3'>
+                {loader ? 
+                    <section className="sec-loading">
+                        <div className="one"></div>
+                    </section> :
+                    <>
                     {userSubscription.value == 0 && <ChartForEarning data={Monthly_data} />}
                     {userSubscription.value == 1 && <ChartForEarning data={Weekly_data} />}
                     {userSubscription.value == 2 && <ChartForEarning data={Daily_data} />}
                     {/* <ChartForEarning data={Monthly_data} /> */}
+                    
+                    </>
+                }   
                 </div>
-                <br className='small-scr'/>
-                <br className='small-scr'/>
-                <br className='small-scr'/>
-                <br className='small-scr'/> 
-                <br className='small-scr'/> 
-                <br className='small-scr'/>
+                <br/>
+                <br/>
+                <br/>
+                <br/> 
+                <br/> 
+                <br/>
                 <div className='dashboard-front-section-2'>
                     <div className='dashboard-front-section-2-row-1'>
                         <div className='df-s2-r1-c1'>
@@ -608,10 +635,16 @@ function AnalyticsTool({ search, setSearch }) {
                     </div>
                 </div>
                 <div className='df-row-3'>
+                {loader ? 
+                    <section className="sec-loading">
+                        <div className="one"></div>
+                    </section> :
+                    <>
                     {saleHistory?.value == 0 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.all_months} option={months} />}
                     {saleHistory?.value == 1 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_week_all_day} option={weekly} />}
                     {saleHistory?.value == 2 && <ChartAnalytics chatData={analyticsDetails?.transaction_history?.last_month_all_days} option={daily} />}
-
+                    </>
+                }
                 </div>
 
                 <div className='table-for-user-management'>
@@ -673,7 +706,11 @@ function AnalyticsTool({ search, setSearch }) {
 
                             </tbody>            
                     </table>
-                    {userTransactionDetails?.data?.length >= 0 ?
+                    {userTransactionLoader ?
+                        <section className="sec-loading mt-4">
+                            <div className="one"></div>
+                        </section> :
+                    userTransactionDetails?.data?.length >= 0 ?
                         <div className='data-table-empty'>
                             <p>No data availaible</p>
                         </div> : ""

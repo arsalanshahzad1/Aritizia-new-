@@ -61,7 +61,7 @@ const OtherProfile = ({ search, setSearch }) => {
   // const getOtherUsersDetails = async (address) => {
   //   const response = await apis.getOtherUser(address);
   //   setUserDetails(response?.data?.data);
-  //   console.log(response, "other-users");
+    // console.log(userDetails?.id, "ssss");
 
   const getNFTlikeListing = async (id) => {
     const response = await apis.getLikeNFTListing(id);
@@ -73,6 +73,7 @@ const OtherProfile = ({ search, setSearch }) => {
   const getOtherUsersDetails = async (address) => {
     const response = await apis.getOtherUser(address);
     setUserDetails(response?.data?.data);
+    viewAllNfts(response?.data?.data?.id)
     getNFTlikeListing(response?.data?.data?.id);
   };
 
@@ -175,8 +176,28 @@ const OtherProfile = ({ search, setSearch }) => {
   //   };
 
   // console.log(userDetails, "userDetails")
+  const viewAllNfts = async (data) => {
+    try {
+      const response = await apis.viewAllMyNfts(data);
+      getMyListedNfts(response?.data?.data)
+      // console.log(response,"ssssssss")
+      // setNftLoader(false)
+    } catch (error) { 
+      setNftLoader(false)
+      console.error("Error:", error);
+    }
+  };
 
-  const getMyListedNfts = async () => {
+//   useEffect(() => {
+//   const fetchData = async () => {
+//     await viewAllNfts();
+//   };
+
+//   fetchData();
+// }, []);
+
+  const getMyListedNfts = async (allMyNfts) => {
+    console.log(allMyNfts,"yesssss")
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
@@ -208,9 +229,9 @@ const OtherProfile = ({ search, setSearch }) => {
 
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < mintedTokens.length; i++) {
+    for (let i = 0; i < allMyNfts.length; i++) {
       let id;
-      id = +mintedTokens[i].tokenId.toString();
+      id = allMyNfts[i]
       // id = mintedTokens[i];
       console.log("YESS");
 

@@ -110,9 +110,15 @@ const NewItemCard = ({
               </div>
             </div>
             <div className="bottom">
-              <div className="left" onClick={() => openDrawer()}>
+              {console.log(seller, userAddress, "you beauty")}
+              {seller.toString().toUpperCase() === userAddress.toString().toUpperCase() ? 
+                <div className="left" onClick={() => openDrawer()}>
+                  <p>Your Nft</p>
+                </div> :
+                <div className="left" onClick={() => openDrawer()}>
                 <p>Place a bid</p>
               </div>
+              }
               <div className="right">
                 <AiFillHeart />
                 <span>50</span>

@@ -165,8 +165,9 @@ const Notification = () => {
               onClick={updateNotificationSetting}
               className="button-styling"
             >
-              Update Profile
+              Update
             </button>
+            
           </div>
         </div>
       </Form>
