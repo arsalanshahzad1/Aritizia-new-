@@ -20,17 +20,15 @@ import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 const SearchPage = ({ search, setSearch }) => {
-  const [status, setStatus] = useState({ value: "one", label: "New" });
-  const [categories, setCategories] = useState({ value: "art", label: "Art" });
+  const [status, setStatus] = useState({ value: "", label: "Select" });
+  const [categories, setCategories] = useState({ value: "", label: "Select" });
   const [item, setItem] = useState({ value: "all", label: "All" });
   const [sortBy, setSortBy] = useState({ value: "all", label: "All" });
   const [rating, setRating] = useState({ value: "all", label: "All" });
   const [chain, setChain] = useState({ value: "all", label: "All" });
-
-  const [currency, setCurrency] = useState({ value: "eth", label: "ETH" });
-
+  const [currency, setCurrency] = useState({ value: "", label: "Select" });
   const [slider, setSlider] = useState(false);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 }); // initial price range
 
   // Receiving data from URL parameters
   // const { data } = useParams();
@@ -38,27 +36,31 @@ const SearchPage = ({ search, setSearch }) => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [searchedNfts, setSearchedNfts] = useState([]);
   const [discountPrice, setDiscountPrice] = useState(0);
-
-  const [listingType, setListingType] = useState("");
-  const [minPrice, setMinPrice] = useState(10);
-  const [maxPrice, setMaxPrice] = useState(100000);
-
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const [name, setName] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
-
-  let searchedNft = useRef([]);
-
   const [searchText, setSearchText] = useState("");
-
+  let searchedNft = useRef([]);
   let searchTexts = useRef();
+
+  const viewFilteredNfts = async (currency_type, listed_type, min_price, max_price, sort_by_price) => {
+    try {
+      const response = await apis.viewFilteredNfts(currency_type, listed_type, min_price, max_price, sort_by_price)
+      console.log(response?.data, 'filter response');
+      // setPriceRange({ min: response?.data?.lowest_price, max: response?.data?.highest_price })
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value)
+  }, [currency, status, categories , priceRange])
 
   const handleSearchChange = (event) => {
     setSearchText(event.target.value);
@@ -120,14 +122,11 @@ const SearchPage = ({ search, setSearch }) => {
     );
     // let dollarPriceOfETH = 1831;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-
     let priceETH = 0.00000002;
     let priceInETH = dollarPriceOfETH.toString() / 1e18;
-
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
-
     console.log("priceInUSD", priceInUSD);
 
     let title;
@@ -146,30 +145,15 @@ const SearchPage = ({ search, setSearch }) => {
     let selectedListingType = 0;
     let minRange = 100;
     let maxRange = 1000;
-    console.log("searchText", searchText);
-
-    console.log("Check1");
-    console.log("nftListFP.length", nftListFP.length);
 
     for (let i = 0; i < nftListFP.length; i++) {
       title = nftListFP[i].title.toLowerCase();
       let priceOfNft = Number(nftListFP[i].price);
-      console.log("Check2");
-
       let priceETH = priceOfNft;
       let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      console.log("Check3");
-
       let oneETHInUSD = 1 / priceInETH;
       let priceInUSD = priceETH;
-
       priceInUSD = oneETHInUSD * priceInUSD;
-      // console.log("searchTextas", typeof searchTexts);
-      // console.log("searchText", searchTexts.toString());
-      console.log("searchText", searchText);
-      // searched = searchTexts.toLowerCase();
-      // console.log("Title", title);
-      // console.log("searched", searched);
 
       if (searchedNfts == "") {
         nfts.push(nftListFP[i]);
@@ -208,7 +192,6 @@ const SearchPage = ({ search, setSearch }) => {
 
     setSearchedNfts(nfts);
     // searchedNft = nfts;
-
     // if (title.toLowerCase().includes(searchText.toLowerCase())) {
     //   console.log("Name of nft", title);
   };
@@ -236,20 +219,12 @@ const SearchPage = ({ search, setSearch }) => {
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
-
       const metaData = await nftContract.tokenURI(id);
-      console.log("in getListedNfts");
-
       let auctionData = await marketplaceContract._idToAuction(id);
-
       const structData = await marketplaceContract._idToNFT(id);
-
       const fanNftData = await marketplaceContract._idToNFT2(id);
-
       const price = ethers.utils.formatEther(structData.price.toString());
-
       let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
-
       listingType = structData.listingType;
 
       setDiscountPrice(discountOnNFT);
@@ -297,7 +272,7 @@ const SearchPage = ({ search, setSearch }) => {
           // console.log(nftData);
           // myNFTs.push(nftData);
           console.log("Setting list");
-          
+
           // setNftListFP(myNFTs);
           setNftListFP((prev) => [...prev, nftData]);
 
@@ -392,11 +367,11 @@ const SearchPage = ({ search, setSearch }) => {
   //   }
   // }, [walletConnected]);
 
-  useEffect(() => {}, [nftListFP]);
+  useEffect(() => { }, [nftListFP]);
   useEffect(() => {
     getSearchedNfts();
   }, [search]);
-  useEffect(() => {}, [searchedNfts]);
+  useEffect(() => { }, [searchedNfts]);
 
   useEffect(() => {
     connectWallet();
@@ -414,31 +389,8 @@ const SearchPage = ({ search, setSearch }) => {
   ];
 
   const categoriesOptions = [
-    { value: "one", label: "Art" },
-    { value: "two", label: "Game" },
-    { value: "three", label: "Carton" },
-  ];
-
-  const itemOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
-  ];
-  const sortByOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
-  ];
-
-  const ratingOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
-  ];
-  const chainOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
+    { value: "0", label: "Low to high" },
+    { value: "1", label: "High to low" },
   ];
   const currencyOptions = [
     { value: "0", label: "ETH" },
@@ -486,12 +438,23 @@ const SearchPage = ({ search, setSearch }) => {
             <div className="row">
               <div className="col-lg-3 hide-on-desktop-screen-app">
                 <div className="search-filter">
+
                   <div className="l-1">
                     <img src="/assets/images/filter.png" alt="" />{" "}
                     <span>Filter</span>
                   </div>
+                  <div className="l-9">
+                    <p>Currency Type</p>
+                    <Dropdown
+                      options={currencyOptions}
+                      onChange={(e) => {
+                        setCurrency(e);
+                      }}
+                      value={currency.label}
+                    />
+                  </div>
                   <div className="l-2">
-                    <p>Status</p>
+                    <p>Listed Type</p>
                     <Dropdown
                       options={statusOptions}
                       onChange={(e) => {
@@ -501,7 +464,7 @@ const SearchPage = ({ search, setSearch }) => {
                     />
                   </div>
                   <div className="l-3">
-                    <p>Categories</p>
+                    <p>Sort by price</p>
                     <Dropdown
                       options={categoriesOptions}
                       onChange={(e) => {
@@ -510,52 +473,12 @@ const SearchPage = ({ search, setSearch }) => {
                       value={categories.label}
                     />
                   </div>
-                  <div className="l-4">
-                    <p>Items</p>
-                    <Dropdown
-                      options={itemOptions}
-                      onChange={(e) => {
-                        setItem(e);
-                      }}
-                      value={item.label}
-                    />
-                  </div>
-                  <div className="l-5">
-                    <p>Sort byasd</p>
-                    <Dropdown
-                      options={sortByOptions}
-                      onChange={(e) => {
-                        setSortBy(e);
-                      }}
-                      value={sortBy.label}
-                    />
-                  </div>
-                  <div className="l-6">
-                    <p>Rating</p>
-                    <Dropdown
-                      options={ratingOptions}
-                      onChange={(e) => {
-                        setRating(e);
-                      }}
-                      value={rating.label}
-                    />
-                  </div>
-                  <div className="l-7">
-                    <p>Chain</p>
-                    <Dropdown
-                      options={chainOptions}
-                      onChange={(e) => {
-                        setChain(e);
-                      }}
-                      value={chain.label}
-                    />
-                  </div>
                   <div className="l-8">
                     <p>Price range</p>
                     <Slider
                       range
                       min={0}
-                      max={100000}
+                      max={1000}
                       value={[priceRange.min, priceRange.max]}
                       onChange={handleSliderChange}
                     />
@@ -566,16 +489,6 @@ const SearchPage = ({ search, setSearch }) => {
                       </div>
                       {/* <div>100000</div> */}
                     </div>
-                  </div>
-                  <div className="l-9">
-                    <p>Currency</p>
-                    <Dropdown
-                      options={currencyOptions}
-                      onChange={(e) => {
-                        setCurrency(e);
-                      }}
-                      value={currency.label}
-                    />
                   </div>
                 </div>
               </div>
@@ -618,7 +531,7 @@ const SearchPage = ({ search, setSearch }) => {
       <div
         className="modal modal_outer left_modal fade"
         id="get_quote_modal"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="myModalLabel2"
       >
@@ -641,8 +554,22 @@ const SearchPage = ({ search, setSearch }) => {
               </div>
               <div className="modal-body get_quote_view_modal_body">
                 <div className="search-filter">
+                  <div className="l-1">
+                    <img src="/assets/images/filter.png" alt="" />{" "}
+                    <span>Filter</span>
+                  </div>
+                  <div className="l-9">
+                    <p>Currency Type</p>
+                    <Dropdown
+                      options={currencyOptions}
+                      onChange={(e) => {
+                        setCurrency(e);
+                      }}
+                      value={currency.label}
+                    />
+                  </div>
                   <div className="l-2">
-                    <p>Status</p>
+                    <p>Listed Type</p>
                     <Dropdown
                       options={statusOptions}
                       onChange={(e) => {
@@ -652,53 +579,13 @@ const SearchPage = ({ search, setSearch }) => {
                     />
                   </div>
                   <div className="l-3">
-                    <p>Categories</p>
+                    <p>Sort by price</p>
                     <Dropdown
                       options={categoriesOptions}
                       onChange={(e) => {
                         setCategories(e);
                       }}
                       value={categories.label}
-                    />
-                  </div>
-                  <div className="l-4">
-                    <p>Items</p>
-                    <Dropdown
-                      options={itemOptions}
-                      onChange={(e) => {
-                        setItem(e);
-                      }}
-                      value={item.label}
-                    />
-                  </div>
-                  <div className="l-5">
-                    <p>Sort by</p>
-                    <Dropdown
-                      options={sortByOptions}
-                      onChange={(e) => {
-                        setSortBy(e);
-                      }}
-                      value={sortBy.label}
-                    />
-                  </div>
-                  <div className="l-6">
-                    <p>Rating</p>
-                    <Dropdown
-                      options={ratingOptions}
-                      onChange={(e) => {
-                        setRating(e);
-                      }}
-                      value={rating.label}
-                    />
-                  </div>
-                  <div className="l-7">
-                    <p>Chain</p>
-                    <Dropdown
-                      options={chainOptions}
-                      onChange={(e) => {
-                        setChain(e);
-                      }}
-                      value={chain.label}
                     />
                   </div>
                   <div className="l-8">
@@ -718,16 +605,7 @@ const SearchPage = ({ search, setSearch }) => {
                       {/* <div>100000</div> */}
                     </div>
                   </div>
-                  <div className="l-9">
-                    <p>Currency</p>
-                    <Dropdown
-                      options={currencyOptions}
-                      onChange={(e) => {
-                        setCurrency(e);
-                      }}
-                      value={currency.label}
-                    />
-                  </div>
+
                 </div>
               </div>
             </div>

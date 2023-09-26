@@ -163,6 +163,7 @@ const createBackendServer = (baseURL) => {
   // User Subscription //
 
   const userSubscribe = async (body) => await api.post(`subscribe`, body);
+  const payNftByFiat = async (body) => await api.post(`pay-nft-by-fiat`, body);
   const cancelSubscription = async (body) =>
     await api.post(`cancel-subscription`, body);
   const viewSubscriptions = async (userId) =>
@@ -210,6 +211,8 @@ const createBackendServer = (baseURL) => {
 
 
   const viewLandingPageDetail = async () => await api.get(`view-landing-page-detail`);
+  const viewFilteredNfts = async (currency_type , listed_type , min_price , max_price , sort_by_price) => 
+    await api.get(`view-filtered-nfts?currency_type=${currency_type}&listed_type=${listed_type}&min_price=${min_price}&max_price=${max_price}&sort_by_price=${sort_by_price}`);
 
 
 
@@ -288,7 +291,11 @@ const createBackendServer = (baseURL) => {
     viewRemainingArtGallery,
     removeArtGallery,
 
-    viewLandingPageDetail
+    viewLandingPageDetail,
+
+    payNftByFiat,
+
+    viewFilteredNfts
 
   };
 };

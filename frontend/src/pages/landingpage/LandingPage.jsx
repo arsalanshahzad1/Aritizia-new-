@@ -483,6 +483,7 @@ const [counterData , setCounterData] = useState('')
                 <div>
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
+                <div className="row">
                 {nftListFP.length > 0 ? (
                   <>
                     {nftListFP?.slice(0,nftListFP.length>4? 4 : nftListFP.list).map((item, index) => (
@@ -513,6 +514,7 @@ const [counterData , setCounterData] = useState('')
                     <DummyCard />
                   </>
                 )}
+                </div>
               </div>
             </div>
           </div>

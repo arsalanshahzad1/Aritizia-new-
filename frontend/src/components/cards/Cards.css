@@ -629,14 +629,14 @@ img {
 
 .css-fwx73e .detail-wrap .center-icon .icon img:first-child {
   position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 5px solid #FFF;
-    width: 66px;
-    height: 66px;
-    object-fit: cover;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 5px solid #FFF;
+  width: 66px;
+  height: 66px;
+  object-fit: cover;
 }
 
 .css-fwx73e .detail-wrap .center-icon .icon {
@@ -656,6 +656,8 @@ img {
 
 .search-nft-wrap img {
   border-radius: 12px;
+  height: 160px;
+  object-fit: cover;
 }
 
 .search-nft-wrap h2 {
@@ -684,6 +686,7 @@ img {
   .css-vurnku {
     height: 330px !important;
   }
+
   .other-profile-cards .css-vurnku {
     height: 315px !important;
   }
@@ -823,7 +826,7 @@ img {
 .simple-card-main .top .image-holder img {
   width: 100%;
   height: 180px;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .simple-card-main .bottom .nft-icon {
@@ -835,12 +838,12 @@ img {
   z-index: 2;
 }
 
-.simple-card-main .bottom .nft-icon > img {
+.simple-card-main .bottom .nft-icon>img {
   width: 50px;
-    background: #b600d1;
-    border-radius: 50px;
-    height: 50px;
-    object-fit: cover;
+  background: #b600d1;
+  border-radius: 50px;
+  height: 50px;
+  object-fit: cover;
 }
 
 .simple-card-main .bottom .nft-icon .checked-icon {
@@ -902,7 +905,7 @@ img {
 
 }
 
-.simple-card-main  .add-discount-text {
+.simple-card-main .add-discount-text {
   margin: 10px auto 0 auto;
   text-align: center;
   background: linear-gradient(92.94deg, #2438CB 2.4%, #B600D1 97.52%);
@@ -913,7 +916,7 @@ img {
   font-family: 'Jost';
   color: white;
   /* z-index: 99999; */
-  
+
 }
 
 
@@ -924,5 +927,6 @@ img {
 }
 
 .input-percent[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 }

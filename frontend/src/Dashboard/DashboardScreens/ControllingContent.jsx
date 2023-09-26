@@ -83,7 +83,8 @@ function ControllingContent({ search, setSearch }) {
     let myNFTs = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
-      let id = mintedTokens[i];
+      let id = mintedTokens[i]?.token_id;
+      let is_unapproved = mintedTokens[i]?.is_unapproved;
       // id = +mintedTokens[i].tokenId.toString();
 
       const structData = await marketplaceContract._idToNFT(id);
@@ -137,6 +138,7 @@ function ControllingContent({ search, setSearch }) {
           const nftData = {
             id: id, //
             title: title,
+            is_unapproved:is_unapproved,
             image: image,
             price: price,
             crypto: crypto,
@@ -149,6 +151,7 @@ function ControllingContent({ search, setSearch }) {
           // myNFTs.push(nftData);
           if (!nftList.some((item) => item.id === nftData.id)) {
             setNftList((prev) => [...prev, nftData]);
+            console.log(nftData , 'nftList');
           }
 
           // } else if (listingType === 1) {
@@ -206,7 +209,6 @@ function ControllingContent({ search, setSearch }) {
   console.log(selectedNTFIds);
 
   const [showLinks, setShowLinks] = useState(false);
-  // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
@@ -256,12 +258,27 @@ function ControllingContent({ search, setSearch }) {
     }
   };
 
+  // const deleteItems = (ids) => {
+  //   console.log(ids, "ids");
+  //   const updatedData = nftList.filter((item) => !ids.includes(item.id));
+  //   setNftList(updatedData);
+  //   setSelectedNTFIds([]);
+  // };
+
   const deleteItems = (ids) => {
     console.log(ids, "ids");
-    const updatedData = nftList.filter((item) => !ids.includes(item.id));
+    const updatedData = nftList.map(item => {
+        if (ids.includes(item.id)) {
+            return {
+                ...item,
+                is_unapproved: true // Assuming 'state' is the property to be updated
+            };
+        }
+        return item;
+    });
     setNftList(updatedData);
     setSelectedNTFIds([]);
-  };
+};
 
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(
@@ -362,11 +379,11 @@ function ControllingContent({ search, setSearch }) {
               style={{ justifyContent: " end", gap: "10px", marginTop: "20px" }}
             >
               <button onClick={() => approveNFT(false, selectedNTFIds)}>
-                Decline
+                Unapprove
               </button>
-              <button onClick={() => approveNFT(true, selectedNTFIds)}>
+              {/* <button onClick={() => approveNFT(true, selectedNTFIds)}>
                 Accept
-              </button>
+              </button> */}
             </div>
           )}
         </div>
@@ -379,15 +396,16 @@ function ControllingContent({ search, setSearch }) {
           {list?.data?.length > 0 ? (
             <>
               <div className="row">
-                <div className="col-lg-10 mx-auto">
+                <div className="col-lg-11 mx-auto">
                   <div className="row">
-                    {console.log(nftList,"nftList")}
-                    {nftList?.map((item, index) => (
+                    {nftList.map((item, index) => (
+                    
                       <DashboardCard2
                         onOpen={onOpen}
                         index={index}
                         key={index}
                         id={item?.id}
+                        is_unapproved={item?.is_unapproved}
                         title={item?.title}
                         image={item?.image}
                         price={item?.price}
