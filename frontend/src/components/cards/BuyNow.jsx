@@ -35,6 +35,7 @@ const BuyNow = ({
   collection,
   collectionImages,
   seller,
+  size
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -466,7 +467,7 @@ const BuyNow = ({
 
   return (
     <>
-      <div className="col-lg-3 col-md-4">
+      <div className={`${size} col-md-4`}>
         <Link to={path}>
           <div className="css-vurnku" style={{ position: "relative" }}>
             <a className="css-118gt74" >

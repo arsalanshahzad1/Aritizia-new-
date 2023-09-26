@@ -924,6 +924,7 @@ const Profile = ({ search, setSearch }) => {
                               description={item?.description}
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
+                              size={'col-lg-3'}
                             />
                           )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }
@@ -1044,6 +1045,7 @@ const Profile = ({ search, setSearch }) => {
                           description={item?.description}
                           collectionImages={item?.collectionImages}
                           userAddress={userAddress}
+                          size={'col-lg-3'}
                         />
                       ))}
                       </>

@@ -502,6 +502,7 @@ const [counterData , setCounterData] = useState('')
                         collectionImages={item?.collectionImages}
                         userAddress={userAddress}
                         seller={item?.seller}
+                        size={'col-lg-3'}
                       />
                       </>
                     ))}
@@ -567,6 +568,7 @@ const [counterData , setCounterData] = useState('')
                         description={item?.description}
                         collectionImages={item?.collectionImages}
                         seller={item?.seller}
+                        size={'col-lg-3'}
                       />
                       </>
                     ))}
