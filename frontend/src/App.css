@@ -1206,50 +1206,53 @@ footer .footer-bottom .footer-bottom-wrap {
   align-items: center;
 }
 
-footer .footer-bottom .footer-bottom-wrap .one {
-}
-footer .footer-bottom .footer-bottom-wrap .one a{
+footer .footer-bottom .footer-bottom-wrap .one {}
+
+footer .footer-bottom .footer-bottom-wrap .one a {
   display: flex;
   align-items: baseline;
   gap: 13.7px;
 }
 
-footer .footer-bottom .footer-bottom-wrap .two {
+footer .footer-bottom .footer-bottom-wrap .two {}
 
+footer .footer-bottom .footer-bottom-wrap .two ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  gap: 26px;
 }
-footer .footer-bottom .footer-bottom-wrap .two ul{
-display: flex;
-margin: 0;
-padding: 0;
-gap: 26px;
-}
-footer .footer-bottom .footer-bottom-wrap .two ul li{
-list-style: none;
+
+footer .footer-bottom .footer-bottom-wrap .two ul li {
+  list-style: none;
 }
 
 footer .footer-bottom .footer-bottom-wrap .three {}
-footer .footer-bottom .footer-bottom-wrap .three ul{
+
+footer .footer-bottom .footer-bottom-wrap .three ul {
   display: flex;
-margin: 0;
-padding: 0;
-gap: 27px;
+  margin: 0;
+  padding: 0;
+  gap: 27px;
 }
-footer .footer-bottom .footer-bottom-wrap .three ul li{
+
+footer .footer-bottom .footer-bottom-wrap .three ul li {
   list-style: none;
 }
-footer .footer-bottom .footer-bottom-wrap .three ul li a{
-  
-}
-footer .footer-bottom .footer-bottom-wrap .three ul li a p{
+
+footer .footer-bottom .footer-bottom-wrap .three ul li a {}
+
+footer .footer-bottom .footer-bottom-wrap .three ul li a p {
   font-family: 'Jost';
-font-size: 18px;
-font-weight: 600;
-line-height: 26px;
-letter-spacing: 0em;
-text-align: left;
-color: rgba(182, 0, 209, 1);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(182, 0, 209, 1);
 }
-footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
+
+footer .footer-bottom .footer-bottom-wrap .three ul li a p span {
   color: #fff;
   font-weight: 400;
 }
@@ -1763,9 +1766,10 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
   color: var(--white);
 }
 
-.search-page .search-input {
+
+
+.search-page {
   margin-top: 140px;
-  margin-bottom: 50px;
 }
 
 .search-page .search-input input {
@@ -1773,7 +1777,6 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
   background: #f2f2f2;
   border: none;
   outline: none;
-  border-radius: 100px;
   padding: 10px 20px;
   font-family: Jost;
   font-size: 26px;
@@ -1782,6 +1785,9 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
   letter-spacing: 0em;
   text-align: left;
   color: var(--secoundary);
+  border-radius: 6px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  margin-bottom: 25px;
 }
 
 .search-page .search-input input::placeholder {
@@ -1798,8 +1804,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
 }
 
 .search-page .search-filter {
-  box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
-    rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   border-radius: 6px;
   padding: 20px;
 }
@@ -1836,6 +1841,24 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span{
   letter-spacing: 0em;
   text-align: left;
   color: #121212;
+}
+
+.search-filter .l-11{}
+.search-filter .l-11 button{
+  background: var(--bg-gradient);
+    padding: 12px 32px;
+    border-radius: 6px;
+    border: none;
+    font-family: "Jost";
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: var(--white);
+    position: relative;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .search-filter .l-1 {
@@ -5723,7 +5746,7 @@ h3 {
   position: relative;
 }
 
-.disable-nft-card{
+.disable-nft-card {
   width: 100%;
   height: 100%;
   position: absolute;

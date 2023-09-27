@@ -345,6 +345,7 @@ function CollectionProfile({ search, setSearch }) {
                             collection={item?.collection}
                             collectionImages={item?.collectionImages}
                             userAddress
+                            size={'col-lg-3'}
                           />
                         ))}
                       </>
@@ -365,6 +366,7 @@ function CollectionProfile({ search, setSearch }) {
                             description={item?.description}
                             collectionImages={item?.collectionImages}
                             userAddress={userAddress}
+                            size={'col-lg-3'}
                           />
                         ))}
                       </>

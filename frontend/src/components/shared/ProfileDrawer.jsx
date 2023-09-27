@@ -955,6 +955,26 @@ function ProfileDrawer({
       position: toast.POSITION.TOP_RIGHT,
     });
   };
+  // user router
+
+  const [userWalletAddress, SetUserWalletAddress] = useState("");
+  // const navigate = useNavigate();
+
+  const handleUserVisit = async ()=> {
+    navigate(
+      `/other-profile?add=${nftDetails?.user?.wallet_address}`
+    )
+    // console.log(id, "user, id")
+    // const response = await apis.getUserData(id);
+    // SetUserWalletAddress( response?.data?.data?.wallet_address);
+  }
+
+  useEffect(()=>{
+    console.log(userWalletAddress)
+    // if(userWalletAddress){
+    //     navigate(`/other-profile?add=${userWalletAddress}`)
+    // }
+  },[userWalletAddress])
 
   return (
     <>

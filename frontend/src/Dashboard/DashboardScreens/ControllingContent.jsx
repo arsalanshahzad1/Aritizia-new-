@@ -118,7 +118,7 @@ function ControllingContent({ search, setSearch }) {
         .then((response) => {
           const meta = response.data;
           let data = JSON.stringify(meta);
-          console.log(data, "dasdasd");
+          console.log(data, 'dasdasd');
 
           data = data.slice(2, -5);
           data = data.replace(/\\/g, "");
@@ -135,7 +135,7 @@ function ControllingContent({ search, setSearch }) {
           const nftData = {
             id: id, //
             title: title,
-            is_unapproved:is_unapproved,
+            is_unapproved: is_unapproved,
             image: image,
             price: price,
             crypto: crypto,
@@ -148,7 +148,7 @@ function ControllingContent({ search, setSearch }) {
           // myNFTs.push(nftData);
           if (!nftList.some((item) => item.id === nftData.id)) {
             setNftList((prev) => [...prev, nftData]);
-            console.log(nftData , 'nftList');
+            console.log(nftData, 'nftList');
           }
 
           // } else if (listingType === 1) {
@@ -265,17 +265,17 @@ function ControllingContent({ search, setSearch }) {
   const deleteItems = (ids) => {
     console.log(ids, "ids");
     const updatedData = nftList.map(item => {
-        if (ids.includes(item.id)) {
-            return {
-                ...item,
-                is_unapproved: true // Assuming 'state' is the property to be updated
-            };
-        }
-        return item;
+      if (ids.includes(item.id)) {
+        return {
+          ...item,
+          is_unapproved: true // Assuming 'state' is the property to be updated
+        };
+      }
+      return item;
     });
     setNftList(updatedData);
     setSelectedNTFIds([]);
-};
+  };
 
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(
@@ -300,7 +300,7 @@ function ControllingContent({ search, setSearch }) {
     setIsVisible(true);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <div className="user-management">
@@ -388,13 +388,14 @@ function ControllingContent({ search, setSearch }) {
           className="table-for-user-management"
           style={{ top: selectedNTFIds.length > 0 ? "160px" : "120px" }}
         >
+
+          {console.log(list, "list data")}
           {list?.data?.length > 0 ? (
             <>
               <div className="row">
                 <div className="col-lg-11 mx-auto">
                   <div className="row">
                     {nftList.map((item, index) => (
-                    
                       <DashboardCard2
                         onOpen={onOpen}
                         index={index}
@@ -427,9 +428,8 @@ function ControllingContent({ search, setSearch }) {
                 style={{ justifyContent: "center" }}
               >
                 <button
-                  className={`controling-Nft-Load-More ${
-                    list?.pagination?.remaining == 0 ? "disable" : ""
-                  }`}
+                  className={`controling-Nft-Load-More ${list?.pagination?.remaining == 0 ? "disable" : ""
+                    }`}
                   onClick={() => {
                     viewNftList(
                       +list?.pagination?.page + 1,
@@ -443,11 +443,12 @@ function ControllingContent({ search, setSearch }) {
                 </button>
               </div>
             </>
-          ) : (
-            <div className="empty-messahe">
-              <h2>No data avaliable</h2>
-            </div>
-          )}
+          )
+            : (
+              <div className="empty-messahe">
+                <h2>No data avaliable</h2>
+              </div>
+            )}
         </div>
       </div>
     </div>

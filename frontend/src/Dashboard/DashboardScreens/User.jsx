@@ -1021,6 +1021,7 @@ const User = ({ search, setSearch }) => {
                               description={item?.description}
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
+                              size={'col-lg-3'}
                             />
                           ))}
                         </>

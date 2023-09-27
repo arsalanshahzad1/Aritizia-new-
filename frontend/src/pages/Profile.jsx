@@ -799,6 +799,7 @@ const Profile = ({ search, setSearch }) => {
                               description={item?.description}
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
+                              size={'col-lg-3'}
                             />
                           ))}
                         </>
@@ -892,30 +893,34 @@ const Profile = ({ search, setSearch }) => {
                       )}
                       {collectionTabs === 1 && (
                         <>
-                          {likedNftsAuction.length > 0 ? (
-                            <>
-                              {likedNftsAuction.map((item) => (
-                                <NewItemCard
-                                  key={item.id}
-                                  id={item.id}
-                                  title={item?.title}
-                                  image={item?.image}
-                                  price={item?.price}
-                                  highestBid={item?.highestBid}
-                                  isLive={item?.isLive}
-                                  endTime={item?.endTime}
-                                  startTime={item?.startTime}
-                                  description={item?.description}
-                                  collectionImages={item?.collectionImages}
-                                  userAddress={userAddress}
-                                />
-                              ))}
-                            </>
-                          ) : (
-                            <div className="data-not-avaliable">
-                              <h2>No data avaliable</h2>
-                            </div>
-                          )}
+                        { likedNftAuctionLoader ? 
+                          <section className="sec-loading">
+                            <div className="one"></div>
+                          </section>
+                        :
+                        likedNftsAuction.length > 0 ?
+                      <>
+                      {likedNftsAuction.map((item) => (
+                        <NewItemCard
+                          key={item.id}
+                          id={item.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                          highestBid={item?.highestBid}
+                          isLive={item?.isLive}
+                          endTime={item?.endTime}
+                          startTime={item?.startTime}
+                          description={item?.description}
+                          collectionImages={item?.collectionImages}
+                          userAddress={userAddress}
+                          size={'col-lg-3'}
+                        />
+                      ))}
+                      </>
+                      :
+                      <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                      }
                         </>
                       )}
                     </div>

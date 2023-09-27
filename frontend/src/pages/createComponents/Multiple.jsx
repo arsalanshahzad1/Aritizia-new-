@@ -293,10 +293,12 @@ const Multiple = ({ search, setSearch }) => {
       );
       console.log("Response of mint event", response);
     } catch (error) {
+      setMyList(false)
       toast.error(`Error while minting NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
       throw error; // Rethrow the error to be caught in the higher level function if necessary
+      
     }
   }
 
@@ -443,8 +445,6 @@ const Multiple = ({ search, setSearch }) => {
       signer
     );
 
-    console.log("ipfsList", ipfsList);
-
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -505,9 +505,11 @@ const Multiple = ({ search, setSearch }) => {
         nftDataPost();
 
         multiListing = false;
-        toast.success(`NFTs minted`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
+        // toast.success(`NFTs minted`, {
+        //   position: toast.POSITION.TOP_CENTER,
+        // });
+      
+        // navigate('/')
         // alert("NFTs minted");
 
         // setTimeout(() => {
@@ -524,21 +526,32 @@ const Multiple = ({ search, setSearch }) => {
   //   console.log("listToPost", listToPost);
   // };
 
+  const [navigateTrue , setNavigateTrue] = useState(false)
+
   const nftDataPost = async () => {
-    console.log("postListNft");
-    console.log("listToPost.current", listToPost.current);
-    console.log("listToPost.current", listToPost.current.length);
-    console.log("listToPost.current.length", listToPost.current.length);
 
     for (let i = 0; i < listToPost.current.length; i++) {
       console.log("listToPost.current[i]", listToPost.current[i]);
       const response = await apis.postListNft(listToPost.current[i]);
       console.log("response", response);
     }
-    // setTimeout(() => {
-    //   navigate("/profile");
-    // }, 3000);
+
+    setNavigateTrue(true)
+    
   };
+
+  useEffect(() =>{
+    if(navigateTrue){
+      setMyList(false)
+      toast.success(`NFTs minted`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+     setTimeout(() => {
+      navigate("/profile");
+    }, 2000);
+    }
+  } , [navigateTrue])
 
   const handlechange = (file) => {
     setFile(file);

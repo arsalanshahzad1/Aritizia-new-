@@ -15,6 +15,7 @@ const NewItemCard = ({
   description,
   // userAddress,
   collectionImages,
+  size
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -61,7 +62,7 @@ const NewItemCard = ({
 
   return (
     <>
-      <div className="col-lg-3 col-md-4 col-12 new-item-card">
+      <div className={`${size} col-md-4 col-12 new-item-card`}>
         <div className="sec-five-wrap">
           <div className="image">
             <img src={image} alt="" width={"100%"} />

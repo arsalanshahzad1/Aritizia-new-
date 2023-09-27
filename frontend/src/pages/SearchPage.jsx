@@ -18,19 +18,19 @@ import axios from "axios";
 import apis from "../service";
 import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+import BuyNow from "../components/cards/BuyNow";
+import NewItemCard from "../components/cards/NewItemCard";
 
 const SearchPage = ({ search, setSearch }) => {
-  const [status, setStatus] = useState({ value: "one", label: "New" });
-  const [categories, setCategories] = useState({ value: "art", label: "Art" });
+  const [status, setStatus] = useState({ value: "", label: "Select" });
+  const [categories, setCategories] = useState({ value: "", label: "Select" });
   const [item, setItem] = useState({ value: "all", label: "All" });
   const [sortBy, setSortBy] = useState({ value: "all", label: "All" });
   const [rating, setRating] = useState({ value: "all", label: "All" });
   const [chain, setChain] = useState({ value: "all", label: "All" });
-
-  const [currency, setCurrency] = useState({ value: "eth", label: "ETH" });
-
+  const [currency, setCurrency] = useState({ value: "", label: "Select" });
   const [slider, setSlider] = useState(false);
-  const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 }); // initial price range
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 }); // initial price range
 
   // Receiving data from URL parameters
   // const { data } = useParams();
@@ -38,33 +38,52 @@ const SearchPage = ({ search, setSearch }) => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [searchedNfts, setSearchedNfts] = useState([]);
   const [discountPrice, setDiscountPrice] = useState(0);
-
-  const [listingType, setListingType] = useState("");
-  const [minPrice, setMinPrice] = useState(10);
-  const [maxPrice, setMaxPrice] = useState(100000);
-
   const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
-  const [name, setName] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
-
-  let searchedNft = useRef([]);
-
   const [searchText, setSearchText] = useState("");
-
+  const [nftIds, setNftIds] = useState([]);
+  let searchedNft = useRef([]);
   let searchTexts = useRef();
 
+  const viewFilteredNfts = async (currency_type, listed_type, min_price, max_price, sort_by_price, count, search) => {
+    try {
+      const response = await apis.viewFilteredNfts(currency_type, listed_type, min_price, max_price, sort_by_price, count, search)
+      console.log(response?.data, 'filter response');
+      setNftIds(response?.data)
+      console.log(response?.data?.data, 'fdsfdsdf')
+      console.log(nftIds, 'fdsfdsdf');
+      getListedNfts(response?.data?.data)
+      // setPriceRange({ min: 0, max: response?.data?.highest_price })
+    } catch (error) {
+
+    }
+  }
+
+  useEffect(() => {
+    viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, searchText)
+  }, [])
+
   const handleSearchChange = (event) => {
+    console.log(event.target.value);
     setSearchText(event.target.value);
-    searchTexts = event.target.value;
-    getSearchedNfts();
+    viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, event.target.value)
+    setNftListFP([])
+    getListedNfts(response?.data?.data)
+    // searchTexts = event.target.value;
+    // getSearchedNfts();
   };
+
+  const searchNftCards = async (event) => {
+    event.preventDefault()
+    await viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, searchText)
+    setNftListFP([])
+  }
 
   useEffect(() => {
     if (searchParams.get("name") || searchParams.get("name") == "") {
@@ -75,88 +94,94 @@ const SearchPage = ({ search, setSearch }) => {
   }, []);
 
 
-  const getSearchedNfts = async () => {
+  // const getSearchedNfts = async () => {
+  //   const provider = await getProviderOrSigner();
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     provider
+  //   );
+  //   // let dollarPriceOfETH = 1831;
+  //   let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+  //   let priceETH = 0.00000002;
+  //   let priceInETH = dollarPriceOfETH.toString() / 1e18;
+  //   let oneETHInUSD = 1 / priceInETH;
+  //   let priceInUSD = priceETH;
+  //   priceInUSD = oneETHInUSD * priceInUSD;
+  //   console.log("priceInUSD", priceInUSD);
+
+  //   let title;
+  //   let searched;
+  //   let nfts = [];
+  //   setSearchedNfts(nfts);
+
+  //   //////////////////
+  //   // demo variables///
+  //   //////////////////
+
+  //   // Fix front end then call those functions
+
+  //   let listingCheck = false;
+  //   let priceCheck = false;
+  //   let selectedListingType = 0;
+  //   // let minRange = 100;
+  //   // let maxRange = 1000;
+
+  //   for (let i = 0; i < nftListFP.length; i++) {
+  //     title = nftListFP[i].title.toLowerCase();
+  //     let priceOfNft = Number(nftListFP[i].price);
+  //     let priceETH = priceOfNft;
+  //     let priceInETH = dollarPriceOfETH.toString() / 1e18;
+  //     let oneETHInUSD = 1 / priceInETH;
+  //     let priceInUSD = priceETH;
+  //     priceInUSD = oneETHInUSD * priceInUSD;
+
+  //     if (searchedNfts == "") {
+  //       nfts.push(nftListFP[i]);
+  //       console.log("Found khaali", title);
+  //     } else if (title.includes(searchTexts.toLowerCase())) {
+  //       console.log("nftListFP", nftListFP[i]);
+  //       console.log("price", Number(nftListFP[i].price));
+  //       nfts.push(nftListFP[i]);
+
+  //       /////////////////////////
+  //       /////////////////////////
+  //       /////////////////////////  Uncomment the below comments to add the logics
+  //       /////////////////////////
+
+  //       // listing block
+  //       // if (selectedListingType == 100) {
+  //       //   // true
+  //       //   listingCheck = true;
+  //       // } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
+  //       //   listingCheck = true;
+  //       // } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
+  //       //   listingCheck = true;
+  //       // }
+
+  //       // if (priceInUSD >= minRange && priceInUSD <= maxRange) {
+  //       //   priceCheck = true;
+  //       // }
+
+  //       // if (priceCheck && listingCheck) {
+  //       //   nfts.push(nftListFP[i]);
+  //       // }
+  //     }
+
+  //     // price block
+  //   }
+
+  //   setSearchedNfts(nfts);
+  //   // searchedNft = nfts;
+  //   // if (title.toLowerCase().includes(searchText.toLowerCase())) {
+  //   //   console.log("Name of nft", title);
+  // };
+
+  const getListedNfts = async (ids) => {
+    // const provider = await getProvider();
     const provider = await getProviderOrSigner();
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-
-    let priceETH = 0.00000002;
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-
-    let oneETHInUSD = 1 / priceInETH;
-    let priceInUSD = priceETH;
-    priceInUSD = oneETHInUSD * priceInUSD;
-
-    console.log("priceInUSD", priceInUSD);
-
-    let title;
-    let searched;
-    let nfts = [];
-    setSearchedNfts(nfts);
-
-    //////////////////
-    // demo variables///
-    //////////////////
-
-    // Fix front end then call those functions
-
-  
-    console.log("searchText", searchText);
-
-    console.log("Check1");
-    console.log("nftListFP.length", nftListFP.length);
-
-    for (let i = 0; i < nftListFP.length; i++) {
-      title = nftListFP[i].title.toLowerCase();
-      let priceOfNft = Number(nftListFP[i].price);
-      console.log("Check2");
-
-      let priceETH = priceOfNft;
-      let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      console.log("Check3");
-
-      let oneETHInUSD = 1 / priceInETH;
-      let priceInUSD = priceETH;
-
-      priceInUSD = oneETHInUSD * priceInUSD;
-      // console.log("searchTextas", typeof searchTexts);
-      // console.log("searchText", searchTexts.toString());
-      console.log("searchText", searchText);
-      // searched = searchTexts.toLowerCase();
-      // console.log("Title", title);
-      // console.log("searched", searched);
-
-      if (searchedNfts == "") {
-        nfts.push(nftListFP[i]);
-        console.log("Found khaali", title);
-      } else if (title.includes(searchTexts.toLowerCase())) {
-        console.log("nftListFP", nftListFP[i]);
-        console.log("price", Number(nftListFP[i].price));
-        nfts.push(nftListFP[i]);
-
-        /////////////////////////
-        /////////////////////////
-        /////////////////////////  Uncomment the below comments to add the logics
-        /////////////////////////
-
-        
-      }
-
-      // price block
-    }
-
-    setSearchedNfts(nfts);
-   
-  };
-
-  const getListedNfts = async () => {
-    console.log("in getListedNfts");
-    const provider = await getProviderOrSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -169,134 +194,126 @@ const SearchPage = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
+
     let listingType;
 
+    // UNCOMMENT THIS
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+
+    let oneETHInUSD = 1 / priceInETH;
+    let priceInUSD = 1.3;
+
+    let demo = await marketplaceContract.owner();
+
     let mintedTokens = await marketplaceContract.getListedNfts();
+    let myNFTs = [];
+    let myAuctions = [];
 
-    for (let i = 0; i < mintedTokens.length; i++) {
+    for (let i = 0; i < ids.length; i++) {
       let id;
-      id = +mintedTokens[i].tokenId.toString();
+      id = ids[i];
 
-      const metaData = await nftContract.tokenURI(id);
-      console.log("in getListedNfts");
+      let firstOwner = mintedTokens[i].firstOwner;
+      if (firstOwner != "0x0000000000000000000000000000000000000000") {
+        const metaData = await nftContract.tokenURI(id);
+        const structData = await marketplaceContract._idToNFT(id);
+        let collectionId = structData.collectionId.toString();
+        const fanNftData = await marketplaceContract._idToNFT2(id);
+        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
-      let auctionData = await marketplaceContract._idToAuction(id);
+        setDiscountPrice(discountOnNFT);
+        let seller = structData.seller;
 
-      const structData = await marketplaceContract._idToNFT(id);
+        let auctionData = await marketplaceContract._idToAuction(id);
 
-      const fanNftData = await marketplaceContract._idToNFT2(id);
+        let highestBid = ethers.utils.formatEther(
+          auctionData.highestBid.toString()
+        );
 
-      const price = ethers.utils.formatEther(structData.price.toString());
+        listingType = structData.listingType;
+        let listed = structData.listed;
 
-      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        const response = await apis.getNFTCollectionImage(collectionId);
+        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
 
-      listingType = structData.listingType;
+        const price = ethers.utils.formatEther(structData.price.toString());
 
-      setDiscountPrice(discountOnNFT);
+        axios
+          .get(metaData)
+          .then((response) => {
+            const meta = response.data;
+            console.log("first");
+            let data = JSON.stringify(meta);
 
-      let highestBid = ethers.utils.formatEther(
-        auctionData.highestBid.toString()
-      );
+            data = data.slice(2, -5);
+            data = data.replace(/\\/g, "");
+            data = JSON.parse(data);
 
-      axios
-        .get(metaData)
-        .then((response) => {
-          const meta = response.data;
-          let data = JSON.stringify(meta);
+            const crypto = data.crypto;
+            const title = data.title;
+            const image = data.image;
+            const royalty = data.royalty;
+            const description = data.description;
+            const collection = data.collection;
 
-          data = data.slice(2, -5);
-          data = data.replace(/\\/g, "");
+            if (listingType === 0) {
+              console.log("id",id );
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+                seller: seller,
+                listingType: listingType
+              };
 
-          data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
-          const crypto = data.crypto;
-          const title = data.title;
-          const image = data.image;
-          const royalty = data.royalty;
-          const description = data.description;
-          const collection = data.collection;
-          const paymentMethod = data.crypto;
-          console.log("in getListedNfts");
+              // myNFTs.push(nftData);
+              setNftListFP((prev) => [...prev, nftData]);
+            } else if (listingType === 1) {
+              console.log("idddd",id, listingType );
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                paymentMethod: crypto,
+                basePrice: price,
+                startTime: auctionData.startTime.toString(),
+                endTime: auctionData.endTime.toString(),
+                highestBid: highestBid,
+                highestBidder: auctionData.highestBidder.toString(),
+                collectionImages: collectionImages,
+                seller: auctionData.seller.toString(),
+                listingType: listingType
+              };
 
-          const nftData = {
-            id: id, //
-            title: title,
-            image: image,
-            price: price,
-            crypto: crypto,
-            royalty: royalty,
-            description: description,
-            collection: collection,
-            paymentMethod: paymentMethod,
-            listingType: listingType,
-          };
+              // myAuctions.push(nftData);
+              setNftListFP((prev) => [...prev, nftData]);
+            }
+          })
 
-          console.log("in getListedNfts");
-          // console.log(nftData);
-          // myNFTs.push(nftData);
-          console.log("Setting list");
-          
-          // setNftListFP(myNFTs);
-          setNftListFP((prev) => [...prev, nftData]);
-
-          // console.log("myNFTs in function", myNFTs);
-          // if (listingType === 0) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     crypto: crypto,
-          //     royalty: royalty,
-          //     description: description,
-          //     collection: collection,
-          //   };
-
-          //   console.log(nftData);
-          //   myNFTs.push(nftData);
-          //   setNftListFP(myNFTs);
-          //   console.log("myNFTs in function", myNFTs);
-          // } else if (listingType === 1) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     basePrice: auctionData.basePrice.toString(),
-          //     endTime: auctionData.endTime.toString(),
-          //     highestBid: auctionData.highestBid.toString(),
-          //     highestBidder: auctionData.highestBidder.toString(),
-          //     isLive: auctionData.isLive.toString(),
-          //     seller: auctionData.seller.toString(),
-          //     startTime: auctionData.startTime.toString(),
-          //   };
-
-          //   myAuctions.push(nftData);
-          //   console.log("auction in function", myAuctions);
-          //   setNftListAuction(myAuctions);
-          // }
-        })
-
-        .catch((error) => {
-          console.error("Error fetching metadata:", error);
-        });
-    }
+          .catch((error) => {
+            console.error("Error fetching metadata:", error);
+          });
+      }
+    } 
   };
 
+ 
 
-
-  useEffect(() => {}, [nftListFP]);
-  useEffect(() => {
-    getSearchedNfts();
-  }, [search]);
-  useEffect(() => {}, [searchedNfts]);
+  useEffect(() => { }, [nftListFP]);
+ 
+  useEffect(() => { }, [searchedNfts]);
 
   useEffect(() => {
-    connectWallet();
-    getListedNfts();
-    getSearchedNfts();
+    connectWallet(); 
   }, [userAddress]);
 
   useEffect(() => {
@@ -309,31 +326,8 @@ const SearchPage = ({ search, setSearch }) => {
   ];
 
   const categoriesOptions = [
-    { value: "one", label: "Art" },
-    { value: "two", label: "Game" },
-    { value: "three", label: "Carton" },
-  ];
-
-  const itemOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
-  ];
-  const sortByOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
-  ];
-
-  const ratingOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
-  ];
-  const chainOptions = [
-    { value: "one", label: "All" },
-    { value: "two", label: "All" },
-    { value: "three", label: "All" },
+    { value: "0", label: "Low to high" },
+    { value: "1", label: "High to low" },
   ];
   const currencyOptions = [
     { value: "0", label: "ETH" },
@@ -348,35 +342,13 @@ const SearchPage = ({ search, setSearch }) => {
     });
   };
 
+  useEffect(() => { }, [priceRange])
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
       <div className="search-page">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-9 mx-auto">
-              <div className="search-input">
-                <div
-                  className="l-1 hide-on-mobile-screen-app"
-                  id="modal_view_left"
-                  data-toggle="modal"
-                  data-target="#get_quote_modal"
-                >
-                  <div style={{ cursor: "pointer" }}>
-                    <img src="/assets/images/filter.png" alt="" />{" "}
-                    <span>Filter</span>
-                  </div>
-                </div>
-                <input
-                  type="search"
-                  placeholder="Search for nft item"
-                  value={searchText}
-                  onChange={handleSearchChange}
-                />
-              </div>
-            </div>
-          </div>
-          <div></div>
           <div className="filter-card-wrap">
             <div className="row">
               <div className="col-lg-3 hide-on-desktop-screen-app">
@@ -385,8 +357,18 @@ const SearchPage = ({ search, setSearch }) => {
                     <img src="/assets/images/filter.png" alt="" />{" "}
                     <span>Filter</span>
                   </div>
+                  <div className="l-9">
+                    <p>Currency Type</p>
+                    <Dropdown
+                      options={currencyOptions}
+                      onChange={(e) => {
+                        setCurrency(e);
+                      }}
+                      value={currency.label}
+                    />
+                  </div>
                   <div className="l-2">
-                    <p>Status</p>
+                    <p>Listed Type</p>
                     <Dropdown
                       options={statusOptions}
                       onChange={(e) => {
@@ -396,7 +378,7 @@ const SearchPage = ({ search, setSearch }) => {
                     />
                   </div>
                   <div className="l-3">
-                    <p>Categories</p>
+                    <p>Sort by price</p>
                     <Dropdown
                       options={categoriesOptions}
                       onChange={(e) => {
@@ -405,53 +387,13 @@ const SearchPage = ({ search, setSearch }) => {
                       value={categories.label}
                     />
                   </div>
-                  <div className="l-4">
-                    <p>Items</p>
-                    <Dropdown
-                      options={itemOptions}
-                      onChange={(e) => {
-                        setItem(e);
-                      }}
-                      value={item.label}
-                    />
-                  </div>
-                  <div className="l-5">
-                    <p>Sort byasd</p>
-                    <Dropdown
-                      options={sortByOptions}
-                      onChange={(e) => {
-                        setSortBy(e);
-                      }}
-                      value={sortBy.label}
-                    />
-                  </div>
-                  <div className="l-6">
-                    <p>Rating</p>
-                    <Dropdown
-                      options={ratingOptions}
-                      onChange={(e) => {
-                        setRating(e);
-                      }}
-                      value={rating.label}
-                    />
-                  </div>
-                  <div className="l-7">
-                    <p>Chain</p>
-                    <Dropdown
-                      options={chainOptions}
-                      onChange={(e) => {
-                        setChain(e);
-                      }}
-                      value={chain.label}
-                    />
-                  </div>
                   <div className="l-8">
                     <p>Price range</p>
                     <Slider
                       range
                       min={0}
-                      max={100000}
-                      value={[priceRange.min, priceRange.max]}
+                      max={1000}
+                      defaultValue={[priceRange.min, priceRange.max]}
                       onChange={handleSliderChange}
                     />
                     <div className="range-number">
@@ -462,46 +404,93 @@ const SearchPage = ({ search, setSearch }) => {
                       {/* <div>100000</div> */}
                     </div>
                   </div>
-                  <div className="l-9">
-                    <p>Currency</p>
-                    <Dropdown
-                      options={currencyOptions}
-                      onChange={(e) => {
-                        setCurrency(e);
-                      }}
-                      value={currency.label}
-                    />
+                  <div className="l-11">
+                    <button onClick={searchNftCards}>Search</button>
                   </div>
                 </div>
               </div>
               <div className="col-lg-9 col-md-12">
                 <div className="row">
-                  {searchedNfts.length > 0 || search != "" ? (
-                    <>
-                      {searchedNfts.map((item) => (
-                        <SearchNftCards
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {nftListFP.map((item) => (
-                        <SearchNftCards
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                        />
-                      ))}
-                    </>
-                  )}
+                  <div className="col-lg-12 mx-auto">
+                    <div className="search-input">
+                      <div
+                        className="l-1 hide-on-mobile-screen-app"
+                        id="modal_view_left"
+                        data-toggle="modal"
+                        data-target="#get_quote_modal"
+                      >
+                        <div style={{ cursor: "pointer" }}>
+                          <img src="/assets/images/filter.png" alt="" />{" "}
+                          <span>Filter</span>
+                        </div>
+                      </div>
+                      <input
+                        type="search"
+                        placeholder="Search for nft item"
+                        value={searchText}
+                        onChange={handleSearchChange}
+                      />
+                    </div>
+                  </div>
                 </div>
+                <div className="row">
+                  {nftListFP.length > 0 ?
+                    <>
+                      {nftListFP.map((item) => {
+                        if (item?.listingType === 1) {
+                          return (
+                            <NewItemCard
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              highestBid={item?.highestBid}
+                              isLive={item?.isLive}
+                              endTime={item?.endTime}
+                              startTime={item?.startTime}
+                              description={item?.description}
+                              collectionImages={item?.collectionImages}
+                              seller={item?.seller}
+                              size={'col-lg-4'}
+                            />
+                          )
+                        } if (item?.listingType === 0) {
+                          return (
+                            <BuyNow
+                              key={item?.id}
+                              id={item?.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              discountPrice={item?.discountPrice}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              userAddress={userAddress}
+                              seller={item?.seller}
+                              size={'col-lg-4'}
+                            />
+                          )
+                        }
+
+
+                      })}
+                    </>
+                    :
+                    <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                  }
+                </div>
+                {nftListFP.length > 0 &&
+                  <div style={{ textAlign: 'center' }}>
+                    <button className={`controling-Nft-Load-More ${nftIds?.pagination?.remaining == 0 ? "disable" : ""}`}
+                      onClick={() => { viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, +nftIds?.pagination?.page + 1, searchText) }}>
+                      Load More
+                    </button>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -513,7 +502,7 @@ const SearchPage = ({ search, setSearch }) => {
       <div
         className="modal modal_outer left_modal fade"
         id="get_quote_modal"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="myModalLabel2"
       >
@@ -536,8 +525,22 @@ const SearchPage = ({ search, setSearch }) => {
               </div>
               <div className="modal-body get_quote_view_modal_body">
                 <div className="search-filter">
+                  <div className="l-1">
+                    <img src="/assets/images/filter.png" alt="" />{" "}
+                    <span>Filter</span>
+                  </div>
+                  <div className="l-9">
+                    <p>Currency Type</p>
+                    <Dropdown
+                      options={currencyOptions}
+                      onChange={(e) => {
+                        setCurrency(e);
+                      }}
+                      value={currency.label}
+                    />
+                  </div>
                   <div className="l-2">
-                    <p>Status</p>
+                    <p>Listed Type</p>
                     <Dropdown
                       options={statusOptions}
                       onChange={(e) => {
@@ -547,7 +550,7 @@ const SearchPage = ({ search, setSearch }) => {
                     />
                   </div>
                   <div className="l-3">
-                    <p>Categories</p>
+                    <p>Sort by price</p>
                     <Dropdown
                       options={categoriesOptions}
                       onChange={(e) => {
@@ -556,52 +559,12 @@ const SearchPage = ({ search, setSearch }) => {
                       value={categories.label}
                     />
                   </div>
-                  <div className="l-4">
-                    <p>Items</p>
-                    <Dropdown
-                      options={itemOptions}
-                      onChange={(e) => {
-                        setItem(e);
-                      }}
-                      value={item.label}
-                    />
-                  </div>
-                  <div className="l-5">
-                    <p>Sort by</p>
-                    <Dropdown
-                      options={sortByOptions}
-                      onChange={(e) => {
-                        setSortBy(e);
-                      }}
-                      value={sortBy.label}
-                    />
-                  </div>
-                  <div className="l-6">
-                    <p>Rating</p>
-                    <Dropdown
-                      options={ratingOptions}
-                      onChange={(e) => {
-                        setRating(e);
-                      }}
-                      value={rating.label}
-                    />
-                  </div>
-                  <div className="l-7">
-                    <p>Chain</p>
-                    <Dropdown
-                      options={chainOptions}
-                      onChange={(e) => {
-                        setChain(e);
-                      }}
-                      value={chain.label}
-                    />
-                  </div>
                   <div className="l-8">
                     <p>Price range</p>
                     <Slider
                       range
                       min={0}
-                      max={100000}
+                      max={1000}
                       value={[priceRange.min, priceRange.max]}
                       onChange={handleSliderChange}
                     />
@@ -613,15 +576,8 @@ const SearchPage = ({ search, setSearch }) => {
                       {/* <div>100000</div> */}
                     </div>
                   </div>
-                  <div className="l-9">
-                    <p>Currency</p>
-                    <Dropdown
-                      options={currencyOptions}
-                      onChange={(e) => {
-                        setCurrency(e);
-                      }}
-                      value={currency.label}
-                    />
+                  <div className="l-11">
+                    <button onClick={searchNftCards}>Search</button>
                   </div>
                 </div>
               </div>

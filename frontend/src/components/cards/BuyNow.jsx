@@ -35,6 +35,7 @@ const BuyNow = ({
   collection,
   collectionImages,
   seller,
+  size
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -453,7 +454,7 @@ const BuyNow = ({
 
   return (
     <>
-      <div className="col-lg-3 col-md-4">
+      <div className={`${size} col-md-4`}>
         <Link to={path}>
           <div className="css-vurnku" style={{ position: "relative" }}>
             <a className="css-118gt74">
@@ -544,16 +545,13 @@ const BuyNow = ({
                   {/* <div className="button css-pxd23z">
                                         <p>Read More</p>
                                     </div> */}
-                  {buyButton ? (
-                    <div
-                      className="button css-pxd23z"
-                      onClick={() => {
-                        setSucess(true);
-                        getNFTDetailByNFTTokenId(id);
-                        getPriceInUSD();
-                        getFiatAmount();
-                      }}
-                    >
+                  {userAddress?.toUpperCase() !== seller?.toUpperCase() ? (
+                    <div className="button css-pxd23z" onClick={() => {
+                      setSucess(true);
+                      getNFTDetailByNFTTokenId(id)
+                      getPriceInUSD();
+                      getFiatAmount();
+                    }} >
                       <p>Buy Now</p>
                       <span>
                         <img src="/assets/icons/shop.png" alt="" />
@@ -598,6 +596,7 @@ const BuyNow = ({
         collection={collection}
         userAddress={userAddress}
         setIsVisible={setIsVisible}
+        sellerWallet={seller}
       />
       <Modal
         show={sucess}

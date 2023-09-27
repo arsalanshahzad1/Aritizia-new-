@@ -219,6 +219,18 @@ const createBackendServer = (baseURL) => {
 
   const viewLandingPageDetail = async () =>
     await api.get(`view-landing-page-detail`);
+  const viewFilteredNfts = async (
+    currency_type,
+    listed_type,
+    min_price,
+    max_price,
+    sort_by_price,
+    page,
+    search
+  ) =>
+    await api.get(
+      `view-filtered-nfts?currency_type=${currency_type}&listed_type=${listed_type}&min_price=${min_price}&max_price=${max_price}&sort_by_price=${sort_by_price}&page_size=${9}&page=${page}&search=${search}`
+    );
 
   //Returning all the API
   return {
@@ -294,12 +306,12 @@ const createBackendServer = (baseURL) => {
     removeArtGallery,
 
     viewLandingPageDetail,
-
+    viewFilteredNfts,
     payNftByFiat,
   };
 };
 
-const apis = createBackendServer(" http://143.198.70.237");  // Development DB
+const apis = createBackendServer(" http://143.198.70.237"); // Development DB
 // const apis = createBackendServer("http://165.232.142.3"); // Testing DB
 
 export default apis;

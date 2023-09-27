@@ -392,6 +392,7 @@ const OtherProfile = ({ search, setSearch }) => {
                                 collection={item?.collection}
                                 collectionImages={item?.collectionImages}
                                 userADDRESS={userADDRESS}
+                                size={'col-lg-3'}
                               />
                             ))}
                           </>
@@ -413,6 +414,7 @@ const OtherProfile = ({ search, setSearch }) => {
                                 startTime={item?.startTime}
                                 description={item?.description}
                                 userAddress={userADDRESS}
+                                size={'col-lg-3'}
                               />
                             ))}
                           </>
@@ -437,6 +439,7 @@ const OtherProfile = ({ search, setSearch }) => {
                           collection={item?.collection}
                           collectionImage={item?.collectionImage}
                           userADDRESS={userADDRESS}
+                          size={'col-lg-3'}
                         />
                       ))}
                     </div>

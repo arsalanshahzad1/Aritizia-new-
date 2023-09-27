@@ -421,34 +421,37 @@ const LandingPage = ({ search, setSearch }) => {
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
                 <div className="row">
-                  {nftListFP.length > 0 ? (
-                    <>
-                      {nftListFP.map((item) => (
-                        <BuyNow
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                          discountPrice={item?.discountPrice}
-                          crypto={item?.crypto}
-                          royalty={item?.royalty}
-                          description={item?.description}
-                          collection={item?.collection}
-                          collectionImages={item?.collectionImages}
-                          userAddress={userAddress}
-                          seller={item?.seller}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      <DummyCard />
-                      <DummyCard />
-                      <DummyCard />
-                      <DummyCard />
-                    </>
-                  )}
+                {nftListFP.length > 0 ? (
+                  <>
+                    {nftListFP?.slice(0,nftListFP.length>4? 4 : nftListFP.list).map((item, index) => (
+                      <>
+                     <BuyNow
+                        key={item?.id}
+                        id={item?.id}
+                        title={item?.title}
+                        image={item?.image}
+                        price={item?.price}
+                        discountPrice={item?.discountPrice}
+                        crypto={item?.crypto}
+                        royalty={item?.royalty}
+                        description={item?.description}
+                        collection={item?.collection}
+                        collectionImages={item?.collectionImages}
+                        userAddress={userAddress}
+                        seller={item?.seller}
+                        size={'col-lg-3'}
+                      />
+                      </>
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                    <DummyCard />
+                  </>
+                )}
                 </div>
               </div>
             </div>
@@ -501,6 +504,8 @@ const LandingPage = ({ search, setSearch }) => {
                         description={item?.description}
                         collectionImages={item?.collectionImages}
                         userAddress={userAddress}
+                        seller={item?.seller}
+                        size={'col-lg-3'}
                       />
                     ))}
                   </>
