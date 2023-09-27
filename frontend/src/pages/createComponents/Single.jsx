@@ -125,7 +125,7 @@ const Single = ({ search, setSearch }) => {
     let cryptoType;
     console.log(user_id, collectionName, crypto, selectedImage2);
     if (collectionName.length < 1 || !selectedImage2) {
-      toast.warning("Input Collection Name and image to Create", {
+      toast.warning("All fields are required", {
         position: toast.POSITION.TOP_CENTER,
       });
     } else {
@@ -976,7 +976,7 @@ const Single = ({ search, setSearch }) => {
                                 <br />
                                 <div
                                   onClick={handleButtonClick}
-                                  className="button-styling"
+                                  className="button-styling" style={{cursor:"pointer"}}
                                 >
                                   Browse
                                 </div>

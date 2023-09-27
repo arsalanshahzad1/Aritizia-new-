@@ -115,7 +115,6 @@ const LandingPage = ({ search, setSearch }) => {
   //   return web3Provider;
   // };
 
-  console.log("demo", userData.id);
 
   const viewAllNfts = async () => {
     try {

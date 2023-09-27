@@ -123,7 +123,7 @@ const Multiple = ({ search, setSearch }) => {
       let cryptoType;
       console.log(user_id, collectionName, crypto, selectedImage2);
       if (collectionName.length < 1 || !selectedImage2) {
-        toast.warning("Input Collection Name and image to Create", {
+        toast.warning("All Fields are required", {
           position: toast.POSITION.TOP_CENTER,
         });
       } else {

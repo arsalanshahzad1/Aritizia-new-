@@ -8,10 +8,10 @@ import {
   TwitterShareButton,
 } from "react-share";
 
-const SocialShare = ({ style }) => {
+const SocialShare = ({ style, bidStyle }) => {
   // console.log(style);
   return (
-    <div className="share-links-social">
+    <div className={`share-links-social ${bidStyle}`}>
       <span
         style={{ fontSize: style.fontSize, marginRight: style.marginRight }}
       >

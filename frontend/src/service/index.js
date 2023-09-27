@@ -83,7 +83,7 @@ const createBackendServer = (baseURL) => {
   const postChatMessages = async (body) =>
     await api.post(`send-chat-message`, body, headers);
 
-  const viewNotification = async () => await api.get(`view-notifications/8`);
+  const viewNotification = async (count) => await api.get(`view-notifications/${count}`);
 
   const ReadNotification = async () => await api.get(`read-notification/7`);
 

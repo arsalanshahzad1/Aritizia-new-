@@ -234,51 +234,62 @@ const Profile = ({ search, setSearch }) => {
     return true; // No empty strings found, validation passes
   };
   const addFanList = async () => {
-    if (validateFanAddresses(FansAddress)) {
-      const signer = await getProviderOrSigner(true);
-
-      const marketplaceContract = new Contract(
-        MARKETPLACE_CONTRACT_ADDRESS.address,
-        MARKETPLACE_CONTRACT_ABI.abi,
-        signer
-      );
-
-      // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
-      // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
-      // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-      // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-      // 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f  account 8
-      // 0x71bE63f3384f5fb98995898A86B02Fb2426c5788  account 9
-
-      console.log("FansAddress", FansAddress);
-
-      let fanadd = await (
-        await marketplaceContract.addFans(FansAddress)
-      ).wait();
-      console.log("fanadd", fanadd);
-      console.log("asdasdasd");
-
-      let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
-
-      console.log("Response of addedFans event", response);
-      setshowAddFanPopUp(0);
-    } else {
-      toast.warning("There is an empty wallet address", {
+    try {
+      if (validateFanAddresses(FansAddress)) {
+        setLoader(true)
+        const signer = await getProviderOrSigner(true);
+  
+        const marketplaceContract = new Contract(
+          MARKETPLACE_CONTRACT_ADDRESS.address,
+          MARKETPLACE_CONTRACT_ABI.abi,
+          signer
+        );
+  
+        // 0x32e65857f0E0c6045F7b77cf3a9f8b7469f853Cd
+        // 0x92E665119CD1DBd96fd6899bC7375Ac296aF370D
+        // 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+        // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+        // 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f  account 8
+        // 0x71bE63f3384f5fb98995898A86B02Fb2426c5788  account 9
+  
+        console.log("FansAddress", FansAddress);
+  
+        let fanadd = await (
+          await marketplaceContract.addFans(FansAddress)
+        ).wait();
+        console.log("fanadd", fanadd);
+        console.log("asdasdasd");
+  
+        let response = marketplaceContract.on("addedFans", handleAddedFansEvent);
+  
+        console.log("Response of addedFans event", response);
+        setshowAddFanPopUp(0);
+        setLoader(false)
+        
+      } else {
+        toast.warning("There is an empty wallet address", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+      // fanList()
+    } catch (error) {
+      console.log("errrrrr")
+      toast.warning("Wrong wallet address", {
         position: toast.POSITION.TOP_CENTER,
       });
+      setLoader(false)
+      setshowAddFanPopUp(0);
+
     }
   };
 
   const handleAddedFansEvent = async (fanList) => {
-    // let fanList2 = {
-    //   fanList: fanList.toString(),
-    // };
-
-    // fansTesting = fanList.toString();
+  
     setAddedFans(fanList);
     console.log("fanList", fanList);
     // console.log("fanList2", fanList2);
     postFanList();
+    setLoader(false)
   };
 
   const postFanList = async () => {
@@ -1191,176 +1202,177 @@ const Profile = ({ search, setSearch }) => {
                         </svg>
                       </div>
 
-                    {showAddFanPopUp === 1 && (
-                      <>
-                        <div className="BackScreen-dark">
-                          <div className="choose-add-fan-method">
-                            <div
-                              onClick={() => setshowAddFanPopUp(0)}
-                              className="close-btn"
-                            >
-                              <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 27 27"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M25.0157 0H25.3602C25.637 0.0762734 25.8902 0.220569 26.097 0.419655C26.3038 0.61874 26.4575 0.866292 26.544 1.13987C26.6306 1.41346 26.6474 1.70429 26.5928 1.98598C26.5381 2.26766 26.4139 2.53122 26.2313 2.75265L25.9679 3.03604C22.6257 6.35545 19.3037 9.69508 15.9818 13.0145L15.6779 13.217L15.9818 13.4598C19.3442 16.7995 22.6864 20.1594 26.1096 23.58C26.3425 23.7813 26.5165 24.0419 26.6128 24.3342C26.7091 24.6265 26.7242 24.9395 26.6566 25.2397C26.5969 25.5247 26.4659 25.7899 26.2758 26.0104C26.0856 26.231 25.8423 26.3998 25.5691 26.5009C25.2959 26.602 25.0014 26.6322 24.7133 26.5886C24.4252 26.545 24.1531 26.4291 23.9221 26.2517L23.6182 25.9683L13.6523 15.9899C13.5683 15.9109 13.4936 15.8226 13.4295 15.7267L13.1662 15.9696L3.03835 26.0898C2.81125 26.3346 2.52056 26.5116 2.19865 26.601C1.87674 26.6903 1.53624 26.6885 1.21529 26.5958C0.95016 26.5202 0.708757 26.3783 0.51381 26.1835C0.318863 25.9887 0.176967 25.7475 0.101377 25.4826L0 25.2397V24.6729C0.141895 24.1796 0.431818 23.7416 0.830552 23.418L10.6545 13.6015C10.7459 13.5203 10.8482 13.4521 10.9584 13.3991L10.6342 13.1359C7.37307 9.87724 4.11197 6.59838 0.830552 3.3397C0.441664 3.00729 0.153859 2.57252 0 2.08481V1.51802C0.0491955 1.27542 0.148531 1.04576 0.291522 0.843633C0.434513 0.641507 0.618089 0.471322 0.830552 0.34405C1.08222 0.219853 1.34729 0.124876 1.62055 0.0607802H1.82306C2.41002 0.177363 2.93912 0.491743 3.32196 0.951358L13.1054 10.7273L13.3687 10.9702C13.4176 10.8748 13.4791 10.7864 13.5512 10.7071L23.294 0.951358C23.6786 0.483773 24.2171 0.1681 24.8132 0.0607802L25.0157 0Z"
-                                  fill="#6A6A6A"
-                                />
-                              </svg>
-                            </div>
-                            <div className="main-holder">
-                              <h2>SELECT</h2>
-                              <div className="method-holder">
-                                <div onClick={() => setshowAddFanPopUp(2)}>
-                                  Add Custom
-                                </div>
-                                <div onClick={() => setshowAddFanPopUp(3)}>
-                                  Add from <br /> Followers
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    {showAddFanPopUp === 2 && (
-                      <>
-                        <div className="BackScreen-dark">
-                          <div className="Custom-add-fan">
-                            <h3 className="center-align">ADD FAN</h3>
-                            <p className="wallet-text">Wallet address</p>
-                            <div className="Address-holder">
-                              {FansAddress.map((address, Index) => (
-                                <input
-                                  key={Index}
-                                  onChange={(e) =>
-                                    handleChangeAddressInput(e, Index)
-                                  }
-                                  value={address}
-                                  type="text"
-                                  placeholder="Enter Wallet Address"
-                                />
-                              ))}
-                            </div>
-                            <p
-                              onClick={() =>
-                                fansAddressHandle()
-                              }
-                              className="add-more-fan"
-                            >
-                              Add More Fan
-                            </p>
-                            <div className="popUp-btn-group">
+                      {showAddFanPopUp === 1 && (
+                        <>
+                          <div className="BackScreen-dark">
+                            <div className="choose-add-fan-method">
                               <div
                                 onClick={() => setshowAddFanPopUp(0)}
-                                className="button-styling-outline btnCC"
+                                className="close-btn"
                               >
-                                <div
-                                  onClick={() => setFansAddress([""])}
-                                  className="btnCCin"
+                                <svg
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 27 27"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
                                 >
-                                  Cancel
-                                </div>
+                                  <path
+                                    d="M25.0157 0H25.3602C25.637 0.0762734 25.8902 0.220569 26.097 0.419655C26.3038 0.61874 26.4575 0.866292 26.544 1.13987C26.6306 1.41346 26.6474 1.70429 26.5928 1.98598C26.5381 2.26766 26.4139 2.53122 26.2313 2.75265L25.9679 3.03604C22.6257 6.35545 19.3037 9.69508 15.9818 13.0145L15.6779 13.217L15.9818 13.4598C19.3442 16.7995 22.6864 20.1594 26.1096 23.58C26.3425 23.7813 26.5165 24.0419 26.6128 24.3342C26.7091 24.6265 26.7242 24.9395 26.6566 25.2397C26.5969 25.5247 26.4659 25.7899 26.2758 26.0104C26.0856 26.231 25.8423 26.3998 25.5691 26.5009C25.2959 26.602 25.0014 26.6322 24.7133 26.5886C24.4252 26.545 24.1531 26.4291 23.9221 26.2517L23.6182 25.9683L13.6523 15.9899C13.5683 15.9109 13.4936 15.8226 13.4295 15.7267L13.1662 15.9696L3.03835 26.0898C2.81125 26.3346 2.52056 26.5116 2.19865 26.601C1.87674 26.6903 1.53624 26.6885 1.21529 26.5958C0.95016 26.5202 0.708757 26.3783 0.51381 26.1835C0.318863 25.9887 0.176967 25.7475 0.101377 25.4826L0 25.2397V24.6729C0.141895 24.1796 0.431818 23.7416 0.830552 23.418L10.6545 13.6015C10.7459 13.5203 10.8482 13.4521 10.9584 13.3991L10.6342 13.1359C7.37307 9.87724 4.11197 6.59838 0.830552 3.3397C0.441664 3.00729 0.153859 2.57252 0 2.08481V1.51802C0.0491955 1.27542 0.148531 1.04576 0.291522 0.843633C0.434513 0.641507 0.618089 0.471322 0.830552 0.34405C1.08222 0.219853 1.34729 0.124876 1.62055 0.0607802H1.82306C2.41002 0.177363 2.93912 0.491743 3.32196 0.951358L13.1054 10.7273L13.3687 10.9702C13.4176 10.8748 13.4791 10.7864 13.5512 10.7071L23.294 0.951358C23.6786 0.483773 24.2171 0.1681 24.8132 0.0607802L25.0157 0Z"
+                                    fill="#6A6A6A"
+                                  />
+                                </svg>
                               </div>
-                              <div
-                                onClick={addFanList}
-                                className="button-styling btnCC"
-                              >
-                                Add
+                              <div className="main-holder">
+                                <h2>SELECT</h2>
+                                <div className="method-holder">
+                                  <div onClick={() => setshowAddFanPopUp(2)}>
+                                    Add Custom
+                                  </div>
+                                  <div onClick={() => setshowAddFanPopUp(3)}>
+                                    Add from <br /> Followers
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </>
-                    )}
-                    {showAddFanPopUp === 3 && (
-                      <>
-                        <div className="BackScreen-dark">
-                          <div className="Custom-add-fan">
-                            <h3 className="center-align">ADD TO FAN LIST</h3>
-                            <div className="line-1-selector">
-                              <div>No.</div>
-                              <div></div>
+                        </>
+                      )}
+
+                      {showAddFanPopUp === 2 && (
+                        <>
+                          <div className="BackScreen-dark">
+                            <div className="Custom-add-fan">
+                              <h3 className="center-align">ADD FAN</h3>
+                              <p className="wallet-text">Wallet address</p>
+                              <div className="Address-holder">
+                                {FansAddress.map((address, Index) => (
+                                  <input
+                                    key={Index}
+                                    onChange={(e) =>
+                                      handleChangeAddressInput(e, Index)
+                                    }
+                                    value={address}
+                                    type="text"
+                                    placeholder="Enter Wallet Address"
+                                  />
+                                ))}
+                              </div>
+                              <p
+                                onClick={() =>
+                                  fansAddressHandle()
+                                }
+                                className="add-more-fan"
+                              >
+                                Add More Fan
+                              </p>
+                              <div className="popUp-btn-group">
+                                <div
+                                  onClick={() => setshowAddFanPopUp(0)}
+                                  className="button-styling-outline btnCC"
+                                >
+                                  <div
+                                    onClick={() => setFansAddress([""])}
+                                    className="btnCCin"
+                                  >
+                                    Cancel
+                                  </div>
+                                </div>
+                                {/* fan me */}
+                                <div
+                                  onClick={addFanList}
+                                  className="button-styling btnCC"
+                                >
+                                  Add
+                                </div>
+                              </div>
                             </div>
-                            <div className="Address-holder">
-                              {addFanlisting?.length > 0 ? (
-                                <>
-                                  {addFanlisting?.map((data, Index) => (
-                                    <div
-                                      key={Index}
-                                      className="follower-in-fan-list"
-                                    >
-                                      <div className="inner">
-                                        <div className="num">{Index + 1}</div>
-                                        <div className="inner2">
-                                          <div className="img-holder">
-                                            <img
-                                              src={data?.profile_image}
-                                              alt=""
-                                            />
-                                          </div>
-                                          <div className="Text-follower-fan">
-                                            {data?.username} <br />{" "}
-                                            <span>
-                                              {" "}
-                                              {
-                                                data?.count_follower
-                                              } Followers{" "}
-                                            </span>
+                          </div>
+                        </>
+                      )}
+                      {showAddFanPopUp === 3 && (
+                        <>
+                          <div className="BackScreen-dark">
+                            <div className="Custom-add-fan">
+                              <h3 className="center-align">ADD TO FAN LIST</h3>
+                              <div className="line-1-selector">
+                                <div>No.</div>
+                                <div></div>
+                              </div>
+                              <div className="Address-holder">
+                                {addFanlisting?.length > 0 ? (
+                                  <>
+                                    {addFanlisting?.map((data, Index) => (
+                                      <div
+                                        key={Index}
+                                        className="follower-in-fan-list"
+                                      >
+                                        <div className="inner">
+                                          <div className="num">{Index + 1}</div>
+                                          <div className="inner2">
+                                            <div className="img-holder">
+                                              <img
+                                                src={data?.profile_image}
+                                                alt=""
+                                              />
+                                            </div>
+                                            <div className="Text-follower-fan">
+                                              {data?.username} <br />{" "}
+                                              <span>
+                                                {" "}
+                                                {
+                                                  data?.count_follower
+                                                } Followers{" "}
+                                              </span>
+                                            </div>
                                           </div>
                                         </div>
+                                        <div>
+                                          {console.log(
+                                            data?.is_check,
+                                            "is check state"
+                                          )}
+                                          <input
+                                            checked={data?.is_check}
+                                            onChange={() =>
+                                              handleCheckboxChange(data?.user_id)
+                                            }
+                                            className="separate-checkbox-follower"
+                                            type="checkbox"
+                                            name=""
+                                            id=""
+                                          />
+                                        </div>
                                       </div>
-                                      <div>
-                                        {console.log(
-                                          data?.is_check,
-                                          "is check state"
-                                        )}
-                                        <input
-                                          checked={data?.is_check}
-                                          onChange={() =>
-                                            handleCheckboxChange(data?.user_id)
-                                          }
-                                          className="separate-checkbox-follower"
-                                          type="checkbox"
-                                          name=""
-                                          id=""
-                                        />
-                                      </div>
-                                    </div>
-                                  ))}
-                                </>
-                              ) : (
-                                <div className="data-not-avaliable"> <h2>List is Empty</h2></div>
-                              )}
-                            </div>
-                            <div className="popUp-btn-group">
-                              <div
-                                onClick={() => setshowAddFanPopUp(0)}
-                                className="button-styling-outline btnCC"
-                              >
-                                <div
-                                  onClick={() => setFansAddress([""])}
-                                  className="btnCCin"
-                                >
-                                  Cancel
-                                </div>
+                                    ))}
+                                  </>
+                                ) : (
+                                  <div className="data-not-avaliable"> <h2>List is Empty</h2></div>
+                                )}
                               </div>
-                              <div
-                                className="button-styling btnCC"
-                                onClick={addFans}
-                              >
-                                Add
+                              <div className="popUp-btn-group">
+                                <div
+                                  onClick={() => setshowAddFanPopUp(0)}
+                                  className="button-styling-outline btnCC"
+                                >
+                                  <div
+                                    onClick={() => setFansAddress([""])}
+                                    className="btnCCin"
+                                  >
+                                    Cancel
+                                  </div>
+                                </div>
+                                <div
+                                  className="button-styling btnCC"
+                                  onClick={addFans}
+                                >
+                                  Add
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </>
-                    )}
+                        </>
+                      )}
                   </>
                 )}
 

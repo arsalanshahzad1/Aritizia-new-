@@ -444,7 +444,7 @@ function AnalyticsTool({ search, setSearch }) {
             <div className='position-absolute-top'>
                 <div className='dashboard-front-section-1 dashboard-front-section-2'>
                     <div className='dashboard-card'>
-                        <div>Free Trail Total Users</div>
+                        <div>Free Trial Total Users</div>
                         <div>{analyticsDetails?.analytics?.Free_Trail?.user_count}</div>
                         {/* {analyticsDetails?.analytics?.Free_Trail?.percentage < 0 ?
                             <div className='down'>
@@ -549,7 +549,7 @@ function AnalyticsTool({ search, setSearch }) {
                         }
                     </div>
                     <div className='dashboard-card'>
-                        <div>Daimond Total User</div>
+                        <div>Diamond Total User</div>
                         <div>{analyticsDetails?.analytics?.Diamond?.user_count}</div>
                         {analyticsDetails?.analytics?.Diamond?.percentage < 0 ?
                             <div className='down'>
@@ -588,7 +588,7 @@ function AnalyticsTool({ search, setSearch }) {
                             <div className={`${activeTabData == 'free_trail' ? 'active' : ''}`} onClick={() => setActiveTabData('free_trail')}>Free Trial</div>
                             <div className={`${activeTabData == 'gold' ? 'active' : ''}`} onClick={() => setActiveTabData('gold')}>Gold</div>
                             <div className={`${activeTabData == 'platinum' ? 'active' : ''}`} onClick={() => setActiveTabData('platinum')}>Platinum</div>
-                            <div className={`${activeTabData == 'diamond' ? 'active' : ''}`} onClick={() => setActiveTabData('diamond')}>Daimond</div>
+                            <div className={`${activeTabData == 'diamond' ? 'active' : ''}`} onClick={() => setActiveTabData('diamond')}>Diamond</div>
                         </div>
                         <div className='user-sub-dd'>
                             <Dropdown

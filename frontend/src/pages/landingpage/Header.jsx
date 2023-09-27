@@ -10,6 +10,7 @@ import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { getAddress } from "../../methods/methods";
+import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from 'react-icons/io'
 import {
   connectWallet,
   getProviderOrSigner,
@@ -203,6 +204,7 @@ const Header = ({ search, setSearch }) => {
       setNotificationRes([]);
     }
   };
+
   return (
     <>
       <header id={`${scrolled ? "active" : ""}`}>
@@ -284,12 +286,13 @@ const Header = ({ search, setSearch }) => {
                         onClick={() => {
                           setshowMessage(!showMessage),
                             setShowNotification(false),
-                            getChatnotification("message", 0);
+                            getChatnotification("message", user_id);
                           setMessageArrive(false);
                         }}
                         className={`icon-for-header ${
                           scrolled ? "black-svgs" : ""
                         }`}
+                        style={{zIndex:`${showMessage?"21":"10"}`}}
                       >
                         <svg
                           width="36"
@@ -314,7 +317,7 @@ const Header = ({ search, setSearch }) => {
                       </span>
                     )}
                     {showMessage && (
-                      <div className="notification-card" style={{ left: "2%" }}>
+                      <div className="notification-card" style={{ left: "16%" }}>
                         <>
                           {loader ? (
                             <section className="sec-loading">
@@ -351,7 +354,7 @@ const Header = ({ search, setSearch }) => {
                         onClick={() => {
                           setShowNotification(!showNotification);
                           setshowMessage(false);
-                          viewNotification("notification", 0);
+                          viewNotification("notification", user_id);
                           setNotificationArrive(false);
                         }}
                         className={`icon-for-header ${
@@ -383,7 +386,7 @@ const Header = ({ search, setSearch }) => {
                     {showNotification && (
                       <div
                         className="notification-card"
-                        style={{ left: "11%" }}
+                        style={{ left: "22%" }}
                       >
                         <>
                           {loader ? (
@@ -484,7 +487,8 @@ const Header = ({ search, setSearch }) => {
                           ) : (
                             <>
                               {chatNotificationRes?.length > 0 ? (
-                                <Notification data={chatNotificationRes} />
+                                // <Notification data={chatNotificationRes} />
+                                ""
                               ) : (
                                 <section  className="header-empty-record"> <span> No record found </span> </section>
                               )}
@@ -628,7 +632,8 @@ const Header = ({ search, setSearch }) => {
                               setToggleSettingDropdown(!toggleSettingDropdown)
                             }
                           >
-                            Setting +
+                            {/* Setting + */}
+                            Settings {toggleSettingDropdown ? <IoIosArrowDropupCircle /> : <IoIosArrowDropdownCircle />}
                             {toggleSettingDropdown ? (
                               <div>
                                 <ul>
@@ -687,6 +692,27 @@ const Header = ({ search, setSearch }) => {
           </div>
         </div>
       </header>
+      <div
+        style={
+          (showNotification || showMessage) // Check if either is true
+            ? {
+                width: "100vw",
+                height: "100vh",
+                position: "fixed",
+                top: "0",
+                left: "0",
+                backgroundColor: "transparent",
+                zIndex: "5"
+              }
+            : {
+              display:"none"
+            } // Null style when neither is true
+        }
+        onClick={() => {
+          setShowNotification(false);
+          setshowMessage(false);
+        }}
+      ></div>
     </>
   );
 };

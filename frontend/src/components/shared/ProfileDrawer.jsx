@@ -1159,7 +1159,7 @@ function ProfileDrawer({
                   <div className="row d-flex">
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
                       <SocialShare
-                        style={{ fontSize: "18px", marginRight: "10px" }}
+                        style={{ fontSize: "18px", marginRight: "40px" }}
                       />
                     </div>
                     {/* <div className="col-lg-8 col-md-8 col-12">
@@ -1182,8 +1182,8 @@ function ProfileDrawer({
                         History
                       </button>
                     </div> */}
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
-                      <SocialShare
+                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{marginLeft:"0px"}}>
+                      <SocialShare bidStyle="bid-style"
                         style={{ fontSize: "18px", marginRight: "10px"}}
                       />
                     </div>

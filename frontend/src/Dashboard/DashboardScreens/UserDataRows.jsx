@@ -26,7 +26,8 @@ function UserDataRows({
   const navigate = useNavigate();
 
   const NavigateToUser = (id, address) => {
-    navigate(`/dashboard/user?id=${id}&add=${address}`);
+    navigate(`/dashboard/user?id=${id}&add=${address}`); 
+    // navigate(`/dashboard/other-profile?add=${address}`);  
   };
   const unbanUser = async (id, wallet_address) => {
     console.log("unbanUser");
@@ -172,7 +173,6 @@ function UserDataRows({
                             Unblock
                           </li>
                         )}
-                        {/* <li>Delete</li> */}
                       </ul>
                     </div>
                   ) : null}

@@ -77,6 +77,8 @@ const OtherProfile = ({ search, setSearch }) => {
     getNFTlikeListing(response?.data?.data?.id);
   };
 
+  // useEffect()
+
   // const getProviderOrSigner = async (needSigner = false) => {
   //   const provider = await web3ModalRef.current.connect();
   //   const web3Provider = new providers.Web3Provider(provider);
@@ -350,17 +352,19 @@ const OtherProfile = ({ search, setSearch }) => {
       follow_by: RealUserId,
       follow_to: userDetails?.id,
     });
-    if (response?.status === 201) {
-      setFollowStatus(response?.data?.data?.is_follow);
-      setCurrentState(!currentState)
-    }
-    console.log(response, "this is reponse");
-    console.log(FollowStatus, "this is follow status");
+    // if (response?.status === 201) {
+    //   // setFollowStatus(response?.data?.data?.is_follow);
+    //   // // setFollowStatus(!FollowStatus);
+    //   // setCurrentState(!currentState)
+    // }
+    getOtherUsersDetails(userADDRESS)
+    // console.log(response, "this is reponse");
+    // console.log(FollowStatus, "this is follow status");
     
   };
+
   useEffect(() => {
-    console.log(userDetails, "this is user");
-    console.log(userDetails?.followers, "this is followers");
+   
     const flag = userDetails?.followers?.some(
       (follower) => follower.id === RealUserId
     );
@@ -455,7 +459,7 @@ const OtherProfile = ({ search, setSearch }) => {
             <div className="container-fluid">
               <div className="row">
                 <div className="col-lg-4 col-md-4 col-12 followers-div">
-                  {isFollow ? (
+                  {userDetails?.is_follow ? (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
                       Unfollow
                     </div>
@@ -464,7 +468,7 @@ const OtherProfile = ({ search, setSearch }) => {
                       Follow 
                     </div>
                   )}
-                  <div>Followers {totalFollowers}</div>
+                  <div>Followers {userDetails?.total_followers}</div>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6">
                   <h2 className="user-name">
@@ -473,7 +477,7 @@ const OtherProfile = ({ search, setSearch }) => {
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <SocialShare
-                    style={{ fontSize: "28px", marginRight: "0px" }}
+                    style={{ fontSize: "28px", marginRight: "10px" }}
                   />
                 </div>
               </div>

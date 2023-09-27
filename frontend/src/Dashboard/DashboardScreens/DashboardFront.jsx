@@ -45,7 +45,7 @@ function DashboardFront({ search, setSearch }) {
       }
       setLoader(false)
     } catch (error) {
-      console.error("Error:", error);
+    //   console.error("Error:", error);
     }
   };
 
