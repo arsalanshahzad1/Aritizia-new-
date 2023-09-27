@@ -113,9 +113,9 @@ const Header = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  useEffect(() => {
-    setInterval(getAddress, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(getAddress, 3000);
+  // }, []);
 
   function handleDisconnect() {
     // Handle wallet disconnection here
