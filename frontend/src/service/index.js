@@ -299,7 +299,7 @@ const createBackendServer = (baseURL) => {
   };
 };
 
-// const apis = createBackendServer(" http://143.198.70.237"); // Development DB
-const apis = createBackendServer("http://165.232.142.3"); //   Testing DB
+const apis = createBackendServer(" http://143.198.70.237");  // Development DB
+// const apis = createBackendServer("http://165.232.142.3"); // Testing DB
 
 export default apis;

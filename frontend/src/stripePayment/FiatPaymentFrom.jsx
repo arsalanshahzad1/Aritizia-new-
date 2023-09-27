@@ -38,7 +38,7 @@ const FiatPaymentFrom = ({
   amount,
   paymentMethodd,
   sellerPlan,
-  buyerPlan,
+  // buyerPlan,
   ethWeiForFiat,
   setShowPaymentForm,
   showResponseMessage,
@@ -63,6 +63,8 @@ const FiatPaymentFrom = ({
   const userData = JSON.parse(localStorage.getItem("data"));
   console.log("userData", userData);
   const user_id = userData?.id;
+  const buyerPlan = userData?.subscription_plan;
+
   const stripe = useStripe();
   const elements = useElements();
   const nevigate = useNavigate();
@@ -309,13 +311,42 @@ const FiatPaymentFrom = ({
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeETH;
-      console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
-      console.log("www discountedEth", discountedEth);
+      // console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
+      // console.log("www discountedEth", discountedEth);
 
       // check this
       amount = +discountedEth + fee;
       value = amount * 10 ** 18;
     }
+
+    console.log("www paymentMethodd", paymentMethodd);
+    console.log("www id", id);
+    console.log("www sellerPlan", sellerPlan);
+    console.log("www buyerPlan", buyerPlan);
+    console.log("www value", value);
+    console.log("www amount", amount);
+
+    amount = amount.toString();
+    // console.log(
+    //   "www ethers.utils.parseEther(amount)",
+    //   ethers.utils.parseEther(amount.toString())
+    // );
+
+    let gas = await marketplaceContract.estimateGas.buyWithFIAT(
+      NFT_CONTRACT_ADDRESS.address,
+      paymentMethodd,
+      id,
+      sellerPlan,
+      buyerPlan,
+      // value,
+      // ethers.utils.parseEther(value).toString(),
+      ethers.utils.parseEther(amount),
+      {
+        gasLimit: ethers.BigNumber.from("300000"),
+      }
+    );
+
+    console.log("gas", gas.toString());
 
     await (
       await marketplaceContract.buyWithFIAT(
@@ -324,8 +355,9 @@ const FiatPaymentFrom = ({
         id,
         sellerPlan,
         buyerPlan,
-        ethers.utils.parseEther(value).toString(),
-        // ethers.utils.parseEther(value),
+        // value,
+        // ethers.utils.parseEther(value).toString(),
+        ethers.utils.parseEther(amount),
         {
           gasLimit: ethers.BigNumber.from("30000000"),
         }

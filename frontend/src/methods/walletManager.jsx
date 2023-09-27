@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from "react";
 import Web3Modal from "web3modal";
 import { providers } from "ethers";
-
 import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 
@@ -36,6 +34,8 @@ export const getProviderOrSigner = async (needSigner = false) => {
 
   return web3Provider;
 };
+
+
 export const connectWallet = async (setWalletConnected) => {
   console.log("connectWallet");
   try {

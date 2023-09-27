@@ -153,11 +153,9 @@ const BuyNow = ({
   };
 
   const checkSeller = async () => {
-    
     console.log("checkSeller Seller", seller);
     console.log("checkSeller userAddress", userAddress);
     console.log("checkSeller Seller == userAddress", seller == userAddress);
-
 
     if (userAddress != seller) {
       // show buy button
@@ -170,9 +168,7 @@ const BuyNow = ({
     }
   };
 
-  useEffect(() => {
-
-  }, [fiatAmount])
+  useEffect(() => {}, [fiatAmount]);
   useEffect(() => {
     checkSeller();
   }, []);
@@ -187,8 +183,6 @@ const BuyNow = ({
       console.log("Error: ", e);
     }
   };
-
-
 
   const onClose = useCallback(() => {
     setIsVisible(false);
@@ -403,7 +397,6 @@ const BuyNow = ({
   };
 
   const getFiatAmount = async () => {
-
     const signer = await getProviderOrSigner(true);
 
     const marketplaceContract = new Contract(
@@ -446,25 +439,24 @@ const BuyNow = ({
       console.log("www amountInWei", amountInWei);
     }
 
-    // ye wala bhej USD ki amount h ye 
+    // ye wala bhej USD ki amount h ye
     console.log("ye usd ki amount h", amount);
     // setShowFiatPaymentForm(true)
-    setFiatAmount(amount)
-
+    setFiatAmount(amount);
   };
 
   const buyWithFiat = async () => {
     await getPriceInUSD();
     await getFiatAmount();
-    setShowFiatPaymentForm(true)
-  }
+    setShowFiatPaymentForm(true);
+  };
 
   return (
     <>
       <div className="col-lg-3 col-md-4">
         <Link to={path}>
           <div className="css-vurnku" style={{ position: "relative" }}>
-            <a className="css-118gt74" >
+            <a className="css-118gt74">
               <div className="css-15eyh94">
                 <div className="css-2r2ti0" onClick={() => openDrawer()}>
                   <div className="css-15xcape">
@@ -524,7 +516,10 @@ const BuyNow = ({
               >
                 {/* <BiDotsHorizontalRounded className="doted-icon" /> */}
                 <div className="css-fwx73e">
-                  <div className="css-10nf7hq detail-wrap" onClick={() => openDrawer()}>
+                  <div
+                    className="css-10nf7hq detail-wrap"
+                    onClick={() => openDrawer()}
+                  >
                     <div className="center-icon">
                       <div className="icon">
                         <img src={collectionImages} alt="" />
@@ -550,12 +545,15 @@ const BuyNow = ({
                                         <p>Read More</p>
                                     </div> */}
                   {buyButton ? (
-                    <div className="button css-pxd23z" onClick={() => {
-                      setSucess(true);
-                      getNFTDetailByNFTTokenId(id)
-                      getPriceInUSD();
-                      getFiatAmount();
-                    }} >
+                    <div
+                      className="button css-pxd23z"
+                      onClick={() => {
+                        setSucess(true);
+                        getNFTDetailByNFTTokenId(id);
+                        getPriceInUSD();
+                        getFiatAmount();
+                      }}
+                    >
                       <p>Buy Now</p>
                       <span>
                         <img src="/assets/icons/shop.png" alt="" />
@@ -620,7 +618,13 @@ const BuyNow = ({
           </div>
           <div className="mobal-button-2">
             {/* <button onClick={buyWithFIAT}>Buy with FIAT</button> */}
-            <button onClick={() => { buyWithFiat() }}>Buy with FIAT</button>
+            <button
+              onClick={() => {
+                buyWithFiat();
+              }}
+            >
+              Buy with FIAT
+            </button>
           </div>
         </div>
       </Modal>
@@ -647,6 +651,7 @@ const BuyNow = ({
             </div>
             <FiatStripeContainer
               id={id}
+              paymentMethodd={crypto}
               amount={fiatAmount}
               setShowPaymentForm={setShowFiatPaymentForm}
               showResponseMessage={showResponseMessage}
@@ -659,7 +664,5 @@ const BuyNow = ({
     </>
   );
 };
-
-
 
 export default BuyNow;

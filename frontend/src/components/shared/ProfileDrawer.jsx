@@ -341,7 +341,7 @@ function ProfileDrawer({
 
   let fiatPurchase = false;
 
-  // const buyWithFIAT = async () => {
+  // const buyWithFIAT2 = async () => {
   //   console.log("11111111111111");
 
   //   fiatPurchase = true;
@@ -1312,7 +1312,7 @@ function ProfileDrawer({
             <button onClick={() => setShowFiatPaymentForm(true)}>
               Buy with FIAT
             </button>
-            {/* <button onClick={buyWithFIAT}>Buy with FIAT</button> */}
+            {/* <button onClick={buyWithFIAT2}>Buy with FIAT2</button> */}
           </div>
         </div>
       </Modal>

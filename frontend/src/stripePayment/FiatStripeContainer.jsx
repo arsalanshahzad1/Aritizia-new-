@@ -12,7 +12,7 @@ const stripeTestPromise = loadStripe(PUBLIC_KEY);
 const FiatStripeContainer = ({
   id,
   amount,
-  paymentMethod,
+  paymentMethodd,
   sellerPlan,
   buyerPlan,
   ethWeiForFiat,
@@ -26,7 +26,7 @@ const FiatStripeContainer = ({
       <FiatPaymentFrom
         id={id}
         amount={amount}
-        paymentMethodd={paymentMethod}
+        paymentMethodd={paymentMethodd}
         sellerPlan={sellerPlan}
         buyerPlan={buyerPlan}
         ethWeiForFiat={ethWeiForFiat}

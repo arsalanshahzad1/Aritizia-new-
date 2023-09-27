@@ -42,13 +42,52 @@ const LandingPage = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
+  // CALL THIS FUNCTION RECURSIVELY TO CHECK LIQUIDITY AND SEND NOTIF TO ADMIN
 
-
-
-  // CALL THIS FUNCTION RECURSIVELY TO CHECK LIQUIDITY AND SEND NOTIF TO ADMIN 
- 
   async function getBalance() {
     const provider = await getProviderOrSigner();
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    let paymentMethodd = 0;
+    let id = 4;
+    let sellerPlan = 0;
+    let buyerPlan = 0;
+    let amount = "1.015";
+
+    let gas = await marketplaceContract.estimateGas.buyWithFIAT(
+      NFT_CONTRACT_ADDRESS.address,
+      paymentMethodd,
+      id,
+      sellerPlan,
+      buyerPlan,
+      // value,
+      // ethers.utils.parseEther(value).toString(),
+      ethers.utils.parseEther(amount),
+      {
+        gasLimit: ethers.BigNumber.from("300000"),
+      }
+    );
+
+    let currentGasPrice = await provider.getGasPrice();
+
+    console.log("gas", gas.toString());
+
+    gas = gas.toString();
+
+    currentGasPrice = currentGasPrice.toString();
+
+    let total = +gas * +currentGasPrice;
+    console.log("gas", gas);
+    console.log("currentGasPrice", currentGasPrice);
+    total = Math.ceil(total / 10 ** 9);
+    console.log("total", total);
+    const amountInWei = ethers.utils.parseUnits(total.toString(), "gwei");
+    console.log("amountInWei", amountInWei.toString());
 
     // Create a provider using any Ethereum node URL
     provider
@@ -57,9 +96,9 @@ const LandingPage = ({ search, setSearch }) => {
         var balanceEther = ethers.utils.formatEther(balanceWei);
         console.log(`Balance ${balanceEther} ETH`);
 
-        if(+balanceEther < 10){
+        if (+balanceEther < 10) {
           // hit api for admin
-          console.log("ADMIN KI API HIT KAR LOW LQUIDITY KI");
+          console.log("ADMIN KI API HIT KARO `LOW LQUIDITY` KI");
         }
       })
       .catch((error) => {
@@ -84,7 +123,6 @@ const LandingPage = ({ search, setSearch }) => {
     const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     let addr = await getAddress();
-    
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -198,6 +236,7 @@ const LandingPage = ({ search, setSearch }) => {
             console.log("listingType", listingType);
 
             if (listingType === 0) {
+              // Fixed Price
               const nftData = {
                 id: id, //
                 title: title,
@@ -211,10 +250,10 @@ const LandingPage = ({ search, setSearch }) => {
                 seller: seller,
               };
 
-              myNFTs.push(nftData);
-              // setNftListFP(myNFTs);
+              myNFTs.push({ nftData });
               setNftListFP((prev) => [...prev, nftData]);
             } else if (listingType === 1) {
+              // Auction
               const nftData = {
                 id: id, //
                 title: title,
@@ -273,7 +312,6 @@ const LandingPage = ({ search, setSearch }) => {
     };
   }, []);
 
-  
   const [counterData, setCounterData] = useState("");
   const viewLandingPageDetail = async () => {
     try {
@@ -372,7 +410,7 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                   <button onClick={getBalance}>Get Balance</button> 
+                    <button onClick={getBalance}>Get Balance</button>
                     <div className="left">NFT</div>
                     <Link to="/search">
                       <div className="right">View more</div>
@@ -383,34 +421,34 @@ const LandingPage = ({ search, setSearch }) => {
                   {/* <button onClick={approveUSDT}>Approve</button> */}
                 </div>
                 <div className="row">
-                {nftListFP.length > 0 ? (
-                  <>
-                    {nftListFP.map((item) => (
-                      <BuyNow
-                        key={item?.id}
-                        id={item?.id}
-                        title={item?.title}
-                        image={item?.image}
-                        price={item?.price}
-                        discountPrice={item?.discountPrice}
-                        crypto={item?.crypto}
-                        royalty={item?.royalty}
-                        description={item?.description}
-                        collection={item?.collection}
-                        collectionImages={item?.collectionImages}
-                        userAddress={userAddress}
-                        seller={item?.seller}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <>
-                    <DummyCard />
-                    <DummyCard />
-                    <DummyCard />
-                    <DummyCard />
-                  </>
-                )}
+                  {nftListFP.length > 0 ? (
+                    <>
+                      {nftListFP.map((item) => (
+                        <BuyNow
+                          key={item?.id}
+                          id={item?.id}
+                          title={item?.title}
+                          image={item?.image}
+                          price={item?.price}
+                          discountPrice={item?.discountPrice}
+                          crypto={item?.crypto}
+                          royalty={item?.royalty}
+                          description={item?.description}
+                          collection={item?.collection}
+                          collectionImages={item?.collectionImages}
+                          userAddress={userAddress}
+                          seller={item?.seller}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <DummyCard />
+                      <DummyCard />
+                      <DummyCard />
+                      <DummyCard />
+                    </>
+                  )}
                 </div>
               </div>
             </div>
