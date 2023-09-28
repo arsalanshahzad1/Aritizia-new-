@@ -33,6 +33,7 @@ const postWalletAddress = async (address) => {
       // console.log("check1");
       const response = await apis.postWalletAddress({
         wallet_address: address,
+        user_id: 0,
       });
       localStorage.removeItem("data");
       console.log("responsepostWalletAddress", response);
@@ -44,6 +45,7 @@ const postWalletAddress = async (address) => {
     // console.log("check4"); 
     const response = await apis.postWalletAddress({
       wallet_address: address,
+      user_id: 0,
     });
     localStorage.setItem("data", JSON.stringify(response?.data?.data));
     // console.log("check5");

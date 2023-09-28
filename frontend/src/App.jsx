@@ -24,6 +24,9 @@ import WalletManager from "../src/methods/walletManager";
 import { ToastContainer } from "react-toastify";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import apis from "./service";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -37,6 +40,14 @@ function App() {
       document.body.style.overflow = "auto";
     };
   }, [search]);
+
+  const jsonData = localStorage.getItem("data");
+  const dataObject = JSON.parse(jsonData);
+  const userId = dataObject.id;
+
+  useEffect(()=>{
+    const response = apis.checkSubExpiration(userId)
+  },[])
 
   return (
     <>
@@ -131,6 +142,14 @@ function App() {
               <Route
                 path="/login"
                 element={<Login/>}
+              />
+              <Route
+                path="/terms"
+                element={<Terms search={search} setSearch={setSearch} />}
+              />
+              <Route
+                path="/privacy-policy"
+                element={<PrivacyPolicy search={search} setSearch={setSearch} />}
               />
             </Routes>
           </Suspense>

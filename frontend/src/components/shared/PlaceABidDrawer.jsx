@@ -1043,7 +1043,7 @@ const PlaceABidDrawer = ({
                       <span
                         onClick={() =>
                           navigate(
-                            `/other-profile?add=${nftDetails?.user?.wallet_address}`
+                            `/other-profile?add=${nftDetails?.user?.id}`
                           )
                         }
                       >
@@ -1090,7 +1090,7 @@ const PlaceABidDrawer = ({
                             <div
                               onClick={() =>
                                 navigate(
-                                  `/other-profile?add=${nftDetails?.user?.wallet_address}`,
+                                  `/other-profile?add=${nftDetails?.user?.id}`,
                                   {
                                     state: {
                                       address: nftDetails?.user?.wallet_address,

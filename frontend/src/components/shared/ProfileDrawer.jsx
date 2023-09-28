@@ -979,7 +979,7 @@ function ProfileDrawer({
 
   const handleUserVisit = async ()=> {
     navigate(
-      `/other-profile?add=${nftDetails?.user?.wallet_address}`
+      `/other-profile?add=${nftDetails?.user?.id}`
     )
     // console.log(id, "user, id")
     // const response = await apis.getUserData(id);
@@ -1087,7 +1087,7 @@ function ProfileDrawer({
                       <span
                         onClick={() =>
                           navigate(
-                            `/other-profile?add=${nftDetails?.user?.wallet_address}`
+                            `/other-profile?add=${nftDetails?.user?.id}`
                           )
                         }
                       >
@@ -1153,7 +1153,7 @@ function ProfileDrawer({
                             <div
                               onClick={() =>
                                 navigate(
-                                  `/other-profile?add=${nftDetails?.user?.wallet_address}`,
+                                  `/other-profile?add=${nftDetails?.user?.id}`,
                                   {
                                     state: {
                                       address: nftDetails?.user?.wallet_address,
@@ -1202,7 +1202,7 @@ function ProfileDrawer({
                   <div className="row d-flex">
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
                       <SocialShare
-                        style={{ fontSize: "18px", marginRight: "10px" }}
+                        style={{ fontSize: "18px", marginRight: "40px" }}
                       />
                     </div>
                     {/* <div className="col-lg-8 col-md-8 col-12">
@@ -1225,8 +1225,8 @@ function ProfileDrawer({
                         History
                       </button>
                     </div> */}
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
-                      <SocialShare
+                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{marginLeft:"0px"}}>
+                      <SocialShare bidStyle="bid-style"
                         style={{ fontSize: "18px", marginRight: "10px"}}
                       />
                     </div>
@@ -1307,7 +1307,7 @@ function ProfileDrawer({
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}
-                      <span>I agree all Terms & Conditions.</span>
+                      <span>I agree all <a href="/terms" target="_blank">Terms</a> & <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Policy</a>.</span>
                     </div>
                     <div className="eight-line">
                       {buyButton ? (
@@ -1328,7 +1328,7 @@ function ProfileDrawer({
               </div>
             </div>
           </div>
-          <button onClick={checkSeller}>checkSeller </button>
+          {/* <button onClick={checkSeller}>checkSeller </button> */}
         </div>
       </Drawer>
       <Modal

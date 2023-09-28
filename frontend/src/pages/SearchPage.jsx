@@ -562,6 +562,14 @@ const SearchPage = ({ search, setSearch }) => {
   };
 
   useEffect(() => { }, [priceRange])
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
 
   return (
     <>

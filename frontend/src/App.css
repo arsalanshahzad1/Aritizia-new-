@@ -844,7 +844,7 @@ header .left img {
   font-weight: 400;
   line-height: 28px;
   letter-spacing: 0em;
-  text-align: right;
+  text-align: left;
 }
 
 .home-four-sec .two .percentage {
@@ -853,7 +853,7 @@ header .left img {
   font-weight: 400;
   line-height: 23px;
   letter-spacing: 0em;
-  text-align: right;
+  text-align: left;
 }
 
 .home-four-sec .two .red {
@@ -1264,7 +1264,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span {
 .profile-first-section .big-image {
   /* width: 100%; */
   height: 400px;
-  object-fit: cover;
+  /* object-fit: cover; */
   /* padding: 0px 45px; */
   margin-top: 107px;
   background: #a308d126;
@@ -1331,6 +1331,11 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span {
 .share-links-social {
   display: flex;
   justify-content: end;
+  align-items: center;
+}
+.bid-style{
+  display: flex;
+  justify-content: start;
   align-items: center;
 }
 
@@ -2506,6 +2511,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span {
   box-shadow: 8px 8px 15px 2px rgba(0, 0, 255, 0.2);
   border-radius: 10px;
   object-fit: cover;
+  /* color: rgb(138, 138, 138); */
 }
 
 .single-net-image span {
@@ -5765,4 +5771,32 @@ h3 {
   footer .footer-bottom .footer-bottom-wrap {
     max-width: 1320px;
   }
+}
+
+.terms-container h1, .terms-container h2, .terms-container h3, .terms-container h4{
+  text-align: left;
+}
+
+
+.privacy .table-container {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.privacy .table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.privacy .table-container th, .privacy .table-container td {
+  border: 1px solid #cfcfcf; /* Add border to td elements */
+  padding: 8px;
+  text-align: left;
+}
+
+.privacy .table-container th {
+  background-color: #f2f2f2;
 }

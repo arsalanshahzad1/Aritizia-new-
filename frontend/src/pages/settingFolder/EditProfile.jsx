@@ -33,6 +33,8 @@ const EditProfile = () => {
     }));
   };
 
+  console.log(data,"user edit")
+
   const onChangeHandler = (e) => {
     const { files, value, name } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
@@ -58,10 +60,9 @@ const EditProfile = () => {
     }
 
     const response = await apis.editProfile(sendData);
-    console.log(response, "RESPONSE");
     if (response?.data?.user) {
       localStorage.setItem("data", JSON.stringify(response.data.user));
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -143,7 +144,7 @@ const EditProfile = () => {
               type="email"
               placeholder="Enter email"
               name="email"
-              onChange={onChangeHandler}
+              // onChange={onChangeHandler}
             />
           </div>
 

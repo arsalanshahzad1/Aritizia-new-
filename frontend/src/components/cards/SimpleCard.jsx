@@ -15,6 +15,7 @@ import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import {
   FacebookShareButton,
   InstapaperShareButton,
+  LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
 import {
@@ -148,12 +149,12 @@ const SimpleCard = ({
               </div>
               {showLinks && (
                 <div className="social-media">
-                  <InstapaperShareButton
+                  <LinkedinShareButton
                     url="http://artizia.pluton.ltd/profile"
                     title="Ali Khan"
                   >
-                    <p>Instagram</p>
-                  </InstapaperShareButton>
+                    <p>Linkedin</p>
+                  </LinkedinShareButton>
                   <TwitterShareButton
                     url="http://artizia.pluton.ltd/profile"
                     title="Ali Khan"

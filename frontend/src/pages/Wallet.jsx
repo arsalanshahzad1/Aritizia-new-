@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect } from "react";
 import Footer from "./landingpage/Footer";
 import Header from "./landingpage/Header";
 import PageTopSection from "../components/shared/PageTopSection";
@@ -7,6 +7,16 @@ import CoinBaseWalletCard from "../components/cards/CoinBaseWalletCard";
 import Search from "../components/shared/Search";
 
 const Wallet = ({ search, setSearch }) => {
+
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />

@@ -464,6 +464,14 @@ const BuyNow = ({
     await getFiatAmount();
     setShowFiatPaymentForm(true)
   }
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
 
   return (
     <>
@@ -493,7 +501,7 @@ const BuyNow = ({
                                   url="http://artizia.pluton.ltd"
                                   title="Ali Khan"
                                 >
-                                  <p>Instagram</p>
+                                  <p>Linkedin</p>
                                 </LinkedinShareButton>
                               </a>
                             </li>

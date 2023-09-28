@@ -176,6 +176,16 @@ function ChatPage({ search, setSearch }) {
       channel.stopListening(".chat-event");
     };
   }, [userMessagesDetails, userMessagesListing]);
+
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+  
   return (
     <div>
       <Header search={search} setSearch={setSearch} />

@@ -15,7 +15,7 @@ const Following = ({ data, id }) => {
 
   const handleUserVisit = async (id)=> {
     const response = await apis.getUserData(id);
-    SetUserWalletAddress( response?.data?.data?.wallet_address);
+    SetUserWalletAddress( response?.data?.data?.id);
   }
 
   useEffect(()=>{

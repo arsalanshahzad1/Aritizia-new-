@@ -29,6 +29,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import Loader from "../../components/shared/Loader";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -70,9 +71,9 @@ const Multiple = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
 
-  useEffect(() =>{
-    window.scrollTo(0,0)
-  } ,[])
+  // useEffect(() =>{
+  //   window.scrollTo(0,0)
+  // } ,[])
 
 
   console.log(location?.state?.artGallery, "asasasas");
@@ -122,7 +123,7 @@ const Multiple = ({ search, setSearch }) => {
       let cryptoType;
       console.log(user_id, collectionName, crypto, selectedImage2);
       if (collectionName.length < 1 || !selectedImage2) {
-        toast.warning("Input Collection Name and image to Create", {
+        toast.warning("All Fields are required", {
           position: toast.POSITION.TOP_CENTER,
         });
       } else {
@@ -152,6 +153,9 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
+  // useEffect(() => {
+  //   window.scrollTo(0,0)
+  // }, []);
   useEffect(() => {
     window.scrollTo(0,0)
   }, []);
@@ -345,12 +349,12 @@ const Multiple = ({ search, setSearch }) => {
         multiListing ? handleNFTMintedEvent : null
       );
       console.log("Response of mint event", response);
-      setMyList(false)
+      // setMyList(false)
     } catch (error) {
       setMyList(false)
-      toast.error(`Error while minting NFT: ${error}`, {
-        position: toast.POSITION.TOP_CENTER,
-      });
+      // toast.error(`Error while minting NFT: ${error}`, {
+      //   // position: toast.POSITION.TOP_CENTER,
+      // });
       // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
       
@@ -1281,6 +1285,15 @@ const Multiple = ({ search, setSearch }) => {
     }
   }, [nftForm.startDate, nftForm.endDate]);
 
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
   useEffect(() => {
     const today = new Date();
     today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
@@ -1310,6 +1323,8 @@ const Multiple = ({ search, setSearch }) => {
 
   return (
     <>
+
+      {myList && <Loader />}
       <Header search={search} setSearch={setSearch} />
       <div className="create-single">
         <PageTopSection title={"Create Multiple Collectible"} />
@@ -2252,7 +2267,7 @@ const Multiple = ({ search, setSearch }) => {
         <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };
