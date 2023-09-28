@@ -141,8 +141,12 @@ const createBackendServer = (baseURL) => {
   const getUserData = async (id) =>
     await api.get(`get-user-data/${id}`);
 
-  const getOtherUser = async (userAddress) =>
-    await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
+    // const getOtherUser = async (userAddress) =>
+    //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
+
+    const getOtherUser = async (otherUserId) =>
+      await api.get(`view-other-user-detail/${otherUserId}/${RealUserId}`);
+    
 
   const getLikeNFTListing = async (userId) =>
     await api.get(`view-liked-nfts/${userId}`);
@@ -167,12 +171,16 @@ const createBackendServer = (baseURL) => {
     await api.get(`purchase-history/${RealUserId}`);
 
   // User Subscription //
+  const checkSubExpiration = async (body) => await api.get(`check-subs-expiration/${body ? body : 0}`);
 
   const userSubscribe = async (body) => await api.post(`subscribe`, body);
+
   const cancelSubscription = async (body) =>
     await api.post(`cancel-subscription`, body);
+
   const viewSubscriptions = async (userId) =>
     await api.get(`view-subscriptions/${userId}`);
+
   const autoRecursionOnoff = async (body) =>
     await api.post(`auto-recursion-onoff`, body);
 
@@ -272,6 +280,7 @@ const createBackendServer = (baseURL) => {
     getPurchaseHistory,
 
     // User Subscription //
+    checkSubExpiration,
 
     userSubscribe,
     cancelSubscription,

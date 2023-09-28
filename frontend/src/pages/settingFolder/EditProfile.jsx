@@ -52,12 +52,7 @@ const EditProfile = () => {
     const sendData = new FormData();
 
     for (const [key, value] of Object.entries(data)) {
-      if(key !== "wallet_address" && key !== "email" && key !== "id"){
-        sendData.append(key, value);
-      }
-      if(key == "id"){
-        sendData.append("user_id", 3)
-      }
+     sendData.append(key, value);
     }
 
     const response = await apis.editProfile(sendData);

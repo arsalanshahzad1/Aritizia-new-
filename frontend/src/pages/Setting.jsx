@@ -26,14 +26,14 @@ const Setting = ({ search, setSearch }) => {
 
     const [loader, setLoader] = useState(true)
 
-    const [scroll, setScroll] = useState(true)
+    // const [scroll, setScroll] = useState(true)
 
-    useEffect(()=>{
-      if(scroll){
-        window.scrollTo(0,0)
-        setScroll(false)
-      }
-    },[])
+    // useEffect(()=>{
+    //   if(scroll){
+    //     window.scrollTo(0,0)
+    //     setScroll(false)
+    //   }
+    // },[])
     
     return (
         <>

@@ -340,7 +340,7 @@ function NftControllingDrawer({
                       <div className="logo-name">
                         {userData?.wallet_address ==
                           drawerData?.user?.wallet_address ? (
-                          <Link to={`/other-profile?add=${drawerData?.user?.wallet_address}`}>
+                          <Link to={`/other-profile?add=${drawerData?.user?.id}`}>
                             {/* <img src={drawerData?.user?.profile_image} alt="" />{" "} */}
                             {nftDetails?.user?.profile_image !== null ? (
                                 <img

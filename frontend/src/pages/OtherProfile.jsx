@@ -14,7 +14,7 @@ import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
-import nft from "../../public/assets/images/NFTImage.png";
+import nft from "../../public/assets/images/NFTImage.png"; 
 import bird from "../../public/assets/images/bird.png";
 import SimpleCard from "../components/cards/SimpleCard";
 import MyNftCard from "../components/cards/MyNftCard";
@@ -57,11 +57,20 @@ const OtherProfile = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const [userID, setUserID] = useState(searchParams.get("id"));
   const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
+  const [scroll, setScroll] = useState(true)
+
+  // useEffect(() => {
+  //   console.log(scroll, 'scroll');
+  //   if (scroll) {
+  //     window.scrollTo(0, 0)
+  //     setScroll(false)
+  //   }
+  // }, [])
 
   // const getOtherUsersDetails = async (address) => {
   //   const response = await apis.getOtherUser(address);
   //   setUserDetails(response?.data?.data);
-    // console.log(userDetails?.id, "ssss");
+  // console.log(userDetails?.id, "ssss");
 
   const getNFTlikeListing = async (id) => {
     const response = await apis.getLikeNFTListing(id);
@@ -184,22 +193,22 @@ const OtherProfile = ({ search, setSearch }) => {
       getMyListedNfts(response?.data?.data)
       // console.log(response,"ssssssss")
       // setNftLoader(false)
-    } catch (error) { 
+    } catch (error) {
       setNftLoader(false)
       console.error("Error:", error);
     }
   };
 
-//   useEffect(() => {
-//   const fetchData = async () => {
-//     await viewAllNfts();
-//   };
+  //   useEffect(() => {
+  //   const fetchData = async () => {
+  //     await viewAllNfts();
+  //   };
 
-//   fetchData();
-// }, []);
+  //   fetchData();
+  // }, []);
 
   const getMyListedNfts = async (allMyNfts) => {
-    console.log(allMyNfts,"yesssss")
+    console.log(allMyNfts, "yesssss")
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
@@ -325,7 +334,7 @@ const OtherProfile = ({ search, setSearch }) => {
   };
 
   const [FollowStatus, setFollowStatus] = useState(0);
-  
+
 
   const postChatMeaage = async () => {
     console.log("clicking");
@@ -345,7 +354,7 @@ const OtherProfile = ({ search, setSearch }) => {
 
   // console.log(userDetails?.id, "arsalan data")
 
- 
+
   const [currentState, setCurrentState] = useState(false)
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
@@ -360,11 +369,11 @@ const OtherProfile = ({ search, setSearch }) => {
     getOtherUsersDetails(userADDRESS)
     // console.log(response, "this is reponse");
     // console.log(FollowStatus, "this is follow status");
-    
+
   };
 
   useEffect(() => {
-   
+
     const flag = userDetails?.followers?.some(
       (follower) => follower.id === RealUserId
     );
@@ -392,31 +401,24 @@ const OtherProfile = ({ search, setSearch }) => {
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [isFollow, setIsFollow] = useState(false)
 
-  const getTotalFollowers = async () =>{
+  const getTotalFollowers = async () => {
     const response = await apis.getCountFollow(userDetails?.id)
     setTotalFollowers(response?.data?.data?.follower_count)
     setIsFollow(response?.data?.data?.is_follow)
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getTotalFollowers()
-  },[])
+  }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     getTotalFollowers()
-  },[currentState, isFollow])
+  }, [currentState, isFollow])
 
   const [nftLoader, setNftLoader] = useState(true)
   const [likedNftLoader, setLikedNftLoader] = useState(true)
 
-  const [scroll, setScroll] = useState(true)
 
-  useEffect(()=>{
-    if(scroll){
-      window.scrollTo(0,0)
-      setScroll(false)
-    }
-  },[])
 
 
   return (
@@ -474,7 +476,7 @@ const OtherProfile = ({ search, setSearch }) => {
                     </div>
                   ) : (
                     <div onClick={followOther} style={{ cursor: "pointer" }}>
-                      Follow 
+                      Follow
                     </div>
                   )}
                   <div>Followers {userDetails?.total_followers}</div>
@@ -559,29 +561,29 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex other-profile-cards d-flex flex-wrap">
                         {collectionTabs === 0 && (
                           <>
-                            { nftLoader ?
+                            {nftLoader ?
                               <section className="sec-loading">
                                 <div className="one"></div>
                               </section>
                               :
-                            nftListFP?.length > 0 ? nftListFP?.map((item) => (
-                              <BuyNow
-                                onOpen={onOpen}
-                                // onClose={onClose}
-                                key={item.id}
-                                id={item.id}
-                                title={item?.title}
-                                image={item?.image}
-                                price={item?.price}
-                                crypto={item?.crypto}
-                                royalty={item?.royalty}
-                                description={item?.description}
-                                collection={item?.collection}
-                                collectionImages={item?.collectionImages}
-                                userADDRESS={userADDRESS}
-                              />
-                            )) : 
-                            <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                              nftListFP?.length > 0 ? nftListFP?.map((item) => (
+                                <BuyNow
+                                  onOpen={onOpen}
+                                  // onClose={onClose}
+                                  key={item.id}
+                                  id={item.id}
+                                  title={item?.title}
+                                  image={item?.image}
+                                  price={item?.price}
+                                  crypto={item?.crypto}
+                                  royalty={item?.royalty}
+                                  description={item?.description}
+                                  collection={item?.collection}
+                                  collectionImages={item?.collectionImages}
+                                  userADDRESS={userADDRESS}
+                                />
+                              )) :
+                                <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
                           </>
                         )}
@@ -589,27 +591,27 @@ const OtherProfile = ({ search, setSearch }) => {
                       <div className="d-flex">
                         {collectionTabs === 1 && (
                           <>
-                            { nftLoader ?
+                            {nftLoader ?
                               <section className="sec-loading">
                                 <div className="one"></div>
                               </section>
                               :
-                            nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
-                              <NewItemCard
-                                key={item.id}
-                                id={item.id}
-                                title={item?.title}
-                                image={item?.image}
-                                price={item?.price}
-                                highestBid={item?.highestBid}
-                                isLive={item?.isLive}
-                                endTime={item?.endTime}
-                                startTime={item?.startTime}
-                                description={item?.description}
-                                userAddress={userADDRESS}
-                              />
-                            )):
-                            <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                              nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
+                                <NewItemCard
+                                  key={item.id}
+                                  id={item.id}
+                                  title={item?.title}
+                                  image={item?.image}
+                                  price={item?.price}
+                                  highestBid={item?.highestBid}
+                                  isLive={item?.isLive}
+                                  endTime={item?.endTime}
+                                  startTime={item?.startTime}
+                                  description={item?.description}
+                                  userAddress={userADDRESS}
+                                />
+                              )) :
+                                <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
                           </>
                         )}
@@ -620,27 +622,27 @@ const OtherProfile = ({ search, setSearch }) => {
                 {tabs === 1 && (
                   <>
                     <div className="row">
-                      {likedNftLoader ? 
+                      {likedNftLoader ?
                         <section className="sec-loading">
                           <div className="one"></div>
                         </section>
-                      :
-                      likedNfts?.length > 0 ? likedNfts?.map((item) => (
-                        <NewItemCard
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                          crypto={item?.crypto}
-                          royalty={item?.royalty}
-                          description={item?.description}
-                          collection={item?.collection}
-                          collectionImage={item?.collectionImage}
-                          userADDRESS={userADDRESS}
-                        />
-                      )):
-                      <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        :
+                        likedNfts?.length > 0 ? likedNfts?.map((item) => (
+                          <NewItemCard
+                            key={item?.id}
+                            id={item?.id}
+                            title={item?.title}
+                            image={item?.image}
+                            price={item?.price}
+                            crypto={item?.crypto}
+                            royalty={item?.royalty}
+                            description={item?.description}
+                            collection={item?.collection}
+                            collectionImage={item?.collectionImage}
+                            userADDRESS={userADDRESS}
+                          />
+                        )) :
+                          <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
                       }
                     </div>
                   </>

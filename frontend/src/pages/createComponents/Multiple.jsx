@@ -71,9 +71,9 @@ const Multiple = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
 
-  useEffect(() =>{
-    window.scrollTo(0,0)
-  } ,[])
+  // useEffect(() =>{
+  //   window.scrollTo(0,0)
+  // } ,[])
 
 
   console.log(location?.state?.artGallery, "asasasas");
@@ -153,9 +153,9 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {
-    window.scrollTo(0,0)
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0,0)
+  // }, []);
   useEffect(() => {
     getCollection();
   }, []);
@@ -1283,14 +1283,14 @@ const Multiple = ({ search, setSearch }) => {
     }
   }, [nftForm.startDate, nftForm.endDate]);
 
-  const [scroll, setScroll] = useState(true)
+  // const [scroll, setScroll] = useState(true)
 
-  useEffect(()=>{
-    if(scroll){
-      window.scrollTo(0,0)
-      setScroll(false)
-    }
-  },[])
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
 
   useEffect(() => {
     const today = new Date();

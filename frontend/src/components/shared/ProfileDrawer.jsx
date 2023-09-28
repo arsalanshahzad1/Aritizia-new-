@@ -936,7 +936,7 @@ function ProfileDrawer({
 
   const handleUserVisit = async ()=> {
     navigate(
-      `/other-profile?add=${nftDetails?.user?.wallet_address}`
+      `/other-profile?add=${nftDetails?.user?.id}`
     )
     // console.log(id, "user, id")
     // const response = await apis.getUserData(id);
@@ -1044,7 +1044,7 @@ function ProfileDrawer({
                       <span
                         onClick={() =>
                           navigate(
-                            `/other-profile?add=${nftDetails?.user?.wallet_address}`
+                            `/other-profile?add=${nftDetails?.user?.id}`
                           )
                         }
                       >
@@ -1110,7 +1110,7 @@ function ProfileDrawer({
                             <div
                               onClick={() =>
                                 navigate(
-                                  `/other-profile?add=${nftDetails?.user?.wallet_address}`,
+                                  `/other-profile?add=${nftDetails?.user?.id}`,
                                   {
                                     state: {
                                       address: nftDetails?.user?.wallet_address,
