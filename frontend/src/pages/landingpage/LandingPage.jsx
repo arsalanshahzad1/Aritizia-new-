@@ -115,7 +115,26 @@ const LandingPage = ({ search, setSearch }) => {
   //   return web3Provider;
   // };
 
-  const getListedNfts = async () => {
+
+  const viewAllNfts = async () => {
+    try {
+      const response = await apis.viewAllNfts();
+      getListedNfts(response?.data?.data)
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await viewAllNfts();
+    };
+
+    fetchData();
+  }, []);
+
+
+  const getListedNfts = async (allNftIds) => {
     // const provider = await getProvider();
     const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -156,17 +175,146 @@ const LandingPage = ({ search, setSearch }) => {
     let priceInUSD = 1.3;
 
     let demo = await marketplaceContract.owner();
-    console.log("demo", demo);
+    
 
+   
+
+    // arsalan
     let mintedTokens = await marketplaceContract.getListedNfts();
     console.log("mintedTokens", mintedTokens);
     let myNFTs = [];
     let myAuctions = [];
 
-    for (let i = 0; i < mintedTokens.length; i++) {
+    // for (let i = 0; i < myNFTs.length; i++) {
+    //   let id;
+    //   id = myNFTs[i];
+
+    // for (let i = 0; i < mintedTokens.length; i++) {
+    //   let id;
+    //   id = +mintedTokens[i].tokenId.toString();
+    //   console.log("YESS", id);
+
+    //   let firstOwner = mintedTokens[i].firstOwner;
+    //   if (firstOwner != "0x0000000000000000000000000000000000000000") {
+    //     console.log("idd", id);
+    //     const metaData = await nftContract.tokenURI(id);
+
+    //     const structData = await marketplaceContract._idToNFT(id);
+
+    //     console.log("metaData", metaData);
+    //     console.log("structData", structData);
+    //     console.log("firstownerr", mintedTokens[i].firstOwner);
+    //     let collectionId = structData.collectionId.toString();
+
+    //     const fanNftData = await marketplaceContract._idToNFT2(id);
+
+    //     let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+
+    //     setDiscountPrice(discountOnNFT);
+    //     let seller = structData.seller;
+
+    //     console.log("discountOnNFT", discountOnNFT);
+    //     console.log("discountOnNFT", typeof discountOnNFT);
+
+    //     let auctionData = await marketplaceContract._idToAuction(id);
+
+    //     let highestBid = ethers.utils.formatEther(
+    //       auctionData.highestBid.toString()
+    //     );
+
+    //     listingType = structData.listingType;
+    //     let listed = structData.listed;
+
+    //     console.log("collectionId", collectionId);
+    //     const response = await apis.getNFTCollectionImage(collectionId);
+    //     console.log(response.data, "saad landing");
+    //     const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+    //     console.log(
+    //       response?.data?.data?.media?.[0]?.original_url,
+    //       "collectionImagesss"
+    //     );
+
+    //     const price = ethers.utils.formatEther(structData.price.toString());
+    //     console.log("priceee", price);
+
+    //     axios
+    //       .get(metaData)
+    //       .then((response) => {
+    //         const meta = response.data;
+    //         console.log("first");
+    //         let data = JSON.stringify(meta);
+
+    //         data = data.slice(2, -5);
+    //         data = data.replace(/\\/g, "");
+    //         data = JSON.parse(data);
+
+    //         console.log("Dataa", data);
+    //         // Extracting values using dot notation
+    //         // const price = data.price;
+    //         // listingType = data.listingType;
+    //         const crypto = data.crypto;
+    //         const title = data.title;
+    //         const image = data.image;
+    //         const royalty = data.royalty;
+    //         const description = data.description;
+    //         const collection = data.collection;
+    //         // console.log("data.listingType", typeof data.listingType);
+
+    //         console.log("listingType", listingType);
+
+    //         if (listingType === 0) {
+    //           const nftData = {
+    //             id: id, //
+    //             title: title,
+    //             image: image,
+    //             price: price,
+    //             crypto: crypto,
+    //             royalty: royalty,
+    //             description: description,
+    //             collection: collection,
+    //             collectionImages: collectionImages,
+    //             seller: seller,
+    //           };
+
+    //           myNFTs.push(nftData);
+    //           // setNftListFP(myNFTs);
+    //           setNftListFP((prev) => [...prev, nftData]);
+    //         } else if (listingType === 1) {
+    //           const nftData = {
+    //             id: id, //
+    //             title: title,
+    //             image: image,
+    //             price: price,
+    //             paymentMethod: crypto,
+    //             basePrice: price,
+    //             startTime: auctionData.startTime.toString(),
+    //             endTime: auctionData.endTime.toString(),
+    //             highestBid: highestBid,
+    //             highestBidder: auctionData.highestBidder.toString(),
+    //             // isLive: auctionData.isLive.toString(),
+    //             collectionImages: collectionImages,
+    //             seller: auctionData.seller.toString(),
+    //           };
+
+    //           myAuctions.push(nftData);
+    //           // setNftListAuction(myAuctions);
+    //           setNftListAuction((prev) => [...prev, nftData]);
+    //         }
+    //       })
+
+    //       .catch((error) => {
+    //         console.error("Error fetching metadata:", error);
+    //       });
+    //   }
+    // }
+
+    console.log(allNftIds,"nnnnnn t")
+
+    for (let i = 0; i < allNftIds?.length; i++) {
+      console.log(allNftIds[i],"nnnnnnnnnn y")
       let id;
-      id = +mintedTokens[i].tokenId.toString();
-      console.log("YESS", id);
+      id = allNftIds[i];
+      console.log("YESSS", id);
 
       let firstOwner = mintedTokens[i].firstOwner;
       if (firstOwner != "0x0000000000000000000000000000000000000000") {
@@ -393,11 +541,11 @@ const [counterData , setCounterData] = useState('')
       const response = await apis.viewLandingPageDetail()
       console.log(response?.data?.data , 'ccccccc');
       setCounterData(response?.data?.data)
-
+      setLoader(false)
     } catch (error) {
-      
+      setLoader(false)
     }
-    setLoader(false)
+    
   }
 
   useEffect(() =>{
@@ -405,6 +553,15 @@ const [counterData , setCounterData] = useState('')
   }, [])
 
   const [loader, setLoader] = useState(true)
+
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
 
   return (
     <>
@@ -502,6 +659,7 @@ const [counterData , setCounterData] = useState('')
                         collectionImages={item?.collectionImages}
                         userAddress={userAddress}
                         seller={item?.seller}
+                        size={'col-lg-3'}
                       />
                       </>
                     ))}
@@ -567,6 +725,7 @@ const [counterData , setCounterData] = useState('')
                         description={item?.description}
                         collectionImages={item?.collectionImages}
                         seller={item?.seller}
+                        size={'col-lg-3'}
                       />
                       </>
                     ))}

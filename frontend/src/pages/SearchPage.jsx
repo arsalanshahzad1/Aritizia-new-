@@ -18,6 +18,8 @@ import axios from "axios";
 import apis from "../service";
 import { getAddress } from "../methods/methods";
 import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+import BuyNow from "../components/cards/BuyNow";
+import NewItemCard from "../components/cards/NewItemCard";
 
 const SearchPage = ({ search, setSearch }) => {
   const [status, setStatus] = useState({ value: "", label: "Select" });
@@ -45,28 +47,43 @@ const SearchPage = ({ search, setSearch }) => {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const [searchText, setSearchText] = useState("");
+  const [nftIds, setNftIds] = useState([]);
   let searchedNft = useRef([]);
   let searchTexts = useRef();
 
-  const viewFilteredNfts = async (currency_type, listed_type, min_price, max_price, sort_by_price) => {
+  const viewFilteredNfts = async (currency_type, listed_type, min_price, max_price, sort_by_price, count, search) => {
     try {
-      const response = await apis.viewFilteredNfts(currency_type, listed_type, min_price, max_price, sort_by_price)
+      const response = await apis.viewFilteredNfts(currency_type, listed_type, min_price, max_price, sort_by_price, count, search)
       console.log(response?.data, 'filter response');
-      // setPriceRange({ min: response?.data?.lowest_price, max: response?.data?.highest_price })
+      setNftIds(response?.data)
+      console.log(response?.data?.data, 'fdsfdsdf')
+      console.log(nftIds, 'fdsfdsdf');
+      getListedNfts(response?.data?.data)
+      // setPriceRange({ min: 0, max: response?.data?.highest_price })
     } catch (error) {
 
     }
   }
 
   useEffect(() => {
-    viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value)
-  }, [currency, status, categories , priceRange])
+    viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, searchText)
+  }, [])
 
   const handleSearchChange = (event) => {
+    console.log(event.target.value);
     setSearchText(event.target.value);
-    searchTexts = event.target.value;
-    getSearchedNfts();
+    viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, event.target.value)
+    setNftListFP([])
+    getListedNfts(response?.data?.data)
+    // searchTexts = event.target.value;
+    // getSearchedNfts();
   };
+
+  const searchNftCards = async (event) => {
+    event.preventDefault()
+    await viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, searchText)
+    setNftListFP([])
+  }
 
   useEffect(() => {
     if (searchParams.get("name") || searchParams.get("name") == "") {
@@ -112,93 +129,98 @@ const SearchPage = ({ search, setSearch }) => {
   //   return web3Provider;
   // };
 
-  const getSearchedNfts = async () => {
+  // const getSearchedNfts = async () => {
+  //   const provider = await getProviderOrSigner();
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     provider
+  //   );
+  //   // let dollarPriceOfETH = 1831;
+  //   let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+  //   let priceETH = 0.00000002;
+  //   let priceInETH = dollarPriceOfETH.toString() / 1e18;
+  //   let oneETHInUSD = 1 / priceInETH;
+  //   let priceInUSD = priceETH;
+  //   priceInUSD = oneETHInUSD * priceInUSD;
+  //   console.log("priceInUSD", priceInUSD);
+
+  //   let title;
+  //   let searched;
+  //   let nfts = [];
+  //   setSearchedNfts(nfts);
+
+  //   //////////////////
+  //   // demo variables///
+  //   //////////////////
+
+  //   // Fix front end then call those functions
+
+  //   let listingCheck = false;
+  //   let priceCheck = false;
+  //   let selectedListingType = 0;
+  //   // let minRange = 100;
+  //   // let maxRange = 1000;
+
+  //   for (let i = 0; i < nftListFP.length; i++) {
+  //     title = nftListFP[i].title.toLowerCase();
+  //     let priceOfNft = Number(nftListFP[i].price);
+  //     let priceETH = priceOfNft;
+  //     let priceInETH = dollarPriceOfETH.toString() / 1e18;
+  //     let oneETHInUSD = 1 / priceInETH;
+  //     let priceInUSD = priceETH;
+  //     priceInUSD = oneETHInUSD * priceInUSD;
+
+  //     if (searchedNfts == "") {
+  //       nfts.push(nftListFP[i]);
+  //       console.log("Found khaali", title);
+  //     } else if (title.includes(searchTexts.toLowerCase())) {
+  //       console.log("nftListFP", nftListFP[i]);
+  //       console.log("price", Number(nftListFP[i].price));
+  //       nfts.push(nftListFP[i]);
+
+  //       /////////////////////////
+  //       /////////////////////////
+  //       /////////////////////////  Uncomment the below comments to add the logics
+  //       /////////////////////////
+
+  //       // listing block
+  //       // if (selectedListingType == 100) {
+  //       //   // true
+  //       //   listingCheck = true;
+  //       // } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
+  //       //   listingCheck = true;
+  //       // } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
+  //       //   listingCheck = true;
+  //       // }
+
+  //       // if (priceInUSD >= minRange && priceInUSD <= maxRange) {
+  //       //   priceCheck = true;
+  //       // }
+
+  //       // if (priceCheck && listingCheck) {
+  //       //   nfts.push(nftListFP[i]);
+  //       // }
+  //     }
+
+  //     // price block
+  //   }
+
+  //   setSearchedNfts(nfts);
+  //   // searchedNft = nfts;
+  //   // if (title.toLowerCase().includes(searchText.toLowerCase())) {
+  //   //   console.log("Name of nft", title);
+  // };
+
+  const getListedNfts = async (ids) => {
+    // const provider = await getProvider();
     const provider = await getProviderOrSigner();
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    let addr = await getAddress();
+    console.log("ZZZZZZ", addr);
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-    // let dollarPriceOfETH = 1831;
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    let priceETH = 0.00000002;
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    let oneETHInUSD = 1 / priceInETH;
-    let priceInUSD = priceETH;
-    priceInUSD = oneETHInUSD * priceInUSD;
-    console.log("priceInUSD", priceInUSD);
-
-    let title;
-    let searched;
-    let nfts = [];
-    setSearchedNfts(nfts);
-
-    //////////////////
-    // demo variables///
-    //////////////////
-
-    // Fix front end then call those functions
-
-    let listingCheck = false;
-    let priceCheck = false;
-    let selectedListingType = 0;
-    let minRange = 100;
-    let maxRange = 1000;
-
-    for (let i = 0; i < nftListFP.length; i++) {
-      title = nftListFP[i].title.toLowerCase();
-      let priceOfNft = Number(nftListFP[i].price);
-      let priceETH = priceOfNft;
-      let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      let oneETHInUSD = 1 / priceInETH;
-      let priceInUSD = priceETH;
-      priceInUSD = oneETHInUSD * priceInUSD;
-
-      if (searchedNfts == "") {
-        nfts.push(nftListFP[i]);
-        console.log("Found khaali", title);
-      } else if (title.includes(searchTexts.toLowerCase())) {
-        console.log("nftListFP", nftListFP[i]);
-        console.log("price", Number(nftListFP[i].price));
-        nfts.push(nftListFP[i]);
-
-        /////////////////////////
-        /////////////////////////
-        /////////////////////////  Uncomment the below comments to add the logics
-        /////////////////////////
-
-        // listing block
-        // if (selectedListingType == 100) {
-        //   // true
-        //   listingCheck = true;
-        // } else if (selectedListingType == 0 && nftListFP[i].listingType == 0) {
-        //   listingCheck = true;
-        // } else if (selectedListingType == 1 && nftListFP[i].listingType == 1) {
-        //   listingCheck = true;
-        // }
-
-        // if (priceInUSD >= minRange && priceInUSD <= maxRange) {
-        //   priceCheck = true;
-        // }
-
-        // if (priceCheck && listingCheck) {
-        //   nfts.push(nftListFP[i]);
-        // }
-      }
-
-      // price block
-    }
-
-    setSearchedNfts(nfts);
-    // searchedNft = nfts;
-    // if (title.toLowerCase().includes(searchText.toLowerCase())) {
-    //   console.log("Name of nft", title);
-  };
-
-  const getListedNfts = async () => {
-    console.log("in getListedNfts");
-    const provider = await getProviderOrSigner();
+    console.log("Provider", provider);
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -211,114 +233,248 @@ const SearchPage = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
+
     let listingType;
+
+    // UNCOMMENT THIS
+    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+
+    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+
+    let oneETHInUSD = 1 / priceInETH;
+    let priceInUSD = 1.3;
+
+    let demo = await marketplaceContract.owner();
 
     let mintedTokens = await marketplaceContract.getListedNfts();
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < mintedTokens.length; i++) {
+
+    for (let i = 0; i < ids.length; i++) {
       let id;
-      id = +mintedTokens[i].tokenId.toString();
-      const metaData = await nftContract.tokenURI(id);
-      let auctionData = await marketplaceContract._idToAuction(id);
-      const structData = await marketplaceContract._idToNFT(id);
-      const fanNftData = await marketplaceContract._idToNFT2(id);
-      const price = ethers.utils.formatEther(structData.price.toString());
-      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
-      listingType = structData.listingType;
+      id = ids[i];
 
-      setDiscountPrice(discountOnNFT);
+      let firstOwner = mintedTokens[i].firstOwner;
+      if (firstOwner != "0x0000000000000000000000000000000000000000") {
+        const metaData = await nftContract.tokenURI(id);
+        const structData = await marketplaceContract._idToNFT(id);
+        let collectionId = structData.collectionId.toString();
+        const fanNftData = await marketplaceContract._idToNFT2(id);
+        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
-      let highestBid = ethers.utils.formatEther(
-        auctionData.highestBid.toString()
-      );
+        setDiscountPrice(discountOnNFT);
+        let seller = structData.seller;
 
-      axios
-        .get(metaData)
-        .then((response) => {
-          const meta = response.data;
-          let data = JSON.stringify(meta);
+        let auctionData = await marketplaceContract._idToAuction(id);
 
-          data = data.slice(2, -5);
-          data = data.replace(/\\/g, "");
+        let highestBid = ethers.utils.formatEther(
+          auctionData.highestBid.toString()
+        );
 
-          data = JSON.parse(data);
-          // Extracting values using dot notation
-          // const price = data.price;
-          // listingType = data.listingType;
-          const crypto = data.crypto;
-          const title = data.title;
-          const image = data.image;
-          const royalty = data.royalty;
-          const description = data.description;
-          const collection = data.collection;
-          const paymentMethod = data.crypto;
-          console.log("in getListedNfts");
+        listingType = structData.listingType;
+        let listed = structData.listed;
 
-          const nftData = {
-            id: id, //
-            title: title,
-            image: image,
-            price: price,
-            crypto: crypto,
-            royalty: royalty,
-            description: description,
-            collection: collection,
-            paymentMethod: paymentMethod,
-            listingType: listingType,
-          };
+        const response = await apis.getNFTCollectionImage(collectionId);
+        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
 
-          console.log("in getListedNfts");
-          // console.log(nftData);
-          // myNFTs.push(nftData);
-          console.log("Setting list");
+        const price = ethers.utils.formatEther(structData.price.toString());
 
-          // setNftListFP(myNFTs);
-          setNftListFP((prev) => [...prev, nftData]);
+        axios
+          .get(metaData)
+          .then((response) => {
+            const meta = response.data;
+            console.log("first");
+            let data = JSON.stringify(meta);
 
-          // console.log("myNFTs in function", myNFTs);
-          // if (listingType === 0) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     crypto: crypto,
-          //     royalty: royalty,
-          //     description: description,
-          //     collection: collection,
-          //   };
+            data = data.slice(2, -5);
+            data = data.replace(/\\/g, "");
+            data = JSON.parse(data);
 
-          //   console.log(nftData);
-          //   myNFTs.push(nftData);
-          //   setNftListFP(myNFTs);
-          //   console.log("myNFTs in function", myNFTs);
-          // } else if (listingType === 1) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     basePrice: auctionData.basePrice.toString(),
-          //     endTime: auctionData.endTime.toString(),
-          //     highestBid: auctionData.highestBid.toString(),
-          //     highestBidder: auctionData.highestBidder.toString(),
-          //     isLive: auctionData.isLive.toString(),
-          //     seller: auctionData.seller.toString(),
-          //     startTime: auctionData.startTime.toString(),
-          //   };
+            const crypto = data.crypto;
+            const title = data.title;
+            const image = data.image;
+            const royalty = data.royalty;
+            const description = data.description;
+            const collection = data.collection;
 
-          //   myAuctions.push(nftData);
-          //   console.log("auction in function", myAuctions);
-          //   setNftListAuction(myAuctions);
-          // }
-        })
+            if (listingType === 0) {
+              console.log("id",id );
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+                seller: seller,
+                listingType: listingType
+              };
 
-        .catch((error) => {
-          console.error("Error fetching metadata:", error);
-        });
+              // myNFTs.push(nftData);
+              setNftListFP((prev) => [...prev, nftData]);
+            } else if (listingType === 1) {
+              console.log("idddd",id, listingType );
+              const nftData = {
+                id: id, //
+                title: title,
+                image: image,
+                price: price,
+                paymentMethod: crypto,
+                basePrice: price,
+                startTime: auctionData.startTime.toString(),
+                endTime: auctionData.endTime.toString(),
+                highestBid: highestBid,
+                highestBidder: auctionData.highestBidder.toString(),
+                collectionImages: collectionImages,
+                seller: auctionData.seller.toString(),
+                listingType: listingType
+              };
+
+              // myAuctions.push(nftData);
+              setNftListFP((prev) => [...prev, nftData]);
+            }
+          })
+
+          .catch((error) => {
+            console.error("Error fetching metadata:", error);
+          });
+      }
     }
+    // console.log("nftListFPmain", myNFTs);
+    // console.log("nftListAuctionmain", myAuctions);
   };
+
+  // const getListedNfts = async (ids) => {
+  //   console.log("in getListedNfts", ids);
+  //   const provider = await getProviderOrSigner();
+  //   console.log("111111");
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     provider
+  //   );
+
+  //   const nftContract = new Contract(
+  //     NFT_CONTRACT_ADDRESS.address,
+  //     NFT_CONTRACT_ABI.abi,
+  //     provider
+  //   );
+  //   let listingType;
+  //   console.log("22222");
+  //   console.log("nftIds", nftIds);
+
+  //   // let mintedTokens = await marketplaceContract.getListedNfts();
+  //   // let myNFTs = [];
+  //   // let myAuctions = [];
+  //   for (let i = 0; i < ids.length; i++) {
+  //     console.log("4444");
+  //     let id;
+  //     // id = +mintedTokens[i].tokenId.toString();
+  //     id = ids[i];
+  //     const metaData = await nftContract.tokenURI(id);
+  //     let auctionData = await marketplaceContract._idToAuction(id);
+  //     const structData = await marketplaceContract._idToNFT(id);
+  //     const fanNftData = await marketplaceContract._idToNFT2(id);
+  //     const price = ethers.utils.formatEther(structData.price.toString());
+  //     let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+  //     listingType = structData.listingType;
+
+  //     setDiscountPrice(discountOnNFT);
+
+  //     let highestBid = ethers.utils.formatEther(
+  //       auctionData.highestBid.toString()
+  //     );
+  //     console.log("33333");
+
+  //     axios
+  //       .get(metaData)
+  //       .then((response) => {
+  //         const meta = response.data;
+  //         let data = JSON.stringify(meta);
+
+  //         data = data.slice(2, -5);
+  //         data = data.replace(/\\/g, "");
+
+  //         data = JSON.parse(data);
+  //         // Extracting values using dot notation
+  //         // const price = data.price;
+  //         // listingType = data.listingType;
+  //         const crypto = data.crypto;
+  //         const title = data.title;
+  //         const image = data.image;
+  //         const royalty = data.royalty;
+  //         const description = data.description;
+  //         const collection = data.collection;
+  //         const paymentMethod = data.crypto;
+  //         console.log("in getListedNfts");
+
+  //         const nftData = {
+  //           id: id, //
+  //           title: title,
+  //           image: image,
+  //           price: price,
+  //           crypto: crypto,
+  //           royalty: royalty,
+  //           description: description,
+  //           collection: collection,
+  //           paymentMethod: paymentMethod,
+  //           listingType: listingType,
+  //         };
+
+  //         console.log("in getListedNfts", nftData);
+  //         // console.log(nftData);
+  //         // myNFTs.push(nftData);
+  //         console.log("Setting list");
+
+  //         // setNftListFP(myNFTs);
+  //         setNftListFP((prev) => [...prev, nftData]);
+  //         // console.log("myNFTs in function", myNFTs);
+  //         // if (listingType === 0) {
+  //         //   const nftData = {
+  //         //     id: id, //
+  //         //     title: title,
+  //         //     image: image,
+  //         //     price: price,
+  //         //     crypto: crypto,
+  //         //     royalty: royalty,
+  //         //     description: description,
+  //         //     collection: collection,
+  //         //   };
+
+  //         //   console.log(nftData);
+  //         //   myNFTs.push(nftData);
+  //         //   setNftListFP(myNFTs);
+  //         //   console.log("myNFTs in function", myNFTs);
+  //         // } else if (listingType === 1) {
+  //         //   const nftData = {
+  //         //     id: id, //
+  //         //     title: title,
+  //         //     image: image,
+  //         //     price: price,
+  //         //     basePrice: auctionData.basePrice.toString(),
+  //         //     endTime: auctionData.endTime.toString(),
+  //         //     highestBid: auctionData.highestBid.toString(),
+  //         //     highestBidder: auctionData.highestBidder.toString(),
+  //         //     isLive: auctionData.isLive.toString(),
+  //         //     seller: auctionData.seller.toString(),
+  //         //     startTime: auctionData.startTime.toString(),
+  //         //   };
+
+  //         //   myAuctions.push(nftData);
+  //         //   console.log("auction in function", myAuctions);
+  //         //   setNftListAuction(myAuctions);
+  //         // }
+  //       })
+
+  //       .catch((error) => {
+  //         console.error("Error fetching metadata:", error);
+  //       });
+  //   }
+  // };
 
   // const getAddress = async () => {
   //   const accounts = await window.ethereum.request({
@@ -368,15 +524,15 @@ const SearchPage = ({ search, setSearch }) => {
   // }, [walletConnected]);
 
   useEffect(() => { }, [nftListFP]);
-  useEffect(() => {
-    getSearchedNfts();
-  }, [search]);
+  // useEffect(() => {
+  //   getSearchedNfts();
+  // }, [search]);
   useEffect(() => { }, [searchedNfts]);
 
   useEffect(() => {
     connectWallet();
-    getListedNfts();
-    getSearchedNfts();
+    // getListedNfts();
+    // getSearchedNfts();
   }, [userAddress]);
 
   useEffect(() => {
@@ -405,40 +561,25 @@ const SearchPage = ({ search, setSearch }) => {
     });
   };
 
+  useEffect(() => { }, [priceRange])
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
       <div className="search-page">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-9 mx-auto">
-              <div className="search-input">
-                <div
-                  className="l-1 hide-on-mobile-screen-app"
-                  id="modal_view_left"
-                  data-toggle="modal"
-                  data-target="#get_quote_modal"
-                >
-                  <div style={{ cursor: "pointer" }}>
-                    <img src="/assets/images/filter.png" alt="" />{" "}
-                    <span>Filter</span>
-                  </div>
-                </div>
-                <input
-                  type="search"
-                  placeholder="Search for nft item"
-                  value={searchText}
-                  onChange={handleSearchChange}
-                />
-              </div>
-            </div>
-          </div>
-          <div></div>
           <div className="filter-card-wrap">
             <div className="row">
               <div className="col-lg-3 hide-on-desktop-screen-app">
                 <div className="search-filter">
-
                   <div className="l-1">
                     <img src="/assets/images/filter.png" alt="" />{" "}
                     <span>Filter</span>
@@ -479,7 +620,7 @@ const SearchPage = ({ search, setSearch }) => {
                       range
                       min={0}
                       max={1000}
-                      value={[priceRange.min, priceRange.max]}
+                      defaultValue={[priceRange.min, priceRange.max]}
                       onChange={handleSliderChange}
                     />
                     <div className="range-number">
@@ -490,36 +631,93 @@ const SearchPage = ({ search, setSearch }) => {
                       {/* <div>100000</div> */}
                     </div>
                   </div>
+                  <div className="l-11">
+                    <button onClick={searchNftCards}>Search</button>
+                  </div>
                 </div>
               </div>
               <div className="col-lg-9 col-md-12">
                 <div className="row">
-                  {searchedNfts.length > 0 || search != "" ? (
-                    <>
-                      {searchedNfts.map((item) => (
-                        <SearchNftCards
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <>
-                      {nftListFP.map((item) => (
-                        <SearchNftCards
-                          key={item?.id}
-                          id={item?.id}
-                          title={item?.title}
-                          image={item?.image}
-                          price={item?.price}
-                        />
-                      ))}
-                    </>
-                  )}
+                  <div className="col-lg-12 mx-auto">
+                    <div className="search-input">
+                      <div
+                        className="l-1 hide-on-mobile-screen-app"
+                        id="modal_view_left"
+                        data-toggle="modal"
+                        data-target="#get_quote_modal"
+                      >
+                        <div style={{ cursor: "pointer" }}>
+                          <img src="/assets/images/filter.png" alt="" />{" "}
+                          <span>Filter</span>
+                        </div>
+                      </div>
+                      <input
+                        type="search"
+                        placeholder="Search for nft item"
+                        value={searchText}
+                        onChange={handleSearchChange}
+                      />
+                    </div>
+                  </div>
                 </div>
+                <div className="row">
+                  {nftListFP.length > 0 ?
+                    <>
+                      {nftListFP.map((item) => {
+                        if (item?.listingType === 1) {
+                          return (
+                            <NewItemCard
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              highestBid={item?.highestBid}
+                              isLive={item?.isLive}
+                              endTime={item?.endTime}
+                              startTime={item?.startTime}
+                              description={item?.description}
+                              collectionImages={item?.collectionImages}
+                              seller={item?.seller}
+                              size={'col-lg-4'}
+                            />
+                          )
+                        } if (item?.listingType === 0) {
+                          return (
+                            <BuyNow
+                              key={item?.id}
+                              id={item?.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              discountPrice={item?.discountPrice}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              userAddress={userAddress}
+                              seller={item?.seller}
+                              size={'col-lg-4'}
+                            />
+                          )
+                        }
+
+
+                      })}
+                    </>
+                    :
+                    <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                  }
+                </div>
+                {nftListFP.length > 0 &&
+                  <div style={{ textAlign: 'center' }}>
+                    <button className={`controling-Nft-Load-More ${nftIds?.pagination?.remaining == 0 ? "disable" : ""}`}
+                      onClick={() => { viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, +nftIds?.pagination?.page + 1, searchText) }}>
+                      Load More
+                    </button>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -593,7 +791,7 @@ const SearchPage = ({ search, setSearch }) => {
                     <Slider
                       range
                       min={0}
-                      max={100000}
+                      max={1000}
                       value={[priceRange.min, priceRange.max]}
                       onChange={handleSliderChange}
                     />
@@ -605,7 +803,9 @@ const SearchPage = ({ search, setSearch }) => {
                       {/* <div>100000</div> */}
                     </div>
                   </div>
-
+                  <div className="l-11">
+                    <button onClick={searchNftCards}>Search</button>
+                  </div>
                 </div>
               </div>
             </div>

@@ -9,12 +9,16 @@ const Notification = () => {
   const userData = JSON.parse(localStorage.getItem("data"));
 
   const getNotificationSetting = async () => {
-    const response = await apis.getCurrentNotificationSettings(userData?.id);
-    console.log(response?.status, "igotit");
-    if (response?.status === 200) {
-      setData(response.data.data);
+    try{
+      const response = await apis.getCurrentNotificationSettings(userData?.id);
+      console.log(response?.status, "igotit");
+      if (response?.status === 200) {
+        setData(response.data.data);
+      }
+      setLoader(false)
+    }catch(err){
+      setLoader(false)
     }
-    setLoader(false)
   };
 
   const updateNotificationSetting = async (e) => {
@@ -76,17 +80,17 @@ const Notification = () => {
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
-                <h2>Auction Expiration</h2>
+                <h2>Add Fan</h2>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
-                  checked={data?.auction_expiration === 1 ? true : false}
-                  name="auction_expiration"
+                  checked={data?.add_fan === 1 ? true : false}
+                  name="add_fan"
                   onChange={(e) => handleSwitchChange(e)}
                 />
               </div>
               <div>
-                <p>When an auction you created ends.</p>
+                <p>When someone adds you in a Fan list</p>
               </div>
             </div>
           </div>
@@ -110,34 +114,34 @@ const Notification = () => {
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
-                <h2>Outbid</h2>
+                <h2>Follow</h2>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
-                  checked={data?.outbid === 1 ? true : false}
-                  name="outbid"
+                  checked={data?.follow === 1 ? true : false}
+                  name="follow"
                   onChange={(e) => handleSwitchChange(e)}
                 />
               </div>
               <div>
-                <p>When an offer you placed is exceeded by another user.</p>
+                <p>When someone follows you.</p>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
-                <h2>Price Change</h2>
+                <h2>like</h2>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
-                  checked={data?.price_change === 1 ? true : false}
-                  name="price_change"
+                  checked={data?.like === 1 ? true : false}
+                  name="like"
                   onChange={(e) => handleSwitchChange(e)}
                 />
               </div>
               <div>
-                <p>When an item you made an offer on changes in price.</p>
+                <p>When anyone likes your nft.</p>
               </div>
             </div>
           </div>
@@ -165,8 +169,9 @@ const Notification = () => {
               onClick={updateNotificationSetting}
               className="button-styling"
             >
-              Update Profile
+              Update Settings
             </button>
+            
           </div>
         </div>
       </Form>

@@ -536,6 +536,17 @@ function CollectionProfile({ search, setSearch }) {
   const onOpen = (action) => {
     setIsVisible(action);
   };
+
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
+  
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -659,6 +670,7 @@ function CollectionProfile({ search, setSearch }) {
                             collection={item?.collection}
                             collectionImages={item?.collectionImages}
                             userAddress
+                            size={'col-lg-3'}
                           />
                         )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                       }
@@ -681,6 +693,7 @@ function CollectionProfile({ search, setSearch }) {
                             description={item?.description}
                             collectionImages={item?.collectionImages}
                             userAddress={userAddress}
+                            size={'col-lg-3'}
                           />
                         )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                         }

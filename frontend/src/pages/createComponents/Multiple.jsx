@@ -29,6 +29,7 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
+import Loader from "../../components/shared/Loader";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -70,9 +71,9 @@ const Multiple = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
 
-  useEffect(() =>{
-    window.scrollTo(0,0)
-  } ,[])
+  // useEffect(() =>{
+  //   window.scrollTo(0,0)
+  // } ,[])
 
 
   console.log(location?.state?.artGallery, "asasasas");
@@ -122,7 +123,7 @@ const Multiple = ({ search, setSearch }) => {
       let cryptoType;
       console.log(user_id, collectionName, crypto, selectedImage2);
       if (collectionName.length < 1 || !selectedImage2) {
-        toast.warning("Input Collection Name and image to Create", {
+        toast.warning("All Fields are required", {
           position: toast.POSITION.TOP_CENTER,
         });
       } else {
@@ -152,6 +153,9 @@ const Multiple = ({ search, setSearch }) => {
     }
   };
 
+  // useEffect(() => {
+  //   window.scrollTo(0,0)
+  // }, []);
   useEffect(() => {
     window.scrollTo(0,0)
   }, []);
@@ -345,14 +349,15 @@ const Multiple = ({ search, setSearch }) => {
         multiListing ? handleNFTMintedEvent : null
       );
       console.log("Response of mint event", response);
-      setMyList(false)
+      // setMyList(false)
     } catch (error) {
-      toast.error(`Error while minting NFT: ${error}`, {
-        position: toast.POSITION.TOP_CENTER,
-      });
+      setMyList(false)
+      // toast.error(`Error while minting NFT: ${error}`, {
+      //   // position: toast.POSITION.TOP_CENTER,
+      // });
       // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
-      setMyList(false)
+      
     }
   }
 
@@ -505,32 +510,6 @@ const Multiple = ({ search, setSearch }) => {
       signer
     );
 
-    console.log("ipfsList", ipfsList);
-
-    // await (await nftContract.mint(ipfsList.current)).wait();
-    // console.log("minAndList 1");
-
-    // let mintedTokens = await nftContract.getMintedTokensList();
-    // console.log("mintedTokens ", mintedTokens);
-    // console.log("mintedTokens.length ", mintedTokens.length);
-    // console.log("minAndList 2");
-
-    // let multi = false;
-    // if (mintedTokens.length > 1) {
-    //   console.log("minAndList 3");
-
-    //   multi = true;
-    //   let listOfTokens = [];
-    //   for (let i = 0; i < mintedTokens.length; i++) {
-    //     console.log("mintedTokens[i]", mintedTokens[i].toString());
-    //     listOfTokens.push(Number(mintedTokens[i].toString()));
-    //   }
-    //   mintedTokens = listOfTokens;
-    //   console.log("listOfTokens", listOfTokens);
-    // } else {
-    //   mintedTokens = Number(mintedTokens);
-    // }
-
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -670,11 +649,11 @@ const Multiple = ({ search, setSearch }) => {
         nftDataPost();
 
         multiListing = false;
-        toast.success(`NFTs minted`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
+        // toast.success(`NFTs minted`, {
+        //   position: toast.POSITION.TOP_CENTER,
+        // });
       
-        navigate('/')
+        // navigate('/')
         // alert("NFTs minted");
 
         // setTimeout(() => {
@@ -691,21 +670,32 @@ const Multiple = ({ search, setSearch }) => {
   //   console.log("listToPost", listToPost);
   // };
 
+  const [navigateTrue , setNavigateTrue] = useState(false)
+
   const nftDataPost = async () => {
-    console.log("postListNft");
-    console.log("listToPost.current", listToPost.current);
-    console.log("listToPost.current", listToPost.current.length);
-    console.log("listToPost.current.length", listToPost.current.length);
 
     for (let i = 0; i < listToPost.current.length; i++) {
       console.log("listToPost.current[i]", listToPost.current[i]);
       const response = await apis.postListNft(listToPost.current[i]);
       console.log("response", response);
     }
-    // setTimeout(() => {
-    //   navigate("/profile");
-    // }, 3000);
+
+    setNavigateTrue(true)
+    
   };
+
+  useEffect(() =>{
+    if(navigateTrue){
+      setMyList(false)
+      toast.success(`NFTs minted`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+     setTimeout(() => {
+      navigate("/profile");
+    }, 2000);
+    }
+  } , [navigateTrue])
 
   const handlechange = (file) => {
     setFile(file);
@@ -1295,6 +1285,15 @@ const Multiple = ({ search, setSearch }) => {
     }
   }, [nftForm.startDate, nftForm.endDate]);
 
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
   useEffect(() => {
     const today = new Date();
     today.setDate(today.getDate() - 1); // Subtract 1 day from today's date
@@ -1324,6 +1323,8 @@ const Multiple = ({ search, setSearch }) => {
 
   return (
     <>
+
+      {myList && <Loader />}
       <Header search={search} setSearch={setSearch} />
       <div className="create-single">
         <PageTopSection title={"Create Multiple Collectible"} />
@@ -2228,7 +2229,7 @@ const Multiple = ({ search, setSearch }) => {
                                   </button>
                                 )}
                                 {NFts.length > 0 &&
-                                  NFts[NFts.length - 1].status === "completed" && !myList ? (
+                                  NFts[NFts.length - 1].status === "completed" ? (
                                   <button
                                     onClick={createItemMulti}
                                     // disabled={myList}
@@ -2266,7 +2267,7 @@ const Multiple = ({ search, setSearch }) => {
         <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };

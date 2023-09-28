@@ -35,7 +35,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
             {data.map((res, i) => {
                 return (
                     <div className="col-lg-3 col-md-6" key={i}>
-                        {res?.name == 'Free Trail' ?
+                        {res?.name == 'Free Trial' ?
                             <div className={`subscription-card-wrap`}>
                                 <h2 className='title'>{res?.name}</h2>
                                 <div>
@@ -200,8 +200,6 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                             <>
                                                 <p className='p1'>Images generated/mo</p><Check />
                                             </>
-
-
                                         }
                                     </div>
                                     <div>

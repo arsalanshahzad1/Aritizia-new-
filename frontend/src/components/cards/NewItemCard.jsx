@@ -17,6 +17,7 @@ const NewItemCard = ({
   // userAddress,
   seller,
   collectionImages,
+  size
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -63,7 +64,7 @@ const NewItemCard = ({
 
   return (
     <>
-      <div className="col-lg-3 col-md-4 col-12 new-item-card">
+      <div className={`${size} col-md-4 col-12 new-item-card`}>
         <div className="sec-five-wrap">
           <div className="image">
             <img src={image} alt="" width={"100%"} />
@@ -72,18 +73,25 @@ const NewItemCard = ({
               <NftCountdown endDateTime={new Date(endTime * 1000)} />
             </span>
             {showLinks && (
-              <div className="social-links">
-                <ul>
-                  <li>
-                    <a href="">Instagram</a>
-                  </li>
-                  <li>
-                    <a href="">Twitter</a>
-                  </li>
-                  <li>
-                    <a href="">Facebook</a>
-                  </li>
-                </ul>
+              <div className="social-media">
+                <LinkedinShareButton
+                  url="http://artizia.pluton.ltd/profile"
+                  title="Ali Khan"
+                >
+                  <p>Linkedin</p>
+                </LinkedinShareButton>
+                <TwitterShareButton
+                  url="http://artizia.pluton.ltd/profile"
+                  title="Ali Khan"
+                >
+                  <p>Twitter</p>
+                </TwitterShareButton>
+                <FacebookShareButton
+                  url="http://artizia.pluton.ltd/profile"
+                  title="Ali Khan"
+                >
+                  <p>Facebook</p>
+                </FacebookShareButton>
               </div>
             )}
           </div>
@@ -110,9 +118,15 @@ const NewItemCard = ({
               </div>
             </div>
             <div className="bottom">
-              <div className="left" onClick={() => openDrawer()}>
+              {console.log(seller, userAddress, "you beauty")}
+              {seller.toString().toUpperCase() === userAddress.toString().toUpperCase() ? 
+                <div className="left" onClick={() => openDrawer()}>
+                  <p>Your Nft</p>
+                </div> :
+                <div className="left" onClick={() => openDrawer()}>
                 <p>Place a bid</p>
               </div>
+              }
               <div className="right">
                 <AiFillHeart />
                 <span>50</span>

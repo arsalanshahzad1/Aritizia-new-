@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import Header from './landingpage/Header'
 import Footer from './landingpage/Footer'
 import PageTopSection from '../components/shared/PageTopSection'
@@ -12,6 +12,16 @@ const Create = ({ search, setSearch }) => {
             block: 'start',
         })
     }
+
+    // const [scroll, setScroll] = useState(true)
+
+    // useEffect(()=>{
+    //   if(scroll){
+    //     window.scrollTo(0,0)
+    //     setScroll(false)
+    //   }
+    // },[])
+
     return (
         <>
             <Header

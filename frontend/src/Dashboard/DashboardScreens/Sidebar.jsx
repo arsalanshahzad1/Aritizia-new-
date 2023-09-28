@@ -3,6 +3,8 @@ import DashboardToggle from '../SVG/DashboardToggle'
 import { useContext } from 'react'
 import { GlobalContext } from '../../Context/GlobalContext'
 import { NavLink, useLocation } from 'react-router-dom'
+import { IoCloseSharp } from "react-icons/io5"
+
 function Sidebar() {
     const location = useLocation();
     console.log(location.pathname);
@@ -11,9 +13,16 @@ function Sidebar() {
     return (
         <div className={`Sidebar ${sidebarCollapsed && 'sidebar-collapsed'}`}>
             <div className='sidebar-inner'>
-                <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
-                    <DashboardToggle />
-                </div>
+               { 
+                sidebarCollapsed ? 
+                    <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
+                        <DashboardToggle />
+                    </div> : 
+                    <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
+                       <IoCloseSharp fontSize="40px"/>
+                    </div>
+                    
+                }
                 <div className={`sidebar-nav}`}>
                     <NavLink to="/dashboard">
                         <div onClick={() => setDashboardActiveTab("dashboard")} className={`sidebar-nav-item ${location.pathname === '/dashboard' ? "active-sidebar-item" : ""}`}>

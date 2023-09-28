@@ -35,6 +35,7 @@ const BuyNow = ({
   collection,
   collectionImages,
   seller,
+  size
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -463,10 +464,18 @@ const BuyNow = ({
     await getFiatAmount();
     setShowFiatPaymentForm(true)
   }
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
 
   return (
     <>
-      <div className="col-lg-3 col-md-4">
+      <div className={`${size} col-md-4`}>
         <Link to={path}>
           <div className="css-vurnku" style={{ position: "relative" }}>
             <a className="css-118gt74" >
@@ -492,7 +501,7 @@ const BuyNow = ({
                                   url="http://artizia.pluton.ltd"
                                   title="Ali Khan"
                                 >
-                                  <p>Instagram</p>
+                                  <p>Linkedin</p>
                                 </LinkedinShareButton>
                               </a>
                             </li>

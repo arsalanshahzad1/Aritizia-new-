@@ -8,10 +8,10 @@ import {
   TwitterShareButton,
 } from "react-share";
 
-const SocialShare = ({ style }) => {
+const SocialShare = ({ style, bidStyle }) => {
   // console.log(style);
   return (
-    <div className="share-links-social">
+    <div className={`share-links-social ${bidStyle}`}>
       <span
         style={{ fontSize: style.fontSize, marginRight: style.marginRight }}
       >
@@ -21,6 +21,7 @@ const SocialShare = ({ style }) => {
         className="share-icons"
         url="http://artizia.pluton.ltd/profile"
         title="Ali Khan"
+        style={{fontSize: style.fontSize, marginRight: style.marginRight }}
       >
         <CgInstagram className="share-icon"/>
       </InstapaperShareButton>
@@ -28,6 +29,7 @@ const SocialShare = ({ style }) => {
         className="share-icons"
         url="http://artizia.pluton.ltd/profile"
         title="Ali Khan"
+        style={{fontSize: style.fontSize, marginRight: style.marginRight }}
       >
         <CiTwitter className="share-icon"/>
       </TwitterShareButton>
@@ -35,8 +37,9 @@ const SocialShare = ({ style }) => {
         className="share-icons"
         url="http://artizia.pluton.ltd/profile"
         title="Ali Khan"
+        style={{fontSize: style.fontSize, marginRight: style.marginRight }}
       >
-        <AiOutlineFacebook className="share-icon"/>
+        <AiOutlineFacebook className="share-icon" />
       </FacebookShareButton>
     </div>
   );

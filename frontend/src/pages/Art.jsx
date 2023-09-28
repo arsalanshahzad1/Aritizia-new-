@@ -9,6 +9,7 @@ import { TNL } from 'tnl-midjourney-api';
 import apis from '../service'
 import Loader from '../components/shared/Loader'
 import { ToastContainer, toast } from "react-toastify";
+import Footer from './landingpage/Footer'
 const Art = ({ search, setSearch }) => {
     const navigate = useNavigate()
     const [loader, setLoader] = useState(false)
@@ -253,9 +254,18 @@ const Art = ({ search, setSearch }) => {
     //     console.log(imageUrls, "images array");
     // }, [imageUrls]);
 
+    // const [scroll, setScroll] = useState(true)
+
+    // useEffect(()=>{
+    //   if(scroll){
+    //     window.scrollTo(0,0)
+    //     setScroll(false)
+    //   }
+    // },[])
+
     return (
         <>
-            < div className='art-page'>
+            < div className='art-page' style={{width: "100%", height:"70vh", display:"flex",flexDirection:"column" ,justifyContent:"center"}}>
                 {loader && <Loader />}
 
                 <Header search={search} setSearch={setSearch} />
@@ -302,6 +312,7 @@ const Art = ({ search, setSearch }) => {
                 }
             </ div>
             <ToastContainer />
+            <Footer />
         </>
     )
 }

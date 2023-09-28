@@ -30,7 +30,7 @@ function Fan({ id, fanToggle }) {
 
   let selectedUser;
   const removeFan = async (id) => {
-    console.log("id", id);
+    console.log("fan id", id);
     selectedUser = id;
     console.log("fanListing", fanListing);
 
@@ -64,6 +64,8 @@ function Fan({ id, fanToggle }) {
   };
 
   const handleRemoveFansEvent = async (removedFan) => {
+    console.log("kkkkkkkkkkkkkkkk");
+
     console.log("removedFan", removedFan);
     getRemoveFan(selectedUser);
   };
@@ -116,7 +118,7 @@ function Fan({ id, fanToggle }) {
     {fanListing.map((data, index) => {
       return (
         <div className="Follow-row" key={index}>
-          <Link to={`/other-profile?add=${data?.wallet_address}`}>
+          <Link to={`/other-profile?add=${data?.id}`}>
             <div className="left">
               <div className="img-holder">
                 {data?.profile_image ? (
