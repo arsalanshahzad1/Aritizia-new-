@@ -308,7 +308,7 @@ const LandingPage = ({ search, setSearch }) => {
     //   }
     // }
 
-    console.log(allNftIds && allNftIds,"nnnnnn t")
+    console.log(allNftIds,"nnnnnn t")
 
     for (let i = 0; i < allNftIds?.length; i++) {
       console.log(allNftIds[i],"nnnnnnnnnn y")
@@ -553,6 +553,15 @@ const [counterData , setCounterData] = useState('')
   }, [])
 
   const [loader, setLoader] = useState(true)
+
+  const [scroll, setScroll] = useState(true)
+
+  useEffect(()=>{
+    if(scroll){
+      window.scrollTo(0,0)
+      setScroll(false)
+    }
+  },[])
 
   return (
     <>

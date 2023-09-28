@@ -327,21 +327,23 @@ const Profile = ({ search, setSearch }) => {
     try {
       const response = await apis.viewAllMyNfts(userData.id);
       getMyListedNfts(response?.data?.data)
+      setNftAuctionLoader(false)
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
+      console.log(error, "errrrr")
+      setNftAuctionLoader(false)
     }
   };
 
   useEffect(() => {
-  const fetchData = async () => {
-    await viewAllNfts();
-  };
-
-  fetchData();
-}, []);
+    const fetchData = async () => {
+      await viewAllNfts();
+    };
+    fetchData();
+  }, []);
 
   const getMyListedNfts = async (allNftIds) => {
-    console.log("aaaa");
+    console.log("aaaa", allNftIds);
     console.log("Connected wallet", userAddress);
     let emptyList = [];
     setNftListAuction(emptyList);
@@ -370,7 +372,7 @@ const Profile = ({ search, setSearch }) => {
 
     let listingType;
 
-    console.log("userAddress", userAddress);
+    // console.log("userAddress", userAddress);
 
     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
 
@@ -381,10 +383,13 @@ const Profile = ({ search, setSearch }) => {
     let myAuctions = [];
 
     // arsalan
+    if(allNftIds.length === 0){
+      setNftLoader(false)
+    }
     for (let i = 0; i < allNftIds.length ; i++) {
       console.log(allNftIds[i],"nnnnnn")
       let id;
-      id = allNftIds[i]
+      id = allNftIds[i];
 
       let collectionId;
       collectionId = +mintedTokens[i].collectionId.toString();
@@ -415,7 +420,7 @@ const Profile = ({ search, setSearch }) => {
       );
 
       const price = ethers.utils.formatEther(structData.price.toString());
-
+        console.log(metaData," metaData ")
       axios
         .get(metaData)
         .then((response) => {
@@ -450,6 +455,9 @@ const Profile = ({ search, setSearch }) => {
             // myNFTs.push(nftData);
             // nftData && setNftListFP(nftData)
             setNftListFP((prev) => [...prev, nftData]);
+
+            console.log(nftListFP , " nftListFP")
+            
           } else if (listingType === 1) {
             const nftData = {
               id: id, //
@@ -468,16 +476,16 @@ const Profile = ({ search, setSearch }) => {
             setNftListAuction((prev) => [...prev, nftData]);
             console.log(nftData, "nftData", i);
           }
-          setNftAuctionLoader(false)
+          console.log("nftssss")
         }
         )
-
         .catch((error) => {
-          setNftAuctionLoader(false)
+          console.log("nftssss")
           console.error("Error fetching metadata:", error);
         });
         
     }
+    setNftLoader(false)
   };
 
   const getMyNfts = async () => {
@@ -580,6 +588,7 @@ const Profile = ({ search, setSearch }) => {
           // myNFTs.push(nftData);
           // setUserNfts(myNFTs);
           setUserNfts((prev) => [...prev, nftData]);
+          // setNft(false)
 
           console.log("myNFTs in function", myNFTs);
           // } else if (listingType === 1) {
@@ -605,11 +614,10 @@ const Profile = ({ search, setSearch }) => {
         })
 
         .catch((error) => {
-          setNftLoader(false)
           console.error("Error fetching metadata:", error);
         });
     }
-    setNftLoader(false)
+      setUserNftLoader(false)
   };
 
   // useEffect(() => {
@@ -725,7 +733,6 @@ const Profile = ({ search, setSearch }) => {
 
   useEffect(() => {
     getFollowersList(userId);
-    // getFollowersForFan('')
   }, []);
 
   const addFans = async () => {
@@ -743,45 +750,36 @@ const Profile = ({ search, setSearch }) => {
     }
     setshowAddFanPopUp(0)
     setFanToggle(!fanToggle)
-    // getFollowersForFan()
-    // get
   };
 
   const copyToClipboard = (link) => {
     console.log(link);
     navigator.clipboard.writeText(link);
+
     toast.success(`Copied Successfully`, {
       position: toast.POSITION.TOP_CENTER,
     });
   };
+
   const [loader, setLoader] = useState(true)
-  const [nftLoader, setNftLoader] = useState(true)
+  const [userNftLoader, setUserNftLoader] = useState(true)
+  const [nftLoader, setNftLoader] = useState(true)  
   const [nftAuctionLoader, setNftAuctionLoader] = useState(true)
   const [likedNftLoader, setLikedNftLoader] = useState(true) 
   const [likedNftAuctionLoader, setLikedNftAuctionLoader] = useState(true) 
 
   const [fanToggle, setFanToggle] = useState(false)
-  // const changeinList = () =>{
-  //   setFanToggle(!fanToggle)
-  // }
 
-  // const [allNftIds, setAllNftIds] = useState([])
+  const [scroll, setScroll] = useState(true)
 
-  // const viewAllNfts = async () =>{
-  //   const response = await apis.viewAllNfts(userData.id)
-  //   if(response.status){
-  //     console.log("yes nnnnnn")
-  //   }
-  //   setAllNftIds(response?.data?.data)
-  // }
+  useEffect(()=>{
+    if(scroll){
+      window.scrollTo(0,0)
+      setScroll(false)
+    }
+  },[])
 
-  // useEffect(()=>{
-  //   viewAllNfts()
-  // },[])
 
-  // useEffect(()=>{
-  //   console.log(allNftIds,"nnnnnn")
-  // },[allNftIds])
 
   return (
     <>
@@ -956,7 +954,8 @@ const Profile = ({ search, setSearch }) => {
                               userAddress
                               sellerWallet={userAddress}
                             />
-                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                          )) : 
+                          <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                         }
                         </>
                       )}
@@ -1000,11 +999,11 @@ const Profile = ({ search, setSearch }) => {
                   <>
                     <div className="row">
                       {
-                        nftLoader ?
+                        userNftLoader ?
                         <section className="sec-loading">
                           <div className="one"></div>
                         </section> :
-                        userNFTs.length > 0 ?
+                         userNFTs.length > 0 ?
                           <>
                           {userNFTs.map((item) => (
                             <MyNftCard
@@ -1391,7 +1390,7 @@ const Profile = ({ search, setSearch }) => {
         <Footer />
       </div>
       {/* <ProfileDrawer  isVisible={isVisible} onClose={onClose} /> */}
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };

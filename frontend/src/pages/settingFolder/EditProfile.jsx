@@ -32,6 +32,8 @@ const EditProfile = () => {
     }));
   };
 
+  console.log(data,"user edit")
+
   const onChangeHandler = (e) => {
     const { files, value, name } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
@@ -50,14 +52,18 @@ const EditProfile = () => {
     const sendData = new FormData();
 
     for (const [key, value] of Object.entries(data)) {
-      sendData.append(key, value);
+      if(key !== "wallet_address" && key !== "email" && key !== "id"){
+        sendData.append(key, value);
+      }
+      if(key == "id"){
+        sendData.append("user_id", 3)
+      }
     }
 
     const response = await apis.editProfile(sendData);
-    console.log(response, "RESPONSE");
     if (response?.data?.user) {
       localStorage.setItem("data", JSON.stringify(response.data.user));
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -139,7 +145,7 @@ const EditProfile = () => {
               type="email"
               placeholder="Enter email"
               name="email"
-              onChange={onChangeHandler}
+              // onChange={onChangeHandler}
             />
           </div>
 

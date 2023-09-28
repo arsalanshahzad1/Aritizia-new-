@@ -254,6 +254,15 @@ const Art = ({ search, setSearch }) => {
     //     console.log(imageUrls, "images array");
     // }, [imageUrls]);
 
+    const [scroll, setScroll] = useState(true)
+
+    useEffect(()=>{
+      if(scroll){
+        window.scrollTo(0,0)
+        setScroll(false)
+      }
+    },[])
+
     return (
         <>
             < div className='art-page' style={{width: "100%", height:"70vh", display:"flex",flexDirection:"column" ,justifyContent:"center"}}>

@@ -5738,3 +5738,31 @@ h3 {
     max-width: 1320px;
   }
 }
+
+.terms-container h1, .terms-container h2, .terms-container h3, .terms-container h4{
+  text-align: left;
+}
+
+
+.privacy .table-container {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+.privacy .table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.privacy .table-container th, .privacy .table-container td {
+  border: 1px solid #cfcfcf; /* Add border to td elements */
+  padding: 8px;
+  text-align: left;
+}
+
+.privacy .table-container th {
+  background-color: #f2f2f2;
+}

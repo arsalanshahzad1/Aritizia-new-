@@ -1264,7 +1264,7 @@ function ProfileDrawer({
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}
-                      <span>I agree all Terms & Conditions.</span>
+                      <span>I agree all <a href="/terms" target="_blank">Terms</a> & <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Policy</a>.</span>
                     </div>
                     <div className="eight-line">
                       {buyButton ? (
@@ -1284,7 +1284,7 @@ function ProfileDrawer({
               </div>
             </div>
           </div>
-          <button onClick={checkSeller}>checkSeller </button>
+          {/* <button onClick={checkSeller}>checkSeller </button> */}
         </div>
       </Drawer>
       <Modal

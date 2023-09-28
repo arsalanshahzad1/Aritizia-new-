@@ -349,9 +349,9 @@ const Multiple = ({ search, setSearch }) => {
       // setMyList(false)
     } catch (error) {
       setMyList(false)
-      toast.error(`Error while minting NFT: ${error}`, {
-        position: toast.POSITION.TOP_CENTER,
-      });
+      // toast.error(`Error while minting NFT: ${error}`, {
+      //   // position: toast.POSITION.TOP_CENTER,
+      // });
       // console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
       
@@ -1282,6 +1282,15 @@ const Multiple = ({ search, setSearch }) => {
       }
     }
   }, [nftForm.startDate, nftForm.endDate]);
+
+  const [scroll, setScroll] = useState(true)
+
+  useEffect(()=>{
+    if(scroll){
+      window.scrollTo(0,0)
+      setScroll(false)
+    }
+  },[])
 
   useEffect(() => {
     const today = new Date();
@@ -2256,7 +2265,7 @@ const Multiple = ({ search, setSearch }) => {
         <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };

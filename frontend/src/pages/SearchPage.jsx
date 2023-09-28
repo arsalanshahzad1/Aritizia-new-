@@ -453,6 +453,15 @@ const SearchPage = ({ search, setSearch }) => {
     });
   };
 
+  const [scroll, setScroll] = useState(true)
+
+  useEffect(()=>{
+    if(scroll){
+      window.scrollTo(0,0)
+      setScroll(false)
+    }
+  },[])
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />

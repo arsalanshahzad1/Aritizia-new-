@@ -22,6 +22,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Art from "./pages/Art";
 import WalletManager from "../src/methods/walletManager";
 import { ToastContainer } from "react-toastify";
+import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   const [search, setSearch] = useState(false);
@@ -121,6 +123,14 @@ function App() {
               <Route
                 path="/chat/:id"
                 element={<ChatPage search={search} setSearch={setSearch} />}
+              />
+              <Route
+                path="/terms"
+                element={<Terms search={search} setSearch={setSearch} />}
+              />
+              <Route
+                path="/privacy-policy"
+                element={<PrivacyPolicy search={search} setSearch={setSearch} />}
               />
             </Routes>
           </Suspense>
