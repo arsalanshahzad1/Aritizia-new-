@@ -71,7 +71,7 @@ const User = ({ search, setSearch }) => {
 
   useEffect(() => {
     getNFTlikeListing();
-    getOtherUsersDetails(userADDRESS);
+    getOtherUsersDetails(userID);
   }, []);
 
   let likedNftsFromDB = [];
