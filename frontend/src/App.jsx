@@ -32,10 +32,8 @@ function App() {
   const [search, setSearch] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
   useEffect(() => {
-    // Apply CSS styles to the body element
     document.body.style.overflow = search ? "hidden" : "auto";
 
-    // Cleanup the effect
     return () => {
       document.body.style.overflow = "auto";
     };
