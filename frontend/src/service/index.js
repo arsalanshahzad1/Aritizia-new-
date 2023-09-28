@@ -44,7 +44,7 @@ const createBackendServer = (baseURL) => {
   const headers = {
     "Content-Type": "multipart/form-data",
   };
- 
+
   const headers2 = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer ' + midjourneyapiKey
@@ -58,11 +58,23 @@ const createBackendServer = (baseURL) => {
 
   const postNftSold = async (body) => await api.post("sold-nft", body);
 
-  const postWalletAddress = async (body) =>
-    await api.post(`connect-wallet`, body);
+  //Auth API Start
 
-  const postAddFans = async (body) =>
-    await api.post("add-custom-user-fans", body);
+  const postWalletAddress = async (body) => await api.post(`connect-wallet`, body);
+
+  const register = async (body) => await api.post(`register`, body);
+
+  const resendOtp = async (user_email) => await api.get(`resend-otp/${user_email}`);
+
+  const verifyOtp = async (body) => await api.post(`verify`, body);
+
+  const loginWithEmail = async (body) => await api.post(`login`, body);
+
+
+
+  //Auth API End
+
+  const postAddFans = async (body) => await api.post("add-custom-user-fans", body);
 
   const postBid = async (body) => await api.post("bidding-nft", body);
 
@@ -131,7 +143,7 @@ const createBackendServer = (baseURL) => {
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
 
-  
+
   const getUserData = async (id) =>
     await api.get(`get-user-data/${id}`);
 
@@ -179,12 +191,12 @@ const createBackendServer = (baseURL) => {
   const viewNftCollectionStock = async (collectionID) => await api.get(`view-nft-collection-stock/${collectionID}`);
   const viewNftCollectionProfile = async (collectionID) => await api.get(`view-nft-collection-profile/${collectionID}`);
   const viewNftTopCollections = async () => await api.get(`view-nft-top-collections`);
-  
-  
-  
+
+
+
   // NFT Collection//
   const getCurrentNotificationSettings = async (userId) => await api.get(`view-notification-setting/${userId}`);
-  const updateNotificationSettings = async (body) => await api.post(`update-notification-setting`,body);
+  const updateNotificationSettings = async (body) => await api.post(`update-notification-setting`, body);
 
 
   const getMidjourneyId = async (body) => await api.post(`https://api.thenextleg.io/v2/imagine`, body, {
@@ -202,7 +214,7 @@ const createBackendServer = (baseURL) => {
 
   // Art Gallery //
 
-  const createArtGalleryImages = async (body) => await api.post(`create-art-gallery`,body,{headers : headers});
+  const createArtGalleryImages = async (body) => await api.post(`create-art-gallery`, body, { headers: headers });
   const generateArtGalleryImages = async (body) => await api.post(`generate-art-gallery`, body);
   const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
   const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
@@ -211,7 +223,7 @@ const createBackendServer = (baseURL) => {
 
 
   const viewLandingPageDetail = async () => await api.get(`view-landing-page-detail`);
-  const viewFilteredNfts = async (currency_type , listed_type , min_price , max_price , sort_by_price , page , search) => 
+  const viewFilteredNfts = async (currency_type, listed_type, min_price, max_price, sort_by_price, page, search) =>
     await api.get(`view-filtered-nfts?currency_type=${currency_type}&listed_type=${listed_type}&min_price=${min_price}&max_price=${max_price}&sort_by_price=${sort_by_price}&page_size=${9}&page=${page}&search=${search}`);
 
 
@@ -223,7 +235,17 @@ const createBackendServer = (baseURL) => {
     editProfile,
     postListNft,
     postNftSold,
+
+     // Auth api start //
+
     postWalletAddress,
+    register,
+    resendOtp,
+    verifyOtp,
+    loginWithEmail,
+
+     // Auth api end //
+
     postAddFans,
     getChatNotification,
     getChatUsers,
@@ -250,7 +272,7 @@ const createBackendServer = (baseURL) => {
     getNFTCollectionImage,
 
     getNFTByTokenId,
-    
+
     getUserData,
 
     getOtherUser,

@@ -11,6 +11,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     const localstorageData = JSON.parse(localStorage.getItem("data"));
+    const user_address = localstorageData?.wallet_address
     setData(localstorageData);
     setProfileImage(localstorageData?.profile_image);
     setCoverImage(localstorageData?.cover_image);
@@ -47,9 +48,12 @@ const EditProfile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    const clonedObject = { ...data };
+    clonedObject.user_id = clonedObject.id;
     const sendData = new FormData();
 
-    for (const [key, value] of Object.entries(data)) {
+    for (const [key, value] of Object.entries(clonedObject)) {
       sendData.append(key, value);
     }
 
