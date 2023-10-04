@@ -36,6 +36,7 @@ export const getProviderOrSigner = async (needSigner = false) => {
 
   return web3Provider;
 };
+
 export const connectWallet = async (setWalletConnected) => {
   console.log("connectWallet");
   try {

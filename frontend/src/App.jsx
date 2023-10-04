@@ -31,6 +31,7 @@ import apis from "./service";
 function App() {
   const [search, setSearch] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
+  
   useEffect(() => {
     document.body.style.overflow = search ? "hidden" : "auto";
 
@@ -47,6 +48,7 @@ function App() {
     const response = apis.checkSubExpiration(userId)
   },[])
 
+console.log(walletConnected,"walletConnected")
   return (
     <>
       <WalletManager setWalletConnected={setWalletConnected} />

@@ -6,7 +6,7 @@ import { GlobalContext } from "../../Context/GlobalContext";
 import Notification from "./Notification";
 import laravelEcho from "../../socket/index";
 import apis from "../../service";
-import Web3Modal from "web3modal";
+import Web3Modal, { local } from "web3modal";
 import UserNotification from "./UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { getAddress } from "../../methods/methods";
@@ -16,8 +16,11 @@ import {
   getProviderOrSigner,
 } from "../../methods/walletManager";
 import UnAuthHeader from "../Headers/UnAuthHeader";
+import { useSelector } from "react-redux";
 
 const Header = ({ search, setSearch }) => {
+
+ const {userWalletAddress}= useSelector((store)=>store.address)
   const { setactiveTabsSetting } = useContext(GlobalContext);
   const [showMessage, setshowMessage] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -157,7 +160,13 @@ const Header = ({ search, setSearch }) => {
     // setUserDatalocalStorage.getItem("data")
   } ,[data])
 
-  return (
+console.log(userWalletAddress,"userWalletAddress")  
+
+
+return (
+    <>
+    {   
+     userWalletAddress !== null ?
     <>
       <header id={`${scrolled ? "active" : ""}`}>
         <div className="container">
@@ -655,8 +664,13 @@ const Header = ({ search, setSearch }) => {
           setShowNotification(false);
           setshowMessage(false);
         }}
-      ></div>
-      {/* <UnAuthHeader search={search} setSearch={setSearch}/> */}
+      >
+
+      </div>
+      </>
+     :
+        <UnAuthHeader search={search} setSearch={setSearch}/>
+     }
     </>
   );
 };

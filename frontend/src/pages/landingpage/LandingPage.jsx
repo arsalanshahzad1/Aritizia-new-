@@ -26,20 +26,22 @@ import {
 import DummyCard from "../../components/cards/DummyCard";
 import { Link } from "react-router-dom";
 import Loader from "../../components/shared/Loader";
+import { setUserWalletAddress } from "../../redux/slices/addressSlice";
+import { useDispatch, useSelector } from "react-redux";
 // import MetaDecorator from "../../Meta/MetaDecorator";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
-
+const {userWalletAddress}  = useSelector((store)=>store.address)
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   // const [userAddress, setUserAddress] = useState("0x000000....");
   const [walletConnected, setWalletConnected] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(0);
-
+console.log(userWalletAddress,"userWalletAddressuserWalletAddress")
   const web3ModalRef = useRef();
-
+const dispatch = useDispatch()
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
@@ -140,7 +142,14 @@ const LandingPage = ({ search, setSearch }) => {
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     let addr = await getAddress();
     console.log("ZZZZZZ", addr);
+    if(addr === false)
+    {
+      dispatch(setUserWalletAddress(null))
 
+    }else{
+      dispatch(setUserWalletAddress(addr))
+
+    }
     console.log("Provider", provider);
 
     const marketplaceContract = new Contract(
@@ -513,9 +522,12 @@ const LandingPage = ({ search, setSearch }) => {
     getListedNfts();
   }, [userAddress]);
 
-  useEffect(() => {
-    getAddress();
-  }, []);
+  useEffect(async() => {
+   const address = await getAddress();
+    }, []);
+
+  
+
 
   useEffect(() => {
     const options = {
