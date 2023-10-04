@@ -321,6 +321,7 @@ const OtherProfile = ({ search, setSearch }) => {
     getMyListedNfts();
   }, [userADDRESS]);
 
+
   useEffect(() => {
     getAddress();
   }, []);

@@ -523,8 +523,9 @@ const User = ({ search, setSearch }) => {
     }
   };
 
+  //TODO change by ali Monis
   useEffect(() => {
-    getAddress();
+    // getAddress();
     getProviderOrSigner();
   }, []);
 

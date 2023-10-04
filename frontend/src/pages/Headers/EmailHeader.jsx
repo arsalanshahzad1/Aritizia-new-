@@ -15,9 +15,8 @@ import {
   connectWallet,
   getProviderOrSigner,
 } from "../../methods/walletManager";
-import UnAuthHeader from "../Headers/UnAuthHeader";
 
-const Header = ({ search, setSearch }) => {
+const EmailHeader = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
   const [showMessage, setshowMessage] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -33,10 +32,8 @@ const Header = ({ search, setSearch }) => {
   const location = useLocation();
   const path = location.pathname;
   const [countLength, setCountLength] = useState('');
-  const data = JSON.parse(localStorage.getItem("data"));
-  const [userData , setUserData] = useState(data)
 
-  // const userData = JSON.parse(localStorage.getItem("data"));
+  const userData = JSON.parse(localStorage.getItem("data"));
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
   const id = JSON.parse(localStorage.getItem("data"));
@@ -152,10 +149,6 @@ const Header = ({ search, setSearch }) => {
       setNotificationRes([]);
     }
   };
-
-  useEffect(() =>{
-    // setUserDatalocalStorage.getItem("data")
-  } ,[data])
 
   return (
     <>
@@ -434,6 +427,7 @@ const Header = ({ search, setSearch }) => {
                           ) : (
                             <>
                               {chatNotificationRes?.length > 0 ? (
+                                // <Notification data={chatNotificationRes} />
                                 ""
                               ) : (
                                 <section className="header-empty-record"> <span> No record found </span> </section>
@@ -575,7 +569,7 @@ const Header = ({ search, setSearch }) => {
                               setToggleSettingDropdown(!toggleSettingDropdown)
                             }
                           >
-
+                            {/* Setting + */}
                             Settings {toggleSettingDropdown ? <IoIosArrowDropupCircle /> : <IoIosArrowDropdownCircle />}
                             {toggleSettingDropdown ? (
                               <div>
@@ -656,9 +650,8 @@ const Header = ({ search, setSearch }) => {
           setshowMessage(false);
         }}
       ></div>
-      {/* <UnAuthHeader search={search} setSearch={setSearch}/> */}
     </>
   );
 };
 
-export default Header;
+export default EmailHeader;

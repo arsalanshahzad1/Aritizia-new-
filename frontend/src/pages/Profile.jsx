@@ -367,7 +367,7 @@ const Profile = ({ search, setSearch }) => {
     const signer = provider.getSigner();
     const address = await signer.getAddress();
 
-    // console.log("MYADDRESS", address);
+    console.log("MYADDRESS", address);
     console.log("333333");
 
     let listingType;
@@ -624,8 +624,11 @@ const Profile = ({ search, setSearch }) => {
   //   window.scroll(0, 0);
   // });
 
-  useEffect(() => {
+  useEffect(async() => {
     getAddress();
+
+    // let addr = await getAddress();
+    // console.log("addr",addr)
     getProviderOrSigner();
   }, []);
 

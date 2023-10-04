@@ -13,43 +13,63 @@ const getAddress = async () => {
   // console.log("accounts", accounts);
 
   postWalletAddress(accounts[0]);
-
   return accounts[0];
 };
-const postWalletAddress = async (address) => {
-  // console.log("postWalletAddress");
-  if (localStorage.getItem("data")) {
-    let storedWallet = JSON.parse(localStorage.getItem("data")).wallet_address;
-    // console.log("check1");
-    // console.log("sss storedWallet", storedWallet);
-    // console.log("sss address", address);
-    storedWallet = storedWallet.toLowerCase();
-    address = address.toLowerCase();
 
-    if (storedWallet == address) {
-      // console.log("check2");
-      // return console.log("data is avaliable");
-    } else {
-      // console.log("check1");
-      const response = await apis.postWalletAddress({
-        wallet_address: address,
-        user_id: 0,
-      });
-      localStorage.removeItem("data");
-      console.log("responsepostWalletAddress", response);
-      localStorage.setItem("data", JSON.stringify(response?.data?.data));
-      // console.log("check3");
-      window.location.reload();
-    }
-  } else {
-    // console.log("check4"); 
+const postWalletAddress = async (address) => {
+  console.log("address", address)
+  let localstrageUserData = localStorage.getItem("data");
+
+  console.log(localstrageUserData ? 'true' : 'false');
+  let storedWallet = JSON.parse(localStorage.getItem("data"))?.wallet_address;
+  let isEmail = JSON.parse(localStorage.getItem("data"))?.is_email;
+  let id = JSON.parse(localStorage.getItem("data"))?.id;
+  console.log(isEmail, 'isEmail');
+
+  if (localstrageUserData === null) {
     const response = await apis.postWalletAddress({
       wallet_address: address,
       user_id: 0,
     });
     localStorage.setItem("data", JSON.stringify(response?.data?.data));
     // console.log("check5");
-    window.location.reload();
+    // window.location.reload();
+  } else {
+    if (!isEmail && storedWallet != "") {
+      if (localStorage.getItem("data")) {
+        storedWallet = storedWallet?.toLowerCase();
+        address = address?.toLowerCase();
+
+        if (storedWallet == address) {
+        } else {
+          const response = await apis.postWalletAddress({
+            wallet_address: address,
+            user_id: 0,
+          });
+          localStorage.removeItem("data");
+          console.log("responsepostWalletAddress", response);
+          localStorage.setItem("data", JSON.stringify(response?.data?.data));
+          // window.location.reload();
+        }
+      } else {
+        // console.log("check4"); 
+        const response = await apis.postWalletAddress({
+          wallet_address: address,
+          user_id: id,
+        });
+        localStorage.setItem("data", JSON.stringify(response?.data?.data));
+        // console.log("check5");
+        // window.location.reload();
+      }
+    } else {
+      const response = await apis.postWalletAddress({
+        wallet_address: address,
+        user_id: id,
+      });
+      localStorage.setItem("data", JSON.stringify(response?.data?.data));
+      // console.log("check5");
+      // window.location.reload();
+    }
   }
 };
 

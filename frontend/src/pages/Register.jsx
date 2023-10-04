@@ -6,6 +6,7 @@ import VerificationInput from "react-verification-input";
 import apis from '../service';
 import { ToastContainer, toast } from "react-toastify";
 import EmailMasked from '../components/shared/EmailMasked';
+import Loader from '../components/shared/Loader';
 
 
 
@@ -14,6 +15,7 @@ function Register() {
     const [varificationPopup, setVarificationPopup] = useState(false);
     const [otpCode, setOtpCode] = useState('');
     const [registerData, setRegisterData] = useState('');
+    const [loader, setLoader] = useState(false)
     const navigate = useNavigate()
 
     const getOtp = (event) => {
@@ -28,6 +30,7 @@ function Register() {
 
     const registerUser = async (event) => {
         event.preventDefault()
+        setLoader(true)
         try {
             const response = await apis.register(registerData)
             console.log(response?.data?.data?.status, 'status');
@@ -36,10 +39,12 @@ function Register() {
                 toast.success(response?.data?.message, {
                     position: toast.POSITION.TOP_RIGHT,
                 });
+                setLoader(false)
                 setVarificationPopup(true)
             }
             console.log(response);
         } catch (error) {
+            setLoader(false)
             toast.error(error?.message, {
                 position: toast.POSITION.TOP_RIGHT,
             });
@@ -49,9 +54,9 @@ function Register() {
     const verifyOtp = async (event) => {
         event.preventDefault()
         try {
-            const response = await apis.verifyOtp({email: registerData?.email , otp : otpCode})
-            console.log(response?.data?.status , 'status');
-            console.log(response?.data?.message , 'message');
+            const response = await apis.verifyOtp({ email: registerData?.email, otp: otpCode })
+            console.log(response?.data?.status, 'status');
+            console.log(response?.data?.message, 'message');
             if (response?.data?.status) {
                 toast.success(response?.data?.message, {
                     position: toast.POSITION.TOP_RIGHT,
@@ -71,8 +76,8 @@ function Register() {
         event.preventDefault()
         try {
             const response = await apis.resendOtp(registerData?.email)
-            console.log(response?.data?.status , 'status');
-            console.log(response?.data?.message , 'message');
+            console.log(response?.data?.status, 'status');
+            console.log(response?.data?.message, 'message');
             if (response?.data?.status) {
                 toast.success(response?.data?.message, {
                     position: toast.POSITION.TOP_RIGHT,
@@ -90,6 +95,7 @@ function Register() {
 
     return (
         <>
+            {loader && <Loader />}
             <div className="registor">
                 <div className="registor-wrap">
                     <div className="left">

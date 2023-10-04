@@ -535,6 +535,7 @@ const SearchPage = ({ search, setSearch }) => {
     // getSearchedNfts();
   }, [userAddress]);
 
+  // TODO change by ali Monis
   useEffect(() => {
     getAddress();
   }, []);

@@ -41,7 +41,7 @@ function App() {
 
   const jsonData = localStorage.getItem("data");
   const dataObject = JSON.parse(jsonData);
-  const userId = dataObject.id;
+  const userId = dataObject?.id;
 
   useEffect(()=>{
     const response = apis.checkSubExpiration(userId)
