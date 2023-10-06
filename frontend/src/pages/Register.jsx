@@ -162,7 +162,6 @@ function Register() {
                     <button className='varify-code' onClick={verifyOtp}>Verify Account</button>
                 </div>
             </Modal>
-            <ToastContainer />
         </>
 
     )

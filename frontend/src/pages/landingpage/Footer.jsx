@@ -46,17 +46,17 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.instagram.com/artizia.io/"}>
                       <img src="/assets/social-icons/insta.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.youtube.com/@ArtiziaLLC"}>
                       <img src="/assets/social-icons/youtube.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.linkedin.com/company/artizia-io"}>
                       <img src="/assets/social-icons/linkdin.png" alt="" />
                     </Link>
                   </li>
@@ -66,12 +66,12 @@ const Footer = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.tiktok.com/@artizia.io"}>
                       <img src="/assets/social-icons/tictoc.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.facebook.com/profile.php?id=100095110465607"}>
                       <img src="/assets/social-icons/facebook.png" alt="" />
                     </Link>
                   </li>
@@ -80,7 +80,7 @@ const Footer = () => {
               <div className="three">
                 <ul>
                   <li>
-                    <Link>
+                    <Link to="/terms">
                       <p>TERMS & CONDITIONS</p>
                     </Link>
                   </li>

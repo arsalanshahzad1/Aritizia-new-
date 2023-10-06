@@ -5,26 +5,26 @@ export const Store = createContext();
 
 const getProviderPEGTOKENContrat = () => {
     //  const provider = new ethers.providers.Web3Provider(ethereum);  // TODO
-    
+
     // const provider = new ethers.providers.JsonRpcProvider(process.env.LocalRpc);
     let RPC = process.env.REACT_APP_RPC;
     // console.log("RPC",RPC);
-    
+
     // const customRpcProvider = new providers.JsonRpcProvider(RPC);
     // console.log("RPC",customRpcProvider);
 
     const provider = new ethers.providers.JsonRpcProvider(RPC);//"http://localhost:8545/"
-    
+
     // const provider = new ethers.providers.JsonRpcProvider(RPC);
-    
+
     // const provider = new ethers.providers.JsonRpcProvider(
-        //   `https://eth-goerli.g.alchemy.com/v2/${process.env.TESTNET_API}`
-        // );
-        
-        // const provider = new ethers.providers.JsonRpcProvider(
-            //   `https://eth-mainnet.g.alchemy.com/v2/${process.env.MAINNET_API}`
-            // );
-            const PEGContract = new ethers.Contract(PEGTOKEN_CONTRACT_ADDRESS.address, PEGTOKEN_CONTRACT_ABI.abi, provider);
+    //   `https://eth-goerli.g.alchemy.com/v2/${process.env.TESTNET_API}`
+    // );
+
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //   `https://eth-mainnet.g.alchemy.com/v2/${process.env.MAINNET_API}`
+    // );
+    const PEGContract = new ethers.Contract(PEGTOKEN_CONTRACT_ADDRESS.address, PEGTOKEN_CONTRACT_ABI.abi, provider);
     return PEGContract;
 }
 
@@ -32,19 +32,39 @@ export const StoreProvider = ({ children }) => {
     const [account, setAccount] = useState("")
     const [walletConnected, setWalletConnected] = useState(false);
     const [loader, setloader] = useState(false);
-    
-    console.log("Mohsin",account,walletConnected)
+    const [firstTimeCall, setFirstTimeCall] = useState(false);
+
+    console.log("Mohsin", account, walletConnected)
+   const user = localStorage.getItem("data")
     const { ethereum } = window;
-    if(account)
-    {
-       localStorage.setItem('userAddress',account) 
+   const userAddress = localStorage.getItem("userAddress")  
+      
+        if (account) {
+            if(userAddress === "false" && account !== undefined)
+            {
+                window.location.reload();
+            }
+            
+        
+            localStorage.setItem('userAddress', account)
+        if(firstTimeCall === false)
+        {
+            localStorage.setItem("address",account)  
+            localStorage.setItem("firstTimeCall","true")
+            
+            setFirstTimeCall(true);
+        }
     }
-    else{
-        localStorage.setItem('data',false) 
-        localStorage.setItem('userAddress',false) 
-        // window.location.reload()    
-    }
-   
+
+    // else if(!account && user !== "false")
+    // {
+    //     localStorage.setItem('userAddress', false)
+    // }
+    // else{
+    //     localStorage.setItem('data', false)
+    //     localStorage.setItem('userAddress', false)     
+    // }
+
     // const getPEGTokenContrat = () => {
     //     const provider = new ethers.providers.Web3Provider(ethereum);
     //     const signer = provider.getSigner();
@@ -55,7 +75,7 @@ export const StoreProvider = ({ children }) => {
     const connectWallet = async () => {
         try {
             // setloader(true);
-            if (!ethereum) return setError(true), setMessage("Please install Metamask"); 
+            if (!ethereum) return setError(true), setMessage("Please install Metamask");
             // toast.info("Please install Metamask");;
             await ethereum.request({
                 method: "wallet_switchEthereumChain",
@@ -68,7 +88,7 @@ export const StoreProvider = ({ children }) => {
                         chainId: "0x7A69" //localHost TODO
                         // chainId:"0x13881" //mumbai
                         // chainId:"0x61"//bnb
-                    
+
                     },
                 ],
             });
@@ -140,6 +160,7 @@ export const StoreProvider = ({ children }) => {
         <>
             <Store.Provider
                 value={{
+                    firstTimeCall,
                     account,
                     walletConnected,
                     loader,

@@ -24,8 +24,8 @@ const EmailHeader = ({ search, setSearch }) => {
   const [scrolled, setScrolled] = useState(false);
   const [toggleUserDropdown, setToggleUserDropdown] = useState(false);
   const [toggleSettingDropdown, setToggleSettingDropdown] = useState(false);
-  const user = localStorage.getItem("data") 
-  const userAddress = localStorage.getItem("userAddress") 
+  const user = localStorage.getItem("data")
+  const userAddress = localStorage.getItem("userAddress")
   const [messageArrive, setMessageArrive] = useState(false);
   const [notificationArrive, setNotificationArrive] = useState(false);
   const [chatNotificationRes, setChatNotificationRes] = useState([]);
@@ -326,7 +326,7 @@ const EmailHeader = ({ search, setSearch }) => {
                       </span>
                     )}
 
-                    {showNotification &&  user?.is_email === false  && (
+                    {showNotification && user?.is_email === false && (
                       <div
                         className="notification-card"
                         style={{ left: "22%" }}
@@ -526,7 +526,7 @@ const EmailHeader = ({ search, setSearch }) => {
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
                     >
-                      {userAddress !==  "false" ? "Connected" : "Connect Wallet"}
+                      {userAddress !== "false" ? "Connected" : "Connect Wallet"}
                     </button>
                   </>
                 )}
@@ -621,6 +621,18 @@ const EmailHeader = ({ search, setSearch }) => {
                           <li>
                             <Link to={"/subscription"}>Subscription</Link>
                           </li>
+
+                          <li>
+                            <div onClick={() => {
+                              localStorage.setItem("data", false)
+                              localStorage.setItem("userAddress", false)
+                              localStorage.setItem("address", false)
+
+                              localStorage.setItem("firstTimeCall", "false")
+                              window.location.reload()
+                            }}>Logout</div>
+                          </li>
+
                         </ul>
                       </div>
                     )}

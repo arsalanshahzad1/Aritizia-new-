@@ -22,6 +22,7 @@ import apis from "../../service/index";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import {
   connectWallet,
   getProviderOrSigner,
@@ -136,16 +137,36 @@ const Single = ({ search, setSearch }) => {
       }
 
       const sendData = new FormData();
+
       sendData.append("user_id", user_id);
       sendData.append("name", collectionName);
       sendData.append("payment_type", cryptoType);
       sendData.append("image", selectedImage2);
-      const response = await apis.postNFTCollection(sendData);
+      
 
-      if (response.status) {
-        getCollection();
-        setshowCreateCollection(false);
+
+      try{
+        setLoading(true);
+        const response = await apis.postNFTCollection(sendData);
+
+        if (response.status) {
+          toast.success(response?.data?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+        });
+          getCollection();
+          setshowCreateCollection(false);
+        }
+        
+        setLoading(false);
       }
+      catch(e)
+      {
+        setLoading(false);
+        console.log(e?.message,"EEEEEEEEEEEEEEEEEEEEE")
+        toast.warning(e?.message)
+    
+      }
+      
 
       // setcollectionOptions((previousOptions) => [
       //   ...previousOptions,
@@ -915,12 +936,14 @@ const Single = ({ search, setSearch }) => {
                                       </div>
                                       <div
                                         className="button-styling btnCC"
+                                        disabled={loading}
                                         onClick={() => {
                                           AddCollection();
                                           postSingleCollection();
                                         }}
                                       >
-                                        Create
+                                     {loading ? "Create":"Loading"}
+                                        
                                       </div>
                                     </div>
                                   </div>

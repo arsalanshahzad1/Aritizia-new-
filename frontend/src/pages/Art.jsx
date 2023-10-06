@@ -311,7 +311,6 @@ const Art = ({ search, setSearch }) => {
                     <p className='art-error'>{errorMessage}</p>
                 }
             </ div>
-            <ToastContainer />
             <Footer />
         </>
     )

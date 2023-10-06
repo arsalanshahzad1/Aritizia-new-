@@ -657,7 +657,6 @@ const OtherProfile = ({ search, setSearch }) => {
         </div>
         <Search search={search} setSearch={setSearch} />
         <Footer />
-        <ToastContainer />
       </div>
       {/* <ProfileDrawer  isVisible={isVisible} onClose={onClose} /> */}
     </>

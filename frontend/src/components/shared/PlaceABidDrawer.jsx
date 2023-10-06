@@ -1340,7 +1340,6 @@ const PlaceABidDrawer = ({
               </div>
             </>
           )}
-          <ToastContainer />
         </div>
       </Modal>
     </>

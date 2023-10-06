@@ -1,17 +1,23 @@
-import React,{useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from './landingpage/Header'
 import Footer from './landingpage/Footer'
 import PageTopSection from '../components/shared/PageTopSection'
 import { Link } from 'react-router-dom'
 import Search from "../components/shared/Search";
+import HeaderConnectPopup from './Headers/HeaderConnectPopup'
 
 const Create = ({ search, setSearch }) => {
+
+    const [connectPopup, setConnectPopup] = useState(false);
+
     const scrollToPrompt = () => {
         document.getElementById('prompt').scrollIntoView({
             behavior: 'smooth',
             block: 'start',
         })
     }
+
+    const userAddress = localStorage.getItem("userAddress")
 
     return (
         <>
@@ -32,24 +38,49 @@ const Create = ({ search, setSearch }) => {
                             <div className="col-lg-12 col-md-12 col-12 mx-auto">
                                 <div className="row">
                                     <div className="col-lg-4 col-md-4 col-12">
-                                        <Link to={'/create/single'}>
-                                            <div className="create-card">
-                                                <div className='image-holder'>
-                                                    <img src="/assets/images/single.png" alt="" />
+                                        {
+                                            userAddress === "false" ?
+
+                                                <div onClick={() => setConnectPopup(true)}
+                                                    className="create-card">
+                                                    <div className='image-holder'>
+                                                        <img src="/assets/images/single.png" alt="" />
+                                                    </div>
+                                                    <h2>Single</h2>
                                                 </div>
-                                                <h2>Single</h2>
-                                            </div>
-                                        </Link>
+                                                :
+                                                <Link to={'/create/single'}>
+                                                    <div className="create-card">
+                                                        <div className='image-holder'>
+                                                            <img src="/assets/images/single.png" alt="" />
+                                                        </div>
+                                                        <h2>Single</h2>
+                                                    </div>
+                                                </Link>
+                                        }
+
                                     </div>
+
                                     <div className="col-lg-4 col-md-4 col-12">
-                                        <Link to={'/create/multiple'}>
-                                            <div className="create-card">
-                                                <div className='image-holder'>
-                                                    <img src="/assets/images/multiple.png" alt="" />
+                                        {
+                                            userAddress === "false" ?
+                                                <div onClick={() => setConnectPopup(true)} className="create-card">
+                                                    <div className='image-holder'>
+                                                        <img src="/assets/images/multiple.png" alt="" />
+                                                    </div>
+                                                    <h2>Multiple</h2>
                                                 </div>
-                                                <h2>Multiple</h2>
-                                            </div>
-                                        </Link>
+                                                :
+                                                <Link to={'/create/multiple'}>
+                                                    <div className="create-card">
+                                                        <div className='image-holder'>
+                                                            <img src="/assets/images/multiple.png" alt="" />
+                                                        </div>
+                                                        <h2>Multiple</h2>
+                                                    </div>
+                                                </Link>
+                                        }
+
                                     </div>
                                     <div className="col-lg-4 col-md-4 col-12">
                                         <Link to={'/art'} onClick={scrollToPrompt}>
@@ -69,6 +100,8 @@ const Create = ({ search, setSearch }) => {
                 <Search search={search} setSearch={setSearch} />
                 <Footer />
             </div>
+
+            <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
         </>
     )
 }

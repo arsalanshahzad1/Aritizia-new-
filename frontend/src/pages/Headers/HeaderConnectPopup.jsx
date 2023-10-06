@@ -5,9 +5,11 @@ import { AiOutlineClose } from "react-icons/ai";
 import {
     connectWallet,
     getProviderOrSigner,
-  } from "../../methods/walletManager";
+} from "../../methods/walletManager";
 
-function HeaderConnectPopup({connectPopup , setConnectPopup}) {
+function HeaderConnectPopup({ connectPopup, setConnectPopup }) {
+    const user = localStorage.getItem("data")
+
     return (
         <Modal
             show={connectPopup}
@@ -38,14 +40,16 @@ function HeaderConnectPopup({connectPopup , setConnectPopup}) {
                     <div className="buttom-group">
                         <button onClick={connectWallet}>Connect Wallet</button>
                     </div>
-                    <div className="buttom-group">
-                        <Link to={'/login'}>
-                            <button>Sign-In</button>
-                        </Link>
-                        <Link to={'/register'}>
-                            <button>Sign-Up</button>
-                        </Link>
-                    </div>
+                    {user === "false" &&
+                        <div className="buttom-group">
+                            <Link to={'/login'}>
+                                <button>Sign-In</button>
+                            </Link>
+                            <Link to={'/register'}>
+                                <button>Sign-Up</button>
+                            </Link>
+                        </div>
+                    }
                 </div>
             </div>
         </Modal>

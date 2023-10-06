@@ -268,7 +268,6 @@ const SimpleCard = ({
                 </div>
               </div>
             </div>
-            <ToastContainer />
           </div>
         </>
       )}

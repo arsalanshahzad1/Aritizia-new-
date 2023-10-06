@@ -175,7 +175,6 @@ const Notification = () => {
           </div>
         </div>
       </Form>
-      <ToastContainer />
     </div>
     </>
   );

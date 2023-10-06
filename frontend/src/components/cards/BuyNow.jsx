@@ -408,6 +408,7 @@ const BuyNow = ({
     console.log("Response of bid even", response);
   };
 
+
   const getFiatAmount = async () => {
 
     const signer = await getProviderOrSigner(true);
@@ -582,7 +583,7 @@ const BuyNow = ({
                     </div>
                   )
                   : (
-                    <div className="button css-pxd23z" style={{display: "flex", justifyContent:"center"}}>
+                    <div className="button css-pxd23z" style={{display: "flex", justifyContent:"center",pointerEvents:"none"}}>
                       <p>Your nft</p>
                     </div>
                   )

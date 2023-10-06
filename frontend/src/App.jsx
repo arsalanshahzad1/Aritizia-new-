@@ -1,5 +1,5 @@
 import React, { Suspense, useContext, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate ,useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import LandingPage from "./pages/landingpage/LandingPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -33,9 +33,10 @@ import ScrollToTop from "./components/shared/ScrollToTop";
 import Loader from "./components/shared/Loader";
 
 function App() {
-  const { account, checkIsWalletConnected, walletConnected } = useContext(Store)
+  const { account, checkIsWalletConnected, walletConnected, firstTimeCall } = useContext(Store)
   const [search, setSearch] = useState(false);
   // const[walletConnected,setWalletConnected]=useState(false);
+
   useEffect(() => {
     document.body.style.overflow = search ? "hidden" : "auto";
 
@@ -55,13 +56,40 @@ function App() {
   useEffect(() => {
     checkIsWalletConnected();
   }, [account])
+  useEffect(() => {
+    if (account == undefined) {
+      localStorage.setItem("data", "false")
+      localStorage.setItem("userAddress", "false")
+      localStorage.setItem("address", "false")
+      localStorage.setItem("firstTimeCall", "false")
+      window.location.reload();
+    }
+    const address = localStorage.getItem("address")
+    const userAddress = localStorage.getItem("userAddress")
+    const first = localStorage.getItem("firstTimeCall")
+
+    console.log(address?.toString()?.toLowerCase(), "falaaaaaaaa")
+    console.log(account?.toString()?.toLowerCase(), "falaaaaaaaa")
+
+    if (firstTimeCall && (account?.toString()?.toLowerCase() !== address?.toString()?.toLowerCase())) {
+      localStorage.setItem("data", "false")
+      localStorage.setItem("userAddress", "false")
+      localStorage.setItem("address", "false")
+      localStorage.setItem("firstTimeCall", "false")
+      window.location.reload();
+    }
+  }, [account])
+
+
+
+
 
   return (
     <>
       <WalletManager />
       <Router>
 
-        <ScrollToTop />
+      <LocationAwareScrollToTop />
         <GlobalProvider>
           <Suspense fallback={<Loader />}>
             <Routes>
@@ -88,12 +116,18 @@ function App() {
                 path="/search/"
                 element={<SearchPage search={search} setSearch={setSearch} />}
               />
+              <Route
+                path="/terms"
+                element={<Terms search={search} setSearch={setSearch} />}
+              />
+              <Route
+                path="/privacy-policy"
+                element={<PrivacyPolicy search={search} setSearch={setSearch} />}
+              />
 
 
 
-
-
-              <Route element={<ProtectedRoute/>}>
+              <Route element={<ProtectedRoute />}>
 
                 <Route
                   path="/profile"
@@ -132,14 +166,7 @@ function App() {
                   path="/create"
                   element={<Create search={search} setSearch={setSearch} />}
                 />
-                <Route
-                  path="/create/single"
-                  element={<Single search={search} setSearch={setSearch} />}
-                />
-                <Route
-                  path="/create/multiple"
-                  element={<Multiple search={search} setSearch={setSearch} />}
-                />
+
                 <Route
                   path="/buy"
                   element={<BuyNow search={search} setSearch={setSearch} />}
@@ -161,13 +188,17 @@ function App() {
                   element={<ChatPage search={search} setSearch={setSearch} />}
                 />
 
+
+
+              </Route>
+              <Route element={<ProtectedRoute isAuth={true} />}>
                 <Route
-                  path="/terms"
-                  element={<Terms search={search} setSearch={setSearch} />}
+                  path="/create/single"
+                  element={<Single search={search} setSearch={setSearch} />}
                 />
                 <Route
-                  path="/privacy-policy"
-                  element={<PrivacyPolicy search={search} setSearch={setSearch} />}
+                  path="/create/multiple"
+                  element={<Multiple search={search} setSearch={setSearch} />}
                 />
               </Route>
             </Routes>
@@ -175,9 +206,19 @@ function App() {
           </Suspense>
         </GlobalProvider>
       </Router>
-      <ToastContainer />
     </>
   );
 }
 
+
 export default App;
+function LocationAwareScrollToTop() {
+  const location = useLocation();
+
+  // Conditionally render the ScrollToTop component
+  if (location.pathname !== '/') {
+    return <ScrollToTop />;
+  }
+
+  return null;
+}

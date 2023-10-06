@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { BsCheck } from 'react-icons/bs'
 import {useNavigate, Link } from 'react-router-dom';
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import apis from '../service';
 
 function Login() {
@@ -74,7 +74,6 @@ function Login() {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
         </>
     )
 }

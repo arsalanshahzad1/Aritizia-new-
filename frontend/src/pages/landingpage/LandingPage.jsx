@@ -40,6 +40,7 @@ const LandingPage = ({ search, setSearch }) => {
       const response = await apis.viewAllNfts();
       if(response?.data?.data?.length > 0)
       {
+        console.log(response?.data?.data,"response?.data?.dataresponse?.data?.data")
         getListedNfts(response?.data?.data)
       }
     } catch (error) {
