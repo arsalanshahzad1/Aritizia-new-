@@ -1,10 +1,29 @@
 import { useState, useEffect } from "react";
 import apis from "../../service";
+import { useNavigate } from "react-router-dom";
+
+
 const Following = ({ data, id }) => {
   const [showOptions, setshowOptions] = useState(false);
   const [following, setFollwing] = useState([]);
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
+
+  // get user wallet address
+  const [userWalletAddress, SetUserWalletAddress] = useState("");
+  const navigate = useNavigate();
+
+  const handleUserVisit = async (id)=> {
+    const response = await apis.getUserData(id);
+    SetUserWalletAddress( response?.data?.data?.id);
+  }
+
+  useEffect(()=>{
+    if(userWalletAddress !== ""){
+        navigate(`/other-profile?add=${userWalletAddress}`)
+    }
+  },[userWalletAddress])
+
 
   const followOther = async (id) => {
     const response = await apis.postFollowAndUnfollow({
@@ -24,12 +43,26 @@ const Following = ({ data, id }) => {
     else {
       setFollwing([]);
     }
+    setLoader(false)
   };
 
 
   useEffect(() => {
     getFollowingList(id);
   }, [])
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
+  
   return (
     <>
       {following != "" ? (
@@ -38,7 +71,7 @@ const Following = ({ data, id }) => {
             return (
               <div className="Follow-row" key={i}>
                 <div className="left">
-                  <div className="img-holder">
+                  <div className="img-holder" onClick={()=> handleUserVisit(data.user_id)}>
                     {data?.profile_image == null ?
                       <img src='/assets/images/user-none.png' alt="" srcset="" />
                       :

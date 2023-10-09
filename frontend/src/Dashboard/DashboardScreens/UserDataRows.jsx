@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import adminApis from "../../service/adminIndex";
 import apis from "../../service/adminIndex";
-import { getProviderOrSigner } from "../../methods/walletManager";
+// import { getProviderOrSigner } from "../../methods/walletManager";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
@@ -26,7 +26,8 @@ function UserDataRows({
   const navigate = useNavigate();
 
   const NavigateToUser = (id, address) => {
-    navigate(`/dashboard/user?id=${id}&add=${address}`);
+    navigate(`/dashboard/user?id=${id}&add=${address}`); 
+    // navigate(`/dashboard/other-profile?add=${address}`);  
   };
   const unbanUser = async (id, wallet_address) => {
     console.log("unbanUser");
@@ -47,7 +48,11 @@ function UserDataRows({
   };
 
   const unbanUserFromSC = async (user_address) => {
-    const signer = await getProviderOrSigner(true);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // Set signer
+  const signer = provider.getSigner()
+
     console.log("QQ Three");
 
     const marketplaceContract = new Contract(
@@ -87,7 +92,9 @@ function UserDataRows({
   };
 
   const banUserFromSC = async (user_address) => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
     console.log("QQ Three");
 
     const marketplaceContract = new Contract(
@@ -109,6 +116,12 @@ function UserDataRows({
   };
 
   useEffect(() => {}, [isOpen]);
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   return (
     <>
@@ -172,7 +185,6 @@ function UserDataRows({
                             Unblock
                           </li>
                         )}
-                        {/* <li>Delete</li> */}
                       </ul>
                     </div>
                   ) : null}

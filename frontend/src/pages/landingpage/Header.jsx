@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Notification from "./Notification";
 import laravelEcho from "../../socket/index";
@@ -9,11 +8,16 @@ import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import { getAddress } from "../../methods/methods";
+import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from 'react-icons/io'
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
+import UnAuthHeader from "../Headers/UnAuthHeader";
+import EmailHeader from "../Headers/EmailHeader";
+import { Store } from "../../Context/Store";
+
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -30,22 +34,27 @@ const Header = ({ search, setSearch }) => {
   const [loader, setloader] = useState(false);
   const location = useLocation();
   const path = location.pathname;
-  const [countLength, setCountLength] = useState(''); 
+  const [countLength, setCountLength] = useState('');
+  const data = JSON.parse(localStorage.getItem("data"));
+  const [userData , setUserData] = useState(data)
 
-  const userData = JSON.parse(localStorage.getItem("data"));
-
+  // const userData = JSON.parse(localStorage.getItem("data"));
   const [walletConnected, setWalletConnected] = useState(false);
-
   const web3ModalRef = useRef();
-
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
+
+  const {account,checkIsWalletConnected,connectWallet}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
-      console.log(data , 'data');
-      
+      console.log(data, 'data');
+      // Handle the received event data
       setMessageArrive(true);
     });
 
@@ -57,6 +66,7 @@ const Header = ({ search, setSearch }) => {
   useEffect(() => {
     const channel = laravelEcho.channel("notification-channel-" + user_id);
     channel.listen(".notification-event", (data) => {
+      // Handle the received event data
       setNotificationArrive(true);
     });
 
@@ -68,21 +78,26 @@ const Header = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  useEffect(() => {
-    setInterval(getAddress, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(getAddress, 3000);
+  // }, []);
 
   function handleDisconnect() {
+    // Handle wallet disconnection here
     console.log(
       "Wallet disconnected. Updating state and clearing local storage..."
     );
-  
+    // For example, update state using React useState hook:
+    // setState(null);
+
+    // Clear localStorage:
     localStorage.clear();
   }
 
   useEffect(() => {
     window.addEventListener("ethereum#disconnect", handleDisconnect);
 
+    // Clean up the event listener when the component unmounts
     return () => {
       window.removeEventListener("ethereum#disconnect", handleDisconnect);
     };
@@ -93,29 +108,26 @@ const Header = ({ search, setSearch }) => {
       if (window.scrollY > 100) {
         setScrolled(true);
         setToggleUserDropdown(false);
-      
       } else {
         setScrolled(false);
         setToggleUserDropdown(false);
-       
       }
     };
 
     window.addEventListener("scroll", handleScroll);
 
+    // Clean up the event listener
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [messageArrive, notificationArrive]);
-
- 
 
   const getChatnotification = async (name, count) => {
     if (name == "message") {
       setChatNotificationRes("");
       setloader(true);
     }
-    const response = await apis.getChatNotification(user_id , count);
+    const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
       setChatNotificationRes((prevState) => [
         ...prevState,
@@ -148,8 +160,21 @@ const Header = ({ search, setSearch }) => {
       setNotificationRes([]);
     }
   };
+
+  useEffect(() =>{
+    // setUserDatalocalStorage.getItem("data")
+  } ,[data])
+const accountAddress = localStorage.getItem("userAddress")
+
+console.log(typeof accountAddress,"accountAddressaccountAddress")
+
+console.log(typeof data,"datadatadatadatadata")
   return (
     <>
+    { 
+
+    data !== "false" && accountAddress !== "false" ?
+    <> 
       <header id={`${scrolled ? "active" : ""}`}>
         <div className="container">
           <div className="row">
@@ -203,16 +228,14 @@ const Header = ({ search, setSearch }) => {
                 {path === "/" ? (
                   <>
                     <FiSearch
-                      className={`search ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`search ${scrolled ? "black-color" : "white-color"
+                        }`}
                       onClick={() => setSearch(true)}
                     />
 
                     <span
-                      className={`icon-for-header ${
-                        scrolled ? "black-svgs" : ""
-                      }`}
+                      className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                        }`}
                     >
                       <svg
                         width="1"
@@ -229,12 +252,12 @@ const Header = ({ search, setSearch }) => {
                         onClick={() => {
                           setshowMessage(!showMessage),
                             setShowNotification(false),
-                            getChatnotification("message", 0);
+                            getChatnotification("message", user_id);
                           setMessageArrive(false);
                         }}
-                        className={`icon-for-header ${
-                          scrolled ? "black-svgs" : ""
-                        }`}
+                        className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                          }`}
+                        style={{ zIndex: `${showMessage ? "21" : "10"}` }}
                       >
                         <svg
                           width="36"
@@ -259,7 +282,7 @@ const Header = ({ search, setSearch }) => {
                       </span>
                     )}
                     {showMessage && (
-                      <div className="notification-card" style={{ left: "2%" }}>
+                      <div className="notification-card" style={{ left: "16%" }}>
                         <>
                           {loader ? (
                             <section className="sec-loading">
@@ -270,10 +293,10 @@ const Header = ({ search, setSearch }) => {
                               {chatNotificationRes?.length > 0 ? (
                                 <Notification data={chatNotificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
-                              chatNotificationRes.length > 0 ? (
+                                chatNotificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -296,12 +319,11 @@ const Header = ({ search, setSearch }) => {
                         onClick={() => {
                           setShowNotification(!showNotification);
                           setshowMessage(false);
-                          viewNotification("notification", 0);
+                          viewNotification("notification", user_id);
                           setNotificationArrive(false);
                         }}
-                        className={`icon-for-header ${
-                          scrolled ? "black-svgs" : ""
-                        }`}
+                        className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                          }`}
                       >
                         <svg
                           width="24"
@@ -328,7 +350,7 @@ const Header = ({ search, setSearch }) => {
                     {showNotification && (
                       <div
                         className="notification-card"
-                        style={{ left: "11%" }}
+                        style={{ left: "22%" }}
                       >
                         <>
                           {loader ? (
@@ -340,10 +362,10 @@ const Header = ({ search, setSearch }) => {
                               {notificationRes?.length > 0 ? (
                                 <UserNotification data={notificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {notificationRes.length < countLength &&
-                              notificationRes.length > 0 ? (
+                                notificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -363,14 +385,13 @@ const Header = ({ search, setSearch }) => {
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                       style={{
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
                     >
-                      {user ? "Connected" : "Connect Wallet"}
+                      {accountAddress !== "false" ? "Connected" : "Connect Wallet"}
                     </button>
                   </>
                 ) : (
@@ -429,12 +450,12 @@ const Header = ({ search, setSearch }) => {
                           ) : (
                             <>
                               {chatNotificationRes?.length > 0 ? (
-                                <Notification data={chatNotificationRes} />
+                                ""
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
-                              chatNotificationRes.length > 0 ? (
+                                chatNotificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -496,10 +517,10 @@ const Header = ({ search, setSearch }) => {
                               {notificationRes?.length > 0 ? (
                                 <UserNotification data={notificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {notificationRes.length < countLength &&
-                              notificationRes.length > 0 ? (
+                                notificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -519,9 +540,8 @@ const Header = ({ search, setSearch }) => {
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                       style={{
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
@@ -551,9 +571,8 @@ const Header = ({ search, setSearch }) => {
                     )}
                     {toggleUserDropdown && (
                       <div
-                        className={`user-login-dropdown ${
-                          scrolled ? "active" : ""
-                        }`}
+                        className={`user-login-dropdown ${scrolled ? "active" : ""
+                          }`}
                       >
                         <ul>
                           <li>
@@ -565,15 +584,16 @@ const Header = ({ search, setSearch }) => {
                           <li>
                             <Link to={"/create"}>Create</Link>
                           </li>
+                         
                           <li
-                            className={`setting ${
-                              toggleSettingDropdown ? "seeting-active" : ""
-                            }`}
+                            className={`setting ${toggleSettingDropdown ? "seeting-active" : ""
+                              }`}
                             onClick={() =>
                               setToggleSettingDropdown(!toggleSettingDropdown)
                             }
                           >
-                            Setting +
+
+                            Settings {toggleSettingDropdown ? <IoIosArrowDropupCircle /> : <IoIosArrowDropdownCircle />}
                             {toggleSettingDropdown ? (
                               <div>
                                 <ul>
@@ -622,6 +642,7 @@ const Header = ({ search, setSearch }) => {
                           <li>
                             <Link to={"/subscription"}>Subscription</Link>
                           </li>
+                       
                         </ul>
                       </div>
                     )}
@@ -632,7 +653,38 @@ const Header = ({ search, setSearch }) => {
           </div>
         </div>
       </header>
+      <div
+        style={
+          (showNotification || showMessage) // Check if either is true
+            ? {
+              width: "100vw",
+              height: "100vh",
+              position: "fixed",
+              top: "0",
+              left: "0",
+              backgroundColor: "transparent",
+              zIndex: "5"
+            }
+            : {
+              display: "none"
+            } // Null style when neither is true
+        }
+        onClick={() => {
+          setShowNotification(false);
+          setshowMessage(false);
+        }}
+      ></div>
+     </>
+      : data !== false && accountAddress == "false" ? 
+    <> 
+    <EmailHeader search={search} setSearch={setSearch}/>
     </>
+      :
+      <> 
+      <UnAuthHeader search={search} setSearch={setSearch}/>
+      </>
+      }
+       </>
   );
 };
 

@@ -3,6 +3,8 @@ import DashboardToggle from '../SVG/DashboardToggle'
 import { useContext } from 'react'
 import { GlobalContext } from '../../Context/GlobalContext'
 import { NavLink, useLocation } from 'react-router-dom'
+import { IoCloseSharp } from "react-icons/io5"
+
 function Sidebar() {
     const location = useLocation();
     console.log(location.pathname);
@@ -11,9 +13,16 @@ function Sidebar() {
     return (
         <div className={`Sidebar ${sidebarCollapsed && 'sidebar-collapsed'}`}>
             <div className='sidebar-inner'>
-                <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
-                    <DashboardToggle />
-                </div>
+               { 
+                sidebarCollapsed ? 
+                    <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
+                        <DashboardToggle />
+                    </div> : 
+                    <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
+                       <IoCloseSharp fontSize="40px"/>
+                    </div>
+                    
+                }
                 <div className={`sidebar-nav}`}>
                     <NavLink to="/dashboard">
                         <div onClick={() => setDashboardActiveTab("dashboard")} className={`sidebar-nav-item ${location.pathname === '/dashboard' ? "active-sidebar-item" : ""}`}>
@@ -68,7 +77,7 @@ function Sidebar() {
                             }
                         </div>
                     </NavLink>
-                    <NavLink to='/dashboard/artwork-management'>
+                    {/* <NavLink to='/dashboard/artwork-management'>
                         <div onClick={() => setDashboardActiveTab("artwork-management")} className={`sidebar-nav-item ${location.pathname === '/dashboard/artwork-management' ? "active-sidebar-item" : ""}`}>
                             <div className='svg-div'>
                                 <svg width="34" height="38" viewBox="0 0 34 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,7 +91,7 @@ function Sidebar() {
                                 </div>
                             }
                         </div>
-                    </NavLink>
+                    </NavLink> */}
                     <NavLink to='/dashboard/analytic-tool'>
                         <div onClick={() => setDashboardActiveTab("analytic-tool")} className={`sidebar-nav-item ${location.pathname === '/dashboard/analytic-tool' ? "active-sidebar-item" : ""}`}>
                             <div className='svg-div'>

@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsCheck } from "react-icons/bs";
 import { toast } from "react-toastify";
+import Loader from "../components/shared/Loader";
 
 const DateDisplay = ({ datetime }) => {
     const parsedDate = new Date(datetime);
@@ -25,14 +26,23 @@ const Subscription = ({ search, setSearch }) => {
     const [planName, setPlanName] = useState("");
     const [index, setIndex] = useState("");
     const [userSebData , setUserSebData] = useState('')
+
     const userData = JSON.parse(localStorage.getItem("data"));
     const userId = userData?.id;
+
+
     const viewSubscriptions = async (id) => {
-        const response = await apis.viewSubscriptions(id);
-        if (response.status) {
-            setSubscriptionData(response?.data?.data);
+        try {
+            const response = await apis.viewSubscriptions(id);
+            if (response.status) {
+                setSubscriptionData(response?.data?.data);
+            }
+            console.log(response);
+            setLoader(false)
+            
+        } catch (error) {
+            setLoader(false)
         }
-        console.log(response);
     };
 
     const showResponseMessage = (message) => {
@@ -54,14 +64,17 @@ const Subscription = ({ search, setSearch }) => {
         }
     }
     const cancelSubn = async () => {
+        setLoader(true)
         const response = await apis.cancelSubscription(userSebData)
         if (response.status) {
             console.log(response);
             viewSubscriptions(userId)
             setCancleSubscription(false)
+            setLoader(false)
         } else {
             console.log(response);
             setCancleSubscription(false)
+            setLoader(false)
         }
     }
 
@@ -70,6 +83,7 @@ const Subscription = ({ search, setSearch }) => {
         setreneval(!reneval)
     }
     const cancelSubscription = (id, subId) =>{
+        
         setUserSebData({ user_id: id, subscription_id: subId })
         setCancleSubscription(!cancleSubscription)
         autoRecursionOnoff(userSebData)
@@ -78,8 +92,23 @@ const Subscription = ({ search, setSearch }) => {
     useEffect(() => {
         viewSubscriptions(userId);
     }, []);
+
+    const [loader, setLoader] = useState(true)
+
+    // const [scroll, setScroll] = useState(true)
+
+    // useEffect(()=>{
+    //   if(scroll){
+    //     window.scrollTo(0,0)
+    //     setScroll(false)
+    //   }
+    // },[])
+
+    
     return (
         <>
+
+        {loader && <Loader />}
             <Header search={search} setSearch={setSearch} />
             <div className="subscription">
                 <PageTopSection title={"Subscription"} />
@@ -90,7 +119,7 @@ const Subscription = ({ search, setSearch }) => {
                                 if (res?.user_subs?.length != 0) {
                                     return (
                                         <div className="subscription-purchase-details" key={index}>
-                                            {res?.user_subs?.auto_recursion ?
+                                            {res?.user_subs?.auto_recursion && !res?.user_subs?.is_cancel ?
                                                 <div className="left">
                                                     Renewal date : <DateDisplay datetime={res?.user_subs?.next_renewal_date} />
                                                 </div>
@@ -107,7 +136,6 @@ const Subscription = ({ search, setSearch }) => {
                                                     <div className="title" style={{ display: 'flex', justifyContent: 'space-between', gap: '5px' }}>
                                                         Auto renewal
                                                         <div onClick={() => comformation(userId, res?.user_subs?.subscription_id)} className="seven-line-nft-cardd" style={{ display: 'flex', alignItems: 'center', padding: '0px' }}>
-                                                        {/* <div onClick={() => autoRecursionOnoff(userId, res?.user_subs?.subscription_id)} className="seven-line-nft-cardd" style={{ display: 'flex', alignItems: 'center', padding: '0px' }}> */}
                                                             <span>
                                                                 <BsCheck className={`${res?.user_subs?.auto_recursion ? "red" : "transparent"}`} />
                                                             </span>
@@ -115,7 +143,7 @@ const Subscription = ({ search, setSearch }) => {
                                                     </div>
                                                 </div>
                                                 <div >
-                                                    <button onClick={() =>cancelSubscription(userId, res?.user_subs?.subscription_id)}>Cancel Subscription</button>
+                                                    <button onClick={() => cancelSubscription(userId, res?.user_subs?.subscription_id)}>Cancel Subscription</button>
                                                 </div>
                                                 </>
                                             }
@@ -162,6 +190,7 @@ const Subscription = ({ search, setSearch }) => {
                         </div>
                     </div>
                 </Modal>
+                {console.log("arsalan :", JSON.parse(localStorage.getItem('data')).wallet_address)}
                 <Modal
                     show={reneval}
                     onHide={() => setreneval(false)}

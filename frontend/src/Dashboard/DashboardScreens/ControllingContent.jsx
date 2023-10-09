@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useContext } from "react";
 import AdminHeader from "../../pages/landingpage/AdminHeader";
 import { useState } from "react";
 import UserDataRows from "./UserDataRows";
@@ -18,13 +18,14 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
 import DashboardCard2 from "./DashboardCard2";
 import apis from "../../service";
+import Loader from "../../components/shared/Loader";
 
 function ControllingContent({ search, setSearch }) {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
@@ -34,6 +35,12 @@ function ControllingContent({ search, setSearch }) {
   const [filter, setFilter] = useState("Yearly");
   const [showfilter, setShowFilter] = useState(false);
   const [nftList, setNftList] = useState([]);
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const viewNftList = async (count, filter, searchInput) => {
     setListCount(count * 10 - 10);
@@ -58,7 +65,9 @@ function ControllingContent({ search, setSearch }) {
     // let emptyList = [];
     // setNftList(emptyList);
 
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -89,9 +98,11 @@ function ControllingContent({ search, setSearch }) {
 
       const structData = await marketplaceContract._idToNFT(id);
 
-      let collectionId = structData.collectionId.toString();
+
+      let collectionId = structData?.collectionId?.toString();
 
       // console.log("YESS", id);
+
 
       const response = await apis.getNFTCollectionImage(collectionId);
       console.log(response, "responses");
@@ -100,6 +111,7 @@ function ControllingContent({ search, setSearch }) {
       // console.log(collectionImages, "trrrr");
 
       const metaData = await nftContract.tokenURI(id);
+
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -118,7 +130,7 @@ function ControllingContent({ search, setSearch }) {
         .then((response) => {
           const meta = response.data;
           let data = JSON.stringify(meta);
-          console.log(data, "dasdasd");
+          console.log(data, 'dasdasd');
 
           data = data.slice(2, -5);
           data = data.replace(/\\/g, "");
@@ -135,7 +147,7 @@ function ControllingContent({ search, setSearch }) {
           const nftData = {
             id: id, //
             title: title,
-            is_unapproved:is_unapproved,
+            is_unapproved: is_unapproved,
             image: image,
             price: price,
             crypto: crypto,
@@ -144,11 +156,11 @@ function ControllingContent({ search, setSearch }) {
             collection: collection,
             collectionImages: collectionImages,
           };
-          // console.log(nftData);
+          console.log(nftData,"new data");
           // myNFTs.push(nftData);
           if (!nftList.some((item) => item.id === nftData.id)) {
             setNftList((prev) => [...prev, nftData]);
-            console.log(nftData , 'nftList');
+            console.log(nftData, 'nftList');
           }
 
           // } else if (listingType === 1) {
@@ -219,7 +231,10 @@ function ControllingContent({ search, setSearch }) {
   const approveNFT = async (decision, id) => {
     bulkCall = true;
     console.log("approveNFT", id);
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -265,17 +280,17 @@ function ControllingContent({ search, setSearch }) {
   const deleteItems = (ids) => {
     console.log(ids, "ids");
     const updatedData = nftList.map(item => {
-        if (ids.includes(item.id)) {
-            return {
-                ...item,
-                is_unapproved: true // Assuming 'state' is the property to be updated
-            };
-        }
-        return item;
+      if (ids.includes(item.id)) {
+        return {
+          ...item,
+          is_unapproved: true // Assuming 'state' is the property to be updated
+        };
+      }
+      return item;
     });
     setNftList(updatedData);
     setSelectedNTFIds([]);
-};
+  };
 
   const approveEvent = async (marketplaceContract) => {
     let response = await marketplaceContract.on(
@@ -300,11 +315,14 @@ function ControllingContent({ search, setSearch }) {
     setIsVisible(true);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
+
+  const [loader, setLoader] = useState(true)
 
   return (
     <div className="user-management">
       <AdminHeader search={search} setSearch={setSearch} />
+      {/* {loader && <Loader/>} */}
       <div className="user-management-after-header">
         <div className="dashboard-front-section-2">
           <div className="dashboard-front-section-2-row-1">
@@ -388,13 +406,15 @@ function ControllingContent({ search, setSearch }) {
           className="table-for-user-management"
           style={{ top: selectedNTFIds.length > 0 ? "160px" : "120px" }}
         >
+
+          {console.log(list, "list data")}
           {list?.data?.length > 0 ? (
             <>
               <div className="row">
                 <div className="col-lg-11 mx-auto">
                   <div className="row">
                     {nftList.map((item, index) => (
-                    
+
                       <DashboardCard2
                         onOpen={onOpen}
                         index={index}
@@ -427,9 +447,8 @@ function ControllingContent({ search, setSearch }) {
                 style={{ justifyContent: "center" }}
               >
                 <button
-                  className={`controling-Nft-Load-More ${
-                    list?.pagination?.remaining == 0 ? "disable" : ""
-                  }`}
+                  className={`controling-Nft-Load-More ${list?.pagination?.remaining == 0 ? "disable" : ""
+                    }`}
                   onClick={() => {
                     viewNftList(
                       +list?.pagination?.page + 1,
@@ -443,11 +462,12 @@ function ControllingContent({ search, setSearch }) {
                 </button>
               </div>
             </>
-          ) : (
-            <div className="empty-messahe">
-              <h2>No data avaliable</h2>
-            </div>
-          )}
+          )
+            : (
+              <div className="empty-messahe">
+                <h2>No data avaliable</h2>
+              </div>
+            )}
         </div>
       </div>
     </div>

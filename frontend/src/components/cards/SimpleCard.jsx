@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 import "./Cards.css";
@@ -15,12 +15,11 @@ import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import {
   FacebookShareButton,
   InstapaperShareButton,
+  LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+import { Store } from "../../Context/Store";
+// import { connectWallet, getProviderOrSigner,} from "../../methods/walletManager";
 
 const SimpleCard = ({
   onOpen,
@@ -34,6 +33,8 @@ const SimpleCard = ({
   description,
   collection,
   collectionImages,
+  // userAddress,
+  sellerWallet
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
@@ -63,6 +64,12 @@ const SimpleCard = ({
   const value = price;
   const [discountedValue, setdiscountedValue] = useState(value);
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   useEffect(() => {
     if (discountPercentage < 0 || discountPercentage > 100) {
       alert("Discount percentage should be between 1 - 100");
@@ -73,7 +80,9 @@ const SimpleCard = ({
   }, [discountPercentage]);
 
   const giveDiscount = async () => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -146,12 +155,12 @@ const SimpleCard = ({
               </div>
               {showLinks && (
                 <div className="social-media">
-                  <InstapaperShareButton
+                  <LinkedinShareButton
                     url="http://artizia.pluton.ltd/profile"
                     title="Ali Khan"
                   >
-                    <p>Instagram</p>
-                  </InstapaperShareButton>
+                    <p>Linkedin</p>
+                  </LinkedinShareButton>
                   <TwitterShareButton
                     url="http://artizia.pluton.ltd/profile"
                     title="Ali Khan"
@@ -182,7 +191,7 @@ const SimpleCard = ({
                 <div className="line-1">
                   <div>Price</div>
                   <div>
-                    <svg
+                    {/* <svg
                       width="20"
                       height="19"
                       viewBox="0 0 24 23"
@@ -197,9 +206,12 @@ const SimpleCard = ({
                         d="M17.4988 9.86401C17.7274 8.33318 16.5595 7.5084 14.9626 6.96168L15.4824 4.88724L14.23 4.57482L13.7258 6.59303L12.6988 6.36496L13.2061 4.33427L11.9536 4.02185L11.437 6.09629C11.1614 6.0338 10.8922 5.97132 10.6292 5.90571L8.88512 5.47146L8.55008 6.81796C8.55008 6.81796 9.48942 7.03353 9.46751 7.04603C9.64273 7.06644 9.80282 7.15498 9.91302 7.29243C10.0232 7.42988 10.0747 7.60515 10.0562 7.7802L9.46437 10.1514L8.63776 13.4599C8.62129 13.519 8.59305 13.5742 8.55472 13.6221C8.5164 13.6701 8.46877 13.7098 8.4147 13.739C8.36062 13.7682 8.3012 13.7861 8.24 13.7919C8.1788 13.7976 8.11707 13.7909 8.0585 13.7723C8.0585 13.7911 7.13794 13.5443 7.13794 13.5443L6.51172 14.9907L8.15869 15.4C8.47181 15.475 8.763 15.5562 9.05733 15.6312L8.53443 17.7275L9.78688 18.0399L10.3066 15.9655C10.6511 16.0592 10.9861 16.1436 11.3117 16.2248L10.7951 18.2898L12.0476 18.6023L12.5736 16.5091C14.7278 16.9152 16.3529 16.7528 17.0323 14.8064C17.5834 13.2443 17.0073 12.3352 15.8707 11.7448C16.6973 11.5542 17.3204 11.0106 17.4863 9.89213L17.4988 9.86401ZM14.6088 13.9067C14.2174 15.4687 11.5748 14.6283 10.7168 14.4128L11.4088 11.6354C12.2667 11.8478 15.0159 12.2602 14.6088 13.9067ZM15.0002 9.84527C14.6433 11.273 12.4421 10.5482 11.7282 10.3701L12.3544 7.84893C13.0714 8.02076 15.3728 8.35192 15.0002 9.83902V9.84527Z"
                         fill="white"
                       />
-                    </svg>
+                    </svg> */}
 
-                    {price}
+                    <div className="right" style={{display:"flex",alignItems:"center",margin:"5px 0px"}}>
+                      <img src="/assets/images/bitCoin.png" alt="" style={{marginRight:"5px"}}/>
+                      {price}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -262,10 +274,10 @@ const SimpleCard = ({
                 </div>
               </div>
             </div>
-            <ToastContainer />
           </div>
         </>
       )}
+      {console.log(sellerWallet,"sellerWaller")}
 
       <ProfileDrawer
         isVisible={isVisible}
@@ -279,6 +291,7 @@ const SimpleCard = ({
         description={description}
         collection={collection}
         userAddress={userAddress}
+        sellerWallet={sellerWallet}
       />
 
     </>

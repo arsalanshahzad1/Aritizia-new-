@@ -1,202 +1,122 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,useContext } from "react";
 import CountUp from "react-countup";
 import Header from "./Header";
 import Footer from "./Footer";
 import BuyNow from "../../components/cards/BuyNow";
-import Table from "react-bootstrap/Table";
 import NewItemCard from "../../components/cards/NewItemCard";
 import TableData from "../../components/cards/TableData";
 import Search from "../../components/shared/Search";
 import SliderImage from "../../components/shared/SliderImage";
-import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import Web3Modal, { local } from "web3modal";
+import {  Contract, ethers } from "ethers";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
-import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
-import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../../service";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import { getAddress } from "../../methods/methods";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
 import { Link } from "react-router-dom";
-// import MetaDecorator from "../../Meta/MetaDecorator";
+import Loader from "../../components/shared/Loader";
+import { CiLight } from "react-icons/ci";
+import { Store } from "../../Context/Store";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
-
+  const [loader, setLoader] = useState(true)
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  // const [userAddress, setUserAddress] = useState("0x000000....");
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [discountPrice, setDiscountPrice] = useState(0);
-
-  const web3ModalRef = useRef();
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
+  const {getProviderMarketContrat, getProviderNFTContrat, account,checkIsWalletConnected}=useContext(Store)
 
+  
+  const viewAllNfts = async () => {
+    try {
+      const response = await apis.viewAllNfts();
+      if(response?.data?.data?.length > 0)
+      {
+        console.log(response?.data?.data,"response?.data?.dataresponse?.data?.data")
+        getListedNfts(response?.data?.data)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await viewAllNfts();
+    };
+    fetchData();
+  }, []);
 
-  // CALL THIS FUNCTION RECURSIVELY TO CHECK LIQUIDITY AND SEND NOTIF TO ADMIN 
- 
-  async function getBalance() {
-    const provider = await getProviderOrSigner();
-
-    // Create a provider using any Ethereum node URL
-    provider
-      .getBalance(MARKETPLACE_CONTRACT_ADDRESS.address)
-      .then((balanceWei) => {
-        var balanceEther = ethers.utils.formatEther(balanceWei);
-        console.log(`Balance ${balanceEther} ETH`);
-
-        if(+balanceEther < 10){
-          // hit api for admin
-          console.log("ADMIN KI API HIT KAR LOW LQUIDITY KI");
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }
-
-  async function getProvider() {
-    // Create a provider using any Ethereum node URL
-    const provider = new ethers.providers.JsonRpcProvider(
-      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"   // Eth mainnet
-      // "http://localhost:8545"
-      "https://rpc.ankr.com/eth_goerli" //Goerli
-      // "https://rpc.sepolia.org"   // Sepolia
-    );
-
-    return provider;
-  }
-
-  const getListedNfts = async () => {
-    // const provider = await getProvider();
-    const provider = await getProviderOrSigner();
-    // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    let addr = await getAddress();
-    
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      provider
-    );
-
-    console.log("nftContract", nftContract);
-    console.log("marketplaceContract", marketplaceContract);
+  
+  const getListedNfts = async (allNftIds) => {
 
     let listingType;
-    // console.log("Active Method", listingType);
-    console.log("time", Date.now());
 
-    // let dollarPriceOfETH = 1831;
-
-    // UNCOMMENT THIS
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-    console.log("dollarPriceOfETH", dollarPriceOfETH);
-
-    let demo = await marketplaceContract.owner();
-    console.log("owner of MP", demo);
-
-    let mintedTokens = await marketplaceContract.getListedNfts();
-    console.log("mintedTokens", mintedTokens);
+    let mintedTokens = await getProviderMarketContrat().getListedNfts();
+    console.log("mintedTokens",mintedTokens)
     let myNFTs = [];
     let myAuctions = [];
 
-    for (let i = 0; i < mintedTokens.length; i++) {
+    
+
+    for (let i = 0; i < allNftIds?.length; i++) {
       let id;
-      id = +mintedTokens[i].tokenId.toString();
-      console.log("YESS", id);
+      id = allNftIds?.[i];
 
-      let firstOwner = mintedTokens[i].firstOwner;
-      if (firstOwner != "0x0000000000000000000000000000000000000000") {
-        console.log("idd", id);
-        const metaData = await nftContract.tokenURI(id);
+      
+      let firstOwner = mintedTokens?.[i]?.firstOwner;
+      
+      if (firstOwner != "0x0000000000000000000000000000000000000000" && mintedTokens?.[i]?.listed) {
+        console.log("firstOwner",id)
 
-        const structData = await marketplaceContract._idToNFT(id);
+        const metaData = await getProviderNFTContrat().tokenURI(id);
+        console.log(metaData,"metaDataID")
+       const structData = await getProviderMarketContrat()._idToNFT(id);
+        let collectionId = structData?.collectionId?.toString();
 
-        console.log("metaData", metaData);
-        console.log("structData", structData);
-        console.log("firstownerr", mintedTokens[i].firstOwner);
-        let collectionId = structData.collectionId.toString();
+      
 
-        const fanNftData = await marketplaceContract._idToNFT2(id);
+        let seller = structData?.seller;
 
-        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        
+        let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
-        setDiscountPrice(discountOnNFT);
-        let seller = structData.seller;
+        let highestBid = ethers.utils.formatEther(auctionData?.highestBid?.toString());
 
-        console.log("discountOnNFT", discountOnNFT);
-        console.log("discountOnNFT", typeof discountOnNFT);
-
-        let auctionData = await marketplaceContract._idToAuction(id);
-        console.log("111");
-
-        let highestBid = ethers.utils.formatEther(
-          auctionData.highestBid.toString()
-        );
-        console.log("2222");
-
-        listingType = structData.listingType;
-        let listed = structData.listed;
-        console.log("3333");
-
-        console.log("collectionId", collectionId);
+        listingType = structData?.listingType;
+     
         const response = await apis.getNFTCollectionImage(collectionId);
-        console.log(response.data, "saad landing");
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-        console.log(
-          response?.data?.data?.media?.[0]?.original_url,
-          "collectionImagesss"
-        );
-
-        const price = ethers.utils.formatEther(structData.price.toString());
-        console.log("priceee", price);
-
+    
+        const price = ethers.utils.formatEther(structData?.price?.toString());
+       
         axios
           .get(metaData)
           .then((response) => {
-            const meta = response.data;
-            console.log("first");
+            const meta = response?.data;
             let data = JSON.stringify(meta);
 
-            data = data.slice(2, -5);
-            data = data.replace(/\\/g, "");
+            data = data?.slice(2, -5);
+            data = data?.replace(/\\/g, "");
             data = JSON.parse(data);
-
-            console.log("Dataa", data);
-            // Extracting values using dot notation
-            // const price = data.price;
-            // listingType = data.listingType;
-            const crypto = data.crypto;
-            const title = data.title;
-            const image = data.image;
-            const royalty = data.royalty;
-            const description = data.description;
-            const collection = data.collection;
-            // console.log("data.listingType", typeof data.listingType);
-
-            console.log("listingType", listingType);
-
+            const crypto = data?.crypto;
+            const title = data?.title;
+            const image = data?.image;
+            const royalty = data?.royalty;
+            const description = data?.description;
+            const collection = data?.collection;
+        
             if (listingType === 0) {
               const nftData = {
                 id: id, //
@@ -210,33 +130,28 @@ const LandingPage = ({ search, setSearch }) => {
                 collectionImages: collectionImages,
                 seller: seller,
               };
-
+              console.log("aaaa",nftData);
               myNFTs.push(nftData);
-              // setNftListFP(myNFTs);
               setNftListFP((prev) => [...prev, nftData]);
             } else if (listingType === 1) {
               const nftData = {
-                id: id, //
+                id: id, 
                 title: title,
                 image: image,
                 price: price,
                 paymentMethod: crypto,
                 basePrice: price,
-                startTime: auctionData.startTime.toString(),
-                endTime: auctionData.endTime.toString(),
+                startTime: auctionData?.startTime?.toString(),
+                endTime: auctionData?.endTime?.toString(),
                 highestBid: highestBid,
-                highestBidder: auctionData.highestBidder.toString(),
-                // isLive: auctionData.isLive.toString(),
+                highestBidder: auctionData?.highestBidder?.toString(),
                 collectionImages: collectionImages,
-                seller: auctionData.seller.toString(),
+                seller: auctionData?.seller?.toString(),
               };
-
               myAuctions.push(nftData);
-              // setNftListAuction(myAuctions);
               setNftListAuction((prev) => [...prev, nftData]);
             }
           })
-
           .catch((error) => {
             console.error("Error fetching metadata:", error);
           });
@@ -244,15 +159,16 @@ const LandingPage = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {
-    connectWallet();
-    getProviderOrSigner();
-    getListedNfts();
-  }, [userAddress]);
+ 
+  // useEffect(() => {
+  //   connectWallet();
+  //   getProviderOrSigner();
+  //   // getListedNfts();
+  // }, [userAddress]);
 
-  useEffect(() => {
-    getAddress();
-  }, []);
+  // useEffect(() => {
+  //   getAddress();
+  // }, []);
 
   useEffect(() => {
     const options = {
@@ -273,24 +189,36 @@ const LandingPage = ({ search, setSearch }) => {
     };
   }, []);
 
-  
-  const [counterData, setCounterData] = useState("");
-  const viewLandingPageDetail = async () => {
-    try {
-      const response = await apis.viewLandingPageDetail();
-      console.log(response?.data?.data, "ccccccc");
-      setCounterData(response?.data?.data);
-    } catch (error) {}
-  };
+useEffect(()=>{
+  checkIsWalletConnected()
+},[account])
 
-  useEffect(() => {
-    viewLandingPageDetail();
-  }, []);
+
+const [counterData , setCounterData] = useState('')
+  const viewLandingPageDetail = async () =>{
+    try {
+      const response = await apis.viewLandingPageDetail()
+   if(response?.data)
+   {
+     setCounterData(response?.data?.data)
+   }
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+    }
+    
+  }
+
+  useEffect(() =>{
+    viewLandingPageDetail()
+  }, [])
+
+ 
 
   return (
     <>
+      {loader && <Loader />}
       <Header
-        connectWallet={connectWallet}
         search={search}
         setSearch={setSearch}
       />
@@ -315,46 +243,20 @@ const LandingPage = ({ search, setSearch }) => {
                     <div className="row">
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
-                          {/* <h3>{isVisible ? <CountUp end={counterData?.total_users} /> : 0}K+</h3> */}
-                          <h3>
-                            {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_users}
-                                prefix="0"
-                              />
-                            ) : (
-                              0
-                            )}
-                          </h3>
+                          <h3>{isVisible ? <CountUp end={counterData?.total_users} prefix="0"/> : 0}</h3>
                           <p>Total Users</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-6">
                         <div className="inner-wrap">
-                          <h3>
-                            {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_nfts}
-                                prefix="0"
-                              />
-                            ) : (
-                              0
-                            )}
-                          </h3>
+                          <h3>{isVisible ? <CountUp end={counterData?.total_nfts} prefix="0"/> : 0}</h3>
                           <p>Total NFTs</p>
                         </div>
                       </div>
                       <div className="col-lg-4 col-md-4 col-12">
                         <div className="inner-wrap">
                           <h3>
-                            {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_artgallery}
-                                prefix="0"
-                              />
-                            ) : (
-                              0
-                            )}
+                            {isVisible ? <CountUp end={counterData?.total_artgallery} prefix="0" /> : 0}
                           </h3>
                           <p>Total Arts</p>
                         </div>
@@ -372,21 +274,20 @@ const LandingPage = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                   <button onClick={getBalance}>Get Balance</button> 
-                    <div className="left">NFT</div>
+                   <div className="left">NFT</div>
                     <Link to="/search">
                       <div className="right">View more</div>
                     </Link>
                   </div>
                 </div>
                 <div>
-                  {/* <button onClick={approveUSDT}>Approve</button> */}
-                </div>
+                    </div>
                 <div className="row">
-                {nftListFP.length > 0 ? (
+                {nftListFP?.length > 0 ? (
                   <>
-                    {nftListFP.map((item) => (
-                      <BuyNow
+                    {nftListFP?.slice(0,nftListFP?.length>4? 4 : nftListFP?.list).map((item, index) => (
+                      <>
+                     <BuyNow
                         key={item?.id}
                         id={item?.id}
                         title={item?.title}
@@ -400,7 +301,9 @@ const LandingPage = ({ search, setSearch }) => {
                         collectionImages={item?.collectionImages}
                         userAddress={userAddress}
                         seller={item?.seller}
+                        size={'col-lg-3'}
                       />
+                      </>
                     ))}
                   </>
                 ) : (
@@ -442,17 +345,16 @@ const LandingPage = ({ search, setSearch }) => {
                   <Link to="/search">
                     <div className="right">View more</div>
                   </Link>
-                  {/* <div className="right">View more markets</div> */}
-                </div>
+                   </div>
               </div>
               <div className="d-flex">
-                {nftListAuction.length > 0 ? (
+                {nftListAuction?.length > 0 ? (
                   <>
-                    {console.log(nftListAuction, "nft list auction")}
-                    {nftListAuction.map((item) => (
+                    {nftListAuction?.slice(0,nftListAuction?.length > 4 ? 4 : nftListAuction?.length ).map((item) => (
+                      <>
                       <NewItemCard
-                        key={item.id}
-                        id={item.id}
+                        key={item?.id}
+                        id={item?.id}
                         title={item?.title}
                         image={item?.image}
                         price={item?.price}
@@ -462,8 +364,10 @@ const LandingPage = ({ search, setSearch }) => {
                         startTime={item?.startTime}
                         description={item?.description}
                         collectionImages={item?.collectionImages}
-                        userAddress={userAddress}
+                        seller={item?.seller}
+                        size={'col-lg-3'}
                       />
+                      </>
                     ))}
                   </>
                 ) : (
@@ -479,9 +383,7 @@ const LandingPage = ({ search, setSearch }) => {
           </div>
         </section>
         <div>
-          {/* <button onClick={swapUSDTForETH}>swapUSDTForETH</button>
-          <button onClick={swapETHForUSDT}>swapETHForUSDT</button> */}
-        </div>
+            </div>
         <section className="home-six-sec"></section>
         <Search search={search} setSearch={setSearch} />
         <Footer />

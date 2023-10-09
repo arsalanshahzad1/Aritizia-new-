@@ -176,6 +176,16 @@ function ChatPage({ search, setSearch }) {
       channel.stopListening(".chat-event");
     };
   }, [userMessagesDetails, userMessagesListing]);
+
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+  
   return (
     <div>
       <Header search={search} setSearch={setSearch} />
@@ -199,7 +209,9 @@ function ChatPage({ search, setSearch }) {
                   })}
                 </>
               ) : (
-                "Loading..."
+                <div className="chat-loading">
+                  <p>No Chats </p>
+                </div>    
               )}
             </>
           </div>

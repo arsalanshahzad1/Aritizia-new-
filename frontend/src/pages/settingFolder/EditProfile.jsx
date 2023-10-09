@@ -11,6 +11,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     const localstorageData = JSON.parse(localStorage.getItem("data"));
+    const user_address = localstorageData?.wallet_address
     setData(localstorageData);
     setProfileImage(localstorageData?.profile_image);
     setCoverImage(localstorageData?.cover_image);
@@ -32,6 +33,8 @@ const EditProfile = () => {
     }));
   };
 
+  console.log(data,"user edit")
+
   const onChangeHandler = (e) => {
     const { files, value, name } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
@@ -47,17 +50,19 @@ const EditProfile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
+    const clonedObject = { ...data };
+    clonedObject.user_id = clonedObject.id;
     const sendData = new FormData();
 
-    for (const [key, value] of Object.entries(data)) {
+    for (const [key, value] of Object.entries(clonedObject)) {
       sendData.append(key, value);
     }
 
     const response = await apis.editProfile(sendData);
-    console.log(response, "RESPONSE");
     if (response?.data?.user) {
       localStorage.setItem("data", JSON.stringify(response.data.user));
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -139,7 +144,7 @@ const EditProfile = () => {
               type="email"
               placeholder="Enter email"
               name="email"
-              onChange={onChangeHandler}
+              // onChange={onChangeHandler}
             />
           </div>
 

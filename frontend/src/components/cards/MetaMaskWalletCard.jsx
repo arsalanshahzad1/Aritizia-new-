@@ -1,7 +1,14 @@
-import React, { useContext } from "react";
-import { connectWallet } from "../../methods/walletManager";
+import React, { useContext, useEffect } from "react";
+import { Store } from "../../Context/Store";
+// import { connectWallet } from "../../methods/walletManager";
 
 const MetaMaskWalletCard = () => {
+const{account,connectWallet,checkIsWalletConnected}=useContext(Store);
+
+useEffect(()=>{
+  checkIsWalletConnected();
+},[account])
+
   return (
     <div onClick={connectWallet} className="col-lg-3 col-md-6">
       <div className="metamask-waller-card">

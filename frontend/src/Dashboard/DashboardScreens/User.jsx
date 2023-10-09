@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Header from "../../pages/landingpage/Header";
 import { BsFillEnvelopeFill } from "react-icons/bs";
 import BuyNow from "../../components/cards/BuyNow";
@@ -22,11 +22,11 @@ import Followers from "../../pages/settingFolder/Followers";
 import apis from "../../service";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Gallery from "../../pages/Gallery";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import { getAddress } from "../../methods/methods";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import RejectedNFTSCard from "../../components/cards/RejectedNFTSCard";
 import FollowersUserDashboard from "../../pages/settingFolder/FollowersUserDashboard";
 import FollowingUserDashboard from "../../pages/settingFolder/FollowingUserDashboard";
@@ -55,6 +55,11 @@ const User = ({ search, setSearch }) => {
   const [userID, setUserID] = useState(searchParams.get("id"));
   const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
   const [userDetails, setUserDetails] = useState([]);
+  
+  const {account,checkIsWalletConnected,getProviderMarketContrat,getProviderNFTContrat}=useContext(Store);
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const getOtherUsersDetails = async (userADDRESS) => {
     const response = await apis.getOtherUser(userADDRESS);
@@ -71,7 +76,7 @@ const User = ({ search, setSearch }) => {
 
   useEffect(() => {
     getNFTlikeListing();
-    getOtherUsersDetails(userADDRESS);
+    getOtherUsersDetails(userID);
   }, []);
 
   let likedNftsFromDB = [];
@@ -80,19 +85,21 @@ const User = ({ search, setSearch }) => {
   const userAddress = userADDRESS;
 
   const getLikedNfts = async () => {
-    const provider = await getProviderOrSigner();
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
+    // const provider = await getProviderOrSigner();
 
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      provider
-    );
+    // const marketplaceContract = new Contract(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   MARKETPLACE_CONTRACT_ABI.abi,
+    //   provider
+    // );
+
+    // const nftContract = new Contract(
+    //   NFT_CONTRACT_ADDRESS.address,
+    //   NFT_CONTRACT_ABI.abi,
+    //   provider
+    // );
+
     let NFTId = await getLikedNftsList();
 
     let liked = [];
@@ -105,34 +112,34 @@ const User = ({ search, setSearch }) => {
     // console.log("NFTId", NFTId);
 
     console.log("Running");
-    if (NFTId.length > 0 && NFTId != "") {
-      for (let i = 0; i < NFTId.length; i++) {
+    if (NFTId?.length > 0 && NFTId != "") {
+      for (let i = 0; i < NFTId?.length; i++) {
         let id;
         let collectionImage = NFTId[i].collection_image;
-        id = +NFTId[i].token_id;
+        id = +NFTId[i]?.token_id;
         // id =i;
 
-        const metaData = await nftContract.tokenURI(id);
+        const metaData = await getProviderNFTContrat().tokenURI(id);
 
-        const structData = await marketplaceContract._idToNFT(id);
+        const structData = await getProviderMarketContrat()._idToNFT(id);
 
-        const fanNftData = await marketplaceContract._idToNFT2(id);
+        const fanNftData = await getProviderMarketContrat()._idToNFT2(id);
 
-        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
         setDiscountPrice(discountOnNFT);
 
-        let auctionData = await marketplaceContract._idToAuction(id);
+        let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
-        let listingType = structData.listingType;
+        let listingType = structData?.listingType;
 
         let highestBid = ethers.utils.formatEther(
-          auctionData.highestBid.toString()
+          auctionData?.highestBid?.toString()
         );
 
         setDiscountPrice(discountOnNFT);
 
-        let collectionId = structData.collectionId.toString();
+        let collectionId = structData?.collectionId?.toString();
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
@@ -149,27 +156,27 @@ const User = ({ search, setSearch }) => {
 
         // let listingType = structData.listingType;
 
-        const price = ethers.utils.formatEther(structData.price.toString());
+        const price = ethers.utils.formatEther(structData?.price?.toString());
 
         axios
           .get(metaData)
           .then((response) => {
-            const meta = response.data;
+            const meta = response?.data;
             let data = JSON.stringify(meta);
 
-            data = data.slice(2, -5);
+            data = data?.slice(2, -5);
             data = data.replace(/\\/g, "");
 
             data = JSON.parse(data);
             // Extracting values using dot notation
             // const price = data.price;
             // listingType = data.listingType;
-            const crypto = data.crypto;
-            const title = data.title;
-            const image = data.image;
-            const royalty = data.royalty;
-            const description = data.description;
-            const collection = data.collection;
+            const crypto = data?.crypto;
+            const title = data?.title;
+            const image = data?.image;
+            const royalty = data?.royalty;
+            const description = data?.description;
+            const collection = data?.collection;
 
             if (listingType === 0) {
               const nftData = {
@@ -196,11 +203,11 @@ const User = ({ search, setSearch }) => {
                 price: price,
                 basePrice: price,
                 collectionImages: collectionImages,
-                endTime: auctionData.endTime.toString(),
+                endTime: auctionData?.endTime?.toString(),
                 highestBid: highestBid,
-                highestBidder: auctionData.highestBidder.toString(),
-                seller: auctionData.seller.toString(),
-                startTime: auctionData.startTime.toString(),
+                highestBidder: auctionData?.highestBidder?.toString(),
+                seller: auctionData?.seller?.toString(),
+                startTime: auctionData?.startTime?.toString(),
               };
               // myAuctions.push(nftData);
               // ((prev) => [...prev, nftData]);
@@ -218,8 +225,12 @@ const User = ({ search, setSearch }) => {
       }
     }
   };
+
   const addFanList = async () => {
-    const signer = await getProviderOrSigner(true);
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -260,15 +271,15 @@ const User = ({ search, setSearch }) => {
     console.log("ssss userAddress", userAddress);
     console.log("ssss addedFans", addedFans);
 
-    const provider = await getProviderOrSigner();
+    // const provider = await getProviderOrSigner();
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
+    // const marketplaceContract = new Contract(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   MARKETPLACE_CONTRACT_ABI.abi,
+    //   provider
+    // );
 
-    let fanList = await marketplaceContract.getFans(userAddress);
+    let fanList = await getProviderMarketContrat().getFans(userAddress);
 
     console.log("ssssr fanList", fanList);
     console.log("ssssr userAddress", userAddress);
@@ -292,7 +303,12 @@ const User = ({ search, setSearch }) => {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
+    // const provider = await getProviderOrSigner();
     console.log("111111");
     // console.log("provider", provider);
 
@@ -308,8 +324,9 @@ const User = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
+
+    // const signer = provider.getSigner();
+    // const address = await signer.getAddress();
 
     // console.log("MYADDRESS", address);
     console.log("333333");
@@ -323,12 +340,12 @@ const User = ({ search, setSearch }) => {
     let NFTId = await getLikedNftsList();
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < mintedTokens.length; i++) {
+    for (let i = 0; i < mintedTokens?.length; i++) {
       let id;
-      id = +mintedTokens[i].tokenId.toString();
+      id = +mintedTokens[i]?.tokenId?.toString();
 
       let collectionId;
-      collectionId = +mintedTokens[i].collectionId.toString();
+      collectionId = +mintedTokens[i]?.collectionId?.toString();
       console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
@@ -343,16 +360,16 @@ const User = ({ search, setSearch }) => {
 
       const fanNftData = await marketplaceContract._idToNFT2(id);
 
-      let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+      let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
       setDiscountPrice(discountOnNFT);
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
-      listingType = structData.listingType;
+      listingType = structData?.listingType;
 
       let highestBid = ethers.utils.formatEther(
-        auctionData.highestBid.toString()
+        auctionData?.highestBid?.toString()
       );
 
       const price = ethers.utils.formatEther(structData.price.toString());
@@ -367,12 +384,12 @@ const User = ({ search, setSearch }) => {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          const crypto = data.crypto;
-          const title = data.title;
-          const image = data.image;
-          const royalty = data.royalty;
-          const description = data.description;
-          const collection = data.collection;
+          const crypto = data?.crypto;
+          const title = data?.title;
+          const image = data?.image;
+          const royalty = data?.royalty;
+          const description = data?.description;
+          const collection = data?.collection;
 
           if (listingType === 0) {
             const nftData = {
@@ -398,11 +415,11 @@ const User = ({ search, setSearch }) => {
               price: price,
               basePrice: price,
               collectionImages: collectionImages,
-              endTime: auctionData.endTime.toString(),
+              endTime: auctionData?.endTime?.toString(),
               highestBid: highestBid,
-              highestBidder: auctionData.highestBidder.toString(),
-              seller: auctionData.seller.toString(),
-              startTime: auctionData.startTime.toString(),
+              highestBidder: auctionData?.highestBidder?.toString(),
+              seller: auctionData?.seller?.toString(),
+              startTime: auctionData?.startTime?.toString(),
             };
             // myAuctions.push(nftData);
 
@@ -423,7 +440,10 @@ const User = ({ search, setSearch }) => {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner();
+
     console.log("two");
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -438,8 +458,8 @@ const User = ({ search, setSearch }) => {
     );
 
     console.log("four");
-    const signer = provider.getSigner();
-    const address = await signer.getAddress();
+    // const signer = provider.getSigner();
+    // const address = await signer.getAddress();
 
     // console.log("MYADDRESS", address);
 
@@ -523,20 +543,23 @@ const User = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {
-    getAddress();
-    getProviderOrSigner();
-  }, []);
+  //TODO change by ali Monis
+  // useEffect(() => {
+  //   // getAddress();
+  //   getProviderOrSigner();
+  // }, []);
+
+  
 
   useEffect(() => {
     getMyListedNfts();
     getMyNfts();
-    getLikedNfts();
+    // getLikedNfts();
   }, [userAddress]);
 
   const getLikedNftsList = async () => {
     const response = await apis.getLikeNFTList(userID);
-    return response.data.data;
+    return response?.data?.data;
   };
 
   useEffect(() => {
@@ -565,7 +588,7 @@ const User = ({ search, setSearch }) => {
 
   const handleCheckboxChange = (id) => {
     setFollwers((prevCheckboxes) => {
-      const updatedCheckboxes = prevCheckboxes.map((data) => {
+      const updatedCheckboxes = prevCheckboxes?.map((data) => {
         if (data?.user_id === id) {
           // Check if the user_id is already in the addingFanList
           if (addingFanList.includes(id)) {
@@ -592,17 +615,17 @@ const User = ({ search, setSearch }) => {
 
   const getFollowersList = async () => {
     const response = await apis.getFollowersList(userID);
-    if (response.status) {
-      setFollwers(response.data.data);
+    if (response?.status) {
+      setFollwers(response?.data?.data);
     } else {
       setFollwers("");
     }
   };
   const getFollowersForFan = async () => {
     const response = await apis.getFollowersForFan();
-    if (response.status) {
-      console.log(response.data.data, "fan");
-      setAddFanlisting(response.data.data);
+    if (response?.status) {
+      console.log(response?.data?.data, "fan");
+      setAddFanlisting(response?.data?.data);
     } else {
       setAddFanlisting("");
     }
@@ -1021,6 +1044,7 @@ const User = ({ search, setSearch }) => {
                               description={item?.description}
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
+                              size={'col-lg-3'}
                             />
                           ))}
                         </>

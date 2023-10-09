@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 import "./Cards.css";
@@ -13,7 +13,7 @@ import ProfileDrawer from "../shared/ProfileDrawer";
 import FiatStripeContainer from "../../stripePayment/FiatStripeContainer";
 import { AiOutlineClose } from "react-icons/ai";
 import Modal from "react-bootstrap/Modal";
-import { getProviderOrSigner } from "../../methods/walletManager";
+// import { getProviderOrSigner } from "../../methods/walletManager";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import TETHER_CONTRACT_ADDRESS from "../../contractsData/TetherToken-address.json";
@@ -21,6 +21,7 @@ import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import apis from "../../service";
+import { Store } from "../../Context/Store";
 
 const BuyNow = ({
   path,
@@ -35,6 +36,7 @@ const BuyNow = ({
   collection,
   collectionImages,
   seller,
+  size
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -62,6 +64,12 @@ const BuyNow = ({
   let sellerPlan = getSellerPlan;
   let buyerPlan = getBuyerPlan;
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
     let _amountToDeduct;
     _amountToDeduct = (_amount * _buyerPercent) / 100;
@@ -69,7 +77,8 @@ const BuyNow = ({
   };
 
   const getPriceInUSD = async () => {
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
 
     let _buyerPercent;
     console.log("buyerPlan asd", buyerPlan);
@@ -96,7 +105,7 @@ const BuyNow = ({
     let discount = +structData2.fanDiscountPercent.toString();
     console.log("fanDiscountPercent", discount);
 
-    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    let nftEthPrice = ethers.utils.formatEther(structData?.price?.toString());
     setPriceETH(nftEthPrice);
     let priceETH = nftEthPrice;
     let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
@@ -143,7 +152,7 @@ const BuyNow = ({
       let priceInUSD = priceETH;
       priceInUSD = oneETHInUSD * priceInUSD;
       priceInUSD = Math.ceil(priceInUSD);
-      setDiscountedAmountUSD(priceInUSD.toString());
+      setDiscountedAmountUSD(priceInUSD?.toString());
       // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
       let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercent);
       feeUSD = Math.ceil(feeUSD);
@@ -153,20 +162,25 @@ const BuyNow = ({
   };
 
   const checkSeller = async () => {
-    
+    // const provider = await getProviderOrSigner();
+
+    // const marketplaceContract = new Contract(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   MARKETPLACE_CONTRACT_ABI.abi,
+    //   provider
+    // );
+
+    // const structData = await marketplaceContract._idToNFT(id);
+    // let seller = structData.seller;
     console.log("checkSeller Seller", seller);
     console.log("checkSeller userAddress", userAddress);
     console.log("checkSeller Seller == userAddress", seller == userAddress);
 
 
     if (userAddress != seller) {
-      // show buy button
       showBuyButton(true);
-      // console.log("WWW Bid");
     } else {
-      // console.log("WWW show claim");
       showBuyButton(false);
-      // show claim
     }
   };
 
@@ -242,7 +256,11 @@ const BuyNow = ({
     console.log("11111111111111");
 
     ethPurchase = true;
-    const signer = await getProviderOrSigner(true);
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+    
     console.log("2222222222222");
 
     const marketplaceContract = new Contract(
@@ -255,18 +273,18 @@ const BuyNow = ({
     const structData = await marketplaceContract._idToNFT(id);
     console.log("4444444444444");
 
-    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    let nftEthPrice = ethers.utils.formatEther(structData?.price?.toString());
     console.log("555555555555");
 
     var fee = +platformFeeETH;
     var amount = +priceETH + fee;
-    var value = amount.toString();
+    var value = amount?.toString();
     console.log("ETH amount", value);
 
     let checkFan = await marketplaceContract.checkFan(id);
 
     const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2.fanDiscountPercent.toString();
+    let discount = +structData2?.fanDiscountPercent?.toString();
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeETH;
@@ -314,7 +332,10 @@ const BuyNow = ({
     // console.log("Amount", amountUSD);
     // console.log("price", price);
     usdtPurchase = true;
-    const signer = await getProviderOrSigner(true);
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -331,12 +352,12 @@ const BuyNow = ({
     let fee = +platformFeeUSDT;
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
     let amountInWei = amount * 10 ** 6;
-    amountInWei = amountInWei.toString();
+    amountInWei = amountInWei?.toString();
 
     let checkFan = await marketplaceContract.checkFan(id);
     console.log("checkFan  ", checkFan);
     const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2.fanDiscountPercent.toString();
+    let discount = +structData2?.fanDiscountPercent?.toString();
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeUSDT;
@@ -349,7 +370,7 @@ const BuyNow = ({
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei.toString();
+      amountInWei = amountInWei?.toString();
 
       console.log("www fee", fee);
       console.log("www amount", amount);
@@ -371,7 +392,7 @@ const BuyNow = ({
     console.log("www ");
     console.log("wwwasda ");
     var amountETH = +priceETH + +platformFeeETH;
-    var value = amountETH.toString();
+    var value = amountETH?.toString();
     console.log("www amountETH", value);
 
     console.log("www paymentMethod", paymentMethod);
@@ -380,7 +401,7 @@ const BuyNow = ({
     console.log("www buyerPlan", buyerPlan);
     console.log("www address", NFT_CONTRACT_ADDRESS.address);
     console.log("www amountInWei", amountInWei);
-    let amountInETHInWei = ethers.utils.parseEther(value).toString();
+    let amountInETHInWei = ethers.utils.parseEther(value);
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
@@ -402,9 +423,12 @@ const BuyNow = ({
     console.log("Response of bid even", response);
   };
 
+
   const getFiatAmount = async () => {
 
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -421,12 +445,12 @@ const BuyNow = ({
     let fee = +platformFeeUSDT;
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
     let amountInWei = amount * 10 ** 6;
-    amountInWei = amountInWei.toString();
+    amountInWei = amountInWei?.toString();
 
     let checkFan = await marketplaceContract.checkFan(id);
     console.log("checkFan  ", checkFan);
     const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2.fanDiscountPercent.toString();
+    let discount = +structData2?.fanDiscountPercent?.toString();
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeUSDT;
@@ -439,7 +463,7 @@ const BuyNow = ({
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei.toString();
+      amountInWei = amountInWei?.toString();
 
       console.log("www fee", fee);
       console.log("www amount", amount);
@@ -458,10 +482,55 @@ const BuyNow = ({
     await getFiatAmount();
     setShowFiatPaymentForm(true)
   }
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
+  const handleNFTSoldEvent = async (
+    // nftContract,
+    tokenId,
+    seller,
+    owner,
+    price
+  ) => {
+    console.log("handleNFTSoldEvent");
+    let soldData = {
+      token_id: +tokenId?.toString(),
+      seller: seller?.toString(),
+      buyer: owner?.toString(),
+      price: ethers.utils.formatEther(price?.toString()),
+    };
+    console.log("soldData", soldData);
+
+    if (ethPurchase || usdtPurchase) {
+      nftSoldPost(soldData);
+      ethPurchase = false;
+      usdtPurchase = false;
+    }
+  };
+
+  const nftSoldPost = async (value) => {
+    console.log("nftSoldPost");
+    // console.log("nftSoldPost", value);
+
+    const response = await apis.postNftSold(value);
+    console.log("asdasdadas", response);
+    // alert("NFT bought");
+    setSucess(false);
+    // await onClose(false);
+    // setTimeout(() => {
+    //   navigate("/profile");
+    // }, 1500);
+  };
 
   return (
     <>
-      <div className="col-lg-3 col-md-4">
+      <div className={`${size} col-md-4`}>
         <Link to={path}>
           <div className="css-vurnku" style={{ position: "relative" }}>
             <a className="css-118gt74" >
@@ -487,7 +556,7 @@ const BuyNow = ({
                                   url="http://artizia.pluton.ltd"
                                   title="Ali Khan"
                                 >
-                                  <p>Instagram</p>
+                                  <p>Linkedin</p>
                                 </LinkedinShareButton>
                               </a>
                             </li>
@@ -527,7 +596,12 @@ const BuyNow = ({
                   <div className="css-10nf7hq detail-wrap" onClick={() => openDrawer()}>
                     <div className="center-icon">
                       <div className="icon">
-                        <img src={collectionImages} alt="" />
+                        {/* <img src={collectionImages && collectionImages} alt="" /> */}
+                            {collectionImages == null ?
+                                <img src='/assets/images/user-none.png' alt="" />
+                                :
+                                <img src={collectionImages} alt="" />
+                            }
                         <img src="/assets/images/chack.png" alt="" />
                       </div>
                     </div>
@@ -549,7 +623,7 @@ const BuyNow = ({
                   {/* <div className="button css-pxd23z">
                                         <p>Read More</p>
                                     </div> */}
-                  {buyButton ? (
+                  {userAddress?.toUpperCase() !== seller?.toUpperCase() ? (
                     <div className="button css-pxd23z" onClick={() => {
                       setSucess(true);
                       getNFTDetailByNFTTokenId(id)
@@ -561,11 +635,13 @@ const BuyNow = ({
                         <img src="/assets/icons/shop.png" alt="" />
                       </span>
                     </div>
-                  ) : (
-                    <div className="button css-pxd23z">
+                  )
+                  : (
+                    <div className="button css-pxd23z" style={{display: "flex", justifyContent:"center",pointerEvents:"none"}}>
                       <p>Your nft</p>
                     </div>
-                  )}
+                  )
+                  }
                 </div>
               </div>
             </a>
@@ -600,6 +676,7 @@ const BuyNow = ({
         collection={collection}
         userAddress={userAddress}
         setIsVisible={setIsVisible}
+        sellerWallet={seller}
       />
       <Modal
         show={sucess}
@@ -659,7 +736,5 @@ const BuyNow = ({
     </>
   );
 };
-
-
 
 export default BuyNow;

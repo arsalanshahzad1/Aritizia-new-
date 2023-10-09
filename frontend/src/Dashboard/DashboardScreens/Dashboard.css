@@ -189,7 +189,7 @@
 }
 
 .dashboard-front-section-2 {
-    position: absolute;
+    position: relative;
     padding: 20px 0;
     width: 100%;
 }
@@ -481,9 +481,10 @@
 } */
 
 .df-row-3 {
-    top: 100px;
+    /* top: 100px; */
     position: relative;
     padding: 10px 40px;
+    margin-top: 100px;
 }
 
 
@@ -875,4 +876,15 @@
 
 .payment-dd-wrap .select-crypto-to-create-collection{
     flex: 1;
+}
+
+@media screen and (max-width: 670px) {
+    .small-scr{
+        display: none;
+    }
+
+    .df-row-3{
+        padding: 10px;
+    }
+    
 }

@@ -8,6 +8,7 @@ import Dropdown from "react-dropdown";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { BiSearchAlt2 } from "react-icons/bi";
 import "react-dropdown/style.css";
+import Loader from "../../components/shared/Loader";
 
 function UserManagement({ search, setSearch }) {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
@@ -28,13 +29,21 @@ function UserManagement({ search, setSearch }) {
 
   const viewUserList = async (count, filter, searchInput) => {
     setListCount(count * 10 - 10);
-    const response = await adminApis.viewUserList(count, filter, searchInput);
-    if (response?.status) {
-      setUserList(response?.data);
-      console.log(userList, "userList");
-      console.log(response?.data, "asasas");
-    } else {
-      console.log("error");
+    try {
+      const response = await adminApis.viewUserList(count, filter, searchInput);
+      if (response?.status) {
+        setUserList(response?.data);
+        console.log(userList, "userList");
+        console.log(response?.data, "asasas");
+    
+      } else {
+        console.log("error");
+      }
+      setLoader(false)
+      
+    } catch (error) {
+      setLoader(false)
+      
     }
   };
 
@@ -50,8 +59,11 @@ function UserManagement({ search, setSearch }) {
     }
   }, [searchInput]);
 
+  const [loader, setLoader] = useState(true)
+
   return (
     <div className="user-management">
+       {loader && <Loader/>}
       {/* <Header search={search} setSearch={setSearch} /> */}
       <AdminHeader />
       <div className="user-management-after-header">

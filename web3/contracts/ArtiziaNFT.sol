@@ -25,9 +25,9 @@ contract ArtiziaNFT is ERC721URIStorage {
     // like this
     uint256[] public mintedTokensList;
 
-    // function getMintedTokensList() public view returns (uint256[] memory) {
-    //     return mintedTokensList;
-    // }
+    function getMintedTokensList() public view returns (uint256[] memory) {
+        return mintedTokensList;
+    }
 
     function mint(string[] memory _tokenURIs) public {
         uint256[] memory mintedTokenIds = new uint256[](_tokenURIs.length);

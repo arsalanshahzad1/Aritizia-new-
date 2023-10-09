@@ -1,29 +1,44 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import apis from "../../service";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import { Link } from "react-router-dom";
+import { Store } from "../../Context/Store";
 
-function Fan({ id }) {
+function Fan({ id, fanToggle }) {
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
   const [fanListing, setFanListing] = useState([]);
 
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   const getFanListing = async () => {
     const response = await apis.getFanList(id);
     setFanListing(response?.data?.data);
     console.log(response?.data?.data, "fanlist");
+    setLoader(false)
   };
+
+  useEffect(()=>{
+    setLoader(true)
+    getFanListing()
+  }
+  ,[fanToggle])
 
   let selectedUser;
   const removeFan = async (id) => {
-    console.log("id", id);
+    console.log("fan id", id);
     selectedUser = id;
     console.log("fanListing", fanListing);
 
@@ -36,7 +51,9 @@ function Fan({ id }) {
       }
     }
 
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -57,6 +74,8 @@ function Fan({ id }) {
   };
 
   const handleRemoveFansEvent = async (removedFan) => {
+    console.log("kkkkkkkkkkkkkkkk");
+
     console.log("removedFan", removedFan);
     getRemoveFan(selectedUser);
   };
@@ -71,11 +90,39 @@ function Fan({ id }) {
     // setFanListing([]);
   };
 
- 
+
+  const getFansBC = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      provider
+    );
+
+    const fans = await marketplaceContract.getFans(userAddress);
+
+    console.log("fans", fans);
+  };
 
   useEffect(() => {
     getFanListing();
   }, []);
+
+  const [loader, setLoader] = useState(true)
+
+  if(loader){
+    return(
+      <>
+        <section className="sec-loading">
+          <div className="one"></div>
+        </section>
+      </>
+    )
+  }
+  
   return (
     <>
     {fanListing.length > 0 ?
@@ -83,7 +130,7 @@ function Fan({ id }) {
     {fanListing.map((data, index) => {
       return (
         <div className="Follow-row" key={index}>
-          <Link to={`/other-profile?add=${data?.wallet_address}`}>
+          <Link to={`/other-profile?add=${data?.id}`}>
             <div className="left">
               <div className="img-holder">
                 {data?.profile_image ? (

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../landingpage/Header";
 import Footer from "../landingpage/Footer";
 import PageTopSection from "../../components/shared/PageTopSection";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef,useContext } from "react";
 import { AiFillTag } from "react-icons/ai";
 import { BsFillClockFill } from "react-icons/bs";
 import Dropdown from "react-dropdown";
@@ -22,10 +22,13 @@ import apis from "../../service/index";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
+import Loader from "../../components/shared/Loader";
+import { Store } from "../../Context/Store";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -47,16 +50,19 @@ const convertImageUrlToImageFile = async (url) => {
     const imageBlob = await response.blob();
 
     // Extract the file name from the URL or specify a custom name
-    const urlParts = imageUrl.split("/");
-    const fileName = urlParts[urlParts.length - 1] || "image.jpg";
+    const urlParts = imageUrl.split('/');
+    const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
 
     // Create a File object from the Blob
-    const file = new File([imageBlob], fileName, {
-      type: response.headers.get("content-type"),
-    });
-    return file;
+    const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+    return (
+      file
+    )
+    // console.log(file);
+    // Set the image file in state
+    // setImageFile(file);
   } catch (error) {
-    console.error("Error:", error);
+    console.error('Error:', error);
   }
 };
 
@@ -77,13 +83,20 @@ const Single = ({ search, setSearch }) => {
   const user_id = id?.id;
   const navigate = useNavigate();
 
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   useEffect(() =>{
     window.scrollTo(0,0)
   } ,[])
 
   const getCollection = async () => {
-    const response = await apis.getNFTCollection();
-    if (response.status) {
+    const response = await apis.getNFTCollection(user_id);
+    if (response?.status) {
       setcollectionOptions("");
 
       for (let i = 0; i < response?.data?.data?.length; i++) {
@@ -121,7 +134,7 @@ const Single = ({ search, setSearch }) => {
     let cryptoType;
     console.log(user_id, collectionName, crypto, selectedImage2);
     if (collectionName.length < 1 || !selectedImage2) {
-      toast.warning("Input Collection Name and image to Create", {
+      toast.warning("All fields are required", {
         position: toast.POSITION.TOP_CENTER,
       });
     } else {
@@ -132,16 +145,45 @@ const Single = ({ search, setSearch }) => {
       }
 
       const sendData = new FormData();
+
       sendData.append("user_id", user_id);
       sendData.append("name", collectionName);
       sendData.append("payment_type", cryptoType);
       sendData.append("image", selectedImage2);
-      const response = await apis.postNFTCollection(sendData);
+      
 
-      if (response.status) {
-        getCollection();
-        setshowCreateCollection(false);
+
+      try{
+        setLoading(true);
+        const response = await apis.postNFTCollection(sendData);
+
+        if (response.status) {
+          toast.success(response?.data?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+        });
+          getCollection();
+          setshowCreateCollection(false);
+        }
+        
+        setLoading(false);
       }
+      catch(e)
+      {
+        setLoading(false);
+        console.log(e?.message,"EEEEEEEEEEEEEEEEEEEEE")
+        toast.warning(e?.message)
+    
+      }
+      
+
+      // setcollectionOptions((previousOptions) => [
+      //   ...previousOptions,
+      //   {
+      //     value: response?.data?.data?.id,
+      //     label: response?.data?.data?.name,
+      //     image: response?.data?.data?.media[0]?.original_url,
+      //   },
+      // ]);
     }
   };
 
@@ -173,6 +215,22 @@ const Single = ({ search, setSearch }) => {
     }
   }, [startingDate, endingDate]);
 
+  // useEffect(() => {
+  //   if (listingType == 1) {
+  //     const today = new Date();
+  //     today.setDate(today.getDate()-1); // Subtract 1 day from today's date
+  //     const selectedStartDate = new Date(startingDate);
+
+  //     if (selectedStartDate < today) {
+  //       toast.warning("Start date should not be before today's date", {
+  //         position: toast.POSITION.TOP_CENTER,
+  //       });
+  //       // alert("Start date should not be before today's date");
+  //       setStartingDate("");
+  //     }
+  //   }
+  // }, [startingDate]);
+
   const web3ModalRef = useRef();
 
   var item = {};
@@ -184,12 +242,41 @@ const Single = ({ search, setSearch }) => {
   let mintcounter = 0;
   let listcounter = 0;
 
+  // Helper function to fetch a Provider/Signer instance from Metamask
+  // const getProviderOrSigner = async (needSigner = false) => {
+  //   console.log("In provider");
+  //   const provider = await web3ModalRef.current.connect();
+  //   console.log("In provider2");
+  //   const web3Provider = new providers.Web3Provider(provider);
+  //   console.log("In provider3");
+  //   const { chainId } = await web3Provider.getNetwork();
+  //   if (chainId !== 31337) {
+  //     toast.warning("Change the network to Sepolia", {
+  //       position: toast.POSITION.TOP_CENTER,
+  //     });
+  //     // window.alert("Change the network to Sepolia");
+  //     throw new Error("Change network to Sepolia");
+  //   }
+
+  //   if (needSigner) {
+  //     const signer = web3Provider.getSigner();
+  //     // console.log("getSigner");
+
+  //     return signer;
+  //   }
+  //   // console.log("getProvider");
+  //   return web3Provider;
+  // };
+
+  // Upload image to IPFS
+
+
   const uploadToIPFS = async (event) => {
     if (typeof selectedImage !== "undefined") {
       try {
         setLoading(true);
         console.log("this is image selectedImage ", selectedImage);
-        console.log("this is image item.file ", item.file);
+        console.log("this is image item.file   ", item.file);
         // const file = await convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
         // const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
 
@@ -239,10 +326,12 @@ const Single = ({ search, setSearch }) => {
         const result = await uploadJSONToIPFS(dataInJSON);
         console.log("uploadJSONToIPFS", result.pinataURL);
         mintThenList(result.pinataURL);
+        // setIsSingleSubmit(false)
 
         //   }
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
+        // setIsSingleSubmit(false)
       }
     } else {
       let price = item.price;
@@ -270,8 +359,10 @@ const Single = ({ search, setSearch }) => {
 
         console.log("RESULT", result);
         mintThenList(result.pinataURL);
+        // setIsSingleSubmit(false)
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
+        // setIsSingleSubmit(false)
       }
     }
   };
@@ -296,7 +387,9 @@ const Single = ({ search, setSearch }) => {
       );
 
       console.log("Response of mint event", response);
+      // setIsSingleSubmit(false)
     } catch (error) {
+      setIsSingleSubmit(false)
       console.error("Error while minting NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
@@ -328,6 +421,14 @@ const Single = ({ search, setSearch }) => {
       console.log("qqq startTime", startTime);
       console.log("startTime typeof", typeof startTime);
       console.log("qqq endTime", endTime);
+      // let currentTime = Date.now();
+      // console.log("aaa f currentTime:", currentTime);
+      // let addedTime = currentTime + 300000;
+
+      // currentTime = Math.floor(currentTime / 1000);
+      // console.log("aaa currentTime:", currentTime);
+      // let addedTime = currentTime + 500000;
+      // console.log("aaa addedTime:", addedTime);
 
       console.log(" collection.collection_id", collection.collection_id);
       console.log("collection.crypto", collection.crypto);
@@ -338,6 +439,8 @@ const Single = ({ search, setSearch }) => {
           [ethers.utils.parseEther(item.price)], // list
           [royalty],
           listingType,
+          // [currentTime],
+          // [addedTime],
           [startTime], // list
           [endTime], // list
           collection.collection_id, // collection number
@@ -356,9 +459,11 @@ const Single = ({ search, setSearch }) => {
 
       console.log("response", response);
     } catch (error) {
+      setIsSingleSubmit(false)
       toast.error(`Error while listing NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
+      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
     console.log("singleMinting", singleMinting);
@@ -366,7 +471,9 @@ const Single = ({ search, setSearch }) => {
 
   // mint the NFT then list
   const mintThenList = async (result) => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -417,22 +524,30 @@ const Single = ({ search, setSearch }) => {
       singleMinting = false;
       console.log("singleMinting", singleMinting);
       nftDataPost();
+    } else {
+      setIsSingleSubmit(false)
     }
   };
 
   const nftDataPost = async () => {
-    toast.success("Nft listed", {
-      position: toast.POSITION.TOP_CENTER,
-    });
     const response = await apis.postListNft(listToPost.current[0]);
-    console.log("response", response);
+    if (response) {
+      toast.success("Nft listed", {
+        position: toast.POSITION.TOP_CENTER,
+      });
 
-    // alert("Nft listed");
-    // setTimeout(() => {
-    // navigate("/profile");
-    // window.location.reload();
-    // }, 3000);
-    // navigate("/profile");
+      console.log("response", response);
+      setIsSingleSubmit(false)
+
+      setTimeout(() => {
+        navigate("/profile");
+        window.location.reload();
+      }, 2000);
+      navigate("/profile");
+    } else {
+      setIsSingleSubmit(false)
+
+    }
   };
 
   const [file, setFile] = useState(null);
@@ -458,10 +573,12 @@ const Single = ({ search, setSearch }) => {
     // ...
   };
 
-  useEffect(() => {}, [price, title, description]);
+  useEffect(() => { }, [price, title, description]);
   let singleMinting = false;
 
   function createItem(e) {
+  
+    setIsSingleSubmit(true)
     e.preventDefault();
     price = inputValue;
     singleMinting = true;
@@ -524,11 +641,36 @@ const Single = ({ search, setSearch }) => {
       });
       // window.alert("Fill all the fields to continue");
     }
+    // setIsSingleSubmit(false)
   }
+
+  // const connectWallet = async () => {
+  //   try {
+  //     await getProviderOrSigner();
+  //     setWalletConnected(true);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
+  //   if (!walletConnected) {
+  //     web3ModalRef.current = new Web3Modal({
+  //       network: "hardhat",
+  //       providerOptions: {},
+  //       disableInjectedProvider: false,
+  //     });
+  //     connectWallet();
+  //     // numberOFICOTokens();
+  //   }
+  // }, [walletConnected]);
 
   const getItem = async () => {
     try {
-      const provider = await getProviderOrSigner();
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      // Set signer
+      const signer = provider.getSigner()
       const marketplaceContract = new Contract(
         MARKETPLACE_CONTRACT_ADDRESS.address,
         MARKETPLACE_CONTRACT_ABI.abi,
@@ -548,7 +690,27 @@ const Single = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
 
-  const AddCollection = () => {};
+  const AddCollection = () => {
+    // if (collectionName.length < 1 || !selectedImage2) {
+    //   toast.warning("Input Collection Name and image to Create", {
+    //     position: toast.POSITION.TOP_CENTER,
+    //   });
+    // } else {
+    //   setcollectionOptions((previousOptions) => [
+    //     ...previousOptions,
+    //     {
+    //       value: collectionName.toLowerCase(),
+    //       label: collectionName,
+    //       image: selectedImage2,
+    //     },
+    //   ]);
+    //   console.log(collectionOptions, "collection updated");
+    //   hideCreateCollection();
+    // }
+  };
+  // useEffect(() => {
+  //   console.log("collection updated", collectionOptions);
+  // }, [collectionOptions]);
 
   const hideCreateCollection = () => {
     setCreateCollection("");
@@ -575,7 +737,9 @@ const Single = ({ search, setSearch }) => {
   };
 
   const getBlockTimestamp = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -611,8 +775,20 @@ const Single = ({ search, setSearch }) => {
 
   const [collectionFinalized, setcollectionFinalized] = useState(false);
 
+  const [isSingleSubmit, setIsSingleSubmit] = useState(false)
+
+  // const [scroll, setScroll] = useState(true)
+
+  // useEffect(()=>{
+  //   if(scroll){
+  //     window.scrollTo(0,0)
+  //     setScroll(false)
+  //   }
+  // },[])
+
   return (
     <>
+      {isSingleSubmit && <Loader />}
       <Header search={search} setSearch={setSearch} />
       <div className="create-single">
         <PageTopSection title={"Create Single Collectible"} />
@@ -658,12 +834,11 @@ const Single = ({ search, setSearch }) => {
                                               return (
                                                 <li
                                                   key={index}
-                                                  className={`${
-                                                    collection?.label ===
-                                                    value?.label
+                                                  className={`${collection?.label ===
+                                                      value?.label
                                                       ? "is-selected"
                                                       : ""
-                                                  }`}
+                                                    }`}
                                                   onClick={() => {
                                                     setCollection(
                                                       collectionOptions[index]
@@ -775,12 +950,14 @@ const Single = ({ search, setSearch }) => {
                                       </div>
                                       <div
                                         className="button-styling btnCC"
+                                        disabled={loading}
                                         onClick={() => {
                                           AddCollection();
                                           postSingleCollection();
                                         }}
                                       >
-                                        Create
+                                     {loading ? "Create":"Loading"}
+                                        
                                       </div>
                                     </div>
                                   </div>
@@ -844,7 +1021,7 @@ const Single = ({ search, setSearch }) => {
                                 <br />
                                 <div
                                   onClick={handleButtonClick}
-                                  className="button-styling"
+                                  className="button-styling" style={{cursor:"pointer"}}
                                 >
                                   Browse
                                 </div>
@@ -875,9 +1052,8 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(0);
                                 }}
-                                className={` create-single-card ${
-                                  listingType === 0 ? "active" : ""
-                                }`}
+                                className={` create-single-card ${listingType === 0 ? "active" : ""
+                                  }`}
                               >
                                 <AiFillTag />
                                 <h3>Fixed Price</h3>
@@ -888,9 +1064,8 @@ const Single = ({ search, setSearch }) => {
                                 onClick={() => {
                                   setListingType(1);
                                 }}
-                                className={` create-single-card ${
-                                  listingType === 1 ? "active" : ""
-                                }`}
+                                className={` create-single-card ${listingType === 1 ? "active" : ""
+                                  }`}
                               >
                                 <BsFillClockFill />
                                 <h3>Timed Auction</h3>
@@ -907,7 +1082,7 @@ const Single = ({ search, setSearch }) => {
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                                // onChange={(e) => setTitle(e.target.value)}
+                              // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
@@ -933,9 +1108,9 @@ const Single = ({ search, setSearch }) => {
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
+                                // type="number"
+                                // placeholder="0.00"
+                                // ref={price}
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -955,9 +1130,9 @@ const Single = ({ search, setSearch }) => {
                                     type="number"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -1023,13 +1198,17 @@ const Single = ({ search, setSearch }) => {
                         <div className="line-seven">
                           <div className="row">
                             <div className="col-lg-12">
-                              <div style={{ textAlign: "right" }}>
-                                <button
-                                  type="submit"
-                                  className="button-styling"
-                                >
-                                  List
-                                </button>
+                              <div style={{ textAlign: 'right' }}>
+                                {
+                                  !isSingleSubmit ?
+                                    <button type="submit" className="button-styling">
+                                      Create Item
+                                    </button> :
+                                    <button className="button-styling" style={{ background: "gray" }} disabled>
+                                      Create Item
+                                    </button>
+                                }
+
                               </div>
                             </div>
                           </div>
@@ -1050,7 +1229,6 @@ const Single = ({ search, setSearch }) => {
         <Search search={search} setSearch={setSearch} />
         <Footer />
       </div>
-      <ToastContainer />
     </>
   );
 };

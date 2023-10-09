@@ -35,7 +35,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
             {data.map((res, i) => {
                 return (
                     <div className="col-lg-3 col-md-6" key={i}>
-                        {res?.name == 'Free Trail' ?
+                        {res?.name == 'Free Trial' ?
                             <div className={`subscription-card-wrap`}>
                                 <h2 className='title'>{res?.name}</h2>
                                 <div>
@@ -200,8 +200,6 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                             <>
                                                 <p className='p1'>Images generated/mo</p><Check />
                                             </>
-
-
                                         }
                                     </div>
                                     <div>
@@ -284,7 +282,22 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                         }
                                     </div>
                                 </div>
-               
+                                {/* {res?.user_subs.length === 0 ? null :
+                                    <div className='sub-card-chack-box' style={{ marginBottom: '-30px' }}>
+                                        <div className="left">
+                                            <div style={{display : 'flex' , justifyContent : 'space-between' , gap: '5px'}}>
+                                                Auto renewal
+                                                <div onClick={() => autoRecursionOnoff(userId, res?.user_subs?.subscription_id)} className="seven-line-nft-cardd" style={{ display: 'flex', alignItems: 'center', padding: '0px' }}>
+                                                    <span>
+                                                        <BsCheck className={`${res?.user_subs?.auto_recursion ? "red" : "transparent"}`} />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                                <DateDisplay datetime={res?.user_subs?.next_renewal_date} />
+                                        </div>
+                                        
+                                    </div>
+                                } */}
                             </div>
                         }
                     </div>

@@ -255,8 +255,8 @@ p {
   box-sizing: border-box;
   margin: 0;
   min-width: 0;
-  height: 310px;
-  margin-bottom: 50px;
+  height: auto;
+  /* margin-bottom: 50px; */
 }
 
 .css-vurnku .doted-icon {
@@ -270,7 +270,7 @@ p {
 
 .css-vurnku .social-links,
 .sec-five-wrap .image .social-links {
-  position: absolute;
+  /* position: absolute;
   z-index: 10;
   top: 50.5%;
   left: 50%;
@@ -279,7 +279,19 @@ p {
   width: 100%;
   height: 100%;
   border-radius: 12px;
+  z-index: 5; */
+
+  position: absolute;
+  z-index: 10;
+  top: 50.5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(182, 0, 209, 0.5);
+  width: 100%;
+  height: 100%;
+  /* border-radius: 7px; */
   z-index: 5;
+  /* margin-top: 2px; */
 }
 
 .css-vurnku .social-links ul,
@@ -322,7 +334,7 @@ p {
   display: block;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 104%;
   border-radius: 8px;
   cursor: pointer;
   overflow: hidden;
@@ -406,11 +418,11 @@ img {
   z-index: 10;
 }
 
-.css-118gt74:hover {
+.css-118gt74 {
   /* transform: translateY(-4px); */
   /* box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px; */
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.26) !important;
-  height: 104%;
+  /* height: 104%; */
 }
 
 .css-vurnku:hover .btc-gray-logo {
@@ -418,48 +430,48 @@ img {
 }
 
 .css-vurnku .J-image {
-  height: 180px;
+  /* height: 180px; */
   width: 100%;
   object-fit: contain;
   border-radius: 8px 8px 0px 0px !important;
   background: none 0% 0% / contain;
   position: relative;
-  object-fit: cover;
+  object-fit: contain;
 }
 
-.css-118gt74:hover .J-bottom {
+/* .css-118gt74:hover .J-bottom {
   margin-top: -44px;
   padding-bottom: 60px;
-}
+} */
 
-.css-118gt74:hover .J-bottom-1 {
+.css-118gt74 .J-bottom-1 {
   margin-top: 0px !important;
 }
 
-.css-118gt74:hover .social-links ul li:last-child {
-  padding-bottom: 85px;
-  transition: .5s ease-in-out;
+.css-118gt74 .social-links ul li:last-child {
+  /* padding-bottom: 85px;
+  transition: .5s ease-in-out; */
 }
 
-.css-118gt74:hover .css-1elubna {
-  margin-top: -5px;
+.css-118gt74 .css-1elubna {
+  margin-top: -10px;
 }
 
 .css-1elubna {
-  box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  position: absolute;
+  /* box-sizing: border-box; */
+  /* margin: 0px; */
+  /* min-width: 0px; */
+  /* position: absolute; */
   width: 100%;
-  left: 0px;
+  /* left: 0px; */
   padding-left: 0px;
   padding-right: 0px;
-  transition: all 0.2s ease 0s;
+  /* transition: all 0.2s ease 0s; */
 }
 
-.css-118gt74:hover .J-bottom {
+.css-118gt74 .J-bottom {
   margin-top: -44px;
-  padding-bottom: 65px;
+  padding-bottom: 15px;
 }
 
 .css-1xg74gr {
@@ -524,7 +536,7 @@ img {
   border-radius: 10px;
   position: relative;
   margin-top: 25px;
-  margin-inline: 10px;
+  margin-inline: 00px;
 }
 
 .J-buynow .button p {
@@ -551,7 +563,7 @@ img {
 }
 
 .css-fwx73e .detail-wrap {
-  padding: 30px 0px 0px 0px;
+  padding: 20px 0px 0px 0px;
   position: relative;
 }
 
@@ -622,21 +634,21 @@ img {
 
 .css-fwx73e .detail-wrap .center-icon {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 .css-fwx73e .detail-wrap .center-icon .icon img:first-child {
   position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 5px solid #FFF;
-    width: 66px;
-    height: 66px;
-    object-fit: cover;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 5px solid #FFF;
+  width: 66px;
+  height: 66px;
+  object-fit: cover;
 }
 
 .css-fwx73e .detail-wrap .center-icon .icon {
@@ -651,11 +663,13 @@ img {
 }
 
 .search-nft-wrap {
-  padding: 0px 10px 30px 10px;
+  /* padding: 0px 10px 30px 10px; */
 }
 
 .search-nft-wrap img {
   border-radius: 12px;
+  height: 160px;
+  object-fit: cover;
 }
 
 .search-nft-wrap h2 {
@@ -676,16 +690,17 @@ img {
 
 @media only screen and (min-width: 1399px) {
   .css-vurnku {
-    height: 330px !important;
+    height: auto !important;
   }
 }
 
 @media only screen and (max-width: 1399px) {
   .css-vurnku {
-    height: 330px !important;
+    height:auto !important;
   }
+
   .other-profile-cards .css-vurnku {
-    height: 315px !important;
+    height: auto !important;
   }
 }
 
@@ -709,22 +724,22 @@ img {
     height: auto;
   }
 
-  .css-118gt74:hover {
+  .css-118gt74 {
     /* transform: translateY(-4px); */
     box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
     height: auto;
   }
 
-  .css-118gt74:hover .social-links ul li:last-child {
+  .css-118gt74 .social-links ul li:last-child {
     padding-bottom: 0px;
     transition: .5s ease-in-out;
   }
 
-  .css-118gt74:hover .css-1elubna {
+  .css-118gt74 .css-1elubna {
     margin-top: 0px;
   }
 
-  .css-118gt74:hover .J-bottom {
+  .css-118gt74 .J-bottom {
     margin-top: 0px;
     padding-bottom: 12px;
   }
@@ -824,6 +839,7 @@ img {
   width: 100%;
   height: 180px;
   object-fit: cover;
+  /* object-fit: contain; */
 }
 
 .simple-card-main .bottom .nft-icon {
@@ -835,12 +851,12 @@ img {
   z-index: 2;
 }
 
-.simple-card-main .bottom .nft-icon > img {
+.simple-card-main .bottom .nft-icon>img {
   width: 50px;
-    background: #b600d1;
-    border-radius: 50px;
-    height: 50px;
-    object-fit: cover;
+  background: #b600d1;
+  border-radius: 50px;
+  height: 50px;
+  object-fit: cover;
 }
 
 .simple-card-main .bottom .nft-icon .checked-icon {
@@ -902,7 +918,7 @@ img {
 
 }
 
-.simple-card-main  .add-discount-text {
+.simple-card-main .add-discount-text {
   margin: 10px auto 0 auto;
   text-align: center;
   background: linear-gradient(92.94deg, #2438CB 2.4%, #B600D1 97.52%);
@@ -913,7 +929,7 @@ img {
   font-family: 'Jost';
   color: white;
   /* z-index: 99999; */
-  
+
 }
 
 
@@ -924,5 +940,6 @@ img {
 }
 
 .input-percent[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
+  -moz-appearance: textfield;
+  /* Firefox */
 }
