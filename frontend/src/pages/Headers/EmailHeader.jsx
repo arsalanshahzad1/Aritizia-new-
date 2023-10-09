@@ -42,11 +42,11 @@ const EmailHeader = ({ search, setSearch }) => {
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const { account, checkIsWalletConnected, connectWallet } = useContext(Store);
 
-  useEffect(()=>{
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
@@ -592,24 +592,27 @@ const EmailHeader = ({ search, setSearch }) => {
                                       Notifications
                                     </li>
                                   </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Purchase")
-                                      }
-                                    >
-                                      Purchase
-                                    </li>
-                                  </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Earnings")
-                                      }
-                                    >
-                                      Earning
-                                    </li>
-                                  </Link>
+                                  {userAddress === "false" ? <></> : <>
+                                    <Link to={"/setting"}>
+                                      <li
+                                        onClick={() =>
+                                          setactiveTabsSetting("Purchase")
+                                        }
+                                      >
+                                        Purchase
+                                      </li>
+                                    </Link>
+                                    <Link to={"/setting"}>
+                                      <li
+                                        onClick={() =>
+                                          setactiveTabsSetting("Earnings")
+                                        }
+                                      >
+                                        Earning
+                                      </li>
+                                    </Link>
+                                  </>
+                                  }
                                   <Link to={"/setting"}>
                                     <li
                                       onClick={() =>

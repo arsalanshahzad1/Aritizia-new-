@@ -40,7 +40,7 @@ const Header = ({ search, setSearch }) => {
 
   const web3ModalRef = useRef();
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const {account,checkIsWalletConnected,connectWallet}=useContext(Store);
 
   useEffect(()=>{
     checkIsWalletConnected()

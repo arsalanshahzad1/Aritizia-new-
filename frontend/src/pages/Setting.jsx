@@ -34,6 +34,10 @@ const Setting = ({ search, setSearch }) => {
     //     setScroll(false)
     //   }
     // },[])
+
+
+    
+    const userAddress = localStorage.getItem("userAddress")
     
     return (
         <>
@@ -51,8 +55,13 @@ const Setting = ({ search, setSearch }) => {
                                 <ul>
                                     <li onClick={() => { setActiveTabs('Notification') }}><button className={`${activeTabs === 'Notification' ? 'active' : ''}`}><ImNotification />Notification</button></li>
                                     {/* <li onClick={() => { setActiveTabs('Appearance') }}><button className={`${activeTabs === 'Appearance' ? 'active' : ''}`}><IoMdColorPalette />Appearance</button></li> */}
-                                    <li onClick={() => { setActiveTabs('Earnings') }}><button className={`${activeTabs === 'Earnings' ? 'active' : ''}`}><FaHandHoldingUsd />Earnings</button> </li>
+                                    {userAddress === "false" ?
+                                   <></>
+                                   :<>
+                                       <li onClick={() => { setActiveTabs('Earnings') }}><button className={`${activeTabs === 'Earnings' ? 'active' : ''}`}><FaHandHoldingUsd />Earnings</button> </li>
                                     <li onClick={() => { setActiveTabs('Purchase') }}><button className={`${activeTabs === 'Purchase' ? 'active' : ''}`}><FaHandHoldingUsd />Purchase</button> </li>
+                                   
+                                     </>}
                                     <li onClick={() => { setActiveTabs('Edit') }}><button className={`${activeTabs === 'Edit' ? 'active' : ''}`}><FaEdit />Edit</button></li>
                                 </ul>
                             </div>
@@ -60,8 +69,11 @@ const Setting = ({ search, setSearch }) => {
                                 <div className="row">
                                     {activeTabs === 'Notification' && <Notification />}
                                     {/* {activeTabs === 'Appearance' && <Appearance />} */}
+                                    {userAddress === "false" ? <></> : <>
                                     {activeTabs === 'Earnings' && <Earnings />}
                                     {activeTabs === 'Purchase' && <Purchase />}
+                                    </>}
+                                
                                     {activeTabs === 'Edit' && <EditProfile />}
                                 </div>
                             </div>

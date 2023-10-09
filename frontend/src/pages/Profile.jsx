@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import Loader from "../components/shared/Loader";
 import Header from "./landingpage/Header";
 import { Store } from "../Context/Store";
+import { CiGlass, CiLight } from "react-icons/ci";
 
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
@@ -48,9 +49,14 @@ const Profile = ({ search, setSearch }) => {
     checkIsWalletConnected()
   },[account])
 
+
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData?.wallet_address;
+  const userId = userData?.id;
+
   const getNFTlikeListing = async () => {
     try {
-      const response = await apis.getLikeNFTListing(userData?.id);
+      const response = await apis.getLikeNFTListing(userId);
       if (response?.data?.data?.length > 0) {
         setLikedNfts(response?.data?.data);
       }
@@ -63,11 +69,9 @@ const Profile = ({ search, setSearch }) => {
 
   useEffect(() => {
     getNFTlikeListing();
+    getLikedNfts();
   }, []);
 
-  const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData?.wallet_address;
-  const userId = userData?.id;
 
   const getLikedNfts = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -98,7 +102,7 @@ const Profile = ({ search, setSearch }) => {
     if (NFTId?.length > 0 && NFTId != "") {
       for (let i = 0; i < NFTId?.length; i++) {
         let id;
-        id = +NFTId?.[i]?.token_id;
+        id = +NFTId?.[i]?.token_id?.toString();
 
 
         const metaData = await nftContract.tokenURI(id);
@@ -273,11 +277,14 @@ const Profile = ({ search, setSearch }) => {
 
   const viewAllNfts = async () => {
     try {
-      const response = await apis.viewAllMyNfts(userData.id);
-      // console.log(response,"response")
-      if (response?.data?.data?.length > 0) {
-        getMyListedNfts(response?.data?.data)
-      }
+      const response = await apis.viewAllMyNfts(userId);
+      console.log(response,"response")
+
+      getMyListedNfts();
+
+      // if (response?.data?.data?.length > 0) {
+      //   // getMyListedNfts(response?.data?.data)
+      // }
       setNftAuctionLoader(false)
     } catch (error) {
       console.log(error, "errrrr")
@@ -290,9 +297,11 @@ const Profile = ({ search, setSearch }) => {
     try {
       const response = await apis.getPurchasedNfts(userId);
       // console.log(response,"response")
-      if (response?.data?.data?.length > 0) {
-        getMyNfts(response?.data?.data)
-      }
+      //Blockchain
+      getMyNfts();
+      // if (response?.data?.data?.length > 0) {
+      //   getMyNfts(response?.data?.data);
+      // }
       setNftAuctionLoader(false)
     } catch (error) {
       console.log(error, "errrrr")
@@ -310,7 +319,7 @@ const Profile = ({ search, setSearch }) => {
   getPurchasedNfts();
   }, []);
 
-  const getMyListedNfts = async (allNftIds) => {
+  const getMyListedNfts = async () => {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
@@ -339,14 +348,14 @@ const Profile = ({ search, setSearch }) => {
 
     let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
 
-    if (allNftIds?.length === 0) {
+    if (mintedTokens?.length === 0) {
       setNftLoader(false)
     }
-    for (let i = 0; i < allNftIds?.length; i++) {
+    for (let i = 0; i<mintedTokens?.length; i++) {
       let id;
-      id = allNftIds?.[i];
+      id = mintedTokens?.[i]?.tokenId?.toString();
 
-      console.log(mintedTokens,"mintedTokens")
+      console.log(mintedTokens?.[i].tokenId?.toString(),"mintedTokens")
       let collectionId;
       collectionId = +mintedTokens?.[i]?.collectionId?.toString();
       console.log(collectionId,"collectionId")
@@ -465,9 +474,16 @@ const Profile = ({ search, setSearch }) => {
 
     let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
 
-    for (let i = 0; i < NFTid?.length; i++) {
+    //for database
+    // for (let i = 0; i < NFTid?.length; i++) {
+    //   let id;
+    //   id = NFTid[i];
+
+    //for blockchian
+     for (let i = 0; i < mintedTokens?.length; i++) {
       let id;
-      id = NFTid[i];
+      id = mintedTokens[i]?.tokenId?.toString();
+
       let collectionId;
       collectionId = +mintedTokens?.[i]?.collectionId?.toString();
 
@@ -529,9 +545,9 @@ const Profile = ({ search, setSearch }) => {
 
 
   useEffect(() => {
-    getMyListedNfts();
-    getMyNfts();
-    getLikedNfts();
+    // getMyListedNfts();
+    // getMyNfts();
+    // getLikedNfts();
     setLoader(false)
   }, [userAddress]);
 
@@ -557,8 +573,12 @@ const Profile = ({ search, setSearch }) => {
   const [FansAddress, setFansAddress] = useState([""]);
 
   const fansAddressHandle = () => {
+    console.log(FansAddress?.[FansAddress?.length - 1] ,"SSSSSSSSSSS")
     if (FansAddress?.[FansAddress?.length - 1]) {
       setFansAddress([...FansAddress, ""])
+    }
+    else{
+      toast.error("Required wallet address field empty")
     }
   }
   const [showAddFanPopUp, setshowAddFanPopUp] = useState(0);
@@ -652,7 +672,8 @@ const Profile = ({ search, setSearch }) => {
 
   const [fanToggle, setFanToggle] = useState(false)
 
-
+  const userWalletAddress = localStorage.getItem("userAddress")
+    
   return (
     <>
       {loader && <Loader />}
@@ -735,7 +756,9 @@ const Profile = ({ search, setSearch }) => {
               </div>
               <div className="row">
                 <div className="profile-tabs">
-                  <button
+                
+                {userWalletAddress === "false" ? <></> : <>   
+                               <button
                     className={`${tabs === 0 ? "active" : ""}`}
                     onClick={() => setTabs(0)}
                   >
@@ -747,12 +770,15 @@ const Profile = ({ search, setSearch }) => {
                   >
                     Gallery
                   </button>
+                
                   <button
                     className={`${tabs === 2 ? "active" : ""}`}
                     onClick={() => setTabs(2)}
                   >
                     My NFT
                   </button>
+                  </>
+}
                   <button
                     className={`${tabs === 3 ? "active" : ""}`}
                     onClick={() => setTabs(3)}
@@ -765,6 +791,8 @@ const Profile = ({ search, setSearch }) => {
                   >
                     Followers
                   </button>
+                  {userWalletAddress === "false" ? <></> : <>   
+            
                   <button
                     className={`${tabs === 5 ? "active" : ""}`}
                     onClick={() => setTabs(5)}
@@ -777,6 +805,8 @@ const Profile = ({ search, setSearch }) => {
                   >
                     Rejected NFTs
                   </button>
+                  </>
+}
                 </div>
               </div>
               <div className="profile-buy-card">

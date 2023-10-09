@@ -179,7 +179,7 @@ const Subscription = ({ search, setSearch }) => {
                             <AiOutlineClose onClick={() => setShowPaymentForm(false)} />
                         </div>
                         <div className="sucess-data">
-                            <p className="card-title">Subscription : {planName}</p>
+                            <p className="card-title">Subscription : {planName === "Free Trail" ? "Free Trial" : planName}</p>
                             <StripeContainer
                                 index={index}
                                 planName={planName}
@@ -190,7 +190,6 @@ const Subscription = ({ search, setSearch }) => {
                         </div>
                     </div>
                 </Modal>
-                {console.log("arsalan :", JSON.parse(localStorage.getItem('data')).wallet_address)}
                 <Modal
                     show={reneval}
                     onHide={() => setreneval(false)}
@@ -226,7 +225,7 @@ const Subscription = ({ search, setSearch }) => {
                         </div>
                         <h2>Cancel Subscription</h2>
                         <div>
-                            <button onClick={() =>setCancleSubscription(false)}>Cancle</button>
+                            <button onClick={() =>setCancleSubscription(false)}>Cancel</button>
                             <button onClick={cancelSubn}>Confirm</button>
                         </div>
                     </div>

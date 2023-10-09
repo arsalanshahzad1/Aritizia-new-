@@ -102,7 +102,7 @@ const Single = ({ search, setSearch }) => {
       for (let i = 0; i < response?.data?.data?.length; i++) {
         let type = response?.data?.data[i]?.payment_type;
         console.log(type == "eth", "eth", "TYpe", type);
-
+        
         if (type == "eth") {
           setcollectionOptions((previousOptions) => [
             ...previousOptions,
@@ -952,11 +952,14 @@ const Single = ({ search, setSearch }) => {
                                         className="button-styling btnCC"
                                         disabled={loading}
                                         onClick={() => {
-                                          AddCollection();
-                                          postSingleCollection();
-                                        }}
+                                          if(!loading)
+                                          {
+                                            AddCollection();
+                                            postSingleCollection();  
+                                          }
+                                          }}
                                       >
-                                     {loading ? "Create":"Loading"}
+                                     {loading ? "Loading":  "Create"}
                                         
                                       </div>
                                     </div>

@@ -1233,7 +1233,7 @@ const PlaceABidDrawer = ({
                     <span>
                       <BsCheck className={`${chack ? "red" : "black"}`} />
                     </span>{" "}
-                    <span>I agree all Terms & Conditions.</span>
+                    <span>I agree to all the terms and policies</span>
                   </div>
                   <div className="eight-line">
                     {bidButton ? (

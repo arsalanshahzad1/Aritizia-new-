@@ -10,6 +10,8 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-ad
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import Loader from "../components/shared/Loader";
+import { Store } from "../Context/Store";
+import { useEffect } from "react";
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -84,8 +86,10 @@ const PaymentForm = ({
           setIspayment(false)
           setShowPaymentForm(false)
           viewSubscriptions(user_id)
+
           const response = await apis.postWalletAddress({
             wallet_address: JSON.parse(localStorage.getItem('data')).wallet_address,
+            user_id:user_id
           });
           localStorage.removeItem("data");
           localStorage.setItem("data", JSON.stringify(response?.data?.data));

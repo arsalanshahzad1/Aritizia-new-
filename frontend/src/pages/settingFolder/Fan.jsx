@@ -130,7 +130,7 @@ function Fan({ id, fanToggle }) {
     {fanListing.map((data, index) => {
       return (
         <div className="Follow-row" key={index}>
-          <Link to={`/other-profile?add=${data?.id}`}>
+          <Link to={`/other-profile?add=${userData?.id}`}>
             <div className="left">
               <div className="img-holder">
                 {data?.profile_image ? (

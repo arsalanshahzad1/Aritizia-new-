@@ -7,6 +7,7 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { ToastContainer, toast } from "react-toastify";
+import { Store } from "../../Context/Store";
 
 function UserDataRows({
   data,

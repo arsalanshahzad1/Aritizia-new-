@@ -17,6 +17,9 @@ const Wallet = ({ search, setSearch }) => {
   //   }
   // },[])
 
+
+
+  const userWalletAddress = localStorage.getItem("userAddress")
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -25,8 +28,8 @@ const Wallet = ({ search, setSearch }) => {
         <div className="wallet-card-wrap">
           <div className="container">
             <div className="row justify-content-center">
-              <MetaMaskWalletCard />
-              <CoinBaseWalletCard />
+              <MetaMaskWalletCard  userWalletAddress={userWalletAddress}/>
+              {/* <CoinBaseWalletCard userWalletAddress={userWalletAddress} /> */}
               {/* <MetaMaskWalletCard />
                             <MetaMaskWalletCard />
                             <MetaMaskWalletCard />

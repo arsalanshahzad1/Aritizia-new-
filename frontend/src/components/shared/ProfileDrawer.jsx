@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect,useContext } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -43,6 +43,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import FiatStripeContainer from "../../stripePayment/FiatStripeContainer";
 import { Store } from "../../Context/Store";
+import HeaderConnectPopup from "../../pages/Headers/HeaderConnectPopup";
 
 function ProfileDrawer({
   isVisible,
@@ -76,6 +77,8 @@ function ProfileDrawer({
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
   const [nftDetails, setNftDetails] = useState("");
   const [showFiatPaymentForm, setShowFiatPaymentForm] = useState(false);
+
+  const [connectPopup, setConnectPopup] = useState(false);
 
   // console.log("user id: ", id)
   const navigate = useNavigate();
@@ -111,11 +114,11 @@ function ProfileDrawer({
 
   const [buyButton, showBuyButton] = useState(false);
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const { account, checkIsWalletConnected } = useContext(Store);
 
-  useEffect(()=>{
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
   const checkSeller = async () => {
     // const provider = await getProviderOrSigner();
@@ -387,10 +390,10 @@ function ProfileDrawer({
   };
 
   const getFiatAmount = async () => {
-  
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  // Set signer
-  const signer = provider.getSigner()
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -433,7 +436,7 @@ function ProfileDrawer({
     }
 
     // ye wala bhej USD ki amount h ye 
-    console.log("ye usd ki amount h",amount);
+    console.log("ye usd ki amount h", amount);
     // setShowFiatPaymentForm(true)
     setFiatAmount(amount)
 
@@ -995,7 +998,7 @@ function ProfileDrawer({
   const [userWalletAddress, SetUserWalletAddress] = useState("");
   // const navigate = useNavigate();
 
-  const handleUserVisit = async ()=> {
+  const handleUserVisit = async () => {
     navigate(
       `/other-profile?add=${nftDetails?.user?.id}`
     )
@@ -1004,13 +1007,17 @@ function ProfileDrawer({
     // SetUserWalletAddress( response?.data?.data?.wallet_address);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(userWalletAddress)
     // if(userWalletAddress){
     //     navigate(`/other-profile?add=${userWalletAddress}`)
     // }
-  },[userWalletAddress])
+  }, [userWalletAddress])
 
+
+
+  
+  const userAccountAddress = localStorage.getItem("userAddress")
   return (
     <>
       <Drawer
@@ -1094,7 +1101,7 @@ function ProfileDrawer({
                   <p>
                     Owned by{" "}
                     {userData?.wallet_address ==
-                    nftDetails?.user?.wallet_address ? (
+                      nftDetails?.user?.wallet_address ? (
                       <Link to={"/profile"}>
                         <span>
                           {nftDetails?.user?.first_name}{" "}
@@ -1148,10 +1155,10 @@ function ProfileDrawer({
                       <div className="logo-name"
                       >
                         {
-                          userData?.wallet_address == nftDetails?.user?.wallet_address  ? (
-                            <Link to={ `/profile`}>
-                             
-                              {nftDetails?.user?.profile_image  ? (
+                          userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                            <Link to={`/profile`}>
+
+                              {nftDetails?.user?.profile_image ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""
@@ -1180,7 +1187,7 @@ function ProfileDrawer({
                                 )
                               }
                             >
-                              {nftDetails?.user?.profile_image  ? (
+                              {nftDetails?.user?.profile_image ? (
                                 <img
                                   src={nftDetails?.user?.profile_image}
                                   alt=""
@@ -1199,7 +1206,7 @@ function ProfileDrawer({
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
                         }
-                         {/* {console.log(nftDetails, "ndt")} */}
+                        {/* {console.log(nftDetails, "ndt")} */}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
@@ -1243,9 +1250,9 @@ function ProfileDrawer({
                         History
                       </button>
                     </div> */}
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{marginLeft:"0px"}}>
+                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{ marginLeft: "0px" }}>
                       <SocialShare bidStyle="bid-style"
-                        style={{ fontSize: "18px", marginRight: "10px"}}
+                        style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
                   </div>
@@ -1319,13 +1326,13 @@ function ProfileDrawer({
                     <div
                       className="seven-line"
                       onClick={() => setChack(!chack)}
-                      >
-                        {/* {console.log(sellerWallet, "sellerWallet")} */}
+                    >
+                      {/* {console.log(sellerWallet, "sellerWallet")} */}
                       {/* {console.log(userAddress.toUpperCase(), " ", sellerWallet.toUpperCase(), "uppercase")} */}
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}
-                      <span>I agree all <a href="/terms" target="_blank">Terms</a> & <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Policy</a>.</span>
+                      <span>I agree to all <a href="/terms" target="_blank">Terms</a> & <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Policy</a>.</span>
                     </div>
                     <div className="eight-line">
                       {buyButton ? (
@@ -1333,8 +1340,14 @@ function ProfileDrawer({
                           className="nft-buy-btn"
                           disabled={!chack}
                           onClick={() => {
-                            getFiatAmount(); 
-                            setSucess(true);
+                            if (userAccountAddress === "false") {
+                              setConnectPopup(true)
+                            }
+                            else {
+                              getFiatAmount();
+                              setSucess(true);
+
+                            }
                           }}
                         >
                           Buy Now
@@ -1342,7 +1355,7 @@ function ProfileDrawer({
                       ) : null}
                     </div>
                   </>
-                ) }
+                )}
               </div>
             </div>
           </div>
@@ -1367,7 +1380,7 @@ function ProfileDrawer({
             <button onClick={buyWithUSDT}>Buy with USDT</button>
           </div>
           <div className="mobal-button-2">
-            <button onClick={() =>setShowFiatPaymentForm(true)}>Buy with FIAT</button>
+            <button onClick={() => setShowFiatPaymentForm(true)}>Buy with FIAT</button>
             {/* <button onClick={buyWithFIAT}>Buy with FIAT</button> */}
           </div>
         </div>
@@ -1404,6 +1417,9 @@ function ProfileDrawer({
           </div>
         </div>
       </Modal>
+
+
+      <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
     </>
   );
 }

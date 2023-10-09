@@ -591,6 +591,7 @@ const WalletHeader = ({ search, setSearch }) => {
                                       Notifications
                                     </li>
                                   </Link>
+                                  {userAddress === "false" ? <></> : <>
                                   <Link to={"/setting"}>
                                     <li
                                       onClick={() =>
@@ -609,6 +610,7 @@ const WalletHeader = ({ search, setSearch }) => {
                                       Earning
                                     </li>
                                   </Link>
+                                  </>}
                                   <Link to={"/setting"}>
                                     <li
                                       onClick={() =>

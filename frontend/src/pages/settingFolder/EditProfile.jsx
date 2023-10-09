@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import apis from "../../service";
+import { toast } from "react-toastify";
 
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -58,9 +59,9 @@ const EditProfile = () => {
     for (const [key, value] of Object.entries(clonedObject)) {
       sendData.append(key, value);
     }
-
     const response = await apis.editProfile(sendData);
-    if (response?.data?.user) {
+    if (response?.data?.status) {
+      toast.success(response?.data?.message)
       localStorage.setItem("data", JSON.stringify(response.data.user));
       // window.location.reload();
     }
@@ -140,10 +141,11 @@ const EditProfile = () => {
               <p>Email Address*</p> <p></p>
             </div>
             <input
-              defaultValue={data?.email}
               type="email"
               placeholder="Enter email"
               name="email"
+              disabled
+              value={data?.email}
               // onChange={onChangeHandler}
             />
           </div>
@@ -210,7 +212,7 @@ const EditProfile = () => {
             </div>
             <input
               defaultValue={data?.phone_no}
-              type="tel"
+              type="number"
               placeholder="Enter your phone number"
               name="phone_no"
               onChange={onChangeHandler}

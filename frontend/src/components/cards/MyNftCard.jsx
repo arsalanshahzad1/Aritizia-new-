@@ -140,7 +140,7 @@ const MyNftCard = ({
                 </span>
               </div>
               <div className="text-area">
-                <div className="line-1">
+                <div className="line-1" style={{marginTop:"12px"}}>
                   <div>{title}</div>
                   <div>{id}</div>
                 </div>

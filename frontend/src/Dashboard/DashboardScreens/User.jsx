@@ -22,6 +22,7 @@ import Followers from "../../pages/settingFolder/Followers";
 import apis from "../../service";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import Gallery from "../../pages/Gallery";
+
 // import { getAddress } from "../../methods/methods";
 // import {
 //   connectWallet,
@@ -31,6 +32,8 @@ import RejectedNFTSCard from "../../components/cards/RejectedNFTSCard";
 import FollowersUserDashboard from "../../pages/settingFolder/FollowersUserDashboard";
 import FollowingUserDashboard from "../../pages/settingFolder/FollowingUserDashboard";
 import FanUserDaskboard from "../../pages/settingFolder/FanUserDaskboard";
+import { Store } from "../../Context/Store";
+import { toast } from "react-toastify";
 
 const { ethereum } = window;
 // import Web3 from "web3";
@@ -778,7 +781,13 @@ const User = ({ search, setSearch }) => {
   //         });
   //     }
   //   };
-
+  const copyToClipboard = (link) => {
+    console.log(link);
+    navigator.clipboard.writeText(link);
+    toast.success(`Copied Successfully`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -844,7 +853,7 @@ const User = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
                 <div className="col-lg-6 col-md-6 col-12">
-                  <div className="copy-url">
+                  <div onClick={()=>copyToClipboard(userDetails?.wallet_address)}  className="copy-url">
                     <span>{userDetails?.wallet_address}</span>
                     <button>Copy</button>
                   </div>

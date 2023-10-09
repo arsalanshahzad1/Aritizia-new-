@@ -162,7 +162,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                             :
                             <div key={i} className={`subscription-card-wrap ${res?.user_subs.length != 0 ? 'active' : ''}`}>
                                 <div onClick={() => { setShowPaymentForm(true); setPlanName(res?.name); setIndex(i) }}>
-                                    <h2 className='title'>{res?.name}</h2>
+                                    <h2 className='title'>{res?.name == 'Free Trail' ? "Free Trial": res?.name}</h2>
                                     <div>
                                         {res?.monthly_cost == 0 ?
                                             <>

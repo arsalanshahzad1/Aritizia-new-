@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import DashboardToggle from '../SVG/DashboardToggle'
 import { useContext } from 'react'
 import { GlobalContext } from '../../Context/GlobalContext'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, Navigate, useLocation } from 'react-router-dom'
 import { IoCloseSharp } from "react-icons/io5"
+import { FiLogOut } from 'react-icons/fi'
 
 function Sidebar() {
     const location = useLocation();
@@ -13,15 +14,15 @@ function Sidebar() {
     return (
         <div className={`Sidebar ${sidebarCollapsed && 'sidebar-collapsed'}`}>
             <div className='sidebar-inner'>
-               { 
-                sidebarCollapsed ? 
-                    <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
-                        <DashboardToggle />
-                    </div> : 
-                    <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
-                       <IoCloseSharp fontSize="40px"/>
-                    </div>
-                    
+                {
+                    sidebarCollapsed ?
+                        <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
+                            <DashboardToggle />
+                        </div> :
+                        <div onClick={() => setsidebarCollapsed(!sidebarCollapsed)} className='dashboard-toggle'>
+                            <IoCloseSharp fontSize="40px" />
+                        </div>
+
                 }
                 <div className={`sidebar-nav}`}>
                     <NavLink to="/dashboard">
@@ -111,9 +112,16 @@ function Sidebar() {
                                     Analytic Tool
                                 </div>
                             }
+
                         </div>
                     </NavLink>
-
+                    <NavLink to='/admin-login' >
+                      
+                        <div onClick={() => localStorage.setItem("adminAuth", false)
+                        } className='sidebar-nav-txt'>
+                           <FiLogOut />   Logout
+                        </div>
+                    </NavLink>
                 </div>
             </div>
         </div>

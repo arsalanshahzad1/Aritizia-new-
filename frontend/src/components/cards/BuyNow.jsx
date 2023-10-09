@@ -22,6 +22,7 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import apis from "../../service";
 import { Store } from "../../Context/Store";
+import HeaderConnectPopup from "../../pages/Headers/HeaderConnectPopup";
 
 const BuyNow = ({
   path,
@@ -42,6 +43,7 @@ const BuyNow = ({
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [connectPopup, setConnectPopup] = useState(false);
 
   const [buyButton, showBuyButton] = useState(false);
   const [showFiatPaymentForm, setShowFiatPaymentForm] = useState(false);
@@ -76,6 +78,7 @@ const BuyNow = ({
     return _amountToDeduct;
   };
 
+  const userWalletAddress = localStorage.getItem("userAddress")
   const getPriceInUSD = async () => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
@@ -293,7 +296,7 @@ const BuyNow = ({
 
       // check this
       amount = +discountedEth + fee;
-      value = amount.toString();
+      value = amount?.toString();
     }
 
     console.log("www paymentMethod", paymentMethod);
@@ -307,7 +310,7 @@ const BuyNow = ({
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
         paymentMethod,
-        id,
+        id?.toString(),
         sellerPlan, //  must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent
         {
@@ -522,12 +525,14 @@ const BuyNow = ({
     console.log("asdasdadas", response);
     // alert("NFT bought");
     setSucess(false);
+    window.location.reload();
     // await onClose(false);
     // setTimeout(() => {
     //   navigate("/profile");
     // }, 1500);
   };
 
+  
   return (
     <>
       <div className={`${size} col-md-4`}>
@@ -625,11 +630,17 @@ const BuyNow = ({
                                     </div> */}
                   {userAddress?.toUpperCase() !== seller?.toUpperCase() ? (
                     <div className="button css-pxd23z" onClick={() => {
-                      setSucess(true);
-                      getNFTDetailByNFTTokenId(id)
-                      getPriceInUSD();
-                      getFiatAmount();
-                    }} >
+                      if(userWalletAddress === "false")
+                      {
+                         setConnectPopup(true)
+                      }
+                      else{
+                        setSucess(true);
+                        getNFTDetailByNFTTokenId(id)
+                        getPriceInUSD();
+                        getFiatAmount();  
+                      }
+                       }} >
                       <p>Buy Now</p>
                       <span>
                         <img src="/assets/icons/shop.png" alt="" />
@@ -733,6 +744,8 @@ const BuyNow = ({
           </div>
         </div>
       </Modal>
+      
+      <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
     </>
   );
 };

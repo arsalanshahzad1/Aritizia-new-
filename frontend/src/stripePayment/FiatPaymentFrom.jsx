@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -10,6 +10,7 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-ad
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { useNavigate } from "react-router-dom";
+import { Store } from "../Context/Store";
 
 const CARD_OPTIONS = {
   iconStyle: "solid",

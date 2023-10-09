@@ -69,10 +69,15 @@ const LandingPage = ({ search, setSearch }) => {
     let myAuctions = [];
 
     
+    //Database
+    // for (let i = 0; i < allNftIds?.length; i++) {
+    //   let id;
+    //   id = allNftIds?.[i];
 
-    for (let i = 0; i < allNftIds?.length; i++) {
+    //Blockchain
+     for (let i = 0; i < mintedTokens?.length; i++) {
       let id;
-      id = allNftIds?.[i];
+      id = mintedTokens?.[i].tokenId?.toString();
 
       
       let firstOwner = mintedTokens?.[i]?.firstOwner;

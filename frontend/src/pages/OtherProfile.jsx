@@ -32,6 +32,7 @@ import apis from "../service";
 
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { Store } from "../Context/Store";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";

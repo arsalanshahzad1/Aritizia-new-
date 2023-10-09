@@ -9,6 +9,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
+import { Store } from "../../Context/Store";
 // import { getAddress } from "../../methods/methods";
 import apis from "../../service";
 import Loader from "../../components/shared/Loader";

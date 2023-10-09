@@ -31,6 +31,7 @@ import { Store } from "./Context/Store";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import Loader from "./components/shared/Loader";
+import AdminLogin from "./pages/AdminLogin";
 
 function App() {
   const { account, checkIsWalletConnected, walletConnected, firstTimeCall } = useContext(Store)
@@ -56,7 +57,7 @@ function App() {
   useEffect(() => {
     checkIsWalletConnected();
   }, [account])
-  
+
   useEffect(() => {
     if (account == undefined) {
       localStorage.setItem("data", "false")
@@ -90,7 +91,7 @@ function App() {
       {/* <WalletManager /> */}
       <Router>
 
-      <LocationAwareScrollToTop />
+        <LocationAwareScrollToTop />
         <GlobalProvider>
           <Suspense fallback={<Loader />}>
             <Routes>
@@ -111,6 +112,10 @@ function App() {
               <Route
                 path="/login"
                 element={<Login />}
+              />
+              <Route
+                path="/admin-login"
+                element={<AdminLogin />}
               />
 
               <Route
@@ -172,6 +177,15 @@ function App() {
                   path="/buy"
                   element={<BuyNow search={search} setSearch={setSearch} />}
                 />
+
+
+
+
+              </Route>
+
+
+
+              <Route element={<ProtectedRoute isAdmin={true} />}>
                 <Route
                   path="/dashboard"
                   element={<DashboardMain search={search} setSearch={setSearch} />}
@@ -189,9 +203,8 @@ function App() {
                   element={<ChatPage search={search} setSearch={setSearch} />}
                 />
 
-
-
               </Route>
+
               <Route element={<ProtectedRoute isAuth={true} />}>
                 <Route
                   path="/create/single"

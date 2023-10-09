@@ -26,6 +26,7 @@ import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
 import DashboardCard2 from "./DashboardCard2";
 import apis from "../../service";
 import Loader from "../../components/shared/Loader";
+import { Store } from "../../Context/Store";
 
 function ControllingContent({ search, setSearch }) {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
@@ -446,20 +447,24 @@ function ControllingContent({ search, setSearch }) {
                 className="user-management-table-contorls"
                 style={{ justifyContent: "center" }}
               >
-                <button
-                  className={`controling-Nft-Load-More ${list?.pagination?.remaining == 0 ? "disable" : ""
-                    }`}
-                  onClick={() => {
-                    viewNftList(
-                      +list?.pagination?.page + 1,
-                      filter,
-                      searchInput
-                    );
-                    setIsOpen(null);
-                  }}
-                >
-                  Load More
-                </button>
+                
+                {list?.pagination?.remaining != 0  &&
+                   <button
+                   className={`controling-Nft-Load-More ${list?.pagination?.remaining == 0 ? "disable" : ""
+                     }`}
+                   onClick={() => {
+                     viewNftList(
+                       +list?.pagination?.page + 1,
+                       filter,
+                       searchInput
+                     );
+                     setIsOpen(null);
+                   }}
+                 >
+                   Load More
+                 </button>
+                }
+             
               </div>
             </>
           )

@@ -2236,15 +2236,11 @@ const Multiple = ({ search, setSearch }) => {
                             ) : (
                               <div className="Button-holding-div">
                                 {NFts.length > 0 &&
-                                  NFts[NFts.length - 1].status !== "completed" ? (
+                                  NFts[NFts.length - 1].status !== "completed" && (
                                   <button
                                     onClick={saveNFT}
                                     className="button-styling"
                                   >
-                                    Next
-                                  </button>
-                                ) : (
-                                  <button className="disabledButton">
                                     Next
                                   </button>
                                 )}
