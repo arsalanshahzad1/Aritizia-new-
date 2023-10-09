@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsShareFill } from "react-icons/bs";
 import "./Cards.css";
@@ -18,10 +18,8 @@ import {
   LinkedinShareButton,
   TwitterShareButton,
 } from "react-share";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+import { Store } from "../../Context/Store";
+// import { connectWallet, getProviderOrSigner,} from "../../methods/walletManager";
 
 const SimpleCard = ({
   onOpen,
@@ -66,6 +64,12 @@ const SimpleCard = ({
   const value = price;
   const [discountedValue, setdiscountedValue] = useState(value);
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   useEffect(() => {
     if (discountPercentage < 0 || discountPercentage > 100) {
       alert("Discount percentage should be between 1 - 100");
@@ -76,7 +80,9 @@ const SimpleCard = ({
   }, [discountPercentage]);
 
   const giveDiscount = async () => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,

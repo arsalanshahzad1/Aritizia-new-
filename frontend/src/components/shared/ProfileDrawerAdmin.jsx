@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -22,10 +22,10 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import apis from "../../service";
 import {
   Area,
@@ -41,6 +41,7 @@ import {
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Store } from "../../Context/Store";
 
 function ProfileDrawerAdmin({
   isVisible,
@@ -92,11 +93,18 @@ function ProfileDrawerAdmin({
   const handleStatus = (e) => {
     setStatus(e);
   };
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const [buyButton, showBuyButton] = useState(false);
 
   const checkSeller = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -111,10 +119,10 @@ function ProfileDrawerAdmin({
   };
 
   const getNFTLike = async () => {
-    var temp = JSON.parse(localStorage.getItem("data"));
-    var address = temp.id;
+    var temp = JSON.parse(localStorage?.getItem("data"));
+    var address = temp?.id;
     const response = await apis.getLikeNFT(address, id);
-    setLikeAndViewData(response.data.data);
+    setLikeAndViewData(response?.data?.data);
   };
 
   const postNFTLike = async () => {
@@ -152,7 +160,9 @@ function ProfileDrawerAdmin({
   };
 
   const getPriceInUSD = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -163,7 +173,7 @@ function ProfileDrawerAdmin({
     const structData = await marketplaceContract._idToNFT(id);
     const structData2 = await marketplaceContract._idToNFT2(id);
 
-    let discount = +structData2.fanDiscountPercent.toString();
+    let discount = +structData2.fanDiscountPercent?.toString();
     console.log("fanDiscountPercent", discount);
 
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
@@ -195,13 +205,13 @@ function ProfileDrawerAdmin({
       // let discountedEthPrice = (nftEthPrice * discount) / 100;
       let priceETH = discountedEthPrice;
       // platformFeeCalculate(priceETH, _buyerPercentFromDB);
-      setDiscountedEth(discountedEthPrice.toFixed(2));
+      setDiscountedEth(discountedEthPrice?.toFixed(2));
       console.log("discountedEthPrice", discountedEthPrice);
 
       // let dollarPriceOfETH = 1831;
 
       let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-      let priceInETH = dollarPriceOfETH.toString() / 1e18;
+      let priceInETH = dollarPriceOfETH?.toString() / 1e18;
       let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
 
       setDiscountedPlatformFeeETH(Math.ceil(feeETH));
@@ -209,7 +219,7 @@ function ProfileDrawerAdmin({
       let priceInUSD = priceETH;
       priceInUSD = oneETHInUSD * priceInUSD;
       priceInUSD = Math.ceil(priceInUSD);
-      setDiscountedAmountUSD(priceInUSD.toString());
+      setDiscountedAmountUSD(priceInUSD?.toString());
       // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
       let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
       feeUSD = Math.ceil(feeUSD);

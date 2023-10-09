@@ -9,7 +9,19 @@ const GlobalProvider = ({ children }) => {
     const [DashboardActiveTab, setDashboardActiveTab] = useState('dashboard')
     const [sidebarCollapsed, setsidebarCollapsed] = useState(true)
     const [prompt, setprompt] = useState('')
+    
+    
+    
+    
+    
+    
+    
+    
     const context_state = { prompt, setprompt, sidebarCollapsed, setsidebarCollapsed, activeTabsSetting, setactiveTabsSetting, DashboardActiveTab, setDashboardActiveTab }
+    
+    
+    
+    
     return (
         <GlobalContext.Provider value={context_state}>
             {children}

@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../landingpage/Header";
 import Footer from "../landingpage/Footer";
 import PageTopSection from "../../components/shared/PageTopSection";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef,useContext } from "react";
 import { AiFillTag } from "react-icons/ai";
 import { BsFillClockFill } from "react-icons/bs";
 import Dropdown from "react-dropdown";
@@ -25,11 +25,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useLocation } from 'react-router-dom';
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import Loader from "../../components/shared/Loader";
+import { Store } from "../../Context/Store";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -71,6 +72,13 @@ const Multiple = ({ search, setSearch }) => {
   const [collectionName, setCreateCollection] = useState("");
   const location = useLocation();
 
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   // useEffect(() =>{
   //   window.scrollTo(0,0)
   // } ,[])
@@ -81,41 +89,49 @@ const Multiple = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
+  
+  
   const getCollection = async () => {
-    const response = await apis.getNFTCollection();
-    console.log("collection api", response);
-    if (response.status) {
-      setcollectionOptions("");
-
-      for (let i = 0; i < response?.data?.data?.length; i++) {
-        let type = response?.data?.data[i]?.payment_type;
-        console.log(type == "eth", "eth", "TYpe", type);
-
-        if (type == "eth") {
-          setcollectionOptions((previousOptions) => [
-            ...previousOptions,
-            {
-              collection_id: response?.data?.data[i]?.id,
-              label: response?.data?.data[i]?.name,
-              image: response?.data?.data[i]?.media[0]?.original_url,
-              crypto: 0,
-            },
-          ]);
-        }
-        if (type == "usdt") {
-          setcollectionOptions((previousOptions) => [
-            ...previousOptions,
-            {
-              collection_id: response?.data?.data[i]?.id,
-              label: response?.data?.data[i]?.name,
-              image: response?.data?.data[i]?.media[0]?.original_url,
-              crypto: 1,
-            },
-          ]);
+    try {
+      const response = await apis.getNFTCollection(user_id);
+      console.log("collection api", response);
+      if (response?.status) {
+        setcollectionOptions("");
+  
+        for (let i = 0; i < response?.data?.data?.length; i++) {
+          let type = response?.data?.data[i]?.payment_type;
+          console.log(type == "eth", "eth", "TYpe", type);
+  
+          if (type == "eth") {
+            setcollectionOptions((previousOptions) => [
+              ...previousOptions,
+              {
+                collection_id: response?.data?.data[i]?.id,
+                label: response?.data?.data[i]?.name,
+                image: response?.data?.data[i]?.media[0]?.original_url,
+                crypto: 0,
+              },
+            ]);
+          }
+          if (type == "usdt") {
+            setcollectionOptions((previousOptions) => [
+              ...previousOptions,
+              {
+                collection_id: response?.data?.data[i]?.id,
+                label: response?.data?.data[i]?.name,
+                image: response?.data?.data[i]?.media[0]?.original_url,
+                crypto: 1,
+              },
+            ]);
+          }
         }
       }
+      console.log(collectionOptions, "collectionOptions");
+      
+    } catch (error) {
+      console.log(error.message);
     }
-    console.log(collectionOptions, "collectionOptions");
+  
   };
 
   const postSingleCollection = async () => {
@@ -500,7 +516,9 @@ const Multiple = ({ search, setSearch }) => {
   const mintThenList = async () => {
     console.log("test1");
 
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
     // console.log("Get the signer", signer);
     console.log("test3");
 
@@ -891,7 +909,9 @@ const Multiple = ({ search, setSearch }) => {
 
   const getItem = async () => {
     try {
-      const provider = await getProviderOrSigner();
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      // Set signer
+      const signer = provider.getSigner()
 
       const marketplaceContract = new Contract(
         MARKETPLACE_CONTRACT_ADDRESS.address,

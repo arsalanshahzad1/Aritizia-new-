@@ -307,7 +307,7 @@
 
 // export default CollectionProfile;
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState,useContext } from "react";
 import Header from "./landingpage/Header";
 import { FiSearch } from "react-icons/fi";
 import { FaFacebookF } from "react-icons/fa";
@@ -327,8 +327,9 @@ import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
-import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+// import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import SimpleCard from "../components/cards/SimpleCard";
+import { Store } from "../Context/Store";
 
 const DateDisplay = ({ datetime }) => {
 
@@ -361,6 +362,13 @@ function CollectionProfile({ search, setSearch }) {
   //   const [likedNfts, setLikedNfts] = useState([]);
   const [discountPrice, setDiscountPrice] = useState(0);
 
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const userId = userData?.id;
@@ -369,7 +377,11 @@ function CollectionProfile({ search, setSearch }) {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+    
     console.log("Connected wallet", userAddress);
     console.log("provider", provider);
     console.log("collectionData", collectionData);
@@ -385,14 +397,14 @@ function CollectionProfile({ search, setSearch }) {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    const signer = provider.getSigner();
+    // const signer = provider.getSigner();
     const address = await signer.getAddress();
 
     console.log("MYADDRESS", address);
 
     let listingType;
 
-    let mintedTokens = collectionData.nfts;
+    let mintedTokens = collectionData?.nfts;
 
     // let collectionTokens = await marketplaceContract.collection(0, 0);
 
@@ -403,15 +415,15 @@ function CollectionProfile({ search, setSearch }) {
 
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < mintedTokens.length; i++) {
+    for (let i = 0; i < mintedTokens?.length; i++) {
       let id;
       id = mintedTokens[i];
       // id = mintedTokens[i];
       console.log("id", id);
       console.log("YESS");
-      let firstOwner = mintedTokens[i].firstOwner;
+      let firstOwner = mintedTokens[i]?.firstOwner;
       if (firstOwner != "0x0000000000000000000000000000000000000000") {
-        const metaData = await nftContract.tokenURI(id);
+        const metaData = await nftContract?.tokenURI(id);
 
         const structData = await marketplaceContract._idToNFT(id);
 
@@ -419,22 +431,30 @@ function CollectionProfile({ search, setSearch }) {
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
-        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
-        let seller = structData.seller;
+        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+        let seller = structData?.seller;
 
         setDiscountPrice(discountOnNFT);
-        let collectionId = structData.collectionId.toString();
+        let collectionId = structData?.collectionId?.toString();
 
         let auctionData = await marketplaceContract._idToAuction(id);
+
+        let collectionImages;
+        
+        try {
         const response = await apis.getNFTCollectionImage(collectionId);
-        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        collectionImages = response?.data?.data?.media?.[0]?.original_url; 
+        } catch (error) {
+        console.log(error)  
+        }
+        
 
         listingType = structData?.listingType;
 
-        const price = ethers.utils.formatEther(structData?.price.toString());
+        const price = ethers.utils.formatEther(structData?.price?.toString());
 
         let highestBid = ethers.utils.formatEther(
-          auctionData.highestBid.toString()
+          auctionData?.highestBid?.toString()
         );
 
         axios
@@ -490,12 +510,12 @@ function CollectionProfile({ search, setSearch }) {
                 price: price,
                 paymentMethod: crypto,
                 basePrice: price,
-                startTime: auctionData.startTime.toString(),
-                endTime: auctionData.endTime.toString(),
+                startTime: auctionData?.startTime?.toString(),
+                endTime: auctionData?.endTime?.toString(),
                 highestBid: highestBid,
-                highestBidder: auctionData.highestBidder.toString(),
+                highestBidder: auctionData?.highestBidder?.toString(),
                 // isLive: auctionData.isLive.toString(),
-                seller: auctionData.seller.toString(),
+                seller: auctionData?.seller?.toString(),
               };
 
               // myAuctions.push(nftData);
@@ -514,7 +534,7 @@ function CollectionProfile({ search, setSearch }) {
 
   const viewNftCollectionProfile = async (id) => {
     const response = await apis.viewNftCollectionProfile(id);
-    if (response.status) {
+    if (response?.status) {
       console.log("viewNftCollectionProfile",response?.data?.data);
       setCollectionData(response?.data?.data);
     } else {
@@ -525,10 +545,12 @@ function CollectionProfile({ search, setSearch }) {
   useEffect(() => {
     viewNftCollectionProfile(collectionID);
   }, []);
+
   useEffect(() => {
-    getProviderOrSigner();
+    // getProviderOrSigner();
     getCollectionNfts();
   }, []);
+
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);

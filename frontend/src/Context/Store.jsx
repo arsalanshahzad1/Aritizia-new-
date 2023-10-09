@@ -1,19 +1,25 @@
 import { ethers, providers } from "ethers";
 import React, { useState, useEffect, createContext } from "react";
+import marketplaceAddr from '../contractsData/ArtiziaMarketplace-address.json'
+import marketplaceAbi from '../contractsData/ArtiziaMarketplace.json'
+import nftContractAddr from "../contractsData/ArtiziaNFT-address.json";
+import nftContractAbi from "../contractsData/ArtiziaNFT.json";
+import apis from "../service";
+
 export const Store = createContext();
 
 
-const getProviderPEGTOKENContrat = () => {
+const getProviderMarketContrat = () => {
     //  const provider = new ethers.providers.Web3Provider(ethereum);  // TODO
 
     // const provider = new ethers.providers.JsonRpcProvider(process.env.LocalRpc);
-    let RPC = process.env.REACT_APP_RPC;
+  
     // console.log("RPC",RPC);
 
     // const customRpcProvider = new providers.JsonRpcProvider(RPC);
     // console.log("RPC",customRpcProvider);
 
-    const provider = new ethers.providers.JsonRpcProvider(RPC);//"http://localhost:8545/"
+    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545/"); //"http://localhost:8545/"
 
     // const provider = new ethers.providers.JsonRpcProvider(RPC);
 
@@ -24,8 +30,33 @@ const getProviderPEGTOKENContrat = () => {
     // const provider = new ethers.providers.JsonRpcProvider(
     //   `https://eth-mainnet.g.alchemy.com/v2/${process.env.MAINNET_API}`
     // );
-    const PEGContract = new ethers.Contract(PEGTOKEN_CONTRACT_ADDRESS.address, PEGTOKEN_CONTRACT_ABI.abi, provider);
-    return PEGContract;
+    const marketContract = new ethers.Contract(marketplaceAddr.address, marketplaceAbi.abi, provider);
+    return marketContract;
+}
+
+const getProviderNFTContrat = () => {
+    //  const provider = new ethers.providers.Web3Provider(ethereum);  // TODO
+
+    // const provider = new ethers.providers.JsonRpcProvider(process.env.LocalRpc);
+  
+    // console.log("RPC",RPC);
+
+    // const customRpcProvider = new providers.JsonRpcProvider(RPC);
+    // console.log("RPC",customRpcProvider);
+
+    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545/"); //"http://localhost:8545/"
+
+    // const provider = new ethers.providers.JsonRpcProvider(RPC);
+
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //   `https://eth-goerli.g.alchemy.com/v2/${process.env.TESTNET_API}`
+    // );
+
+    // const provider = new ethers.providers.JsonRpcProvider(
+    //   `https://eth-mainnet.g.alchemy.com/v2/${process.env.MAINNET_API}`
+    // );
+    const nftContract = new ethers.Contract(nftContractAddr.address, nftContractAbi.abi, provider);
+    return nftContract;
 }
 
 export const StoreProvider = ({ children }) => {
@@ -63,13 +94,6 @@ export const StoreProvider = ({ children }) => {
     // else{
     //     localStorage.setItem('data', false)
     //     localStorage.setItem('userAddress', false)     
-    // }
-
-    // const getPEGTokenContrat = () => {
-    //     const provider = new ethers.providers.Web3Provider(ethereum);
-    //     const signer = provider.getSigner();
-    //     const PEGContract = new ethers.Contract(PEGTOKEN_CONTRACT_ADDRESS.address, PEGTOKEN_CONTRACT_ABI.abi, signer);
-    //     return PEGContract;
     // }
 
     const connectWallet = async () => {
@@ -114,6 +138,7 @@ export const StoreProvider = ({ children }) => {
                 setAccount(accounts[0]);
                 // await connectWallet();
                 setWalletConnected(true)
+                postWalletAddress(accounts?.[0]);
                 // window.location.reload()
                 // await balanceOf(accounts[0]);
             });
@@ -143,6 +168,7 @@ export const StoreProvider = ({ children }) => {
             if (accounts.length) {
                 setAccount(accounts[0]);
                 setWalletConnected(true);
+                postWalletAddress(accounts?.[0]);
                 // window.location.reload()
             } else {
                 console.log("No account Found");
@@ -156,6 +182,51 @@ export const StoreProvider = ({ children }) => {
         }
     };
 
+    const postWalletAddress = async (address) => {
+        let localstrageUserData = localStorage.getItem("data");
+      
+        let storedWallet = JSON.parse(localStorage.getItem("data"))?.wallet_address;
+        let isEmail = JSON.parse(localStorage.getItem("data"))?.is_email;
+        let id = JSON.parse(localStorage.getItem("data"))?.id;
+        
+        if (localstrageUserData === null) {
+          const response = await apis.postWalletAddress({
+            wallet_address: address,
+            user_id: 0,
+          });
+          localStorage.setItem("data", JSON.stringify(response?.data?.data));
+        } else {
+          if (!isEmail && storedWallet != "") {
+            if (localStorage.getItem("data")) {
+              storedWallet = storedWallet?.toLowerCase();
+              address = address?.toLowerCase();
+      
+              if (storedWallet == address) {
+              } else {
+                const response = await apis.postWalletAddress({
+                  wallet_address: address,
+                  user_id: 0,
+                });
+                localStorage.removeItem("data");
+                localStorage.setItem("data", JSON.stringify(response?.data?.data));
+              }
+            } else {
+              const response = await apis.postWalletAddress({
+                wallet_address: address,
+                user_id: id,
+              });
+              localStorage.setItem("data", JSON.stringify(response?.data?.data));
+            }
+          } else {
+            const response = await apis.postWalletAddress({
+              wallet_address: address,
+              user_id: id,
+            });
+            localStorage.setItem("data", JSON.stringify(response?.data?.data));
+          }
+        }
+      };
+
     return (
         <>
             <Store.Provider
@@ -164,6 +235,9 @@ export const StoreProvider = ({ children }) => {
                     account,
                     walletConnected,
                     loader,
+                    getProviderMarketContrat,
+                    getProviderNFTContrat,
+                    connectWallet,
                     setAccount,
                     setWalletConnected,
                     checkIsWalletConnected

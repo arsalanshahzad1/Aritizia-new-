@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import {
-    connectWallet,
-    getProviderOrSigner,
-} from "../../methods/walletManager";
+import { Store } from '../../Context/Store';
+// import {
+//     connectWallet,
+//     getProviderOrSigner,
+// } from "../../methods/walletManager";
 
 function HeaderConnectPopup({ connectPopup, setConnectPopup }) {
     const user = localStorage.getItem("data")
+    const {account,connectWallet,checkIsWalletConnected}=useContext(Store);
 
+    useEffect(()=>{
+    checkIsWalletConnected()
+    },[account])
     return (
         <Modal
             show={connectPopup}

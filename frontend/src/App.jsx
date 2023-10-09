@@ -20,14 +20,14 @@ import CollectionProfile from "./pages/CollectionProfile";
 import ChatPage from "./Chat/ChatPage";
 import "react-toastify/dist/ReactToastify.css";
 import Art from "./pages/Art";
-import WalletManager from "../src/methods/walletManager";
+// import WalletManager from "../src/methods/walletManager";
 import { ToastContainer } from "react-toastify";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import apis from "./service";
-import { Store } from "./methods/Store";
+import { Store } from "./Context/Store";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import Loader from "./components/shared/Loader";
@@ -56,6 +56,7 @@ function App() {
   useEffect(() => {
     checkIsWalletConnected();
   }, [account])
+  
   useEffect(() => {
     if (account == undefined) {
       localStorage.setItem("data", "false")
@@ -86,7 +87,7 @@ function App() {
 
   return (
     <>
-      <WalletManager />
+      {/* <WalletManager /> */}
       <Router>
 
       <LocationAwareScrollToTop />

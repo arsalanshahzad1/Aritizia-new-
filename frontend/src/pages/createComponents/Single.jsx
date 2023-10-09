@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../landingpage/Header";
 import Footer from "../landingpage/Footer";
 import PageTopSection from "../../components/shared/PageTopSection";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef,useContext } from "react";
 import { AiFillTag } from "react-icons/ai";
 import { BsFillClockFill } from "react-icons/bs";
 import Dropdown from "react-dropdown";
@@ -23,11 +23,12 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import Loader from "../../components/shared/Loader";
+import { Store } from "../../Context/Store";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -82,13 +83,20 @@ const Single = ({ search, setSearch }) => {
   const user_id = id?.id;
   const navigate = useNavigate();
 
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   useEffect(() =>{
     window.scrollTo(0,0)
   } ,[])
 
   const getCollection = async () => {
-    const response = await apis.getNFTCollection();
-    if (response.status) {
+    const response = await apis.getNFTCollection(user_id);
+    if (response?.status) {
       setcollectionOptions("");
 
       for (let i = 0; i < response?.data?.data?.length; i++) {
@@ -268,7 +276,7 @@ const Single = ({ search, setSearch }) => {
       try {
         setLoading(true);
         console.log("this is image selectedImage ", selectedImage);
-        console.log("this is image item.file ", item.file);
+        console.log("this is image item.file   ", item.file);
         // const file = await convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
         // const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
 
@@ -463,7 +471,9 @@ const Single = ({ search, setSearch }) => {
 
   // mint the NFT then list
   const mintThenList = async (result) => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -658,7 +668,9 @@ const Single = ({ search, setSearch }) => {
 
   const getItem = async () => {
     try {
-      const provider = await getProviderOrSigner();
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      // Set signer
+      const signer = provider.getSigner()
       const marketplaceContract = new Contract(
         MARKETPLACE_CONTRACT_ADDRESS.address,
         MARKETPLACE_CONTRACT_ABI.abi,
@@ -725,7 +737,9 @@ const Single = ({ search, setSearch }) => {
   };
 
   const getBlockTimestamp = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,

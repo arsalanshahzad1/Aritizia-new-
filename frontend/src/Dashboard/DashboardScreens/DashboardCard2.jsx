@@ -7,10 +7,10 @@ import nft from "../../../public/assets/images/nft-big.png";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
 import adminApis from "../../service/adminIndex";
 import { BsCheck } from "react-icons/bs";

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,useContext } from "react";
 import CountUp from "react-countup";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -14,25 +14,28 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../../service";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import { getAddress } from "../../methods/methods";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
 import { Link } from "react-router-dom";
 import Loader from "../../components/shared/Loader";
 import { CiLight } from "react-icons/ci";
+import { Store } from "../../Context/Store";
 
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(false);
   const targetRef = useRef(null);
-
+  const [loader, setLoader] = useState(true)
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
+
+  const {getProviderMarketContrat, getProviderNFTContrat, account,checkIsWalletConnected}=useContext(Store)
 
   
   const viewAllNfts = async () => {
@@ -52,30 +55,15 @@ const LandingPage = ({ search, setSearch }) => {
     const fetchData = async () => {
       await viewAllNfts();
     };
-
     fetchData();
   }, []);
 
-
+  
   const getListedNfts = async (allNftIds) => {
-    const provider = await getProviderOrSigner();
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      provider
-    );
 
     let listingType;
-    
 
-
-    let mintedTokens = await marketplaceContract.getListedNfts();
+    let mintedTokens = await getProviderMarketContrat().getListedNfts();
     console.log("mintedTokens",mintedTokens)
     let myNFTs = [];
     let myAuctions = [];
@@ -88,12 +76,13 @@ const LandingPage = ({ search, setSearch }) => {
 
       
       let firstOwner = mintedTokens?.[i]?.firstOwner;
-      if (firstOwner != "0x0000000000000000000000000000000000000000") {
+      
+      if (firstOwner != "0x0000000000000000000000000000000000000000" && mintedTokens?.[i]?.listed) {
         console.log("firstOwner",id)
 
-        const metaData = await nftContract.tokenURI(id);
+        const metaData = await getProviderNFTContrat().tokenURI(id);
         console.log(metaData,"metaDataID")
-       const structData = await marketplaceContract._idToNFT(id);
+       const structData = await getProviderMarketContrat()._idToNFT(id);
         let collectionId = structData?.collectionId?.toString();
 
       
@@ -101,18 +90,15 @@ const LandingPage = ({ search, setSearch }) => {
         let seller = structData?.seller;
 
         
-        let auctionData = await marketplaceContract._idToAuction(id);
+        let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
-        let highestBid = ethers.utils.formatEther(
-          auctionData.highestBid.toString()
-        );
+        let highestBid = ethers.utils.formatEther(auctionData?.highestBid?.toString());
 
         listingType = structData?.listingType;
      
         const response = await apis.getNFTCollectionImage(collectionId);
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
     
-
         const price = ethers.utils.formatEther(structData?.price?.toString());
        
         axios
@@ -162,13 +148,10 @@ const LandingPage = ({ search, setSearch }) => {
                 collectionImages: collectionImages,
                 seller: auctionData?.seller?.toString(),
               };
-              
-              console.log("aaaa",nftData);
               myAuctions.push(nftData);
               setNftListAuction((prev) => [...prev, nftData]);
             }
           })
-
           .catch((error) => {
             console.error("Error fetching metadata:", error);
           });
@@ -177,15 +160,15 @@ const LandingPage = ({ search, setSearch }) => {
   };
 
  
-  useEffect(() => {
-    connectWallet();
-    getProviderOrSigner();
-    // getListedNfts();
-  }, [userAddress]);
+  // useEffect(() => {
+  //   connectWallet();
+  //   getProviderOrSigner();
+  //   // getListedNfts();
+  // }, [userAddress]);
 
-  useEffect(() => {
-    getAddress();
-  }, []);
+  // useEffect(() => {
+  //   getAddress();
+  // }, []);
 
   useEffect(() => {
     const options = {
@@ -206,7 +189,9 @@ const LandingPage = ({ search, setSearch }) => {
     };
   }, []);
 
-
+useEffect(()=>{
+  checkIsWalletConnected()
+},[account])
 
 
 const [counterData , setCounterData] = useState('')
@@ -228,13 +213,12 @@ const [counterData , setCounterData] = useState('')
     viewLandingPageDetail()
   }, [])
 
-  const [loader, setLoader] = useState(true)
+ 
 
   return (
     <>
       {loader && <Loader />}
       <Header
-        connectWallet={connectWallet}
         search={search}
         setSearch={setSearch}
       />

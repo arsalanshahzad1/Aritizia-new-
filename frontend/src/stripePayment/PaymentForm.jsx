@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apis from "../service";
-import { getProviderOrSigner } from "../methods/walletManager";
+// import { getProviderOrSigner } from "../methods/walletManager";
 import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
@@ -48,6 +48,12 @@ const PaymentForm = ({
   const user_id = id?.id;
   const stripe = useStripe();
   const elements = useElements();
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const handleSubmit = async (e) => {
     setIspayment(true)
@@ -132,8 +138,9 @@ const PaymentForm = ({
   };
 
   const updateUserPlanInSC = async (planId) => {
-    const signer = await getProviderOrSigner(true);
-    console.log("QQ Three");
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,

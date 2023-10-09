@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useContext } from "react";
 
 import NewItemCard from "../components/cards/NewItemCard";
 import Footer from "./landingpage/Footer";
@@ -19,12 +19,13 @@ import Followers from "./settingFolder/Followers";
 import apis from "../service";
 import { useNavigate } from "react-router-dom";
 import Gallery from "./Gallery";
-import { getAddress } from "../methods/methods";
-import { getProviderOrSigner } from "../methods/walletManager";
+// import { getAddress } from "../methods/methods";
+// import { getProviderOrSigner } from "../methods/walletManager";
 import RejectedNFTSCard from "../components/cards/RejectedNFTSCard";
 import { toast } from "react-toastify";
 import Loader from "../components/shared/Loader";
 import Header from "./landingpage/Header";
+import { Store } from "../Context/Store";
 
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
@@ -38,7 +39,14 @@ const Profile = ({ search, setSearch }) => {
   const [likedNfts, setLikedNfts] = useState([]);
   const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   const [addedFans, setAddedFans] = useState({});
+  const [discountPrice,setDiscountPrice]=useState(0)
   const navigate = useNavigate();
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const getNFTlikeListing = async () => {
     try {
@@ -62,7 +70,9 @@ const Profile = ({ search, setSearch }) => {
   const userId = userData?.id;
 
   const getLikedNfts = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -75,7 +85,9 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
+
     let NFTId = await getLikedNftsList();
+    console.log("NFTId",NFTId)
 
     let liked = [];
 
@@ -104,7 +116,7 @@ const Profile = ({ search, setSearch }) => {
         let listingType = structData?.listingType;
 
         let highestBid = ethers.utils.formatEther(
-          auctionData.highestBid.toString()
+          auctionData?.highestBid?.toString()
         );
 
         setDiscountPrice(discountOnNFT);
@@ -189,7 +201,10 @@ const Profile = ({ search, setSearch }) => {
     try {
       if (validateFanAddresses(FansAddress)) {
         setLoader(true)
-        const signer = await getProviderOrSigner(true);
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // Set signer
+        const signer = provider.getSigner()
 
         const marketplaceContract = new Contract(
           MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -233,7 +248,9 @@ const Profile = ({ search, setSearch }) => {
 
   const postFanList = async () => {
 
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -257,6 +274,7 @@ const Profile = ({ search, setSearch }) => {
   const viewAllNfts = async () => {
     try {
       const response = await apis.viewAllMyNfts(userData.id);
+      // console.log(response,"response")
       if (response?.data?.data?.length > 0) {
         getMyListedNfts(response?.data?.data)
       }
@@ -265,23 +283,41 @@ const Profile = ({ search, setSearch }) => {
       console.log(error, "errrrr")
       setNftAuctionLoader(false)
     }
+  
   };
 
-
-
-
+  const getPurchasedNfts = async () => {
+    try {
+      const response = await apis.getPurchasedNfts(userId);
+      // console.log(response,"response")
+      if (response?.data?.data?.length > 0) {
+        getMyNfts(response?.data?.data)
+      }
+      setNftAuctionLoader(false)
+    } catch (error) {
+      console.log(error, "errrrr")
+      setNftAuctionLoader(false)
+    }
+  
+  };
+  
   useEffect(() => {
-    const fetchData = async () => {
-      await viewAllNfts();
-    };
-    fetchData();
+    // const fetchData = async () => {
+    //   await viewAllNfts();
+    // };
+    // fetchData();
+  viewAllNfts();
+  getPurchasedNfts();
   }, []);
 
   const getMyListedNfts = async (allNftIds) => {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -294,7 +330,7 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    const signer = provider.getSigner();
+    // const signer = provider.getSigner();
     const address = await signer.getAddress();
 
 
@@ -320,19 +356,18 @@ const Profile = ({ search, setSearch }) => {
    
       const metaData = await nftContract.tokenURI(id);
 
-      console.log(metaData,"MEATADAAAAAAAAAA")
       const structData = await marketplaceContract._idToNFT(id);
-
+      
       const fanNftData = await marketplaceContract._idToNFT2(id);
-
+      
       let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
       setDiscountPrice(discountOnNFT);
-
+      listingType = structData?.listingType;
+      
       let auctionData = await marketplaceContract._idToAuction(id);
-
-      listingType = structData.listingType;
-
+      
+    
       let highestBid = ethers.utils.formatEther(
         auctionData?.highestBid?.toString()
       );
@@ -349,6 +384,7 @@ const Profile = ({ search, setSearch }) => {
           data = data?.replace(/\\/g, "");
 
           data = JSON.parse(data);
+          console.log("data",data?.crypto)
           const crypto = data?.crypto;
           const title = data?.title;
           const image = data?.image;
@@ -357,6 +393,7 @@ const Profile = ({ search, setSearch }) => {
           const collection = data?.collection;
 
           if (listingType === 0) {
+    
             const nftData = {
               id: id, //
               title: title,
@@ -372,6 +409,7 @@ const Profile = ({ search, setSearch }) => {
 
 
           } else if (listingType === 1) {
+           
             const nftData = {
               id: id,
               title: title,
@@ -397,16 +435,22 @@ const Profile = ({ search, setSearch }) => {
     setNftLoader(false)
   };
 
-  const getMyNfts = async () => {
+  const getMyNfts = async (NFTid) => {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
+    // const provider = await getProviderOrSigner();
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
+
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
       NFT_CONTRACT_ABI.abi,
@@ -415,15 +459,15 @@ const Profile = ({ search, setSearch }) => {
 
 
     console.log(userAddress,"userAddress")
-    const signer = provider.getSigner();
+    // const signer = provider.getSigner();
     const address = await signer.getAddress();
 
 
     let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
 
-    for (let i = 0; i < mintedTokens?.length; i++) {
+    for (let i = 0; i < NFTid?.length; i++) {
       let id;
-      id = +mintedTokens?.[i]?.tokenId?.toString();
+      id = NFTid[i];
       let collectionId;
       collectionId = +mintedTokens?.[i]?.collectionId?.toString();
 
@@ -435,12 +479,7 @@ const Profile = ({ search, setSearch }) => {
       const metaData = await nftContract.tokenURI(id);
 
 
-      const structData = await marketplaceContract._idToNFT("0");
-
-
-
-      listingType = structData?.listingType;
-
+      const structData = await marketplaceContract._idToNFT(id);
 
       const price = ethers.utils.formatEther(structData?.price?.toString());
 
@@ -501,11 +540,11 @@ const Profile = ({ search, setSearch }) => {
     return response?.data?.data;
   };
 
-  useEffect(() => {
-    getLikedNfts();
-    getAddress();
-    getProviderOrSigner();
-  }, []);
+  // useEffect(() => {
+  //   // getLikedNfts();
+  //   // getAddress();
+  //   // getProviderOrSigner();
+  // }, []);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
@@ -612,8 +651,6 @@ const Profile = ({ search, setSearch }) => {
   const [likedNftAuctionLoader, setLikedNftAuctionLoader] = useState(true)
 
   const [fanToggle, setFanToggle] = useState(false)
-
-
 
 
   return (

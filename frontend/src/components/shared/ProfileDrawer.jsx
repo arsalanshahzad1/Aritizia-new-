@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect,useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -22,10 +22,10 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import apis from "../../service";
 import {
   Area,
@@ -42,6 +42,7 @@ import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import FiatStripeContainer from "../../stripePayment/FiatStripeContainer";
+import { Store } from "../../Context/Store";
 
 function ProfileDrawer({
   isVisible,
@@ -110,8 +111,17 @@ function ProfileDrawer({
 
   const [buyButton, showBuyButton] = useState(false);
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   const checkSeller = async () => {
-    const provider = await getProviderOrSigner();
+    // const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -123,7 +133,7 @@ function ProfileDrawer({
     let usdtEntered = 1639;
     let OneUSDMeItnaEth = getLatestUSDTPrice / 10 ** 18;
     // console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
-    console.log("getLatestUSDTPrice", getLatestUSDTPrice.toString());
+    console.log("getLatestUSDTPrice", getLatestUSDTPrice?.toString());
     // console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
 
     // console.log("eth price check", (usdPrice / 10 ** 8) * 10 ** 18);
@@ -134,12 +144,12 @@ function ProfileDrawer({
     // console.log("usdPrice", usdPrice.toString());
 
     var amount = +priceETH;
-    var value = amount.toString();
+    var value = amount?.toString();
 
-    console.log("ETH amount", ethers.utils.parseEther(value).toString());
+    // console.log("ETH amount", ethers.utils.parseEther(value).toString());
 
     const structData = await marketplaceContract._idToNFT(id);
-    let seller = structData.seller;
+    let seller = structData?.seller;
     // let royaltyPrice = structData.royaltyPrice.toString();
     // console.log("checkSeller royaltyPrice", royaltyPrice);
     // console.log("checkSeller Seller", seller);
@@ -178,7 +188,7 @@ function ProfileDrawer({
   };
 
   const postNFTView = async () => {
-    var temp = JSON.parse(localStorage.getItem("data"));
+    var temp = JSON.parse(localStorage?.getItem("data"));
     var address = temp.id;
     const response = await apis.postViewNFT({
       view_by: address,
@@ -256,10 +266,10 @@ function ProfileDrawer({
   ) => {
     console.log("handleNFTSoldEvent");
     let soldData = {
-      token_id: +tokenId.toString(),
-      seller: seller.toString(),
-      buyer: owner.toString(),
-      price: ethers.utils.formatEther(price.toString()),
+      token_id: +tokenId?.toString(),
+      seller: seller?.toString(),
+      buyer: owner?.toString(),
+      price: ethers.utils.formatEther(price?.toString()),
     };
     console.log("soldData", soldData);
 
@@ -291,7 +301,9 @@ function ProfileDrawer({
   };
 
   const getPriceInUSD = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     let _buyerPercent;
     console.log("buyerPlan asd", buyerPlan);
@@ -375,8 +387,10 @@ function ProfileDrawer({
   };
 
   const getFiatAmount = async () => {
-
-    const signer = await getProviderOrSigner(true);
+  
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  // Set signer
+  const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -398,7 +412,7 @@ function ProfileDrawer({
     let checkFan = await marketplaceContract.checkFan(id);
     console.log("checkFan  ", checkFan);
     const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2.fanDiscountPercent.toString();
+    let discount = +structData2?.fanDiscountPercent?.toString();
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeUSDT;
@@ -411,7 +425,7 @@ function ProfileDrawer({
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei.toString();
+      amountInWei = amountInWei?.toString();
 
       console.log("www fee", fee);
       console.log("www amount", amount);
@@ -431,7 +445,9 @@ function ProfileDrawer({
     console.log("11111111111111");
 
     ethPurchase = true;
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
     console.log("2222222222222");
 
     const marketplaceContract = new Contract(
@@ -444,18 +460,18 @@ function ProfileDrawer({
     const structData = await marketplaceContract._idToNFT(id);
     console.log("4444444444444");
 
-    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
+    let nftEthPrice = ethers.utils.formatEther(structData?.price?.toString());
     console.log("555555555555");
 
     var fee = +platformFeeETH;
     var amount = +priceETH + fee;
-    var value = amount.toString();
+    var value = amount?.toString();
     console.log("ETH amount", value);
 
     let checkFan = await marketplaceContract.checkFan(id);
 
     const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2.fanDiscountPercent.toString();
+    let discount = +structData2?.fanDiscountPercent?.toString();
 
     if (checkFan && discount != 0) {
       fee = +discountedPlatformFeeETH;
@@ -464,7 +480,7 @@ function ProfileDrawer({
 
       // check this
       amount = +discountedEth + fee;
-      value = amount.toString();
+      value = amount?.toString();
     }
 
     console.log("www paymentMethod", paymentMethod);
@@ -503,7 +519,9 @@ function ProfileDrawer({
     // console.log("Amount", amountUSD);
     // console.log("price", price);
     usdtPurchase = true;
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -520,7 +538,7 @@ function ProfileDrawer({
     let fee = +platformFeeUSDT;
     let amount = Math.ceil(Number(amountUSD)) + Math.ceil(fee);
     let amountInWei = amount * 10 ** 6;
-    amountInWei = amountInWei.toString();
+    amountInWei = amountInWei?.toString();
 
     let checkFan = await marketplaceContract.checkFan(id);
     console.log("checkFan  ", checkFan);
@@ -538,7 +556,7 @@ function ProfileDrawer({
 
       amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
       amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei.toString();
+      amountInWei = amountInWei?.toString();
 
       // console.log("www fee", fee);
       // console.log("www amount", amount);
@@ -560,7 +578,7 @@ function ProfileDrawer({
     // console.log("www ");
     // console.log("wwwasda ");
     var amountETH = +priceETH + +platformFeeETH;
-    var value = amountETH.toString();
+    var value = amountETH?.toString();
     // console.log("www amountETH", value);
 
     // console.log("www paymentMethod", paymentMethod);
@@ -569,7 +587,7 @@ function ProfileDrawer({
     // console.log("www buyerPlan", buyerPlan);
     // console.log("www address", NFT_CONTRACT_ADDRESS.address);
     // console.log("www amountInWei", amountInWei);
-    let amountInETHInWei = ethers.utils.parseEther(value).toString();
+    let amountInETHInWei = ethers.utils.parseEther(value);
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,

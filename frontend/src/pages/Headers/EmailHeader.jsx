@@ -9,13 +9,14 @@ import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "../landingpage/UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import { getAddress } from "../../methods/methods";
+// import { getAddress } from "../../methods/methods";
 import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from 'react-icons/io'
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import Notification from "../landingpage/Notification";
+import { Store } from "../../Context/Store";
 
 const EmailHeader = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -40,6 +41,12 @@ const EmailHeader = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
@@ -69,9 +76,9 @@ const EmailHeader = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  useEffect(() => {
-    setInterval(getAddress, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(getAddress, 3000);
+  // }, []);
 
   function handleDisconnect() {
     // Handle wallet disconnection here

@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import "./Cards.css";
 import chack from "../../../public/assets/images/chack.png";
 import { Link } from "react-router-dom";
@@ -8,14 +8,10 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-
-import {
-  FacebookShareButton,
-  InstapaperShareButton,
-  TwitterShareButton,
-} from "react-share";
-import { getProviderOrSigner } from "../../methods/walletManager";
+import {FacebookShareButton, InstapaperShareButton,TwitterShareButton } from "react-share";
+// import { getProviderOrSigner } from "../../methods/walletManager";
 import apis from "../../service";
+import { Store } from "../../Context/Store";
 
 const RejectedNFTSCard = ({
   onOpen,
@@ -35,6 +31,12 @@ const RejectedNFTSCard = ({
   const [isVisible, setIsVisible] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(0);
   const [rejectedNfts, setRejectedNfts] = useState([]);
+
+  const{getProviderMarketContrat ,getProviderNFTContrat,checkIsWalletConnected,account}=useContext(Store); 
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
@@ -57,12 +59,10 @@ const RejectedNFTSCard = ({
     console.log("userId", userId);
     try {
       const response = await apis.viewRejectedNftList(userId);
-      console.log("response.data.data", response.data.data);
-
-      if (response.status) {
+      console.log("response.data.data", response?.data?.data);
+      if (response?.status) {
         // setRejectedList(response.data.data);
-        getRejecteNfts(response.data.data);
-      } else {
+        getRejecteNfts(response?.data?.data);
       }
     } catch (e) {
       console.log("Error: ", e);
@@ -71,21 +71,15 @@ const RejectedNFTSCard = ({
   };
 
   const getRejecteNfts = async (rejectedList) => {
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
+    // const provider = await getProviderOrSigner();
 
     console.log("LISY", rejectedList);
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      provider
-    );
     // console.log("rejectedList", rejectedList);
 
     let rejected = [];
@@ -95,35 +89,35 @@ const RejectedNFTSCard = ({
     // console.log("rejectedList", rejectedList);
 
     console.log("Running");
-    if (rejectedList.length > 0 && rejectedList != "") {
-      for (let i = 0; i < rejectedList.length; i++) {
+    if (rejectedList?.length > 0 && rejectedList != "") {
+      for (let i = 0; i < rejectedList?.length; i++) {
         let id;
-        let collectionImage = rejectedList[i].collection_image;
+        let collectionImage = rejectedList[i]?.collection_image;
         id = +rejectedList[i];
         // id =i;
         console.log("zzz", id);
 
-        const metaData = await nftContract.tokenURI(id);
+        const metaData = await getProviderNFTContrat().tokenURI(id);
 
-        const structData = await marketplaceContract._idToNFT(id);
+        const structData = await getProviderMarketContrat()._idToNFT(id);
 
-        const fanNftData = await marketplaceContract._idToNFT2(id);
+        const fanNftData = await getProviderMarketContrat()._idToNFT2(id);
 
-        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
         setDiscountPrice(discountOnNFT);
 
-        let auctionData = await marketplaceContract._idToAuction(id);
+        let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
-        let listingType = structData.listingType;
+        let listingType = structData?.listingType;
 
         let highestBid = ethers.utils.formatEther(
-          auctionData.highestBid.toString()
+          auctionData?.highestBid?.toString()
         );
 
         setDiscountPrice(discountOnNFT);
 
-        let collectionId = structData.collectionId.toString();
+        let collectionId = structData?.collectionId?.toString();
 
         console.log("collectionId", collectionId);
         const response = await apis.getNFTCollectionImage(collectionId);
@@ -138,16 +132,16 @@ const RejectedNFTSCard = ({
 
           console.log("zayyan", id);
 
-          // let auctionData = await marketplaceContract._idToAuction(id);
+          // let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
           // let listingType = structData.listingType;
 
-          const price = ethers.utils.formatEther(structData.price.toString());
+          const price = ethers.utils.formatEther(structData?.price?.toString());
 
           axios
             .get(metaData)
             .then((response) => {
-              const meta = response.data;
+              const meta = response?.data;
               let data = JSON.stringify(meta);
 
               data = data.slice(2, -5);
@@ -157,12 +151,12 @@ const RejectedNFTSCard = ({
               // Extracting values using dot notation
               // const price = data.price;
               // listingType = data.listingType;
-              const crypto = data.crypto;
-              const title = data.title;
-              const image = data.image;
-              const royalty = data.royalty;
-              const description = data.description;
-              const collection = data.collection;
+              const crypto = data?.crypto;
+              const title = data?.title;
+              const image = data?.image;
+              const royalty = data?.royalty;
+              const description = data?.description;
+              const collection = data?.collection;
 
               const nftData = {
                 id: id, //

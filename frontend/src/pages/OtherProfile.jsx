@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect,useContext } from "react";
 import Header from "./landingpage/Header";
 import { BsFillEnvelopeFill } from "react-icons/bs";
 import BuyNow from "../components/cards/BuyNow";
@@ -27,8 +27,8 @@ import liked1 from "../../public/assets/images/liked1.png";
 import liked2 from "../../public/assets/images/liked2.png";
 import collection from "../../public/assets/images/Collection-card-image.png";
 import apis from "../service";
-import { getAddress } from "../methods/methods";
-import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+// import { getAddress } from "../methods/methods";
+// import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -58,6 +58,12 @@ const OtherProfile = ({ search, setSearch }) => {
   const [userID, setUserID] = useState(searchParams.get("id"));
   const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
   const [scroll, setScroll] = useState(true)
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   // useEffect(() => {
   //   console.log(scroll, 'scroll');
@@ -212,7 +218,11 @@ const OtherProfile = ({ search, setSearch }) => {
     let emptyList = [];
     setNftListAuction(emptyList);
     setNftListFP(emptyList);
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+    
     console.log("Connected wallet", userAddress);
     console.log("provider", provider);
     const marketplaceContract = new Contract(
@@ -226,7 +236,7 @@ const OtherProfile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    const signer = provider.getSigner();
+    // const signer = provider.getSigner();
     const address = await signer.getAddress();
 
     console.log("MYADDRESS", address);
@@ -240,20 +250,20 @@ const OtherProfile = ({ search, setSearch }) => {
 
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < allMyNfts.length; i++) {
+    for (let i = 0; i < allMyNfts?.length; i++) {
       let id;
       id = allMyNfts[i]
       // id = mintedTokens[i];
       console.log("YESS");
 
-      const metaData = await nftContract.tokenURI(id);
+      const metaData = await nftContract?.tokenURI(id);
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
       axios
         .get(metaData)
         .then((response) => {
-          const meta = response.data;
+          const meta = response?.data;
           let data = JSON.stringify(meta);
 
           data = data.slice(2, -5);
@@ -261,14 +271,14 @@ const OtherProfile = ({ search, setSearch }) => {
 
           data = JSON.parse(data);
           // Extracting values using dot notation
-          const price = data.price;
-          listingType = data.listingType;
-          const crypto = data.crypto;
-          const title = data.title;
-          const image = data.image;
-          const royalty = data.royalty;
-          const description = data.description;
-          const collection = data.collection;
+          const price = data?.price;
+          listingType = data?.listingType;
+          const crypto = data?.crypto;
+          const title = data?.title;
+          const image = data?.image;
+          const royalty = data?.royalty;
+          const description = data?.description;
+          const collection = data?.collection;
 
           if (listingType === 0) {
             const nftData = {
@@ -294,12 +304,12 @@ const OtherProfile = ({ search, setSearch }) => {
               image: image,
               price: price,
               basePrice: price,
-              endTime: auctionData.endTime.toString(),
-              highestBid: auctionData.highestBid.toString(),
-              highestBidder: auctionData.highestBidder.toString(),
-              isLive: auctionData.isLive.toString(),
-              seller: auctionData.seller.toString(),
-              startTime: auctionData.startTime.toString(),
+              endTime: auctionData?.endTime?.toString(),
+              highestBid: auctionData?.highestBid?.toString(),
+              highestBidder: auctionData?.highestBidder?.toString(),
+              isLive: auctionData?.isLive?.toString(),
+              seller: auctionData?.seller?.toString(),
+              startTime: auctionData?.startTime?.toString(),
             };
 
             // myAuctions.push(nftData);
@@ -322,9 +332,9 @@ const OtherProfile = ({ search, setSearch }) => {
   }, [userADDRESS]);
 
 
-  useEffect(() => {
-    getAddress();
-  }, []);
+  // useEffect(() => {
+  //   getAddress();
+  // }, []);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
@@ -339,7 +349,7 @@ const OtherProfile = ({ search, setSearch }) => {
 
   const postChatMeaage = async () => {
     console.log("clicking");
-    const id = JSON.parse(localStorage.getItem("data"));
+    const id = JSON.parse(localStorage?.getItem("data"));
     const user_id = id?.id;
     const response = await apis.postCheckChatMessage({
       sender_id: user_id,

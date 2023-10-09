@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState,useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Notification from "./Notification";
 import laravelEcho from "../../socket/index";
@@ -9,11 +8,12 @@ import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+import { Store } from "../../Context/Store";
+// import { getAddress } from "../../methods/methods";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -39,6 +39,12 @@ const Header = ({ search, setSearch }) => {
   const [walletConnected, setWalletConnected] = useState(false);
 
   const web3ModalRef = useRef();
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   // const connectWallet = async () => {
   //   try {
@@ -112,9 +118,9 @@ const Header = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  useEffect(() => {
-    setInterval(getAddress, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(getAddress, 3000);
+  // }, []);
 
   function handleDisconnect() {
     // Handle wallet disconnection here

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Footer from "./landingpage/Footer";
 import Header from "./landingpage/Header";
 import Search from "../components/shared/Search";
@@ -16,10 +16,11 @@ import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../service";
-import { getAddress } from "../methods/methods";
-import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
+// import { getAddress } from "../methods/methods";
+// import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import BuyNow from "../components/cards/BuyNow";
 import NewItemCard from "../components/cards/NewItemCard";
+import { Store } from "../Context/Store";
 
 const SearchPage = ({ search, setSearch }) => {
   const [status, setStatus] = useState({ value: "", label: "Select" });
@@ -50,6 +51,12 @@ const SearchPage = ({ search, setSearch }) => {
   const [nftIds, setNftIds] = useState([]);
   let searchedNft = useRef([]);
   let searchTexts = useRef();
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const viewFilteredNfts = async (currency_type, listed_type, min_price, max_price, sort_by_price, count, search) => {
     try {
@@ -214,10 +221,15 @@ const SearchPage = ({ search, setSearch }) => {
   // };
 
   const getListedNfts = async (ids) => {
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
     // const provider = await getProvider();
-    const provider = await getProviderOrSigner();
+    // const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
-    let addr = await getAddress();
+    // let addr = await getAddress();
     console.log("ZZZZZZ", addr);
 
     console.log("Provider", provider);
@@ -263,7 +275,7 @@ const SearchPage = ({ search, setSearch }) => {
         let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
         setDiscountPrice(discountOnNFT);
-        let seller = structData.seller;
+        let seller = structData?.seller;
 
         let auctionData = await marketplaceContract._idToAuction(id);
 
@@ -271,8 +283,8 @@ const SearchPage = ({ search, setSearch }) => {
           auctionData.highestBid.toString()
         );
 
-        listingType = structData.listingType;
-        let listed = structData.listed;
+        listingType = structData?.listingType;
+        let listed = structData?.listed;
 
         const response = await apis.getNFTCollectionImage(collectionId);
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
@@ -290,12 +302,12 @@ const SearchPage = ({ search, setSearch }) => {
             data = data.replace(/\\/g, "");
             data = JSON.parse(data);
 
-            const crypto = data.crypto;
-            const title = data.title;
-            const image = data.image;
-            const royalty = data.royalty;
-            const description = data.description;
-            const collection = data.collection;
+            const crypto = data?.crypto;
+            const title = data?.title;
+            const image = data?.image;
+            const royalty = data?.royalty;
+            const description = data?.description;
+            const collection = data?.collection;
 
             if (listingType === 0) {
               console.log("id",id );
@@ -324,12 +336,12 @@ const SearchPage = ({ search, setSearch }) => {
                 price: price,
                 paymentMethod: crypto,
                 basePrice: price,
-                startTime: auctionData.startTime.toString(),
-                endTime: auctionData.endTime.toString(),
+                startTime: auctionData?.startTime?.toString(),
+                endTime: auctionData?.endTime?.toString(),
                 highestBid: highestBid,
-                highestBidder: auctionData.highestBidder.toString(),
+                highestBidder: auctionData?.highestBidder?.toString(),
                 collectionImages: collectionImages,
-                seller: auctionData.seller.toString(),
+                seller: auctionData?.seller?.toString(),
                 listingType: listingType
               };
 
@@ -523,22 +535,23 @@ const SearchPage = ({ search, setSearch }) => {
   //   }
   // }, [walletConnected]);
 
-  useEffect(() => { }, [nftListFP]);
+  useEffect(() => { }, [nftListFP,searchedNfts,priceRange]);
   // useEffect(() => {
   //   getSearchedNfts();
   // }, [search]);
-  useEffect(() => { }, [searchedNfts]);
 
-  useEffect(() => {
-    connectWallet();
-    // getListedNfts();
-    // getSearchedNfts();
-  }, [userAddress]);
+  // useEffect(() => { }, [searchedNfts]);
+
+  // useEffect(() => {
+  //   connectWallet();
+  //   // getListedNfts();
+  //   // getSearchedNfts();
+  // }, [userAddress]);
 
   // TODO change by ali Monis
-  useEffect(() => {
-    getAddress();
-  }, []);
+  // useEffect(() => {
+  //   getAddress();
+  // }, []);
 
   const statusOptions = [
     { value: "0", label: "Fixed Price" },
@@ -562,7 +575,7 @@ const SearchPage = ({ search, setSearch }) => {
     });
   };
 
-  useEffect(() => { }, [priceRange])
+  // useEffect(() => { }, [priceRange])
   // const [scroll, setScroll] = useState(true)
 
   // useEffect(()=>{

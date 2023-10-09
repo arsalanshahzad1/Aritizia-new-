@@ -16,6 +16,7 @@ const createBackendServer = (baseURL) => {
   // const userId = 2;
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
+  console.log("RealUserId",RealUserId)
 
   //Interceptor
   api.interceptors.response.use(
@@ -131,8 +132,8 @@ const createBackendServer = (baseURL) => {
   const postCheckChatMessage = async (body) =>
     await api.post(`check-chat-message`, body);
 
-  const getNFTCollection = async () =>
-    await api.get(`view-nft-collections/${RealUserId}`);
+  const getNFTCollection = async (userId) =>
+    await api.get(`view-nft-collections/${userId}`);
 
   const postNFTCollection = async (body) =>
     await api.post(`add-nft-collection`, body);
@@ -149,6 +150,8 @@ const createBackendServer = (baseURL) => {
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
 
+  const getPurchasedNfts = async (userId) =>
+    await api.get(`view-all-my-nfts/${userId}`);
 
   const getUserData = async (id) =>
     await api.get(`get-user-data/${id}`);
@@ -285,6 +288,7 @@ const createBackendServer = (baseURL) => {
     getNFTCollectionImage,
     viewAllNfts,
     viewAllMyNfts,
+    getPurchasedNfts,
 
     getNFTByTokenId,
 

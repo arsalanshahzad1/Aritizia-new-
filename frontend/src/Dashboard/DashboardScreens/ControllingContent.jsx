@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useContext } from "react";
 import AdminHeader from "../../pages/landingpage/AdminHeader";
 import { useState } from "react";
 import UserDataRows from "./UserDataRows";
@@ -18,10 +18,10 @@ import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import ProfileDrawerAdmin from "../../components/shared/ProfileDrawerAdmin";
 import DashboardCard2 from "./DashboardCard2";
 import apis from "../../service";
@@ -35,6 +35,12 @@ function ControllingContent({ search, setSearch }) {
   const [filter, setFilter] = useState("Yearly");
   const [showfilter, setShowFilter] = useState(false);
   const [nftList, setNftList] = useState([]);
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const viewNftList = async (count, filter, searchInput) => {
     setListCount(count * 10 - 10);
@@ -59,7 +65,9 @@ function ControllingContent({ search, setSearch }) {
     // let emptyList = [];
     // setNftList(emptyList);
 
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -91,7 +99,7 @@ function ControllingContent({ search, setSearch }) {
       const structData = await marketplaceContract._idToNFT(id);
 
 
-      let collectionId = structData.collectionId.toString();
+      let collectionId = structData?.collectionId?.toString();
 
       // console.log("YESS", id);
 
@@ -223,7 +231,10 @@ function ControllingContent({ search, setSearch }) {
   const approveNFT = async (decision, id) => {
     bulkCall = true;
     console.log("approveNFT", id);
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,

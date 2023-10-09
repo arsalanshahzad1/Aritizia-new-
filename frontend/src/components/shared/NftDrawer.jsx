@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiFillTag, AiOutlineHeart } from "react-icons/ai";
@@ -38,16 +38,9 @@ import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import Slider from "rc-slider";
 import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
-//
-//
-// /
-//
-//
+import { Store } from "../../Context/Store";
+// import { getAddress } from "../../methods/methods";
+// import {connectWallet, getProviderOrSigner,} from "../../methods/walletManager";
 
 const Monthly_data = [
   {
@@ -351,6 +344,12 @@ const ProfileDrawer = ({
   const [showWarning, setShowWarning] = useState(false);
   const navigate = useNavigate();
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   const handleInputChange = (event) => {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value) || value === "") {
@@ -425,7 +424,9 @@ const ProfileDrawer = ({
   const mintThenList = async (result) => {
     console.log("In mintThenList");
 
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -583,9 +584,9 @@ const ProfileDrawer = ({
 
   useEffect(() => {}, [price, title, description]);
 
-  useEffect(() => {
-    getAddress();
-  }, []);
+  // useEffect(() => {
+  //   getAddress();
+  // }, []);
 
   let relist = false;
   function createItem(e) {
@@ -673,7 +674,9 @@ const ProfileDrawer = ({
   // }, [walletConnected]);
 
   const getItem = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,

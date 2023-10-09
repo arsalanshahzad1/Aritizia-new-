@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect,useContext } from "react";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import ChartForEarning from "./ChartForEarning";
@@ -9,7 +9,7 @@ import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.jso
 import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import axios from "axios";
-import { getAddress } from "../../methods/methods";
+// import { getAddress } from "../../methods/methods";
 import apis from "../../service";
 import Loader from "../../components/shared/Loader";
 
@@ -417,30 +417,36 @@ const Earnings = () => {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   // const [userAddress, setUserAddress] = useState("0x000000....");
   const [totalPrice, setTotalPrice] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-  useEffect(() => {
-    getAddress();
-  }, []);
+  // useEffect(() => {
+  //   getAddress();
+  // }, []);
 
   useEffect(() => {
     getTotalBalance();
   }, [totalPrice]);
 
-  async function getProvider() {
-    // Create a provider using any Ethereum node URL
-    const provider = new ethers.providers.JsonRpcProvider(
-      // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
-      // "http://localhost:8545"
-      "https://rpc.sepolia.org"
-    );
+  // async function getProvider() {
+  //   // Create a provider using any Ethereum node URL
+  //   const provider = new ethers.providers.JsonRpcProvider(
+  //     // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
+  //     // "http://localhost:8545"
+  //     "https://rpc.sepolia.org"
+  //   );
 
-    return provider;
-  }
+  //   return provider;
+  // }
 
   // const getAddress = async () => {
   //   const accounts = await window.ethereum.request({
@@ -478,8 +484,10 @@ const Earnings = () => {
 
   const getTotalBalance = async () => {
     let total = 0;
-    const provider = await getProvider();
-    console.log("provider", provider);
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,

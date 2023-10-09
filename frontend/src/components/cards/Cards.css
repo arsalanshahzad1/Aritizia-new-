@@ -255,8 +255,8 @@ p {
   box-sizing: border-box;
   margin: 0;
   min-width: 0;
-  height: 310px;
-  margin-bottom: 50px;
+  height: auto;
+  /* margin-bottom: 50px; */
 }
 
 .css-vurnku .doted-icon {
@@ -418,7 +418,7 @@ img {
   z-index: 10;
 }
 
-.css-118gt74:hover {
+.css-118gt74 {
   /* transform: translateY(-4px); */
   /* box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px; */
   box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.26) !important;
@@ -439,10 +439,10 @@ img {
   object-fit: contain;
 }
 
-.css-118gt74:hover .J-bottom {
+/* .css-118gt74:hover .J-bottom {
   margin-top: -44px;
   padding-bottom: 60px;
-}
+} */
 
 .css-118gt74 .J-bottom-1 {
   margin-top: 0px !important;
@@ -454,24 +454,24 @@ img {
 }
 
 .css-118gt74 .css-1elubna {
-  margin-top: -5px;
+  margin-top: -10px;
 }
 
 .css-1elubna {
-  box-sizing: border-box;
-  margin: 0px;
-  min-width: 0px;
-  position: absolute;
+  /* box-sizing: border-box; */
+  /* margin: 0px; */
+  /* min-width: 0px; */
+  /* position: absolute; */
   width: 100%;
-  left: 0px;
+  /* left: 0px; */
   padding-left: 0px;
   padding-right: 0px;
-  transition: all 0.2s ease 0s;
+  /* transition: all 0.2s ease 0s; */
 }
 
 .css-118gt74 .J-bottom {
   margin-top: -44px;
-  padding-bottom: 65px;
+  padding-bottom: 15px;
 }
 
 .css-1xg74gr {
@@ -536,7 +536,7 @@ img {
   border-radius: 10px;
   position: relative;
   margin-top: 25px;
-  margin-inline: 10px;
+  margin-inline: 00px;
 }
 
 .J-buynow .button p {
@@ -563,7 +563,7 @@ img {
 }
 
 .css-fwx73e .detail-wrap {
-  padding: 30px 0px 0px 0px;
+  padding: 20px 0px 0px 0px;
   position: relative;
 }
 
@@ -634,7 +634,7 @@ img {
 
 .css-fwx73e .detail-wrap .center-icon {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -690,17 +690,17 @@ img {
 
 @media only screen and (min-width: 1399px) {
   .css-vurnku {
-    height: 330px !important;
+    height: auto !important;
   }
 }
 
 @media only screen and (max-width: 1399px) {
   .css-vurnku {
-    height: 330px !important;
+    height:auto !important;
   }
 
   .other-profile-cards .css-vurnku {
-    height: 315px !important;
+    height: auto !important;
   }
 }
 

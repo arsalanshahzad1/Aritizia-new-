@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -36,11 +36,12 @@ import {
 } from "recharts";
 import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import apis from "../../service";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import NftCountdown from "./NftCountdown";
+import { Store } from "../../Context/Store";
 
 const Monthly_data = [
   {
@@ -331,9 +332,16 @@ const PlaceABidDrawer = ({
   let userAddress = userData?.wallet_address;
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
+  
   const handleStatus = (e) => {
     setStatus(e);
   };
+
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
@@ -356,7 +364,9 @@ const PlaceABidDrawer = ({
   const [bidDisable, setBidDisable] = useState(false);
 
   const getStatusOfAuction = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -441,7 +451,10 @@ const PlaceABidDrawer = ({
   };
 
   const getPriceInUSD = async () => {
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -456,7 +469,7 @@ const PlaceABidDrawer = ({
     setAuctionStatus(getStatusOfAuction);
 
     let highestBid = ethers.utils.formatEther(
-      auctionData?.highestBid.toString()
+      auctionData?.highestBid?.toString()
     );
 
     // let startTime = auctionData.startTime.toString();
@@ -498,7 +511,9 @@ const PlaceABidDrawer = ({
   let auctionPurchase = false;
 
   const claimAuction = async () => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+        // Set signer
+    const signer = provider.getSigner()
 
     auctionPurchase = true;
 
@@ -538,10 +553,10 @@ const PlaceABidDrawer = ({
   ) => {
     let soldData = {
       // nftContract: nftContract.toString(),
-      token_id: tokenId.toString(),
-      seller: seller.toString(),
-      buyer: owner.toString(),
-      price: ethers.utils.formatEther(price.toString()),
+      token_id: tokenId?.toString(),
+      seller: seller?.toString(),
+      buyer: owner?.toString(),
+      price: ethers.utils.formatEther(price?.toString()),
     };
     if (auctionPurchase) {
       console.log("soldData", soldData);
@@ -597,14 +612,14 @@ const PlaceABidDrawer = ({
 
   const handleBidEvent = async (tokenId, seller, highestBidder, highestBid) => {
     let bidData = {
-      token_id: tokenId.toString(),
-      seller: seller.toString(),
-      bidder: highestBidder.toString(),
-      bidding_price: ethers.utils.formatEther(highestBid.toString()),
+      token_id: tokenId?.toString(),
+      seller: seller?.toString(),
+      bidder: highestBidder?.toString(),
+      bidding_price: ethers.utils.formatEther(highestBid?.toString()),
     };
 
-    console.log("bidData", bidData.bidding_price);
-    setHighestBid(bidData.bidding_price);
+    console.log("bidData", bidData?.bidding_price);
+    setHighestBid(bidData?.bidding_price);
     ethBid = false;
     usdtBid = false;
     bidEventPost(bidData);
@@ -656,7 +671,9 @@ const PlaceABidDrawer = ({
 
   // // return the price of NFT in usd
   const getAuctionData = async () => {
-    const provider = await getProviderOrSigner();
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -684,14 +701,14 @@ const PlaceABidDrawer = ({
     // let dollarPriceOfETH = 1831;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    let priceInETH = dollarPriceOfETH?.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
     // console.log("priceInUSD", priceInUSD);
-    priceInUSD = priceInUSD.toFixed(2);
+    priceInUSD = priceInUSD?.toFixed(2);
 
-    setDollarPrice(priceInUSD.toString());
+    setDollarPrice(priceInUSD?.toString());
     // console.log("priceInUSD", priceInUSD);
 
     // let highBid = Number(highestBid.toString()) / 1e18;
@@ -707,7 +724,10 @@ const PlaceABidDrawer = ({
     // console.log("endTime", endTime);
     // console.log("price", price);
     // console.log("isLive", isLive);
-    const provider = await getProviderOrSigner();
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -725,12 +745,12 @@ const PlaceABidDrawer = ({
     console.log("ooo getStatusOfAuction ", getStatusOfAuction);
 
     let highestBid = ethers.utils.formatEther(
-      auctionData.highestBid.toString()
+      auctionData?.highestBid?.toString()
     );
 
-    let startTime = auctionData?.startTime.toString();
+    let startTime = auctionData?.startTime?.toString();
 
-    let endTime = auctionData?.endTime.toString();
+    let endTime = auctionData?.endTime?.toString();
 
     const unixTimestamp = Date.now();
 
@@ -750,12 +770,15 @@ const PlaceABidDrawer = ({
   };
 
   let ethBid = false;
+
   const bidWithETH = async () => {
     // window.alert("KHAREED");
 
     ethBid = true;
 
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -764,7 +787,7 @@ const PlaceABidDrawer = ({
     );
 
     // console.log("Make payment");
-    let price = buyNowPrice.toString();
+    let price = buyNowPrice?.toString();
     await marketplaceContract.bidInETH(id, 0, {
       value: ethers.utils.parseEther(price),
     });
@@ -781,7 +804,9 @@ const PlaceABidDrawer = ({
 
   let usdtBid = false;
   const bidWithUSDT = async () => {
-    const signer = await getProviderOrSigner(true);
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     usdtBid = true;
     const marketplaceContract = new Contract(
@@ -809,7 +834,7 @@ const PlaceABidDrawer = ({
 
     let USDPrice = buyNowPrice;
     let USDPriceInWei = USDPrice * 10 ** 6;
-    USDPrice = USDPrice.toString();
+    USDPrice = USDPrice?.toString();
 
     let getUsdPrice = await marketplaceContract.getLatestUSDTPrice();
     let usdtEntered = USDPrice;
@@ -817,7 +842,7 @@ const PlaceABidDrawer = ({
     console.log("OneUSDMeItnaEth", OneUSDMeItnaEth);
     console.log("ETh itna ayega", OneUSDMeItnaEth * usdtEntered);
     let ethEquivalentToUSDT = OneUSDMeItnaEth * usdtEntered;
-    ethEquivalentToUSDT = ethEquivalentToUSDT.toString();
+    ethEquivalentToUSDT = ethEquivalentToUSDT?.toString();
     let amountInETHInWei = ethers.utils
       .parseEther(ethEquivalentToUSDT)
       .toString();
@@ -834,7 +859,7 @@ const PlaceABidDrawer = ({
 
     console.log("Approved");
 
-    USDPriceInWei = USDPriceInWei.toString();
+    USDPriceInWei = USDPriceInWei?.toString();
     console.log("USDPriceInWei", USDPriceInWei);
 
     // console.log("paymentmethod", paymentMethod);
