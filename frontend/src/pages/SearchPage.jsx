@@ -230,9 +230,7 @@ const SearchPage = ({ search, setSearch }) => {
     // const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     // let addr = await getAddress();
-    console.log("ZZZZZZ", addr);
-
-    console.log("Provider", provider);
+   
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
