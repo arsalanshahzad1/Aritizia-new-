@@ -16,8 +16,6 @@ import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
 import apis from "../service";
-// import { getAddress } from "../methods/methods";
-// import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import BuyNow from "../components/cards/BuyNow";
 import NewItemCard from "../components/cards/NewItemCard";
 import { Store } from "../Context/Store";
@@ -32,9 +30,6 @@ const SearchPage = ({ search, setSearch }) => {
   const [currency, setCurrency] = useState({ value: "", label: "Select" });
   const [slider, setSlider] = useState(false);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 }); // initial price range
-
-  // Receiving data from URL parameters
-  // const { data } = useParams();
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
@@ -230,10 +225,7 @@ const SearchPage = ({ search, setSearch }) => {
     // const provider = await getProviderOrSigner();
     // const provider = new ethers.providers.Web3Provider(window.ethereum);
     // let addr = await getAddress();
-    console.log("ZZZZZZ", addr);
-
-    console.log("Provider", provider);
-
+    
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,

@@ -571,12 +571,21 @@ function ProfileDrawer({
     //   MARKETPLACE_CONTRACT_ADDRESS.address
     // );
 
+    //This Line check the balance of User 
+
+    let accBalance = await USDTContract.balanceOf(userAddress)
+
+    console.log("accBalance",accBalance)
+    if(accBalance < amountInWei){
+      return alert("you dont have balance");
+    }
+   
+
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       amountInWei,
       { gasLimit: ethers.BigNumber.from("50000") }
     );
-
     appprove.wait();
     // console.log("www ");
     // console.log("wwwasda ");
@@ -608,7 +617,6 @@ function ProfileDrawer({
       "NFTSold",
       usdtPurchase ? handleNFTSoldEvent : null
     );
-
     console.log("Response of bid even", response);
   };
 

@@ -384,6 +384,13 @@ const BuyNow = ({
       "MARKETPLACE_CONTRACT_ADDRESS.address  ",
       MARKETPLACE_CONTRACT_ADDRESS.address
     );
+    
+    let accBalance = await USDTContract.balanceOf(userAddress)
+
+    console.log("accBalance",accBalance)
+    if(accBalance < amountInWei){
+      return alert("you dont have balance");
+    }
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,
