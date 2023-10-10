@@ -72,7 +72,7 @@ const NewItemCard = ({
             <span>
               <NftCountdown endDateTime={new Date(endTime * 1000)} />
             </span>
-            {showLinks && (
+            {/* {showLinks && (
               <div className="social-media">
                 <LinkedinShareButton
                   url="http://artizia.pluton.ltd/profile"
@@ -93,7 +93,7 @@ const NewItemCard = ({
                   <p>Facebook</p>
                 </FacebookShareButton>
               </div>
-            )}
+            )} */}
           </div>
           <div className="detail-wrap">
             <div className="center-icon">
