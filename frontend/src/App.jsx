@@ -179,7 +179,10 @@ function App() {
                 />
 
 
-
+                <Route
+                  path="/chat/:id"
+                  element={<ChatPage search={search} setSearch={setSearch} />}
+                />
 
               </Route>
 
@@ -198,10 +201,7 @@ function App() {
                   path="/art"
                   element={<Art search={search} setSearch={setSearch} />}
                 />
-                <Route
-                  path="/chat/:id"
-                  element={<ChatPage search={search} setSearch={setSearch} />}
-                />
+
 
               </Route>
 
