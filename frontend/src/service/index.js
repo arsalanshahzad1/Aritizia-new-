@@ -141,11 +141,15 @@ const createBackendServer = (baseURL) => {
   const getNFTCollectionImage = async (collectionId) =>
     await api.get(`view-nft-collection-stock/${collectionId}`);
 
+  //This API get you all nfts and you need to filter as
+  //per you requirments  
   const viewAllNfts = async () =>
     await api.get(`view-all-nfts`)
 
-  const viewAllMyNfts = async (newid) =>
-    await api.get(`view-all-nfts?user_id=${newid}`)
+
+  //its not working properly TODO
+  // const viewAllMyNfts = async (newid) =>
+  //   await api.get(`view-all-nfts?user_id=${newid}`)
 
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
@@ -287,7 +291,9 @@ const createBackendServer = (baseURL) => {
     postNFTCollection,
     getNFTCollectionImage,
     viewAllNfts,
-    viewAllMyNfts,
+
+    // viewAllMyNfts,
+    
     getPurchasedNfts,
 
     getNFTByTokenId,

@@ -635,6 +635,8 @@ const PlaceABidDrawer = ({
     toast.success("Bid Succesful", {
       position: toast.POSITION.TOP_CENTER,
     });
+    
+    window.location.reload();
 
     // setTimeout(() => {
     //   navigate("/");

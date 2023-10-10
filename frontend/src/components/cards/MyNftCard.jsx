@@ -130,6 +130,7 @@ const MyNftCard = ({
                   </p>
                 </div>
               )}
+              
             </div>
             <div onClick={openDrawer2} className="bottom">
               <div className="nft-icon">

@@ -4,7 +4,6 @@ import NewItemCard from "../components/cards/NewItemCard";
 import Footer from "./landingpage/Footer";
 import SocialShare from "../components/shared/SocialShare";
 import Search from "../components/shared/Search";
-
 import { Contract, ethers } from "ethers";
 import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
@@ -19,8 +18,6 @@ import Followers from "./settingFolder/Followers";
 import apis from "../service";
 import { useNavigate } from "react-router-dom";
 import Gallery from "./Gallery";
-// import { getAddress } from "../methods/methods";
-// import { getProviderOrSigner } from "../methods/walletManager";
 import RejectedNFTSCard from "../components/cards/RejectedNFTSCard";
 import { toast } from "react-toastify";
 import Loader from "../components/shared/Loader";
@@ -33,50 +30,101 @@ const Profile = ({ search, setSearch }) => {
   const [collectionTabs, setCollectionTabs] = useState(0);
   const [FollowersTab, setFollowersTab] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [userNFTs, setUserNfts] = useState([]);
   const [likedNfts, setLikedNfts] = useState([]);
   const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   const [addedFans, setAddedFans] = useState({});
-  const [discountPrice,setDiscountPrice]=useState(0)
-  const navigate = useNavigate();
-
-  const {account,checkIsWalletConnected}=useContext(Store);
-
-  useEffect(()=>{
-    checkIsWalletConnected()
-  },[account])
-
+  const [discountPrice, setDiscountPrice] = useState(0)
+  const [loader, setLoader] = useState(true)
+  const [userNftLoader, setUserNftLoader] = useState(true)
+  const [nftLoader, setNftLoader] = useState(true)
+  const [nftAuctionLoader, setNftAuctionLoader] = useState(true)
+  const [likedNftLoader, setLikedNftLoader] = useState(true)
+  const [likedNftAuctionLoader, setLikedNftAuctionLoader] = useState(true)
+  const [fanToggle, setFanToggle] = useState(false)
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const userId = userData?.id;
 
-  const getNFTlikeListing = async () => {
-    try {
-      const response = await apis.getLikeNFTListing(userId);
-      if (response?.data?.data?.length > 0) {
-        setLikedNfts(response?.data?.data);
-      }
-      setLikedNftLoader(false)
+  const navigate = useNavigate();
 
-    } catch (error) {
-      setLikedNftLoader(false)
-    }
-  };
+  const { account, checkIsWalletConnected } = useContext(Store);
 
   useEffect(() => {
-    getNFTlikeListing();
-    getLikedNfts();
-  }, []);
+    checkIsWalletConnected()
+  }, [account])
 
+  //////////////////////// API Section ///////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////
+
+  const getLikedNftsList = async () => {
+    const response = await apis.getLikeNFTList(userId);
+    return response?.data?.data;
+  };
+
+  const viewAllNfts = async () => {
+    try {
+      // const response = await apis.viewAllMyNfts(userId);
+      console.log("response")
+      getMyListedNfts();
+
+      //Need to fiix this API
+      // if (response?.data?.data?.length > 0) {
+      //   getMyListedNfts(response?.data?.data)
+      // }else{
+      //   setNftLoader(false)
+      // }
+      setNftLoader(false)
+      setNftAuctionLoader(false)
+    } catch (error) {
+      console.log(error, "errrrr")
+      setNftAuctionLoader(false)
+    }
+
+  };
+
+  const getPurchasedNfts = async () => {
+    try {
+      const response = await apis.getPurchasedNfts(userId);
+      // console.log(response,"response")
+      //Blockchain
+      // getMyNfts();
+      if (response?.data?.data?.length > 0) {
+        getMyNfts(response?.data?.data);
+      } else {
+        setNftLoader(false)
+      }
+      setNftAuctionLoader(false)
+    } catch (error) {
+      setNftLoader(false)
+      console.log(error, "errrrr")
+      setNftAuctionLoader(false)
+    }
+
+  };
+
+
+
+  // //get Liked nft on Sale
+  // const getNFTlikeListing = async () => {
+  //   try {
+  //     const response = await apis.getLikeNFTListing(userId);
+  //     if (response?.data?.data?.length > 0) {
+  //       setLikedNfts(response?.data?.data);
+  //     }
+  //     setLikedNftLoader(false)
+
+  //   } catch (error) {
+  //     setLikedNftLoader(false)
+  //   }
+  // };
 
   const getLikedNfts = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
-    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -89,16 +137,19 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-
+    
+    //this is API get Liked NFT's
     let NFTId = await getLikedNftsList();
-    console.log("NFTId",NFTId)
+    
+    if(NFTId.length == 0){
+      setLikedNftLoader(false)
+    }
+
 
     let liked = [];
-
-    let emptyList = [];
-    setLikedNfts(emptyList);
-    setLikedNftsAuction(emptyList);
-
+    // let emptyList = [];
+    // setLikedNfts(emptyList);
+    // setLikedNftsAuction(emptyList);
     if (NFTId?.length > 0 && NFTId != "") {
       for (let i = 0; i < NFTId?.length; i++) {
         let id;
@@ -125,7 +176,7 @@ const Profile = ({ search, setSearch }) => {
 
         setDiscountPrice(discountOnNFT);
 
-        let collectionId = structData.collectionId.toString();
+        let collectionId = structData?.collectionId?.toString();
 
         const response = await apis.getNFTCollectionImage(collectionId);
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
@@ -177,18 +228,36 @@ const Profile = ({ search, setSearch }) => {
               };
               setLikedNftsAuction((prev) => [...prev, nftData]);
             }
-
+             setLikedNftLoader(false)
           })
-
           .catch((error) => {
-            setLikedNftAuctionLoader(false)
+            setNftLoader(false)
+            setLikedNftLoader(false)
             console.error("Error fetching metadata:", error);
           });
 
       }
     }
+    setLikedNftLoader(false)
+    setNftLoader(false)
     setLikedNftAuctionLoader(false)
   };
+
+
+
+  useEffect(() => {
+    // getNFTlikeListing();
+    viewAllNfts();
+    getLikedNfts();
+    getPurchasedNfts();
+    setLoader(false)
+  }, []);
+
+  //////////////////////// Functions Section ///////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////
+
+  
+
 
 
   const validateFanAddresses = (addresses) => {
@@ -200,7 +269,7 @@ const Profile = ({ search, setSearch }) => {
     return true;
   };
 
-
+  ///Add fans list ///// start
   const addFanList = async () => {
     try {
       if (validateFanAddresses(FansAddress)) {
@@ -244,7 +313,6 @@ const Profile = ({ search, setSearch }) => {
   };
 
   const handleAddedFansEvent = async (fanList) => {
-
     setAddedFans(fanList);
     postFanList();
     setLoader(false)
@@ -253,7 +321,7 @@ const Profile = ({ search, setSearch }) => {
   const postFanList = async () => {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-        // Set signer
+    // Set signer
     const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
@@ -274,55 +342,14 @@ const Profile = ({ search, setSearch }) => {
       navigate("/profile");
     }, 1000);
   };
+  ////// end
 
-  const viewAllNfts = async () => {
-    try {
-      const response = await apis.viewAllMyNfts(userId);
-      console.log(response,"response")
+  //get Collection(Minted + Listed (fix + Auction) nft's BLC/DB)
+  const getMyListedNfts = async (nftsList) => {
 
-      getMyListedNfts();
-
-      // if (response?.data?.data?.length > 0) {
-      //   // getMyListedNfts(response?.data?.data)
-      // }
-      setNftAuctionLoader(false)
-    } catch (error) {
-      console.log(error, "errrrr")
-      setNftAuctionLoader(false)
-    }
-  
-  };
-
-  const getPurchasedNfts = async () => {
-    try {
-      const response = await apis.getPurchasedNfts(userId);
-      // console.log(response,"response")
-      //Blockchain
-      getMyNfts();
-      // if (response?.data?.data?.length > 0) {
-      //   getMyNfts(response?.data?.data);
-      // }
-      setNftAuctionLoader(false)
-    } catch (error) {
-      console.log(error, "errrrr")
-      setNftAuctionLoader(false)
-    }
-  
-  };
-  
-  useEffect(() => {
-    // const fetchData = async () => {
-    //   await viewAllNfts();
-    // };
-    // fetchData();
-  viewAllNfts();
-  getPurchasedNfts();
-  }, []);
-
-  const getMyListedNfts = async () => {
-    let emptyList = [];
-    setNftListAuction(emptyList);
-    setNftListFP(emptyList);
+    // let emptyList = [];
+    // setNftListAuction(emptyList)
+    // setNftListFP(emptyList);
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
@@ -351,32 +378,40 @@ const Profile = ({ search, setSearch }) => {
     if (mintedTokens?.length === 0) {
       setNftLoader(false)
     }
-    for (let i = 0; i<mintedTokens?.length; i++) {
+
+    //blockchain Side
+    for (let i = 0; i < mintedTokens?.length; i++) {
       let id;
       id = mintedTokens?.[i]?.tokenId?.toString();
 
-      console.log(mintedTokens?.[i].tokenId?.toString(),"mintedTokens")
+      //for Detabase 
+      // for (let i = 0; i < nftsList?.length; i++) {
+      //   let id;
+      //   id = nftsList?.[i];
+
+      console.log(id, "mintedTokens")
+
       let collectionId;
       collectionId = +mintedTokens?.[i]?.collectionId?.toString();
-      console.log(collectionId,"collectionId")
+      console.log(collectionId, "collectionId")
       const response = await apis.getNFTCollectionImage(collectionId);
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-      console.log(collectionImages,"collectionImages")
-   
+      console.log(collectionImages, "collectionImages")
+
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
-      
+
       const fanNftData = await marketplaceContract._idToNFT2(id);
-      
+
       let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
       setDiscountPrice(discountOnNFT);
       listingType = structData?.listingType;
-      
+
       let auctionData = await marketplaceContract._idToAuction(id);
-      
-    
+
+
       let highestBid = ethers.utils.formatEther(
         auctionData?.highestBid?.toString()
       );
@@ -393,7 +428,7 @@ const Profile = ({ search, setSearch }) => {
           data = data?.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          console.log("data",data?.crypto)
+          console.log("data", data?.crypto)
           const crypto = data?.crypto;
           const title = data?.title;
           const image = data?.image;
@@ -402,7 +437,6 @@ const Profile = ({ search, setSearch }) => {
           const collection = data?.collection;
 
           if (listingType === 0) {
-    
             const nftData = {
               id: id, //
               title: title,
@@ -415,10 +449,9 @@ const Profile = ({ search, setSearch }) => {
               collectionImages: collectionImages,
             };
             setNftListFP((prev) => [...prev, nftData]);
-
-
+  
           } else if (listingType === 1) {
-           
+
             const nftData = {
               id: id,
               title: title,
@@ -434,24 +467,26 @@ const Profile = ({ search, setSearch }) => {
             };
             setNftListAuction((prev) => [...prev, nftData]);
           }
-        }
-        )
+          setNftLoader(false)
+        })
         .catch((error) => {
+          setNftLoader(false)
           console.error("Error fetching metadata:", error);
         });
-
+    setNftLoader(false)
     }
     setNftLoader(false)
   };
 
+
+  //get your purchase nft it show you purchased nft
   const getMyNfts = async (NFTid) => {
-    let emptyList = [];
-    setNftListAuction(emptyList);
-    setNftListFP(emptyList);
+    console.log(NFTid, "NFTid")
+    // let emptyList = [];
+    // setNftListAuction(emptyList);
+    // setNftListFP(emptyList);
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
 
     // const provider = await getProviderOrSigner();
     const marketplaceContract = new Contract(
@@ -467,36 +502,41 @@ const Profile = ({ search, setSearch }) => {
     );
 
 
-    console.log(userAddress,"userAddress")
-    // const signer = provider.getSigner();
-    const address = await signer.getAddress();
-
-
-    let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
-
     //for database
-    // for (let i = 0; i < NFTid?.length; i++) {
-    //   let id;
-    //   id = NFTid[i];
-
-    //for blockchian
-     for (let i = 0; i < mintedTokens?.length; i++) {
+    for (let i = 0; i < NFTid?.length; i++) {
       let id;
-      id = mintedTokens[i]?.tokenId?.toString();
+      id = NFTid[i];
 
-      let collectionId;
-      collectionId = +mintedTokens?.[i]?.collectionId?.toString();
+      //for blockchian
+      // let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
 
+      // for blockchian
+      // for (let i = 0; i < mintedTokens?.length; i++) {
+      //   let id;
+      //   id = mintedTokens[i]?.tokenId?.toString();
 
-      const response = await apis.getNFTCollectionImage(collectionId);
-
-      const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-
-      const metaData = await nftContract.tokenURI(id);
+      //  let collectionId = +mintedTokens?.[i]?.collectionId?.toString();
+      //   console.log(collectionId, "collectionId")
+      //   const response = await apis.getNFTCollectionImage(collectionId);
+      //   const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+      ////////
 
 
       const structData = await marketplaceContract._idToNFT(id);
+      //check if not listed
+      if(!structData?.listed){
+      let response;
+      try {
+        response = await apis.getNFTByTokenId(id);
+      } catch (error) {
+        console.log(error.message)
+      }
 
+      const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
+
+      const metaData = await nftContract.tokenURI(id);
+
+      console.log("1asdasdasdasdasdaqsd")
       const price = ethers.utils.formatEther(structData?.price?.toString());
 
       axios
@@ -528,33 +568,23 @@ const Profile = ({ search, setSearch }) => {
             collection: collection,
             collectionImages: collectionImages,
           };
-
-          console.log(nftData,"nftDatanftData")
+          console.log(nftData, "nftDatanftData")
           setUserNfts((prev) => [...prev, nftData]);
-
-
-
-        })
-
+        }) 
         .catch((error) => {
           console.error("Error fetching metadata:", error);
         });
-    }
+      }
+      }
     setUserNftLoader(false)
   };
 
-
-  useEffect(() => {
-    // getMyListedNfts();
-    // getMyNfts();
-    // getLikedNfts();
-    setLoader(false)
-  }, [userAddress]);
-
-  const getLikedNftsList = async () => {
-    const response = await apis.getLikeNFTList(userId);
-    return response?.data?.data;
-  };
+  // useEffect(() => {
+  //   // getMyListedNfts();
+  //   // getMyNfts();
+  //   // getLikedNfts();
+  //   setLoader(false)
+  // }, [userAddress]);
 
   // useEffect(() => {
   //   // getLikedNfts();
@@ -573,14 +603,15 @@ const Profile = ({ search, setSearch }) => {
   const [FansAddress, setFansAddress] = useState([""]);
 
   const fansAddressHandle = () => {
-    console.log(FansAddress?.[FansAddress?.length - 1] ,"SSSSSSSSSSS")
+    console.log(FansAddress?.[FansAddress?.length - 1], "SSSSSSSSSSS")
     if (FansAddress?.[FansAddress?.length - 1]) {
       setFansAddress([...FansAddress, ""])
     }
-    else{
+    else {
       toast.error("Required wallet address field empty")
     }
   }
+
   const [showAddFanPopUp, setshowAddFanPopUp] = useState(0);
 
   const handleChangeAddressInput = (e, index) => {
@@ -663,17 +694,8 @@ const Profile = ({ search, setSearch }) => {
     });
   };
 
-  const [loader, setLoader] = useState(true)
-  const [userNftLoader, setUserNftLoader] = useState(true)
-  const [nftLoader, setNftLoader] = useState(true)
-  const [nftAuctionLoader, setNftAuctionLoader] = useState(true)
-  const [likedNftLoader, setLikedNftLoader] = useState(true)
-  const [likedNftAuctionLoader, setLikedNftAuctionLoader] = useState(true)
-
-  const [fanToggle, setFanToggle] = useState(false)
-
   const userWalletAddress = localStorage.getItem("userAddress")
-    
+
   return (
     <>
       {loader && <Loader />}
@@ -756,29 +778,29 @@ const Profile = ({ search, setSearch }) => {
               </div>
               <div className="row">
                 <div className="profile-tabs">
-                
-                {userWalletAddress === "false" ? <></> : <>   
-                               <button
-                    className={`${tabs === 0 ? "active" : ""}`}
-                    onClick={() => setTabs(0)}
-                  >
-                    Collection
-                  </button>
-                  <button
-                    className={`${tabs === 1 ? "active" : ""}`}
-                    onClick={() => setTabs(1)}
-                  >
-                    Gallery
-                  </button>
-                
-                  <button
-                    className={`${tabs === 2 ? "active" : ""}`}
-                    onClick={() => setTabs(2)}
-                  >
-                    My NFT
-                  </button>
+
+                  {userWalletAddress === "false" ? <></> : <>
+                    <button
+                      className={`${tabs === 0 ? "active" : ""}`}
+                      onClick={() => setTabs(0)}
+                    >
+                      Collection
+                    </button>
+                    <button
+                      className={`${tabs === 1 ? "active" : ""}`}
+                      onClick={() => setTabs(1)}
+                    >
+                      Gallery
+                    </button>
+
+                    <button
+                      className={`${tabs === 2 ? "active" : ""}`}
+                      onClick={() => setTabs(2)}
+                    >
+                      My NFT
+                    </button>
                   </>
-}
+                  }
                   <button
                     className={`${tabs === 3 ? "active" : ""}`}
                     onClick={() => setTabs(3)}
@@ -791,22 +813,22 @@ const Profile = ({ search, setSearch }) => {
                   >
                     Followers
                   </button>
-                  {userWalletAddress === "false" ? <></> : <>   
-            
-                  <button
-                    className={`${tabs === 5 ? "active" : ""}`}
-                    onClick={() => setTabs(5)}
-                  >
-                    Fan List
-                  </button>
-                  <button
-                    className={`${tabs === 6 ? "active" : ""}`}
-                    onClick={() => setTabs(6)}
-                  >
-                    Rejected NFTs
-                  </button>
+                  {userWalletAddress === "false" ? <></> : <>
+
+                    <button
+                      className={`${tabs === 5 ? "active" : ""}`}
+                      onClick={() => setTabs(5)}
+                    >
+                      Fan List
+                    </button>
+                    <button
+                      className={`${tabs === 6 ? "active" : ""}`}
+                      onClick={() => setTabs(6)}
+                    >
+                      Rejected NFTs
+                    </button>
                   </>
-}
+                  }
                 </div>
               </div>
               <div className="profile-buy-card">
@@ -1249,6 +1271,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
+
               </div>
             </div>
           </div>

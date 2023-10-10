@@ -324,6 +324,7 @@ const ProfileDrawer = ({
   // const [description, setDescription] = useState("");
   // const [minimumBid, setMinimumBid] = useState("");
   const [listingType, setlistingType] = useState(0);
+
   useEffect(() => {
     console.log("timed auction value=> ", timedAuction);
     if (timedAuction == true) {
@@ -335,8 +336,8 @@ const ProfileDrawer = ({
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [startingDate, setStartingDate] = useState("");
-  const [endingDate, setEndingDate] = useState("");
+  const [startingDate, setStartingDate] = useState(0);
+  const [endingDate, setEndingDate] = useState(0);
 
   var startTime = useRef(0);
   var endTime = useRef(0);
@@ -344,11 +345,14 @@ const ProfileDrawer = ({
   const [showWarning, setShowWarning] = useState(false);
   const navigate = useNavigate();
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData?.wallet_address;
 
-  useEffect(()=>{
+  const { account, checkIsWalletConnected } = useContext(Store);
+
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -362,12 +366,12 @@ const ProfileDrawer = ({
     }
   };
 
-  useEffect(() => {
-    if (startingDate && endingDate && endingDate < startingDate) {
-      alert("End date should be after start date");
-      setEndingDate("");
-    }
-  }, [startingDate, endingDate]);
+  // useEffect(() => {
+  //   if (startingDate && endingDate && endingDate < startingDate) {
+  //     alert("End date should be after start date");
+  //     setEndingDate("");
+  //   }
+  // }, [startingDate, endingDate]);
 
   const web3ModalRef = useRef();
 
@@ -384,8 +388,7 @@ const ProfileDrawer = ({
   //   setUserAddress(accounts[0]);
   //   console.log("getAddress", accounts[0]);
   // };
-  const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData?.wallet_address;
+
   // const [userAddress, setUserAddress] = useState("0x000000....");
 
   // const getProviderOrSigner = async () => {
@@ -504,12 +507,12 @@ const ProfileDrawer = ({
     if (relist) {
       let listedData = {
         // nftContract: nftContract.toString(),
-        token_id: tokenId.toString(),
-        seller: seller.toString(),
-        owner: owner.toString(),
-        price: ethers.utils.formatEther(price.toString()),
-        collection_id: collectionId.toString(),
-        listing_type: listingType.toString(),
+        token_id: tokenId?.toString(),
+        seller: seller?.toString(),
+        owner: owner?.toString(),
+        price: ethers.utils.formatEther(price?.toString()),
+        collection_id: collectionId?.toString(),
+        listing_type: listingType?.toString(),
       };
 
       addListToPost(listedData);
@@ -523,7 +526,7 @@ const ProfileDrawer = ({
 
   const nftDataPost = async () => {
     console.log("postListNft");
-    console.log("listToPost.current[0]", listToPost.current[0]);
+    console.log("listToPost.current[0]", listToPost?.current[0]);
 
     // const response = await apis.postListNft(listToPost.current[0]);
     // console.log("2222222222222222");
@@ -582,18 +585,21 @@ const ProfileDrawer = ({
   //     }
   // };
 
-  useEffect(() => {}, [price, title, description]);
+  useEffect(() => { }, [price, title, description]);
 
   // useEffect(() => {
   //   getAddress();
   // }, []);
 
   let relist = false;
+
+
+
   function createItem(e) {
     e.preventDefault();
     price = inputValue;
     relist = true;
-    // console.log("startTimestamp in if", startingDate);
+
     // console.log("endTimestamp in if", endingDate);
 
     if (listingType == 0) {
@@ -604,6 +610,7 @@ const ProfileDrawer = ({
       startTime = 0;
       endTime = 0;
     } else if (listingType == 1) {
+      
       const startDate = new Date(startingDate);
       const endDate = new Date(endingDate);
 
@@ -611,12 +618,9 @@ const ProfileDrawer = ({
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
 
-      console.log("startTimestamp in else", startTimestamp);
-      console.log("endTimestamp in else", endTimestamp);
-      setStartingDate(startTimestamp);
-      setEndingDate(endTimestamp);
+      if(startTimestamp >= endTimestamp ) return setEndingDate(""), alert("end date must be grather than start date");
       startTime = startTimestamp;
-      endTime = startTimestamp;
+      endTime = endTimestamp;
     }
 
     console.log("CHECK startingDate", startTime);
@@ -625,7 +629,7 @@ const ProfileDrawer = ({
     console.log("price", price);
 
     item = {
-      tokenId: 0,
+      tokenId: id,
       price: price,
       listingType: listingType,
       startTime: startTime,
@@ -636,7 +640,7 @@ const ProfileDrawer = ({
 
     if (
       //   item.title != null &&
-      item.price != null && startingDate !== "" && endingDate !== ""
+      item.price !== "" && startingDate !== "" && endingDate !== ""
       //   item.description != null &&
       //   item.crypto != null &&
       //   item.file != null &&
@@ -650,55 +654,34 @@ const ProfileDrawer = ({
     }
   }
 
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
+
+
+  // const getItem = async () => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum)
+  //   // Set signer
+  //   const signer = provider.getSigner()
+
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     provider
+  //   );
+  //   const structData = await marketplaceContract._idToNFT(id);
+  //   let seller = structData.seller;
+  //   let owner = structData.owner;
+
+  //   console.log("seller", seller);
+  //   console.log("owner", owner);
+
+  //   //   const _listedNfts = await marketplaceContract.getListedNfts();
+
+  //   //   for (let i = 0; i < _listedNfts.length; i++) {
+  //   //     console.log("_listedNfts", _listedNfts[i]);
+  //   //   }
+  //   // } catch (err) {
+  //   //   console.error(err);
+  //   // }
   // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     getAddress();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
-
-  const getItem = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-    const structData = await marketplaceContract._idToNFT(id);
-    let seller = structData.seller;
-    let owner = structData.owner;
-
-    console.log("seller", seller);
-    console.log("owner", owner);
-
-    //   const _listedNfts = await marketplaceContract.getListedNfts();
-
-    //   for (let i = 0; i < _listedNfts.length; i++) {
-    //     console.log("_listedNfts", _listedNfts[i]);
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
-  };
 
   const [CreateCollection, setCreateCollection] = useState("");
   const [showCreateCollection, setshowCreateCollection] = useState(false);
@@ -747,10 +730,10 @@ const ProfileDrawer = ({
                                   type="text"
                                   value={inputValue}
                                   onChange={handleInputChange}
-                                  // type="number"
-                                  // placeholder="0.00"
-                                  // ref={price}
-                                  // required
+                                // type="number"
+                                // placeholder="0.00"
+                                // ref={price}
+                                // required
                                 />
                                 {showWarning && (
                                   <p style={{ color: "red" }}>
@@ -780,10 +763,10 @@ const ProfileDrawer = ({
                                     type="text"
                                     value={inputValue}
                                     onChange={handleInputChange}
-                                    // type="number"
-                                    // placeholder="0.00"
-                                    // ref={price}
-                                    // required
+                                  // type="number"
+                                  // placeholder="0.00"
+                                  // ref={price}
+                                  // required
                                   />
                                   {showWarning && (
                                     <p style={{ color: "red" }}>
@@ -817,7 +800,7 @@ const ProfileDrawer = ({
                                       setStartingDate(e.target.value)
                                     }
                                     min={new Date().toISOString().split("T")[0]}
-                                    // required
+                                  // required
                                   />
                                 </div>
                                 <div className="col-lg-6 col-md-6 col-6">
@@ -832,7 +815,7 @@ const ProfileDrawer = ({
                                       setEndingDate(e.target.value)
                                     }
                                     min={startingDate}
-                                    // required
+                                  // required
                                   />
                                 </div>
                               </div>
@@ -859,7 +842,7 @@ const ProfileDrawer = ({
                                 placeholder="e.g. ‘Crypto Funk"
                                 // defaultValue={title.current.value}
                                 ref={title}
-                                // onChange={(e) => setTitle(e.target.value)}
+                              // onChange={(e) => setTitle(e.target.value)}
                               />
                             </div>
                           </div>
@@ -887,9 +870,9 @@ const ProfileDrawer = ({
                                 min={0}
                                 max={15}
                                 defaultValue={royalty}
-                                // step={null}
-                                // onChange={handleSliderChange}
-                                // value={royalty}
+                              // step={null}
+                              // onChange={handleSliderChange}
+                              // value={royalty}
                               />
                             </div>
                             <div className="col-lg-3 ">
@@ -910,19 +893,21 @@ const ProfileDrawer = ({
                         </div>
                       </div>
                     </div>
+
                     <div className="col-lg-3 mx-auto nft-drawer-dp">
                       <h2>NFT image</h2>
                       <div className="img-holder">
                         <img src={image} alt="" />
                       </div>
                     </div>
+
                   </div>
                 </div>
               </form>
-              <br></br>
+              {/* <br />
               <button onClick={getItem} className="button-styling">
                 Get NFTS data
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

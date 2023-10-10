@@ -7,18 +7,9 @@ import NewItemCard from "../../components/cards/NewItemCard";
 import TableData from "../../components/cards/TableData";
 import Search from "../../components/shared/Search";
 import SliderImage from "../../components/shared/SliderImage";
-import {  Contract, ethers } from "ethers";
-import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
-import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
-import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
-import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
+import { ethers } from "ethers";
 import axios from "axios";
 import apis from "../../service";
-// import { getAddress } from "../../methods/methods";
-// import {
-//   connectWallet,
-//   getProviderOrSigner,
-// } from "../../methods/walletManager";
 import DummyCard from "../../components/cards/DummyCard";
 import { Link } from "react-router-dom";
 import Loader from "../../components/shared/Loader";
@@ -37,7 +28,7 @@ const LandingPage = ({ search, setSearch }) => {
 
   const {getProviderMarketContrat, getProviderNFTContrat, account,checkIsWalletConnected}=useContext(Store)
 
-  
+  //API CALL HERE WITH FUNCTION
   const viewAllNfts = async () => {
     try {
       const response = await apis.viewAllNfts();
@@ -51,14 +42,6 @@ const LandingPage = ({ search, setSearch }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await viewAllNfts();
-    };
-    fetchData();
-  }, []);
-
-  
   const getListedNfts = async (allNftIds) => {
 
     let listingType;
@@ -68,32 +51,28 @@ const LandingPage = ({ search, setSearch }) => {
     let myNFTs = [];
     let myAuctions = [];
 
-    
     //Database
-    // for (let i = 0; i < allNftIds?.length; i++) {
-    //   let id;
-    //   id = allNftIds?.[i];
+    for (let i = 0; i < allNftIds?.length; i++) {
+      let id;
+      id = allNftIds?.[i];
 
     //Blockchain
-     for (let i = 0; i < mintedTokens?.length; i++) {
-      let id;
-      id = mintedTokens?.[i].tokenId?.toString();
-
+    //  for (let i = 0; i < mintedTokens?.length; i++) {
+    //   let id;
+    //   id = mintedTokens?.[i].tokenId?.toString();
       
       let firstOwner = mintedTokens?.[i]?.firstOwner;
-      
-      if (firstOwner != "0x0000000000000000000000000000000000000000" && mintedTokens?.[i]?.listed) {
+      const structData = await getProviderMarketContrat()._idToNFT(id);
+
+      if (firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed) {
         console.log("firstOwner",id)
 
         const metaData = await getProviderNFTContrat().tokenURI(id);
         console.log(metaData,"metaDataID")
        const structData = await getProviderMarketContrat()._idToNFT(id);
         let collectionId = structData?.collectionId?.toString();
-
-      
-
+     
         let seller = structData?.seller;
-
         
         let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
@@ -163,6 +142,17 @@ const LandingPage = ({ search, setSearch }) => {
       }
     }
   };
+
+  useEffect(() => {
+    // const fetchData = async () => {
+    //   await viewAllNfts();
+    // };
+    // fetchData();
+    viewAllNfts();
+  }, []);
+
+  
+ 
 
  
   // useEffect(() => {

@@ -119,7 +119,7 @@ const NewItemCard = ({
             </div>
             <div className="bottom">
               {console.log(seller, userAddress, "you beauty")}
-              {seller.toString().toUpperCase() === userAddress.toString().toUpperCase() ? 
+              {seller?.toString()?.toUpperCase() === userAddress?.toString()?.toUpperCase() ? 
                 <div className="left" onClick={() => openDrawer()}>
                   <p>Your Nft</p>
                 </div> :
