@@ -330,6 +330,7 @@ import axios from "axios";
 // import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 import SimpleCard from "../components/cards/SimpleCard";
 import { Store } from "../Context/Store";
+import { toast } from "react-toastify";
 
 const DateDisplay = ({ datetime }) => {
 
@@ -538,7 +539,7 @@ function CollectionProfile({ search, setSearch }) {
       console.log("viewNftCollectionProfile",response?.data?.data);
       setCollectionData(response?.data?.data);
     } else {
-      alert("error");
+      toast.error("error");
     }
   };
 

@@ -579,7 +579,7 @@ const PlaceABidDrawer = ({
 
     const response = await apis.postNftSold(value);
     console.log("response", response);
-    alert("NFT bought");
+    toast.error("NFT bought");
     // navigate("/profile");
   };
 

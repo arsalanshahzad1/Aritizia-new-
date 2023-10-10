@@ -605,6 +605,12 @@ const Single = ({ search, setSearch }) => {
       const startTimestamp = Math.floor(startDate.getTime() / 1000);
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
+
+      if(startTimestamp >= endTimestamp ) return setEndingDate(""),setIsSingleSubmit(false), toast.error( "Expire date must be grather than start date",{
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+
       setStartingDate(startTimestamp);
       setEndingDate(endTimestamp);
       startTime = startTimestamp;

@@ -72,7 +72,7 @@ const SimpleCard = ({
 
   useEffect(() => {
     if (discountPercentage < 0 || discountPercentage > 100) {
-      alert("Discount percentage should be between 1 - 100");
+      toast.error("Discount percentage should be between 1 - 100");
       setdiscountPercentage(0);
     } else {
       handleDiscount();

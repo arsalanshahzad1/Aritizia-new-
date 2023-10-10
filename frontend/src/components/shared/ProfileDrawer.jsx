@@ -44,6 +44,7 @@ import { useNavigate } from "react-router-dom";
 import FiatStripeContainer from "../../stripePayment/FiatStripeContainer";
 import { Store } from "../../Context/Store";
 import HeaderConnectPopup from "../../pages/Headers/HeaderConnectPopup";
+import { toast } from "react-toastify";
 
 function ProfileDrawer({
   isVisible,
@@ -577,7 +578,7 @@ function ProfileDrawer({
 
     console.log("accBalance",accBalance)
     if(accBalance < amountInWei){
-      return alert("you dont have balance");
+      return toast.error("you dont have balance");
     }
    
 

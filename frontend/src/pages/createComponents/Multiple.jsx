@@ -199,7 +199,6 @@ const Multiple = ({ search, setSearch }) => {
       toast.warning(`End date should be after start date`, {
         position: toast.POSITION.TOP_CENTER,
       });
-      // alert("End date should be after start date");
       setEndingDate("");
     }
   }, [startingDate, endingDate]);
@@ -1138,8 +1137,13 @@ const Multiple = ({ search, setSearch }) => {
       } else {
         const startDate = new Date(nftForm.startDate);
         const endDate = new Date(nftForm.endDate);
+
         const startTimestamp = Math.floor(startDate.getTime() / 1000);
         const endTimestamp = Math.floor(endDate.getTime() / 1000);
+        
+        if(startTimestamp >= endTimestamp ) return setEndingDate(""), toast.error( "Expire date must be grather than start date",{
+          position: toast.POSITION.TOP_CENTER,
+        });
         const Data = {
           title: nftForm.title,
           price: nftForm.bid,

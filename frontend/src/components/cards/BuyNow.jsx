@@ -23,6 +23,7 @@ import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import apis from "../../service";
 import { Store } from "../../Context/Store";
 import HeaderConnectPopup from "../../pages/Headers/HeaderConnectPopup";
+import { toast } from "react-toastify";
 
 const BuyNow = ({
   path,
@@ -389,7 +390,7 @@ const BuyNow = ({
 
     console.log("accBalance",accBalance)
     if(accBalance < amountInWei){
-      return alert("you dont have balance");
+      return toast.error("You dont have balance");
     }
 
     const appprove = await USDTContract.approve(

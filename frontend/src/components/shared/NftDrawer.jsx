@@ -39,6 +39,7 @@ import Slider from "rc-slider";
 import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
 import { Store } from "../../Context/Store";
+import { toast } from "react-toastify";
 // import { getAddress } from "../../methods/methods";
 // import {connectWallet, getProviderOrSigner,} from "../../methods/walletManager";
 
@@ -520,7 +521,7 @@ const ProfileDrawer = ({
       console.log("listedData", listedData);
 
       nftDataPost();
-      alert("Nft listed");
+      toast.error("Nft listed");
     }
   };
 
@@ -618,7 +619,9 @@ const ProfileDrawer = ({
 
       const endTimestamp = Math.floor(endDate.getTime() / 1000);
 
-      if(startTimestamp >= endTimestamp ) return setEndingDate(""), alert("end date must be grather than start date");
+      if(startTimestamp >= endTimestamp ) return setEndingDate(""),  toast.error( "Expire date must be grather than start date",{
+        position: toast.POSITION.TOP_CENTER,
+      });
       startTime = startTimestamp;
       endTime = endTimestamp;
     }
@@ -688,7 +691,7 @@ const ProfileDrawer = ({
 
   const AddCollection = () => {
     if (CreateCollection.length < 1) {
-      alert("Input Collection Name to Create");
+      toast.error("Input Collection Name to Create");
     } else {
       setcollectionOptions((previousOptions) => [
         ...previousOptions,
