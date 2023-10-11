@@ -388,8 +388,8 @@ const BuyNow = ({
     
     let accBalance = await USDTContract.balanceOf(userAddress)
 
-    console.log("accBalance",accBalance)
-    if(accBalance < amountInWei){
+    console.log("accBalance asdas",accBalance.toString() , amountInWei)
+    if(+amountInWei > +accBalance.toString()){
       return toast.error("You dont have balance");
     }
 

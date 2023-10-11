@@ -576,8 +576,7 @@ function ProfileDrawer({
 
     let accBalance = await USDTContract.balanceOf(userAddress)
 
-    console.log("accBalance",accBalance)
-    if(accBalance < amountInWei){
+    if(+amountInWei > +accBalance.toString()){
       return toast.error("you dont have balance");
     }
    

@@ -807,6 +807,7 @@ const PlaceABidDrawer = ({
   };
 
   let usdtBid = false;
+
   const bidWithUSDT = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
@@ -850,6 +851,21 @@ const PlaceABidDrawer = ({
     let amountInETHInWei = ethers.utils
       .parseEther(ethEquivalentToUSDT)
       .toString();
+
+     
+      let accBalance = await USDTContract.balanceOf(userAddress)
+      if(+USDPriceInWei > +accBalance.toString()){
+        return toast.error("you dont have balance", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+
+      if(+USDPriceInWei < (+amountUSD *10**6) + (+platformFee *10**6)){
+        return toast.error("Please place a bid graterthan last bid", {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+      
 
     const appprove = await USDTContract.approve(
       MARKETPLACE_CONTRACT_ADDRESS.address,

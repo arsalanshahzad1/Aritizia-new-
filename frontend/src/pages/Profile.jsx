@@ -523,8 +523,9 @@ const Profile = ({ search, setSearch }) => {
 
 
       const structData = await marketplaceContract._idToNFT(id);
+      console.log("structData",structData)
       //check if not listed
-      if(!structData?.listed){
+      if(!structData?.listed && structData.owner.toString().toLowerCase() === userAddress.toString().toLowerCase()){
       let response;
       try {
         response = await apis.getNFTByTokenId(id);
