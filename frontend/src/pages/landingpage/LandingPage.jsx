@@ -31,12 +31,13 @@ const LandingPage = ({ search, setSearch }) => {
   //API CALL HERE WITH FUNCTION
   const viewAllNfts = async () => {
     try {
-      const response = await apis.viewAllNfts();
-      if(response?.data?.data?.length > 0)
-      {
-        console.log(response?.data?.data,"response?.data?.dataresponse?.data?.data")
-        getListedNfts(response?.data?.data)
-      }
+      getListedNfts();
+      // const response = await apis.viewAllNfts();
+      // if(response?.data?.data?.length > 0)
+      // {
+      //   console.log(response?.data?.data,"response?.data?.dataresponse?.data?.data")
+        // getListedNfts(response?.data?.data)
+      // }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -52,14 +53,14 @@ const LandingPage = ({ search, setSearch }) => {
     let myAuctions = [];
 
     //Database
-    for (let i = 0; i < allNftIds?.length; i++) {
-      let id;
-      id = allNftIds?.[i];
+    // for (let i = 0; i < allNftIds?.length; i++) {
+    //   let id;
+    //   id = allNftIds?.[i];
 
     //Blockchain
-    //  for (let i = 0; i < mintedTokens?.length; i++) {
-    //   let id;
-    //   id = mintedTokens?.[i].tokenId?.toString();
+     for (let i = 0; i < mintedTokens?.length; i++) {
+      let id;
+      id = mintedTokens?.[i].tokenId?.toString();
       
       let firstOwner = mintedTokens?.[i]?.firstOwner;
       const structData = await getProviderMarketContrat()._idToNFT(id);
@@ -68,8 +69,22 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("firstOwner",id)
 
         const metaData = await getProviderNFTContrat().tokenURI(id);
+        // const responses = await fetch(metaData)
+        // const metadata = await responses.json()
+
+        // const extractedData = {};
+
+        // for (const key in metadata) {
+        //   if (metadata.hasOwnProperty(key)) {
+        //     const keyObject = JSON.parse(key);
+        //     Object.assign(extractedData, keyObject);
+        //   }
+        // }
+        
+
         console.log(metaData,"metaDataID")
-       const structData = await getProviderMarketContrat()._idToNFT(id);
+        
+      //  const structData = await getProviderMarketContrat()._idToNFT(id);
         let collectionId = structData?.collectionId?.toString();
      
         let seller = structData?.seller;
@@ -84,6 +99,48 @@ const LandingPage = ({ search, setSearch }) => {
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
     
         const price = ethers.utils.formatEther(structData?.price?.toString());
+
+            // const crypto = extractedData?.crypto;
+            // const title = extractedData?.title;
+            // const image = extractedData?.image;
+            // const royalty = extractedData?.royalty;
+            // const description = extractedData?.description;
+            // const collection = extractedData?.collection;
+        
+            // if (listingType === 0) {
+            //   const nftData = {
+            //     id: id, //
+            //     title: title,
+            //     image: image,
+            //     price: price,
+            //     crypto: crypto,
+            //     royalty: royalty,
+            //     description: description,
+            //     collection: collection,
+            //     collectionImages: collectionImages,
+            //     seller: seller,
+            //   };
+            //   console.log("aaaa",nftData);
+            //   myNFTs.push(nftData);
+            //   setNftListFP((prev) => [...prev, nftData]);
+            // } else if (listingType === 1) {
+            //   const nftData = {
+            //     id: id, 
+            //     title: title,
+            //     image: image,
+            //     price: price,
+            //     paymentMethod: crypto,
+            //     basePrice: price,
+            //     startTime: auctionData?.startTime?.toString(),
+            //     endTime: auctionData?.endTime?.toString(),
+            //     highestBid: highestBid,
+            //     highestBidder: auctionData?.highestBidder?.toString(),
+            //     collectionImages: collectionImages,
+            //     seller: auctionData?.seller?.toString(),
+            //   };
+            //   myAuctions.push(nftData);
+            //   setNftListAuction((prev) => [...prev, nftData]);
+            // }
        
         axios
           .get(metaData)
@@ -144,11 +201,11 @@ const LandingPage = ({ search, setSearch }) => {
   };
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   await viewAllNfts();
-    // };
-    // fetchData();
-    viewAllNfts();
+    const fetchData = async () => {
+      await viewAllNfts();
+    };
+    fetchData();
+    // viewAllNfts();
   }, []);
 
   

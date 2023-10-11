@@ -146,7 +146,6 @@ const createBackendServer = (baseURL) => {
   const viewAllNfts = async () =>
     await api.get(`view-all-nfts`)
 
-
   //its not working properly TODO
   // const viewAllMyNfts = async (newid) =>
   //   await api.get(`view-all-nfts?user_id=${newid}`)
@@ -348,7 +347,7 @@ const createBackendServer = (baseURL) => {
   };
 };
 
-const apis = createBackendServer("http://165.232.142.3");
+const apis = createBackendServer("http://143.198.70.237");
 
 //     Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237

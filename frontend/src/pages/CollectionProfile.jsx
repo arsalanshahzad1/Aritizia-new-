@@ -374,19 +374,31 @@ function CollectionProfile({ search, setSearch }) {
   const userAddress = userData?.wallet_address;
   const userId = userData?.id;
 
-  const getCollectionNfts = async () => {
-    let emptyList = [];
-    setNftListAuction(emptyList);
-    setNftListFP(emptyList);
+  const viewNftCollectionProfile = async (id) => {
+    const response = await apis.viewNftCollectionProfile(id);
+    if (response?.status) {
+      console.log("viewNftCollectionProfile",response);
+      setCollectionData(response?.data?.data);
+      getCollectionNfts(response?.data?.data?.nfts)
+    } else {
+      toast.error("error");
+    }
+  };
+
+  useEffect(() => {
+    viewNftCollectionProfile(collectionID);
+  }, []);
+
+  
+  const getCollectionNfts = async (nftIds) => {
+    // let emptyList = [];
+    // // setNftListAuction(emptyList);
+    // // setNftListFP(emptyList);
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
     const signer = provider.getSigner()
     
-    console.log("Connected wallet", userAddress);
-    console.log("provider", provider);
-    console.log("collectionData", collectionData);
-    console.log("collectionData.nfts", collectionData?.nfts);
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -401,34 +413,35 @@ function CollectionProfile({ search, setSearch }) {
     // const signer = provider.getSigner();
     const address = await signer.getAddress();
 
-    console.log("MYADDRESS", address);
 
     let listingType;
 
-    let mintedTokens = collectionData?.nfts;
+
 
     // let collectionTokens = await marketplaceContract.collection(0, 0);
 
     // console.log("collectionTokens", collectionTokens);
 
     // let mintedTokens = [1, 4, 2];
-    console.log("mintedTokens", mintedTokens);
-
+    const myArray = Object.values(nftIds);
+  
     let myNFTs = [];
     let myAuctions = [];
-    for (let i = 0; i < mintedTokens?.length; i++) {
+
+    for (let i = 0; i < myArray?.length; i++) {
       let id;
-      id = mintedTokens[i];
+      id = myArray[i];
       // id = mintedTokens[i];
-      console.log("id", id);
-      console.log("YESS");
-      let firstOwner = mintedTokens[i]?.firstOwner;
+    
+      console.log("YESS",id);
+
+      const structData = await marketplaceContract._idToNFT(id);
+
+      console.log("structData", structData);
+
+      let firstOwner = structData[i]?.firstOwner;
       if (firstOwner != "0x0000000000000000000000000000000000000000") {
         const metaData = await nftContract?.tokenURI(id);
-
-        const structData = await marketplaceContract._idToNFT(id);
-
-        console.log("structData", structData);
 
         const fanNftData = await marketplaceContract._idToNFT2(id);
 
@@ -449,7 +462,6 @@ function CollectionProfile({ search, setSearch }) {
         console.log(error)  
         }
         
-
         listingType = structData?.listingType;
 
         const price = ethers.utils.formatEther(structData?.price?.toString());
@@ -469,12 +481,12 @@ function CollectionProfile({ search, setSearch }) {
             console.log("Dataa", data);
 
             data = JSON.parse(data);
-            const crypto = data.crypto;
-            const title = data.title;
-            const image = data.image;
-            const royalty = data.royalty;
-            const description = data.description;
-            const collection = data.collection;
+            const crypto = data?.crypto;
+            const title = data?.title;
+            const image = data?.image;
+            const royalty = data?.royalty;
+            const description = data?.description;
+            const collection = data?.collection;
 
             ///////////////////////////
             ///////////////////////////
@@ -533,24 +545,7 @@ function CollectionProfile({ search, setSearch }) {
     }
   };
 
-  const viewNftCollectionProfile = async (id) => {
-    const response = await apis.viewNftCollectionProfile(id);
-    if (response?.status) {
-      console.log("viewNftCollectionProfile",response?.data?.data);
-      setCollectionData(response?.data?.data);
-    } else {
-      toast.error("error");
-    }
-  };
 
-  useEffect(() => {
-    viewNftCollectionProfile(collectionID);
-  }, []);
-
-  useEffect(() => {
-    // getProviderOrSigner();
-    getCollectionNfts();
-  }, []);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
