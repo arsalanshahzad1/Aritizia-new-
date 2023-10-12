@@ -209,9 +209,9 @@ const PaymentForm = ({
             >
               <p>Payment Method</p>
               <div className="title">
-                {paymentMode} <MdKeyboardArrowDown />
+                {paymentMode}
               </div>
-              {ShowPaymentMode && (
+              {/* {ShowPaymentMode && (
                 <div className="options">
                   <h2
                     onClick={() => {
@@ -228,7 +228,7 @@ const PaymentForm = ({
                     One time
                   </h2>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <fieldset className="FormGroup">

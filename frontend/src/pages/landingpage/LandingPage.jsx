@@ -36,7 +36,7 @@ const LandingPage = ({ search, setSearch }) => {
       // if(response?.data?.data?.length > 0)
       // {
       //   console.log(response?.data?.data,"response?.data?.dataresponse?.data?.data")
-        // getListedNfts(response?.data?.data)
+      //   getListedNfts(response?.data?.data)
       // }
     } catch (error) {
       console.error("Error:", error);
@@ -84,7 +84,7 @@ const LandingPage = ({ search, setSearch }) => {
 
         console.log(metaData,"metaDataID")
         
-      //  const structData = await getProviderMarketContrat()._idToNFT(id);
+       const structData = await getProviderMarketContrat()._idToNFT(id);
         let collectionId = structData?.collectionId?.toString();
      
         let seller = structData?.seller;
@@ -94,66 +94,88 @@ const LandingPage = ({ search, setSearch }) => {
         let highestBid = ethers.utils.formatEther(auctionData?.highestBid?.toString());
 
         listingType = structData?.listingType;
-     
-        const response = await apis.getNFTCollectionImage(collectionId);
+
+        let response
+        // let user_id
+
+        try {
+          response = await apis.getNFTCollectionImage(collectionId);
+          console.log(response?.data?.data?.user_id, 'ressssss');
+        } catch (error) {
+          console.log(error)
+        }
+      
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-    
+        const user_id = response?.data?.data?.user_id;
         const price = ethers.utils.formatEther(structData?.price?.toString());
 
-            // const crypto = extractedData?.crypto;
-            // const title = extractedData?.title;
-            // const image = extractedData?.image;
-            // const royalty = extractedData?.royalty;
-            // const description = extractedData?.description;
-            // const collection = extractedData?.collection;
+          // axios
+          // .get(metaData)
+          // .then((response) => {
+          //   const meta = response?.data;
+          //   let data = JSON.stringify(meta);
+          //   data = data?.slice(2, -5);
+          //   data = data?.replace(/\\/g, "");
+          //   data = JSON.parse(data);
+          //   const crypto = data?.crypto;
+          //   const title = data?.title;
+          //   const image = data?.image;
+          //   const royalty = data?.royalty;
+          //   const description = data?.description;
+          //   const collection = data?.collection;
         
-            // if (listingType === 0) {
-            //   const nftData = {
-            //     id: id, //
-            //     title: title,
-            //     image: image,
-            //     price: price,
-            //     crypto: crypto,
-            //     royalty: royalty,
-            //     description: description,
-            //     collection: collection,
-            //     collectionImages: collectionImages,
-            //     seller: seller,
-            //   };
-            //   console.log("aaaa",nftData);
-            //   myNFTs.push(nftData);
-            //   setNftListFP((prev) => [...prev, nftData]);
-            // } else if (listingType === 1) {
-            //   const nftData = {
-            //     id: id, 
-            //     title: title,
-            //     image: image,
-            //     price: price,
-            //     paymentMethod: crypto,
-            //     basePrice: price,
-            //     startTime: auctionData?.startTime?.toString(),
-            //     endTime: auctionData?.endTime?.toString(),
-            //     highestBid: highestBid,
-            //     highestBidder: auctionData?.highestBidder?.toString(),
-            //     collectionImages: collectionImages,
-            //     seller: auctionData?.seller?.toString(),
-            //   };
-            //   myAuctions.push(nftData);
-            //   setNftListAuction((prev) => [...prev, nftData]);
-            // }
-       
-        axios
+
+          //     const nftData = {
+          //       id: id, //
+          //       title: title,
+          //       image: image,
+          //       price: price,
+          //       crypto: crypto,
+          //       royalty: royalty,
+          //       description: description,
+          //       collection: collection,
+          //       seller: seller,
+          //       listingType:listingType,
+          //       paymentMethod: crypto,
+          //       basePrice: price,
+          //       startTime: auctionData?.startTime?.toString(),
+          //       endTime: auctionData?.endTime?.toString(),
+          //       highestBid: highestBid,
+          //       highestBidder: auctionData?.highestBidder?.toString(),
+          //       collectionImages: collectionImages,
+          //       auctionSeller: auctionData?.seller?.toString(),
+          //     };
+
+          //     console.log(nftData, 'nftData');
+
+          //     setNftListFP((prev) => [...prev, nftData]);
+            
+          // })
+          // .catch((error) => {
+          //   console.error("Error fetching metadata:", error);
+          // });
+
+
+          const testingNft = async () => await axios
+          .get(metaData)
+          .then((response)=> {
+            return response
+          })
+          console.log(await testingNft()  , 'testingNft');
+         axios
           .get(metaData)
           .then((response) => {
             const meta = response?.data;
             let data = JSON.stringify(meta);
-
             data = data?.slice(2, -5);
             data = data?.replace(/\\/g, "");
             data = JSON.parse(data);
+            console.log(data  , 'testingNft');
             const crypto = data?.crypto;
             const title = data?.title;
-            const image = data?.image;
+            const replacedUrl = data?.image;
+            const image = replacedUrl.replace('https://ipfs.io/ipfs/', 'https://gateway.pinata.cloud/ipfs/');
+            console.log('ReplacedURL:', image);
             const royalty = data?.royalty;
             const description = data?.description;
             const collection = data?.collection;
@@ -170,6 +192,7 @@ const LandingPage = ({ search, setSearch }) => {
                 collection: collection,
                 collectionImages: collectionImages,
                 seller: seller,
+                user_id:user_id
               };
               console.log("aaaa",nftData);
               myNFTs.push(nftData);
@@ -188,6 +211,7 @@ const LandingPage = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 collectionImages: collectionImages,
                 seller: auctionData?.seller?.toString(),
+                user_id:user_id
               };
               myAuctions.push(nftData);
               setNftListAuction((prev) => [...prev, nftData]);
@@ -354,6 +378,7 @@ const [counterData , setCounterData] = useState('')
                         userAddress={userAddress}
                         seller={item?.seller}
                         size={'col-lg-3'}
+                        user_id={item?.user_id}
                       />
                       </>
                     ))}
@@ -418,6 +443,7 @@ const [counterData , setCounterData] = useState('')
                         collectionImages={item?.collectionImages}
                         seller={item?.seller}
                         size={'col-lg-3'}
+                        user_id={item?.user_id}
                       />
                       </>
                     ))}

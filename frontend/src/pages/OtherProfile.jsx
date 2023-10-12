@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState, useEffect,useContext } from "react";
 import Header from "./landingpage/Header";
-import { BsFillEnvelopeFill } from "react-icons/bs";
+import { BsFillEnvelopeFill, BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
 import BuyNow from "../components/cards/BuyNow";
 import NewItemCard from "../components/cards/NewItemCard";
 import Footer from "./landingpage/Footer";
@@ -33,6 +33,7 @@ import apis from "../service";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Store } from "../Context/Store";
+import { FaFacebookF } from "react-icons/fa";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -499,9 +500,12 @@ const OtherProfile = ({ search, setSearch }) => {
                   </h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
-                  <SocialShare
-                    style={{ fontSize: "28px", marginRight: "10px" }}
-                  />
+                  <div className="other-user-icons">
+                    <a href={userDetails?.facebook_url} target="_blank"><FaFacebookF /></a>
+                    <a href={userDetails?.twitter_url} target="_blank"><BsTwitter /></a>
+                    <a href={userDetails?.instagram_url} target="_blank"><BsInstagram /></a>
+                    <a href={userDetails?.your_site} target="_blank"><BsLinkedin /></a>
+                  </div>
                 </div>
               </div>
               <div className="row">

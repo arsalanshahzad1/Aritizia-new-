@@ -631,6 +631,7 @@ function ProfileDrawer({
       const response = await apis.getNFTByTokenId(id);
       console.log("ressss", response?.data?.data?.subscription_plan);
       setNftDetails(response?.data?.data);
+      console.log(response?.data?.data , 'fsfweffsdfsfwe');
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
       console.log("Error: ", e);
@@ -1023,7 +1024,7 @@ function ProfileDrawer({
   }, [userWalletAddress])
 
 
-
+console.log(nftDetails?.user?.id , 'odddd');
   
   const userAccountAddress = localStorage.getItem("userAddress")
   return (

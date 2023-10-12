@@ -91,8 +91,13 @@ const UnAuthHeader = ({ search, setSearch }) => {
                       </svg>
                     </span>
                     <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }} onClick={() => setConnectPopup(true)}>
-                      Connect Wallet
+                      Create an account
                     </button>
+                    <Link to={'/login'}>
+                      <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }}>
+                        Login
+                      </button>
+                    </Link>
                   </>
                 ) : (
                   <>
@@ -104,8 +109,13 @@ const UnAuthHeader = ({ search, setSearch }) => {
                     </span>
 
                     <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }} onClick={() => setConnectPopup(true)}>
-                      Connect Wallet
+                      Create an account
                     </button>
+                    <Link to={'/login'}>
+                      <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }}>
+                        Login
+                      </button>
+                    </Link>
                   </>
                 )}
               </div>

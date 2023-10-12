@@ -975,7 +975,7 @@ header .left img {
 .sec-five-wrap .image img {
   width: 100%;
   height: 180px;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .sec-five-wrap .image span {
@@ -1040,12 +1040,16 @@ header .left img {
 
 .new-item-card .detail-wrap .topsection .left p {
   font-family: "Jost";
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 29px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #121212;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #121212;
+    width: 180px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .new-item-card .detail-wrap .topsection .left span {
@@ -1140,6 +1144,30 @@ footer p {
   letter-spacing: 0em;
   text-align: left;
   color: var(--white);
+}
+footer .three ul li:nth-child(1) p {
+  font-family: 'Jost';
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    /* color: rgba(182, 0, 209, 1); */
+    display: flex;
+    gap: 10px;
+}
+footer .three ul li:nth-child(1) p a{
+  
+  color: rgba(182, 0, 209, 1);
+}
+footer .three ul li:nth-child(1) p p{
+  font-family: 'Jost';
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #fff;
 }
 
 footer h1 {
@@ -1242,7 +1270,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li {
 
 footer .footer-bottom .footer-bottom-wrap .three ul li a {}
 
-footer .footer-bottom .footer-bottom-wrap .three ul li a p {
+footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p {
   font-family: 'Jost';
   font-size: 18px;
   font-weight: 600;
@@ -1252,7 +1280,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p {
   color: rgba(182, 0, 209, 1);
 }
 
-footer .footer-bottom .footer-bottom-wrap .three ul li a p span {
+footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
   color: #fff;
   font-weight: 400;
 }
@@ -3018,6 +3046,16 @@ footer .footer-bottom .footer-bottom-wrap .three ul li a p span {
 }
 
 .other-user-icons svg:nth-child(3) {
+  font-size: 36px;
+  margin-left: 15px;
+}
+.other-user-icons a{
+  color: #212529;
+}
+.other-user-icons a:hover{
+  color: #B600D1;
+}
+.other-user-icons svg:nth-child(4) {
   font-size: 36px;
   margin-left: 15px;
 }
@@ -5958,4 +5996,23 @@ h3 {
 }
 .header-connect-modal-wrap .main-data{
   padding: 40px 0px;
+}
+
+
+  .tawk-button {
+    margin: 0;
+    border-radius: 5px;
+    overflow: hidden;
+    font: inherit;
+    color: inherit;
+    text-transform: none;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #B600D1 !important;
+    line-height: 1.5rem;
+    text-decoration: none;
+    background-color: #B600D1 !important;
+    color: #fff;
+
 }

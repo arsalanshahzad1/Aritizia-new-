@@ -2,12 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { GlobalContext } from "../../Context/GlobalContext";
 import { Link } from "react-router-dom";
+import HeaderConnectPopup from "../../pages/Headers/HeaderConnectPopup";
+import EmailSigninPopup from "../../pages/Headers/EmailSigninPopup";
 
 const SliderImage = () => {
   const { prompt, setprompt } = useContext(GlobalContext);
   const [count, setCount] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
-  const [user, setUser] = useState(localStorage.getItem("data"));
+  const [connectPopup, setConnectPopup] = useState(false);
+  const [emailSigninPopup, setEmailSigninPopup] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("data")));
 
   // const connectWallet = async () => {
   //   // console.log("Connect wallet");
@@ -40,6 +44,7 @@ const SliderImage = () => {
     };
   }, []);
   return (
+    <>
     <section
       className="home-first-sec"
       style={{
@@ -49,9 +54,13 @@ const SliderImage = () => {
       <div className="home-first-wrap">
         <h1>CREATE YOUR OWN NFT</h1>
         <div className="search" id="prompt">
-          <Link to="/art">
-            <button>Prompt</button>
-          </Link>
+          {user?.email != null && user ?
+            <Link to="/art">
+              <button>Prompt</button>
+            </Link>
+            : 
+            <button  onClick={() => setEmailSigninPopup(true)}>Prompt</button>
+          }
           <input
             type="text"
             placeholder="A cinematic wide shot of a hamster in a space suite, HD, NFT art, 2:3"
@@ -74,6 +83,9 @@ const SliderImage = () => {
         </button>
       </div>
     </section>
+    <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
+    <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
+    </>
   );
 };
 

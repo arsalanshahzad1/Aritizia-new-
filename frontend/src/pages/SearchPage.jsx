@@ -76,7 +76,7 @@ const SearchPage = ({ search, setSearch }) => {
     setSearchText(event.target.value);
     viewFilteredNfts(currency.value, status.value, priceRange.min, priceRange.max, categories.value, 1, event.target.value)
     setNftListFP([])
-    getListedNfts(response?.data?.data)
+    // getListedNfts(response?.data?.data)
     // searchTexts = event.target.value;
     // getSearchedNfts();
   };

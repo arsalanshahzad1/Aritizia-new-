@@ -24,6 +24,8 @@ import Loader from "../components/shared/Loader";
 import Header from "./landingpage/Header";
 import { Store } from "../Context/Store";
 import { CiGlass, CiLight } from "react-icons/ci";
+import { FaFacebookF } from "react-icons/fa";
+import { BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
 
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
@@ -193,7 +195,7 @@ const Profile = ({ search, setSearch }) => {
             data = JSON.parse(data);
             const crypto = data?.crypto;
             const title = data?.title;
-            const image = data?.image;
+            const image =data?.image;
             const royalty = data?.royalty;
             const description = data?.description;
             const collection = data?.collection;
@@ -697,6 +699,10 @@ const Profile = ({ search, setSearch }) => {
 
   const userWalletAddress = localStorage.getItem("userAddress")
 
+  console.log(window.location.hash , 'asdasdasdas');
+  console.log(window.location.host , 'asdasdasdasss');
+  console.log(window.location.href , 'asdasdasdasssss');
+
   return (
     <>
       {loader && <Loader />}
@@ -753,9 +759,15 @@ const Profile = ({ search, setSearch }) => {
                   </h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
-                  <SocialShare
+                  <div className="other-user-icons">
+                    <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
+                    <a href={userData?.twitter_url} target="_blank"><FaXTwitter /></a>
+                    <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
+                    <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
+                  </div>
+                  {/* <SocialShare
                     style={{ fontSize: "22px", marginRight: "10px" }}
-                  />
+                  /> */}
                 </div>
               </div>
               <div className="row">

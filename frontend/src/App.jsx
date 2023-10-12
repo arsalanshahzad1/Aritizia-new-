@@ -134,6 +134,10 @@ function App() {
 
 
               <Route element={<ProtectedRoute />}>
+              <Route
+                  path="/art"
+                  element={<Art search={search} setSearch={setSearch} />}
+                />
 
                 <Route
                   path="/profile"
@@ -197,10 +201,7 @@ function App() {
                   path="/dashboard/*"
                   element={<DashboardMain search={search} setSearch={setSearch} />}
                 />
-                <Route
-                  path="/art"
-                  element={<Art search={search} setSearch={setSearch} />}
-                />
+                
 
 
               </Route>

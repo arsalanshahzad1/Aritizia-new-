@@ -38,7 +38,8 @@ const BuyNow = ({
   collection,
   collectionImages,
   seller,
-  size
+  size,
+  user_id
   // userAddress,
 }) => {
   const [showLinks, setShowLinks] = useState(false);
@@ -67,11 +68,11 @@ const BuyNow = ({
   let sellerPlan = getSellerPlan;
   let buyerPlan = getBuyerPlan;
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const { account, checkIsWalletConnected } = useContext(Store);
 
-  useEffect(()=>{
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
     let _amountToDeduct;
@@ -200,6 +201,7 @@ const BuyNow = ({
       const response = await apis.getNFTByTokenId(id);
       console.log("ressss", response);
       setNftDetails(response?.data?.data);
+      console.log("Error: ", e);
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
       console.log("Error: ", e);
@@ -264,7 +266,7 @@ const BuyNow = ({
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
     const signer = provider.getSigner()
-    
+
     console.log("2222222222222");
 
     const marketplaceContract = new Contract(
@@ -385,11 +387,11 @@ const BuyNow = ({
       "MARKETPLACE_CONTRACT_ADDRESS.address  ",
       MARKETPLACE_CONTRACT_ADDRESS.address
     );
-    
+
     let accBalance = await USDTContract.balanceOf(userAddress)
 
-    console.log("accBalance asdas",accBalance.toString() , amountInWei)
-    if(+amountInWei > +accBalance.toString()){
+    console.log("accBalance asdas", accBalance.toString(), amountInWei)
+    if (+amountInWei > +accBalance.toString()) {
       return toast.error("You dont have balance");
     }
 
@@ -540,7 +542,9 @@ const BuyNow = ({
     // }, 1500);
   };
 
-  
+
+
+
   return (
     <>
       <div className={`${size} col-md-4`}>
@@ -566,8 +570,8 @@ const BuyNow = ({
                             <li>
                               <a>
                                 <LinkedinShareButton
-                                  url="http://artizia.pluton.ltd"
-                                  title="Ali Khan"
+                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                                  title="Artizia"
                                 >
                                   <p>Linkedin</p>
                                 </LinkedinShareButton>
@@ -576,8 +580,8 @@ const BuyNow = ({
                             <li>
                               <a>
                                 <TwitterShareButton
-                                  url="http://artizia.pluton.ltd"
-                                  title="Ali Khan"
+                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                                  title="Artizia"
                                 >
                                   <p>Twitter</p>
                                 </TwitterShareButton>
@@ -586,8 +590,8 @@ const BuyNow = ({
                             <li>
                               <a>
                                 <FacebookShareButton
-                                  url="http://artizia.pluton.ltd"
-                                  title="Ali Khan"
+                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                                  title="Artizia"
                                 >
                                   <p>Facebook</p>
                                 </FacebookShareButton>
@@ -610,11 +614,11 @@ const BuyNow = ({
                     <div className="center-icon">
                       <div className="icon">
                         {/* <img src={collectionImages && collectionImages} alt="" /> */}
-                            {collectionImages == null ?
-                                <img src='/assets/images/user-none.png' alt="" />
-                                :
-                                <img src={collectionImages} alt="" />
-                            }
+                        {collectionImages == null ?
+                          <img src='/assets/images/user-none.png' alt="" />
+                          :
+                          <img src={collectionImages} alt="" />
+                        }
                         <img src="/assets/images/chack.png" alt="" />
                       </div>
                     </div>
@@ -638,28 +642,27 @@ const BuyNow = ({
                                     </div> */}
                   {userAddress?.toUpperCase() !== seller?.toUpperCase() ? (
                     <div className="button css-pxd23z" onClick={() => {
-                      if(userWalletAddress === "false")
-                      {
-                         setConnectPopup(true)
+                      if (userWalletAddress === "false") {
+                        setConnectPopup(true)
                       }
-                      else{
+                      else {
                         setSucess(true);
                         getNFTDetailByNFTTokenId(id)
                         getPriceInUSD();
-                        getFiatAmount();  
+                        getFiatAmount();
                       }
-                       }} >
+                    }} >
                       <p>Buy Now</p>
                       <span>
                         <img src="/assets/icons/shop.png" alt="" />
                       </span>
                     </div>
                   )
-                  : (
-                    <div className="button css-pxd23z" style={{display: "flex", justifyContent:"center",pointerEvents:"none"}}>
-                      <p>Your nft</p>
-                    </div>
-                  )
+                    : (
+                      <div className="button css-pxd23z" style={{ display: "flex", justifyContent: "center", pointerEvents: "none" }}>
+                        <p>Your nft</p>
+                      </div>
+                    )
                   }
                 </div>
               </div>
@@ -752,7 +755,7 @@ const BuyNow = ({
           </div>
         </div>
       </Modal>
-      
+
       <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
     </>
   );

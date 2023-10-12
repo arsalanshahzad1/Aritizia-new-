@@ -80,9 +80,17 @@ const Footer = () => {
               <div className="three">
                 <ul>
                   <li>
+                    <p>
                     <Link to="/terms">
-                      <p>TERMS & CONDITIONS</p>
+                      TERMS
                     </Link>
+                    <p>&</p>
+                    <Link to="/privacy-policy">
+                      POLICY
+                    </Link>
+                    </p>
+                    
+                    
                   </li>
                   <li>
                     <Link>

@@ -599,11 +599,11 @@ function CollectionProfile({ search, setSearch }) {
                   <h2 className="user-name">{collectionData?.name}</h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
-                  <div className="other-user-icons">
+                  {/* <div className="other-user-icons">
                     <FaFacebookF />
                     <BsTwitter />
                     <BsInstagram />
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

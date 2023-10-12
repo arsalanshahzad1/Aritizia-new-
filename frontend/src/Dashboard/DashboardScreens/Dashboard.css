@@ -358,6 +358,8 @@
     border: 2px solid #929292;
     background: #fff;
     width: 100%;
+    position: absolute;
+    z-index: 2;
 }
 .user-sub-payment .options h2{
     color: #929292;

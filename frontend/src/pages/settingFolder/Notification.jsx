@@ -131,7 +131,7 @@ const Notification = () => {
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
-                <h2>like</h2>
+                <h2>Like</h2>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
@@ -141,7 +141,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When anyone likes your nft.</p>
+                <p>When anyone likes your NFT.</p>
               </div>
             </div>
           </div>

@@ -32,9 +32,9 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
 
     return (
         <>
-            {data.map((res, i) => {
+            {data.map((res, index) => {
                 return (
-                    <div className="col-lg-3 col-md-6" key={i}>
+                    <div className="col-lg-3 col-md-6" key={index}>
                         {res?.name == 'Free Trial' ?
                             <div className={`subscription-card-wrap`}>
                                 <h2 className='title'>{res?.name}</h2>
@@ -69,11 +69,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 <div>
                                     {res?.monthly_generated_images == 0 ?
                                         <>
-                                            <p className='p1'>Images generated/mo</p><Cross />
+                                            <p className='p1'>Images generated 40/Month </p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Images generated/mo</p><Check />
+                                            <p className='p1'>Images generated 40/Month</p><Check />
                                         </>
 
 
@@ -160,8 +160,8 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 </div>
                             </div>
                             :
-                            <div key={i} className={`subscription-card-wrap ${res?.user_subs.length != 0 ? 'active' : ''}`}>
-                                <div onClick={() => { setShowPaymentForm(true); setPlanName(res?.name); setIndex(i) }}>
+                            <div key={index} className={`subscription-card-wrap ${res?.user_subs.length != 0 ? 'active' : ''}`}>
+                                <div onClick={() => { setShowPaymentForm(true); setPlanName(res?.name); setIndex(index) }}>
                                     <h2 className='title'>{res?.name == 'Free Trail' ? "Free Trial": res?.name}</h2>
                                     <div>
                                         {res?.monthly_cost == 0 ?
@@ -194,11 +194,17 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.monthly_generated_images == 0 ?
                                             <>
-                                                <p className='p1'>Images generated/mo</p><Cross />
+                                                {index === 0 && <><p className='p1'>Images generated 40/Month</p><Cross /></>}
+                                                {index === 1 && <><p className='p1'>Images generated 400/Month</p><Cross /></>}
+                                                {index === 2 && <><p className='p1'>Images generated 700/Month</p><Cross /></>}
+                                                {index === 3 && <><p className='p1'>Images generated 1600/Month</p><Cross /></>}
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Images generated/mo</p><Check />
+                                            {index === 0 && <><p className='p1'>Images generated 40/Month </p><Check /></>}
+                                            {index === 1 && <><p className='p1'>Images generated 400/Month </p><Check /></>}
+                                            {index === 2 && <><p className='p1'>Images generated 700/Month </p><Check /></>}
+                                            {index === 3 && <><p className='p1'>Images generated 1600/Month </p><Check /></>}
                                             </>
                                         }
                                     </div>

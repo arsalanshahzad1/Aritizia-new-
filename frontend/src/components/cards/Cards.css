@@ -300,7 +300,7 @@ p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  /* height: 100%; */
   list-style: none;
   padding: 0;
   margin: 0;
@@ -574,13 +574,17 @@ img {
 }
 
 .css-fwx73e .detail-wrap .top .left {
-  font-family: 'Jost';
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 26px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: var(--secoundary);
+  font-family: "Jost";
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #121212;
+    width: 180px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .css-fwx73e .detail-wrap .top .right {

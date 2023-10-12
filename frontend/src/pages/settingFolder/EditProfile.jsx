@@ -152,7 +152,7 @@ const EditProfile = () => {
 
           <div>
             <div>
-              <p>Your site</p> <p>optional</p>
+              <p>Linkdin url</p>
             </div>
             <input
               defaultValue={data?.your_site}
@@ -173,6 +173,19 @@ const EditProfile = () => {
               type="url"
               placeholder="Enter instagram URL"
               name="twitter_url"
+              onChange={onChangeHandler}
+            />
+          </div>
+          <div>
+            <div>
+              {" "}
+              <p>Facebook URL</p> <p></p>
+            </div>
+            <input
+              defaultValue={data?.facebook_url}
+              type="url"
+              placeholder="Enter facebook URL"
+              name="facebook_url"
               onChange={onChangeHandler}
             />
           </div>

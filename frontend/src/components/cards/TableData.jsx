@@ -9,12 +9,12 @@ const TableData = () => {
   const [list, setList] = useState([]);
 
   const viewNftTopCollections = async () => {
-    const response = await apis.viewNftTopCollections();
-    if (response.status) {
+
+    try {
+      const response = await apis.viewNftTopCollections();
       setList(response?.data?.data);
-      console.log(response, "zzzzxxxx");
-    } else {
-      console.log("Error");
+    } catch (error) {
+      console.log(error.message);
     }
   };
 

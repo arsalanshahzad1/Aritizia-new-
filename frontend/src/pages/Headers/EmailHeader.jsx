@@ -41,6 +41,7 @@ const EmailHeader = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
+  const [userParse, setUserParse] = useState(JSON.parse(localStorage.getItem("data")));
 
   const { account, checkIsWalletConnected, connectWallet } = useContext(Store);
 
@@ -535,6 +536,12 @@ const EmailHeader = ({ search, setSearch }) => {
                     >
                       {userAddress !== "false" ? "Connected" : "Connect Wallet"}
                     </button>
+                    {userParse?.email === null ?
+                          <Link to={'/login'}>
+                            <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`}
+                              style={{ margin: user ? "0px 20px 0px 0px" : "0px 0px 0px 3px" }}>Login</button>
+                          </Link>:<></>
+                          }
                   </>
                 )}
                 {user && (
