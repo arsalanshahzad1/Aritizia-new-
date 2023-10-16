@@ -318,6 +318,7 @@ const PlaceABidDrawer = ({
   isLive,
   startTime,
   endTime,
+  user_id
 }) => {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -1191,6 +1192,7 @@ const PlaceABidDrawer = ({
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
+                        user_id={user_id}
                       />
                     </div>
                     {/* <div className="col-lg-8 col-md-8 col-12">
@@ -1216,6 +1218,7 @@ const PlaceABidDrawer = ({
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
+                        user_id={user_id}
                       />
                     </div>
                   </div>

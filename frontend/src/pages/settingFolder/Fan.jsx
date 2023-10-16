@@ -12,6 +12,7 @@ import { Store } from "../../Context/Store";
 
 function Fan({ id, fanToggle }) {
   const userData = JSON.parse(localStorage.getItem("data"));
+  const ids = userData?.id;
   const userAddress = userData?.wallet_address;
 
   const [fanListing, setFanListing] = useState([]);
@@ -23,7 +24,7 @@ function Fan({ id, fanToggle }) {
     checkIsWalletConnected()
   },[account])
 
-  const getFanListing = async () => {
+  const getFanListing = async (ids) => {
     const response = await apis.getFanList(id);
     setFanListing(response?.data?.data);
     console.log(response?.data?.data, "fanlist");
@@ -32,7 +33,7 @@ function Fan({ id, fanToggle }) {
 
   useEffect(()=>{
     setLoader(true)
-    getFanListing()
+    getFanListing(ids)
   }
   ,[fanToggle])
 
@@ -81,10 +82,7 @@ function Fan({ id, fanToggle }) {
   };
 
   const getRemoveFan = async (selectedUser) => {
-    console.log("figetRemoveFanrst");
-    console.log("selectedUser", selectedUser);
     const response = await apis.getremovedFan(selectedUser);
-    console.log("response from getRemoveFan", response);
     setFanListing(response?.data?.data);
     getFanListing();
     // setFanListing([]);

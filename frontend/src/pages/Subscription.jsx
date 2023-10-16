@@ -132,7 +132,7 @@ const Subscription = ({ search, setSearch }) => {
                                                 {res?.user_subs?.is_cancel == 0 &&
                                                 <>
                                                 
-                                                <div >
+                                                {/* <div >
                                                     <div className="title" style={{ display: 'flex', justifyContent: 'space-between', gap: '5px' }}>
                                                         Auto renewal
                                                         <div onClick={() => comformation(userId, res?.user_subs?.subscription_id)} className="seven-line-nft-cardd" style={{ display: 'flex', alignItems: 'center', padding: '0px' }}>
@@ -141,6 +141,9 @@ const Subscription = ({ search, setSearch }) => {
                                                             </span>
                                                         </div>
                                                     </div>
+                                                </div> */}
+                                                <div>
+                                                    
                                                 </div>
                                                 <div >
                                                     <button onClick={() => cancelSubscription(userId, res?.user_subs?.subscription_id)}>Cancel Subscription</button>

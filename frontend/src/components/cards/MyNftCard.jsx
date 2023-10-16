@@ -21,7 +21,8 @@ const MyNftCard = ({
   description,
   collection,
   collectionImages,
-  getMyNfts
+  getMyNfts,
+  user_id
   // userAddress,
 }) => {
   console.log(royalty, "royalty");

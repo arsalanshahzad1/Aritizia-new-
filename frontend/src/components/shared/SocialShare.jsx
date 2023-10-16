@@ -9,7 +9,7 @@ import {
   TwitterShareButton,
 } from "react-share";
 
-const SocialShare = ({ style, bidStyle }) => {
+const SocialShare = ({ style, bidStyle ,user_id}) => {
   // console.log(style);
   return (
     <div className={`share-links-social ${bidStyle}`}>
@@ -20,24 +20,24 @@ const SocialShare = ({ style, bidStyle }) => {
       </span>
       <LinkedinShareButton
         className="share-icons"
-        url="http://artizia.pluton.ltd/profile"
-        title="Ali Khan"
+        url={`https://${window.location.host}/other-profile?add=${user_id}`}
+        title="Artizia"
         style={{fontSize: style.fontSize, marginRight: style.marginRight }}
       >
         <AiOutlineLinkedin className="share-icon"/>
       </LinkedinShareButton>
       <TwitterShareButton
         className="share-icons"
-        url="http://artizia.pluton.ltd/profile"
-        title="Ali Khan"
+        url={`https://${window.location.host}/other-profile?add=${user_id}`}
+        title="Artizia"
         style={{fontSize: style.fontSize, marginRight: style.marginRight }}
       >
         <CiTwitter className="share-icon"/>
       </TwitterShareButton>
       <FacebookShareButton
         className="share-icons"
-        url="http://artizia.pluton.ltd/profile"
-        title="Ali Khan"
+        url={`https://${window.location.host}/other-profile?add=${user_id}`}
+        title="Artizia"
         style={{fontSize: style.fontSize, marginRight: style.marginRight }}
       >
         <AiOutlineFacebook className="share-icon" />

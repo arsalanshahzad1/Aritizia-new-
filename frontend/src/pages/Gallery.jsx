@@ -5,14 +5,17 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import GalleryItem from './GalleryItem'
 import apis from '../service'
+import HeaderConnectPopup from './Headers/HeaderConnectPopup'
+import Loader from '../components/shared/Loader'
 const Gallery = ({user}) => {
-
+    const [connectPopup, setConnectPopup] = useState(false);
     console.log(user=="admin" ? "yes admin":"not admin")
     const navigate = useNavigate()
     const id = JSON.parse(localStorage.getItem("data"));
     const user_id = id?.id;
     const [GalleryItems, setGalleryItems] = useState([])
     const [selectCount, setSelectCount] = useState(0)
+    const [loader, setLoader] = useState(false)
 
     useEffect(() => {
         const count = GalleryItems.filter(item => item.selected).length;
@@ -32,6 +35,7 @@ const Gallery = ({user}) => {
         setGalleryItems(updatedArts);
     };
     const ListGallery = async () => {
+        setLoader(true)
         const readyTobeListed = GalleryItems.filter(item => item.selected).map(item => item.image)
         console.log(readyTobeListed, "we are ready to travel to Database")
         // const imageDataObject = {};
@@ -56,6 +60,7 @@ const Gallery = ({user}) => {
 
         // console.log(imageDataObject);
         // navigate('/create/multiple')
+        setLoader(false)
         navigate(
             '/create/multiple',
             {
@@ -160,7 +165,6 @@ const Gallery = ({user}) => {
         saveToGallery()
     }, [])
 
-    const [loader, setLoader] = useState(true)
 
     if(loader){
       return(
@@ -171,10 +175,13 @@ const Gallery = ({user}) => {
         </>
       )
     }
+
+    const accountAddress = localStorage.getItem("userAddress")
     
     return (
+        <>
+        {loader && <Loader />}
         < div >
-        
             <div className='Arts-holder'>
                 {GalleryItems.length >= 0 ?
                     GalleryItems.map((item, Index) => {
@@ -187,7 +194,11 @@ const Gallery = ({user}) => {
             </div>
             {user === "admin" ? 
                 <div style={{ display: "flex", justifyContent: "center" }}>
+                {accountAddress !== "false" ?
                 <button onClick={ListGallery} disabled={selectCount < 1} className='save-art-btn'>Listing ({selectCount})</button>
+                :
+                <button onClick={() =>setConnectPopup(true)} disabled={selectCount < 1} className='save-art-btn'>Listing ({selectCount})</button>
+                }
                 </div>
                 : ""
             }
@@ -210,8 +221,9 @@ const Gallery = ({user}) => {
 
                 </div>
             </Link> */}
-
+            <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
         </ div>
+        </>
     )
 }
 

@@ -147,8 +147,8 @@ const createBackendServer = (baseURL) => {
     await api.get(`view-all-nfts`)
 
   //its not working properly TODO
-  // const viewAllMyNfts = async (newid) =>
-  //   await api.get(`view-all-nfts?user_id=${newid}`)
+  const viewAllMyNfts = async (newid) =>
+    await api.get(`view-all-nfts?user_id=${newid}`)
 
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
@@ -174,7 +174,7 @@ const createBackendServer = (baseURL) => {
   const postCustomUserFans = async (body) =>
     await api.post(`add-custom-user-fans`, body);
 
-  const getFanList = async () => await api.get(`view-fan-list/${RealUserId}`);
+  const getFanList = async (RealUserId) => await api.get(`view-fan-list/${RealUserId}`);
 
   const getremovedFan = async (removingUserId) =>
     await api.get(`remove-fan/${removingUserId}`);
@@ -342,7 +342,9 @@ const createBackendServer = (baseURL) => {
 
     payNftByFiat,
 
-    viewFilteredNfts
+    viewFilteredNfts,
+
+    viewAllMyNfts
 
   };
 };

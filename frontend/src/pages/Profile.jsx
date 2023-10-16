@@ -26,10 +26,12 @@ import { Store } from "../Context/Store";
 import { CiGlass, CiLight } from "react-icons/ci";
 import { FaFacebookF } from "react-icons/fa";
 import { BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
+import FavNftCard from "../components/cards/FavNftCard";
 
 const Profile = ({ search, setSearch }) => {
   const [tabs, setTabs] = useState(0);
   const [collectionTabs, setCollectionTabs] = useState(0);
+  const [likeNftTabs, setLikeNftTabsTabs] = useState(0);
   const [FollowersTab, setFollowersTab] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [nftListFP, setNftListFP] = useState([]);
@@ -181,6 +183,7 @@ const Profile = ({ search, setSearch }) => {
         let collectionId = structData?.collectionId?.toString();
 
         const response = await apis.getNFTCollectionImage(collectionId);
+        const user_id = response?.data?.data?.user_id;
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         const price = ethers.utils.formatEther(structData?.price?.toString());
         axios
@@ -211,6 +214,7 @@ const Profile = ({ search, setSearch }) => {
                 description: description,
                 collection: collection,
                 collectionImages: collectionImages,
+                user_id:user_id
               };
               liked.push(nftData);
               setLikedNfts(liked)
@@ -227,6 +231,7 @@ const Profile = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 seller: auctionData?.seller?.toString(),
                 startTime: auctionData?.startTime?.toString(),
+                user_id:user_id
               };
               setLikedNftsAuction((prev) => [...prev, nftData]);
             }
@@ -398,6 +403,7 @@ const Profile = ({ search, setSearch }) => {
       console.log(collectionId, "collectionId")
       const response = await apis.getNFTCollectionImage(collectionId);
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+      const user_id = response?.data?.data?.user_id;
       console.log(collectionImages, "collectionImages")
 
       const metaData = await nftContract.tokenURI(id);
@@ -449,6 +455,7 @@ const Profile = ({ search, setSearch }) => {
               description: description,
               collection: collection,
               collectionImages: collectionImages,
+              user_id:user_id
             };
             setNftListFP((prev) => [...prev, nftData]);
   
@@ -466,6 +473,7 @@ const Profile = ({ search, setSearch }) => {
               highestBidder: auctionData?.highestBidder?.toString(),
               seller: auctionData?.seller?.toString(),
               startTime: auctionData?.startTime?.toString(),
+              user_id:user_id
             };
             setNftListAuction((prev) => [...prev, nftData]);
           }
@@ -536,10 +544,11 @@ const Profile = ({ search, setSearch }) => {
       }
 
       const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
+      const user_id = response?.data?.data?.owner?.id;
+      // console.log("1asdasdasdasdasdaqsd" , response?.data?.data?.owner?.id)
 
       const metaData = await nftContract.tokenURI(id);
 
-      console.log("1asdasdasdasdasdaqsd")
       const price = ethers.utils.formatEther(structData?.price?.toString());
 
       axios
@@ -570,6 +579,7 @@ const Profile = ({ search, setSearch }) => {
             description: description,
             collection: collection,
             collectionImages: collectionImages,
+            user_id:user_id
           };
           console.log(nftData, "nftDatanftData")
           setUserNfts((prev) => [...prev, nftData]);
@@ -703,6 +713,8 @@ const Profile = ({ search, setSearch }) => {
   console.log(window.location.host , 'asdasdasdasss');
   console.log(window.location.href , 'asdasdasdasssss');
 
+  const accountAddress = localStorage.getItem("userAddress")
+
   return (
     <>
       {loader && <Loader />}
@@ -761,7 +773,7 @@ const Profile = ({ search, setSearch }) => {
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <div className="other-user-icons">
                     <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
-                    <a href={userData?.twitter_url} target="_blank"><FaXTwitter /></a>
+                    <a href={userData?.twitter_url} target="_blank"><BsTwitter /></a>
                     <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
                     <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
                   </div>
@@ -776,6 +788,7 @@ const Profile = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
                 <div className="col-lg-6 col-md-6 col-12">
+                {accountAddress !== "false" ?
                   <div className="copy-url">
                     <span>{userData?.wallet_address}</span>
                     <button
@@ -786,12 +799,22 @@ const Profile = ({ search, setSearch }) => {
                       Copy
                     </button>
                   </div>
+                  :
+                  <></>
+                    }
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto"></div>
               </div>
               <div className="row">
                 <div className="profile-tabs">
-
+                {userData === "false" ? <></> : <>
+                <button
+                      className={`${tabs === 1 ? "active" : ""}`}
+                      onClick={() => setTabs(1)}
+                    >
+                      Gallery
+                    </button>
+                    </>}
                   {userWalletAddress === "false" ? <></> : <>
                     <button
                       className={`${tabs === 0 ? "active" : ""}`}
@@ -799,12 +822,7 @@ const Profile = ({ search, setSearch }) => {
                     >
                       Collection
                     </button>
-                    <button
-                      className={`${tabs === 1 ? "active" : ""}`}
-                      onClick={() => setTabs(1)}
-                    >
-                      Gallery
-                    </button>
+                    
 
                     <button
                       className={`${tabs === 2 ? "active" : ""}`}
@@ -818,7 +836,7 @@ const Profile = ({ search, setSearch }) => {
                     className={`${tabs === 3 ? "active" : ""}`}
                     onClick={() => setTabs(3)}
                   >
-                    Liked
+                    Favorite
                   </button>
                   <button
                     className={`${tabs === 4 ? "active" : ""}`}
@@ -885,6 +903,7 @@ const Profile = ({ search, setSearch }) => {
                                   collectionImages={item?.collectionImages}
                                   userAddress
                                   sellerWallet={userAddress}
+                                  user_id={item?.user_id}
                                 />
                               )) :
                               <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
@@ -915,6 +934,7 @@ const Profile = ({ search, setSearch }) => {
                                   userAddress={userAddress}
                                   size={'col-lg-3'}
                                   seller={item?.seller}
+                                  user_id={item?.user_id}
                                 />
                               )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }
@@ -953,6 +973,7 @@ const Profile = ({ search, setSearch }) => {
                                   collectionImages={item?.collectionImages}
                                   getMyNfts={getMyNfts}
                                   userAddress
+                                  user_id={item?.user_id}
                                 />
                               ))}
                             </>
@@ -968,19 +989,19 @@ const Profile = ({ search, setSearch }) => {
                     <div className="row">
                       <div className="Collection-tabs">
                         <div
-                          onClick={() => setCollectionTabs(0)}
-                          className={`${collectionTabs === 0 && "active-tab"}`}
+                          onClick={() => setLikeNftTabsTabs(0)}
+                          className={`${likeNftTabs === 0 && "active-tab"}`}
                         >
                           On Sale
                         </div>
                         <div
-                          onClick={() => setCollectionTabs(1)}
-                          className={`${collectionTabs === 1 && "active-tab"}`}
+                          onClick={() => setLikeNftTabsTabs(1)}
+                          className={`${likeNftTabs === 1 && "active-tab"}`}
                         >
                           Auction
                         </div>
                       </div>
-                      {collectionTabs === 0 && (
+                      {likeNftTabs === 0 && (
                         <>
                           {likedNftLoader ?
                             <section className="sec-loading">
@@ -990,7 +1011,7 @@ const Profile = ({ search, setSearch }) => {
                             likedNfts?.length > 0 ?
                               <>
                                 {likedNfts?.map((item) => (
-                                  <SimpleCard
+                                  <FavNftCard
                                     onOpen={onOpen}
                                     // onClose={onClose}
                                     key={item?.id}
@@ -1004,6 +1025,7 @@ const Profile = ({ search, setSearch }) => {
                                     collection={item?.collection}
                                     collectionImages={item?.collectionImages}
                                     userAddress
+                                    user_id={item?.user_id}
                                   />
                                 ))}
                               </> :
@@ -1011,7 +1033,7 @@ const Profile = ({ search, setSearch }) => {
                           }
                         </>
                       )}
-                      {collectionTabs === 1 && (
+                      {likeNftTabs === 1 && (
                         <>
                           {likedNftAuctionLoader ?
                             <section className="sec-loading">
@@ -1035,6 +1057,7 @@ const Profile = ({ search, setSearch }) => {
                                     collectionImages={item?.collectionImages}
                                     userAddress={userAddress}
                                     size={'col-lg-3'}
+                                    user_id={item?.user_id}
                                   />
                                 ))}
                               </>

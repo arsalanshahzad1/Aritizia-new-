@@ -454,10 +454,12 @@ function CollectionProfile({ search, setSearch }) {
         let auctionData = await marketplaceContract._idToAuction(id);
 
         let collectionImages;
+        let user_id;
         
         try {
         const response = await apis.getNFTCollectionImage(collectionId);
         collectionImages = response?.data?.data?.media?.[0]?.original_url; 
+        user_id = response?.data?.data?.media?.[0]?.original_url; 
         } catch (error) {
         console.log(error)  
         }
@@ -507,6 +509,7 @@ function CollectionProfile({ search, setSearch }) {
                 collection: collection,
                 collectionImages: collectionImages,
                 seller: seller,
+                user_id: user_id,
               };
 
               console.log("nftData", nftData);
@@ -529,6 +532,7 @@ function CollectionProfile({ search, setSearch }) {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 // isLive: auctionData.isLive.toString(),
                 seller: auctionData?.seller?.toString(),
+                user_id: user_id,
               };
 
               // myAuctions.push(nftData);
@@ -712,6 +716,7 @@ function CollectionProfile({ search, setSearch }) {
                             collectionImages={item?.collectionImages}
                             userAddress={userAddress}
                             size={'col-lg-3'}
+                            user_id={item.user_id}
                           />
                         )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                         }

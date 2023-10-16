@@ -280,6 +280,7 @@ const SearchPage = ({ search, setSearch }) => {
 
         const response = await apis.getNFTCollectionImage(collectionId);
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        const user_id = response?.data?.data?.user_id;
 
         const price = ethers.utils.formatEther(structData.price.toString());
 
@@ -314,7 +315,8 @@ const SearchPage = ({ search, setSearch }) => {
                 collection: collection,
                 collectionImages: collectionImages,
                 seller: seller,
-                listingType: listingType
+                listingType: listingType,
+                user_id:user_id
               };
 
               // myNFTs.push(nftData);
@@ -334,7 +336,8 @@ const SearchPage = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 collectionImages: collectionImages,
                 seller: auctionData?.seller?.toString(),
-                listingType: listingType
+                listingType: listingType,
+                user_id:user_id
               };
 
               // myAuctions.push(nftData);
@@ -686,6 +689,7 @@ const SearchPage = ({ search, setSearch }) => {
                               collectionImages={item?.collectionImages}
                               seller={item?.seller}
                               size={'col-lg-4'}
+                              user_id={user_id}
                             />
                           )
                         } if (item?.listingType === 0) {

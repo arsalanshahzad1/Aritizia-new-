@@ -17,9 +17,9 @@ import { CiLight } from "react-icons/ci";
 import { Store } from "../../Context/Store";
 
 const LandingPage = ({ search, setSearch }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const targetRef = useRef(null);
-  const [loader, setLoader] = useState(true)
+  const [loader, setLoader] = useState(false)
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
 

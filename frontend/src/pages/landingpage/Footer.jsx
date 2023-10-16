@@ -41,37 +41,37 @@ const Footer = () => {
               <div className="two">
                 <ul>
                   <li>
-                    <Link>
+                    <Link to={"https://twitter.com/ArtiziaLLC"} target='_blank'>
                       <img src="/assets/social-icons/blade.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link to={"https://www.instagram.com/artizia.io/"}>
+                    <Link to={"https://www.instagram.com/artizia.io/"} target='_blank'>
                       <img src="/assets/social-icons/insta.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link to={"https://www.youtube.com/@ArtiziaLLC"}>
+                    <Link to={"https://www.youtube.com/@ArtiziaLLC"} target='_blank'>
                       <img src="/assets/social-icons/youtube.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link to={"https://www.linkedin.com/company/artizia-io"}>
+                    <Link to={"https://www.linkedin.com/company/artizia-io"} target='_blank'>
                       <img src="/assets/social-icons/linkdin.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to= {"https://www.reddit.com/user/ArtiziaLLC" } target='_blank'>
                       <img src="/assets/social-icons/monkey.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link to={"https://www.tiktok.com/@artizia.io"}>
+                    <Link to={"https://www.tiktok.com/@artizia.io"} target='_blank'>
                       <img src="/assets/social-icons/tictoc.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link to={"https://www.facebook.com/profile.php?id=100095110465607"}>
+                    <Link to={"https://www.facebook.com/profile.php?id=100095110465607"} target='_blank'>
                       <img src="/assets/social-icons/facebook.png" alt="" />
                     </Link>
                   </li>
@@ -81,11 +81,11 @@ const Footer = () => {
                 <ul>
                   <li>
                     <p>
-                    <Link to="/terms">
+                    <Link to="/terms" target='_blank'>
                       TERMS
                     </Link>
                     <p>&</p>
-                    <Link to="/privacy-policy">
+                    <Link to="/privacy-policy" target='_blank'>
                       POLICY
                     </Link>
                     </p>

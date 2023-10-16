@@ -105,6 +105,10 @@ function App() {
                 path="/"
                 element={<LandingPage search={search} setSearch={setSearch} />}
               />
+               <Route
+                  path="/other-profile"
+                  element={<OtherProfile search={search} setSearch={setSearch} />}
+                />
               <Route
                 path="/register"
                 element={<Register />}
@@ -143,10 +147,7 @@ function App() {
                   path="/profile"
                   element={<Profile search={search} setSearch={setSearch} />}
                 />
-                <Route
-                  path="/other-profile"
-                  element={<OtherProfile search={search} setSearch={setSearch} />}
-                />
+               
                 {/* <Route
                 path="/user-profile"
                 element={<UserProfile search={search} setSearch={setSearch} />}

@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import apis from "../../service";
+import EmailSigninPopup from "../../pages/Headers/EmailSigninPopup";
 
 const TableData = () => {
   const navigate = useNavigate();
+  const [emailSigninPopup, setEmailSigninPopup] = useState(false);
+
+  const userData = JSON.parse(localStorage.getItem('data'))
 
   const [list, setList] = useState([]);
 
@@ -19,7 +23,11 @@ const TableData = () => {
   };
 
   const navigateTo = (id) => {
-    navigate(`/collection?id=${id}`);
+    if (userData && userData?.email != null) {
+      navigate(`/collection?id=${id}`);
+    }else{
+      setEmailSigninPopup(true)
+    }
   };
 
   useEffect(() => {
@@ -103,6 +111,8 @@ const TableData = () => {
           })}
         </tbody>
       </Table>
+    <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
+
     </div>
   );
 };

@@ -122,7 +122,7 @@ function Register() {
                                         </div>
                                     </div>
                                     <div className="two">
-                                        <p>I agree to all <Link to={'/terms'}>Term</Link> , <Link to={'/privacy-policy'}>Privacy Policy</Link> and fees</p>
+                                        <p>I agree to all <Link to={'/terms'} target='_blank'>Terms</Link> , <Link to={'/privacy-policy'}target='_blank'>Privacy Policy</Link> and fees</p>
                                     </div>
                                 </div>
                                 <button type='submit' disabled={loader} className={`signup ${!chack ? 'disable' : ''}`}>Sign up</button>

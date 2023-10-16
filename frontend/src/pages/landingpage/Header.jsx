@@ -174,7 +174,7 @@ const Header = ({ search, setSearch }) => {
   // const parse = localStorage.getItem("data")
   // const userParse = JSON.parse(parse)
 
-  const [userParse, setUserParse] = useState('');
+  const [userParse, setUserParse] = useState(JSON.parse(localStorage.getItem("data")));
 
   useEffect(() => {
   }, [data,userParse])

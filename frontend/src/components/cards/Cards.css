@@ -309,11 +309,12 @@ p {
 .css-vurnku .social-links ul li,
 .sec-five-wrap .image .social-links ul li {
   padding: 10px 0px;
+  cursor: pointer;
 }
 
 .css-vurnku .social-links ul li:last-child,
 .sec-five-wrap .image .social-links ul li:last-child {
-  padding-bottom: 35px;
+  padding-bottom: 10px;
 }
 
 .css-vurnku .social-links ul li a,
@@ -324,6 +325,10 @@ p {
   line-height: 26px;
   letter-spacing: 0em;
   text-align: left;
+  color: #fff;
+}
+
+.css-vurnku .social-links ul li a:hover{
   color: #fff;
 }
 

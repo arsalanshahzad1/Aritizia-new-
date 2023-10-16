@@ -10,6 +10,7 @@ import apis from '../service'
 import Loader from '../components/shared/Loader'
 import { ToastContainer, toast } from "react-toastify";
 import Footer from './landingpage/Footer'
+import GalleryLoader from '../components/shared/GalleryLoader'
 const Art = ({ search, setSearch }) => {
     const navigate = useNavigate()
     const [loader, setLoader] = useState(false)
@@ -219,17 +220,12 @@ const Art = ({ search, setSearch }) => {
     };
 
     const saveToGallery = async () => {
+        setLoader(true)
         let readyTobeSaved;
         if (generatedArts?.[0].base64Images) {
-
             readyTobeSaved = generatedArts.filter(item => item.selected).map(item => item.base64Images)
-            console.log(readyTobeSaved, "we are ready to travel to Database")
-            // console.log(base64Images
-            //     , "we are ready to travel to Database")
         } else {
             readyTobeSaved = generatedArts.filter(item => item.selected).map(item => item.image)
-            console.log(readyTobeSaved, "we are ready to travel to Database")
-            console.log(generatedArts, "we are ready to travel to Database")
         }
 
         const sendData = new FormData();
@@ -238,16 +234,21 @@ const Art = ({ search, setSearch }) => {
         for (let i = 0; i < readyTobeSaved.length; i++) {
             sendData.append('gallery_images[]', readyTobeSaved[i]);
         }
-        console.log(sendData);
-        const response = await apis.createArtGalleryImages(sendData);
-        console.log(response);
-        if (response.status) {
-            // setgeneratedArts([])
-            setprompt('')
-            setTimeout(() => {
-                navigate('/profile')
-            }, 3000)
+
+        try {
+            const response = await apis.createArtGalleryImages(sendData);
+            if (response.status) {
+                setprompt('')
+                setTimeout(() => {
+                    setLoader(false)
+                    navigate('/profile')
+                }, 3000)
+            }
+        } catch (error) {
+            setLoader(false)
+            alert(error.message)
         }
+       
     }
 
     // useEffect(() => {
@@ -265,8 +266,8 @@ const Art = ({ search, setSearch }) => {
 
     return (
         <>
-            < div className='art-page' style={{width: "100%", height:"70vh", display:"flex",flexDirection:"column" ,justifyContent:"center"}}>
-                {loader && <Loader />}
+            < div className='art-page' style={{width: "100%", minHeight:"300px", display:"flex",flexDirection:"column" ,justifyContent:"center"}}>
+                {loader && <GalleryLoader />}
 
                 <Header search={search} setSearch={setSearch} />
                 <h1 style={{ textAlign: 'center' }}>Your Generated Art</h1>

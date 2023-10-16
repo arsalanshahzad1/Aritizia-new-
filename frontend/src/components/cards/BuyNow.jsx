@@ -660,7 +660,7 @@ const BuyNow = ({
                   )
                     : (
                       <div className="button css-pxd23z" style={{ display: "flex", justifyContent: "center", pointerEvents: "none" }}>
-                        <p>Your nft</p>
+                        <p>Your NFT</p>
                       </div>
                     )
                   }
@@ -699,6 +699,7 @@ const BuyNow = ({
         userAddress={userAddress}
         setIsVisible={setIsVisible}
         sellerWallet={seller}
+        user_id={user_id}
       />
       <Modal
         show={sucess}

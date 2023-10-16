@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import apis from "../../service";
 import { toast } from "react-toastify";
+import Loader from "../../components/shared/Loader";
 
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -9,6 +10,7 @@ const EditProfile = () => {
   const profileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const [data, setData] = useState("");
+  const [loader, setLoader] = useState(false)
 
   useEffect(() => {
     const localstorageData = JSON.parse(localStorage.getItem("data"));
@@ -51,6 +53,7 @@ const EditProfile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoader(true)
 
     const clonedObject = { ...data };
     clonedObject.user_id = clonedObject.id;
@@ -59,16 +62,23 @@ const EditProfile = () => {
     for (const [key, value] of Object.entries(clonedObject)) {
       sendData.append(key, value);
     }
-    const response = await apis.editProfile(sendData);
-    if (response?.data?.status) {
-      toast.success(response?.data?.message)
-      localStorage.setItem("data", JSON.stringify(response.data.user));
-      // window.location.reload();
+    try {
+      const response = await apis.editProfile(sendData);
+      if (response?.data?.status) {
+        toast.success(response?.data?.message)
+        localStorage.setItem("data", JSON.stringify(response.data.user));
+        // window.location.reload();
+      }
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      toast.error(error?.message)
     }
   };
 
   return (
     <>
+     {loader && <Loader />}
       <div className="col-lg-7 col-md-7">
         <div className="inputfield-edit-profile">
           <div>
@@ -128,7 +138,7 @@ const EditProfile = () => {
               <p>Bio</p> <p></p>
             </div>
             <input
-              defaultValue={data?.bio}
+              defaultValue={data?.bio === "null" ? "" : data?.bio}
               type="text"
               placeholder="Tell the world who are you!"
               name="bio"

@@ -61,7 +61,8 @@ function ProfileDrawer({
   // userAddress,
   showBuyNow,
   ShowAcceptbtn,
-  sellerWallet
+  sellerWallet,
+  user_id
 }) {
   const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
@@ -1235,8 +1236,9 @@ console.log(nftDetails?.user?.id , 'odddd');
                 <div className="five-line">
                   <div className="row d-flex">
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
-                      <SocialShare
-                        style={{ fontSize: "18px", marginRight: "40px" }}
+                      <SocialShare 
+                      style={{ fontSize: "18px", marginRight: "40px" }} 
+                      user_id={user_id}
                       />
                     </div>
                     {/* <div className="col-lg-8 col-md-8 col-12">
@@ -1260,8 +1262,10 @@ console.log(nftDetails?.user?.id , 'odddd');
                       </button>
                     </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{ marginLeft: "0px" }}>
-                      <SocialShare bidStyle="bid-style"
-                        style={{ fontSize: "18px", marginRight: "10px" }}
+                      <SocialShare 
+                      bidStyle="bid-style"
+                      style={{ fontSize: "18px", marginRight: "10px" }}
+                      user_id={user_id}
                       />
                     </div>
                   </div>

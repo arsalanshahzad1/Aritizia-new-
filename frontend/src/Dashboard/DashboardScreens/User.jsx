@@ -148,6 +148,7 @@ const User = ({ search, setSearch }) => {
         const response = await apis.getNFTCollectionImage(collectionId);
         console.log(response.data, "saad");
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        const user_id = response?.data?.data?.user_id;
         console.log(
           response?.data?.data?.media?.[0]?.original_url,
           "collectionImagesss"
@@ -192,6 +193,7 @@ const User = ({ search, setSearch }) => {
                 description: description,
                 collection: collection,
                 collectionImages: collectionImages,
+                user_id:user_id
               };
               console.log("nftData", nftData);
               // liked.push(nftData);
@@ -211,6 +213,7 @@ const User = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 seller: auctionData?.seller?.toString(),
                 startTime: auctionData?.startTime?.toString(),
+                user_id:user_id
               };
               // myAuctions.push(nftData);
               // ((prev) => [...prev, nftData]);
@@ -354,6 +357,7 @@ const User = ({ search, setSearch }) => {
       const response = await apis.getNFTCollectionImage(collectionId);
       console.log(response, "responses");
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+      const user_id = response?.data?.data?.user_id;
       console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
       console.log(collectionImages, "trrrr");
 
@@ -405,6 +409,7 @@ const User = ({ search, setSearch }) => {
               description: description,
               collection: collection,
               collectionImages: collectionImages,
+              user_id:user_id
             };
             console.log(nftData);
             // myNFTs.push(nftData);
@@ -423,6 +428,7 @@ const User = ({ search, setSearch }) => {
               highestBidder: auctionData?.highestBidder?.toString(),
               seller: auctionData?.seller?.toString(),
               startTime: auctionData?.startTime?.toString(),
+              user_id:user_id
             };
             // myAuctions.push(nftData);
 
@@ -486,6 +492,7 @@ const User = ({ search, setSearch }) => {
       const response = await apis.getNFTCollectionImage(collectionId);
       console.log(response.data, "saad");
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+      const user_id = response?.data?.data?.user_id;
       console.log(
         response?.data?.data?.media?.[0]?.original_url,
         "collectionImagesss"
@@ -531,6 +538,7 @@ const User = ({ search, setSearch }) => {
             description: description,
             collection: collection,
             collectionImages: collectionImages,
+            user_id
           };
 
           //   myNFTs.push(nftData);
@@ -940,6 +948,7 @@ const User = ({ search, setSearch }) => {
                               collection={item?.collection}
                               collectionImages={item?.collectionImages}
                               userAddress
+                              user_id={item?.user_id}
                             />
                           ))}
                         </>
@@ -960,6 +969,7 @@ const User = ({ search, setSearch }) => {
                               description={item?.description}
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
+                              user_id={item?.user_id}
                             />
                           ))}
                         </>
@@ -990,6 +1000,7 @@ const User = ({ search, setSearch }) => {
                           collectionImages={item?.collectionImages}
                           getMyNfts={getMyNfts}
                           userAddress
+                          user_id={item?.user_id}
                         />
                       )) : 
                       <div className="data-not-avaliable">
@@ -1033,6 +1044,7 @@ const User = ({ search, setSearch }) => {
                               collection={item?.collection}
                               collectionImages={item?.collectionImages}
                               userAddress
+                              user_id={item?.user_id}
                             />
                           ))}
                         </>
@@ -1054,6 +1066,7 @@ const User = ({ search, setSearch }) => {
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
                               size={'col-lg-3'}
+                              user_id={item?.user_id}
                             />
                           ))}
                         </>

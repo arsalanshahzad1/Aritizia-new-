@@ -3,6 +3,12 @@ import { AiFillHeart } from "react-icons/ai";
 import "./Cards.css";
 import PlaceABidDrawer from "../shared/PlaceABidDrawer";
 import NftCountdown from "../shared/NftCountdown";
+import {
+  FacebookShareButton,
+  InstapaperShareButton,
+  TwitterShareButton,
+  LinkedinShareButton,
+} from "react-share";
 
 const NewItemCard = ({
   id,
@@ -17,7 +23,8 @@ const NewItemCard = ({
   // userAddress,
   seller,
   collectionImages,
-  size
+  size,
+  user_id
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -72,28 +79,42 @@ const NewItemCard = ({
             <span>
               <NftCountdown endDateTime={new Date(endTime * 1000)} />
             </span>
-            {/* {showLinks && (
-              <div className="social-media">
-                <LinkedinShareButton
-                  url="http://artizia.pluton.ltd/profile"
-                  title="Ali Khan"
-                >
-                  <p>Linkedin</p>
-                </LinkedinShareButton>
-                <TwitterShareButton
-                  url="http://artizia.pluton.ltd/profile"
-                  title="Ali Khan"
-                >
-                  <p>Twitter</p>
-                </TwitterShareButton>
-                <FacebookShareButton
-                  url="http://artizia.pluton.ltd/profile"
-                  title="Ali Khan"
-                >
-                  <p>Facebook</p>
-                </FacebookShareButton>
-              </div>
-            )} */}
+            {showLinks && (
+                        <div className="social-links">
+                          <ul>
+                            <li>
+                              <a>
+                                <LinkedinShareButton
+                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                                  title="Artizia"
+                                >
+                                  <p>Linkedin</p>
+                                </LinkedinShareButton>
+                              </a>
+                            </li>
+                            <li>
+                              <a>
+                                <TwitterShareButton
+                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                                  title="Artizia"
+                                >
+                                  <p>Twitter</p>
+                                </TwitterShareButton>
+                              </a>
+                            </li>
+                            <li>
+                              <a>
+                                <FacebookShareButton
+                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                                  title="Artizia"
+                                >
+                                  <p>Facebook</p>
+                                </FacebookShareButton>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
           </div>
           <div className="detail-wrap">
             <div className="center-icon">
@@ -106,7 +127,7 @@ const NewItemCard = ({
               <div className="left">
                 <p>{title}</p>
                 <span>
-                  {highestBid == 0 ? `${price} ETH` : `${highestBid} ETH`}
+                  {+highestBid == 0 ? `${+price} ETH` : `${highestBid} ETH`}
                 </span>
               </div>
               <div
@@ -152,6 +173,7 @@ const NewItemCard = ({
         isLive={isLive}
         highestBid={highestBid}
         sellerWallet={seller}
+        user_id={user_id}
       />
     </>
   );

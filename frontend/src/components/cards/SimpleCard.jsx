@@ -34,7 +34,8 @@ const SimpleCard = ({
   collection,
   collectionImages,
   // userAddress,
-  sellerWallet
+  sellerWallet,
+  user_id
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   // const [walletConnected, setWalletConnected] = useState(false);
@@ -64,11 +65,11 @@ const SimpleCard = ({
   const value = price;
   const [discountedValue, setdiscountedValue] = useState(value);
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const { account, checkIsWalletConnected } = useContext(Store);
 
-  useEffect(()=>{
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
   useEffect(() => {
     if (discountPercentage < 0 || discountPercentage > 100) {
@@ -154,25 +155,39 @@ const SimpleCard = ({
                 </svg>
               </div>
               {showLinks && (
-                <div className="social-media">
-                  <LinkedinShareButton
-                    url="http://artizia.pluton.ltd/profile"
-                    title="Ali Khan"
-                  >
-                    <p>Linkedin</p>
-                  </LinkedinShareButton>
-                  <TwitterShareButton
-                    url="http://artizia.pluton.ltd/profile"
-                    title="Ali Khan"
-                  >
-                    <p>Twitter</p>
-                  </TwitterShareButton>
-                  <FacebookShareButton
-                    url="http://artizia.pluton.ltd/profile"
-                    title="Ali Khan"
-                  >
-                    <p>Facebook</p>
-                  </FacebookShareButton>
+                <div className="social-links">
+                  <ul>
+                    <li>
+                      <a>
+                        <LinkedinShareButton
+                          url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                          title="Artizia"
+                        >
+                          <p>Linkedin</p>
+                        </LinkedinShareButton>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <TwitterShareButton
+                          url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                          title="Artizia"
+                        >
+                          <p>Twitter</p>
+                        </TwitterShareButton>
+                      </a>
+                    </li>
+                    <li>
+                      <a>
+                        <FacebookShareButton
+                          url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                          title="Artizia"
+                        >
+                          <p>Facebook</p>
+                        </FacebookShareButton>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>
@@ -208,8 +223,8 @@ const SimpleCard = ({
                       />
                     </svg> */}
 
-                    <div className="right" style={{display:"flex",alignItems:"center",margin:"5px 0px"}}>
-                      <img src="/assets/images/bitCoin.png" alt="" style={{marginRight:"5px"}}/>
+                    <div className="right" style={{ display: "flex", alignItems: "center", margin: "5px 0px" }}>
+                      <img src="/assets/images/bitCoin.png" alt="" style={{ marginRight: "5px" }} />
                       {price}
                     </div>
                   </div>
@@ -242,7 +257,7 @@ const SimpleCard = ({
                   <input
                     placeholder="0"
                     value={discountPercentage}
-             
+
                     onChange={handleInputChange}
                     type="text"
                     className="input-percent"
@@ -250,11 +265,11 @@ const SimpleCard = ({
                   <div>%</div>
                 </div>
               </div>
-                {showWarning && (
-                  <p style={{ color: "red" , fontSize : '14px' }}>
-                    Please enter a valid positive number.
-                  </p>
-                )}
+              {showWarning && (
+                <p style={{ color: "red", fontSize: '14px' }}>
+                  Please enter a valid positive number.
+                </p>
+              )}
               <div className="line-2">
                 <div className="discount-text">Value</div>
                 <div className="value-div">{discountedValue} ETH</div>
@@ -277,7 +292,7 @@ const SimpleCard = ({
           </div>
         </>
       )}
-      {console.log(sellerWallet,"sellerWaller")}
+      {console.log(sellerWallet, "sellerWaller")}
 
       <ProfileDrawer
         isVisible={isVisible}
