@@ -1046,7 +1046,7 @@ header .left img {
     letter-spacing: 0em;
     text-align: left;
     color: #121212;
-    width: 180px;
+    width: 150px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -5229,7 +5229,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
 
 .Add-Fan-btn {
   position: fixed;
-  bottom: 20px;
+  bottom: 90px;
   right: 20px;
   background: linear-gradient(180deg, #2538cb 0%, #b501d1 100%);
   border-radius: 50px;

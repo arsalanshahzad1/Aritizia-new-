@@ -14,10 +14,8 @@ const UnAuthHeader = ({ search, setSearch }) => {
     const handleScroll = () => {
       if (window.scrollY > 100) {
         setScrolled(true);
-        setToggleUserDropdown(false);
       } else {
         setScrolled(false);
-        setToggleUserDropdown(false);
       }
     };
 

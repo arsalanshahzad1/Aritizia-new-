@@ -410,7 +410,7 @@ const Header = ({ search, setSearch }) => {
                           >
                             {accountAddress !== "false" ? "Connected" : "Connect Wallet"}
                           </button>
-                          {userParse?.email == null ?
+                          {userParse?.email === null ?
                           <Link to={'/login'}>
                             <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`}
                               style={{ margin: user ? "0px 20px 0px 0px" : "0px 0px 0px 3px" }}>Login</button>

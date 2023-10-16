@@ -39,12 +39,8 @@ function Fan({ id, fanToggle }) {
 
   let selectedUser;
   const removeFan = async (id) => {
-    console.log("fan id", id);
     selectedUser = id;
-    console.log("fanListing", fanListing);
-
     let userToRemove;
-
     for (let i = 0; i < fanListing.length; i++) {
       if (fanListing[i].fan_id == id) {
         console.log("selected fan", fanListing[i].wallet_address);
@@ -62,16 +58,11 @@ function Fan({ id, fanToggle }) {
       signer
     );
 
-    console.log("userToRemove", userToRemove);
-
-    // getRemoveFan();
-
     const remove = await marketplaceContract.removeFans(userToRemove);
-    console.log("remove", remove);
-
+  
     let response = marketplaceContract.on("removeFan", handleRemoveFansEvent);
-    // getFanListing();
-    console.log("Response of removeFan event", response);
+    console.log("kkkkkkkkkkkkkkkk" , marketplaceContract);
+
   };
 
   const handleRemoveFansEvent = async (removedFan) => {

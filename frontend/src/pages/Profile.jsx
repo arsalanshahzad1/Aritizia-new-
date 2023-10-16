@@ -657,8 +657,8 @@ const Profile = ({ search, setSearch }) => {
     });
   };
 
-  let [followers, setFollwers] = useState([]);
-  let [addFanlisting, setAddFanlisting] = useState([]);
+  const [followers, setFollwers] = useState([]);
+  const [addFanlisting, setAddFanlisting] = useState([]);
 
   const getFollowersList = async () => {
     const response = await apis.getFollowersList(userId);
@@ -669,10 +669,11 @@ const Profile = ({ search, setSearch }) => {
     }
   };
 
-  const getFollowersForFan = async () => {
-    const response = await apis.getFollowersForFan();
+  const getFollowersForFan = async (id) => {
+    const response = await apis.getFollowersForFan(id);
     if (response?.status) {
       setAddFanlisting(response?.data?.data);
+      console.log(response?.data?.data , 'response');
     } else {
       setAddFanlisting("");
     }
@@ -1111,7 +1112,7 @@ const Profile = ({ search, setSearch }) => {
                     <div
                       onClick={() => {
                         setshowAddFanPopUp(1);
-                        getFollowersForFan();
+                        getFollowersForFan(userData?.id);
                       }}
                       className="Add-Fan-btn"
                     >
@@ -1239,7 +1240,7 @@ const Profile = ({ search, setSearch }) => {
                                         <div className="inner2">
                                           <div className="img-holder">
                                             <img
-                                              src={data?.profile_image}
+                                              src={data?.profile_image !==null ? data?.profile_image : '/assets/images/user-none.png'}
                                               alt=""
                                             />
                                           </div>

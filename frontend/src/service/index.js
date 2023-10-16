@@ -16,7 +16,7 @@ const createBackendServer = (baseURL) => {
   // const userId = 2;
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
-  console.log("RealUserId",RealUserId)
+  console.log("RealUserId", RealUserId)
 
   //Interceptor
   api.interceptors.response.use(
@@ -159,12 +159,12 @@ const createBackendServer = (baseURL) => {
   const getUserData = async (id) =>
     await api.get(`get-user-data/${id}`);
 
-    // const getOtherUser = async (userAddress) =>
-    //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
+  // const getOtherUser = async (userAddress) =>
+  //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
 
-    const getOtherUser = async (otherUserId) =>
-      await api.get(`view-other-user-detail/${otherUserId}/${RealUserId}`);
-    
+  const getOtherUser = async (otherUserId) =>
+    await api.get(`view-other-user-detail/${otherUserId}/${RealUserId}`);
+
 
   const getLikeNFTListing = async (userId) =>
     await api.get(`view-liked-nfts/${userId}`);
@@ -179,8 +179,8 @@ const createBackendServer = (baseURL) => {
   const getremovedFan = async (removingUserId) =>
     await api.get(`remove-fan/${removingUserId}`);
 
-  const getFollowersForFan = async () =>
-    await api.get(`view-followers-for-fan/${RealUserId}`);
+  const getFollowersForFan = async (userId) =>
+    await api.get(`view-followers-for-fan/${userId}`);
 
   const getSalesHistory = async () =>
     await api.get(`sale-history/${RealUserId}`);
@@ -246,6 +246,13 @@ const createBackendServer = (baseURL) => {
     await api.get(`view-filtered-nfts?currency_type=${currency_type}&listed_type=${listed_type}&min_price=${min_price}&max_price=${max_price}&sort_by_price=${sort_by_price}&page_size=${9}&page=${page}&search=${search}`);
 
 
+  //forget and reset password
+
+  const forgotPassword = async (body) => await api.post(`forgot-password`, body);
+  const resendForgotOtp = async (body) => await api.post(`resend-forgot-otp`, body);
+  const forgotVerify = async (body) => await api.post(`forgot-verify`, body);
+  const changePassword = async (body) => await api.post(`change-password`, body);
+
 
   //Returning all the API
   return {
@@ -255,7 +262,7 @@ const createBackendServer = (baseURL) => {
     postListNft,
     postNftSold,
 
-     // Auth api start //
+    // Auth api start //
 
     postWalletAddress,
     register,
@@ -263,7 +270,7 @@ const createBackendServer = (baseURL) => {
     verifyOtp,
     loginWithEmail,
 
-     // Auth api end //
+    // Auth api end //
 
     postAddFans,
     getChatNotification,
@@ -292,7 +299,7 @@ const createBackendServer = (baseURL) => {
     viewAllNfts,
 
     // viewAllMyNfts,
-    
+
     getPurchasedNfts,
 
     getNFTByTokenId,
@@ -344,7 +351,15 @@ const createBackendServer = (baseURL) => {
 
     viewFilteredNfts,
 
-    viewAllMyNfts
+    viewAllMyNfts,
+
+
+    // changes and reset password //
+
+    forgotPassword,
+    resendForgotOtp,
+    forgotVerify,
+    changePassword,
 
   };
 };

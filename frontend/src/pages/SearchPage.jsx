@@ -280,6 +280,7 @@ const SearchPage = ({ search, setSearch }) => {
 
         const response = await apis.getNFTCollectionImage(collectionId);
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        console.log(response, ' resasdasdsa');
         const user_id = response?.data?.data?.user_id;
 
         const price = ethers.utils.formatEther(structData.price.toString());
@@ -689,7 +690,7 @@ const SearchPage = ({ search, setSearch }) => {
                               collectionImages={item?.collectionImages}
                               seller={item?.seller}
                               size={'col-lg-4'}
-                              user_id={user_id}
+                              user_id={item?.user_id}
                             />
                           )
                         } if (item?.listingType === 0) {
@@ -709,6 +710,7 @@ const SearchPage = ({ search, setSearch }) => {
                               userAddress={userAddress}
                               seller={item?.seller}
                               size={'col-lg-4'}
+                              user_id={item?.user_id}
                             />
                           )
                         }

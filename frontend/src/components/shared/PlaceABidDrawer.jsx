@@ -1,7 +1,7 @@
 import React, { useRef, useCallback, useState, useEffect, useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsCheck } from "react-icons/bs";
 import "./Shared.css";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
@@ -22,7 +22,7 @@ import TETHER_CONTRACT_ABI from "../../contractsData/TetherToken.json";
 import Modal from "react-bootstrap/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import { AiOutlineClose } from "react-icons/ai";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Area,
   AreaChart,
@@ -44,6 +44,7 @@ import apis from "../../service";
 import NftCountdown from "./NftCountdown";
 import { Store } from "../../Context/Store";
 import HeaderConnectPopup from "../../pages/Headers/HeaderConnectPopup";
+
 
 const Monthly_data = [
   {
@@ -330,9 +331,12 @@ const PlaceABidDrawer = ({
   const [bidButton, showBidButton] = useState(false);
   const [nftDetails, setNftDetails] = useState("");
   const [getSellerPlan, setSellerPlan] = useState("");
+  const [likeAndViewData, setLikeAndViewData] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   let userAddress = userData?.wallet_address;
+
+  const navigate = useNavigate();
 
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
 
@@ -353,9 +357,39 @@ const PlaceABidDrawer = ({
     setSellerPlan(response?.data?.data?.subscription_plan);
   };
 
+
+
+  const getNFTLike = async () => {
+    var temp = JSON.parse(localStorage.getItem("data"));
+    var address = temp.id;
+    const response = await apis.getLikeNFT(address, id);
+    setLikeAndViewData(response.data.data);
+  };
+
+  const postNFTLike = async () => {
+    var temp = JSON.parse(localStorage.getItem("data"));
+    var address = temp.id;
+    const response = await apis.postLikeNFT({
+      like_by: address,
+      nft_token: id,
+    });
+    getNFTLike();
+  };
+
+  const postNFTView = async () => {
+    var temp = JSON.parse(localStorage?.getItem("data"));
+    var address = temp.id;
+    const response = await apis.postViewNFT({
+      view_by: address,
+      nft_token: id,
+    });
+    getNFTLike();
+  };
+
   useEffect(() => {
     if (isVisible) {
       getNFTDetailByNFTTokenId();
+      postNFTView();
     }
   }, [isVisible]);
 
@@ -1104,7 +1138,7 @@ const PlaceABidDrawer = ({
                     )}
                   </p>
                 </div>
-                <div className="three-line">
+                {/* <div className="three-line">
                   <div>
                     <TfiEye />
                     <span>2 View</span>
@@ -1170,6 +1204,108 @@ const PlaceABidDrawer = ({
                           //   <span>{nftDetails?.user?.username}</span>
                           // </Link>
                         }
+                      </div>
+                    </div>
+                    <div className="col-lg-6 col-md-6 col-6">
+                      <h3>Collection</h3>
+                      <Link to={`collection?id=${nftDetails?.collection?.id}`}>
+                        <div className="logo-name">
+                          <img
+                            src={nftDetails?.collection?.media[0]?.original_url}
+                            alt=""
+                          />{" "}
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                </div> */}
+                <div className="three-line">
+                  <div>
+                    <TfiEye />
+                    <span>
+                      {likeAndViewData?.view_count == ""
+                        ? "00"
+                        : likeAndViewData?.view_count}{" "}
+                      View
+                    </span>
+                  </div>
+                  <div onClick={() => postNFTLike()}>
+                    {likeAndViewData?.is_liked == 0 ? (
+                      <AiOutlineHeart />
+                    ) : (
+                      <AiFillHeart style={{ fill: "#2636d9" }} />
+                    )}
+                    <span>
+                      {likeAndViewData?.like_count == ""
+                        ? "0"
+                        : likeAndViewData?.like_count}{" "}
+                      Favorite
+                    </span>
+                  </div>
+                </div>
+                <div className="four-line">
+                  <p>{description}</p>
+                </div>
+                <div className="four-line">
+                  <div className="row">
+                    <div className="col-lg-6 col-md-6 col-6">
+                      <h3>Creator</h3>
+                      <div className="logo-name"
+                      >
+                        {
+                          userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                            <Link to={`/profile`}>
+
+                              {nftDetails?.user?.profile_image ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
+                              <span>
+                                {nftDetails?.user?.first_name}{" "}
+                                {nftDetails?.user?.last_name}
+                              </span>
+                            </Link>
+                          ) : (
+                            <div
+                              onClick={() =>
+                                navigate(
+                                  `/other-profile?add=${nftDetails?.user?.id}`,
+                                  {
+                                    state: {
+                                      address: nftDetails?.user?.wallet_address,
+                                    },
+                                  }
+                                )
+                              }
+                            >
+                              {nftDetails?.user?.profile_image ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
+                              <span>{nftDetails?.user?.username}</span>
+                            </div>
+                          )
+                          // <Link to={`/other-profile?address=${nftDetails?.user?.wallet_address}`}>
+                          //    <img src={nftDetails?.user?.profile_image} alt="" />{" "}
+                          //   <span>{nftDetails?.user?.username}</span>
+                          // </Link>
+                        }
+                        {/* {console.log(nftDetails, "ndt")} */}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">

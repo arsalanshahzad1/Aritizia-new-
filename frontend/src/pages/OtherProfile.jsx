@@ -35,6 +35,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { Store } from "../Context/Store";
 import { FaFacebookF } from "react-icons/fa";
 import EmailSigninPopup from "./Headers/EmailSigninPopup";
+import Loader from "../components/shared/Loader";
 const { ethereum } = window;
 // import Web3 from "web3";
 // import Web3Modal from "web3modal";
@@ -61,35 +62,43 @@ const OtherProfile = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const [userID, setUserID] = useState(searchParams.get("id"));
   const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
-  const [scroll, setScroll] = useState(true)
   const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   const [emailSigninPopup, setEmailSigninPopup] = useState(false);
+  const [loader, setLoader] = useState(false)
 
-  const { account, checkIsWalletConnected } = useContext(Store);
+  const { account, checkIsWalletConnected,getProviderMarketContrat,getProviderNFTContrat } = useContext(Store);
 
   useEffect(() => {
     checkIsWalletConnected()
   }, [account])
 
-  // useEffect(() => {
-  //   console.log(scroll, 'scroll');
-  //   if (scroll) {
-  //     window.scrollTo(0, 0)
-  //     setScroll(false)
-  //   }
-  // }, [])
+  const getOtherUsersDetails = async (address) => {
+    setLoader(true)
+    try {
+      const response = await apis.getOtherUser(address);
+      setUserDetails(response?.data?.data);
+      setFollowUnfollowStatus({
+        follower_count: response?.data?.data?.total_followers,
+        is_follow: response?.data?.data?.is_follow
+      })
+      await viewAllNfts(response?.data?.data?.id)
+      await getNFTlikeListing(response?.data?.data?.id);
+      setLoader(false)
+    } catch (error) {
+      setLoader(false)
+      toast.error("getting some error");
 
-  // const getOtherUsersDetails = async (address) => {
-  //   const response = await apis.getOtherUser(address);
-  //   setUserDetails(response?.data?.data);
-  // console.log(userDetails?.id, "ssss");
+    }
+  };
 
   const getNFTlikeListing = async (id) => {
-    const response = await apis.getLikeNFTListing(id);
-    getLikedNfts(response?.data?.data)
-    // setLikedNfts(response?.data?.data);
-    console.log(response, "other-users");
-    setLikedNftLoader(false)
+    try {
+      const response = await apis.getLikeNFTListing(id);
+      getLikedNfts(response?.data?.data)
+      setLikedNftLoader(false)
+    } catch (error) {
+      toast.error("getting some error");
+    }
   };
 
   const getLikedNfts = async (nftIds) => {
@@ -117,9 +126,9 @@ const OtherProfile = ({ search, setSearch }) => {
 
 
     let liked = [];
-    // let emptyList = [];
-    // setLikedNfts(emptyList);
-    // setLikedNftsAuction(emptyList);
+    let emptyList = [];
+    setLikedNfts(emptyList);
+    setLikedNftsAuction(emptyList);
     if (nftIds?.length > 0 && nftIds != "") {
       for (let i = 0; i < nftIds?.length; i++) {
         let id;
@@ -217,17 +226,7 @@ const OtherProfile = ({ search, setSearch }) => {
     // setLikedNftAuctionLoader(false)
   };
 
-  const getOtherUsersDetails = async (address) => {
-    const response = await apis.getOtherUser(address);
-    setUserDetails(response?.data?.data);
-    setFollowUnfollowStatus({
-      follower_count: response?.data?.data?.total_followers,
-      is_follow: response?.data?.data?.is_follow
-    })
-    console.log(response?.data?.data, 'response?.data?.data');
-    viewAllNfts(response?.data?.data?.id)
-    getNFTlikeListing(response?.data?.data?.id);
-  };
+
 
   // useEffect()
 
@@ -330,49 +329,47 @@ const OtherProfile = ({ search, setSearch }) => {
   //   };
 
   // console.log(userDetails, "userDetails")
+
   const viewAllNfts = async (data) => {
     try {
       const response = await apis.viewAllMyNfts(data);
       getMyListedNfts(response?.data?.data)
-      console.log(response, "ssssssss")
-      // setNftLoader(false)
     } catch (error) {
       setNftLoader(false)
-      console.error("Error:", error);
     }
   };
 
   const getMyListedNfts = async (allMyNfts) => {
     console.log(allMyNfts, "yesssss")
-    // let emptyList = [];
-    // setNftListAuction(emptyList);
-    // setNftListFP(emptyList);
+    let emptyList = [];
+    setNftListAuction(emptyList);
+    setNftListFP(emptyList);
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
+    // const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // // Set signer
+    // const signer = provider.getSigner()
 
-    console.log("Connected wallet", userAddress);
-    console.log("provider", provider);
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
+    // console.log("Connected wallet", userAddress);
+    // console.log("provider", provider);
+    // const marketplaceContract = new Contract(
+    //   MARKETPLACE_CONTRACT_ADDRESS.address,
+    //   MARKETPLACE_CONTRACT_ABI.abi,
+    //   provider
+    // );
 
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      provider
-    );
+    // const nftContract = new Contract(
+    //   NFT_CONTRACT_ADDRESS.address,
+    //   NFT_CONTRACT_ABI.abi,
+    //   provider
+    // );
     // const signer = provider.getSigner();
-    const address = await signer.getAddress();
+    // const address = await signer.getAddress();
 
-    console.log("MYADDRESS", address);
+    // console.log("MYADDRESS", address);
 
     let listingType;
 
-    let mintedTokens = await marketplaceContract.getListedNfts();
+    let mintedTokens = await getProviderMarketContrat().getListedNfts();
 
     // let mintedTokens = [1, 4, 2];
     console.log("mintedTokens", mintedTokens);
@@ -385,9 +382,9 @@ const OtherProfile = ({ search, setSearch }) => {
       // id = mintedTokens[i];
       console.log("YESS");
 
-      const metaData = await nftContract?.tokenURI(id);
+      const metaData = await getProviderNFTContrat().tokenURI(id);
 
-      let auctionData = await marketplaceContract._idToAuction(id);
+      let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
       let collectionId;
       collectionId = +mintedTokens?.[i]?.collectionId?.toString();
@@ -468,6 +465,7 @@ const OtherProfile = ({ search, setSearch }) => {
         });
     }
   };
+
   const onClose = useCallback(() => {
     setIsVisible(false);
   }, []);
@@ -476,7 +474,7 @@ const OtherProfile = ({ search, setSearch }) => {
     setIsVisible(action);
   };
 
-  const [FollowStatus, setFollowStatus] = useState(0);
+  // const [FollowStatus, setFollowStatus] = useState(0);
 
 
   const postChatMeaage = async () => {
@@ -498,7 +496,7 @@ const OtherProfile = ({ search, setSearch }) => {
   // console.log(userDetails?.id, "arsalan data")
 
 
-  const [currentState, setCurrentState] = useState(false)
+  // const [currentState, setCurrentState] = useState(false)
 
   const followOther = async () => {
     const response = await apis.postFollowAndUnfollow({
@@ -507,35 +505,26 @@ const OtherProfile = ({ search, setSearch }) => {
     });
 
     setFollowUnfollowStatus(response?.data?.data)
-    console.log(response?.data?.data, 'sdsdsdsd');
-    // if (response?.status === 201) {
-    //   // setFollowStatus(response?.data?.data?.is_follow);
-    //   // // setFollowStatus(!FollowStatus);
-    //   // setCurrentState(!currentState)
-    // }
-    // getOtherUsersDetails(userADDRESS)
-    // console.log(response, "this is reponse");
-    // console.log(FollowStatus, "this is follow status");
 
   };
 
-  useEffect(() => {
-
-    const flag = userDetails?.followers?.some(
-      (follower) => follower.id === RealUserId
-    );
-
-    console.log(flag, "flag");
-    setFollowStatus(flag ? 1 : 0);
-  }, [userDetails]);
-
   // useEffect(() => {
-  //   getOtherUsersDetails(userADDRESS);
-  // }, []);
+
+  //   const flag = userDetails?.followers?.some(
+  //     (follower) => follower.id === RealUserId
+  //   );
+
+  //   console.log(flag, "flag");
+  //   setFollowStatus(flag ? 1 : 0);
+  // }, [userDetails]);
 
   useEffect(() => {
     getOtherUsersDetails(userADDRESS);
-  }, [FollowStatus]);
+  }, []);
+
+  // useEffect(() => {
+  //   getOtherUsersDetails(userADDRESS);
+  // }, [FollowStatus]);
 
   const copyToClipboard = (link) => {
     console.log(link);
@@ -549,26 +538,28 @@ const OtherProfile = ({ search, setSearch }) => {
   const [isFollow, setIsFollow] = useState(false)
 
   const getTotalFollowers = async () => {
-    const response = await apis.getCountFollow(userDetails?.id)
-    setTotalFollowers(response?.data?.data?.follower_count)
-    setIsFollow(response?.data?.data?.is_follow)
+    try {
+      const response = await apis.getCountFollow(userDetails?.id)
+      setTotalFollowers(response?.data?.data?.follower_count)
+      setIsFollow(response?.data?.data?.is_follow)
+    } catch (error) {
+      toast.error(error.message);
+    }
   }
 
-  useEffect(() => {
-    getTotalFollowers()
-  }, [followUnfollowStatus])
+  // useEffect(() => {
+  //   getTotalFollowers()
+  // }, [followUnfollowStatus])
 
-  useEffect(() => {
-    getTotalFollowers()
-  }, [currentState, isFollow])
+  // useEffect(() => {
+  //   getTotalFollowers()
+  // }, [currentState, isFollow])
 
   const [nftLoader, setNftLoader] = useState(true)
   const [likedNftLoader, setLikedNftLoader] = useState(true)
-
-
-  console.log(followUnfollowStatus, 'followUnfollowStatus');
   return (
     <>
+      {loader && <Loader />}
       <Header search={search} setSearch={setSearch} />
       <div className="profile" style={{ position: "relative" }}>
         <div className="profile-first-section">
@@ -676,23 +667,23 @@ const OtherProfile = ({ search, setSearch }) => {
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto">
                   {userData?.email !== null ?
-                  <>
-                  <div className="message-btn" onClick={() => {postChatMeaage();}}>
-                    <button>
-                      <BsFillEnvelopeFill />
-                      MESSAGE
-                    </button>
-                  </div>
-                  </>
-                  :
-                  <>
-                  <div className="message-btn" onClick={() => {setEmailSigninPopup(true)}}>
-                    <button>
-                      <BsFillEnvelopeFill />
-                      MESSAGE
-                    </button>
-                  </div>
-                  </>
+                    <>
+                      <div className="message-btn" onClick={() => { postChatMeaage(); }}>
+                        <button>
+                          <BsFillEnvelopeFill />
+                          MESSAGE
+                        </button>
+                      </div>
+                    </>
+                    :
+                    <>
+                      <div className="message-btn" onClick={() => { setEmailSigninPopup(true) }}>
+                        <button>
+                          <BsFillEnvelopeFill />
+                          MESSAGE
+                        </button>
+                      </div>
+                    </>
                   }
                 </div>
               </div>
@@ -763,7 +754,7 @@ const OtherProfile = ({ search, setSearch }) => {
                           </>
                         )}
                       </div>
-                      <div className="d-flex">
+                      <div className="d-flex other-profile-cards d-flex flex-wrap">
                         {collectionTabs === 1 && (
                           <>
                             {nftLoader ?

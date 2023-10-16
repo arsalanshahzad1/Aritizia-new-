@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GiCrossMark } from 'react-icons/gi'
 import Cross from '../svg/Cross'
 import Check from '../svg/Check'
 import { BsCheck } from "react-icons/bs";
 import apis from '../../service';
+import EmailSigninPopup from '../../pages/Headers/EmailSigninPopup';
 
 const DateDisplay = ({ datetime }) => {
     const parsedDate = new Date(datetime);
@@ -16,7 +17,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
 
     const userData = JSON.parse(localStorage.getItem("data"));
     const userId = userData?.id;
-
+    const [emailSigninPopup, setEmailSigninPopup] = useState(false);
     const autoRecursionOnoff = async (id, subId) => {
         console.log(id);
         console.log(subId);
@@ -161,7 +162,13 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                             </div>
                             :
                             <div key={index} className={`subscription-card-wrap ${res?.user_subs.length != 0 ? 'active' : ''}`}>
-                                <div onClick={() => { setShowPaymentForm(true); setPlanName(res?.name); setIndex(index) }}>
+                               <div onClick={() => {
+                                    if (userData.email === null) {
+                                        setEmailSigninPopup(true)
+                                    } else {
+                                        setShowPaymentForm(true); setPlanName(res?.name); setIndex(i)
+                                    }
+                                }}>
                                     <h2 className='title'>{res?.name == 'Free Trail' ? "Free Trial": res?.name}</h2>
                                     <div>
                                         {res?.monthly_cost == 0 ?
@@ -309,6 +316,7 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                     </div>
                 )
             })}
+            <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
         </>
     )
 }

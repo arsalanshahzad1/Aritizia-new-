@@ -1028,7 +1028,7 @@ p {
 
 .varification-modal-wrap .modal-body {
   width: 470px;
-  padding: 40px 63px;
+  padding: 40px 40px;
 }
 
 .varification-modal-wrap .modal-body .title {
@@ -1048,7 +1048,43 @@ p {
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
+  line-height: 
+  normal;
+}
+.varification-modal-wrap .modal-body .desc-forget {
+  color: #8C8C8C;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
   line-height: normal;
+  line-height: 20px;
+  margin-bottom: 20px !important;
+}
+.varification-modal-wrap .modal-body .desc-change {
+  color: #8C8C8C;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  line-height: 20px;
+  margin-bottom: 20px !important;
+  margin-top: 20px !important;
+}
+.varification-modal-wrap .modal-body .resent-code-login {
+  color: #B600D1;
+  text-align: left;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  line-height: 20px;
+  margin-top: 10px !important;
+  cursor: pointer;
 }
 
 .varification-modal-wrap .modal-body .email {
@@ -1061,6 +1097,40 @@ p {
   line-height: normal;
   margin-top: 14px !important;
   margin-bottom: 34px !important;
+}
+.varification-modal-wrap .modal-body .email-forget {
+  color: #3E3E3E;
+  text-align: left;
+  font-family: 'Jost';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 14px !important;
+  margin-bottom: 20px !important;
+  width: 100%;
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: #F2F2F2;
+  margin-top: 15px;
+}
+.varification-modal-wrap .modal-body .password-forget {
+  color: #3E3E3E;
+  text-align: left;
+  font-family: 'Jost';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 14px !important;
+  margin-bottom: 0px !important;
+  width: 100%;
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: #F2F2F2;
+  margin-top: 15px;
 }
 
 .varification-modal-wrap .modal-body .resent-code {
@@ -1093,6 +1163,35 @@ p {
   outline: none;
   width: 100%;
   padding: 11px 0px;
+}
+
+.varification-modal-wrap .modal-body .back{
+  border-radius: 10px;
+  background: transparent;
+  color: #000;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 20px 0px 0px 0px;
+}
+
+.varification-modal-wrap .modal-body .email{
+  width: 100%;
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: #F2F2F2;
+  margin-top: 15px;
+}
+
+.varification-modal-wrap .modal-body .back:hover{
+  text-decoration: underline;
 }
 
 .varification-modal-wrap .vi__wrapper {
