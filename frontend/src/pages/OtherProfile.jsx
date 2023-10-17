@@ -4,33 +4,16 @@ import { BsFillEnvelopeFill, BsInstagram, BsLinkedin, BsTwitter } from "react-ic
 import BuyNow from "../components/cards/BuyNow";
 import NewItemCard from "../components/cards/NewItemCard";
 import Footer from "./landingpage/Footer";
-import ProfileDrawer from "../components/shared/ProfileDrawer";
-import SocialShare from "../components/shared/SocialShare";
 import Search from "../components/shared/Search";
-import Web3Modal from "web3modal";
-import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import {  Contract, ethers } from "ethers";
 import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import NFT_CONTRACT_ADDRESS from "../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../contractsData/ArtiziaNFT.json";
 import axios from "axios";
-import nft from "../../public/assets/images/NFTImage.png";
-import bird from "../../public/assets/images/bird.png";
-import SimpleCard from "../components/cards/SimpleCard";
-import MyNftCard from "../components/cards/MyNftCard";
-import nftimage2 from "../../public/assets/images/nftimage2.png";
-
-import OtherUser from "../../public/assets/images/OtherUser.png";
-import OtherUserBackground from "../../public/assets/images/OtherUserBackground.png";
-import CollectionCard from "../components/cards/CollectionCard";
-import liked1 from "../../public/assets/images/liked1.png";
-import liked2 from "../../public/assets/images/liked2.png";
-import collection from "../../public/assets/images/Collection-card-image.png";
 import apis from "../service";
-// import { getAddress } from "../methods/methods";
-// import { connectWallet, getProviderOrSigner } from "../methods/walletManager";
 
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Store } from "../Context/Store";
 import { FaFacebookF } from "react-icons/fa";
@@ -50,18 +33,16 @@ const OtherProfile = ({ search, setSearch }) => {
   const web3ModalRef = useRef();
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
-  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [userDetails, setUserDetails] = useState("");
   const [likedNfts, setLikedNfts] = useState([]);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const { state } = useLocation();
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData?.wallet_address;
   const navigate = useNavigate();
   const [userID, setUserID] = useState(searchParams.get("id"));
-  const [userADDRESS, setUserADDRESS] = useState(searchParams.get("add"));
+  const otherUsersId = searchParams.get("add");
+  const [userADDRESS, setUserADDRESS] = useState(otherUsersId);
   const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   const [emailSigninPopup, setEmailSigninPopup] = useState(false);
   const [loader, setLoader] = useState(false)
@@ -156,11 +137,20 @@ const OtherProfile = ({ search, setSearch }) => {
         // setDiscountPrice(discountOnNFT);
 
         let collectionId = structData?.collectionId?.toString();
-
+        
         const response = await apis.getNFTCollectionImage(collectionId);
         const user_id = response?.data?.data?.user_id;
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         const price = ethers.utils.formatEther(structData?.price?.toString());
+        
+        let nftLikes
+        try {
+          // nftLikes = await getNFTLike(response?.data?.data?.user?.wallet_address , id);
+          nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
+          console.log(nftLikes?.data?.data?.like_count, 'ressssss');
+        } catch (error) {
+          
+        }
 
         axios
           .get(metaData)
@@ -207,7 +197,8 @@ const OtherProfile = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 seller: auctionData?.seller?.toString(),
                 startTime: auctionData?.startTime?.toString(),
-                user_id: user_id
+                user_id: user_id,
+                nft_like:nftLikes?.data?.data?.like_count
               };
               setLikedNftsAuction((prev) => [...prev, nftData]);
             }
@@ -393,7 +384,16 @@ const OtherProfile = ({ search, setSearch }) => {
       // console.log(response, "collectionImages")
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
       const user_id = response?.data?.data?.user_id;
-      console.log(user_id, "collectionImages")
+      
+
+      let nftLikes
+        try {
+          // nftLikes = await getNFTLike(response?.data?.data?.user?.wallet_address , id);
+          nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
+          console.log(nftLikes?.data?.data?.like_count, 'ressssss');
+        } catch (error) {
+          
+        }
 
 
       axios
@@ -449,7 +449,8 @@ const OtherProfile = ({ search, setSearch }) => {
               seller: auctionData?.seller?.toString(),
               startTime: auctionData?.startTime?.toString(),
               collectionImages: collectionImages,
-              user_id: user_id
+              user_id: user_id,
+              nft_like:nftLikes?.data?.data?.like_count
             };
 
             // myAuctions.push(nftData);
@@ -518,9 +519,7 @@ const OtherProfile = ({ search, setSearch }) => {
   //   setFollowStatus(flag ? 1 : 0);
   // }, [userDetails]);
 
-  useEffect(() => {
-    getOtherUsersDetails(userADDRESS);
-  }, []);
+
 
   // useEffect(() => {
   //   getOtherUsersDetails(userADDRESS);
@@ -547,6 +546,10 @@ const OtherProfile = ({ search, setSearch }) => {
     }
   }
 
+  useEffect(() => {
+    getOtherUsersDetails(otherUsersId);
+  }, [userADDRESS , otherUsersId]);
+  
   // useEffect(() => {
   //   getTotalFollowers()
   // }, [followUnfollowStatus])
@@ -778,6 +781,7 @@ const OtherProfile = ({ search, setSearch }) => {
                                   user_id={item?.user_id}
                                   userAddress={userADDRESS}
                                   size={'col-lg-3'}
+                                  nft_like={item?.nft_like}
                                 />
                               )) :
                                 <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
@@ -861,6 +865,7 @@ const OtherProfile = ({ search, setSearch }) => {
                                   user_id={item?.user_id}
                                   userAddress={userADDRESS}
                                   size={'col-lg-3'}
+                                  nft_like={item?.nft_like}
                                 />
                               )) :
                                 <div class="data-not-avaliable"><h2>No data avaliable</h2></div>

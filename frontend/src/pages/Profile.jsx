@@ -141,11 +141,11 @@ const Profile = ({ search, setSearch }) => {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    
+
     //this is API get Liked NFT's
     let NFTId = await getLikedNftsList();
-    
-    if(NFTId.length == 0){
+
+    if (NFTId.length == 0) {
       setLikedNftLoader(false)
     }
 
@@ -186,6 +186,16 @@ const Profile = ({ search, setSearch }) => {
         const user_id = response?.data?.data?.user_id;
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         const price = ethers.utils.formatEther(structData?.price?.toString());
+
+        let nftLikes
+        try {
+          // nftLikes = await getNFTLike(response?.data?.data?.user?.wallet_address , id);
+          nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
+          console.log(nftLikes?.data?.data?.like_count, 'ressssss');
+          // nft_like:nftLikes?.data?.data?.like_count
+        } catch (error) {
+
+        }
         axios
           .get(metaData)
           .then((response) => {
@@ -198,7 +208,7 @@ const Profile = ({ search, setSearch }) => {
             data = JSON.parse(data);
             const crypto = data?.crypto;
             const title = data?.title;
-            const image =data?.image;
+            const image = data?.image;
             const royalty = data?.royalty;
             const description = data?.description;
             const collection = data?.collection;
@@ -214,7 +224,7 @@ const Profile = ({ search, setSearch }) => {
                 description: description,
                 collection: collection,
                 collectionImages: collectionImages,
-                user_id:user_id
+                user_id: user_id
               };
               liked.push(nftData);
               setLikedNfts(liked)
@@ -231,11 +241,12 @@ const Profile = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 seller: auctionData?.seller?.toString(),
                 startTime: auctionData?.startTime?.toString(),
-                user_id:user_id
+                user_id: user_id,
+                nft_like: nftLikes?.data?.data?.like_count
               };
               setLikedNftsAuction((prev) => [...prev, nftData]);
             }
-             setLikedNftLoader(false)
+            setLikedNftLoader(false)
           })
           .catch((error) => {
             setNftLoader(false)
@@ -262,8 +273,6 @@ const Profile = ({ search, setSearch }) => {
 
   //////////////////////// Functions Section ///////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
-
-  
 
 
 
@@ -292,7 +301,7 @@ const Profile = ({ search, setSearch }) => {
           signer
         );
 
-
+        console.log("FansAddressFansAddress",FansAddress)
 
         let fanadd = await (
           await marketplaceContract.addFans(FansAddress)
@@ -338,7 +347,7 @@ const Profile = ({ search, setSearch }) => {
     );
 
     let fanList = await marketplaceContract.getFans(userAddress);
-
+    // console.log(fanList, "newwwwwwwwwww")
     const response = await apis.postAddFans({
       fan_by_wallet: userAddress,
       fan_to_array_wallet: fanList,
@@ -426,6 +435,13 @@ const Profile = ({ search, setSearch }) => {
 
       const price = ethers.utils.formatEther(structData?.price?.toString());
 
+      let nftLikes
+      try {
+        nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)  
+      } catch (error) {
+
+      }
+
       axios
         .get(metaData)
         .then((response) => {
@@ -455,10 +471,10 @@ const Profile = ({ search, setSearch }) => {
               description: description,
               collection: collection,
               collectionImages: collectionImages,
-              user_id:user_id
+              user_id: user_id
             };
             setNftListFP((prev) => [...prev, nftData]);
-  
+
           } else if (listingType === 1) {
 
             const nftData = {
@@ -473,7 +489,9 @@ const Profile = ({ search, setSearch }) => {
               highestBidder: auctionData?.highestBidder?.toString(),
               seller: auctionData?.seller?.toString(),
               startTime: auctionData?.startTime?.toString(),
-              user_id:user_id
+              user_id: user_id,
+              nft_like: nftLikes?.data?.data?.like_count
+
             };
             setNftListAuction((prev) => [...prev, nftData]);
           }
@@ -483,7 +501,7 @@ const Profile = ({ search, setSearch }) => {
           setNftLoader(false)
           console.error("Error fetching metadata:", error);
         });
-    setNftLoader(false)
+      setNftLoader(false)
     }
     setNftLoader(false)
   };
@@ -533,62 +551,62 @@ const Profile = ({ search, setSearch }) => {
 
 
       const structData = await marketplaceContract._idToNFT(id);
-      console.log("structData",structData)
+      console.log("structData", structData)
       //check if not listed
-      if(!structData?.listed && structData.owner.toString().toLowerCase() === userAddress.toString().toLowerCase()){
-      let response;
-      try {
-        response = await apis.getNFTByTokenId(id);
-      } catch (error) {
-        console.log(error.message)
+      if (!structData?.listed && structData.owner.toString().toLowerCase() === userAddress.toString().toLowerCase()) {
+        let response;
+        try {
+          response = await apis.getNFTByTokenId(id);
+        } catch (error) {
+          console.log(error.message)
+        }
+
+        const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
+        const user_id = response?.data?.data?.owner?.id;
+        // console.log("1asdasdasdasdasdaqsd" , response?.data?.data?.owner?.id)
+
+        const metaData = await nftContract.tokenURI(id);
+
+        const price = ethers.utils.formatEther(structData?.price?.toString());
+
+        axios
+          .get(metaData)
+          .then((response) => {
+            const meta = response?.data;
+            let data = JSON.stringify(meta);
+
+            data = data?.slice(2, -5);
+            data = data?.replace(/\\/g, "");
+
+            data = JSON.parse(data);
+
+            const crypto = data?.crypto;
+            const title = data?.title;
+            const image = data?.image;
+            const royalty = data?.royalty;
+            const description = data?.description;
+            const collection = data?.collection;
+
+            const nftData = {
+              id: id,
+              title: title,
+              image: image,
+              price: price,
+              crypto: crypto,
+              royalty: royalty,
+              description: description,
+              collection: collection,
+              collectionImages: collectionImages,
+              user_id: user_id
+            };
+            console.log(nftData, "nftDatanftData")
+            setUserNfts((prev) => [...prev, nftData]);
+          })
+          .catch((error) => {
+            console.error("Error fetching metadata:", error);
+          });
       }
-
-      const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
-      const user_id = response?.data?.data?.owner?.id;
-      // console.log("1asdasdasdasdasdaqsd" , response?.data?.data?.owner?.id)
-
-      const metaData = await nftContract.tokenURI(id);
-
-      const price = ethers.utils.formatEther(structData?.price?.toString());
-
-      axios
-        .get(metaData)
-        .then((response) => {
-          const meta = response?.data;
-          let data = JSON.stringify(meta);
-
-          data = data?.slice(2, -5);
-          data = data?.replace(/\\/g, "");
-
-          data = JSON.parse(data);
-
-          const crypto = data?.crypto;
-          const title = data?.title;
-          const image = data?.image;
-          const royalty = data?.royalty;
-          const description = data?.description;
-          const collection = data?.collection;
-
-          const nftData = {
-            id: id,
-            title: title,
-            image: image,
-            price: price,
-            crypto: crypto,
-            royalty: royalty,
-            description: description,
-            collection: collection,
-            collectionImages: collectionImages,
-            user_id:user_id
-          };
-          console.log(nftData, "nftDatanftData")
-          setUserNfts((prev) => [...prev, nftData]);
-        }) 
-        .catch((error) => {
-          console.error("Error fetching metadata:", error);
-        });
-      }
-      }
+    }
     setUserNftLoader(false)
   };
 
@@ -673,7 +691,7 @@ const Profile = ({ search, setSearch }) => {
     const response = await apis.getFollowersForFan(id);
     if (response?.status) {
       setAddFanlisting(response?.data?.data);
-      console.log(response?.data?.data , 'response');
+      console.log(response?.data?.data, 'response');
     } else {
       setAddFanlisting("");
     }
@@ -710,9 +728,9 @@ const Profile = ({ search, setSearch }) => {
 
   const userWalletAddress = localStorage.getItem("userAddress")
 
-  console.log(window.location.hash , 'asdasdasdas');
-  console.log(window.location.host , 'asdasdasdasss');
-  console.log(window.location.href , 'asdasdasdasssss');
+  console.log(window.location.hash, 'asdasdasdas');
+  console.log(window.location.host, 'asdasdasdasss');
+  console.log(window.location.href, 'asdasdasdasssss');
 
   const accountAddress = localStorage.getItem("userAddress")
 
@@ -789,33 +807,33 @@ const Profile = ({ search, setSearch }) => {
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
                 <div className="col-lg-6 col-md-6 col-12">
-                {accountAddress !== "false" ?
-                  <div className="copy-url">
-                    <span>{userData?.wallet_address}</span>
-                    <button
-                      onClick={() => {
-                        copyToClipboard(userData?.wallet_address);
-                      }}
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  :
-                  <></>
-                    }
+                  {accountAddress !== "false" ?
+                    <div className="copy-url">
+                      <span>{userData?.wallet_address}</span>
+                      <button
+                        onClick={() => {
+                          copyToClipboard(userData?.wallet_address);
+                        }}
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    :
+                    <></>
+                  }
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto"></div>
               </div>
               <div className="row">
                 <div className="profile-tabs">
-                {userData === "false" ? <></> : <>
-                <button
+                  {userData === "false" ? <></> : <>
+                    <button
                       className={`${tabs === 1 ? "active" : ""}`}
                       onClick={() => setTabs(1)}
                     >
                       Gallery
                     </button>
-                    </>}
+                  </>}
                   {userWalletAddress === "false" ? <></> : <>
                     <button
                       className={`${tabs === 0 ? "active" : ""}`}
@@ -823,7 +841,7 @@ const Profile = ({ search, setSearch }) => {
                     >
                       Collection
                     </button>
-                    
+
 
                     <button
                       className={`${tabs === 2 ? "active" : ""}`}
@@ -847,12 +865,12 @@ const Profile = ({ search, setSearch }) => {
                   </button>
                   {userWalletAddress === "false" ? <></> : <>
 
-                    <button
+                    {/* <button
                       className={`${tabs === 5 ? "active" : ""}`}
                       onClick={() => setTabs(5)}
                     >
                       Fan List
-                    </button>
+                    </button> */}
                     <button
                       className={`${tabs === 6 ? "active" : ""}`}
                       onClick={() => setTabs(6)}
@@ -936,6 +954,7 @@ const Profile = ({ search, setSearch }) => {
                                   size={'col-lg-3'}
                                   seller={item?.seller}
                                   user_id={item?.user_id}
+                                  nft_like={item?.nft_like}
                                 />
                               )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }
@@ -1059,6 +1078,8 @@ const Profile = ({ search, setSearch }) => {
                                     userAddress={userAddress}
                                     size={'col-lg-3'}
                                     user_id={item?.user_id}
+                                    nft_like={item?.nft_like}
+                                    
                                   />
                                 ))}
                               </>
@@ -1104,7 +1125,7 @@ const Profile = ({ search, setSearch }) => {
                     </div>
                   </>
                 )}
-                {tabs === 5 && (
+                {/* {tabs === 5 && (
                   <>
                     <div className="FanListPage"></div>
                     <Fan id={userId} fanToggle={fanToggle} />
@@ -1206,7 +1227,6 @@ const Profile = ({ search, setSearch }) => {
                                   Cancel
                                 </div>
                               </div>
-                              {/* fan me */}
                               <div
                                 onClick={addFanList}
                                 className="button-styling btnCC"
@@ -1240,7 +1260,7 @@ const Profile = ({ search, setSearch }) => {
                                         <div className="inner2">
                                           <div className="img-holder">
                                             <img
-                                              src={data?.profile_image !==null ? data?.profile_image : '/assets/images/user-none.png'}
+                                              src={data?.profile_image !== null ? data?.profile_image : '/assets/images/user-none.png'}
                                               alt=""
                                             />
                                           </div>
@@ -1299,7 +1319,7 @@ const Profile = ({ search, setSearch }) => {
                       </>
                     )}
                   </>
-                )}
+                )} */}
 
                 {tabs === 6 && (
                   <>

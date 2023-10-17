@@ -259,6 +259,7 @@ p {
     margin-bottom: 50px;
     border-radius: 12px;
     box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
+    margin-bottom: 20px;
 }
 
 .css-vurnkuu .doted-icon {
@@ -705,7 +706,7 @@ img {
     letter-spacing: 0em;
     text-align: left;
     color: var(--white);
-    margin: 0px 20px 0px 36px;
+    margin: 20px 20px 0px 36px;
     position: relative;
     margin-bottom: 30px;
 }
@@ -722,7 +723,7 @@ img {
     letter-spacing: 0em;
     text-align: left;
     color: #000;
-    margin: 0px 20px 0px 36px;
+    margin: 20px 20px 0px 36px;
     position: relative;
     margin-bottom: 30px;
     pointer-events: none;

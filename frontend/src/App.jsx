@@ -32,6 +32,7 @@ import ProtectedRoute from "./components/shared/ProtectedRoute";
 import ScrollToTop from "./components/shared/ScrollToTop";
 import Loader from "./components/shared/Loader";
 import AdminLogin from "./pages/AdminLogin";
+import TopCollection from "./pages/TopCollection";
 
 function App() {
   const { account, checkIsWalletConnected, walletConnected, firstTimeCall } = useContext(Store)
@@ -112,6 +113,10 @@ function App() {
               <Route
                 path="/register"
                 element={<Register />}
+              />
+              <Route
+                path="/top-collection"
+                element={<TopCollection />}
               />
               <Route
                 path="/login"

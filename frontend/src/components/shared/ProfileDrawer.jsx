@@ -1188,7 +1188,7 @@ console.log(nftDetails?.user?.id , 'odddd');
                             <div
                               onClick={() =>
                                 navigate(
-                                  `/other-profile?add=${nftDetails?.user?.id}`,
+                                  `/other-profile?add=${nftDetails?.owner?.id}`,
                                   {
                                     state: {
                                       address: nftDetails?.user?.wallet_address,

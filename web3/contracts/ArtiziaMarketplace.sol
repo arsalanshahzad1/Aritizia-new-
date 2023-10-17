@@ -222,7 +222,7 @@ error invalidPrice();
 error invalidListingFee();
 error invalidListingType();
 
-contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
+contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
     using Counters for Counters.Counter;
     Counters.Counter public _nftsSold;
     Counters.Counter public _nftCount;
@@ -1459,18 +1459,12 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         for (uint256 i = 0; i < fans.length; i++) {
             address fan = fans[i];
-            // require(fan != address(0), "Invalid fan address");
-            // require(!isFan[msg.sender][fan], "Address is already a fan");
-            if (fan == address(0)) {
-                console.log("Invalid fan address");
-            } else if (isFan[msg.sender][fan]) {
-                console.log("Address is already a fan");
-            } else {
+            require(fan != address(0), "Invalid fan address");
+            require(!isFan[msg.sender][fan], "Address is already a fan");
                 fanLists[msg.sender].push(fan);
                 isFan[msg.sender][fan] = true;
                 console.log("Fan added to list");
                 myFans[i] = fan;
-            }
         }
 
         emit addedFans(myFans);

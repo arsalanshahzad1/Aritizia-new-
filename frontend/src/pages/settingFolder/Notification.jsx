@@ -23,6 +23,7 @@ const Notification = () => {
 
   const updateNotificationSetting = async (e) => {
     e.preventDefault();
+    setLoader(true)
     const settings = data;
     settings["user_id"] = userData?.id;
     console.log(settings, "settings data");
@@ -33,11 +34,13 @@ const Notification = () => {
       toast.success("Notification settings updated", {
         position: toast.POSITION.TOP_CENTER,
       });
+      setLoader(false)
     }
     else{
       toast.warning("Failed", {
         position: toast.POSITION.TOP_CENTER,
       });
+      setLoader(false)
     }
 
   };

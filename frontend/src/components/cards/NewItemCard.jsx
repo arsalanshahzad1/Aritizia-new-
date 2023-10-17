@@ -24,7 +24,8 @@ const NewItemCard = ({
   seller,
   collectionImages,
   size,
-  user_id
+  user_id,
+  nft_like
 }) => {
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -80,41 +81,41 @@ const NewItemCard = ({
               <NftCountdown endDateTime={new Date(endTime * 1000)} />
             </span>
             {showLinks && (
-                        <div className="social-links">
-                          <ul>
-                            <li>
-                              <a>
-                                <LinkedinShareButton
-                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
-                                  title="Artizia"
-                                >
-                                  <p>Linkedin</p>
-                                </LinkedinShareButton>
-                              </a>
-                            </li>
-                            <li>
-                              <a>
-                                <TwitterShareButton
-                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
-                                  title="Artizia"
-                                >
-                                  <p>Twitter</p>
-                                </TwitterShareButton>
-                              </a>
-                            </li>
-                            <li>
-                              <a>
-                                <FacebookShareButton
-                                  url={`https://${window.location.host}/other-profile?add=${user_id}`}
-                                  title="Artizia"
-                                >
-                                  <p>Facebook</p>
-                                </FacebookShareButton>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      )}
+              <div className="social-links">
+                <ul>
+                  <li>
+                    <a>
+                      <LinkedinShareButton
+                        url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                        title="Artizia"
+                      >
+                        <p>Linkedin</p>
+                      </LinkedinShareButton>
+                    </a>
+                  </li>
+                  <li>
+                    <a>
+                      <TwitterShareButton
+                        url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                        title="Artizia"
+                      >
+                        <p>Twitter</p>
+                      </TwitterShareButton>
+                    </a>
+                  </li>
+                  <li>
+                    <a>
+                      <FacebookShareButton
+                        url={`https://${window.location.host}/other-profile?add=${user_id}`}
+                        title="Artizia"
+                      >
+                        <p>Facebook</p>
+                      </FacebookShareButton>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
           <div className="detail-wrap">
             <div className="center-icon">
@@ -140,17 +141,17 @@ const NewItemCard = ({
             </div>
             <div className="bottom">
               {console.log(seller, userAddress, "you beauty")}
-              {seller?.toString()?.toUpperCase() === userAddress?.toString()?.toUpperCase() ? 
+              {seller?.toString()?.toUpperCase() === userAddress?.toString()?.toUpperCase() ?
                 <div className="left" onClick={() => openDrawer()}>
-                  <p>Your Nft</p>
+                  <p>Your NFT</p>
                 </div> :
                 <div className="left" onClick={() => openDrawer()}>
-                <p>Place a bid</p>
-              </div>
+                  <p>Place a bid</p>
+                </div>
               }
               <div className="right">
                 <AiFillHeart />
-                <span>50</span>
+                <span>{nft_like}</span>
               </div>
             </div>
           </div>

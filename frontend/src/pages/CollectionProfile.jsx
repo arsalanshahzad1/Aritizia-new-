@@ -307,7 +307,7 @@
 
 // export default CollectionProfile;
 
-import React, { useCallback, useEffect, useState,useContext } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react";
 import Header from "./landingpage/Header";
 import { FiSearch } from "react-icons/fi";
 import { FaFacebookF } from "react-icons/fa";
@@ -334,13 +334,13 @@ import { toast } from "react-toastify";
 
 const DateDisplay = ({ datetime }) => {
 
-  
+
   const parsedDate = new Date(datetime);
   const year = parsedDate.getFullYear();
   const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
   const day = String(parsedDate.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
-  console.log(formattedDate," end time now")
+  console.log(formattedDate, " end time now")
   return formattedDate;
 };
 
@@ -363,12 +363,12 @@ function CollectionProfile({ search, setSearch }) {
   //   const [likedNfts, setLikedNfts] = useState([]);
   const [discountPrice, setDiscountPrice] = useState(0);
 
-  
-  const {account,checkIsWalletConnected}=useContext(Store);
 
-  useEffect(()=>{
+  const { account, checkIsWalletConnected } = useContext(Store);
+
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
@@ -377,7 +377,7 @@ function CollectionProfile({ search, setSearch }) {
   const viewNftCollectionProfile = async (id) => {
     const response = await apis.viewNftCollectionProfile(id);
     if (response?.status) {
-      console.log("viewNftCollectionProfile",response);
+      console.log("viewNftCollectionProfile", response);
       setCollectionData(response?.data?.data);
       getCollectionNfts(response?.data?.data?.nfts)
     } else {
@@ -389,7 +389,7 @@ function CollectionProfile({ search, setSearch }) {
     viewNftCollectionProfile(collectionID);
   }, []);
 
-  
+
   const getCollectionNfts = async (nftIds) => {
     // let emptyList = [];
     // // setNftListAuction(emptyList);
@@ -398,7 +398,7 @@ function CollectionProfile({ search, setSearch }) {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
     const signer = provider.getSigner()
-    
+
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
       MARKETPLACE_CONTRACT_ABI.abi,
@@ -424,16 +424,17 @@ function CollectionProfile({ search, setSearch }) {
 
     // let mintedTokens = [1, 4, 2];
     const myArray = Object.values(nftIds);
-  
+
     let myNFTs = [];
     let myAuctions = [];
 
     for (let i = 0; i < myArray?.length; i++) {
       let id;
-      id = myArray[i];
+      let tempid = i
+      id = myArray[i] - 1;
       // id = mintedTokens[i];
-    
-      console.log("YESS",id);
+
+      console.log("YESS", id);
 
       const structData = await marketplaceContract._idToNFT(id);
 
@@ -455,15 +456,20 @@ function CollectionProfile({ search, setSearch }) {
 
         let collectionImages;
         let user_id;
-        
+        let response;
+
         try {
-        const response = await apis.getNFTCollectionImage(collectionId);
-        collectionImages = response?.data?.data?.media?.[0]?.original_url; 
-        user_id = response?.data?.data?.media?.[0]?.original_url; 
+          response = await apis.getNFTCollectionImage(collectionId);
+          collectionImages = response?.data?.data?.media?.[0]?.original_url;
+          user_id = response?.data?.data?.media?.[0]?.original_url;
         } catch (error) {
-        console.log(error)  
+          console.log(error)
         }
-        
+
+        let nftLikes
+        try { nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id) }
+        catch (error) { }
+
         listingType = structData?.listingType;
 
         const price = ethers.utils.formatEther(structData?.price?.toString());
@@ -533,6 +539,7 @@ function CollectionProfile({ search, setSearch }) {
                 // isLive: auctionData.isLive.toString(),
                 seller: auctionData?.seller?.toString(),
                 user_id: user_id,
+                nft_like: nftLikes?.data?.data?.like_count
               };
 
               // myAuctions.push(nftData);
@@ -568,7 +575,7 @@ function CollectionProfile({ search, setSearch }) {
   //   }
   // },[])
 
-  
+
   return (
     <>
       <Header search={search} setSearch={setSearch} />
@@ -676,49 +683,50 @@ function CollectionProfile({ search, setSearch }) {
                     </div>
                     {collectionTabs === 0 && (
                       <>
-                        { nftListFP.length > 0 ?
-                        nftListFP?.map((item) => (
-                          <BuyNow
-                            onOpen={onOpen}
-                            // onClose={onClose}
-                            key={item.id}
-                            id={item.id}
-                            title={item?.title}
-                            image={item?.image}
-                            price={item?.price}
-                            crypto={item?.crypto}
-                            royalty={item?.royalty}
-                            description={item?.description}
-                            collection={item?.collection}
-                            collectionImages={item?.collectionImages}
-                            userAddress
-                            size={'col-lg-3'}
-                          />
-                        )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                      }
+                        {nftListFP.length > 0 ?
+                          nftListFP?.map((item) => (
+                            <BuyNow
+                              onOpen={onOpen}
+                              // onClose={onClose}
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              crypto={item?.crypto}
+                              royalty={item?.royalty}
+                              description={item?.description}
+                              collection={item?.collection}
+                              collectionImages={item?.collectionImages}
+                              userAddress
+                              size={'col-lg-3'}
+                            />
+                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        }
                       </>
                     )}
                     {collectionTabs === 1 && (
                       <>
-                        { nftListAuction.length > 0 ?
-                        nftListAuction.map((item) => (
-                          <NewItemCard
-                            key={item.id}
-                            id={item.id}
-                            title={item?.title}
-                            image={item?.image}
-                            price={item?.price}
-                            highestBid={item?.highestBid}
-                            isLive={item?.isLive}
-                            endTime={item?.endTime}
-                            startTime={item?.startTime}
-                            description={item?.description}
-                            collectionImages={item?.collectionImages}
-                            userAddress={userAddress}
-                            size={'col-lg-3'}
-                            user_id={item.user_id}
-                          />
-                        )): <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
+                        {nftListAuction.length > 0 ?
+                          nftListAuction.map((item) => (
+                            <NewItemCard
+                              key={item.id}
+                              id={item.id}
+                              title={item?.title}
+                              image={item?.image}
+                              price={item?.price}
+                              highestBid={item?.highestBid}
+                              isLive={item?.isLive}
+                              endTime={item?.endTime}
+                              startTime={item?.startTime}
+                              description={item?.description}
+                              collectionImages={item?.collectionImages}
+                              userAddress={userAddress}
+                              size={'col-lg-3'}
+                              user_id={item.user_id}
+                              nft_like={item?.nft_like}
+                            />
+                          )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                         }
                       </>
                     )}

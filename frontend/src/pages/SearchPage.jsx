@@ -285,6 +285,10 @@ const SearchPage = ({ search, setSearch }) => {
 
         const price = ethers.utils.formatEther(structData.price.toString());
 
+        let nftLikes
+      try {nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)} 
+      catch (error) {}
+
         axios
           .get(metaData)
           .then((response) => {
@@ -338,7 +342,8 @@ const SearchPage = ({ search, setSearch }) => {
                 collectionImages: collectionImages,
                 seller: auctionData?.seller?.toString(),
                 listingType: listingType,
-                user_id:user_id
+                user_id:user_id,
+                nft_like: nftLikes?.data?.data?.like_count
               };
 
               // myAuctions.push(nftData);
@@ -691,6 +696,7 @@ const SearchPage = ({ search, setSearch }) => {
                               seller={item?.seller}
                               size={'col-lg-4'}
                               user_id={item?.user_id}
+                              nft_like={item?.nft_like}
                             />
                           )
                         } if (item?.listingType === 0) {

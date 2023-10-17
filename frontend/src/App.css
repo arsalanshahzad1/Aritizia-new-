@@ -963,8 +963,8 @@ header .left img {
   padding: 20px 0px 35px 20px; */
 }
 
-.sec-five-wrap:hover {
-  box-shadow: 8px 8px 25px rgba(0, 0, 0, 0.363);
+.sec-five-wrap{
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 .sec-five-wrap .image {
@@ -3215,6 +3215,11 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
   height: 100%;
   /* color: var(--primary); */
 }
+
+.top-collection-pahe{
+  margin-top: 10px;
+}
+
 
 @keyframes scroll {
   to {

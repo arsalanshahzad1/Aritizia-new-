@@ -231,14 +231,14 @@ const SimpleCard = ({
                 </div>
               </div>
             </div>
-            <div
+            {/* <div
               onClick={() => {
                 setshowDiscountPopUp(true);
               }}
               className="add-discount-text"
             >
               Add Discount
-            </div>
+            </div> */}
           </div>
         </Link>
       </div>

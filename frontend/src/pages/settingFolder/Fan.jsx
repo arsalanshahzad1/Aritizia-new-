@@ -38,6 +38,7 @@ function Fan({ id, fanToggle }) {
   ,[fanToggle])
 
   let selectedUser;
+  
   const removeFan = async (id) => {
     selectedUser = id;
     let userToRemove;
@@ -59,7 +60,6 @@ function Fan({ id, fanToggle }) {
     );
 
     const remove = await marketplaceContract.removeFans(userToRemove);
-  
     let response = marketplaceContract.on("removeFan", handleRemoveFansEvent);
     console.log("kkkkkkkkkkkkkkkk" , marketplaceContract);
 
@@ -114,12 +114,12 @@ function Fan({ id, fanToggle }) {
   
   return (
     <>
-    {fanListing.length > 0 ?
+    {fanListing?.length > 0 ?
     <>
     {fanListing.map((data, index) => {
       return (
         <div className="Follow-row" key={index}>
-          <Link to={`/other-profile?add=${userData?.id}`}>
+          <Link to={`/other-profile?add=${data?.user_id}`}>
             <div className="left">
               <div className="img-holder">
                 {data?.profile_image ? (

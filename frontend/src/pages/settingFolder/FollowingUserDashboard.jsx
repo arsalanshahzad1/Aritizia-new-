@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import apis from "../../service";
+import { Link } from "react-router-dom";
 const FollowingUserDashboard = ({ data, id }) => {
     const [showOptions, setshowOptions] = useState(false);
     const [following, setFollwing] = useState([]);
@@ -39,6 +40,7 @@ const FollowingUserDashboard = ({ data, id }) => {
                     {following?.map((data, i) => {
                         return (
                             <div className="Follow-row" key={i}>
+                                <Link to={`/other-profile?add=${data?.user_id}`}>
                                 <div className="left">
                                     <div className="img-holder">
                                         {data?.profile_image == null ?
@@ -52,6 +54,7 @@ const FollowingUserDashboard = ({ data, id }) => {
                                         <p>{data?.count_follower} Followers</p>
                                     </div>
                                 </div>
+                                </Link>
                                 <div className="right">
                                     {/* <button
                                         className="unfollow"

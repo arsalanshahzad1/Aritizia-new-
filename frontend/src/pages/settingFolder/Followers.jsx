@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import apis from "../../service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Followers = ({ data  , id}) => {
@@ -71,6 +71,7 @@ const Followers = ({ data  , id}) => {
           {followers?.map((data, i) => {
             return (
               <div className="Follow-row" key={i}>
+                <Link to={`/other-profile?add=${data?.user_id}`}>
                 <div className="left">
                   <div className="img-holder" onClick={()=> handleUserVisit(data?.user_id)}>
                     {data?.profile_image == null ?
@@ -84,6 +85,7 @@ const Followers = ({ data  , id}) => {
                     <p>{data?.count_follower} Followers</p>
                   </div>
                 </div>
+                </Link>
                 <div className="right">
                   <button onClick={() => followOther(data?.user_id)}>{data?.is_follow === true ? "Unfollow" : "Follow"}</button>
               

@@ -200,8 +200,7 @@ const BuyNow = ({
     try {
       const response = await apis.getNFTByTokenId(id);
       console.log("ressss", response);
-      setNftDetails(response?.data?.data);
-      console.log("Error: ", e);
+      setNftDetails(response?.data?.data);  
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
       console.log("Error: ", e);
@@ -259,7 +258,7 @@ const BuyNow = ({
   let ethPurchase = false;
 
   const buyWithETH = async () => {
-    console.log("11111111111111");
+    console.log("Mohsin");
 
     ethPurchase = true;
 
@@ -313,7 +312,7 @@ const BuyNow = ({
       await marketplaceContract.buyWithETH(
         NFT_CONTRACT_ADDRESS.address,
         paymentMethod,
-        id?.toString(),
+        id,
         sellerPlan, //  must be multiple of 10 of the users percent
         buyerPlan, // must be multiple of 10 of the users percent
         {

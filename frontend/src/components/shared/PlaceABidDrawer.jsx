@@ -321,9 +321,7 @@ const PlaceABidDrawer = ({
   endTime,
   user_id
 }) => {
-  const [propertyTabs, setPropertyTabs] = useState(0);
   const [chack, setChack] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
   const [sucess, setSucess] = useState(false);
   const [dollarPrice, setDollarPrice] = useState("");
   const [highestBid, setHighestBid] = useState("");

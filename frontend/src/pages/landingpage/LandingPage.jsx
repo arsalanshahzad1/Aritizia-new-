@@ -43,6 +43,16 @@ const LandingPage = ({ search, setSearch }) => {
     }
   };
 
+  const getNFTLike = async (address , id) => {
+    var temp = JSON.parse(localStorage.getItem("data"));
+    var address = temp.id;
+    const response = await apis.getLikeNFT(address, id);
+    return response?.data?.data
+    // setLikeAndViewData(response.data.data);
+  };
+
+  
+
   const getListedNfts = async (allNftIds) => {
 
     let listingType;
@@ -61,6 +71,8 @@ const LandingPage = ({ search, setSearch }) => {
      for (let i = 0; i < mintedTokens?.length; i++) {
       let id;
       id = mintedTokens?.[i].tokenId?.toString();
+
+      
       
       let firstOwner = mintedTokens?.[i]?.firstOwner;
       const structData = await getProviderMarketContrat()._idToNFT(id);
@@ -81,30 +93,31 @@ const LandingPage = ({ search, setSearch }) => {
         //   }
         // }
         
-
-        console.log(metaData,"metaDataID")
-        
        const structData = await getProviderMarketContrat()._idToNFT(id);
         let collectionId = structData?.collectionId?.toString();
-     
         let seller = structData?.seller;
-        
         let auctionData = await getProviderMarketContrat()._idToAuction(id);
-
         let highestBid = ethers.utils.formatEther(auctionData?.highestBid?.toString());
-
         listingType = structData?.listingType;
 
         let response
-        // let user_id
+        let nftLikes
 
         try {
           response = await apis.getNFTCollectionImage(collectionId);
-          console.log(response?.data?.data?.user_id, 'ressssss');
+          console.log(response?.data?.data, 'ressssss');
         } catch (error) {
           console.log(error)
         }
-      
+
+        try {
+          // nftLikes = await getNFTLike(response?.data?.data?.user?.wallet_address , id);
+          nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
+          console.log(nftLikes?.data?.data?.like_count, 'ressssss');
+        } catch (error) {
+          
+        }
+        console.log(response?.data?.data, 'ddddddd');
         const collectionImages = response?.data?.data?.media?.[0]?.original_url;
         const user_id = response?.data?.data?.user_id;
         const price = ethers.utils.formatEther(structData?.price?.toString());
@@ -211,7 +224,8 @@ const LandingPage = ({ search, setSearch }) => {
                 highestBidder: auctionData?.highestBidder?.toString(),
                 collectionImages: collectionImages,
                 seller: auctionData?.seller?.toString(),
-                user_id:user_id
+                user_id:user_id,
+                nft_like:nftLikes?.data?.data?.like_count
               };
               myAuctions.push(nftData);
               setNftListAuction((prev) => [...prev, nftData]);
@@ -402,7 +416,7 @@ const [counterData , setCounterData] = useState('')
               <div className="col-lg-12">
                 <div className="header">
                   <div className="left">Top Collection</div>
-                  <Link to="/search">
+                  <Link to="/top-collection">
                     <div className="right">View more markets</div>
                   </Link>
                 </div>
@@ -444,6 +458,7 @@ const [counterData , setCounterData] = useState('')
                         seller={item?.seller}
                         size={'col-lg-3'}
                         user_id={item?.user_id}
+                        nft_like={item?.nft_like}
                       />
                       </>
                     ))}

@@ -361,6 +361,12 @@ const User = ({ search, setSearch }) => {
       console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
       console.log(collectionImages, "trrrr");
 
+      let nftLikes
+      try {nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)} 
+      catch (error) {
+
+      }
+        
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
@@ -428,7 +434,8 @@ const User = ({ search, setSearch }) => {
               highestBidder: auctionData?.highestBidder?.toString(),
               seller: auctionData?.seller?.toString(),
               startTime: auctionData?.startTime?.toString(),
-              user_id:user_id
+              user_id:user_id,
+              nft_like: nftLikes?.data?.data?.like_count
             };
             // myAuctions.push(nftData);
 
@@ -970,6 +977,7 @@ const User = ({ search, setSearch }) => {
                               collectionImages={item?.collectionImages}
                               userAddress={userAddress}
                               user_id={item?.user_id}
+                              nft_like={item?.nft_like}
                             />
                           ))}
                         </>
@@ -1067,6 +1075,7 @@ const User = ({ search, setSearch }) => {
                               userAddress={userAddress}
                               size={'col-lg-3'}
                               user_id={item?.user_id}
+                              nft_like={item?.nft_like}
                             />
                           ))}
                         </>
