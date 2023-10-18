@@ -69,25 +69,25 @@ const BuyNow = ({
   let buyerPlan = getBuyerPlan;
 
   const { account, checkIsWalletConnected } = useContext(Store);
+  
+  const userWalletAddress = localStorage.getItem("userAddress")
 
   useEffect(() => {
     checkIsWalletConnected()
   }, [account])
 
   const platformFeeCalculate = async (_amount, _buyerPercent) => {
-    let _amountToDeduct;
-    _amountToDeduct = (_amount * _buyerPercent) / 100;
-    return _amountToDeduct;
+    return (_amount * _buyerPercent) / 100;
   };
 
-  const userWalletAddress = localStorage.getItem("userAddress")
+
+
+
   const getPriceInUSD = async () => {
-
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-
     let _buyerPercent;
-    console.log("buyerPlan asd", buyerPlan);
 
+    console.log("buyerPlan asd", buyerPlan);
     if (buyerPlan == 4) {
       _buyerPercent = 0;
     } else if (buyerPlan == 3) {
@@ -95,7 +95,6 @@ const BuyNow = ({
     } else {
       _buyerPercent = 1.5;
     }
-
     console.log("_buyerPercent", _buyerPercent);
 
     const marketplaceContract = new Contract(
@@ -105,13 +104,16 @@ const BuyNow = ({
     );
 
     const structData = await marketplaceContract._idToNFT(id);
-    const structData2 = await marketplaceContract._idToNFT2(id);
 
-    let discount = +structData2.fanDiscountPercent.toString();
-    console.log("fanDiscountPercent", discount);
+    // const structData2 = await marketplaceContract._idToNFT2(id);
+
+    // let discount = +structData2.fanDiscountPercent.toString();
+    // console.log("fanDiscountPercent", discount);
 
     let nftEthPrice = ethers.utils.formatEther(structData?.price?.toString());
-    setPriceETH(nftEthPrice);
+    
+    setPriceETH(nftEthPrice?.toString());
+    
     let priceETH = nftEthPrice;
     let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
     setPlatformFeeETH(feeETH);
@@ -120,13 +122,13 @@ const BuyNow = ({
 
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    let priceInETH = dollarPriceOfETH?.toString() / 1e18;
 
     let oneETHInUSD = 1 / priceInETH;
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
     priceInUSD = Math.ceil(priceInUSD);
-    setAmountUSD(priceInUSD.toString());
+    setAmountUSD(priceInUSD?.toString());
 
     let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercent);
     setPlatformFeeUSDT(Math.ceil(feeUSD));
@@ -134,36 +136,37 @@ const BuyNow = ({
     // let fee = Math.ceil((priceInUSD * 3) / 100);
     // setPlatformFee(fee);
 
-    console.log("discount", discount);
+    // console.log("discount", discount);
 
-    if (discount != 0) {
-      let discountedEthPrice = (nftEthPrice * discount) / 100;
-      // let discountedEthPrice = (nftEthPrice * discount) / 100;
-      let priceETH = discountedEthPrice;
-      setDiscountedEth(discountedEthPrice.toFixed(2));
-      console.log("discountedEthPrice", discountedEthPrice);
+    // if (discount != 0) {
+    //   let discountedEthPrice = (nftEthPrice * discount) / 100;
+    //   // let discountedEthPrice = (nftEthPrice * discount) / 100;
+    //   let priceETH = discountedEthPrice;
+    //   setDiscountedEth(discountedEthPrice.toFixed(2));
+    //   console.log("discountedEthPrice", discountedEthPrice);
 
-      // let dollarPriceOfETH = 1831;
+    //   // let dollarPriceOfETH = 1831;
 
-      let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-      let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
-      console.log("ssss feeETH", feeETH);
-      console.log("ssss priceInETH", priceInETH);
-      // setDiscountedPlatformFeeETH(Math.ceil(feeETH));
-      setDiscountedPlatformFeeETH(feeETH);
-      console.log("ssss Math.ceil(feeETH)", Math.ceil(feeETH));
-      let oneETHInUSD = 1 / priceInETH;
-      let priceInUSD = priceETH;
-      priceInUSD = oneETHInUSD * priceInUSD;
-      priceInUSD = Math.ceil(priceInUSD);
-      setDiscountedAmountUSD(priceInUSD?.toString());
-      // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
-      let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercent);
-      feeUSD = Math.ceil(feeUSD);
-      // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-      setDiscountedPlatformFeeUSDT(feeUSD);
-    }
+    //   let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    //   let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    //   let feeETH = await platformFeeCalculate(priceETH, _buyerPercent);
+    //   console.log("ssss feeETH", feeETH);
+    //   console.log("ssss priceInETH", priceInETH);
+    //   // setDiscountedPlatformFeeETH(Math.ceil(feeETH));
+    //   setDiscountedPlatformFeeETH(feeETH);
+    //   console.log("ssss Math.ceil(feeETH)", Math.ceil(feeETH));
+    //   let oneETHInUSD = 1 / priceInETH;
+    //   let priceInUSD = priceETH;
+    //   priceInUSD = oneETHInUSD * priceInUSD;
+    //   priceInUSD = Math.ceil(priceInUSD);
+    //   setDiscountedAmountUSD(priceInUSD?.toString());
+    //   // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
+    //   let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercent);
+    //   feeUSD = Math.ceil(feeUSD);
+    //   // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+    //   setDiscountedPlatformFeeUSDT(feeUSD);
+    // }
+
   };
 
   const checkSeller = async () => {
@@ -190,8 +193,8 @@ const BuyNow = ({
   };
 
   useEffect(() => {
-
   }, [fiatAmount])
+
   useEffect(() => {
     checkSeller();
   }, []);
@@ -206,7 +209,6 @@ const BuyNow = ({
       console.log("Error: ", e);
     }
   };
-
 
 
   const onClose = useCallback(() => {
@@ -276,6 +278,7 @@ const BuyNow = ({
     console.log("3333333333333");
 
     const structData = await marketplaceContract._idToNFT(id);
+
     console.log("4444444444444");
 
     let nftEthPrice = ethers.utils.formatEther(structData?.price?.toString());
@@ -286,20 +289,17 @@ const BuyNow = ({
     var value = amount?.toString();
     console.log("ETH amount", value);
 
-    let checkFan = await marketplaceContract.checkFan(id);
-
-    const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2?.fanDiscountPercent?.toString();
-
-    if (checkFan && discount != 0) {
-      fee = +discountedPlatformFeeETH;
-      console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
-      console.log("www discountedEth", discountedEth);
-
-      // check this
-      amount = +discountedEth + fee;
-      value = amount?.toString();
-    }
+    // let checkFan = await marketplaceContract.checkFan(id);
+    // const structData2 = await marketplaceContract._idToNFT2(id);
+    // let discount = +structData2?.fanDiscountPercent?.toString();
+    // if (checkFan && discount != 0) {
+    //   fee = +discountedPlatformFeeETH;
+    //   console.log("www discountedPlatformFeeETH", discountedPlatformFeeETH);
+    //   console.log("www discountedEth", discountedEth);
+    //   // check this
+    //   amount = +discountedEth + fee;
+    //   value = amount?.toString();
+    // }
 
     console.log("www paymentMethod", paymentMethod);
     console.log("www id", id);
@@ -359,28 +359,30 @@ const BuyNow = ({
     let amountInWei = amount * 10 ** 6;
     amountInWei = amountInWei?.toString();
 
-    let checkFan = await marketplaceContract.checkFan(id);
-    console.log("checkFan  ", checkFan);
-    const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2?.fanDiscountPercent?.toString();
+    // let checkFan = await marketplaceContract.checkFan(id);
+    // console.log("checkFan  ", checkFan);
+    // const structData2 = await marketplaceContract._idToNFT2(id);
+    // let discount = +structData2?.fanDiscountPercent?.toString();
 
-    if (checkFan && discount != 0) {
-      fee = +discountedPlatformFeeUSDT;
-      console.log("fee", fee);
-      console.log("www platformFeeUSDT", platformFeeUSDT);
-      console.log("www amountUSD", fee);
+    // if (checkFan && discount != 0) {
+    //   fee = +discountedPlatformFeeUSDT;
+    //   console.log("fee", fee);
+    //   console.log("www platformFeeUSDT", platformFeeUSDT);
+    //   console.log("www amountUSD", fee);
 
-      console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
-      console.log("www discountedAmountUSD", discountedAmountUSD);
+    //   console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
+    //   console.log("www discountedAmountUSD", discountedAmountUSD);
 
-      amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
-      amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei?.toString();
+    //   amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
+    //   amountInWei = amount * 10 ** 6;
+    //   amountInWei = amountInWei?.toString();
 
-      console.log("www fee", fee);
-      console.log("www amount", amount);
-      console.log("www amountInWei", amountInWei);
-    }
+    //   console.log("www fee", fee);
+    //   console.log("www amount", amount);
+    //   console.log("www amountInWei", amountInWei);
+    // }
+
+
     console.log("amountInWei  ", amountInWei);
     console.log(
       "MARKETPLACE_CONTRACT_ADDRESS.address  ",
@@ -459,28 +461,28 @@ const BuyNow = ({
     let amountInWei = amount * 10 ** 6;
     amountInWei = amountInWei?.toString();
 
-    let checkFan = await marketplaceContract.checkFan(id);
-    console.log("checkFan  ", checkFan);
-    const structData2 = await marketplaceContract._idToNFT2(id);
-    let discount = +structData2?.fanDiscountPercent?.toString();
+    // let checkFan = await marketplaceContract.checkFan(id);
+    // console.log("checkFan  ", checkFan);
+    // const structData2 = await marketplaceContract._idToNFT2(id);
+    // let discount = +structData2?.fanDiscountPercent?.toString();
 
-    if (checkFan && discount != 0) {
-      fee = +discountedPlatformFeeUSDT;
-      console.log("fee", fee);
-      console.log("www platformFeeUSDT", platformFeeUSDT);
-      console.log("www amountUSD", fee);
+    // if (checkFan && discount != 0) {
+    //   fee = +discountedPlatformFeeUSDT;
+    //   console.log("fee", fee);
+    //   console.log("www platformFeeUSDT", platformFeeUSDT);
+    //   console.log("www amountUSD", fee);
 
-      console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
-      console.log("www discountedAmountUSD", discountedAmountUSD);
+    //   console.log("www discountedPlatformFeeUSDT", discountedPlatformFeeUSDT);
+    //   console.log("www discountedAmountUSD", discountedAmountUSD);
 
-      amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
-      amountInWei = amount * 10 ** 6;
-      amountInWei = amountInWei?.toString();
+    //   amount = Math.ceil(Number(discountedAmountUSD)) + Math.ceil(fee);
+    //   amountInWei = amount * 10 ** 6;
+    //   amountInWei = amountInWei?.toString();
 
-      console.log("www fee", fee);
-      console.log("www amount", amount);
-      console.log("www amountInWei", amountInWei);
-    }
+    //   console.log("www fee", fee);
+    //   console.log("www amount", amount);
+    //   console.log("www amountInWei", amountInWei);
+    // }
 
     // ye wala bhej USD ki amount h ye 
     console.log("ye usd ki amount h", amount);

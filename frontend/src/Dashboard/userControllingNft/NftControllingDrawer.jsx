@@ -169,10 +169,10 @@ function NftControllingDrawer({
     );
 
     const structData = await marketplaceContract._idToNFT(id);
-    const structData2 = await marketplaceContract._idToNFT2(id);
+    // const structData2 = await marketplaceContract._idToNFT2(id);
 
-    let discount = +structData2.fanDiscountPercent.toString();
-    console.log("fanDiscountPercent", discount);
+    // let discount = +structData2.fanDiscountPercent.toString();
+    // console.log("fanDiscountPercent", discount);
 
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
     setPriceETH(nftEthPrice);
@@ -198,32 +198,32 @@ function NftControllingDrawer({
     // let fee = Math.ceil((priceInUSD * 3) / 100);
     // setPlatformFee(fee);
 
-    if (discount != 0) {
-      let discountedEthPrice = (nftEthPrice * discount) / 100;
-      // let discountedEthPrice = (nftEthPrice * discount) / 100;
-      let priceETH = discountedEthPrice;
-      // platformFeeCalculate(priceETH, _buyerPercentFromDB);
-      setDiscountedEth(discountedEthPrice.toFixed(2));
-      console.log("discountedEthPrice", discountedEthPrice);
+    // if (discount != 0) {
+    //   let discountedEthPrice = (nftEthPrice * discount) / 100;
+    //   // let discountedEthPrice = (nftEthPrice * discount) / 100;
+    //   let priceETH = discountedEthPrice;
+    //   // platformFeeCalculate(priceETH, _buyerPercentFromDB);
+    //   setDiscountedEth(discountedEthPrice.toFixed(2));
+    //   console.log("discountedEthPrice", discountedEthPrice);
 
-      // let dollarPriceOfETH = 1831;
+    //   // let dollarPriceOfETH = 1831;
 
-      let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-      let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
+    //   let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
+    //   let priceInETH = dollarPriceOfETH.toString() / 1e18;
+    //   let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
 
-      setDiscountedPlatformFeeETH(Math.ceil(feeETH));
-      let oneETHInUSD = 1 / priceInETH;
-      let priceInUSD = priceETH;
-      priceInUSD = oneETHInUSD * priceInUSD;
-      priceInUSD = Math.ceil(priceInUSD);
-      setDiscountedAmountUSD(priceInUSD.toString());
-      // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
-      let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-      feeUSD = Math.ceil(feeUSD);
-      // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-      setDiscountedPlatformFeeUSDT(feeUSD);
-    }
+    //   setDiscountedPlatformFeeETH(Math.ceil(feeETH));
+    //   let oneETHInUSD = 1 / priceInETH;
+    //   let priceInUSD = priceETH;
+    //   priceInUSD = oneETHInUSD * priceInUSD;
+    //   priceInUSD = Math.ceil(priceInUSD);
+    //   setDiscountedAmountUSD(priceInUSD.toString());
+    //   // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
+    //   let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+    //   feeUSD = Math.ceil(feeUSD);
+    //   // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
+    //   setDiscountedPlatformFeeUSDT(feeUSD);
+    // }
   };
 
   const getNFTDetailByNFTTokenId = async () => {

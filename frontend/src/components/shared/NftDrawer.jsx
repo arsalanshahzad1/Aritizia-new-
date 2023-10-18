@@ -515,13 +515,10 @@ const ProfileDrawer = ({
         collection_id: collectionId?.toString(),
         listing_type: listingType?.toString(),
       };
-
       addListToPost(listedData);
-
       console.log("listedData", listedData);
-
       nftDataPost();
-      toast.error("Nft listed");
+      toast.success("NFT listed");
     }
   };
 

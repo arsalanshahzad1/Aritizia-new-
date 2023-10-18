@@ -410,9 +410,7 @@ function CollectionProfile({ search, setSearch }) {
       NFT_CONTRACT_ABI.abi,
       provider
     );
-    // const signer = provider.getSigner();
-    const address = await signer.getAddress();
-
+    
 
     let listingType;
 
@@ -425,12 +423,10 @@ function CollectionProfile({ search, setSearch }) {
     // let mintedTokens = [1, 4, 2];
     const myArray = Object.values(nftIds);
 
-    let myNFTs = [];
-    let myAuctions = [];
+  
 
     for (let i = 0; i < myArray?.length; i++) {
       let id;
-      let tempid = i
       id = myArray[i] - 1;
       // id = mintedTokens[i];
 
@@ -444,12 +440,12 @@ function CollectionProfile({ search, setSearch }) {
       if (firstOwner != "0x0000000000000000000000000000000000000000") {
         const metaData = await nftContract?.tokenURI(id);
 
-        const fanNftData = await marketplaceContract._idToNFT2(id);
+        // const fanNftData = await marketplaceContract._idToNFT2(id);
 
-        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+        // let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
         let seller = structData?.seller;
 
-        setDiscountPrice(discountOnNFT);
+        // setDiscountPrice(discountOnNFT);
         let collectionId = structData?.collectionId?.toString();
 
         let auctionData = await marketplaceContract._idToAuction(id);

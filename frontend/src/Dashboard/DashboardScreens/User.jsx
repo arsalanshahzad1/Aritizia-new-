@@ -512,11 +512,11 @@ const User = ({ search, setSearch }) => {
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
-      listingType = structData.listingType;
+      listingType = structData?.listingType;
 
-      console.log("Owner of nft", structData.owner);
+      console.log("Owner of nft", structData?.owner);
 
-      const price = ethers.utils.formatEther(structData.price.toString());
+      const price = ethers.utils.formatEther(structData?.price?.toString());
 
       axios
         .get(metaData)

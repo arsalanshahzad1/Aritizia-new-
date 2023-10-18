@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+//SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
 interface IUniswapV2Router01 {
@@ -222,7 +222,7 @@ error invalidPrice();
 error invalidListingFee();
 error invalidListingType();
 
-contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
+contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter public _nftsSold;
     Counters.Counter public _nftCount;
@@ -237,13 +237,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
 
     mapping(uint256 => NFT) public _idToNFT;
 
-    mapping(uint256 => NFT2) public _idToNFT2;
+    // mapping(uint256 => NFT2) public _idToNFT2;
 
     // neechey wali dono mappings me key address artist ka h
 
-    mapping(address => mapping(address => bool)) public isFan;
+    // mapping(address => mapping(address => bool)) public isFan;
 
-    mapping(address => address[]) public fanLists;
+    // mapping(address => address[]) public fanLists;
 
     mapping(address => uint256[]) public bannedNfts;
 
@@ -315,11 +315,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
         uint256 collectionId;
     }
 
-    struct NFT2 {
-        uint256 tokenId;
-        bool onlyFans;
-        uint256 fanDiscountPercent;
-    }
+    // struct NFT2 {
+    //     uint256 tokenId;
+    //     bool onlyFans;
+    //     uint256 fanDiscountPercent;
+    // }
 
     struct Bid {
         address bidder;
@@ -339,9 +339,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
         uint256 newTime
     );
 
-    event addedFans(address[] fans);
+    // event addedFans(address[] fans);
 
-    event removeFan(address fan);
+    // event removeFan(address fan);
 
     event approvalUpdate(uint256 tokenId, bool decision);
 
@@ -383,8 +383,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
-    address public UNISWAP_ROUTER_ADDRESS =
-        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+    address public UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
     address public USDT_ADDRESS = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
 
     IUniswapV2Router02 uniswapRouter;
@@ -598,7 +597,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
                     _collectionId
                 );
 
-                _idToNFT2[_tokenId[i]] = NFT2(_tokenId[i], false, 0);
+                // _idToNFT2[_tokenId[i]] = NFT2(_tokenId[i], false, 0);
 
                 if (_listingType == uint256(ListingType.Auction)) {
                     _idToAuction[_tokenId[i]] = Auction(
@@ -656,6 +655,19 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
             nft.seller != msg.sender,
             "An owner cannot purchase its own NFT."
         );
+         require(
+            !bannedUsers[nft.seller],
+            "The owner of this nft is blacklisted on this platform."
+        );
+         require(
+            nft.listingType == ListingType.FixedPrice,
+            "This NFT is not at auction"
+        );
+          require(
+                _amountInETHInWei >= nft.price,
+                "Not enough amount to cover asking price"
+            );
+
 
         // uint256 ethPriceInUsdt = getLatestUSDTPrice();
         uint256 _sellerPercent = getSubscriptionFee(_sellerPlan);
@@ -666,16 +678,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
         // _amountInETHInWei = _amountInETHInWei / 10 ** 18;
         // uint256 _amountInETHInWei = _amountETHWei;
         // console.log("Test 0 _amountInETHInWei", _amountInETHInWei);
-        require(
-            !bannedUsers[nft.seller],
-            "The owner of this nft is blacklisted on this platform."
-        );
+       
 
-        require(
-            nft.listingType == ListingType.FixedPrice,
-            "This NFT is not at auction"
-        );
-
+       
         // require(nft.listed == true, "Nft is not listed to purchase");
 
         // if condition ajayegi jo check kregi k agr
@@ -691,33 +696,34 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
         //     _amountToBePaid = _amountInETHInWei;
         // }
 
-        if (isFan[_idToNFT[_tokenId].seller][msg.sender]) {
-            // uint256 _discountedAmountToBePaidUSDT = _amountToBePaid -
-            //     discountCalculate(
-            //         _amount,
-            //         _idToNFT2[_tokenId].fanDiscountPercent
-            //     );
-            // uint256 _discountedAmountToBePaidETH = _amountToBePaid -
-            //     discountCalculate(
-            //         _amountInETHInWei,
-            //         _idToNFT2[_tokenId].fanDiscountPercent
-            //     );
-            // if (_paymentMethod == 1) {
-            //     _amountToBePaid = _discountedAmountToBePaidUSDT;
-            // } else {
-            //     _amountToBePaid = _discountedAmountToBePaidETH;
-            // }
-            // console.log("Is a fan", _amountToBePaid);
-            // require(
-            //     _amountInETHInWei >= _discountedAmountToBePaidETH,
+        // if (isFan[_idToNFT[_tokenId].seller][msg.sender]) {
+        //     // uint256 _discountedAmountToBePaidUSDT = _amountToBePaid -
+        //     //     discountCalculate(
+        //     //         _amount,
+        //     //         _idToNFT2[_tokenId].fanDiscountPercent
+        //     //     );
+        //     // uint256 _discountedAmountToBePaidETH = _amountToBePaid -
+        //     //     discountCalculate(
+        //     //         _amountInETHInWei,
+        //     //         _idToNFT2[_tokenId].fanDiscountPercent
+        //     //     );
+        //     // if (_paymentMethod == 1) {
+        //     //     _amountToBePaid = _discountedAmountToBePaidUSDT;
+        //     // } else {
+        //     //     _amountToBePaid = _discountedAmountToBePaidETH;
+        //     // }
+        //     // console.log("Is a fan", _amountToBePaid);
+        //     // require(
+        //     //     _amountInETHInWei >= _discountedAmountToBePaidETH,
+        //     //     "Not enough amount to cover asking price"
+        //     // );
+        // } else {
+            //    require(
+            //     _amountInETHInWei >= nft.price,
             //     "Not enough amount to cover asking price"
             // );
-        } else {
-            require(
-                _amountInETHInWei >= nft.price,
-                "Not enough amount to cover asking price"
-            );
-        }
+          
+        // }
 
         bool check = false;
 
@@ -820,7 +826,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
             nft.seller = payable(address(0));
             nft.listed = false;
             _nftsSold.increment();
-            _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
+            // _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
         }
     }
 
@@ -852,6 +858,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
             "This NFT is not at auction"
         );
 
+        require(
+                msg.value >= nft.price,
+                "Not enough ether to cover asking price"
+        );
+
         require(nft.listed == true, "Nft is not listed to purchase");
 
         bool check = false;
@@ -862,28 +873,28 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
 
         // if condition ajayegi jo check kregi k agr
         // if (_idToNFT2[_tokenId].onlyFans) {
-        if (isFan[_idToNFT[_tokenId].seller][msg.sender]) {
-            // require(
-            //     isFan[_idToNFT[_tokenId].seller][msg.sender],
-            //     "You are not in the fan list"
-            // );
-            // _amountToBePaid =
-            //     msg.value -
-            //     discountCalculate(
-            //         msg.value,
-            //         _idToNFT2[_tokenId].fanDiscountPercent
-            //     );
-            // require(
-            //     msg.value >= _amountToBePaid,
-            //     "Not enough ether to cover asking price"
-            // );
-        } else {
-            require(
-                msg.value >= nft.price,
-                "Not enough ether to cover asking price"
-            );
-            // _amountToBePaid = msg.value;
-        }
+        // if (isFan[_idToNFT[_tokenId].seller][msg.sender]) {
+        //     // require(
+        //     //     isFan[_idToNFT[_tokenId].seller][msg.sender],
+        //     //     "You are not in the fan list"
+        //     // );
+        //     // _amountToBePaid =
+        //     //     msg.value -
+        //     //     discountCalculate(
+        //     //         msg.value,
+        //     //         _idToNFT2[_tokenId].fanDiscountPercent
+        //     //     );
+        //     // require(
+        //     //     msg.value >= _amountToBePaid,
+        //     //     "Not enough ether to cover asking price"
+        //     // );
+        // } else {
+        //     require(
+        //         msg.value >= nft.price,
+        //         "Not enough ether to cover asking price"
+        //     );
+        //     // _amountToBePaid = msg.value;
+        // }
 
         if (nft.seller == nft.firstOwner) {
             _amountToBePaid =
@@ -969,7 +980,155 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
             nft.seller = payable(address(0));
             nft.listed = false;
             _nftsSold.increment();
-            _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
+            // _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
+        }
+    }
+
+
+        // // Buy an NFT with ETH
+    function buyWithFIAT(
+        address _nftContract,
+        uint256 _paymentMethod,
+        uint256 _tokenId,
+        uint8 _sellerPlan,
+        uint8 _buyerPlan,
+        uint256 _amountSent
+    ) public payable isApproved(_tokenId) isUserBanned nonReentrant {
+        NFT storage nft = _idToNFT[_tokenId];
+
+        uint256 _sellerPercent = getSubscriptionFee(_sellerPlan);
+        uint256 _buyerPercent = getSubscriptionFee(_buyerPlan);
+
+        require(
+            nft.seller != msg.sender,
+            "An owner cannot purchase its own NFT."
+        );
+
+        require(
+            !bannedUsers[nft.seller],
+            "The owner of this nft is blacklisted on this platform."
+        );
+
+        require(
+            nft.listingType == ListingType.FixedPrice,
+            "This NFT is not at auction"
+        );
+
+        require(nft.listed == true, "Nft is not listed to purchase");
+
+        bool check = false;
+        address payable buyer = payable(msg.sender);
+
+        // uint256 _amountAfterRoyalty;
+        uint256 _amountToBePaid = _amountSent;
+
+        // // if condition ajayegi jo check kregi k agr
+        // // if (_idToNFT2[_tokenId].onlyFans) {
+        // if (isFan[_idToNFT[_tokenId].seller][msg.sender]) {
+        //     // require(
+        //     //     isFan[_idToNFT[_tokenId].seller][msg.sender],
+        //     //     "You are not in the fan list"
+        //     // );
+        //     // _amountToBePaid =
+        //     //     msg.value -
+        //     //     discountCalculate(
+        //     //         msg.value,
+        //     //         _idToNFT2[_tokenId].fanDiscountPercent
+        //     //     );
+        //     // require(
+        //     //     msg.value >= _amountToBePaid,
+        //     //     "Not enough ether to cover asking price"
+        //     // );
+        // } else {
+        //     require(
+        //         _amountSent >= nft.price,
+        //         "Not enough ether to cover asking price"
+        //     );
+        //     // _amountToBePaid = msg.value;
+        // }
+
+        if (nft.seller == nft.firstOwner) {
+            uint256 platformFee = platformFeeCalculate(
+                _amountToBePaid,
+                _sellerPercent,
+                _buyerPercent
+            );
+
+            _amountToBePaid = _amountToBePaid - platformFee;
+            payable(_marketOwner).transfer(platformFee);
+
+            if (_paymentMethod == 0) {
+                payable(nft.seller).transfer(_amountToBePaid);
+                check = true;
+            } else {
+                uint256 _amountOfUSDT = _amountToBePaid / getLatestUSDTPrice();
+                _amountOfUSDT = _amountOfUSDT * 10 ** 6;
+                //swap _amountToBePaid here to USDT and transfer
+                swapETHForUSDT(_amountOfUSDT, 0);
+                // get the equivalent of _amountToBePaid from getUSDTPrice
+                // uint256 _amountToBePaidInUSDT = _amountToBePaid *
+                //     getLatestUSDTPrice();
+                // // send USDT to nft.seller
+
+                // uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaidInUSDT *
+                //         10 ** 6;
+
+                USDTtoken.transfer(nft.seller, _amountOfUSDT);
+                check = true;
+            }
+        } else {
+            uint256 _amount = _amountToBePaid;
+            uint256 _royaltyFee = royaltyCalculate(_amount, nft.royaltyPrice);
+            // _amountAfterRoyalty = _amount - _royaltyFee;
+            uint256 platformFee = platformFeeCalculate(
+                _amountToBePaid,
+                _sellerPercent,
+                _buyerPercent
+            );
+
+            _amountToBePaid = _amount - _royaltyFee - platformFee;
+
+            payable(_marketOwner).transfer(platformFee);
+            payable(nft.firstOwner).transfer(_royaltyFee);
+            if (_paymentMethod == 0) {
+                payable(nft.seller).transfer(_amountToBePaid);
+                check = true;
+            } else {
+                //swap _amountToBePaid here to USDT and transfer
+                uint256 _amountOfUSDT = _amountToBePaid / getLatestUSDTPrice();
+                _amountOfUSDT = _amountOfUSDT * 10 ** 6;
+                swapETHForUSDT(_amountOfUSDT, 0);
+                // get the equivalent of _amountToBePaid from getUSDTPrice
+                // uint256 _amountToBePaidInUSDT = _amountToBePaid /
+                //     getLatestUSDTPrice();
+                // // send USDT to nft.seller
+                // uint256 _amountToBePaidInUSDTInDecimals = _amountToBePaidInUSDT *
+                //         10 ** 6;
+                USDTtoken.transfer(nft.seller, _amountOfUSDT);
+                check = true;
+            }
+        }
+
+        if (check) {
+            IERC721(_nftContract).transferFrom(
+                address(this),
+                buyer,
+                nft.tokenId
+            );
+
+            emit NFTSold(
+                // _nftContract,
+                nft.tokenId,
+                nft.seller,
+                buyer,
+                _amountSent
+            );
+
+            nft.owner = buyer;
+            nft.seller = payable(address(0));
+            nft.listed = false;
+            _nftsSold.increment();
+            // _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
         }
     }
 
@@ -1039,12 +1198,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
         uint256 _bidCurrency
     ) public payable auctionIsLive(_tokenId) isApproved(_tokenId) isUserBanned {
         bool check = false;
-        if (_idToNFT2[_tokenId].onlyFans) {
-            require(
-                isFan[_idToNFT[_tokenId].seller][msg.sender],
-                "You are not in the fan list"
-            );
-        }
+
+        // if (_idToNFT2[_tokenId].onlyFans) {
+            
+        // require(
+        //         isFan[_idToNFT[_tokenId].seller][msg.sender],
+        //         "You are not in the fan list"
+        //     );
+        // }
 
         if (_idToAuction[_tokenId].highestBidder == address(0)) {
             require(
@@ -1116,12 +1277,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
     ) public payable auctionIsLive(_tokenId) isApproved(_tokenId) isUserBanned {
         // uint256 ethPriceInUsdt = getLatestUSDTPrice();
         bool check = false;
-        if (_idToNFT2[_tokenId].onlyFans) {
-            require(
-                isFan[_idToNFT[_tokenId].seller][msg.sender],
-                "You are not in the fan list"
-            );
-        }
+
+        // if (_idToNFT2[_tokenId].onlyFans) {
+        //     require(
+        //         isFan[_idToNFT[_tokenId].seller][msg.sender],
+        //         "You are not in the fan list"
+        //     );
+        // }
+
         // uint256 _amountInETHInWei = _amount * 10 ** 12;
         // _amountInETHInWei = _amountInETHInWei * ethPriceInUsdt;
         // _amountInETHInWei = _amountInETHInWei / 10 ** 18;
@@ -1409,7 +1572,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
             nft.seller = payable(address(0));
             nft.listed = false;
             _nftsSold.increment();
-            _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
+            // _idToNFT2[nft.tokenId].fanDiscountPercent = 0;
         }
 
         // console.log("Test 60");
@@ -1442,52 +1605,58 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
         return _amountToDeduct;
     }
 
-    function changeFanDiscountPercent(
-        uint256 _tokenId,
-        uint256 _newDiscountPercent
-    ) public {
-        require(
-            _idToNFT[_tokenId].seller == msg.sender,
-            "Only the owner of an nft can set discounted prices."
-        );
+    // function changeFanDiscountPercent(
+    //     uint256 _tokenId,
+    //     uint256 _newDiscountPercent
+    // ) public {
+    //     require(
+    //         _idToNFT[_tokenId].seller == msg.sender,
+    //         "Only the owner of an nft can set discounted prices."
+    //     );
 
-        _idToNFT2[_tokenId].fanDiscountPercent = _newDiscountPercent;
-    }
+    //     // _idToNFT2[_tokenId].fanDiscountPercent = _newDiscountPercent;
+    // }
 
-    function addFans(address[] memory fans) public {
-        address[] memory myFans = new address[](fans.length);
+    // function addFans(address[] memory fans) public {
+    //     address[] memory myFans = new address[](fans.length);
 
-        for (uint256 i = 0; i < fans.length; i++) {
-            address fan = fans[i];
-            require(fan != address(0), "Invalid fan address");
-            require(!isFan[msg.sender][fan], "Address is already a fan");
-                fanLists[msg.sender].push(fan);
-                isFan[msg.sender][fan] = true;
-                console.log("Fan added to list");
-                myFans[i] = fan;
-        }
+    //     for (uint256 i = 0; i < fans.length; i++) {
+    //         address fan = fans[i];
+    //         // require(fan != address(0), "Invalid fan address");
+    //         // require(!isFan[msg.sender][fan], "Address is already a fan");
+    //         if (fan == address(0)) {
+    //             console.log("Invalid fan address");
+    //         } else if (isFan[msg.sender][fan]) {
+    //             console.log("Address is already a fan");
+    //         } else {
+    //             fanLists[msg.sender].push(fan);
+    //             isFan[msg.sender][fan] = true;
+    //             console.log("Fan added to list");
+    //             myFans[i] = fan;
+    //         }
+    //     }
 
-        emit addedFans(myFans);
-    }
+    //     emit addedFans(myFans);
+    // }
 
-    function removeFans(address addressToRemove) public {
-        address[] storage fanList = fanLists[msg.sender];
-        for (uint256 i = 0; i < fanList.length; i++) {
-            if (fanList[i] == addressToRemove) {
-                fanList[i] = fanList[fanList.length - 1];
-                fanList.pop();
-                emit removeFan(addressToRemove);
-                break;
-            }
-        }
-    }
+    // function removeFans(address addressToRemove) public {
+    //     address[] storage fanList = fanLists[msg.sender];
+    //     for (uint256 i = 0; i < fanList.length; i++) {
+    //         if (fanList[i] == addressToRemove) {
+    //             fanList[i] = fanList[fanList.length - 1];
+    //             fanList.pop();
+    //             emit removeFan(addressToRemove);
+    //             break;
+    //         }
+    //     }
+    // }
 
-    function discountCalculate(
-        uint256 _amount,
-        uint256 _percent
-    ) internal pure returns (uint256) {
-        return (_amount * _percent) / 100;
-    }
+    // function discountCalculate(
+    //     uint256 _amount,
+    //     uint256 _percent
+    // ) internal pure returns (uint256) {
+    //     return (_amount * _percent) / 100;
+    // // }
 
     function banUser(address _user) public onlyOwner {
         bannedUsers[_user] = true;
@@ -1569,15 +1738,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable{
     ///////////////////////////////////////////////
     /////////////////////////////////////////////// 
 
-    function getFans(
-        address user
-    ) public view isUserBanned returns (address[] memory) {
-        return fanLists[user];
-    }
+    // function getFans(address user) public view isUserBanned returns (address[] memory) {
+    //     return fanLists[user];
+    // }
 
-    function checkFan(uint256 _tokenId) public view returns (bool) {
-        return isFan[_idToNFT[_tokenId].seller][msg.sender];
-    }
+    // function checkFan(uint256 _tokenId) public view returns (bool) {
+    //     return isFan[_idToNFT[_tokenId].seller][msg.sender];
+    // }
 
     function getCollectionNfts(
         uint256 _collectionId

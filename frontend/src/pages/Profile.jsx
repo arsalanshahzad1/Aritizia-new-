@@ -93,12 +93,13 @@ const Profile = ({ search, setSearch }) => {
   const getPurchasedNfts = async () => {
     try {
       const response = await apis.getPurchasedNfts(userId);
-      // console.log(response,"response")
+      console.log(response,"response")
       //Blockchain
       // getMyNfts();
       if (response?.data?.data?.length > 0) {
         getMyNfts(response?.data?.data);
       } else {
+        getMyNfts(0);
         setNftLoader(false)
       }
       setNftAuctionLoader(false)
@@ -164,11 +165,11 @@ const Profile = ({ search, setSearch }) => {
 
         const structData = await marketplaceContract._idToNFT(id);
 
-        const fanNftData = await marketplaceContract._idToNFT2(id);
+        // const fanNftData = await marketplaceContract._idToNFT2(id);
 
-        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+        // let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
-        setDiscountPrice(discountOnNFT);
+        // setDiscountPrice(discountOnNFT);
 
         let auctionData = await marketplaceContract._idToAuction(id);
 
@@ -178,7 +179,7 @@ const Profile = ({ search, setSearch }) => {
           auctionData?.highestBid?.toString()
         );
 
-        setDiscountPrice(discountOnNFT);
+        // setDiscountPrice(discountOnNFT);
 
         let collectionId = structData?.collectionId?.toString();
 
@@ -419,11 +420,11 @@ const Profile = ({ search, setSearch }) => {
 
       const structData = await marketplaceContract._idToNFT(id);
 
-      const fanNftData = await marketplaceContract._idToNFT2(id);
+      // const fanNftData = await marketplaceContract._idToNFT2(id);
 
-      let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+      // let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+      // setDiscountPrice(discountOnNFT);
 
-      setDiscountPrice(discountOnNFT);
       listingType = structData?.listingType;
 
       let auctionData = await marketplaceContract._idToAuction(id);
@@ -529,82 +530,144 @@ const Profile = ({ search, setSearch }) => {
       provider
     );
 
+    if(NFTid?.length > 0 ) {
+       //for database
+      for (let i = 0; i < NFTid?.length; i++) {
+        let id;
+        id = NFTid[i]
 
-    //for database
-    for (let i = 0; i < NFTid?.length; i++) {
-      let id;
-      id = NFTid[i];
-
-      //for blockchian
-      // let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
-
-      // for blockchian
-      // for (let i = 0; i < mintedTokens?.length; i++) {
-      //   let id;
-      //   id = mintedTokens[i]?.tokenId?.toString();
-
-      //  let collectionId = +mintedTokens?.[i]?.collectionId?.toString();
-      //   console.log(collectionId, "collectionId")
-      //   const response = await apis.getNFTCollectionImage(collectionId);
-      //   const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-      ////////
-
-
-      const structData = await marketplaceContract._idToNFT(id);
-      console.log("structData", structData)
-      //check if not listed
-      if (!structData?.listed && structData.owner.toString().toLowerCase() === userAddress.toString().toLowerCase()) {
-        let response;
-        try {
-          response = await apis.getNFTByTokenId(id);
-        } catch (error) {
-          console.log(error.message)
+        const structData = await marketplaceContract._idToNFT(id);
+    
+        //check if not listed
+        if (!structData?.listed && structData.owner.toString().toLowerCase() === userAddress.toString().toLowerCase()) {
+          
+          let response;
+  
+          try {
+            response = await apis.getNFTByTokenId(id);
+          } catch (error) {
+            console.log(error.message)
+          }
+  
+          const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
+          const user_id = response?.data?.data?.owner?.id;
+          // console.log("1asdasdasdasdasdaqsd" , response?.data?.data?.owner?.id)
+  
+          const metaData = await nftContract.tokenURI(id);
+  
+          const price = ethers.utils.formatEther(structData?.price?.toString());
+  
+          axios
+            .get(metaData)
+            .then((response) => {
+              const meta = response?.data;
+              let data = JSON.stringify(meta);
+  
+              data = data?.slice(2, -5);
+              data = data?.replace(/\\/g, "");
+  
+              data = JSON.parse(data);
+  
+              const crypto = data?.crypto;
+              const title = data?.title;
+              const image = data?.image;
+              const royalty = data?.royalty;
+              const description = data?.description;
+              const collection = data?.collection;
+  
+              const nftData = {
+                id: id,
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+                user_id: user_id
+              };
+              console.log(nftData, "nftDatanftData")
+              setUserNfts((prev) => [...prev, nftData]);
+            })
+            .catch((error) => {
+              console.error("Error fetching metadata:", error);
+           });
         }
+      }
+      }
 
-        const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
-        const user_id = response?.data?.data?.owner?.id;
-        // console.log("1asdasdasdasdasdaqsd" , response?.data?.data?.owner?.id)
+   else {
 
-        const metaData = await nftContract.tokenURI(id);
+       // for blockchian
+       let mintedTokens = await marketplaceContract.getMyNfts(userAddress);
+       console.log("mintedTokens",mintedTokens)
+       // for blockchian
+       for (let i = 0; i < mintedTokens?.length; i++) {
+        let id;
+        id = mintedTokens[i]?.tokenId?.toString();
 
-        const price = ethers.utils.formatEther(structData?.price?.toString());
+       let collectionId = +mintedTokens?.[i]?.collectionId?.toString();
+        console.log(collectionId, "collectionId")
 
-        axios
-          .get(metaData)
-          .then((response) => {
-            const meta = response?.data;
-            let data = JSON.stringify(meta);
-
-            data = data?.slice(2, -5);
-            data = data?.replace(/\\/g, "");
-
-            data = JSON.parse(data);
-
-            const crypto = data?.crypto;
-            const title = data?.title;
-            const image = data?.image;
-            const royalty = data?.royalty;
-            const description = data?.description;
-            const collection = data?.collection;
-
-            const nftData = {
-              id: id,
-              title: title,
-              image: image,
-              price: price,
-              crypto: crypto,
-              royalty: royalty,
-              description: description,
-              collection: collection,
-              collectionImages: collectionImages,
-              user_id: user_id
-            };
-            console.log(nftData, "nftDatanftData")
-            setUserNfts((prev) => [...prev, nftData]);
-          })
-          .catch((error) => {
-            console.error("Error fetching metadata:", error);
-          });
+        const structData = await marketplaceContract._idToNFT(id);
+        console.log("structData", structData)
+        //check if not listed
+        if (!structData?.listed && structData.owner.toString().toLowerCase() === userAddress.toString().toLowerCase()) {
+          
+          let response;
+  
+          try {
+            response = await apis.getNFTByTokenId(id);
+          } catch (error) {
+            console.log(error.message)
+          }
+  
+          const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
+          const user_id = response?.data?.data?.owner?.id;
+          console.log("1asdasdasdasdasdaqsd" , response)
+  
+          const metaData = await nftContract.tokenURI(id);
+  
+          const price = ethers.utils.formatEther(structData?.price?.toString());
+  
+          axios
+            .get(metaData)
+            .then((response) => {
+              const meta = response?.data;
+              let data = JSON.stringify(meta);
+  
+              data = data?.slice(2, -5);
+              data = data?.replace(/\\/g, "");
+  
+              data = JSON.parse(data);
+  
+              const crypto = data?.crypto;
+              const title = data?.title;
+              const image = data?.image;
+              const royalty = data?.royalty;
+              const description = data?.description;
+              const collection = data?.collection;
+  
+              const nftData = {
+                id: id,
+                title: title,
+                image: image,
+                price: price,
+                crypto: crypto,
+                royalty: royalty,
+                description: description,
+                collection: collection,
+                collectionImages: collectionImages,
+                user_id: user_id
+              };
+              console.log(nftData, "nftDatanftData")
+              setUserNfts((prev) => [...prev, nftData]);
+            })
+            .catch((error) => {
+              console.error("Error fetching metadata:", error);
+           });
+        }
       }
     }
     setUserNftLoader(false)

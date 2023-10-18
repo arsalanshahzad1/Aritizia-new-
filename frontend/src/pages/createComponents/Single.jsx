@@ -532,7 +532,7 @@ const Single = ({ search, setSearch }) => {
   const nftDataPost = async () => {
     const response = await apis.postListNft(listToPost.current[0]);
     if (response) {
-      toast.success("Nft listed", {
+      toast.success("NFT listed", {
         position: toast.POSITION.TOP_CENTER,
       });
 

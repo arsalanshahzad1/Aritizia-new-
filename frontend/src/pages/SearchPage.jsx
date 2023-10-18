@@ -263,10 +263,10 @@ const SearchPage = ({ search, setSearch }) => {
         const metaData = await nftContract.tokenURI(id);
         const structData = await marketplaceContract._idToNFT(id);
         let collectionId = structData.collectionId.toString();
-        const fanNftData = await marketplaceContract._idToNFT2(id);
-        let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
+        // const fanNftData = await marketplaceContract._idToNFT2(id);
+        // let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
 
-        setDiscountPrice(discountOnNFT);
+        // setDiscountPrice(discountOnNFT);
         let seller = structData?.seller;
 
         let auctionData = await marketplaceContract._idToAuction(id);

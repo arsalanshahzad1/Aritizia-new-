@@ -756,55 +756,55 @@ const PlaceABidDrawer = ({
     console.log(buyNowPrice, "buyNowPrice");
   };
 
-  const bidWithFIAT = async () => {
-    // console.log("startTime", startTime);
-    // console.log("endTime", endTime);
-    // console.log("price", price);
-    // console.log("isLive", isLive);
+  // const bidWithFIAT = async () => {
+  //   // console.log("startTime", startTime);
+  //   // console.log("endTime", endTime);
+  //   // console.log("price", price);
+  //   // console.log("isLive", isLive);
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum)
+  //   // Set signer
+  //   const signer = provider.getSigner()
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-    let time = await marketplaceContract.getCurrentTimestamp();
+  //   const marketplaceContract = new Contract(
+  //     MARKETPLACE_CONTRACT_ADDRESS.address,
+  //     MARKETPLACE_CONTRACT_ABI.abi,
+  //     provider
+  //   );
+  //   let time = await marketplaceContract.getCurrentTimestamp();
 
-    // console.log("block.timestamp", time);
-    let auctionData = await marketplaceContract._idToAuction(id);
+  //   // console.log("block.timestamp", time);
+  //   let auctionData = await marketplaceContract._idToAuction(id);
 
-    const structData = await marketplaceContract._idToNFT(id);
+  //   const structData = await marketplaceContract._idToNFT(id);
 
-    const getStatusOfAuction = await marketplaceContract.getStatusOfAuction(id);
-    console.log("ooo getStatusOfAuction ", getStatusOfAuction);
+  //   const getStatusOfAuction = await marketplaceContract.getStatusOfAuction(id);
+  //   console.log("ooo getStatusOfAuction ", getStatusOfAuction);
 
-    let highestBid = ethers.utils.formatEther(
-      auctionData?.highestBid?.toString()
-    );
+  //   let highestBid = ethers.utils.formatEther(
+  //     auctionData?.highestBid?.toString()
+  //   );
 
-    let startTime = auctionData?.startTime?.toString();
+  //   let startTime = auctionData?.startTime?.toString();
 
-    let endTime = auctionData?.endTime?.toString();
+  //   let endTime = auctionData?.endTime?.toString();
 
-    const unixTimestamp = Date.now();
+  //   const unixTimestamp = Date.now();
 
-    const currentDate = new Date(unixTimestamp);
+  //   const currentDate = new Date(unixTimestamp);
 
-    // Get the current time in hours, minutes, and seconds
-    const hours = currentDate.getHours();
-    const minutes = currentDate.getMinutes();
-    const seconds = currentDate.getSeconds();
+  //   // Get the current time in hours, minutes, and seconds
+  //   const hours = currentDate.getHours();
+  //   const minutes = currentDate.getMinutes();
+  //   const seconds = currentDate.getSeconds();
 
-    // Format the time with leading zeros if necessary
-    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
-      minutes
-    ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  //   // Format the time with leading zeros if necessary
+  //   const formattedTime = `${String(hours).padStart(2, "0")}:${String(
+  //     minutes
+  //   ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
-    console.log("Formatted time:", formattedTime);
-  };
+  //   console.log("Formatted time:", formattedTime);
+  // };
 
   let ethBid = false;
 
@@ -1505,7 +1505,7 @@ const PlaceABidDrawer = ({
                   Bid with USDT
                 </button>
               </div>
-              <div className="mobal-button-2">
+              {/* <div className="mobal-button-2">
                 <button
                   onClick={() => {
                     setBidFunction(2), setShowBuyOptionsStep2(true);
@@ -1513,7 +1513,7 @@ const PlaceABidDrawer = ({
                 >
                   Bid with FIAT
                 </button>
-              </div>
+              </div> */}
             </>
           ) : (
             <>

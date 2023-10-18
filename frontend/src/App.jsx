@@ -20,8 +20,6 @@ import CollectionProfile from "./pages/CollectionProfile";
 import ChatPage from "./Chat/ChatPage";
 import "react-toastify/dist/ReactToastify.css";
 import Art from "./pages/Art";
-// import WalletManager from "../src/methods/walletManager";
-import { ToastContainer } from "react-toastify";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Terms from "./pages/Terms";
@@ -106,10 +104,6 @@ function App() {
                 path="/"
                 element={<LandingPage search={search} setSearch={setSearch} />}
               />
-               <Route
-                  path="/other-profile"
-                  element={<OtherProfile search={search} setSearch={setSearch} />}
-                />
               <Route
                 path="/register"
                 element={<Register />}
@@ -143,16 +137,15 @@ function App() {
 
 
               <Route element={<ProtectedRoute />}>
-              <Route
-                  path="/art"
-                  element={<Art search={search} setSearch={setSearch} />}
-                />
 
                 <Route
                   path="/profile"
                   element={<Profile search={search} setSearch={setSearch} />}
                 />
-               
+                <Route
+                  path="/other-profile"
+                  element={<OtherProfile search={search} setSearch={setSearch} />}
+                />
                 {/* <Route
                 path="/user-profile"
                 element={<UserProfile search={search} setSearch={setSearch} />}
@@ -207,7 +200,10 @@ function App() {
                   path="/dashboard/*"
                   element={<DashboardMain search={search} setSearch={setSearch} />}
                 />
-                
+                <Route
+                  path="/art"
+                  element={<Art search={search} setSearch={setSearch} />}
+                />
 
 
               </Route>

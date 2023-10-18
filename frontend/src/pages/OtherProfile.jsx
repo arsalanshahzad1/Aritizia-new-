@@ -120,9 +120,9 @@ const OtherProfile = ({ search, setSearch }) => {
 
         const structData = await marketplaceContract._idToNFT(id);
 
-        const fanNftData = await marketplaceContract._idToNFT2(id);
+        // const fanNftData = await marketplaceContract._idToNFT2(id);
 
-        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+        // let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
 
         // setDiscountPrice(discountOnNFT);
 

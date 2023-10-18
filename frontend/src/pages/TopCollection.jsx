@@ -7,6 +7,7 @@ import Header from "./landingpage/Header";
 import Footer from "./landingpage/Footer";
 import Loader from "../components/shared/Loader";
 import PageTopSection from "../components/shared/PageTopSection";
+import { toast } from "react-toastify";
 
 const TopCollection = () => {
     const navigate = useNavigate();
