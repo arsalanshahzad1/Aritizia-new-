@@ -650,7 +650,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _amountInETHInWei
     ) public payable isApproved(_tokenId) isUserBanned nonReentrant {
         NFT storage nft = _idToNFT[_tokenId];
-        // console.log("Test 0 _amount", _amount);
+       
         require(
             nft.seller != msg.sender,
             "An owner cannot purchase its own NFT."

@@ -519,7 +519,9 @@ const Single = ({ search, setSearch }) => {
         price: ethers.utils.formatEther(price.toString()),
         collection_id: collectionId.toString(),
         listing_type: listingType.toString(),
+        user_id:user_id
       };
+      
       addListToPost(listedData);
       singleMinting = false;
       console.log("singleMinting", singleMinting);

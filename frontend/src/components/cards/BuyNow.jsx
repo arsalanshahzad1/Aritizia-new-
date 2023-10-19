@@ -416,6 +416,7 @@ const BuyNow = ({
     console.log("www address", NFT_CONTRACT_ADDRESS.address);
     console.log("www amountInWei", amountInWei);
     let amountInETHInWei = ethers.utils.parseEther(value);
+   
     await (
       await marketplaceContract.buyWithUSDT(
         NFT_CONTRACT_ADDRESS.address,
