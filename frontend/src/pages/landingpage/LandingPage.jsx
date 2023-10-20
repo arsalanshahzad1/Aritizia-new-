@@ -81,8 +81,11 @@ const LandingPage = ({ search, setSearch }) => {
         console.log("firstOwner", id)
 
         const metaData = await getProviderNFTContrat().tokenURI(id);
-        // const responses = await fetch(metaData)
-        // const metadata = await responses.json()
+        console.log("metadata",metaData)
+        const image = metaData.replace('https://ipfs.io/ipfs/', 'https://dweb.link/ipfs/');
+        const responses = await fetch(metaData)
+        const metadata = await responses.json()
+        console.log(metadata,"metadata")
 
         // const extractedData = {};
 
@@ -175,9 +178,10 @@ const LandingPage = ({ search, setSearch }) => {
         //   return response
         // })
         // console.log(await testingNft()  , 'testingNft');
+  
 
         axios
-          .get(metaData)
+          .get(image)
           .then((response) => {
             const meta = response?.data;
             let data = JSON.stringify(meta);

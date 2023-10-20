@@ -532,14 +532,16 @@ const PlaceABidDrawer = ({
 
     // let dollarPriceOfETH = 1831;
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-
+    let priceInETH = dollarPriceOfETH?.toString() / 1e18;
     let oneETHInUSD = 1 / priceInETH;
+    console.log(oneETHInUSD,priceInETH,"priceInUSD1") 
     let priceInUSD = priceETH;
     priceInUSD = oneETHInUSD * priceInUSD;
+
     priceInUSD = Math.ceil(priceInUSD);
-    setAmountUSD(priceInUSD.toString());
-    let fee = Math.ceil((priceInUSD * 3) / 100);
+    setAmountUSD(priceInUSD?.toString());
+    let fee = Math.ceil((priceInUSD * 1.5) / 100);
+    console.log(fee,"priceInUSD")
     setPlatformFee(fee);
   };
 
@@ -887,6 +889,7 @@ const PlaceABidDrawer = ({
 
      
       let accBalance = await USDTContract.balanceOf(userAddress)
+      console.log(+USDPriceInWei,+accBalance?.toString(),"accBalance");
       if(+USDPriceInWei > +accBalance.toString()){
         return toast.error("you dont have balance", {
           position: toast.POSITION.TOP_CENTER,

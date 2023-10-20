@@ -73,14 +73,14 @@ const NewItemCard = ({
   return (
     <>
       <div className={`${size} col-md-4 col-12 new-item-card`}>
-        <div className="sec-five-wrap">
+        <div className="sec-five-wrap" onClick={() => openDrawer()}>
           <div className="image">
             <img src={image} alt="" width={"100%"} />
             {/* <span>{endDate}</span> */}
             <span>
               <NftCountdown endDateTime={new Date(endTime * 1000)} />
             </span>
-            {showLinks && (
+            {/* {showLinks && (
               <div className="social-links">
                 <ul>
                   <li>
@@ -115,7 +115,7 @@ const NewItemCard = ({
                   </li>
                 </ul>
               </div>
-            )}
+            )} */}
           </div>
           <div className="detail-wrap">
             <div className="center-icon">
@@ -134,9 +134,9 @@ const NewItemCard = ({
               <div
                 className="right"
                 style={{ cursor: "pointer", padding: "15px 0px 15px 20px" }}
-                onClick={() => setShowLinks(!showLinks)}
+                // onClick={() => setShowLinks(!showLinks)}
               >
-                <p>...</p>
+                {/* <p>...</p> */}
               </div>
             </div>
             <div className="bottom">
@@ -145,7 +145,7 @@ const NewItemCard = ({
                 <div className="left" onClick={() => openDrawer()}>
                   <p>Your NFT</p>
                 </div> :
-                <div className="left" onClick={() => openDrawer()}>
+                <div className="left" >
                   <p>Place a bid</p>
                 </div>
               }

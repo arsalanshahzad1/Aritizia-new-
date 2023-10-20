@@ -959,6 +959,7 @@ header .left img {
   border-radius: 10px;
   margin: 10% 1%;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
   /* padding-bottom: 35px;
   padding: 20px 0px 35px 20px; */
 }
@@ -1092,6 +1093,7 @@ header .left img {
   letter-spacing: 0em;
   text-align: left;
   color: var(--primary);
+  cursor: pointer;
 }
 
 .new-item-card .bottom .right {

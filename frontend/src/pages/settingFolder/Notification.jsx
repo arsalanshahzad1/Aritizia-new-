@@ -80,7 +80,7 @@ const Notification = () => {
               </div>
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-12">
+          {/* <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
                 <h2>Add Fan</h2>
@@ -96,7 +96,7 @@ const Notification = () => {
                 <p>When someone adds you in a Fan list</p>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>

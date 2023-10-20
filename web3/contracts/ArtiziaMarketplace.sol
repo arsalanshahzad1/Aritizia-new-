@@ -237,16 +237,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     mapping(uint256 => NFT) public _idToNFT;
 
-    // mapping(uint256 => NFT2) public _idToNFT2;
-
-    // neechey wali dono mappings me key address artist ka h
-
-    // mapping(address => mapping(address => bool)) public isFan;
-
-    // mapping(address => address[]) public fanLists;
-
-    mapping(address => uint256[]) public bannedNfts;
-
     mapping(uint256 => Auction) public _idToAuction;
 
     mapping(address => bool) public bannedUsers;
@@ -370,7 +360,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     );
 
     event NFTSold(
-        // address nftContract,
+        //address nftContract,
         uint256 tokenId,
         address seller,
         address buyer,
@@ -401,23 +391,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         setSubscriptionFee(SubscriptionLevel.Diamond, 0);
     }
 
-    function setSubscriptionFee(
-        SubscriptionLevel level,
-        uint256 fee
-    ) private onlyOwner {
-        subscriptionFees[level] = fee;
+    function setSubscriptionFee(SubscriptionLevel _level, uint256 _fee ) private onlyOwner {
+        subscriptionFees[_level] = _fee;
     }
-
-    // function setUserSubscription(SubscriptionLevel level) external {
-    //     userSubscription[msg.sender] = level;
-    // }
-
-    // function getUserSubscriptionFee(
-    //     address user
-    // ) public view returns (uint256) {
-    //     SubscriptionLevel level = userSubscription[user];
-    //     return subscriptionFees[level];
-    // }
 
     function getSubscriptionFee(uint8 level) public view returns (uint256) {
         if (level == 3) {
@@ -1199,13 +1175,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ) public payable auctionIsLive(_tokenId) isApproved(_tokenId) isUserBanned {
         bool check = false;
 
-        // if (_idToNFT2[_tokenId].onlyFans) {
-            
-        // require(
-        //         isFan[_idToNFT[_tokenId].seller][msg.sender],
-        //         "You are not in the fan list"
-        //     );
-        // }
+       
 
         if (_idToAuction[_tokenId].highestBidder == address(0)) {
             require(
