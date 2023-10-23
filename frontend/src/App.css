@@ -4598,7 +4598,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
   font-weight: 600;
   color: #9d9d9d;
   cursor: pointer;
-  width: 130px;
+  /* width: 130px; */
   text-align: center;
 }
 
@@ -4905,7 +4905,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
 }
 
 .Notification-in-header .text-area .name-txt span {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   margin-right: 5px;
   text-transform: capitalize;
@@ -5448,11 +5448,16 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
 
 .art-img-div {
   width: 230px;
-  height: 250px;
+  /* height: 250px; */
   margin: 10px;
   border-radius: 10px;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.5s ease-in-out;
   position: relative;
+}
+
+.art-img-div:hover{
+  transform: scale(1.5);
+  z-index: 10;
 }
 
 .art-img-div:hover {

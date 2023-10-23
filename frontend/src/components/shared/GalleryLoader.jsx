@@ -42,7 +42,7 @@ function GalleryLoader() {
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
         </div>
-        <p>Your art Generation is in process</p>
+        <p>Your Art Masterpiece is in Process</p>
       </section>
     </div>
   )

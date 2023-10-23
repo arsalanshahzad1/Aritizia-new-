@@ -668,13 +668,13 @@ function CollectionProfile({ search, setSearch }) {
                         onClick={() => setCollectionTabs(0)}
                         className={`${collectionTabs === 0 && "active-tab"}`}
                       >
-                        On Sale
+                        Fix Price Resale
                       </div>
                       <div
                         onClick={() => setCollectionTabs(1)}
                         className={`${collectionTabs === 1 && "active-tab"}`}
                       >
-                        Auction
+                        Auction Resale
                       </div>
                     </div>
                     {collectionTabs === 0 && (

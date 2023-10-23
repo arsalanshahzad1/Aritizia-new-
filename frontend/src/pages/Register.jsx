@@ -17,6 +17,8 @@ function Register() {
     const [registerData, setRegisterData] = useState('');
     const [loader, setLoader] = useState(false)
     const navigate = useNavigate()
+    const userData = JSON.parse(localStorage.getItem('data')) 
+    console.log(userData , 'fsdfsdfsdf');
 
     const getOtp = (event) => {
         setOtpCode(event)
@@ -31,6 +33,13 @@ function Register() {
     const registerUser = async (event) => {
         event.preventDefault()
         setLoader(true)
+        if(data != false && data.email === null){
+            // wallet_address
+            setRegisterData((prev) =>( {...prev , wallet_address : data?.wallet_address}))
+        }
+        else{
+            setRegisterData((prev) =>( {...prev , wallet_address : null})) 
+        }
         try {
             const response = await apis.register(registerData)
             console.log(response?.data?.data?.status, 'status');

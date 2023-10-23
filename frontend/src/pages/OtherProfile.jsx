@@ -716,13 +716,13 @@ const OtherProfile = ({ search, setSearch }) => {
                           onClick={() => setCollectionTabs(0)}
                           className={`${collectionTabs === 0 && "active-tab"}`}
                         >
-                          On Sale
+                         Fix Price Resale
                         </div>
                         <div
                           onClick={() => setCollectionTabs(1)}
                           className={`${collectionTabs === 1 && "active-tab"}`}
                         >
-                          Auction
+                          Auction Resale
                         </div>
                       </div>
                       <div className="d-flex other-profile-cards d-flex flex-wrap">
@@ -800,13 +800,13 @@ const OtherProfile = ({ search, setSearch }) => {
                           onClick={() => setLikeNftTabsTabs(0)}
                           className={`${likeNftTabs === 0 && "active-tab"}`}
                         >
-                          On Sale
+                         Fix Price Resale
                         </div>
                         <div
                           onClick={() => setLikeNftTabsTabs(1)}
                           className={`${likeNftTabs === 1 && "active-tab"}`}
                         >
-                          Auction
+                          Auction Resale
                         </div>
                       </div>
                       <div className="d-flex other-profile-cards d-flex flex-wrap">

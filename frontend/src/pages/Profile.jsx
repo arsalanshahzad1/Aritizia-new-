@@ -42,7 +42,7 @@ const Profile = ({ search, setSearch }) => {
   const [addedFans, setAddedFans] = useState({});
   const [discountPrice, setDiscountPrice] = useState(0)
   const [loader, setLoader] = useState(true)
-  const [userNftLoader, setUserNftLoader] = useState(true)
+  const [userNftLoader, setUserNftLoader] = useState(false)
   const [nftLoader, setNftLoader] = useState(true)
   const [nftAuctionLoader, setNftAuctionLoader] = useState(true)
   const [likedNftLoader, setLikedNftLoader] = useState(true)
@@ -98,6 +98,7 @@ const Profile = ({ search, setSearch }) => {
       // getMyNfts();
       if (response?.data?.data?.length > 0) {
         getMyNfts(response?.data?.data);
+        setUserNftLoader(false)
       } else {
         getMyNfts(0);
         setNftLoader(false)
@@ -953,13 +954,13 @@ const Profile = ({ search, setSearch }) => {
                           onClick={() => setCollectionTabs(0)}
                           className={`${collectionTabs === 0 && "active-tab"}`}
                         >
-                          On Sale
+                          Fix Price Resale
                         </div>
                         <div
                           onClick={() => setCollectionTabs(1)}
                           className={`${collectionTabs === 1 && "active-tab"}`}
                         >
-                          Auction
+                          Auction Resale
                         </div>
                       </div>
                       {collectionTabs === 0 && (
@@ -1038,7 +1039,8 @@ const Profile = ({ search, setSearch }) => {
                         userNftLoader ?
                           <section className="sec-loading">
                             <div className="one"></div>
-                          </section> :
+                          </section> 
+                          :
                           userNFTs?.length > 0 ?
                             <>
                               {userNFTs?.map((item) => (
@@ -1075,13 +1077,13 @@ const Profile = ({ search, setSearch }) => {
                           onClick={() => setLikeNftTabsTabs(0)}
                           className={`${likeNftTabs === 0 && "active-tab"}`}
                         >
-                          On Sale
+                         Fix Price Resale
                         </div>
                         <div
                           onClick={() => setLikeNftTabsTabs(1)}
                           className={`${likeNftTabs === 1 && "active-tab"}`}
                         >
-                          Auction
+                          Auction Resale
                         </div>
                       </div>
                       {likeNftTabs === 0 && (

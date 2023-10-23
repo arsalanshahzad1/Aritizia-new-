@@ -14,9 +14,12 @@ import Loader from "../components/shared/Loader";
 
 const DateDisplay = ({ datetime }) => {
     const parsedDate = new Date(datetime);
-    const formattedDate = parsedDate.toISOString().split('T')[0];
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const year = parsedDate.getFullYear();
+    const formattedDate = `${month}-${day}-${year}`;
     return <p>{formattedDate}</p>;
-}
+  }
 
 const Subscription = ({ search, setSearch }) => {
     const [subscriptionData, setSubscriptionData] = useState([]);

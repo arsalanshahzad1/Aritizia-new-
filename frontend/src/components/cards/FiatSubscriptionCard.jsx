@@ -43,11 +43,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                 <div>
                                     {res?.monthly_cost == 0 ?
                                         <>
-                                            <p className='p1'>Monthly subscription cost</p><Cross />
+                                            <p className='p1'>Monthly Subscription Cost</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Monthly subscription cost</p>
+                                            <p className='p1'>Monthly Subscription Cost</p>
                                             <span className="span-1">{res?.monthly_cost}</span>
                                         </>
 
@@ -57,11 +57,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                 <div>
                                     {res?.annual_cost == 0 ?
                                         <>
-                                            <p className='p1'>Annual subscription cost</p><Cross />
+                                            <p className='p1'>Annual Subscription Cost</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Annual subscription cost</p>
+                                            <p className='p1'>Annual Subscription Cost</p>
                                             <span className="span-1">{res?.annual_cost}</span>
                                         </>
 
@@ -174,11 +174,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                     <div>
                                         {res?.monthly_cost == 0 ?
                                             <>
-                                                <p className='p1'>Monthly subscription cost</p><Cross />
+                                                <p className='p1'>Monthly Subscription Cost</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Monthly subscription cost</p>
+                                                <p className='p1'>Monthly Subscription Cost</p>
                                                 <span className="span-1">{res?.monthly_cost}$</span>
                                             </>
 
@@ -188,11 +188,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                     <div>
                                         {res?.annual_cost == 0 ?
                                             <>
-                                                <p className='p1'>Annual subscription cost</p><Cross />
+                                                <p className='p1'>Annual Subscription Cost</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Annual subscription cost</p>
+                                                <p className='p1'>Annual Subscription Cost</p>
                                                 <span className="span-1">{res?.annual_cost}$</span>
                                             </>
 

@@ -942,7 +942,7 @@ const Single = ({ search, setSearch }) => {
                                         />
                                       </div>
                                     </div>
-                                    <p className="txt-2">Upload image</p>
+                                    <p className="txt-2">Upload Collection Image</p>
                                     <input
                                       type="file"
                                       accept="image/*"

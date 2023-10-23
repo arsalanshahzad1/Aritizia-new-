@@ -150,6 +150,10 @@ function App() {
                 path="/user-profile"
                 element={<UserProfile search={search} setSearch={setSearch} />}
               /> */}
+              <Route
+                  path="/art"
+                  element={<Art search={search} setSearch={setSearch} />}
+                />
                 <Route
                   path="/collection"
                   element={
@@ -200,10 +204,7 @@ function App() {
                   path="/dashboard/*"
                   element={<DashboardMain search={search} setSearch={setSearch} />}
                 />
-                <Route
-                  path="/art"
-                  element={<Art search={search} setSearch={setSearch} />}
-                />
+                
 
 
               </Route>

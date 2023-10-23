@@ -42,11 +42,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 <div>
                                     {res?.monthly_cost == 0 ?
                                         <>
-                                            <p className='p1'>Monthly subscription cost</p><Cross />
+                                            <p className='p1'>Monthly Subscription Cost</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Monthly subscription cost</p>
+                                            <p className='p1'>Monthly Subscription Cost</p>
                                             <span className="span-1">{res?.monthly_cost}</span>
                                         </>
 
@@ -56,11 +56,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 <div>
                                     {res?.annual_cost == 0 ?
                                         <>
-                                            <p className='p1'>Annual subscription cost</p><Cross />
+                                            <p className='p1'>Annual Subscription Cost</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Annual subscription cost</p>
+                                            <p className='p1'>Annual Subscription Cost</p>
                                             <span className="span-1">{res?.annual_cost}</span>
                                         </>
 
@@ -173,12 +173,12 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.monthly_cost == 0 ?
                                             <>
-                                                <p className='p1'>Monthly subscription cost</p><Cross />
+                                                <p className='p1'>Monthly Subscription Cost</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Monthly subscription cost</p>
-                                                <span className="span-1">{res?.monthly_cost}$</span>
+                                                <p className='p1'>Monthly Subscription Cost</p>
+                                                <span className="span-1">${res?.monthly_cost}</span>
                                             </>
 
 
@@ -187,12 +187,12 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.annual_cost == 0 ?
                                             <>
-                                                <p className='p1'>Annual subscription cost</p><Cross />
+                                                <p className='p1'>Annual Subscription Cost</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Annual subscription cost</p>
-                                                <span className="span-1">{res?.annual_cost}$</span>
+                                                <p className='p1'>Annual Subscription Cost</p>
+                                                <span className="span-1">${res?.annual_cost}</span>
                                             </>
 
 
@@ -218,11 +218,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.transection_fee == 0 ?
                                             <>
-                                                <p className='p1'>Transection fee</p><Cross />
+                                                <p className='p1'>"Transaction"  fee</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Transection fee</p>
+                                                <p className='p1'>"Transaction"  fee</p>
                                                 <span className="span-1">{res?.transection_fee}%</span>
                                             </>
 
