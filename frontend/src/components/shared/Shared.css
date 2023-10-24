@@ -253,7 +253,8 @@ p {
 
 .profile-drawer .nft-image {
   border-radius: 18px;
-  width: 100%;
+  /* width: 100%; */
+  height: 350px;
 }
 
 .profile-drawer .first-line {
@@ -264,9 +265,9 @@ p {
 
 .profile-drawer .first-line h2 {
   font-family: 'Jost';
-  font-size: 40px;
+  font-size: 32px;
   font-weight: 600;
-  line-height: 58px;
+  line-height: 42px;
   letter-spacing: 0em;
   text-align: left;
   color: #121212;
@@ -276,7 +277,9 @@ p {
 
 .profile-drawer img {}
 
-.profile-drawer .second-line {}
+.profile-drawer .second-line {
+  margin: 15px 0px;
+}
 
 .profile-drawer .second-line p {
   font-family: 'Jost';
@@ -318,7 +321,19 @@ p {
 }
 
 .profile-drawer .four-line {
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.profile-drawer .four-line h2{
+  font-family: 'Jost';
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #121212;
+    text-transform: capitalize;
+    margin-right: 10px;
 }
 
 .profile-drawer .four-line p {
@@ -413,9 +428,9 @@ p {
 
 .profile-drawer .six-line .left p {
   font-family: 'Jost';
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 600;
-  line-height: 43px;
+  line-height: 32px;
   letter-spacing: 0em;
   text-align: left;
   color: #121212;
@@ -429,7 +444,7 @@ p {
   letter-spacing: 0em;
   text-align: left;
   color: #6F6F6F;
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 .profile-drawer .six-line .right {
@@ -876,7 +891,27 @@ p {
   border-radius: 20px;
   border: 2px solid transparent;
   background: #F2F2F2;
-  margin-top: 15px;
+  /* margin-top: 15px; */
+}
+
+.registor .registor-wrap .right .content form .pass{
+  position: relative;
+  width: 100%;
+}
+.registor .registor-wrap .right .content form .pass input{
+  width: 100%;
+}
+
+.registor .registor-wrap .right .content form .pass span{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  z-index: 9;
+  cursor: pointer;
+}
+.registor .registor-wrap .right .content form .email svg{
+  color: #909090;
 }
 
 .registor .registor-wrap .right .content form input:focus-visible {
@@ -1122,14 +1157,31 @@ p {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-top: 14px !important;
-  margin-bottom: 0px !important;
+  /* margin-top: 14px !important; */
+  /* margin-bottom: 0px !important; */
   width: 100%;
   padding: 10px 28px;
   border-radius: 20px;
   border: 2px solid transparent;
   background: #F2F2F2;
-  margin-top: 15px;
+  /* margin-top: 15px; */
+  position: relative;
+}
+
+.varification-modal-wrap .modal-body .pass{
+  position: relative;
+}
+
+.varification-modal-wrap .modal-body .pass span{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  cursor: pointer;
+}
+
+.varification-modal-wrap .modal-body .pass span svg{
+  color: #929292;
 }
 
 .varification-modal-wrap .modal-body .resent-code {

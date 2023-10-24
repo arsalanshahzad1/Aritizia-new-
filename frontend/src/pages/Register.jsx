@@ -7,6 +7,7 @@ import apis from '../service';
 import { ToastContainer, toast } from "react-toastify";
 import EmailMasked from '../components/shared/EmailMasked';
 import Loader from '../components/shared/Loader';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 
 
@@ -14,6 +15,8 @@ function Register() {
     const [chack, setChack] = useState(false);
     const [varificationPopup, setVarificationPopup] = useState(false);
     const [otpCode, setOtpCode] = useState('');
+    const [showPass, setShowPass] = useState(false);
+    const [showConformPass, setShowConformPass] = useState(false);
     const [registerData, setRegisterData] = useState('');
     const [loader, setLoader] = useState(false)
     const navigate = useNavigate()
@@ -33,15 +36,15 @@ function Register() {
     const registerUser = async (event) => {
         event.preventDefault()
         setLoader(true)
-        if(data != false && data.email === null){
-            // wallet_address
-            setRegisterData((prev) =>( {...prev , wallet_address : data?.wallet_address}))
+        let temp;
+        if(userData != false && userData.email === null){
+            temp = {...registerData , wallet_address : userData?.wallet_address}
         }
         else{
-            setRegisterData((prev) =>( {...prev , wallet_address : null})) 
+             temp = {...registerData , wallet_address : null}
         }
         try {
-            const response = await apis.register(registerData)
+            const response = await apis.register(temp)
             console.log(response?.data?.data?.status, 'status');
             console.log(response?.data?.message, 'message');
             if (response?.data?.data?.status) {
@@ -118,10 +121,13 @@ function Register() {
                             <h1 className='title'>Create your account</h1>
                             <p className='desc'>Let’s get started</p>
                             <form onSubmit={registerUser}>
-                                <input type="text" name="first_name" onChange={onChangeHandler} id="" placeholder='First name' required />
-                                <input type="text" name="last_name" onChange={onChangeHandler} id="" placeholder='Last name' required />
-                                <input type="email" name="email" onChange={onChangeHandler} id="" placeholder='Email Address' required />
-                                <input type="password" name="password" onChange={onChangeHandler} id="" placeholder='Password' required />
+                                <input type="text" name="first_name" onChange={onChangeHandler} id="" placeholder='First name' required style={{marginBottom:'15px'}}/>
+                                <input type="text" name="last_name" onChange={onChangeHandler} id="" placeholder='Last name' required  style={{marginBottom:'15px'}}/>
+                                <input type="email" name="email" onChange={onChangeHandler} id="" placeholder='Email Address' required style={{marginBottom:'15px'}}/>
+                                <div className="pass">
+                                <input type={showPass ? "text" : "password"} name="password" onChange={onChangeHandler} id="" placeholder='Password' required />
+                                {showPass ?<span onClick={() =>{setShowPass(!showPass)}}><FaRegEye/></span>  : <span onClick={() =>{setShowPass(!showPass)}}><FaRegEyeSlash/></span> }
+                                </div>
                                 <div className="term-condition">
                                     <div className="one">
                                         <div className="registor-chack" onClick={() => { setChack(!chack) }}>

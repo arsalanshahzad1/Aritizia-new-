@@ -1359,9 +1359,9 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
 }
 
 .share-links-social {
-  display: flex;
+  /* display: flex;
   justify-content: end;
-  align-items: center;
+  align-items: center; */
 }
 
 .bid-style {

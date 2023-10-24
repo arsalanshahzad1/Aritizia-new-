@@ -1044,7 +1044,7 @@ console.log(nftDetails?.user?.id , 'odddd');
             x
           </span>
           <div className="row">
-            <div className="col-lg-6 col-md-6 col-12">
+            <div className="col-lg-6 col-md-6 col-12" style={{textAlign:'center'}}>
               <img className="nft-image" src={image} alt="" />
               {/* <img src="/assets/images/progress-bar.png" className='hide-on-mobile-screen' alt="" width={'100%'} style={{marginTop : '20px'}}/> */}
 
@@ -1157,6 +1157,7 @@ console.log(nftDetails?.user?.id , 'odddd');
                   </div>
                 </div>
                 <div className="four-line">
+                  <h2>Description</h2>
                   <p>{description}</p>
                 </div>
                 <div className="four-line">
@@ -1236,46 +1237,9 @@ console.log(nftDetails?.user?.id , 'odddd');
                 </div>
                 <div className="five-line">
                   <div className="row d-flex">
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
-                      <SocialShare 
-                      style={{ fontSize: "18px", marginRight: "40px" }} 
-                      user_id={user_id}
-                      />
-                    </div>
-                    {/* <div className="col-lg-8 col-md-8 col-12">
-                      <button
-                        className={`${propertyTabs === 0 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(0)}
-                      >
-                        Details
-                      </button>
-                      <button
-                        className={`${propertyTabs === 1 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(1)}
-                      >
-                        Bids
-                      </button>
-                      <button
-                        className={`${propertyTabs === 2 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(2)}
-                      >
-                        History
-                      </button>
-                    </div> */}
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{ marginLeft: "0px" }}>
-                      <SocialShare 
-                      bidStyle="bid-style"
-                      style={{ fontSize: "18px", marginRight: "10px" }}
-                      user_id={user_id}
-                      />
-                    </div>
+                    
                   </div>
                 </div>
-                {/* <div>
-                  {propertyTabs === 0 && <Details />}
-                  {propertyTabs === 1 && <Bids />}
-                  {propertyTabs === 2 && <History />}
-                </div> */}
                 <div className="six-line">
                   <div className="row">
                     <div className="col-lg-12 col-md-8 col-8">
@@ -1304,19 +1268,26 @@ console.log(nftDetails?.user?.id , 'odddd');
                         </p>
                       </div>
                     </div> */}
-
+                    <div className="col-lg-6 col-md-4 col-12 hide-on-desktop-screen">
+                      <SocialShare 
+                      style={{ fontSize: "18px", marginRight: "40px" }} 
+                      user_id={user_id}
+                      />
+                    </div>
+                    <div className="col-lg-6 col-md-4 col-12 hide-on-mobile-screen" style={{ marginLeft: "0px" }}>
+                      <SocialShare 
+                      bidStyle="bid-style"
+                      style={{ fontSize: "18px", marginRight: "10px" }}
+                      user_id={user_id}
+                      />
+                    </div>
                     {!showBuyNow && (
-                      <div className="col-lg-4 col-md-8 col-8">
+                      <div className="col-lg-6 col-md-8 col-8">
                         <div className="stock-div">
                           {nftDetails?.in_stock} <span>in stock</span>{" "}
                         </div>
                       </div>
                     )}
-                    <div className="col-lg-6 col-md-4 col-4">
-                      <div className="right">
-                        <p>{/* 13<span>in stock</span> */}</p>
-                      </div>
-                    </div>
                   </div>
                   <img
                     src="/assets/images/progress-bar.png"

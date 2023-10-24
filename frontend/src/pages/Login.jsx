@@ -7,9 +7,12 @@ import Loader from '../components/shared/Loader';
 import Modal from "react-bootstrap/Modal";
 import EmailMasked from '../components/shared/EmailMasked';
 import VerificationInput from 'react-verification-input';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 function Login() {
     const [chack, setChack] = useState(false);
+    const [showPass, setShowPass] = useState(false);
+    const [showResetPass, setShowResetPass] = useState(false);
     const [loader, setLoader] = useState(false);
     const [forget, setForget] = useState(false);
     const [changePass, setChangePass] = useState(false);
@@ -186,8 +189,11 @@ function Login() {
                             <h1 className='title'>Login your account</h1>
                             <p className='desc'>Welcome to Artizia, please enter your login details below to using the app</p>
                             <form onSubmit={loginWithEmail}>
-                                <input type="email" name="email" id="" placeholder='Email Address' onChange={onChangeHandler} />
-                                <input type="password" name="password" id="" placeholder='Password' onChange={onChangeHandler} />
+                                <input type="email" name="email" id="" placeholder='Email Address' onChange={onChangeHandler} style={{marginBottom:'20px'}}/>
+                                <div className="pass">
+                                <input type={showPass ? "text" : "password"} name="password" id="" placeholder='Password' onChange={onChangeHandler} />
+                                {showPass ?<span onClick={() =>{setShowPass(!showPass)}}><FaRegEye/></span>  : <span onClick={() =>{setShowPass(!showPass)}}><FaRegEyeSlash/></span> }
+                                </div>
                                 <Link to={''} className='forget-pass' onClick={() => setForget(true)}>Forget the password?</Link>
                                 <button type='submit' disabled={loader} className={`signup ${loader ? 'disable' : ''}`}>Sign in</button>
                                 <div className="or">
@@ -247,8 +253,11 @@ function Login() {
                 <div className="modal-body">
                     <form onSubmit={forgotVerify}>
                         <h1 className='title'>Forget Password</h1>
-                        <input type="email" value={email} disabled id='email' placeholder='Enter email' className='password-forget' required />
-                        <input type="password"  onChange={(e) => setPassword(e.target.value)} placeholder='Enter new password' className='password-forget' required />
+                        <input type="email" value={email} disabled id='email' placeholder='Enter email' className='password-forget' required style={{marginBottom : '15px'}}/>
+                        <div className="pass">
+                        <input type={showResetPass ? "text":"password"}  onChange={(e) => setPassword(e.target.value)} placeholder='Enter new password' className='password-forget' required />
+                        {showResetPass ?<span onClick={() =>{setShowResetPass(!showResetPass)}}><FaRegEye/></span>  : <span onClick={() =>{setShowResetPass(!showResetPass)}}><FaRegEyeSlash/></span> }
+                        </div>
                         <p className='resent-code-login' onClick={resendForgotOtp}>Recent code</p>
                         {/* <p className="email">
                         <EmailMasked email={registerData?.email} />

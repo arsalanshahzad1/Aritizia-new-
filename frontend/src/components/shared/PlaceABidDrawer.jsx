@@ -1324,42 +1324,7 @@ const PlaceABidDrawer = ({
                   </div>
                 </div>
 
-                <div className="five-line">
-                  <div className="row">
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
-                      <SocialShare
-                        style={{ fontSize: "18px", marginRight: "10px" }}
-                        user_id={user_id}
-                      />
-                    </div>
-                    {/* <div className="col-lg-8 col-md-8 col-12">
-                      <button
-                        className={`${propertyTabs === 0 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(0)}
-                      >
-                        Details
-                      </button>
-                      <button
-                        className={`${propertyTabs === 1 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(1)}
-                      >
-                        Bids
-                      </button>
-                      <button
-                        className={`${propertyTabs === 2 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(2)}
-                      >
-                        History
-                      </button>
-                    </div> */}
-                    <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
-                      <SocialShare
-                        style={{ fontSize: "18px", marginRight: "10px" }}
-                        user_id={user_id}
-                      />
-                    </div>
-                  </div>
-                </div>
+               
                 {/* <div>
                   {propertyTabs === 0 && <Details />}
                   {propertyTabs === 1 && <Bids />}
@@ -1393,6 +1358,42 @@ const PlaceABidDrawer = ({
                     width={"100%"}
                     style={{ marginTop: "20px", marginBottom: "20px" }}
                   />
+                </div>
+                <div className="five-line">
+                  <div className="row">
+                    <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
+                      <SocialShare
+                        style={{ fontSize: "18px", marginRight: "10px" }}
+                        user_id={user_id}
+                      />
+                    </div>
+                    {/* <div className="col-lg-8 col-md-8 col-12">
+                      <button
+                        className={`${propertyTabs === 0 ? "active" : ""}`}
+                        onClick={() => setPropertyTabs(0)}
+                      >
+                        Details
+                      </button>
+                      <button
+                        className={`${propertyTabs === 1 ? "active" : ""}`}
+                        onClick={() => setPropertyTabs(1)}
+                      >
+                        Bids
+                      </button>
+                      <button
+                        className={`${propertyTabs === 2 ? "active" : ""}`}
+                        onClick={() => setPropertyTabs(2)}
+                      >
+                        History
+                      </button>
+                    </div> */}
+                    <div className="col-lg-12 col-md-4 col-12 hide-on-mobile-screen" style={{textAlign:'right'}}>
+                      <SocialShare
+                        style={{ fontSize: "18px", marginRight: "10px" }}
+                        user_id={user_id}
+                      />
+                    </div>
+                  </div>
                 </div>
                 {userAddress?.toUpperCase() !== sellerWallet?.toUpperCase() && <>
                   <div className="seven-line" onClick={() => setChack(!chack)}>
