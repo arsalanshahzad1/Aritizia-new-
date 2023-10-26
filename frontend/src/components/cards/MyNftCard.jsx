@@ -119,7 +119,7 @@ const MyNftCard = ({
                     }}
                     className="nft-fix-price"
                   >
-                    Fix Price
+                      Fix Price Resale
                   </p>
                   <p
                     onClick={() => {
@@ -127,7 +127,7 @@ const MyNftCard = ({
                     }}
                     className="nft-fix-price"
                   >
-                    On Auction
+                   Auction Resale
                   </p>
                 </div>
               )}

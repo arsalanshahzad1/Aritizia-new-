@@ -218,11 +218,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.transection_fee == 0 ?
                                             <>
-                                                <p className='p1'>"Transaction"  fee</p><Cross />
+                                                <p className='p1'>Transaction  fee</p> <span className="span-1">0%</span>
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>"Transaction"  fee</p>
+                                                <p className='p1'>  Transaction  fee</p>
                                                 <span className="span-1">{res?.transection_fee}%</span>
                                             </>
 
@@ -232,11 +232,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.unlimited_gallery_uploads == 0 ?
                                             <>
-                                                <p className='p1'>Unlimited gallegy uploads</p><Cross />
+                                                <p className='p1'>Unlimited Gallery Uploads</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Unlimited gallegy uploads</p><Check />
+                                                <p className='p1'>Unlimited Gallery Uploads</p><Check />
                                             </>
 
 

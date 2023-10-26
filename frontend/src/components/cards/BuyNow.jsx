@@ -662,7 +662,7 @@ const BuyNow = ({
                   )
                     : (
                       <div className="button css-pxd23z" style={{ display: "flex", justifyContent: "center", pointerEvents: "none" }}>
-                        <p>Your NFT</p>
+                        <p>Unavailable to Buy</p>
                       </div>
                     )
                   }
