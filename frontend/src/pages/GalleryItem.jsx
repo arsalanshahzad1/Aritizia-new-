@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import  React, { useState, useEffect } from 'react'
 const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selected, user }) => {
     const [isSelected, setIsSelected] = useState(selected)
 

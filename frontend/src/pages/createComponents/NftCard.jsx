@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import  React, { useState } from 'react'
 
 const NftCard = ({ isClicked, isCompleted, index, img, handleRemoveImage }) => {
     return (

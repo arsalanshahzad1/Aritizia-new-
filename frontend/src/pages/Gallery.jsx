@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import  React, { useState } from 'react'
 import bird from '../../public/assets/images/bird.png'
 import ArtItem from './ArtItem'
 import { useEffect } from 'react'

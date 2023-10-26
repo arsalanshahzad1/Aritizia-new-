@@ -1,4 +1,4 @@
-import { useState, useEffect,useContext } from "react";
+import  React, { useState, useEffect,useContext } from "react";
 import Header from "../../pages/landingpage/Header";
 import { Navigate, useNavigate } from "react-router-dom";
 import SocialShare from "../../components/shared/SocialShare";

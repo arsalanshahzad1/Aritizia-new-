@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react'
+import React , { useContext, useRef, useState } from 'react'
 import Header from './landingpage/Header'
 import bird from '../../public/assets/images/bird.png'
 import { GlobalContext } from '../Context/GlobalContext'
