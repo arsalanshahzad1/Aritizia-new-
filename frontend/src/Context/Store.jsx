@@ -10,51 +10,19 @@ export const Store = createContext();
 
 
 const getProviderMarketContrat = () => {
-    //  const provider = new ethers.providers.Web3Provider(ethereum);  // TODO
 
-    // const provider = new ethers.providers.JsonRpcProvider(process.env.LocalRpc);
-  
-    // console.log("RPC",RPC);
-
-    // const customRpcProvider = new providers.JsonRpcProvider(RPC);
-    // console.log("RPC",customRpcProvider);
-
-    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545/"); //"http://localhost:8545/"
-
-    // const provider = new ethers.providers.JsonRpcProvider(RPC);
-
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   `https://eth-goerli.g.alchemy.com/v2/${process.env.TESTNET_API}`
-    // );
-
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   `https://eth-mainnet.g.alchemy.com/v2/${process.env.MAINNET_API}`
-    // );
+    const RPC = process.env.SEPOLIA_RPC_ADDRESS;
+    const provider = new ethers.providers.JsonRpcProvider(RPC); //"http://localhost:8545/"
+    
     const marketContract = new ethers.Contract(marketplaceAddr.address, marketplaceAbi.abi, provider);
     return marketContract;
 }
 
 const getProviderNFTContrat = () => {
-    //  const provider = new ethers.providers.Web3Provider(ethereum);  // TODO
+    
+    const RPC = process.env.SEPOLIA_RPC_ADDRESS;
+    const provider = new ethers.providers.JsonRpcProvider(RPC); //"http://localhost:8545/"
 
-    // const provider = new ethers.providers.JsonRpcProvider(process.env.LocalRpc);
-  
-    // console.log("RPC",RPC);
-
-    // const customRpcProvider = new providers.JsonRpcProvider(RPC);
-    // console.log("RPC",customRpcProvider);
-
-    const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545/"); //"http://localhost:8545/"
-
-    // const provider = new ethers.providers.JsonRpcProvider(RPC);
-
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   `https://eth-goerli.g.alchemy.com/v2/${process.env.TESTNET_API}`
-    // );
-
-    // const provider = new ethers.providers.JsonRpcProvider(
-    //   `https://eth-mainnet.g.alchemy.com/v2/${process.env.MAINNET_API}`
-    // );
     const nftContract = new ethers.Contract(nftContractAddr.address, nftContractAbi.abi, provider);
     return nftContract;
 }
@@ -74,9 +42,7 @@ export const StoreProvider = ({ children }) => {
             if(userAddress === "false" && account !== undefined)
             {
                 window.location.reload();
-            }
-            
-        
+            }  
             localStorage.setItem('userAddress', account)
         if(firstTimeCall === false)
         {
@@ -107,9 +73,9 @@ export const StoreProvider = ({ children }) => {
                     {
                         // chainId: "0x5" //Goerli
                         // chainId: "0x89", //PolygonMainnet
-                        // chainId: "0xAA36A7", //sepolia
+                        chainId: "0xaa36a7", //sepolia
                         // chainId: "0x1", //Miannet
-                        chainId: "0x7A69" //localHost TODO
+                        // chainId: "0x7A69" //localHost TODO/
                         // chainId:"0x13881" //mumbai
                         // chainId:"0x61"//bnb
 
@@ -145,16 +111,16 @@ export const StoreProvider = ({ children }) => {
 
             window.ethereum.on('chainChanged', async (chainId) => {
                 console.log("chainId", chainId);
-                if (chainId != "0x7A69") { //TODO
+                if (chainId != "0xaa36a7") { //TODO
                     await ethereum.request({
                         method: "wallet_switchEthereumChain",
                         params: [
                             {
                                 // chainId: "0x5" //Goerli
                                 // chainId: "0x89", //PolygonMainnet
-                                // chainId: "0xAA36A7", //sepolia
+                                chainId: "0xaa36a7", //sepolia
                                 // chainId: "0x1", //Miannet
-                                chainId: "0x7A69" //localHost TODO
+                                // chainId: "0x7A69" //localHost TODO
                                 // chainId:"0x13881" //mumbai
                                 // chainId:"0x61"//bnb
 

@@ -2,6 +2,7 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config({ path: ".env" });
 
 const QUICKNODE_HTTP_URL = process.env.QUICKNODE_HTTP_URL;
+const QUICKNODE_HTTP_URL_SEP = process.env.QUICKNODE_HTTP_URL_SEP
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 module.exports = {
@@ -42,15 +43,15 @@ module.exports = {
         // url : "https://wiser-wider-valley.bsc.discover.quiknode.pro/050ea5d25ccade9d764fac15bd4709b810d543a1/"
       },
     },
-    // sepolia: {
+    sepolia: {
+      url: QUICKNODE_HTTP_URL_SEP, // Use the URL from the environment variable
+      accounts: [PRIVATE_KEY], // Use the private key from the environment variable
+      gasPrice: "auto",
+    },
+    // goerli: {
     //   url: QUICKNODE_HTTP_URL, // Use the URL from the environment variable
     //   accounts: [PRIVATE_KEY], // Use the private key from the environment variable
     //   gasPrice: "auto",
     // },
-    goerli: {
-      url: QUICKNODE_HTTP_URL, // Use the URL from the environment variable
-      accounts: [PRIVATE_KEY], // Use the private key from the environment variable
-      gasPrice: "auto",
-    },
   },
 };

@@ -493,10 +493,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         // USDTtoken.transfer(msg.sender, amountsOut[1]);
     }
 
-    // function getContractBalance() public view returns (uint) {
-    //     return address(this).balance;
-    // }
-
+ 
     modifier auctionIsLive(uint256 _tokenId) {
         require(
             block.timestamp > _idToAuction[_tokenId].startTime &&
@@ -605,15 +602,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     function getLatestUSDTPrice() public view returns (uint256) {
         // Commenting for testing
 
-        AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
-            0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
-        ); // Mainnet contract address for USDT price feed
-        (, int256 price, , , ) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
-        require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
-        return uint256(price);
+        // AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
+        //     0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
+        // ); // Mainnet contract address for USDT price feed
+        // (, int256 price, , , ) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
+        // require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
+        // return uint256(price);
 
         // Uncomment for testnet
-        // return 627758691588469;
+        return 627758691588469;
     }
 
     function buyWithUSDT(
