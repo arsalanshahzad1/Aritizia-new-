@@ -81,7 +81,8 @@ function App() {
     }
   }, [account])
 
-
+  const RPC = process.env.SEPOLIA_RPC_ADDRESS;
+  console.log(RPC,"RPCRPCRPC");
 
 
 

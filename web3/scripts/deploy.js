@@ -97,3 +97,6 @@ main()
     console.error(error);
     process.exit(1);
   });
+
+//marketplace contract 0x41498e4ec6f2C4FcAc61A25aAB24825Ad886E288
+// nftcntract  0xc0D61eBCCcc94d518D3e8CCf6787FDA1441EaDbB
