@@ -329,7 +329,6 @@ p {
   letter-spacing: 0em;
   text-align: left;
   color: #929292;
-  padding-right: 115px !important;
 }
 
 .profile-drawer .pro-dtails {
@@ -414,7 +413,7 @@ p {
 
 .profile-drawer .six-line .left p {
   font-family: 'Jost';
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 43px;
   letter-spacing: 0em;
@@ -430,7 +429,7 @@ p {
   letter-spacing: 0em;
   text-align: left;
   color: #6F6F6F;
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
 .profile-drawer .six-line .right {
@@ -904,6 +903,14 @@ p {
   font-weight: 500;
   line-height: normal;
 }
+.registor .registor-wrap .right .content form .term-condition .two p a{
+  color: #B600D1;
+  font-family: 'Jost';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
 
 .registor .registor-wrap .right .content form .signup {
   border-radius: 15px;
@@ -1020,7 +1027,7 @@ p {
 
 .varification-modal-wrap .modal-body {
   width: 470px;
-  padding: 40px 63px;
+  padding: 40px 40px;
 }
 
 .varification-modal-wrap .modal-body .title {
@@ -1040,7 +1047,43 @@ p {
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
+  line-height: 
+  normal;
+}
+.varification-modal-wrap .modal-body .desc-forget {
+  color: #8C8C8C;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
   line-height: normal;
+  line-height: 20px;
+  margin-bottom: 20px !important;
+}
+.varification-modal-wrap .modal-body .desc-change {
+  color: #8C8C8C;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  line-height: 20px;
+  margin-bottom: 20px !important;
+  margin-top: 20px !important;
+}
+.varification-modal-wrap .modal-body .resent-code-login {
+  color: #B600D1;
+  text-align: left;
+  font-family: 'Jost';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  line-height: 20px;
+  margin-top: 10px !important;
+  cursor: pointer;
 }
 
 .varification-modal-wrap .modal-body .email {
@@ -1053,6 +1096,40 @@ p {
   line-height: normal;
   margin-top: 14px !important;
   margin-bottom: 34px !important;
+}
+.varification-modal-wrap .modal-body .email-forget {
+  color: #3E3E3E;
+  text-align: left;
+  font-family: 'Jost';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 14px !important;
+  margin-bottom: 20px !important;
+  width: 100%;
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: #F2F2F2;
+  margin-top: 15px;
+}
+.varification-modal-wrap .modal-body .password-forget {
+  color: #3E3E3E;
+  text-align: left;
+  font-family: 'Jost';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 14px !important;
+  margin-bottom: 0px !important;
+  width: 100%;
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: #F2F2F2;
+  margin-top: 15px;
 }
 
 .varification-modal-wrap .modal-body .resent-code {
@@ -1087,6 +1164,35 @@ p {
   padding: 11px 0px;
 }
 
+.varification-modal-wrap .modal-body .back{
+  border-radius: 10px;
+  background: transparent;
+  color: #000;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 20px 0px 0px 0px;
+}
+
+.varification-modal-wrap .modal-body .email{
+  width: 100%;
+  padding: 10px 28px;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background: #F2F2F2;
+  margin-top: 15px;
+}
+
+.varification-modal-wrap .modal-body .back:hover{
+  text-decoration: underline;
+}
+
 .varification-modal-wrap .vi__wrapper {
   width: 100%;
 }
@@ -1100,4 +1206,21 @@ p {
   width: 62px;
   height: 58px;
   flex-shrink: 0;
+}
+
+.registor .registor-wrap .right .content form .pass{
+  position: relative;
+  width: 100%;
+}
+.registor .registor-wrap .right .content form .pass input{
+  width: 100%;
+}
+
+.registor .registor-wrap .right .content form .pass span{
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  right: 20px;
+  z-index: 9;
+  cursor: pointer;
 }

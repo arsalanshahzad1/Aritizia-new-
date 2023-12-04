@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import apis from "../../service";
+import { toast } from "react-toastify";
+import Loader from "../../components/shared/Loader";
 
-const EditProfile = () => {
+const EditProfile = ({loader,setLoader}) => {
   const [profileImage, setProfileImage] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const profileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const [data, setData] = useState("");
+  // const [loader, setLoader] = useState(false)
 
   useEffect(() => {
     const localstorageData = JSON.parse(localStorage.getItem("data"));
@@ -50,24 +53,37 @@ const EditProfile = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoader(true)
 
-    const clonedObject = { ...data };
+    const clonedObject = { ...data};
     clonedObject.user_id = clonedObject.id;
     const sendData = new FormData();
 
     for (const [key, value] of Object.entries(clonedObject)) {
       sendData.append(key, value);
     }
-
-    const response = await apis.editProfile(sendData);
-    if (response?.data?.user) {
-      localStorage.setItem("data", JSON.stringify(response.data.user));
-      // window.location.reload();
+    try {
+      const response = await apis.editProfile(sendData);
+      if (response?.data?.status) {
+        toast.success(response?.data?.message)
+        localStorage.setItem("data", JSON.stringify(response.data.user));
+        // window.location.reload();
+      }
+      setLoader(false)
+    } catch (error) {
+      console.log(error , 'error');
+      setLoader(false)
+      if(error?.message?.[0] != 0){
+        toast.error(error?.message?.[0])
+      }else{
+        toast.error(error?.message)
+      }
     }
   };
 
   return (
     <>
+     {loader && <Loader />}
       <div className="col-lg-7 col-md-7">
         <div className="inputfield-edit-profile">
           <div>
@@ -126,13 +142,18 @@ const EditProfile = () => {
             <div>
               <p>Bio</p> <p></p>
             </div>
-            <input
-              defaultValue={data?.bio}
+            <textarea
+              defaultValue={data?.bio === "null" ? "" : data?.bio}
               type="text"
               placeholder="Tell the world who are you!"
               name="bio"
               onChange={onChangeHandler}
+              cols={5}  
+              rows={3}
+              maxLength={500}
             />
+            <span className="password-validation-unclear-bio">Bio length should not be greather then {data?.bio?.length > 0 ? data?.bio?.length : ''}/500 words.</span>
+         
           </div>
 
           <div>
@@ -140,17 +161,18 @@ const EditProfile = () => {
               <p>Email Address*</p> <p></p>
             </div>
             <input
-              defaultValue={data?.email}
               type="email"
               placeholder="Enter email"
               name="email"
+              disabled
+              value={data?.email}
               // onChange={onChangeHandler}
             />
           </div>
 
           <div>
             <div>
-              <p>Your site</p> <p>optional</p>
+              <p>LinkedIn URL</p>
             </div>
             <input
               defaultValue={data?.your_site}
@@ -171,6 +193,19 @@ const EditProfile = () => {
               type="url"
               placeholder="Enter instagram URL"
               name="twitter_url"
+              onChange={onChangeHandler}
+            />
+          </div>
+          <div>
+            <div>
+              {" "}
+              <p>Facebook URL</p> <p></p>
+            </div>
+            <input
+              defaultValue={data?.facebook_url}
+              type="url"
+              placeholder="Enter facebook URL"
+              name="facebook_url"
               onChange={onChangeHandler}
             />
           </div>
@@ -210,7 +245,7 @@ const EditProfile = () => {
             </div>
             <input
               defaultValue={data?.phone_no}
-              type="tel"
+              type="number"
               placeholder="Enter your phone number"
               name="phone_no"
               onChange={onChangeHandler}

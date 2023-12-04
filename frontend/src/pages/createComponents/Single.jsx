@@ -2,97 +2,81 @@ import React from "react";
 import Header from "../landingpage/Header";
 import Footer from "../landingpage/Footer";
 import PageTopSection from "../../components/shared/PageTopSection";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { AiFillTag } from "react-icons/ai";
 import { BsFillClockFill } from "react-icons/bs";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import Slider from "rc-slider";
-import Web3Modal from "web3modal";
-import { BigNumber, Contract, ethers, providers, utils } from "ethers";
+import { ethers } from "ethers";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "./pinanta";
-import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
-import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
-import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
-import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Search from "../../components/shared/Search";
-import duck from "../../../public/assets/images/duck.png";
-import { createPath, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import apis from "../../service/index";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
 import Loader from "../../components/shared/Loader";
-
-const fileTypes = ["JPG", "PNG", "GIF"];
-
-// const [imageUrl, setImageUrl] = useState('');
-//   const [imageFile, setImageFile] = useState(null);
-
-const convertImageUrlToImageFile = async (url) => {
-  try {
-    // Download the image from the URL
-    const imageUrl = url;
-    const response = await fetch(url);
-    console.log(response);
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch image. Status: ${response.status}`);
-    }
-
-    // Convert the response data to a Blob
-    const imageBlob = await response.blob();
-
-    // Extract the file name from the URL or specify a custom name
-    const urlParts = imageUrl.split('/');
-    const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
-
-    // Create a File object from the Blob
-    const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
-    return (
-      file
-    )
-    // console.log(file);
-    // Set the image file in state
-    // setImageFile(file);
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
+import { Store } from "../../Context/Store";
 
 const Single = ({ search, setSearch }) => {
-  let image = "";
-  const [listingType, setListingType] = useState(0);
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [startingDate, setStartingDate] = useState("");
-  const [endingDate, setEndingDate] = useState("");
-  const [showCollection, setshowcollection] = useState(false);
 
-  var startTime = useRef(0);
-  var endTime = useRef(0);
-  const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  
   const [showWarning, setShowWarning] = useState(false);
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
+
   const navigate = useNavigate();
 
-  useEffect(() =>{
-    window.scrollTo(0,0)
-  } ,[])
+  const { account, checkIsWalletConnected, getSignerMarketContrat, getSignerNFTContrat } = useContext(Store);
+
+  const [listingType, setListingType] = useState(0);
+  const [startingDate, setStartingDate] = useState(0);
+  const [endingDate, setEndingDate] = useState(0);
+  const [showCollection, setshowcollection] = useState(false);
+  const [crypto, setCrypto] = useState({ value: 0, label: "ETH" });
+  const [collection, setCollection] = useState("");
+  const [royalty, setRoyalty] = useState(0);
+  const [royaltyValue, setRoyaltyValue] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [displayImage, setDisplayImage] = useState("");
+  const [price, setPrice]=useState("")
+  const [showValue, setShowValue]=useState("");
+  const [pinataImage ,setPinataImage]=useState("")
+  const [description, setDescription]=useState("");
+  const [title,setTitle]=useState("");
+  const [startTime,setStartTime]=useState("");
+  const [endTime, setEndTime]=useState(0);
+    
+  const [collectionOptions, setcollectionOptions] = useState([]);
+  
+  const [collectionName, setCreateCollection] = useState("");
+  const [selectedImage2, setSelectedImage2] = useState(null); //collection Image
+  const [showCreateCollection, setshowCreateCollection] = useState(false);
+  
+  const [collectionFinalized, setcollectionFinalized] = useState(false);
+  const [isSingleSubmit, setIsSingleSubmit] = useState(false)
+  
+  
+  let mintcounter = 0;
+  let listcounter = 0;
+
+
+  useEffect(() => {
+    checkIsWalletConnected()
+  }, [account])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const getCollection = async () => {
-    const response = await apis.getNFTCollection();
-    if (response.status) {
-      setcollectionOptions("");
-
+    const response = await apis.getNFTCollection(user_id);
+    if (response?.status) {
+  
       for (let i = 0; i < response?.data?.data?.length; i++) {
         let type = response?.data?.data[i]?.payment_type;
-        console.log(type == "eth", "eth", "TYpe", type);
 
         if (type == "eth") {
           setcollectionOptions((previousOptions) => [
@@ -118,12 +102,11 @@ const Single = ({ search, setSearch }) => {
         }
       }
     }
-    console.log(collectionOptions, "collectionOptions");
   };
 
   const postSingleCollection = async () => {
     let cryptoType;
-    console.log(user_id, collectionName, crypto, selectedImage2);
+
     if (collectionName.length < 1 || !selectedImage2) {
       toast.warning("All fields are required", {
         position: toast.POSITION.TOP_CENTER,
@@ -134,29 +117,37 @@ const Single = ({ search, setSearch }) => {
       } else if (crypto.value === 1) {
         cryptoType = "usdt";
       }
-
       const sendData = new FormData();
       sendData.append("user_id", user_id);
       sendData.append("name", collectionName);
       sendData.append("payment_type", cryptoType);
       sendData.append("image", selectedImage2);
-      const response = await apis.postNFTCollection(sendData);
 
-      if (response.status) {
-        getCollection();
-        setshowCreateCollection(false);
+      try {
+        setLoading(true);
+        const response = await apis.postNFTCollection(sendData);
+
+        if (response.status) {
+          toast.success(response?.data?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          getCollection();
+          setshowCreateCollection(false);
+        }
+
+        setLoading(false);
+      }
+      catch (e) {
+        setLoading(false);
+        console.log(e?.message, "EEEEEEEEEEEEEEEEEEEEE")
+        toast.warning(e?.message)
+
       }
 
-      // setcollectionOptions((previousOptions) => [
-      //   ...previousOptions,
-      //   {
-      //     value: response?.data?.data?.id,
-      //     label: response?.data?.data?.name,
-      //     image: response?.data?.data?.media[0]?.original_url,
-      //   },
-      // ]);
     }
   };
+
+  // console.log(startingDate,"startDate")
 
   useEffect(() => {
     getCollection();
@@ -165,307 +156,147 @@ const Single = ({ search, setSearch }) => {
   const handleInputChange = (event) => {
     const value = event.target.value;
     if (/^\d*\.?\d*$/.test(value) || value === "") {
-      price = Number(value);
-      console.log("Price", price);
-      setInputValue(value);
+      setShowValue(value);
+      let pricesss = ethers.utils.parseEther(value?.toString())
+      setPrice(pricesss);
       setShowWarning(false);
     } else {
       setShowWarning(true);
     }
   };
+  //pehly saai requitments pori kro fr upload oor mint or list kro
 
-  useEffect(() => {
-    if (listingType == 1) {
-      if (startingDate && endingDate && endingDate < startingDate) {
-        toast.warning("End date should be after start date!", {
+  const uploadToIPFS = async (e) => {
+      e.preventDefault()
+      setIsSingleSubmit(true);
+      if (listingType == 0) {
+        // console.log("startTimestamp in if", startingDate);
+        // console.log("endTimestamp in if", endingDate);
+        setStartTime(0)
+        setEndTime(0)
+        setStartingDate(0)
+        setEndingDate(0)
+      } 
+      else if (listingType == 1) {
+        const startDate = new Date(startingDate);
+        const endDate = new Date(endingDate);
+        const startTimestamp = Math.floor(startDate.getTime() / 1000)
+        setStartTime(startTimestamp)
+        const endTimestamp = Math.floor(endDate.getTime() / 1000); 
+        setEndTime(endTimestamp)
+        if (startTimestamp >= endTimestamp) return setEndingDate(0), setIsSingleSubmit(false), toast.error("Expire date must be grather than start date", {
           position: toast.POSITION.TOP_CENTER,
         });
-        // alert("End date should be after start date");
-        setEndingDate("");
       }
+
+  if (!title || !description) return setIsSingleSubmit(false), toast.error("someThingWrong");
+  
+  if (typeof selectedImage !== "undefined") {
+    try {
+      setLoading(true);
+      // console.log("this is image selectedImage ", selectedImage);
+      const resut = await uploadFileToIPFS(selectedImage);
+      console.log("Result.pinata", resut?.pinataURL);
+      setPinataImage(resut?.pinataURL);
+      setLoading(false);
+      createNFT(resut?.pinataURL);
+    } catch (error) {
+      setLoading(false);
+      console.log("ipfs image upload error: ", error);
     }
-  }, [startingDate, endingDate]);
-
-  // useEffect(() => {
-  //   if (listingType == 1) {
-  //     const today = new Date();
-  //     today.setDate(today.getDate()-1); // Subtract 1 day from today's date
-  //     const selectedStartDate = new Date(startingDate);
-
-  //     if (selectedStartDate < today) {
-  //       toast.warning("Start date should not be before today's date", {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       // alert("Start date should not be before today's date");
-  //       setStartingDate("");
-  //     }
-  //   }
-  // }, [startingDate]);
-
-  const web3ModalRef = useRef();
-
-  var item = {};
-
-  let price = useRef(0);
-  const title = useRef("");
-  const description = useRef("");
-
-  let mintcounter = 0;
-  let listcounter = 0;
-
-  // Helper function to fetch a Provider/Signer instance from Metamask
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   console.log("In provider");
-  //   const provider = await web3ModalRef.current.connect();
-  //   console.log("In provider2");
-  //   const web3Provider = new providers.Web3Provider(provider);
-  //   console.log("In provider3");
-  //   const { chainId } = await web3Provider.getNetwork();
-  //   if (chainId !== 31337) {
-  //     toast.warning("Change the network to Sepolia", {
-  //       position: toast.POSITION.TOP_CENTER,
-  //     });
-  //     // window.alert("Change the network to Sepolia");
-  //     throw new Error("Change network to Sepolia");
-  //   }
-
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-  //     // console.log("getSigner");
-
-  //     return signer;
-  //   }
-  //   // console.log("getProvider");
-  //   return web3Provider;
-  // };
-
-  // Upload image to IPFS
-
-
-  const uploadToIPFS = async (event) => {
-    if (typeof selectedImage !== "undefined") {
-      try {
-        setLoading(true);
-        console.log("this is image selectedImage ", selectedImage);
-        console.log("this is image item.file ", item.file);
-        // const file = await convertImageUrlToImageFile('https://cdn.midjourney.com/842c4129-2432-49b2-a7a6-f96d6151fa3d/0_0.png')
-        // const file = await convertImageUrlToImageFile('http://143.198.70.237/uploads/3/media-libraryeSf5vB')
-
-        const resut = await uploadFileToIPFS(item.file);
-        // const resut = await uploadFileToIPFS(file);
-
-        //const result = await client.add(file)
-        console.log("!!!!!!!!!!!!!!!!!!", resut);
-        console.log("Result.pinata", resut.pinataURL);
-        // setImage(resut.pinataURL);
-        image = resut.pinataURL;
-        setLoading(false);
-        // create nft using image IPFS and other data
-        console.log("Calling the createNFT function");
-        createNFT();
-      } catch (error) {
-        setLoading(false);
-        console.log("ipfs image upload error: ", error);
-      }
-    }
-  };
+  }
+};
 
   // Upload image and data to IPFS
-  const createNFT = async () => {
-    if (listingType == 0) {
-      let price = item.price;
-      let crypto = item.crypto;
-      let collection = 1; // collection id hardcoded dey hrey hn
-      let title = item.title;
-      let description = item.description;
-
-      console.log("collection", collection);
-      console.log("royalty", royalty);
-
+  const createNFT = async (ImageUrl) => {
+    if(!ImageUrl) return setIsSingleSubmit(false), toast.error("Image Url Undefined"); 
+    
+    const nftJSON = {
+        "description": `${description}`,
+        "image": `${ImageUrl}`,
+        "title": `${title}`
+        // "collection": `${1}`,
+        // "listingType": `${listingType}`,
+        // "price": `${price}`,
+        // "crypto": `${collection?.crypto}`,
+        // "royalty": `${royaltyValue}`
+      }
+      
       try {
-        const dataInJSON = JSON.stringify({
-          image,
-          listingType,
-          price,
-          crypto,
-          collection,
-          title,
-          description,
-          royalty,
-        });
-        console.log("dataInJSON", dataInJSON);
-        const result = await uploadJSONToIPFS(dataInJSON);
+        const result = await uploadJSONToIPFS(nftJSON);
         console.log("uploadJSONToIPFS", result.pinataURL);
-        mintThenList(result.pinataURL);
-        // setIsSingleSubmit(false)
-
-        //   }
+        mintThenList(result?.pinataURL);
       } catch (error) {
         console.log("ipfs uri upload error: ", error);
-        // setIsSingleSubmit(false)
+        setIsSingleSubmit(false)
       }
-    } else {
-      let price = item.price;
-      let crypto = item.crypto;
-      let collection = 0;
-      let title = item.title;
-      let description = item.description;
+  }
 
-      try {
-        const dataInJSON = JSON.stringify({
-          image,
-          listingType,
-          price,
-          // crypto, uncommment this after fixing frontend
-          startTime,
-          endTime,
-          collection,
-          title,
-          description,
-          royalty,
-        });
+  let singleMinting = false;
 
-        console.log("dataInJSON", dataInJSON);
-        const result = await uploadJSONToIPFS(dataInJSON);
-
-        console.log("RESULT", result);
-        mintThenList(result.pinataURL);
-        // setIsSingleSubmit(false)
-      } catch (error) {
-        console.log("ipfs uri upload error: ", error);
-        // setIsSingleSubmit(false)
-      }
-    }
-  };
-
-  const [listedEvents, setListed] = useState([]);
-  const [isMinted, setIsMinted] = useState(false);
-
-  const mintNFT = async (result, nftContract) => {
+  const mintThenList = async (result) => {
     mintcounter += 1;
-    console.log("mintcounter", mintcounter);
     try {
-      console.log("result", result);
-      await nftContract.mint([result], {
+      singleMinting= true;
+     let minted =  await getSignerNFTContrat().mint([result], {
         gasLimit: ethers.BigNumber.from("5000000"),
       });
-
-      console.log("NFT minting is complete!");
-
-      let response = await nftContract.on(
-        "NFTMinted",
-        singleMinting ? handleNFTMintedEvent2 : null
-      );
-
-      console.log("Response of mint event", response);
-      // setIsSingleSubmit(false)
+      minted.wait();
+      console.log("NFT minting is complete!",minted);
+      await getSignerNFTContrat().on("NFTMinted",handleNFTMintedEvent2);
     } catch (error) {
       setIsSingleSubmit(false)
       console.error("Error while minting NFT:", error);
-      throw error; // Rethrow the error to be caught in the higher level function if necessary
+      throw error;
     }
   };
-  const [getMintedTokens, setMintedTokensList] = useState();
-  let marketplaceContractGlobal;
-  let nftContractGlobal;
 
   const handleNFTMintedEvent2 = async (mintedTokens) => {
-    console.log("handleNFTMintedEvent2");
-    let tokenId = +mintedTokens[0].toString();
-    setMintedTokensList(tokenId);
-    console.log("tokenId", tokenId);
 
-    singleMinting
-      ? listNFT(marketplaceContractGlobal, nftContractGlobal, tokenId)
-      : null;
-  };
-
-  async function listNFT(marketplaceContract, nftContract, listedToken) {
-    console.log("listNFT", listNFT);
+    let tokenId = mintedTokens[0]?.toString();
+    
     listcounter += 1;
     try {
-      let mintedTokens = listedToken;
 
-      console.log("listedToken", listedToken);
-      console.log("getMintedTokens", mintedTokens);
+      const startDate = new Date(startingDate);
+      const endDate = new Date(endingDate);
+      const startTimestamp = Math.floor(startDate.getTime() / 1000)
+      const endTimestamp = Math.floor(endDate.getTime() / 1000); 
 
-      console.log("qqq startTime", startTime);
-      console.log("startTime typeof", typeof startTime);
-      console.log("qqq endTime", endTime);
-      // let currentTime = Date.now();
-      // console.log("aaa f currentTime:", currentTime);
-      // let addedTime = currentTime + 300000;
+      console.log("data", tokenId);
+      console.log("data", startTimestamp);
+      console.log("data", endTimestamp);
+      console.log("data", collection?.collection_id);
+      console.log("data",listingType);
+      console.log("data",royaltyValue);
+      console.log("data",price?.toString());
 
-      // currentTime = Math.floor(currentTime / 1000);
-      // console.log("aaa currentTime:", currentTime);
-      // let addedTime = currentTime + 500000;
-      // console.log("aaa addedTime:", addedTime);
-
-      console.log(" collection.collection_id", collection.collection_id);
-      console.log("collection.crypto", collection.crypto);
-      await (
-        await marketplaceContract.listNft(
-          nftContract.address,
-          [mintedTokens],
-          [ethers.utils.parseEther(item.price)], // list
-          [royalty],
+       let listed =  await getSignerMarketContrat().listNft(
+          getSignerNFTContrat().address,
+          [tokenId],
+          [price], // list
+          [royaltyValue],
           listingType,
-          // [currentTime],
-          // [addedTime],
-          [startTime], // list
-          [endTime], // list
-          collection.collection_id, // collection number
-          collection.crypto,
+          [startTimestamp], // list
+          [endTimestamp], // list
+          collection?.collection_id, // collection number
+          collection?.crypto,
+          user_id,
           {
             gasLimit: ethers.BigNumber.from("5000000"),
           }
-        )
-      ).wait();
+        );
+
+      listed.wait();
       console.log("NFT listing is complete!");
-
-      let response = await marketplaceContract.on(
-        "NFTListed",
-        singleMinting ? handleNFTListedEvent2 : null
-      );
-
-      console.log("response", response);
+      await getSignerMarketContrat().on("NFTListed", handleNFTListedEvent2);
     } catch (error) {
       setIsSingleSubmit(false)
       toast.error(`Error while listing NFT: ${error}`, {
         position: toast.POSITION.TOP_CENTER,
       });
-      // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
-    console.log("singleMinting", singleMinting);
-  }
-
-  // mint the NFT then list
-  const mintThenList = async (result) => {
-    const signer = await getProviderOrSigner(true);
-
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      signer
-    );
-
-    console.log("In result", result);
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
-    marketplaceContractGlobal = marketplaceContract;
-    nftContractGlobal = nftContract;
-    await mintNFT(result, nftContract);
-  };
-
-  let listToPost = useRef([]);
-
-  const addListToPost = (newValue) => {
-    listToPost.current.push(newValue);
   };
 
   const handleNFTListedEvent2 = async (
@@ -479,277 +310,76 @@ const Single = ({ search, setSearch }) => {
   ) => {
     console.log("handleNFTListedEvent2");
 
-    if (singleMinting) {
       let listedData = {
-        title: item.title,
-        token_id: tokenId.toString(),
-        seller: seller.toString(),
-        owner: owner.toString(),
-        price: ethers.utils.formatEther(price.toString()),
-        collection_id: collectionId.toString(),
-        listing_type: listingType.toString(),
+        title: title,
+        token_id: tokenId?.toString(),
+        seller: seller?.toString(),
+        owner: owner?.toString(),
+        price: price?.toString(),
+        collection_id: collectionId?.toString(),
+        listing_type: listingType?.toString(),
+        user_id: user_id
       };
-      addListToPost(listedData);
-      singleMinting = false;
-      console.log("singleMinting", singleMinting);
-      nftDataPost();
-    } else {
-      setIsSingleSubmit(false)
-    }
+      nftDataPost(listedData);
   };
 
-  const nftDataPost = async () => {
-    const response = await apis.postListNft(listToPost.current[0]);
-    if (response) {
-      toast.success("Nft listed", {
+  const nftDataPost = async (listedData) => {
+    // const response = await apis.postListNft(listedData);
+    if (true) {
+      setIsSingleSubmit(false)
+      toast.success("NFT listed", {
         position: toast.POSITION.TOP_CENTER,
       });
-
-      console.log("response", response);
       setIsSingleSubmit(false)
-
+      window.location.reload();
       setTimeout(() => {
         navigate("/profile");
-        window.location.reload();
       }, 2000);
-      navigate("/profile");
+      
     } else {
       setIsSingleSubmit(false)
-
     }
   };
-
-  const [file, setFile] = useState(null);
-  const [crypto, setCrypto] = useState({ value: 0, label: "ETH" });
-  const [collection, setCollection] = useState("");
-  const [royalty, setRoyalty] = useState(0);
 
   const cryptoOptions = [
     { value: "", label: "Select Crypto" },
     { value: 0, label: "ETH" },
     { value: 1, label: "USDT" },
   ];
-
-  const [collectionOptions, setcollectionOptions] = useState([]);
-
-  const defaultOption = collectionOptions[0];
+  
   const defaultCrypto = cryptoOptions[0];
+
 
   const handleSliderChange = (value) => {
     // Update the value or perform any other actions
-    console.log("Slider value:", value);
+    // console.log("Slider value:", value);
     setRoyalty(value);
-    // ...
+    setRoyaltyValue(value * 100)
   };
 
-  useEffect(() => { }, [price, title, description]);
-  let singleMinting = false;
-
-  function createItem(e) {
-  
-    setIsSingleSubmit(true)
-    e.preventDefault();
-    price = inputValue;
-    singleMinting = true;
-
-    console.log("collection  in createNFT", collection);
-    let tempCollection = collection;
-
-    console.log("crypto in check", crypto);
-
-    console.log("startTimestamp in if", startingDate);
-    console.log("endTimestamp in if", endingDate);
-
-    if (listingType == 0) {
-      console.log("startTimestamp in if", startingDate);
-      console.log("endTimestamp in if", endingDate);
-      setStartingDate(0);
-      setEndingDate(0);
-      startTime = 0;
-      endTime = 0;
-    } else if (listingType == 1) {
-      const startDate = new Date(startingDate);
-      const endDate = new Date(endingDate);
-
-      const startTimestamp = Math.floor(startDate.getTime() / 1000);
-
-      const endTimestamp = Math.floor(endDate.getTime() / 1000);
-      setStartingDate(startTimestamp);
-      setEndingDate(endTimestamp);
-      startTime = startTimestamp;
-      endTime = endTimestamp;
-    }
-
-    let demoCollection = 0;
-    item = {
-      title: title.current.value,
-      price: price,
-      description: description.current.value,
-      crypto: collection.crypto,
-      file: selectedImage,
-      collection: tempCollection.collection_id,
-    };
-
-    console.log("item", item);
-
-    if (
-      item.title != null &&
-      item.price != null &&
-      item.description != null &&
-      item.crypto != null &&
-      item.file != null &&
-      item.collection != null
-    ) {
-      //  UNCOMMENT THIS
-      console.log("filezz", file);
-
-      uploadToIPFS(file);
-    } else {
-      toast.warning("Fill all the fields to continue", {
-        position: toast.POSITION.TOP_CENTER,
-      });
-      // window.alert("Fill all the fields to continue");
-    }
-    // setIsSingleSubmit(false)
-  }
-
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "hardhat",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //     connectWallet();
-  //     // numberOFICOTokens();
-  //   }
-  // }, [walletConnected]);
-
-  const getItem = async () => {
-    try {
-      const provider = await getProviderOrSigner();
-      const marketplaceContract = new Contract(
-        MARKETPLACE_CONTRACT_ADDRESS.address,
-        MARKETPLACE_CONTRACT_ABI.abi,
-        provider
-      );
-      const _listedNfts = await marketplaceContract.getListedNfts();
-
-      console.log("listedNfts", _listedNfts);
-
-      for (let i = 0; i < _listedNfts.length; i++) {
-        console.log("_listedNfts", _listedNfts[i]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  const [collectionName, setCreateCollection] = useState("");
-  const [showCreateCollection, setshowCreateCollection] = useState(false);
-
-  const AddCollection = () => {
-    // if (collectionName.length < 1 || !selectedImage2) {
-    //   toast.warning("Input Collection Name and image to Create", {
-    //     position: toast.POSITION.TOP_CENTER,
-    //   });
-    // } else {
-    //   setcollectionOptions((previousOptions) => [
-    //     ...previousOptions,
-    //     {
-    //       value: collectionName.toLowerCase(),
-    //       label: collectionName,
-    //       image: selectedImage2,
-    //     },
-    //   ]);
-    //   console.log(collectionOptions, "collection updated");
-    //   hideCreateCollection();
-    // }
-  };
-  // useEffect(() => {
-  //   console.log("collection updated", collectionOptions);
-  // }, [collectionOptions]);
 
   const hideCreateCollection = () => {
     setCreateCollection("");
     setshowCreateCollection(false);
   };
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [displayImage, setDisplayImage] = useState("");
-
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     setDisplayImage(URL.createObjectURL(file));
     setSelectedImage(file);
   };
+
   const fileInputRef = useRef(null);
   const handleButtonClick = () => {
     fileInputRef.current.click();
   };
 
-  const [selectedImage2, setSelectedImage2] = useState(null);
   const handleInputChange2 = (e) => {
     const file = e.target.files[0];
     setSelectedImage2(file);
   };
 
-  const getBlockTimestamp = async () => {
-    const provider = await getProviderOrSigner();
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-
-    let time = await marketplaceContract.getCurrentTimestamp();
-
-    console.log("GGGG  collection.collection_id", collection.collection_id);
-    console.log("GGGG collection.crypto", collection.crypto);
-    // console.log("block.timestamp", time);
-    console.log("block.timestamp", time.toString());
-
-    const startDate = new Date(startingDate);
-    const endDate = new Date(endingDate);
-
-    console.log("startDate", startDate.getTime());
-    console.log("endDate", endDate.getTime());
-
-    const startTimestamp = Math.floor(startDate.getTime() / 1000);
-
-    const endTimestamp = Math.floor(endDate.getTime() / 1000);
-    console.log("startTimestamp", startTimestamp);
-    console.log("endTimestamp", endTimestamp);
-  };
-
-  const [choosenCollection, setChoosenCollection] = useState("");
-  useEffect(() => {
-    setChoosenCollection(collection);
-    console.log("choosen", choosenCollection);
-  }, [collection]);
-
-  const [collectionFinalized, setcollectionFinalized] = useState(false);
-
-  const [isSingleSubmit, setIsSingleSubmit] = useState(false)
-
-  // const [scroll, setScroll] = useState(true)
-
-  // useEffect(()=>{
-  //   if(scroll){
-  //     window.scrollTo(0,0)
-  //     setScroll(false)
-  //   }
-  // },[])
+  console.log("Renderrrrr");
 
   return (
     <>
@@ -758,7 +388,7 @@ const Single = ({ search, setSearch }) => {
       <div className="create-single">
         <PageTopSection title={"Create Single Collectible"} />
         <div className="create-single-section-wrap">
-          <form onSubmit={createItem}>
+          <form onSubmit={uploadToIPFS} type="button">
             <div className="container">
               <div className="row">
                 <div className="col-lg-8 mx-auto">
@@ -800,19 +430,14 @@ const Single = ({ search, setSearch }) => {
                                                 <li
                                                   key={index}
                                                   className={`${collection?.label ===
-                                                      value?.label
-                                                      ? "is-selected"
-                                                      : ""
+                                                    value?.label
+                                                    ? "is-selected"
+                                                    : ""
                                                     }`}
                                                   onClick={() => {
                                                     setCollection(
                                                       collectionOptions[index]
-                                                    );
-                                                    console.log(
-                                                      "alimonis",
-                                                      collection
-                                                    );
-                                                  }}
+                                                    )}}
                                                 >
                                                   {value?.label}
                                                 </li>
@@ -899,7 +524,7 @@ const Single = ({ search, setSearch }) => {
                                         />
                                       </div>
                                     </div>
-                                    <p className="txt-2">Upload image</p>
+                                    <p className="txt-2">Upload Collection Image</p>
                                     <input
                                       type="file"
                                       accept="image/*"
@@ -915,12 +540,16 @@ const Single = ({ search, setSearch }) => {
                                       </div>
                                       <div
                                         className="button-styling btnCC"
+                                        disabled={loading}
                                         onClick={() => {
-                                          AddCollection();
-                                          postSingleCollection();
+                                          if (!loading) {
+                                            // AddCollection();
+                                            postSingleCollection();
+                                          }
                                         }}
                                       >
-                                        Create
+                                        {loading ? "Loading" : "Create"}
+
                                       </div>
                                     </div>
                                   </div>
@@ -984,7 +613,7 @@ const Single = ({ search, setSearch }) => {
                                 <br />
                                 <div
                                   onClick={handleButtonClick}
-                                  className="button-styling" style={{cursor:"pointer"}}
+                                  className="button-styling" style={{ cursor: "pointer" }}
                                 >
                                   Browse
                                 </div>
@@ -1043,9 +672,9 @@ const Single = ({ search, setSearch }) => {
                               <input
                                 type="text"
                                 placeholder="e.g. ‘Crypto Funk"
-                                // defaultValue={title.current.value}
-                                ref={title}
-                              // onChange={(e) => setTitle(e.target.value)}
+                                onChange={(e) => setTitle(e.target.value)}
+                                defaultValue={title}
+              
                               />
                             </div>
                           </div>
@@ -1056,8 +685,10 @@ const Single = ({ search, setSearch }) => {
                               <h2>Description</h2>
                               <input
                                 type="text"
-                                placeholder="e.g. ‘This is very limited item’"
-                                ref={description}
+                                onChange={(e)=>setDescription(e.target.value)}
+                                placeholder="‘This is very limited item’"
+                                defaultValue={description}
+                                
                               />
                             </div>
                           </div>
@@ -1069,7 +700,7 @@ const Single = ({ search, setSearch }) => {
                                 <h2>Price</h2>
                                 <input
                                   type="text"
-                                  value={inputValue}
+                                  defaultValue={showValue}
                                   onChange={handleInputChange}
                                 // type="number"
                                 // placeholder="0.00"
@@ -1089,9 +720,10 @@ const Single = ({ search, setSearch }) => {
                               <div className="row">
                                 <div className="col-lg-8">
                                   <h2>Minimum bid</h2>
+                                  
                                   <input
                                     type="number"
-                                    value={inputValue}
+                                    defaultValue={showValue}
                                     onChange={handleInputChange}
                                   // type="number"
                                   // placeholder="0.00"
@@ -1132,7 +764,7 @@ const Single = ({ search, setSearch }) => {
                                     onChange={(e) =>
                                       setEndingDate(e.target.value)
                                     }
-                                    min={startingDate}
+                                  min={startingDate}
                                   />
                                 </div>
                               </div>
@@ -1165,10 +797,12 @@ const Single = ({ search, setSearch }) => {
                                 {
                                   !isSingleSubmit ?
                                     <button type="submit" className="button-styling">
-                                      Create Item
+                                      {/* Create Item */}
+                                      Mint
                                     </button> :
                                     <button className="button-styling" style={{ background: "gray" }} disabled>
-                                      Create Item
+                                      {/* Create Item */}
+                                      Mint
                                     </button>
                                 }
 
@@ -1183,11 +817,8 @@ const Single = ({ search, setSearch }) => {
               </div>
             </div>
           </form>
-          {/* <button onClick={getBlockTimestamp}>GetBlockTimestamp</button> */}
-          <br></br>
-          {/* <button onClick={getItem} className="button-styling">
-            Get NFTS data
-          </button> */}
+
+
         </div>
         <Search search={search} setSearch={setSearch} />
         <Footer />

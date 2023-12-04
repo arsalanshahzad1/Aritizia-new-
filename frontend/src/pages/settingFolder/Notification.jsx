@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import apis from "../../service";
@@ -23,6 +24,7 @@ const Notification = () => {
 
   const updateNotificationSetting = async (e) => {
     e.preventDefault();
+    setLoader(true)
     const settings = data;
     settings["user_id"] = userData?.id;
     console.log(settings, "settings data");
@@ -33,11 +35,13 @@ const Notification = () => {
       toast.success("Notification settings updated", {
         position: toast.POSITION.TOP_CENTER,
       });
+      setLoader(false)
     }
     else{
       toast.warning("Failed", {
         position: toast.POSITION.TOP_CENTER,
       });
+      setLoader(false)
     }
 
   };
@@ -73,11 +77,11 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When someone purhased your item.</p>
+                <p> When someone purchased your item.</p>
               </div>
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-12">
+          {/* <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
                 <h2>Add Fan</h2>
@@ -93,7 +97,7 @@ const Notification = () => {
                 <p>When someone adds you in a Fan list</p>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
@@ -107,7 +111,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When someone purhased your item.</p>
+                <p>When someone bids on your NFT.</p>
               </div>
             </div>
           </div>
@@ -124,14 +128,14 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When someone follows you.</p>
+                <p>When someone followed you.</p>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-12">
             <div className="notification-sec-wrap">
               <div>
-                <h2>like</h2>
+                <h2>Like</h2>
                 <Form.Check
                   type="switch"
                   id="custom-switch"
@@ -141,7 +145,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When anyone likes your nft.</p>
+                <p>When someone liked your NFT.</p>
               </div>
             </div>
           </div>
@@ -158,7 +162,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When you successfully buy an item.</p>
+                <p> When you successfully purchased an NFT.</p>
               </div>
             </div>
           </div>
@@ -175,7 +179,6 @@ const Notification = () => {
           </div>
         </div>
       </Form>
-      <ToastContainer />
     </div>
     </>
   );

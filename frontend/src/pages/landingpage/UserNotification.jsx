@@ -4,10 +4,18 @@ import '../../App.css';
 
 function UserNotification(props) {
     const { data } = props;
-
+    const userData = JSON.parse(localStorage.getItem('data'))
+    console.log(typeof userData?.id, 'adsfhf');
     const navigate = useNavigate();
     const navigateToProfile = (id) => {
-        navigate(`/profile/${id}`)
+
+        if (userData?.id === id) {
+            navigate(`/profile`)
+        } else {
+            navigate(`/other-profile?add=${id}`)
+        }
+        console.log(typeof id, 'adsfhf');
+        // navigate(`/profile/${id}`)
     }
 
     // Additional check to ensure data is an array before using map()
@@ -18,13 +26,13 @@ function UserNotification(props) {
     return (
         <>
             {data?.map((res, id) => (
-                <div key={id} onClick={() => navigateToProfile(res?.sender_id)} className={`Notification-in-header ${res?.is_seen == 0 ? 'is_seen' : ''}`} >
+                <div key={id} onClick={() => navigateToProfile(res?.user?.id)} className={`Notification-in-header ${res?.is_seen == 0 ? 'is_seen' : ''}`} >
                     <div className='image-holder'>
                         {res?.user?.profile_image == null ?
-                        <img src='/assets/images/user-none.png' alt="" />
-                        :
-                        <img src={res?.user?.profile_image} alt="" />
-                    }
+                            <img src='/assets/images/user-none.png' alt="" />
+                            :
+                            <img src={res?.user?.profile_image} alt="" />
+                        }
                     </div>
                     <div className='text-area'>
                         <div className='name-txt'>

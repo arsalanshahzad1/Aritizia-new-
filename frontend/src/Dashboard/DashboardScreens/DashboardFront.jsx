@@ -30,9 +30,9 @@ function DashboardFront({ search, setSearch }) {
     const defaultUserSubscription = userSubscriptionyptoOptions[0];
     const defaultSaleHistory = saleHistoryOptions[0];
 
-    console.log(graphData, "graph data")
+    // console.log(graphData, "graph data")
 
-    console.log(current, "current state")
+    // console.log(current, "current state")
 
   const viewAnalyticDashboard = async () => {
     try {
@@ -41,7 +41,7 @@ function DashboardFront({ search, setSearch }) {
         setDashboardAnalytics(response?.data.data.dashboard_analytics);
         setUserSubscription(response?.data.data.user_subscription);
       } else {
-        console.log("API request failed");
+        // console.log("API request failed");
       }
       setLoader(false)
     } catch (error) {
@@ -54,7 +54,7 @@ function DashboardFront({ search, setSearch }) {
   }, []);
 
   useEffect(() => {
-    console.log(userSubscription, "user Subscription");
+    // console.log(userSubscription, "user Subscription");
   }, [dashboardAnalytics]);
 
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];

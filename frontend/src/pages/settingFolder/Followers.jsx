@@ -1,6 +1,7 @@
+import React from 'react'
 import { useEffect, useState } from "react";
 import apis from "../../service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const Followers = ({ data  , id}) => {
@@ -27,7 +28,7 @@ const Followers = ({ data  , id}) => {
 
   const getFollowersList = async () => {
     const response = await apis.getFollowersList(id);
-    if(response.status){
+    if(response?.status){
       setFollwers(response?.data?.data);
       console.log(followers)
     }else{
@@ -69,11 +70,11 @@ const Followers = ({ data  , id}) => {
         ?
         <>
           {followers?.map((data, i) => {
-            {console.log(data,"id data")}
             return (
               <div className="Follow-row" key={i}>
+                <Link to={`/other-profile?add=${data?.user_id}`}>
                 <div className="left">
-                  <div className="img-holder" onClick={()=> handleUserVisit(data.user_id)}>
+                  <div className="img-holder" onClick={()=> handleUserVisit(data?.user_id)}>
                     {data?.profile_image == null ?
                       <img src='/assets/images/user-none.png' alt=""/>
                       :
@@ -85,10 +86,10 @@ const Followers = ({ data  , id}) => {
                     <p>{data?.count_follower} Followers</p>
                   </div>
                 </div>
+                </Link>
                 <div className="right">
                   <button onClick={() => followOther(data?.user_id)}>{data?.is_follow === true ? "Unfollow" : "Follow"}</button>
-                  {console.log(data?.is_follow, "data")}
-
+              
                   {/* <span
                     onClick={() => {
                       setshowOptions(!showOptions);

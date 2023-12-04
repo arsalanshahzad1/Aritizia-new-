@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState, useEffect } from 'react'
 const ArtItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selected }) => {
     const [isSelected, setIsSelected] = useState(selected)

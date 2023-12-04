@@ -1,6 +1,7 @@
+import React from 'react'
 import { useEffect, useState } from "react";
 import apis from "../../service";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import apis from "../../service";
 
 const FollowersUserDashboard = ({ data, id }) => {
@@ -53,6 +54,7 @@ const FollowersUserDashboard = ({ data, id }) => {
                         console.log(data, "data value")
                         return (
                             <div className="Follow-row" key={i}>
+                                <Link to={`/other-profile?add=${data?.user_id}`}>
                                 <div className="left">
                                     <div className="img-holder" 
                                         onClick={() =>{
@@ -71,6 +73,7 @@ const FollowersUserDashboard = ({ data, id }) => {
                                         <p>{data?.count_follower} Followers</p>
                                     </div>
                                 </div>
+                                </Link>
                                 <div className="right">
                                     {/* <button></button> */}
                                     {/* <button onClick={() => followOther(data?.user_id)}>Follow</button> */}

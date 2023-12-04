@@ -41,37 +41,37 @@ const Footer = () => {
               <div className="two">
                 <ul>
                   <li>
-                    <Link>
+                    <Link to={"https://twitter.com/ArtiziaLLC"} target='_blank'>
                       <img src="/assets/social-icons/blade.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.instagram.com/artizia.io/"} target='_blank'>
                       <img src="/assets/social-icons/insta.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.youtube.com/@ArtiziaLLC"} target='_blank'>
                       <img src="/assets/social-icons/youtube.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.linkedin.com/company/artizia-io"} target='_blank'>
                       <img src="/assets/social-icons/linkdin.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to= {"https://www.reddit.com/user/ArtiziaLLC" } target='_blank'>
                       <img src="/assets/social-icons/monkey.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.tiktok.com/@artizia.io"} target='_blank'>
                       <img src="/assets/social-icons/tictoc.png" alt="" />
                     </Link>
                   </li>
                   <li>
-                    <Link>
+                    <Link to={"https://www.facebook.com/profile.php?id=100095110465607"} target='_blank'>
                       <img src="/assets/social-icons/facebook.png" alt="" />
                     </Link>
                   </li>
@@ -80,9 +80,17 @@ const Footer = () => {
               <div className="three">
                 <ul>
                   <li>
-                    <Link>
-                      <p>TERMS & CONDITIONS</p>
+                    <p>
+                    <Link to="/terms" target='_blank'>
+                    Terms of Use
                     </Link>
+                    <p>&</p>
+                    <Link to="/privacy-policy" target='_blank'>
+                    Privacy Policy
+                    </Link>
+                    </p>
+                    
+                    
                   </li>
                   <li>
                     <Link>

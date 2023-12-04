@@ -1,103 +1,66 @@
-import { useEffect, useState } from "react";
+import React from 'react'
+import { useEffect, useState,useContext } from "react";
 import apis from "../../service";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import { Link } from "react-router-dom";
+import { Store } from "../../Context/Store";
 
 function Fan({ id, fanToggle }) {
   const userData = JSON.parse(localStorage.getItem("data"));
+  const ids = userData?.id;
   const userAddress = userData?.wallet_address;
 
   const [fanListing, setFanListing] = useState([]);
 
-  const getFanListing = async () => {
-    const response = await apis.getFanList(id);
-    setFanListing(response?.data?.data);
-    console.log(response?.data?.data, "fanlist");
-    setLoader(false)
-  };
+  
+  const {account,checkIsWalletConnected}=useContext(Store);
 
   useEffect(()=>{
-    setLoader(true)
-    getFanListing()
-  }
-  ,[fanToggle])
+    checkIsWalletConnected()
+  },[account])
+
+  // const getFanListing = async (ids) => {
+  //   const response = await apis.getFanList(id);
+  //   setFanListing(response?.data?.data);
+  //   console.log(response?.data?.data, "fanlist");
+  //   setLoader(false)
+  // };
+
+  // useEffect(()=>{
+  //   setLoader(true)
+  //   getFanListing(ids)
+  // }
+  // ,[fanToggle])
 
   let selectedUser;
-  const removeFan = async (id) => {
-    console.log("fan id", id);
-    selectedUser = id;
-    console.log("fanListing", fanListing);
-
-    let userToRemove;
-
-    for (let i = 0; i < fanListing.length; i++) {
-      if (fanListing[i].fan_id == id) {
-        console.log("selected fan", fanListing[i].wallet_address);
-        userToRemove = fanListing[i].wallet_address;
-      }
-    }
-
-    const signer = await getProviderOrSigner(true);
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
-
-    console.log("userToRemove", userToRemove);
-
-    // getRemoveFan();
-
-    const remove = await marketplaceContract.removeFans(userToRemove);
-    console.log("remove", remove);
-
-    let response = marketplaceContract.on("removeFan", handleRemoveFansEvent);
-    // getFanListing();
-    console.log("Response of removeFan event", response);
-  };
-
-  const handleRemoveFansEvent = async (removedFan) => {
-    console.log("kkkkkkkkkkkkkkkk");
-
-    console.log("removedFan", removedFan);
-    getRemoveFan(selectedUser);
-  };
-
-  const getRemoveFan = async (selectedUser) => {
-    console.log("figetRemoveFanrst");
-    console.log("selectedUser", selectedUser);
-    const response = await apis.getremovedFan(selectedUser);
-    console.log("response from getRemoveFan", response);
-    setFanListing(response?.data?.data);
-    getFanListing();
-    // setFanListing([]);
-  };
+  
 
 
-  const getFansBC = async () => {
-    const provider = await getProviderOrSigner();
+  // const handleRemoveFansEvent = async (removedFan) => {
+  //   console.log("kkkkkkkkkkkkkkkk");
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
+  //   console.log("removedFan", removedFan);
+  //   getRemoveFan(selectedUser);
+  // };
 
-    const fans = await marketplaceContract.getFans(userAddress);
+  // const getRemoveFan = async (selectedUser) => {
+  //   const response = await apis.getremovedFan(selectedUser);
+  //   setFanListing(response?.data?.data);
+  //   getFanListing();
+  //   // setFanListing([]);
+  // };
 
-    console.log("fans", fans);
-  };
 
-  useEffect(() => {
-    getFanListing();
-  }, []);
+
+  // useEffect(() => {
+  //   getFanListing();
+  // }, []);
 
   const [loader, setLoader] = useState(true)
 
@@ -113,12 +76,12 @@ function Fan({ id, fanToggle }) {
   
   return (
     <>
-    {fanListing.length > 0 ?
+    {fanListing?.length > 0 ?
     <>
     {fanListing.map((data, index) => {
       return (
         <div className="Follow-row" key={index}>
-          <Link to={`/other-profile?add=${data?.id}`}>
+          <Link to={`/other-profile?add=${data?.user_id}`}>
             <div className="left">
               <div className="img-holder">
                 {data?.profile_image ? (
@@ -143,7 +106,6 @@ function Fan({ id, fanToggle }) {
               Remove
             </button>
           </div>
-          {/* <button onClick={getFansBC}>getBC</button> */}
         </div>
       );
     })}

@@ -12,7 +12,7 @@ const DashboardCard = ({
   title,
   image,
   price,
-  crypto,
+  paymentMethod,
   royalty,
   description,
   collection,
@@ -201,7 +201,7 @@ const DashboardCard = ({
         title={title}
         image={image}
         price={price}
-        paymentMethod={crypto}
+        paymentMethod={paymentMethod}
         royalty={royalty}
         description={description}
         collection={collection}

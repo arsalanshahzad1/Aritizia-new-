@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Notification from "./Notification";
 import laravelEcho from "../../socket/index";
@@ -9,11 +8,7 @@ import apis from "../../service";
 import Web3Modal from "web3modal";
 import UserNotification from "./UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import { getAddress } from "../../methods/methods";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+import { Store } from "../../Context/Store";
 
 const Header = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -40,54 +35,20 @@ const Header = ({ search, setSearch }) => {
 
   const web3ModalRef = useRef();
 
-  // const connectWallet = async () => {
-  //   try {
-  //     await getProviderOrSigner();
-  //     setWalletConnected(true);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const { account, checkIsWalletConnected, connectWallet } = useContext(Store);
 
-  // useEffect(() => {
-  //   if (!walletConnected) {
-  //     web3ModalRef.current = new Web3Modal({
-  //       network: "sepolia",
-  //       providerOptions: {},
-  //       disableInjectedProvider: false,
-  //     });
-  //   }
-  // }, [walletConnected]);
+  useEffect(() => {
+    checkIsWalletConnected()
+  }, [account])
 
-  // const getProviderOrSigner = async (needSigner = false) => {
-  //   const provider = await web3ModalRef.current.connect();
-  //   const web3Provider = new providers.Web3Provider(provider);
 
-  //   // If user is not connected to the Sepolia network, let them know and throw an error
-  //   const { chainId } = await web3Provider.getNetwork();
-  //   try {
-  //     await ethereum.request({
-  //       method: "wallet_switchEthereumChain",
-  //       // params: [{ chainId: "0xaa36a7" }], // sepolia's chainId
-  //       params: [{ chainId: "0x7A69" }], // localhost's chainId
-  //     });
-  //   } catch (error) {
-  //     // User rejected the network change or there was an error
-  //     throw new Error("Change network to Sepolia to proceed.");
-  //   }
-  //   if (needSigner) {
-  //     const signer = web3Provider.getSigner();
-  //     return signer;
-  //   }
-  //   return web3Provider;
-  // };
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
 
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
-      console.log(data , 'data');
+      console.log(data, 'data');
       // Handle the received event data
       setMessageArrive(true);
     });
@@ -112,9 +73,9 @@ const Header = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  useEffect(() => {
-    setInterval(getAddress, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(getAddress, 3000);
+  // }, []);
 
   function handleDisconnect() {
     // Handle wallet disconnection here
@@ -170,7 +131,7 @@ const Header = ({ search, setSearch }) => {
       setChatNotificationRes("");
       setloader(true);
     }
-    const response = await apis.getChatNotification(user_id , count);
+    const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
       setChatNotificationRes((prevState) => [
         ...prevState,
@@ -257,17 +218,15 @@ const Header = ({ search, setSearch }) => {
               <div className="left">
                 {path === "/" ? (
                   <>
-                    <FiSearch
-                      className={`search ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
-                      onClick={() => setSearch(true)}
-                    />
+
+                    <Link to={'/search'}>
+                      <FiSearch className={`search ${scrolled ? "black-color" : "white-color"
+                        }`} />
+                    </Link>
 
                     <span
-                      className={`icon-for-header ${
-                        scrolled ? "black-svgs" : ""
-                      }`}
+                      className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                        }`}
                     >
                       <svg
                         width="1"
@@ -287,9 +246,8 @@ const Header = ({ search, setSearch }) => {
                             getChatnotification("message", 0);
                           setMessageArrive(false);
                         }}
-                        className={`icon-for-header ${
-                          scrolled ? "black-svgs" : ""
-                        }`}
+                        className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                          }`}
                       >
                         <svg
                           width="36"
@@ -325,10 +283,10 @@ const Header = ({ search, setSearch }) => {
                               {chatNotificationRes?.length > 0 ? (
                                 <Notification data={chatNotificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
-                              chatNotificationRes.length > 0 ? (
+                                chatNotificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -354,9 +312,8 @@ const Header = ({ search, setSearch }) => {
                           viewNotification("notification", 0);
                           setNotificationArrive(false);
                         }}
-                        className={`icon-for-header ${
-                          scrolled ? "black-svgs" : ""
-                        }`}
+                        className={`icon-for-header ${scrolled ? "black-svgs" : ""
+                          }`}
                       >
                         <svg
                           width="24"
@@ -395,10 +352,10 @@ const Header = ({ search, setSearch }) => {
                               {notificationRes?.length > 0 ? (
                                 <UserNotification data={notificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {notificationRes.length < countLength &&
-                              notificationRes.length > 0 ? (
+                                notificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -418,9 +375,8 @@ const Header = ({ search, setSearch }) => {
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                       style={{
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
@@ -430,10 +386,9 @@ const Header = ({ search, setSearch }) => {
                   </>
                 ) : (
                   <>
-                    <FiSearch
-                      className="search black-color"
-                      onClick={() => setSearch(true)}
-                    />
+                    <Link to={'/search'}>
+                      <FiSearch className="search black-color" />
+                    </Link>
                     <span className="icon-for-header">
                       <svg
                         width="1"
@@ -486,10 +441,10 @@ const Header = ({ search, setSearch }) => {
                               {chatNotificationRes?.length > 0 ? (
                                 <Notification data={chatNotificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
-                              chatNotificationRes.length > 0 ? (
+                                chatNotificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -551,10 +506,10 @@ const Header = ({ search, setSearch }) => {
                               {notificationRes?.length > 0 ? (
                                 <UserNotification data={notificationRes} />
                               ) : (
-                                <section  className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
                               {notificationRes.length < countLength &&
-                              notificationRes.length > 0 ? (
+                                notificationRes.length > 0 ? (
                                 <button
                                   className="loadmore-mgs-notofication"
                                   onClick={() =>
@@ -574,9 +529,8 @@ const Header = ({ search, setSearch }) => {
                     )}
                     <button
                       onClick={connectWallet}
-                      className={`header-connect-wallet ${
-                        scrolled ? "black-color" : "white-color"
-                      }`}
+                      className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"
+                        }`}
                       style={{
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}

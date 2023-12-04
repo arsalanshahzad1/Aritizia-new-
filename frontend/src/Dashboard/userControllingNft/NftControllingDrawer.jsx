@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useRef, useCallback, useState, useEffect,useContext } from "react";
 import Drawer from "react-bottom-drawer";
 import { TfiEye } from "react-icons/tfi";
 import { AiOutlineHeart } from "react-icons/ai";
@@ -22,10 +22,10 @@ import NFT_CONTRACT_ADDRESS from "../../contractsData/ArtiziaNFT-address.json";
 import NFT_CONTRACT_ABI from "../../contractsData/ArtiziaNFT.json";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
 import apis from "../../service";
 import {
   Area,
@@ -42,6 +42,7 @@ import ChartForEarning from "../../pages/settingFolder/ChartForEarning";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import adminApis from "../../service/adminIndex";
+import { Store } from "../../Context/Store";
 
 function NftControllingDrawer({
   isVisible,
@@ -54,175 +55,45 @@ function NftControllingDrawer({
   royalty,
   description,
   collection,
-  // userAddress,
   showBuyNow,
   ShowAcceptbtn,
-  approveNFT,
+  is_unapproved 
 }) {
-  const [propertyTabs, setPropertyTabs] = useState(0);
-  const [chack, setChack] = useState(false);
-  const [walletConnected, setWalletConnected] = useState(false);
+
   const [sucess, setSucess] = useState(false);
-  const [amount, setAmount] = useState("");
-  const [platformFee, setPlatformFee] = useState("");
-  const [discountedEth, setDiscountedEth] = useState(0);
-  const [discountedAmountUSD, setDiscountedAmountUSD] = useState(0);
-  const [platformFeeUSDT, setPlatformFeeUSDT] = useState(0);
-  const [platformFeeETH, setPlatformFeeETH] = useState(0);
-  const [discountedPlatformFeeETH, setDiscountedPlatformFeeETH] = useState(0);
-  const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
   const [nftDetails, setNftDetails] = useState("");
+  const [selectedNTFIds, setSelectedNTFIds] = useState([]);
+
+  const {account,checkIsWalletConnected ,getSignerMarketContrat}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getPriceInUSD();
-  }, [isVisible]);
-
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-  const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
   const [likeAndViewData, setLikeAndViewData] = useState("");
-
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
-  const handleStatus = (e) => {
-    setStatus(e);
-  };
+  const [drawerData, setDrawerData] = useState("");
+  const [nftList, setNftList] = useState([]);
 
-  const [buyButton, showBuyButton] = useState(false);
-
-  // const checkSeller = async () => {
-  //   const provider = await getProviderOrSigner();
-
-  //   const marketplaceContract = new Contract(
-  //     MARKETPLACE_CONTRACT_ADDRESS.address,
-  //     MARKETPLACE_CONTRACT_ABI.abi,
-  //     provider
-  //   );
-
-  //   const structData = await marketplaceContract._idToNFT(id);
-  //   let approve = structData.approve;
-  //   console.log("checkSeller id", id);
-  //   console.log("checkSeller approve", approve);
-  // };
-
-  const getNFTLike = async () => {
-    var temp = JSON.parse(localStorage.getItem("data"));
-    var address = temp.id;
-    const response = await apis.getLikeNFT(address, id);
-    setLikeAndViewData(response.data.data);
-  };
-
-  const postNFTLike = async () => {
-    var temp = JSON.parse(localStorage.getItem("data"));
-    var address = temp.id;
-    const response = await apis.postLikeNFT({
-      like_by: address,
-      nft_token: id,
-    });
-    getNFTLike();
-  };
-
-  const postNFTView = async () => {
-    var temp = JSON.parse(localStorage.getItem("data"));
-    var address = temp.id;
-    const response = await apis.postViewNFT({
-      view_by: address,
-      nft_token: id,
-    });
-    getNFTLike();
+  const getPriceInUSDAndDetials = async () => {
+    let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(price?.toString())
+    setAmountUSD(intoUSDT?.toString() / 10 ** 6);
   };
 
   useEffect(() => {
-    if (isVisible) {
-      postNFTView();
-    }
-  }, [isVisible]);
-
-  let _buyerPercentFromDB = 1.5;
-
-  const platformFeeCalculate = async (_amount, _buyerPercent) => {
-    let _amountToDeduct;
-    _amountToDeduct = (_amount * _buyerPercent) / 100;
-    return _amountToDeduct;
-  };
-
-  const getPriceInUSD = async () => {
-    const provider = await getProviderOrSigner();
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-
-    const structData = await marketplaceContract._idToNFT(id);
-    const structData2 = await marketplaceContract._idToNFT2(id);
-
-    let discount = +structData2.fanDiscountPercent.toString();
-    console.log("fanDiscountPercent", discount);
-
-    let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
-    setPriceETH(nftEthPrice);
-    let priceETH = nftEthPrice;
-    let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
-    setPlatformFeeETH(feeETH);
-
-    // let dollarPriceOfETH = 1831;
-
-    let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-
-    let priceInETH = dollarPriceOfETH.toString() / 1e18;
-
-    let oneETHInUSD = 1 / priceInETH;
-    let priceInUSD = priceETH;
-    priceInUSD = oneETHInUSD * priceInUSD;
-    priceInUSD = Math.ceil(priceInUSD);
-    setAmountUSD(priceInUSD.toString());
-
-    let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-    setPlatformFeeUSDT(Math.ceil(feeUSD));
-
-    // let fee = Math.ceil((priceInUSD * 3) / 100);
-    // setPlatformFee(fee);
-
-    if (discount != 0) {
-      let discountedEthPrice = (nftEthPrice * discount) / 100;
-      // let discountedEthPrice = (nftEthPrice * discount) / 100;
-      let priceETH = discountedEthPrice;
-      // platformFeeCalculate(priceETH, _buyerPercentFromDB);
-      setDiscountedEth(discountedEthPrice.toFixed(2));
-      console.log("discountedEthPrice", discountedEthPrice);
-
-      // let dollarPriceOfETH = 1831;
-
-      let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-      let priceInETH = dollarPriceOfETH.toString() / 1e18;
-      let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
-
-      setDiscountedPlatformFeeETH(Math.ceil(feeETH));
-      let oneETHInUSD = 1 / priceInETH;
-      let priceInUSD = priceETH;
-      priceInUSD = oneETHInUSD * priceInUSD;
-      priceInUSD = Math.ceil(priceInUSD);
-      setDiscountedAmountUSD(priceInUSD.toString());
-      // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
-      let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-      feeUSD = Math.ceil(feeUSD);
-      // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-      setDiscountedPlatformFeeUSDT(feeUSD);
-    }
-  };
+    getPriceInUSDAndDetials();
+  }, []);
 
   const getNFTDetailByNFTTokenId = async () => {
     const response = await apis.getNFTByTokenId(id);
     setNftDetails(response?.data?.data);
   };
-
-  const [drawerData, setDrawerData] = useState("");
 
   const nftDetailByToken = async (id) => {
     const response = await adminApis.nftDetailByToken(id);
@@ -231,11 +102,69 @@ function NftControllingDrawer({
   };
 
   useEffect(() => {
-    if (isVisible) {
       getNFTDetailByNFTTokenId();
       nftDetailByToken(id);
+  }, []);
+
+  
+  let bulkCall = false;
+
+  const approveNFT = async (decision, id) => {
+
+    console.log("decisiondecision",decision,id);
+
+    bulkCall = true;
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+    const signer = provider.getSigner()
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+
+    let approve = await getSignerMarketContrat().approveNfts(id, decision, {
+      gasLimit: ethers.BigNumber.from("500000"),
+    });
+
+    await approve.wait();
+    await handleApprovalEvent();
+    await postAPI(decision, id);
+  };
+
+  const postAPI = async (decision, id) => {
+    let body = {
+      token_idz: id,
+    };
+
+    if (decision) {
+      const response = await adminApis.approveNfts(body);
+      // console.log("response", response);
+      deleteItems(id);
+      await onClose(false);
+    } else {
+      const response = await adminApis.rejectNfts(body);
+      // console.log("response", response);
+      deleteItems(id);
+      await onClose(false);
     }
-  }, [isVisible]);
+  };
+
+  const deleteItems = (ids) => {
+    const updatedData = nftList.map(item => {
+      if (ids.includes(item.id)) {
+        return {
+          ...item,
+          is_unapproved: true // Assuming 'state' is the property to be updated
+        };
+      }
+      return item;
+    });
+    setNftList(updatedData);
+    setSelectedNTFIds([]);
+  };
 
   return (
     <>
@@ -253,61 +182,7 @@ function NftControllingDrawer({
           </span>
           <div className="row">
             <div className="col-lg-6 col-md-6 col-12">
-              <img className="nft-image" src={image} alt="" />
-              {/* <img src="/assets/images/progress-bar.png" className='hide-on-mobile-screen' alt="" width={'100%'} style={{marginTop : '20px'}}/> */}
-
-              {/* place your chart here */}
-              {/* <div className="Earning-Filter-Holder">
-                <div className="d-flex align-items-center">
-                  <p className="Earning-filter-text">Price History</p>
-                </div>
-                <div className="search-filter">
-                  <div className="l-2">
-                    <Dropdown
-                      options={statusOptions}
-                      onChange={(e) => {
-                        handleStatus(e);
-                      }}
-                      value={status.label}
-                    />
-                  </div>
-                </div>
-              </div> */}
-              {/* <div className="earning-map">
-                <div
-                  style={{
-                    position: "relative",
-                    height: "400px",
-                    background: "linear-gradient(to bottom, #ffffff, #F0F0F0)",
-                  }}
-                >
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: "0",
-                      left: "0",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  >
-                    {status.value === "Monthly" ? (
-                      <ChartForEarning data={Monthly_data} />
-                    ) : (
-                      <div></div>
-                    )}
-                    {status.value === "Weekly" ? (
-                      <ChartForEarning data={Weekly_data} />
-                    ) : (
-                      <div></div>
-                    )}
-                    {status.value === "Daily" ? (
-                      <ChartForEarning data={Daily_data} />
-                    ) : (
-                      <div></div>
-                    )}
-                  </div>
-                </div>
-              </div> */}
+              <img className="nft-image" src={image} alt=""/>
             </div>
             <div className="col-lg-6 col-md-6 col-12">
               <div className="pro-dtails">
@@ -341,7 +216,6 @@ function NftControllingDrawer({
                         {userData?.wallet_address ==
                           drawerData?.user?.wallet_address ? (
                           <Link to={`/other-profile?add=${drawerData?.user?.id}`}>
-                            {/* <img src={drawerData?.user?.profile_image} alt="" />{" "} */}
                             {nftDetails?.user?.profile_image !== null ? (
                                 <img
                                   src={drawerData?.user?.profile_image}
@@ -354,10 +228,7 @@ function NftControllingDrawer({
                                 />
                               )}
                             <span>{drawerData?.user?.username}</span>
-                            <br />
-                            {/* <span>{userData?.wallet_address}</span> */}
-                            <br />
-                            {/* <span>{nftDetails?.user?.wallet_address}</span> */}
+                            <br />     
                           </Link>
                         ) : (
                           <div
@@ -404,14 +275,13 @@ function NftControllingDrawer({
                     <div className="col-lg-6 col-md-8 col-8">
                       <div className="left">
                         <p>
-                          {price} ETH
+                          {Number(ethers.utils.formatEther(price?.toString()))?.toFixed(5)} ETH
                           <span>
-                            ${amountUSD} + Platform Fee ${platformFeeUSDT}
+                            ${Number(amountUSD)?.toFixed(5)} + Platform Fee ${""}
                           </span>
                         </p>
                       </div>
                     </div>
-
                     {!showBuyNow && (
                       <div className="col-lg-6 col-md-8 col-8">
                         <div className="stock-div">

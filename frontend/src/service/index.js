@@ -16,6 +16,7 @@ const createBackendServer = (baseURL) => {
   // const userId = 2;
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
+  console.log("RealUserId", RealUserId)
 
   //Interceptor
   api.interceptors.response.use(
@@ -95,7 +96,7 @@ const createBackendServer = (baseURL) => {
   const postChatMessages = async (body) =>
     await api.post(`send-chat-message`, body, headers);
 
-  const viewNotification = async (count) => await api.get(`view-notifications/${count}`);
+  const viewNotification = async (count) => await api.get(`view-notifications/${RealUserId}?last_count=${count}`);
 
   const ReadNotification = async () => await api.get(`read-notification/7`);
 
@@ -131,8 +132,8 @@ const createBackendServer = (baseURL) => {
   const postCheckChatMessage = async (body) =>
     await api.post(`check-chat-message`, body);
 
-  const getNFTCollection = async () =>
-    await api.get(`view-nft-collections/${RealUserId}`);
+  const getNFTCollection = async (userId) =>
+    await api.get(`view-nft-collections/${userId}`);
 
   const postNFTCollection = async (body) =>
     await api.post(`add-nft-collection`, body);
@@ -140,25 +141,30 @@ const createBackendServer = (baseURL) => {
   const getNFTCollectionImage = async (collectionId) =>
     await api.get(`view-nft-collection-stock/${collectionId}`);
 
+  //This API get you all nfts and you need to filter as
+  //per you requirments  
   const viewAllNfts = async () =>
     await api.get(`view-all-nfts`)
 
+  //its not working properly TODO
   const viewAllMyNfts = async (newid) =>
     await api.get(`view-all-nfts?user_id=${newid}`)
 
   const getNFTByTokenId = async (tokenId) =>
     await api.get(`view-nft-by-token/${tokenId}`);
 
+  const getPurchasedNfts = async (userId) =>
+    await api.get(`view-all-my-nfts/${userId}`);
 
   const getUserData = async (id) =>
     await api.get(`get-user-data/${id}`);
 
-    // const getOtherUser = async (userAddress) =>
-    //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
+  // const getOtherUser = async (userAddress) =>
+  //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
 
-    const getOtherUser = async (otherUserId) =>
-      await api.get(`view-other-user-detail/${otherUserId}/${RealUserId}`);
-    
+  const getOtherUser = async (otherUserId) =>
+    await api.get(`view-other-user-detail/${otherUserId}/${RealUserId}`);
+
 
   const getLikeNFTListing = async (userId) =>
     await api.get(`view-liked-nfts/${userId}`);
@@ -168,13 +174,13 @@ const createBackendServer = (baseURL) => {
   const postCustomUserFans = async (body) =>
     await api.post(`add-custom-user-fans`, body);
 
-  const getFanList = async () => await api.get(`view-fan-list/${RealUserId}`);
+  const getFanList = async (RealUserId) => await api.get(`view-fan-list/${RealUserId}`);
 
   const getremovedFan = async (removingUserId) =>
     await api.get(`remove-fan/${removingUserId}`);
 
-  const getFollowersForFan = async () =>
-    await api.get(`view-followers-for-fan/${RealUserId}`);
+  const getFollowersForFan = async (userId) =>
+    await api.get(`view-followers-for-fan/${userId}`);
 
   const getSalesHistory = async () =>
     await api.get(`sale-history/${RealUserId}`);
@@ -232,6 +238,9 @@ const createBackendServer = (baseURL) => {
   const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
   const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
   const removeArtGallery = async (RealUserId) => await api.get(`remove-art-gallery/${RealUserId}`);
+  const storeTempArtGallery = async (body) => await api.post(`store-temp-art-gallery`, body);
+  const generateBase = async (body) => await api.post(`generate-base`, body);
+  const deleteTempArtGallery = async (body) => await api.post(`generate-base`, body);
 
 
 
@@ -240,6 +249,20 @@ const createBackendServer = (baseURL) => {
     await api.get(`view-filtered-nfts?currency_type=${currency_type}&listed_type=${listed_type}&min_price=${min_price}&max_price=${max_price}&sort_by_price=${sort_by_price}&page_size=${9}&page=${page}&search=${search}`);
 
 
+  //forget and reset password
+
+  const forgotPassword = async (body) => await api.post(`forgot-password`, body);
+  const resendForgotOtp = async (body) => await api.post(`resend-forgot-otp`, body);
+  const forgotVerify = async (body) => await api.post(`forgot-verify`, body);
+  const changePassword = async (body) => await api.post(`change-password`, body);
+
+
+  //Search History
+
+  const storeSearchHistory = async (body) => await api.post(`store-search-history`, body);
+  const getUserSearchHistory = async (user_id , search_key , page) => await api.get(`user-search-history?user_id=${user_id}&search_key=${search_key}&page=${page}`);
+  const DeleteAllSearchHistory = async (body) => await api.post(`clear-search-history`, body);
+  const DeleteSearchHistoryByName = async (body) => await api.post(`delete-search-history`, body);
 
   //Returning all the API
   return {
@@ -249,7 +272,7 @@ const createBackendServer = (baseURL) => {
     postListNft,
     postNftSold,
 
-     // Auth api start //
+    // Auth api start //
 
     postWalletAddress,
     register,
@@ -257,7 +280,7 @@ const createBackendServer = (baseURL) => {
     verifyOtp,
     loginWithEmail,
 
-     // Auth api end //
+    // Auth api end //
 
     postAddFans,
     getChatNotification,
@@ -284,7 +307,10 @@ const createBackendServer = (baseURL) => {
     postNFTCollection,
     getNFTCollectionImage,
     viewAllNfts,
-    viewAllMyNfts,
+
+    // viewAllMyNfts,
+
+    getPurchasedNfts,
 
     getNFTByTokenId,
 
@@ -328,19 +354,39 @@ const createBackendServer = (baseURL) => {
     viewArtGallery,
     viewRemainingArtGallery,
     removeArtGallery,
+    storeTempArtGallery,
+    generateBase,
+    deleteTempArtGallery,
 
     viewLandingPageDetail,
 
     payNftByFiat,
 
-    viewFilteredNfts
+    viewFilteredNfts,
+
+    viewAllMyNfts,
+
+
+    // changes and reset password //
+
+    forgotPassword,
+    resendForgotOtp,
+    forgotVerify,
+    changePassword,
+
+
+    storeSearchHistory,
+    getUserSearchHistory,
+    DeleteAllSearchHistory,
+    DeleteSearchHistoryByName,
 
   };
 };
 
 const apis = createBackendServer("http://143.198.70.237");
+// const apis = createBackendServer("http://165.232.142.3");
 
-//     Testing DB: http://165.232.142.3
+// Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237
 
 export default apis;
