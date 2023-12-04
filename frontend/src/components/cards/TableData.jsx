@@ -71,7 +71,7 @@ const TableData = () => {
                 </td>
                 <td>
                   <div className="two">
-                    <p className="price">{res?.flow_price} ETH</p>
+                    <p className="price">{Number(ethers.utils.formatEther(res?.flow_price?.toString()))?.toFixed(5)} ETH</p>
                   </div>
                 </td>
                 <td>
@@ -85,7 +85,7 @@ const TableData = () => {
                           {res?.coll_status > 0 ? (
                             <>+{res?.coll_status}%</>
                           ) : (
-                            <>-{res?.coll_status}%</>
+                            <>{res?.coll_status}%</>
                           )}
                         </>
                       )}

@@ -360,7 +360,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     );
 
     event NFTSold(
-        //address nftContract,
+        address nftContract,
         uint256 tokenId,
         address seller,
         address buyer,
@@ -788,7 +788,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             // console.log("Test 11");
 
             emit NFTSold(
-                // _nftContract,
+                _nftContract,
                 nft.tokenId,
                 nft.seller,
                 buyer,
@@ -942,7 +942,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             );
 
             emit NFTSold(
-                // _nftContract,
+                _nftContract,
                 nft.tokenId,
                 nft.seller,
                 buyer,
@@ -1090,7 +1090,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             );
 
             emit NFTSold(
-                // _nftContract,
+                _nftContract,
                 nft.tokenId,
                 nft.seller,
                 buyer,
@@ -1545,7 +1545,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         // console.log("Test 60");
 
         emit NFTSold(
-            // _nftContract,
+            _nftContract,
             nft.tokenId,
             nft.seller,
             auction.highestBidder,

@@ -19,7 +19,7 @@ import { Store } from "../../Context/Store";
 const LandingPage = ({ search, setSearch }) => {
   const [isVisible, setIsVisible] = useState(true);
   const targetRef = useRef(null);
-  const [loader, setLoader] = useState(false)
+  
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
 

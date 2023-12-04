@@ -71,9 +71,9 @@ export const StoreProvider = ({ children }) => {
                 method: "wallet_switchEthereumChain",
                 params: [
                     {
-                        // chainId: "0x5" //Goerli
+                        chainId: "0x5" //Goerli
                         // chainId: "0x89", //PolygonMainnet
-                        chainId: "0xaa36a7", //sepolia
+                        // chainId: "0xaa36a7", //sepolia
                         // chainId: "0x1", //Miannet
                         // chainId: "0x7A69" //localHost TODO/
                         // chainId:"0x13881" //mumbai
@@ -111,14 +111,14 @@ export const StoreProvider = ({ children }) => {
 
             window.ethereum.on('chainChanged', async (chainId) => {
                 console.log("chainId", chainId);
-                if (chainId != "0xaa36a7") { //TODO
+                if (chainId != "0x5") { //TODO
                     await ethereum.request({
                         method: "wallet_switchEthereumChain",
                         params: [
                             {
-                                // chainId: "0x5" //Goerli
+                                chainId: "0x5" //Goerli
                                 // chainId: "0x89", //PolygonMainnet
-                                chainId: "0xaa36a7", //sepolia
+                                // chainId: "0xaa36a7", //sepolia
                                 // chainId: "0x1", //Miannet
                                 // chainId: "0x7A69" //localHost TODO
                                 // chainId:"0x13881" //mumbai

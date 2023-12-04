@@ -22,11 +22,6 @@ import apis from "../../service/index";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// import {
-//   connectWallet,
-//   getProviderOrSigner,
-// } from "../../methods/walletManager";
 import Loader from "../../components/shared/Loader";
 import { Store } from "../../Context/Store";
 
@@ -322,6 +317,7 @@ const Single = ({ search, setSearch }) => {
           description,
           royalty,
         });
+
         console.log("dataInJSON", dataInJSON);
         const result = await uploadJSONToIPFS(dataInJSON);
         console.log("uploadJSONToIPFS", result.pinataURL);
@@ -365,6 +361,30 @@ const Single = ({ search, setSearch }) => {
         // setIsSingleSubmit(false)
       }
     }
+  };
+
+   // mint the NFT then list
+   const mintThenList = async (result) => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
+
+    const nftContract = new Contract(
+      NFT_CONTRACT_ADDRESS.address,
+      NFT_CONTRACT_ABI.abi,
+      signer
+    );
+
+    console.log("In result", result);
+
+    const marketplaceContract = new Contract(
+      MARKETPLACE_CONTRACT_ADDRESS.address,
+      MARKETPLACE_CONTRACT_ABI.abi,
+      signer
+    );
+    marketplaceContractGlobal = marketplaceContract;
+    nftContractGlobal = nftContract;
+    await mintNFT(result, nftContract);
   };
 
   const [listedEvents, setListed] = useState([]);
@@ -412,9 +432,9 @@ const Single = ({ search, setSearch }) => {
   async function listNFT(marketplaceContract, nftContract, listedToken) {
     console.log("listNFT", listNFT);
     listcounter += 1;
-    try {
-      let mintedTokens = listedToken;
+    let mintedTokens = listedToken;
 
+    try {
       console.log("listedToken", listedToken);
       console.log("getMintedTokens", mintedTokens);
 
@@ -436,21 +456,21 @@ const Single = ({ search, setSearch }) => {
         await marketplaceContract.listNft(
           nftContract.address,
           [mintedTokens],
-          [ethers.utils.parseEther(item.price)], // list
+          [ethers.utils.parseEther(item?.price)], // list
           [royalty],
           listingType,
           // [currentTime],
           // [addedTime],
           [startTime], // list
           [endTime], // list
-          collection.collection_id, // collection number
-          collection.crypto,
+          collection?.collection_id, // collection number
+          collection?.crypto,
           {
             gasLimit: ethers.BigNumber.from("5000000"),
           }
         )
       ).wait();
-      console.log("NFT listing is complete!");
+      console.log("NFT listing is complete!",singleMinting);
 
       let response = await marketplaceContract.on(
         "NFTListed",
@@ -466,41 +486,19 @@ const Single = ({ search, setSearch }) => {
       // console.error("Error while listing NFT:", error);
       throw error; // Rethrow the error to be caught in the higher level function if necessary
     }
-    console.log("singleMinting", singleMinting);
+    console.log("singleMintingMohsinCheektRUE", singleMinting);
   }
 
-  // mint the NFT then list
-  const mintThenList = async (result) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
+ 
 
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      signer
-    );
+  // let listToPost = useRef([]);
 
-    console.log("In result", result);
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
-    marketplaceContractGlobal = marketplaceContract;
-    nftContractGlobal = nftContract;
-    await mintNFT(result, nftContract);
-  };
-
-  let listToPost = useRef([]);
-
-  const addListToPost = (newValue) => {
-    listToPost.current.push(newValue);
-  };
+  // const addListToPost = (newValue) => {
+  //   listToPost.current.push(newValue);
+  // };
 
   const handleNFTListedEvent2 = async (
-    nftContract,
+    //nftContract,
     tokenId,
     seller,
     owner,
@@ -508,31 +506,32 @@ const Single = ({ search, setSearch }) => {
     collectionId,
     listingType
   ) => {
-    console.log("handleNFTListedEvent2");
+    console.log("lstngEVENT HIT HOWA HAI");
 
     if (singleMinting) {
       let listedData = {
-        title: item.title,
-        token_id: tokenId.toString(),
-        seller: seller.toString(),
-        owner: owner.toString(),
-        price: ethers.utils.formatEther(price.toString()),
-        collection_id: collectionId.toString(),
-        listing_type: listingType.toString(),
+        title: item?.title,
+        token_id: tokenId?.toString(),
+        seller: seller?.toString(),
+        owner: owner?.toString(),
+        price: ethers.utils.formatEther(price?.toString()),
+        collection_id: collectionId?.toString(),
+        listing_type: listingType?.toString(),
         user_id:user_id
       };
       
-      addListToPost(listedData);
+      // addListToPost(listedData);
       singleMinting = false;
-      console.log("singleMinting", singleMinting);
-      nftDataPost();
+      console.log("singleMintingMohsnssss", singleMinting);
+      nftDataPost(listedData);
     } else {
       setIsSingleSubmit(false)
     }
   };
 
-  const nftDataPost = async () => {
-    const response = await apis.postListNft(listToPost.current[0]);
+  const nftDataPost = async (listedData) => {
+    console.log("Check List API HIY ",listedData);
+    const response = await apis.postListNft(listedData);
     if (response) {
       toast.success("NFT listed", {
         position: toast.POSITION.TOP_CENTER,

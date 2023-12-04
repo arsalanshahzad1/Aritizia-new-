@@ -359,6 +359,105 @@ const SearchPage = ({ search, setSearch }) => {
     // console.log("nftListFPmain", myNFTs);
     // console.log("nftListAuctionmain", myAuctions);
   };
+  const getListedNfts = async (allNftIds) => {
+
+    let listingType;
+    let mintedTokens = await getProviderMarketContrat().getListedNfts();
+
+    console.log(mintedTokens,"mintedTokens");
+
+    // let myNFTs = [];
+    // let myAuctions = [];
+
+    //Database
+    // for (let i = 0; i < allNftIds?.length; i++) {
+    //   let id;
+    //   id = allNftIds?.[i];
+
+    //Blockchain
+    for (let i = 0; i < mintedTokens?.length; i++) {
+      let id;
+      id = mintedTokens?.[i].tokenId?.toString();
+
+      const structData = await getProviderMarketContrat()._idToNFT(id);
+
+      if (structData?.firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed && structData?.approve) {
+  
+        const auctionData = await getProviderMarketContrat()._idToAuction(id);
+        
+        let response
+        let nftLikes
+
+        try {
+          response = await apis.getNFTCollectionImage(structData?.collectionId?.toString());
+        } catch (error) {
+          console.log(error)
+        }
+
+        try {
+          nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
+        } catch (error) {
+          console.log(error)
+        }
+
+        const collectionImages = response?.data?.data?.media?.[0]?.original_url;
+        const user_id = response?.data?.data?.user_id;
+
+        const auctionLive = await getProviderMarketContrat().getStatusOfAuction(id);
+           
+        const price = structData?.price?.toString();       
+        const metaData = await getProviderNFTContrat().tokenURI(id);
+        const responses = await fetch(metaData)
+        const metadata = await responses.json()
+        
+
+        listingType = structData?.listingType;
+
+        if (listingType === 0) {
+          const nftData = {
+            id: id, 
+            title: metadata?.title,
+            image: metadata?.image,
+            price: price,
+            paymentMethod: structData?.paymentMethod,
+            royalty: structData?.royalty,
+            royaltyPrice:structData?.royaltyPrice,
+            description: metadata?.description,
+            collection:  structData?.collectionId?.toString(),
+            collectionImages: collectionImages,
+            seller: structData?.seller,
+            user_id: user_id,
+            is_unapproved : structData?.approve
+          };
+          setNftListFP((prev) => [...prev, nftData]);
+
+        } else if (listingType === 1) {
+          const nftData = {
+            id: id, 
+            isLive: auctionLive,
+            title: metadata?.title,
+            image: metadata?.image,
+            description: metadata?.description,
+            basePrice: price,
+            startTime: auctionData?.startTime?.toString(),
+            endTime: auctionData?.endTime?.toString(),
+            highestBidIntoETH: auctionData?.highestBidIntoETH?.toString(),
+            highestBidIntoUSDT:auctionData?.highestBidIntoUSDT?.toString(),
+            highestBidderAddress: auctionData?.highestBidder?.toString(),
+            paymentMethod: structData?.paymentMethod,
+            royaltyPrice:structData?.royaltyPrice,
+            collection:  structData?.collectionId?.toString(),
+            collectionImages: collectionImages,
+            seller: auctionData?.seller?.toString(),
+            user_id: user_id,
+            is_unapproved : structData?.approve,
+            nft_like: nftLikes?.data?.data?.like_count
+          };
+          setNftListAuction((prev) => [...prev, nftData]);
+        }
+      }
+    }
+  };
 
   // const getListedNfts = async (ids) => {
   //   console.log("in getListedNfts", ids);

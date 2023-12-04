@@ -4,6 +4,7 @@ require("dotenv").config({ path: ".env" });
 const QUICKNODE_HTTP_URL = process.env.QUICKNODE_HTTP_URL;
 const QUICKNODE_HTTP_URL_SEP = process.env.QUICKNODE_HTTP_URL_SEP
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const PRIVATE_KEY_GOERLI = process.env.PRIVATE_KEY_GOERLI;
 
 module.exports = {
   solidity: {
@@ -48,10 +49,10 @@ module.exports = {
       accounts: [PRIVATE_KEY], // Use the private key from the environment variable
       gasPrice: "auto",
     },
-    // goerli: {
-    //   url: QUICKNODE_HTTP_URL, // Use the URL from the environment variable
-    //   accounts: [PRIVATE_KEY], // Use the private key from the environment variable
-    //   gasPrice: "auto",
-    // },
+    goerli: {
+      url: QUICKNODE_HTTP_URL, // Use the URL from the environment variable
+      accounts: [PRIVATE_KEY_GOERLI], // Use the private key from the environment variable
+      gasPrice: "auto",
+    },
   },
 };
