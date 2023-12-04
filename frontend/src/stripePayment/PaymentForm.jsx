@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apis from "../service";
-import { getProviderOrSigner } from "../methods/walletManager";
+// import { getProviderOrSigner } from "../methods/walletManager";
 import MARKETPLACE_CONTRACT_ADDRESS from "../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../contractsData/ArtiziaMarketplace.json";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import Loader from "../components/shared/Loader";
+import { Store } from "../Context/Store";
+import { useEffect } from "react";
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -49,6 +51,12 @@ const PaymentForm = ({
   const stripe = useStripe();
   const elements = useElements();
 
+  const {account,checkIsWalletConnected}=useContext(Store);
+
+  useEffect(()=>{
+    checkIsWalletConnected()
+  },[account])
+
   const handleSubmit = async (e) => {
     setIspayment(true)
     e.preventDefault();
@@ -78,8 +86,10 @@ const PaymentForm = ({
           setIspayment(false)
           setShowPaymentForm(false)
           viewSubscriptions(user_id)
+
           const response = await apis.postWalletAddress({
             wallet_address: JSON.parse(localStorage.getItem('data')).wallet_address,
+            user_id:user_id
           });
           localStorage.removeItem("data");
           localStorage.setItem("data", JSON.stringify(response?.data?.data));
@@ -132,8 +142,9 @@ const PaymentForm = ({
   };
 
   const updateUserPlanInSC = async (planId) => {
-    const signer = await getProviderOrSigner(true);
-    console.log("QQ Three");
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    // Set signer
+    const signer = provider.getSigner()
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -198,9 +209,9 @@ const PaymentForm = ({
             >
               <p>Payment Method</p>
               <div className="title">
-                {paymentMode} <MdKeyboardArrowDown />
+                {paymentMode}
               </div>
-              {ShowPaymentMode && (
+              {/* {ShowPaymentMode && (
                 <div className="options">
                   <h2
                     onClick={() => {
@@ -217,7 +228,7 @@ const PaymentForm = ({
                     One time
                   </h2>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <fieldset className="FormGroup">
@@ -235,7 +246,7 @@ const PaymentForm = ({
         </form>
       ) : (
         <div>
-          <h2>You just buy an nft</h2>
+          <h2>You just buy an NFT</h2>
         </div>
       )}
       {/* <ToastContainer /> */}

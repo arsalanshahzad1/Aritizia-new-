@@ -10,12 +10,20 @@ import {
   LinkedinShareButton,
 } from "react-share";
 import ProfileDrawer from "../shared/ProfileDrawer";
-
 const DummyCard = () => {
 
   return (
     <>
       <div className="col-lg-3 col-md-4 mt-5">
+        <div class="carddd is-loading">
+          <div class="image"></div>
+          <div class="content">
+            <h2></h2>
+            <p></p>
+          </div>
+        </div>
+      </div>
+      {/* <div className="col-lg-3 col-md-4 mt-5">
         <Link>
           <div className="css-vurnku" style={{ position: "relative" , pointerEvents : 'none' , marginBottom : '0px' }}>
             <a className="css-118gt74" style={{ background: "rgb(196 196 196)" , pointerEvents : 'none' , filter : 'blur(10px)'}}>
@@ -65,13 +73,9 @@ const DummyCard = () => {
                 </div>
               </div>
             </a>
-            {/* <img src="/assets/images/btc.png" alt="" className='btc-gray-logo' onClick={() => { setShowLinks(!showLinks) }} /> */}
           </div>
         </Link>
-
-        {/* <button onClick={buyWithETH}>Buy with ETH</button>
-                                    <button onClick={buyWithUSDT}>Buy with USDT</button> */}
-      </div>
+      </div> */}
     </>
   );
 };

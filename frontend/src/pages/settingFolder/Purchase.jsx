@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table';
 import apis from '../../service';
 import Loader from '../../components/shared/Loader';
+import { BigNumber, Contract, ethers,  utils } from "ethers";
+
 function Purchase() {
     const [purchase , setPurchase] = useState([])
 
@@ -57,7 +59,7 @@ function Purchase() {
                                 </td>
                                 <td>
                                     <div className="two">
-                                        <p className="price" style={{ textAlign: 'left' }}>{data?.price}</p>
+                                        <p className="price" style={{ textAlign: 'left' }}>{Number(ethers.utils.formatEther(data?.price))?.toFixed(5)}</p>
                                     </div>
                                 </td>
                                 <td>

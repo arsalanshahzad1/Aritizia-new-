@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import {
-    connectWallet,
-    getProviderOrSigner,
-  } from "../../methods/walletManager";
+import { Store } from '../../Context/Store';
+// import {
+//     connectWallet,
+//     getProviderOrSigner,
+// } from "../../methods/walletManager";
 
-function HeaderConnectPopup({connectPopup , setConnectPopup}) {
+function HeaderConnectPopup({ connectPopup, setConnectPopup }) {
+    const user = localStorage.getItem("data")
+    const userr = JSON.parse(localStorage.getItem("data")) 
+    const { account, connectWallet, checkIsWalletConnected } = useContext(Store);
+  const accountAddress = localStorage.getItem("userAddress")
+// console.log(userr?.is_email , 'userrrrr');
+
+    useEffect(() => {
+        checkIsWalletConnected()
+    }, [account])
     return (
         <Modal
             show={connectPopup}
@@ -36,16 +46,31 @@ function HeaderConnectPopup({connectPopup , setConnectPopup}) {
                         <div><img src="/assets/logo/logo-title-dark.png" alt="" /></div>
                     </div>
                     <div className="buttom-group">
+                        {accountAddress === 'false' &&
                         <button onClick={connectWallet}>Connect Wallet</button>
+                        }
+                        {user === "false" &&
+                            <Link to={'/register'}>
+                                <button>Sign-Up</button>
+                            </Link>
+                        }
+                        {userr?.is_email === false &&
+                            <Link to={'/register'}>
+                                <button>Sign-Up with Email</button>
+                            </Link>
+                        }
+
                     </div>
-                    <div className="buttom-group">
-                        <Link to={'/login'}>
-                            <button>Sign-In</button>
-                        </Link>
-                        <Link to={'/register'}>
-                            <button>Sign-Up</button>
-                        </Link>
-                    </div>
+                    {/* {user === "false" &&
+                        <div className="buttom-group">
+                            <Link to={'/login'}>
+                                <button>Sign-In</button>
+                            </Link>
+                            <Link to={'/register'}>
+                                <button>Sign-Up</button>
+                            </Link>
+                        </div>
+                    } */}
                 </div>
             </div>
         </Modal>

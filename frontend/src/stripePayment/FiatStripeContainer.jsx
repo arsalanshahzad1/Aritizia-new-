@@ -8,16 +8,33 @@ const PUBLIC_KEY = "pk_test_51NSaCXCt3RaL5WVcM0wwsKmoPMRRZRK9mM217g2t36lIlTk3POR
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY)
 
-const FiatStripeContainer = ({id ,amount , setShowPaymentForm , showResponseMessage , setSucess ,setIsVisible }) => {
+const FiatStripeContainer = ({_nftContract,
+  _tokenId,
+  _sellerPlan,
+  _buyerAddress,
+  _buyerPlan,
+  sellerId,
+  buyerId,id ,amount , setShowPaymentForm , showResponseMessage , setSucess ,setIsVisible, ethAmount,setLoader}) => {
+
+
   return (
     <Elements stripe={stripeTestPromise}>
         <FiatPaymentFrom 
+        setLoader={setLoader}
         id={id} 
         amount={amount} 
         setShowPaymentForm={setShowPaymentForm} 
         showResponseMessage={showResponseMessage} 
         setSucess={setSucess}
         setIsVisible={setIsVisible}
+        _nftContract={_nftContract}
+        _tokenId={_tokenId}
+        _sellerPlan={_sellerPlan}
+        _buyerAddress={_buyerAddress}
+        _buyerPlan={_buyerPlan}
+        sellerId={sellerId}
+        buyerId={buyerId} 
+        ethAmount={ethAmount}
         />
     </Elements >
   )

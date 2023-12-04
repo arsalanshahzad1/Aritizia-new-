@@ -126,7 +126,7 @@ function NftCountdown({ endDateTime }) {
     const formattedSeconds = String(seconds).padStart(2, '0');
 
     const formattedTimeRemaining = `${formattedDays}:${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-
+        
     return formattedTimeRemaining;
 }
 

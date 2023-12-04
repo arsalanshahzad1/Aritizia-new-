@@ -76,7 +76,7 @@
 }
 
 .Dashboard-area {
-    width: 80%;
+    width: 100%;
     height: 100vh;
     background-color: white !important;
     border-radius: 30px 0 0 30px;
@@ -358,6 +358,8 @@
     border: 2px solid #929292;
     background: #fff;
     width: 100%;
+    position: absolute;
+    z-index: 2;
 }
 .user-sub-payment .options h2{
     color: #929292;

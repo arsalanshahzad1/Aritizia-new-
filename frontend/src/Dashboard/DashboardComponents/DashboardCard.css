@@ -259,6 +259,7 @@ p {
     margin-bottom: 50px;
     border-radius: 12px;
     box-shadow: rgba(24, 26, 32, 0.1) 0px 0px 1px, rgba(71, 77, 87, 0.08) 0px 7px 14px, rgba(24, 26, 32, 0.08) 0px 3px 6px;
+    margin-bottom: 20px;
 }
 
 .css-vurnkuu .doted-icon {
@@ -272,7 +273,7 @@ p {
 
 .css-vurnkuu .css-15xcape img{
     width: 100%;
-    height: 195px;
+    height: auto;
     object-fit: contain;
 }
 
@@ -466,15 +467,15 @@ img {
 }
 
 .css-1elubna {
-    box-sizing: border-box;
-    margin: 0px;
-    min-width: 0px;
-    position: absolute;
+    /* box-sizing: border-box; */
+    /* margin: 0px; */
+    /* min-width: 0px; */
+    /* position: absolute; */
     width: 100%;
-    left: 0px;
+    /* left: 0px; */
     padding-left: 0px;
     padding-right: 0px;
-    transition: all 0.2s ease 0s;
+    /* transition: all 0.2s ease 0s; */
 }
 
 .css-118gt75:hover .J1-bottom {
@@ -582,13 +583,17 @@ img {
 }
 
 .css-fwx73e .detail-wrap .top .left {
-    font-family: 'Jost';
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 26px;
+    font-family: "Jost";
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 29px;
     letter-spacing: 0em;
     text-align: left;
-    color: var(--secoundary);
+    color: #121212;
+    width: 180px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .css-fwx73e .detail-wrap .top .right {
@@ -701,7 +706,7 @@ img {
     letter-spacing: 0em;
     text-align: left;
     color: var(--white);
-    margin: 0px 20px 0px 36px;
+    margin: 20px 20px 0px 36px;
     position: relative;
     margin-bottom: 30px;
 }
@@ -718,7 +723,7 @@ img {
     letter-spacing: 0em;
     text-align: left;
     color: #000;
-    margin: 0px 20px 0px 36px;
+    margin: 20px 20px 0px 36px;
     position: relative;
     margin-bottom: 30px;
     pointer-events: none;

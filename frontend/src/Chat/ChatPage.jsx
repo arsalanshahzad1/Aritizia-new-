@@ -10,6 +10,7 @@ import laravelEcho from "../socket/index";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ChatPage({ search, setSearch }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -43,7 +44,7 @@ function ChatPage({ search, setSearch }) {
       if (response.status) {
         setUserMessagesListing(response.data);
       } else {
-        alert("getting some error");
+        toast.error("getting some error");
       }
     } catch (e) {
       console.log("Error: ", e);
@@ -58,9 +59,9 @@ function ChatPage({ search, setSearch }) {
       if (response.status) {
         setUserMessagesDetails(response?.data?.data);
         setUserDetails(response?.data?.user);
-        console.log(userDetails, "userDetails");
+        // console.log(userDetails, "userDetails");
       } else {
-        alert("getting some error");
+        toast.error("getting some error");
       }
     } catch (e) {
       console.log("Error: ", e);
@@ -125,7 +126,7 @@ function ChatPage({ search, setSearch }) {
         const response = await apis.postChatMessages(sendData);
 
         if (response?.status) {
-          console.log(response, "send-chat-response");
+          // console.log(response, "send-chat-response");
           setUserMessagesDetails((prevState) => [
             response?.data?.data,
             ...prevState,
@@ -138,7 +139,7 @@ function ChatPage({ search, setSearch }) {
         console.log("Error: ", e);
       }
     } else {
-      alert("Data can no be empty");
+      toast.error("Data can no be empty");
     }
   };
 
@@ -167,10 +168,10 @@ function ChatPage({ search, setSearch }) {
       //   setMessageArrive(true);
     });
 
-    console.log(
-      userMessagesDetails,
-      "userMessagesDetails?.user?.profile_image"
-    );
+    // console.log(
+    //   userMessagesDetails,
+    //   "userMessagesDetails?.user?.profile_image"
+    // );
 
     return () => {
       channel.stopListening(".chat-event");

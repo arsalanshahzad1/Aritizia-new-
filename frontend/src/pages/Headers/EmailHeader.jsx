@@ -3,18 +3,20 @@ import { Link, useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useContext } from "react";
 import { GlobalContext } from "../../Context/GlobalContext";
-import Notification from "./Notification";
+
 import laravelEcho from "../../socket/index";
 import apis from "../../service";
 import Web3Modal from "web3modal";
-import UserNotification from "./UserNotification";
+import UserNotification from "../landingpage/UserNotification";
 import { BigNumber, Contract, ethers, providers, utils } from "ethers";
-import { getAddress } from "../../methods/methods";
+// import { getAddress } from "../../methods/methods";
 import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from 'react-icons/io'
-import {
-  connectWallet,
-  getProviderOrSigner,
-} from "../../methods/walletManager";
+// import {
+//   connectWallet,
+//   getProviderOrSigner,
+// } from "../../methods/walletManager";
+import Notification from "../landingpage/Notification";
+import { Store } from "../../Context/Store";
 
 const EmailHeader = ({ search, setSearch }) => {
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -23,7 +25,8 @@ const EmailHeader = ({ search, setSearch }) => {
   const [scrolled, setScrolled] = useState(false);
   const [toggleUserDropdown, setToggleUserDropdown] = useState(false);
   const [toggleSettingDropdown, setToggleSettingDropdown] = useState(false);
-  const [user, setUser] = useState(localStorage.getItem("data"));
+  const user = localStorage.getItem("data")
+  const userAddress = localStorage.getItem("userAddress")
   const [messageArrive, setMessageArrive] = useState(false);
   const [notificationArrive, setNotificationArrive] = useState(false);
   const [chatNotificationRes, setChatNotificationRes] = useState([]);
@@ -34,10 +37,15 @@ const EmailHeader = ({ search, setSearch }) => {
   const [countLength, setCountLength] = useState('');
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const [walletConnected, setWalletConnected] = useState(false);
-  const web3ModalRef = useRef();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
+  const [userParse, setUserParse] = useState(JSON.parse(localStorage.getItem("data")));
+
+  const { account, checkIsWalletConnected, connectWallet,walletConnected } = useContext(Store);
+
+  useEffect(() => {
+    checkIsWalletConnected()
+  }, [account])
 
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
@@ -67,9 +75,9 @@ const EmailHeader = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  useEffect(() => {
-    setInterval(getAddress, 3000);
-  }, []);
+  // useEffect(() => {
+  //   setInterval(getAddress, 3000);
+  // }, []);
 
   function handleDisconnect() {
     // Handle wallet disconnection here
@@ -118,6 +126,7 @@ const EmailHeader = ({ search, setSearch }) => {
     }
     const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
+      console.log(response?.data?.data , 'response?.data?.data');
       setChatNotificationRes((prevState) => [
         ...prevState,
         ...response?.data?.data,
@@ -204,11 +213,9 @@ const EmailHeader = ({ search, setSearch }) => {
               <div className="left">
                 {path === "/" ? (
                   <>
-                    <FiSearch
-                      className={`search ${scrolled ? "black-color" : "white-color"
-                        }`}
-                      onClick={() => setSearch(true)}
-                    />
+                    <Link to={'/search'}>
+                  <FiSearch className={`search ${scrolled ? "black-color" : "white-color"}`} />
+                  </Link>
 
                     <span
                       className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -296,7 +303,7 @@ const EmailHeader = ({ search, setSearch }) => {
                         onClick={() => {
                           setShowNotification(!showNotification);
                           setshowMessage(false);
-                          viewNotification("notification", user_id);
+                          viewNotification("notification", 0);
                           setNotificationArrive(false);
                         }}
                         className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -324,7 +331,7 @@ const EmailHeader = ({ search, setSearch }) => {
                       </span>
                     )}
 
-                    {showNotification && (
+                    {showNotification && user?.is_email === false && (
                       <div
                         className="notification-card"
                         style={{ left: "22%" }}
@@ -368,15 +375,15 @@ const EmailHeader = ({ search, setSearch }) => {
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
                     >
-                      {user ? "Connected" : "Connect Wallet"}
+                      Connect Wallet
                     </button>
                   </>
                 ) : (
                   <>
-                    <FiSearch
-                      className="search black-color"
-                      onClick={() => setSearch(true)}
-                    />
+                  <Link to={'/search'}>
+                  <FiSearch className="search black-color" />
+                  </Link>
+                    
                     <span className="icon-for-header">
                       <svg
                         width="1"
@@ -427,8 +434,8 @@ const EmailHeader = ({ search, setSearch }) => {
                           ) : (
                             <>
                               {chatNotificationRes?.length > 0 ? (
-                                // <Notification data={chatNotificationRes} />
-                                ""
+                                <Notification data={chatNotificationRes} />
+                            
                               ) : (
                                 <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
@@ -524,8 +531,14 @@ const EmailHeader = ({ search, setSearch }) => {
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
                     >
-                      {user ? "Connected" : "Connect Wallet"}
+                      {userAddress !== "false" && walletConnected ? "Connected" : "Connect Wallet"}
                     </button>
+                    {userParse?.email === null ?
+                          <Link to={'/login'}>
+                            <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`}
+                              style={{ margin: user ? "0px 20px 0px 0px" : "0px 0px 0px 3px" }}>Login</button>
+                          </Link>:<></>
+                          }
                   </>
                 )}
                 {user && (
@@ -583,24 +596,27 @@ const EmailHeader = ({ search, setSearch }) => {
                                       Notifications
                                     </li>
                                   </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Purchase")
-                                      }
-                                    >
-                                      Purchase
-                                    </li>
-                                  </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Earnings")
-                                      }
-                                    >
-                                      Earning
-                                    </li>
-                                  </Link>
+                                  {userAddress === "false" ? <></> : <>
+                                    <Link to={"/setting"}>
+                                      <li
+                                        onClick={() =>
+                                          setactiveTabsSetting("Purchase")
+                                        }
+                                      >
+                                        Purchase
+                                      </li>
+                                    </Link>
+                                    <Link to={"/setting"}>
+                                      <li
+                                        onClick={() =>
+                                          setactiveTabsSetting("Earnings")
+                                        }
+                                      >
+                                        Earning
+                                      </li>
+                                    </Link>
+                                  </>
+                                  }
                                   <Link to={"/setting"}>
                                     <li
                                       onClick={() =>
@@ -619,6 +635,18 @@ const EmailHeader = ({ search, setSearch }) => {
                           <li>
                             <Link to={"/subscription"}>Subscription</Link>
                           </li>
+
+                          <li>
+                            <div onClick={() => {
+                              localStorage.setItem("data", false)
+                              localStorage.setItem("userAddress", false)
+                              localStorage.setItem("address", false)
+
+                              localStorage.setItem("firstTimeCall", "false")
+                              window.location.reload()
+                            }}>Logout</div>
+                          </li>
+
                         </ul>
                       </div>
                     )}

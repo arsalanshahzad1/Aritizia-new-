@@ -2,24 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import apis from "../../service";
+import EmailSigninPopup from "../../pages/Headers/EmailSigninPopup";
+import { ethers } from "ethers";
 
 const TableData = () => {
   const navigate = useNavigate();
+  const [emailSigninPopup, setEmailSigninPopup] = useState(false);
+
+  const userData = JSON.parse(localStorage.getItem('data'))
 
   const [list, setList] = useState([]);
 
   const viewNftTopCollections = async () => {
-    const response = await apis.viewNftTopCollections();
-    if (response.status) {
+
+    try {
+      const response = await apis.viewNftTopCollections();
       setList(response?.data?.data);
-      console.log(response, "zzzzxxxx");
-    } else {
-      console.log("Error");
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
   const navigateTo = (id) => {
-    navigate(`/collection?id=${id}`);
+    if (userData) {
+      navigate(`/collection?id=${id}`);
+    }else{
+      setEmailSigninPopup(true)
+    }
   };
 
   useEffect(() => {
@@ -33,12 +42,12 @@ const TableData = () => {
             <th>Name</th>
             <th>Floor Price</th>
             <th>Status</th>
-            <th>Owner</th>
-            <th>Item</th>
+            <th>Owners</th>
+            <th>Supply</th>
           </tr>
         </thead>
         <tbody>
-          {list.slice(0, 3).map((res, index) => {
+          {list?.slice(0, 3).map((res, index) => {
             return (
               <tr className="table-details" key={index}>
                 <td
@@ -63,7 +72,7 @@ const TableData = () => {
                 </td>
                 <td>
                   <div className="two">
-                    <p className="price">{res?.flow_price} ETH</p>
+                    <p className="price">{Number(ethers.utils.formatEther(res?.flow_price?.toString()))?.toFixed(5)} ETH</p>
                   </div>
                 </td>
                 <td>
@@ -77,7 +86,7 @@ const TableData = () => {
                           {res?.coll_status > 0 ? (
                             <>+{res?.coll_status}%</>
                           ) : (
-                            <>-{res?.coll_status}%</>
+                            <>{res?.coll_status}%</>
                           )}
                         </>
                       )}
@@ -103,6 +112,8 @@ const TableData = () => {
           })}
         </tbody>
       </Table>
+    <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
+
     </div>
   );
 };
