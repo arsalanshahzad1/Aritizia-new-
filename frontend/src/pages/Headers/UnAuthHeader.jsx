@@ -82,14 +82,16 @@ const UnAuthHeader = ({ search, setSearch }) => {
               <div className="left">
                 {path === "/" ? (
                   <>
-                    <FiSearch className={`search ${scrolled ? "black-color" : "white-color"}`} onClick={() => setSearch(true)} />
+                    <Link to={'/search'}>
+                  <FiSearch className={`search ${scrolled ? "black-color" : "white-color"}`} />
+                  </Link>
                     <span className={`icon-for-header ${scrolled ? "black-svgs" : ""}`}>
                       <svg width="1" height="22" viewBox="0 0 1 22" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
                         <rect width="1" height="22" fill="#ffffff" />
                       </svg>
                     </span>
                     <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }} onClick={() => setConnectPopup(true)}>
-                      Create an account
+                      Create Account
                     </button>
                     <Link to={'/login'}>
                       <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }}>
@@ -99,7 +101,9 @@ const UnAuthHeader = ({ search, setSearch }) => {
                   </>
                 ) : (
                   <>
-                    <FiSearch className="search black-color" onClick={() => setSearch(true)} />
+                    <Link to={'/search'}>
+                  <FiSearch className="search black-color" />
+                  </Link>
                     <span className="icon-for-header">
                       <svg width="1" height="22" viewBox="0 0 1 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="1" height="22" fill="#111111" />
@@ -107,7 +111,7 @@ const UnAuthHeader = ({ search, setSearch }) => {
                     </span>
 
                     <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }} onClick={() => setConnectPopup(true)}>
-                      Create an account
+                      Create Account
                     </button>
                     <Link to={'/login'}>
                       <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`} style={{ margin: "0px 0px 0px 3px" }}>

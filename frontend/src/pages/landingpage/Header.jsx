@@ -27,8 +27,6 @@ const Header = ({ search, setSearch }) => {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(false);
   const [toggleSettingDropdown, setToggleSettingDropdown] = useState(false);
   const [user, setUser] = useState(localStorage.getItem("data"));
-
-
   const [messageArrive, setMessageArrive] = useState(false);
   const [notificationArrive, setNotificationArrive] = useState(false);
   const [chatNotificationRes, setChatNotificationRes] = useState([]);
@@ -39,15 +37,11 @@ const Header = ({ search, setSearch }) => {
   const [countLength, setCountLength] = useState('');
   const data = JSON.parse(localStorage.getItem("data"));
   const [userData, setUserData] = useState(data)
-
-  // const userData = JSON.parse(localStorage.getItem("data"));
-  const [walletConnected, setWalletConnected] = useState(false);
-  const web3ModalRef = useRef();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
 
 
-  const { account, checkIsWalletConnected, connectWallet } = useContext(Store);
+  const { account, checkIsWalletConnected, connectWallet,walletConnected } = useContext(Store);
 
   useEffect(() => {
     checkIsWalletConnected()
@@ -81,18 +75,11 @@ const Header = ({ search, setSearch }) => {
   const [accountChange, setAccountChange] = useState(false);
 
 
-  // useEffect(() => {
-  //   setInterval(getAddress, 3000);
-  // }, []);
-
   function handleDisconnect() {
     // Handle wallet disconnection here
     console.log(
       "Wallet disconnected. Updating state and clearing local storage..."
     );
-    // For example, update state using React useState hook:
-    // setState(null);
-
     // Clear localStorage:
     localStorage.clear();
   }
@@ -132,6 +119,7 @@ const Header = ({ search, setSearch }) => {
     }
     const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
+      console.log(response , 'response');
       setChatNotificationRes((prevState) => [
         ...prevState,
         ...response?.data?.data,
@@ -165,9 +153,9 @@ const Header = ({ search, setSearch }) => {
   };
 
 
-  const accountAddress = localStorage.getItem("userAddress")
+  let accountAddress = localStorage.getItem("userAddress")
 
-  console.log(typeof accountAddress, "accountAddressaccountAddress")
+  // console.log(typeof accountAddress, "accountAddressaccountAddress")
 
   // console.log( parse, "userParse")
   // console.log( user.email, "userParse")
@@ -181,11 +169,22 @@ const Header = ({ search, setSearch }) => {
   useEffect(() => {
     setTimeout(() => {
       setUserParse(JSON.parse(localStorage.getItem("data")))
-    }, 2000);
+    }, 1000);
     // setUserDatalocalStorage.getItem("data")
   }, [])
-  console.log(userParse?.email, "userParse")
+  // console.log(userParse?.email, "userParse")
 
+
+  console.log("data",data)
+  
+  console.log("accountAddress",accountAddress)
+ useEffect(()=>{
+if(accountAddress == null&& data == null )
+{
+  window.location.reload()
+} 
+},[accountAddress,data])
+ 
   return (
     <>
       {
@@ -244,11 +243,10 @@ const Header = ({ search, setSearch }) => {
                     <div className="left">
                       {path === "/" ? (
                         <>
-                          <FiSearch
-                            className={`search ${scrolled ? "black-color" : "white-color"
-                              }`}
-                            onClick={() => setSearch(true)}
-                          />
+                           <Link to={'/search'}>
+                      <FiSearch className={`search ${scrolled ? "black-color" : "white-color"
+                        }`} />
+                    </Link>
 
                           <span
                             className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -269,7 +267,7 @@ const Header = ({ search, setSearch }) => {
                               onClick={() => {
                                 setshowMessage(!showMessage),
                                   setShowNotification(false),
-                                  getChatnotification("message", user_id);
+                                  getChatnotification("message", 0);
                                 setMessageArrive(false);
                               }}
                               className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -336,7 +334,7 @@ const Header = ({ search, setSearch }) => {
                               onClick={() => {
                                 setShowNotification(!showNotification);
                                 setshowMessage(false);
-                                viewNotification("notification", user_id);
+                                viewNotification("notification", 0);
                                 setNotificationArrive(false);
                               }}
                               className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -408,19 +406,20 @@ const Header = ({ search, setSearch }) => {
                               margin: user ? "0px 10px 0px 15px" : "0px 0px 0px 3px",
                             }}
                           >
-                            {accountAddress !== "false" ? "Connected" : "Connect Wallet"}
+                            {accountAddress !== "false" && walletConnected? "Connected" : "Connect Wallet"}
                           </button>
-                          {userParse?.email === null &&
+                          {userParse?.email === null ?
                             <Link to={'/login'}>
                               <button className={`header-connect-wallet ${scrolled ? "black-color" : "white-color"}`}
                                 style={{ margin: user ? "0px 20px 0px 0px" : "0px 0px 0px 3px" }}>Login</button>
-                            </Link> 
-                            // : <></>
+                            </Link> : <></>
                           }
                         </>
                       ) : (
                         <>
-                        <FiSearch className='search black-color' onClick={() => setSearch(true)}/>
+                        <Link to={'/search'}>
+                  <FiSearch className="search black-color" />
+                  </Link>
 
                         <span className='icon-for-header black-svgs'>
                           <svg width="1" height="22" viewBox="0 0 1 22" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
@@ -432,7 +431,7 @@ const Header = ({ search, setSearch }) => {
                             onClick={() => {
                               setshowMessage(!showMessage),
                                 setShowNotification(false),
-                                getChatnotification("message", user_id);
+                                getChatnotification("message" , 0);
                               setMessageArrive(false);
                             }}
                             className='icon-for-header black-svgs'
@@ -498,7 +497,7 @@ const Header = ({ search, setSearch }) => {
                             onClick={() => {
                               setShowNotification(!showNotification);
                               setshowMessage(false);
-                              viewNotification("notification", user_id);
+                              viewNotification("notification", 0);
                               setNotificationArrive(false);
                             }}
                             className='icon-for-header black-svgs'
@@ -566,7 +565,7 @@ const Header = ({ search, setSearch }) => {
                             margin: user ? "0px 10px 0px 15px" : "0px 0px 0px 3px",
                           }}
                         >
-                          {accountAddress !== "false" ? "Connected" : "Connect Wallet"}
+                          {accountAddress !== "false" && walletConnected ? "Connected" : "Connect Wallet"}
                         </button>
                         {userParse?.email === null ?
                           <Link to={'/login'}>

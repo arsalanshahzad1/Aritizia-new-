@@ -1,4 +1,5 @@
-import  React, { useState, useEffect,useContext } from "react";
+import React from 'react'
+import { useState, useEffect,useContext } from "react";
 import Header from "../../pages/landingpage/Header";
 import { Navigate, useNavigate } from "react-router-dom";
 import SocialShare from "../../components/shared/SocialShare";
@@ -116,7 +117,7 @@ function User2({ search, setSearch }) {
           data = data.replace(/\\/g, "");
 
           data = JSON.parse(data);
-          const crypto = data?.crypto;
+          const paymentMethod = data?.crypto;
           const title = data?.title;
           const image = data?.image;
           const royalty = data?.royalty;
@@ -129,7 +130,7 @@ function User2({ search, setSearch }) {
             title: title,
             image: image,
             price: price,
-            crypto: crypto,
+            paymentMethod: paymentMethod,
             royalty: royalty,
             description: description,
             collection: collection,
@@ -167,6 +168,7 @@ function User2({ search, setSearch }) {
     }
   };
 
+  console.log("DONEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
   return (
     <div className="user">
       <div className="back-btn">
@@ -247,7 +249,7 @@ function User2({ search, setSearch }) {
                             title={item?.title}
                             image={item?.image}
                             price={item?.price}
-                            crypto={item?.crypto}
+                            paymentMethod={item?.paymentMethod}
                             royalty={item?.royalty}
                             description={item?.description}
                             collection={item?.collection}
@@ -257,128 +259,11 @@ function User2({ search, setSearch }) {
                       </div>
                     </>
                   )}
-                  {/* {tabs === 1 && (
-                    <>
-                      <div className="row">
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                      </div>
-                    </>
-                  )}
-                  {tabs === 2 && (
-                    <>
-                      <div className="row">
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                        <DashboardCard2
-                          key={"2"}
-                          id={"2"}
-                          title={"Bull BTC Club"}
-                          image={nft}
-                          price={"0.008"}
-                          crypto={"0"}
-                          royalty={"item?.royalty"}
-                          description={
-                            "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
-                          }
-                          collection={"item?.collection"}
-                        />
-                      </div>
-                    </>
-                  )} */}
+                 
                 </div>
               </div>
             </div>
           </div>
-
-          {/* <Search search={search} setSearch={setSearch} /> */}
         </div>
       </div>
     </div>

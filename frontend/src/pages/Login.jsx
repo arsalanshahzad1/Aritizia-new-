@@ -9,11 +9,9 @@ import EmailMasked from '../components/shared/EmailMasked';
 import VerificationInput from 'react-verification-input';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
-function Login() {
+function Login({loader,setLoader}) {
     const [chack, setChack] = useState(false);
-    const [showPass, setShowPass] = useState(false);
-    const [showResetPass, setShowResetPass] = useState(false);
-    const [loader, setLoader] = useState(false);
+    // const [loader, setLoader] = useState(false);
     const [forget, setForget] = useState(false);
     const [changePass, setChangePass] = useState(false);
     const [registerData, setRegisterData] = useState('');
@@ -22,6 +20,8 @@ function Login() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const navigate = useNavigate()
+    const [showPass, setShowPass] = useState(false);
+    const [showResetPass, setShowResetPass] = useState(false);
 
     const loginWithEmail = async (event) => {
         event.preventDefault()
@@ -186,15 +186,15 @@ function Login() {
                             <Link to={'/'}>
                                 <img src="/assets/logo/logo.png" alt="logo" />
                             </Link>
-                            <h1 className='title'>Login your account</h1>
-                            <p className='desc'>Welcome to Artizia, please enter your login details below to using the app</p>
+                            <h1 className='title'>Account Login</h1>
+                            <p className='desc'>Welcome to Artizia, please enter your login details below.</p>
                             <form onSubmit={loginWithEmail}>
-                                <input type="email" name="email" id="" placeholder='Email Address' onChange={onChangeHandler} style={{marginBottom:'20px'}}/>
+                                <input type="email" name="email" id="" placeholder='Email Address' onChange={onChangeHandler} />
                                 <div className="pass">
                                 <input type={showPass ? "text" : "password"} name="password" id="" placeholder='Password' onChange={onChangeHandler} />
                                 {showPass ?<span onClick={() =>{setShowPass(!showPass)}}><FaRegEye/></span>  : <span onClick={() =>{setShowPass(!showPass)}}><FaRegEyeSlash/></span> }
                                 </div>
-                                <Link to={''} className='forget-pass' onClick={() => setForget(true)}>Forget the password?</Link>
+                                <Link to={''} className='forget-pass' onClick={() => setForget(true)}>Forgot Password?</Link>
                                 <button type='submit' disabled={loader} className={`signup ${loader ? 'disable' : ''}`}>Sign in</button>
                                 <div className="or">
                                     <div className='middle-line'></div>
@@ -238,7 +238,7 @@ function Login() {
                         {/* <p className="resent-code">Didn’t receive code? <Link onClick={resentOtp}> Resend </Link></p> */}
                         <button className='varify-code'>Next</button>
                     </form>
-                        <button className='back' onClick={() => setForget(false)}>Cancel</button>
+                        <button className='back' onClick={() => setForget(false)}>Cancle</button>
                 </div>
             </Modal>
             <Modal
@@ -253,7 +253,7 @@ function Login() {
                 <div className="modal-body">
                     <form onSubmit={forgotVerify}>
                         <h1 className='title'>Forget Password</h1>
-                        <input type="email" value={email} disabled id='email' placeholder='Enter email' className='password-forget' required style={{marginBottom : '15px'}}/>
+                        <input type="email" value={email} disabled id='email' placeholder='Enter email' className='password-forget' required />
                         <div className="pass">
                         <input type={showResetPass ? "text":"password"}  onChange={(e) => setPassword(e.target.value)} placeholder='Enter new password' className='password-forget' required />
                         {showResetPass ?<span onClick={() =>{setShowResetPass(!showResetPass)}}><FaRegEye/></span>  : <span onClick={() =>{setShowResetPass(!showResetPass)}}><FaRegEyeSlash/></span> }

@@ -1,7 +1,5 @@
-
-
-
-import  React, { useEffect, useState,useContext } from "react";
+import React from 'react'
+import { useEffect, useState,useContext } from "react";
 import apis from "../../service";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";

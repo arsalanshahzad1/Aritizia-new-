@@ -59,7 +59,7 @@ function ChatPage({ search, setSearch }) {
       if (response.status) {
         setUserMessagesDetails(response?.data?.data);
         setUserDetails(response?.data?.user);
-        console.log(userDetails, "userDetails");
+        // console.log(userDetails, "userDetails");
       } else {
         toast.error("getting some error");
       }
@@ -126,7 +126,7 @@ function ChatPage({ search, setSearch }) {
         const response = await apis.postChatMessages(sendData);
 
         if (response?.status) {
-          console.log(response, "send-chat-response");
+          // console.log(response, "send-chat-response");
           setUserMessagesDetails((prevState) => [
             response?.data?.data,
             ...prevState,
@@ -168,10 +168,10 @@ function ChatPage({ search, setSearch }) {
       //   setMessageArrive(true);
     });
 
-    console.log(
-      userMessagesDetails,
-      "userMessagesDetails?.user?.profile_image"
-    );
+    // console.log(
+    //   userMessagesDetails,
+    //   "userMessagesDetails?.user?.profile_image"
+    // );
 
     return () => {
       channel.stopListening(".chat-event");

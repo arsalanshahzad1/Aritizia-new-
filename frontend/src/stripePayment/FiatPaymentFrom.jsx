@@ -38,9 +38,25 @@ const FiatPaymentFrom = ({
   setShowPaymentForm,
   showResponseMessage,
   setSucess,
-  setIsVisible
+  setIsVisible,
+  _nftContract,
+    _tokenId,
+    _sellerPlan,      
+    _buyerAddress,
+    _buyerPlan,
+    sellerId,
+    buyerId,
+    ethAmount,
+    setLoader
 }) => {
   // console.log(index, "index");
+  console.log(_nftContract,
+    _tokenId,
+    _sellerPlan,      
+    _buyerAddress,
+    _buyerPlan,
+    sellerId,
+    buyerId,"Mohsinssss")
   const [success, setSuccess] = useState(false);
   const [planeType, setPlaneType] = useState("monthly");
   const [showPlaneType, setShowPlaneType] = useState(false);
@@ -52,7 +68,7 @@ const FiatPaymentFrom = ({
   const elements = useElements();
   const nevigate = useNavigate()
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const {account,checkIsWalletConnected,buyWithFiatPayment}=useContext(Store);
 
   useEffect(()=>{
     checkIsWalletConnected()
@@ -67,6 +83,7 @@ const FiatPaymentFrom = ({
     });
 
     if (!error) {
+      setLoader(true)
       try {
         console.log("payment_method_id: " + paymentMethod.id);
         const { id } = paymentMethod.id;
@@ -78,16 +95,26 @@ const FiatPaymentFrom = ({
         });
 
         if (response.status) {
-          setSucess(false)
-          setIsVisible(false)
-          toast.success("NFT purchased!", {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-          setShowPaymentForm(false)
+          //_nftContract, _tokenId, _sellerPlan, _buyerAddress, _buyerPlan, sellerId, buyerId, ethAmount
+          let status = await buyWithFiatPayment(_nftContract,_tokenId,_sellerPlan,_buyerAddress,_buyerPlan,sellerId,buyerId,ethAmount);
           
-          setTimeout(() =>{
-            window.location.replace('/profile')
-          } , 2000)
+          if(status){
+            setSucess(false)
+            setIsVisible(false)
+            toast.success("NFT purchased!", {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+            setShowPaymentForm(false)
+            setTimeout(() =>{
+              window.location.replace('/profile')
+            } , 2000)
+            setLoader(false)
+          }else{
+            toast.success("Something Wrong", {
+              position: toast.POSITION.TOP_RIGHT,
+            }),setLoader(false)
+          }
+
           
           // viewSubscriptions(user_id)
         }
@@ -180,7 +207,7 @@ const FiatPaymentFrom = ({
         </form>
       ) : (
         <div>
-          <h2>You just buy an nft</h2>
+          <h2>You just buy an NFT</h2>
         </div>
       )}
       {/* <ToastContainer /> */}

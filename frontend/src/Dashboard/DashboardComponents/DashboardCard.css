@@ -368,16 +368,16 @@ a {
     padding: 60px 60px;
 }
 
-/* .css-15eyh94 {
+.css-15eyh94 {
     box-sizing: border-box;
     margin: 0px;
     min-width: 0px;
     position: relative;
     width: 100%;
     padding-bottom: 82%;
-} */
+}
 
-/* .css-2r2ti0 {
+.css-2r2ti0 {
     box-sizing: border-box;
     margin: 0px;
     min-width: 0px;
@@ -385,8 +385,8 @@ a {
     top: 0px;
     left: 0px;
     width: 100%;
-    height: 100%;
-} */
+    /* height: 100%; */
+}
 
 .css-15xcape {
     box-sizing: border-box;
@@ -419,7 +419,19 @@ img {
     right: 8px;
 }
 
-
+.css-1xg74gr {
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    /* border-top: 1px solid rgb(234, 236, 239); */
+    transition: all 0.2s ease 0s;
+    opacity: 1;
+    pointer-events: all;
+    z-index: 10;
+}
 
 .css-118gt75:hover {
     /* transform: translateY(-4px); */
@@ -471,7 +483,19 @@ img {
     /* padding-bottom: 65px; */
 }
 
-
+.css-1xg74gr {
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    padding: 12px;
+    /* border-top: 1px solid rgb(234, 236, 239); */
+    transition: all 0.2s ease 0s;
+    opacity: 1;
+    pointer-events: all;
+    z-index: 5;
+}
 
 .btc-gray-logo {
     position: absolute;

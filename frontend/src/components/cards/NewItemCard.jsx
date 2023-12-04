@@ -3,42 +3,49 @@ import { AiFillHeart } from "react-icons/ai";
 import "./Cards.css";
 import PlaceABidDrawer from "../shared/PlaceABidDrawer";
 import NftCountdown from "../shared/NftCountdown";
+import MarketplaceAddress from "../../contractsData/ArtiziaMarketplace-address.json";
 import {
   FacebookShareButton,
   InstapaperShareButton,
   TwitterShareButton,
   LinkedinShareButton,
 } from "react-share";
+import { ethers } from "ethers";
 
 const NewItemCard = ({
+  setLoader,
   id,
+  isLive,
   title,
   image,
-  price,
-  highestBid,
-  isLive,
+  description,
+  basePrice,
   startTime,
   endTime,
-  description,
-  // userAddress,
-  seller,
+  highestBidIntoETH,
+  highestBidIntoUSDT,
+  highestBidderAddress,
+  royaltyPrice,
+  collection,
   collectionImages,
-  size,
+  seller,
+  owner,
+  firstOwner,
   user_id,
-  nft_like
+  nft_like,
+  size,
+  is_unapproved
 }) => {
-  const [showLinks, setShowLinks] = useState(false);
+
+  // const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [endDate, setEndDate] = useState("");
-  highestBid = Number(highestBid).toFixed(2);
+
+  const unixTimestamp = Math.floor(Date.now() / 1000);
+  console.log(startTime > unixTimestamp , "timeeee");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
-
-  console.log("highestBiddd", highestBid);
-  console.log("pricezzz", price);
-  console.log("collectionImagestt", collectionImages);
-  console.log("highestBiddd", typeof highestBid);
 
   function convertTimestampToCustomFormat() {
     const date = new Date(endTime * 1000);
@@ -63,11 +70,11 @@ const NewItemCard = ({
   }, []);
 
   const openDrawer = () => {
-    if (showLinks === true) {
-      return onOpen(false);
-    } else {
+    // if (showLinks === true) {
+    //   return onOpen(false);
+    // } else {
       setIsVisible(true);
-    }
+    // }
   };
 
   return (
@@ -76,46 +83,16 @@ const NewItemCard = ({
         <div className="sec-five-wrap" onClick={() => openDrawer()}>
           <div className="image">
             <img src={image} alt="" width={"100%"} />
-            {/* <span>{endDate}</span> */}
             <span>
-              <NftCountdown endDateTime={new Date(endTime * 1000)} />
+              {isLive ?
+                <NftCountdown endDateTime={new Date(endTime * 1000)} />
+                :
+                startTime > unixTimestamp ? 
+                "Coming Soon" 
+                :
+                "Auction Ended"
+              }
             </span>
-            {/* {showLinks && (
-              <div className="social-links">
-                <ul>
-                  <li>
-                    <a>
-                      <LinkedinShareButton
-                        url={`https://${window.location.host}/other-profile?add=${user_id}`}
-                        title="Artizia"
-                      >
-                        <p>Linkedin</p>
-                      </LinkedinShareButton>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <TwitterShareButton
-                        url={`https://${window.location.host}/other-profile?add=${user_id}`}
-                        title="Artizia"
-                      >
-                        <p>Twitter</p>
-                      </TwitterShareButton>
-                    </a>
-                  </li>
-                  <li>
-                    <a>
-                      <FacebookShareButton
-                        url={`https://${window.location.host}/other-profile?add=${user_id}`}
-                        title="Artizia"
-                      >
-                        <p>Facebook</p>
-                      </FacebookShareButton>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            )} */}
           </div>
           <div className="detail-wrap">
             <div className="center-icon">
@@ -128,27 +105,35 @@ const NewItemCard = ({
               <div className="left">
                 <p>{title}</p>
                 <span>
-                  {+highestBid == 0 ? `${+price} ETH` : `${highestBid} ETH`}
+                  {+highestBidIntoETH > +basePrice ? `${Number(ethers.utils.formatEther(highestBidIntoETH?.toString()))?.toFixed(5)} ETH` : `${Number(ethers.utils.formatEther(basePrice?.toString()))?.toFixed(5)} ETH`}
                 </span>
               </div>
               <div
                 className="right"
                 style={{ cursor: "pointer", padding: "15px 0px 15px 20px" }}
-                // onClick={() => setShowLinks(!showLinks)}
               >
-                {/* <p>...</p> */}
               </div>
             </div>
             <div className="bottom">
-              {console.log(seller, userAddress, "you beauty")}
-              {seller?.toString()?.toUpperCase() === userAddress?.toString()?.toUpperCase() ?
-                <div className="left" onClick={() => openDrawer()}>
-                  <p>Your NFT</p>
-                </div> :
+              {startTime > unixTimestamp ?
                 <div className="left" >
-                  <p>Place a bid</p>
+                  <p>Coming Soon</p>
                 </div>
-              }
+                :
+                owner?.toUpperCase() === MarketplaceAddress?.address?.toUpperCase() && (
+                  seller?.toString()?.toUpperCase() === userAddress?.toString()?.toUpperCase() ?
+                    <div className="left">
+                      <p>Your NFT</p>
+                    </div> :
+                    isLive ?
+                      <div className="left" >
+                        <p>Place a bid</p>
+                      </div>
+                      :
+                      <div className="left" >
+                        <p>Auction Ended</p>
+                      </div>
+                )}
               <div className="right">
                 <AiFillHeart />
                 <span>{nft_like}</span>
@@ -158,23 +143,29 @@ const NewItemCard = ({
         </div>
       </div>
       <PlaceABidDrawer
+        setLoader={setLoader}
         isVisible={isVisible}
         onClose={onClose}
         id={id}
+        isLive={isLive}
         title={title}
         image={image}
-        price={price}
-        crypto={crypto}
-        // royalty={royalty}
         description={description}
-        // collection={collection}
-        userAddress={userAddress}
+        basePrice={basePrice}
         startTime={startTime}
         endTime={endTime}
-        isLive={isLive}
-        highestBid={highestBid}
-        sellerWallet={seller}
+        highestBidIntoETH={highestBidIntoETH}
+        highestBidIntoUSDT={highestBidIntoUSDT}
+        highestBidderAddress={highestBidderAddress}
+        royaltyPrice={royaltyPrice}
+        collection={collection}
+        collectionImages={collectionImages}
+        seller={seller}
+        owner={owner}
+        firstOwner={firstOwner}
         user_id={user_id}
+        is_unapproved={is_unapproved}
+        nft_like={nft_like}
       />
     </>
   );

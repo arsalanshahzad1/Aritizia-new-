@@ -16,15 +16,16 @@ import Purchase from './settingFolder/Purchase'
 import Loader from '../components/shared/Loader'
 
 
-const Setting = ({ search, setSearch }) => {
+const Setting = ({ search, setSearch, loader, setLoader }) => {
     const { activeTabsSetting } = useContext(GlobalContext)
     const [activeTabs, setActiveTabs] = useState(activeTabsSetting)
+    
     useEffect(() => {
         setActiveTabs(activeTabsSetting)
         setLoader(false)
     }, [activeTabsSetting])
 
-    const [loader, setLoader] = useState(true)
+    // const [loader, setLoader] = useState(true)
 
     // const [scroll, setScroll] = useState(true)
 
@@ -34,8 +35,6 @@ const Setting = ({ search, setSearch }) => {
     //     setScroll(false)
     //   }
     // },[])
-
-
     
     const userAddress = localStorage.getItem("userAddress")
     
@@ -59,7 +58,7 @@ const Setting = ({ search, setSearch }) => {
                                    <></>
                                    :<>
                                        <li onClick={() => { setActiveTabs('Earnings') }}><button className={`${activeTabs === 'Earnings' ? 'active' : ''}`}><FaHandHoldingUsd />Earnings</button> </li>
-                                    <li onClick={() => { setActiveTabs('Purchase') }}><button className={`${activeTabs === 'Purchase' ? 'active' : ''}`}><FaHandHoldingUsd />Purchase</button> </li>
+                                    <li onClick={() => { setActiveTabs('Purchase') }}><button className={`${activeTabs === 'Purchase' ? 'active' : ''}`}><FaHandHoldingUsd />purchased</button> </li>
                                    
                                      </>}
                                     <li onClick={() => { setActiveTabs('Edit') }}><button className={`${activeTabs === 'Edit' ? 'active' : ''}`}><FaEdit />Edit</button></li>
@@ -74,7 +73,7 @@ const Setting = ({ search, setSearch }) => {
                                     {activeTabs === 'Purchase' && <Purchase />}
                                     </>}
                                 
-                                    {activeTabs === 'Edit' && <EditProfile />}
+                                    {activeTabs === 'Edit' && <EditProfile loader={loader} setLoader={setLoader}/>}
                                 </div>
                             </div>
                         </div>

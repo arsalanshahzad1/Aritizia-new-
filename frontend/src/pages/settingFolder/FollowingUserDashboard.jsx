@@ -1,6 +1,5 @@
-
-
-import  React, { useState, useEffect } from "react";
+import React from 'react'
+import { useState, useEffect } from "react";
 import apis from "../../service";
 import { Link } from "react-router-dom";
 const FollowingUserDashboard = ({ data, id }) => {

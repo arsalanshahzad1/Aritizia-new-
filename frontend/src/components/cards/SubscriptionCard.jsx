@@ -13,20 +13,20 @@ const DateDisplay = ({ datetime }) => {
 }
 
 const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, index, viewSubscriptions }) => {
-    console.log(data);
+    // console.log(data);
 
     const userData = JSON.parse(localStorage.getItem("data"));
     const userId = userData?.id;
     const [emailSigninPopup, setEmailSigninPopup] = useState(false);
     const autoRecursionOnoff = async (id, subId) => {
-        console.log(id);
-        console.log(subId);
+        // console.log(id);
+        // console.log(subId);
         const response = await apis.autoRecursionOnoff({ user_id: id, subscription_id: subId })
         if (response.status) {
-            console.log(response);
+            // console.log(response);
             viewSubscriptions(userId)
         } else {
-            console.log(response);
+            // console.log(response);
         }
     }
 
@@ -97,11 +97,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 <div>
                                     {res?.unlimited_gallery_uploads == 0 ?
                                         <>
-                                            <p className='p1'>Unlimited gallegy uploads</p><Cross />
+                                            <p className='p1'>Unlimited Gallery Uploads</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Unlimited gallegy uploads</p><Check />
+                                            <p className='p1'>Unlimited Gallery Uploads</p><Check />
                                         </>
 
 
@@ -110,11 +110,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 <div>
                                     {res?.prompt_privacy == 0 ?
                                         <>
-                                            <p className='p1'>Prompt privacy</p><Cross />
+                                            <p className='p1'>Prompt Privacy</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Prompt privacy</p><Check />
+                                            <p className='p1'>Prompt Privacy</p><Check />
                                         </>
 
 
@@ -149,11 +149,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                 <div>
                                     {res?.exclusive_art_release == 0 ?
                                         <>
-                                            <p className='p1'>Access to exclusive art releases</p><Cross />
+                                            <p className='p1'>Access To Exclusive Art Releases</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Access to exclusive art releases</p><Check />
+                                            <p className='p1'>Access To Exclusive Art Releases</p><Check />
                                         </>
 
 
@@ -201,28 +201,29 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.monthly_generated_images == 0 ?
                                             <>
-                                                {index === 0 && <><p className='p1'>Images generated 40/Month</p><Cross /></>}
-                                                {index === 1 && <><p className='p1'>Images generated 400/Month</p><Cross /></>}
-                                                {index === 2 && <><p className='p1'>Images generated 700/Month</p><Cross /></>}
-                                                {index === 3 && <><p className='p1'>Images generated 1600/Month</p><Cross /></>}
+                                                {index === 0 && <><p className='p1'>Images Generated 40/Month</p><Cross /></>}
+                                                {index === 1 && <><p className='p1'>Images Generated 400/Month</p><Cross /></>}
+                                                {index === 2 && <><p className='p1'>Images Generated 700/Month</p><Cross /></>}
+                                                {index === 3 && <><p className='p1'>Images Generated 1600/Month</p><Cross /></>}
                                             </>
                                             :
                                             <>
-                                            {index === 0 && <><p className='p1'>Images generated 40/Month </p><Check /></>}
-                                            {index === 1 && <><p className='p1'>Images generated 400/Month </p><Check /></>}
-                                            {index === 2 && <><p className='p1'>Images generated 700/Month </p><Check /></>}
-                                            {index === 3 && <><p className='p1'>Images generated 1600/Month </p><Check /></>}
+                                            {index === 0 && <><p className='p1'>Images Generated 40/Month </p><Check /></>}
+                                            {index === 1 && <><p className='p1'>Images Generated 400/Month </p><Check /></>}
+                                            {index === 2 && <><p className='p1'>Images Generated 700/Month </p><Check /></>}
+                                            {index === 3 && <><p className='p1'>Images Generated 1600/Month </p><Check /></>}
                                             </>
                                         }
                                     </div>
                                     <div>
                                         {res?.transection_fee == 0 ?
                                             <>
-                                                <p className='p1'>Transaction  fee</p> <span className="span-1">0%</span>
+                                                <p className='p1'>Transaction  Fee</p>
+                                                <span className="span-1">0.0%</span>
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>  Transaction  fee</p>
+                                                <p className='p1'>Transaction  Fee</p>
                                                 <span className="span-1">{res?.transection_fee}%</span>
                                             </>
 
@@ -245,11 +246,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.prompt_privacy == 0 ?
                                             <>
-                                                <p className='p1'>Prompt privacy</p><Cross />
+                                                <p className='p1'>Prompt Privacy</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Prompt privacy</p><Check />
+                                                <p className='p1'>Prompt Privacy</p><Check />
                                             </>
 
 
@@ -284,11 +285,11 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                     <div>
                                         {res?.exclusive_art_release == 0 ?
                                             <>
-                                                <p className='p1'>Access to exclusive art releases</p><Cross />
+                                                <p className='p1'>Access To Exclusive Art Releases</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Access to exclusive art releases</p><Check />
+                                                <p className='p1'>Access To Exclusive Art Releases</p><Check />
                                             </>
 
 

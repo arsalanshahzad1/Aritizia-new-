@@ -15,3 +15,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   // </React.StrictMode>
 );
 
+// const rootElement = document.getElementById("root");
+// if (rootElement.hasChildNodes()) {
+//   hydrate(<App />, rootElement);
+// } else {
+//   render(<App />, rootElement);
+// }

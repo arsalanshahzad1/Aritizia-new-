@@ -37,13 +37,11 @@ const EmailHeader = ({ search, setSearch }) => {
   const [countLength, setCountLength] = useState('');
 
   const userData = JSON.parse(localStorage.getItem("data"));
-  const [walletConnected, setWalletConnected] = useState(false);
-  const web3ModalRef = useRef();
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
   const [userParse, setUserParse] = useState(JSON.parse(localStorage.getItem("data")));
 
-  const { account, checkIsWalletConnected, connectWallet } = useContext(Store);
+  const { account, checkIsWalletConnected, connectWallet,walletConnected } = useContext(Store);
 
   useEffect(() => {
     checkIsWalletConnected()
@@ -128,6 +126,7 @@ const EmailHeader = ({ search, setSearch }) => {
     }
     const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
+      console.log(response?.data?.data , 'response?.data?.data');
       setChatNotificationRes((prevState) => [
         ...prevState,
         ...response?.data?.data,
@@ -214,11 +213,9 @@ const EmailHeader = ({ search, setSearch }) => {
               <div className="left">
                 {path === "/" ? (
                   <>
-                    <FiSearch
-                      className={`search ${scrolled ? "black-color" : "white-color"
-                        }`}
-                      onClick={() => setSearch(true)}
-                    />
+                    <Link to={'/search'}>
+                  <FiSearch className={`search ${scrolled ? "black-color" : "white-color"}`} />
+                  </Link>
 
                     <span
                       className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -306,7 +303,7 @@ const EmailHeader = ({ search, setSearch }) => {
                         onClick={() => {
                           setShowNotification(!showNotification);
                           setshowMessage(false);
-                          viewNotification("notification", user_id);
+                          viewNotification("notification", 0);
                           setNotificationArrive(false);
                         }}
                         className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -383,10 +380,10 @@ const EmailHeader = ({ search, setSearch }) => {
                   </>
                 ) : (
                   <>
-                    <FiSearch
-                      className="search black-color"
-                      onClick={() => setSearch(true)}
-                    />
+                  <Link to={'/search'}>
+                  <FiSearch className="search black-color" />
+                  </Link>
+                    
                     <span className="icon-for-header">
                       <svg
                         width="1"
@@ -437,8 +434,8 @@ const EmailHeader = ({ search, setSearch }) => {
                           ) : (
                             <>
                               {chatNotificationRes?.length > 0 ? (
-                                // <Notification data={chatNotificationRes} />
-                                ""
+                                <Notification data={chatNotificationRes} />
+                            
                               ) : (
                                 <section className="header-empty-record"> <span> No record found </span> </section>
                               )}
@@ -534,7 +531,7 @@ const EmailHeader = ({ search, setSearch }) => {
                         margin: user ? "0px 20px 0px 15px" : "0px 0px 0px 3px",
                       }}
                     >
-                      {userAddress !== "false" ? "Connected" : "Connect Wallet"}
+                      {userAddress !== "false" && walletConnected ? "Connected" : "Connect Wallet"}
                     </button>
                     {userParse?.email === null ?
                           <Link to={'/login'}>

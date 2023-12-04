@@ -37,28 +37,16 @@ const Create = ({ search, setSearch }) => {
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-12 mx-auto">
                                 <div className="row">
-                                    <div className="col-lg-4 col-md-4 col-12">
-                                        {
-                                            userAddress === "false" ?
 
-                                                <div onClick={() => setConnectPopup(true)}
-                                                    className="create-card">
-                                                    <div className='image-holder'>
-                                                        <img src="/assets/images/single.png" alt="" />
-                                                    </div>
-                                                    <h2>Single</h2>
+                                <div className="col-lg-4 col-md-4 col-12">
+                                        <Link to={'/art'} onClick={scrollToPrompt}>
+                                            <div className="create-card">
+                                                <div className='image-holder'>
+                                                    <img src="/assets/images/Generate.png" alt="" />
                                                 </div>
-                                                :
-                                                <Link to={'/create/single'}>
-                                                    <div className="create-card">
-                                                        <div className='image-holder'>
-                                                            <img src="/assets/images/single.png" alt="" />
-                                                        </div>
-                                                        <h2>Single</h2>
-                                                    </div>
-                                                </Link>
-                                        }
-
+                                                <h2>Generate Art</h2>
+                                            </div>
+                                        </Link>
                                     </div>
 
                                     <div className="col-lg-4 col-md-4 col-12">
@@ -68,7 +56,7 @@ const Create = ({ search, setSearch }) => {
                                                     <div className='image-holder'>
                                                         <img src="/assets/images/multiple.png" alt="" />
                                                     </div>
-                                                    <h2>Multiple</h2>
+                                                    <h2>Multiple NFTs</h2>
                                                 </div>
                                                 :
                                                 <Link to={'/create/multiple'}>
@@ -76,22 +64,41 @@ const Create = ({ search, setSearch }) => {
                                                         <div className='image-holder'>
                                                             <img src="/assets/images/multiple.png" alt="" />
                                                         </div>
-                                                        <h2>Multiple</h2>
+                                                        <h2>Multiple NFTs</h2>
                                                     </div>
                                                 </Link>
                                         }
 
                                     </div>
+
+
                                     <div className="col-lg-4 col-md-4 col-12">
-                                        <Link to={'/art'} onClick={scrollToPrompt}>
-                                            <div className="create-card">
-                                                <div className='image-holder'>
-                                                    <img src="/assets/images/Generate.png" alt="" />
+                                        {
+                                            userAddress === "false" ?
+
+                                                <div onClick={() => setConnectPopup(true)}
+                                                    className="create-card">
+                                                    <div className='image-holder'>
+                                                        <img src="/assets/images/single.png" alt="" />
+                                                    </div>
+                                                    <h2>Single NFT</h2>
                                                 </div>
-                                                <h2>Generate</h2>
-                                            </div>
-                                        </Link>
+                                                :
+                                                <Link to={'/create/single'}>
+                                                    <div className="create-card">
+                                                        <div className='image-holder'>
+                                                            <img src="/assets/images/single.png" alt="" />
+                                                        </div>
+                                                        <h2>Single NFT</h2>
+                                                    </div>
+                                                </Link>
+                                        }
+
                                     </div>
+
+                                   
+
+
                                 </div>
                             </div>
                         </div>

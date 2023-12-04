@@ -14,20 +14,20 @@ const DateDisplay = ({ datetime }) => {
 }
 
 const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, index, viewSubscriptions }) => {
-    console.log(data);
+    // console.log(data);
 
     const userData = JSON.parse(localStorage.getItem("data"));
     const userId = userData?.id;
     const [emailSigninPopup, setEmailSigninPopup] = useState(false);
     const autoRecursionOnoff = async (id, subId) => {
-        console.log(id);
-        console.log(subId);
+        // console.log(id);
+        // console.log(subId);
         const response = await apis.autoRecursionOnoff({ user_id: id, subscription_id: subId })
         if (response.status) {
-            console.log(response);
+            // console.log(response);
             viewSubscriptions(userId)
         } else {
-            console.log(response);
+            // console.log(response);
         }
     }
 
@@ -98,11 +98,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                 <div>
                                     {res?.unlimited_gallery_uploads == 0 ?
                                         <>
-                                            <p className='p1'>Unlimited gallegy uploads</p><Cross />
+                                            <p className='p1'>Unlimited Gallery Uploads</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Unlimited gallegy uploads</p><Check />
+                                            <p className='p1'>Unlimited Gallery Uploads</p><Check />
                                         </>
 
 
@@ -111,11 +111,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                 <div>
                                     {res?.prompt_privacy == 0 ?
                                         <>
-                                            <p className='p1'>Prompt privacy</p><Cross />
+                                            <p className='p1'>Prompt Privacy</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Prompt privacy</p><Check />
+                                            <p className='p1'>Prompt Privacy</p><Check />
                                         </>
 
 
@@ -150,11 +150,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                 <div>
                                     {res?.exclusive_art_release == 0 ?
                                         <>
-                                            <p className='p1'>Access to exclusive art releases</p><Cross />
+                                            <p className='p1'>Access To Exclusive Art Releases</p><Cross />
                                         </>
                                         :
                                         <>
-                                            <p className='p1'>Access to exclusive art releases</p><Check />
+                                            <p className='p1'>Access To Exclusive Art Releases</p><Check />
                                         </>
 
 
@@ -229,11 +229,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                     <div>
                                         {res?.unlimited_gallery_uploads == 0 ?
                                             <>
-                                                <p className='p1'>Unlimited gallegy uploads</p><Cross />
+                                                <p className='p1'>Unlimited Gallery Uploads</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Unlimited gallegy uploads</p><Check />
+                                                <p className='p1'>Unlimited Gallery Uploads</p><Check />
                                             </>
 
 
@@ -242,11 +242,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                     <div>
                                         {res?.prompt_privacy == 0 ?
                                             <>
-                                                <p className='p1'>Prompt privacy</p><Cross />
+                                                <p className='p1'>Prompt Privacy</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Prompt privacy</p><Check />
+                                                <p className='p1'>Prompt Privacy</p><Check />
                                             </>
 
 
@@ -281,11 +281,11 @@ const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex,
                                     <div>
                                         {res?.exclusive_art_release == 0 ?
                                             <>
-                                                <p className='p1'>Access to exclusive art releases</p><Cross />
+                                                <p className='p1'>Access To Exclusive Art Releases</p><Cross />
                                             </>
                                             :
                                             <>
-                                                <p className='p1'>Access to exclusive art releases</p><Check />
+                                                <p className='p1'>Access To Exclusive Art Releases</p><Check />
                                             </>
 
 

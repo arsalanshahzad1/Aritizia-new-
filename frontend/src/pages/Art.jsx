@@ -1,4 +1,5 @@
-import React , { useContext, useRef, useState } from 'react'
+import React from 'react'
+import { useContext, useRef, useState } from 'react'
 import Header from './landingpage/Header'
 import bird from '../../public/assets/images/bird.png'
 import { GlobalContext } from '../Context/GlobalContext'
@@ -11,9 +12,9 @@ import Loader from '../components/shared/Loader'
 import { ToastContainer, toast } from "react-toastify";
 import Footer from './landingpage/Footer'
 import GalleryLoader from '../components/shared/GalleryLoader'
-const Art = ({ search, setSearch }) => {
+const Art = ({ search, setSearch, loader, setLoader }) => {
     const navigate = useNavigate()
-    const [loader, setLoader] = useState(false)
+    // const [loader, setLoader] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const { prompt, setprompt } = useContext(GlobalContext)
     const [generatedArts, setgeneratedArts] = useState([])
@@ -23,21 +24,25 @@ const Art = ({ search, setSearch }) => {
     const buttonRef = useRef(null);
     const id = JSON.parse(localStorage.getItem("data"));
     const user_id = id?.id;
+    const [prevSearchList, setPrevSearchList] = useState([]);
+    const [inputOptions, setInputOptions] = useState(false);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("data")));
+    const inputRef = useRef(null);
 
     const viewRemainingArtGallery = async (user_id) => {
-        try {            
+        try {
             const response = await apis.viewRemainingArtGallery(user_id)
             console.log(response?.data?.data, 'dsfsdfsdf');
             setPromptCalculator(response?.data?.data)
-            if(response?.data?.data?.remaining == 0){
+            if (response?.data?.data?.remaining == 0) {
                 setLoader(false)
                 toast.error("No prompt avaliable", {
                     position: toast.POSITION.TOP_CENTER,
                 });
             }
         } catch (error) {
-            console.log(error , 'viewRemainingArtGallery');
-            
+            console.log(error, 'viewRemainingArtGallery');
+
         }
     }
     const generateArtGalleryImages = async (user_id, total_generates) => {
@@ -49,9 +54,9 @@ const Art = ({ search, setSearch }) => {
         }
     }
 
-    useEffect(() =>{
+    useEffect(() => {
         viewRemainingArtGallery(user_id)
-    } , [])
+    }, [])
 
     useEffect(() => {
         const count = generatedArts.filter(item => item.selected).length;
@@ -76,8 +81,61 @@ const Art = ({ search, setSearch }) => {
 
     const [midjourneyId, setMidjourneyId] = useState('')
 
+    const convertImageUrlToImageFile = async (url, i) => {
+        console.log(url , 'imageDataObject');
+        try {
+            if (url.includes("http")) {
+                // Download the image from the URL
+                const imageUrl = url;
+                const response = await fetch(url);
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                }
+
+                // Convert the response data to a Blob
+                const imageBlob = await response.blob();
+
+                // Extract the file name from the URL or specify a custom name
+                const urlParts = imageUrl.split('/');
+                const fileName = urlParts[urlParts.length - 1] || 'image.jpg';
+
+                // Create a File object from the Blob
+                const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+                return (
+                    file
+                )
+            } else {
+                const imageUrl = url;
+                const response = await fetch(`data:image/png;base64,${url}`);
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch image. Status: ${response.status}`);
+                }
+
+                // Convert the response data to a Blob
+                const imageBlob = await response.blob();
+
+                // Extract the file name from the URL or specify a custom name
+                const urlParts = imageUrl.split('/');
+                const fileName = `image${i}.png`;
+
+                // Create a File object from the Blob
+                const file = new File([imageBlob], fileName, { type: response.headers.get('content-type') });
+                return (
+                    file
+                )
+
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
     const getMidjourneyId = async (event) => {
-        if (promptCalculator?.remaining  != 0) {
+        if (promptCalculator?.remaining != 0) {
             event.preventDefault();
             setLoader(true)
             try {
@@ -109,27 +167,59 @@ const Art = ({ search, setSearch }) => {
 
     const getMidjourneyImagesFromId = async () => {
         console.log(midjourneyId, 'id');
-        if (promptCalculator?.remaining  > 0) {
+        if (promptCalculator?.remaining > 0) {
             try {
                 // const response = await apis.getMidjourneyImagesFromId()
                 const response = await apis.getMidjourneyImagesFromId(midjourneyId)
                 if (response?.data?.progress < 100 || response?.data?.progress == 'incomplete') {
                     getMidjourneyImagesFromId()
                 } else {
-                    let tempImages = []
-                    for (let index = 0; index < response?.data?.response?.imageUrls?.length; index++) {
-                        tempImages.push({ image: response?.data?.response?.imageUrls?.[index], selected: false })
+                    const imageDataObject = [];
+                    for (let i = 0; i < response?.data?.response?.imageUrls?.length; i++) {
+                        try {
+                            const imageUrl = response?.data?.response?.imageUrls?.[i];
+                            const imageFile = await convertImageUrlToImageFile(imageUrl, i);
+                            imageDataObject.push(imageFile);
+                        } catch (error) {
+                            console.error(`Error fetching image for URL ${response?.data?.response?.imageUrls?.[i]}:`, error);
+                        }
                     }
-                    setgeneratedArts(tempImages)
-                    setprompt('')
-                    generateArtGalleryImages(user_id, 4)
-                    setLoader(false)
-                    setMidjourneyId('')
+                    console.log(imageDataObject, 'imageDataObject');
+
+                    const sendData = new FormData();
+                    sendData.append('user_id', user_id);
+
+                    for (let i = 0; i < imageDataObject.length; i++) {
+                        sendData.append('media_file[]', imageDataObject[i]);
+                    }
+
+                    const resp = await apis.storeTempArtGallery(sendData);
+                    try {
+                        console.log(resp?.data?.data?.media , 'imageDataObject');
+                        let tempImages = []
+                        for (let index = 0; index < resp?.data?.data?.media?.length; index++) {
+                            tempImages.push({ image: resp?.data?.data?.media?.[index], selected: false })
+                        }
+                        setgeneratedArts(tempImages)
+                        setprompt('')
+                        generateArtGalleryImages(user_id, 4)
+                        setLoader(false)
+                        setMidjourneyId('')
+                        console.log(tempImages , 'imageDataObject');
+                    } catch (error) {
+                        console.log(error , 'imageDataObject');
+                        getStabilityImages()
+                        setMidjourneyId('')
+                    }
+
+
+
                 }
             } catch (error) {
                 console.log('error');
                 getStabilityImages()
                 setMidjourneyId('')
+                // setLoader(false) // need to remove
             }
         } else {
             toast.error("No prompt avaliable", {
@@ -158,7 +248,7 @@ const Art = ({ search, setSearch }) => {
 
 
     const getStabilityImages = async () => {
-        if (promptCalculator?.remaining  != 0) {
+        if (promptCalculator?.remaining != 0) {
             const body = {
                 width: 512,
                 height: 512,
@@ -193,16 +283,54 @@ const Art = ({ search, setSearch }) => {
                     const urlCreator = window.URL || window.webkitURL;
                     return urlCreator.createObjectURL(blob);
                 });
-                let tempImages = []
-                for (let index = 0; index < urls.length; index++) {
-                    tempImages.push({ image: urls?.[index], selected: false, base64Images: response?.data?.artifacts?.[index]?.base64 })
-                }
-                console.log(response, "data");
 
-                setgeneratedArts(tempImages);
-                setprompt('')
+                const imageDataObject = [];
+                    for (let i = 0; i <urls?.length; i++) {
+                        try {
+                            const imageUrl = response?.data?.artifacts?.[i]?.base64;
+                            const imageFile = await convertImageUrlToImageFile(imageUrl, i);
+                            imageDataObject.push(imageFile);
+                        } catch (error) {
+                            console.error(`Error fetching image for URL ${response?.data?.artifacts?.[i]}:`, error);
+                        }
+                    }
+                    console.log(imageDataObject, 'imageDataObject');
+
+                    const sendData = new FormData();
+                    sendData.append('user_id', user_id);
+
+                    for (let i = 0; i < imageDataObject.length; i++) {
+                        sendData.append('media_file[]', imageDataObject[i]);
+                    }
+
+                    const resp = await apis.storeTempArtGallery(sendData);
+                    try {
+                        console.log(resp?.data?.data?.media , 'imageDataObject');
+                        let tempImages = []
+                        for (let index = 0; index < resp?.data?.data?.media?.length; index++) {
+                            tempImages.push({ image: resp?.data?.data?.media?.[index], selected: false })
+                        }
+                        setgeneratedArts(tempImages)
+                        setprompt('')
+                        generateArtGalleryImages(user_id, 4)
+                        setLoader(false)
+                        console.log(tempImages , 'imageDataObject');
+                    } catch (error) {
+                        console.log(error , 'imageDataObject');
+                        setLoader(false)
+                    }
+
+
+                // let tempImages = []
+                // for (let index = 0; index < urls.length; index++) {
+                //     tempImages.push({ image: urls?.[index], selected: false, base64Images: response?.data?.artifacts?.[index]?.base64 })
+                // }
+                // console.log(response, "data");
+
+                // setgeneratedArts(tempImages);
+                // setprompt('')
                 setLoader(false)
-                generateArtGalleryImages(user_id, 4)
+                // generateArtGalleryImages(user_id, 4)
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setgeneratedArts([])
@@ -238,6 +366,7 @@ const Art = ({ search, setSearch }) => {
         try {
             const response = await apis.createArtGalleryImages(sendData);
             if (response.status) {
+                // const res = await apis.deleteTempArtGallery({'user_id': user_id})
                 setprompt('')
                 setTimeout(() => {
                     setLoader(false)
@@ -248,43 +377,194 @@ const Art = ({ search, setSearch }) => {
             setLoader(false)
             alert(error.message)
         }
-       
+
     }
 
-    // useEffect(() => {
-    //     console.log(imageUrls, "images array");
-    // }, [imageUrls]);
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            setInputOptions(false)
+            storeSearchHistory()
+            getMidjourneyId(e)
+        }
+    };
 
-    // const [scroll, setScroll] = useState(true)
+    const getUserSearchHistory = async (prompt, page) => {
+        const response = await apis.getUserSearchHistory(user?.id, prompt, page)
+        try {
+            console.log(response?.data?.data, 'response');
+            if (response?.data?.data?.result?.length > 0) {
+                setInputOptions(true)
+            }
+            setPrevSearchList(response?.data?.data)
+        } catch (error) {
 
-    // useEffect(()=>{
-    //   if(scroll){
-    //     window.scrollTo(0,0)
-    //     setScroll(false)
-    //   }
-    // },[])
+        }
+    }
+
+    const storeSearchHistory = async () => {
+        const data = {
+            user_id: user?.id,
+            search_key: prompt
+        }
+        const response = await apis.storeSearchHistory(data)
+        try {
+            console.log(response?.data?.data, 'response');
+        } catch (error) {
+
+        }
+    }
+
+    const getSearchList = () => {
+        getUserSearchHistory(inputRef.current.value, 1)
+    }
+    const DeleteSearchHistoryByName = async (searchText) => {
+        const data = {
+            user_id: user?.id,
+            search_term: searchText,
+        };
+
+        try {
+            // Make the API call to delete the search history item
+            const response = await apis.DeleteSearchHistoryByName(data);
+
+            // If the deletion is successful, update the state to remove the deleted item
+            if (response?.status) {
+                setPrevSearchList((prevList) => {
+                    // Filter out the deleted item based on the search term
+                    const updatedList = prevList.result.filter(
+                        (item) => item.search_term !== searchText
+                    );
+
+                    // Return the updated list
+                    return { result: updatedList };
+                });
+            }
+        } catch (error) {
+            // Handle errors if needed
+            console.error('Error deleting search history item:', error);
+        }
+    };
+
+    const DeleteAllSearchHistory = async () => {
+        const data = {
+            user_id: user?.id
+        }
+        try {
+            // Make the API call to delete the search history item
+            const response = await apis.DeleteAllSearchHistory(data)
+
+            // If the deletion is successful, update the state to remove the deleted item
+            console.log(response?.status, 'status');
+            if (response?.status === 200) {
+                setInputOptions(false)
+                setPrevSearchList([]);
+            }
+        } catch (error) {
+            console.error('Error deleting search history item:', error);
+        }
+    }
+
+    const getPromptValue = (e) => {
+        console.log(e.target.value, 'e.target.value');
+        setprompt(e.target.value)
+        getUserSearchHistory(inputRef.current.value, 1)
+    }
+
+
+    const goToPromptSearchPage = () => {
+        navigate(`/prompt-search`)
+    }
+    const handleDocumentClick = (e) => {
+        // Check if the click is outside the input field
+        // and not on the delete button or the "See All" and "Delete All" elements
+        if (
+            inputRef.current &&
+            !inputRef.current.contains(e.target) &&
+            !e.target.closest('.AQZ9Vd') &&
+            !e.target.closest('.search-all-delete')
+        ) {
+            console.log('Clicked outside the input field and not on delete button or "See All"/"Delete All"');
+            // Perform your action for clicks outside the input field
+            setInputOptions(false); // Hide input options when clicked outside
+        }
+    };
+
+    useEffect(() => {
+        // Add click event listener to the document
+        document.addEventListener('click', handleDocumentClick);
+
+        // Clean up the event listener when the component unmounts
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, []);
+
 
     return (
         <>
-            < div className='art-page' style={{width: "100%", minHeight:"300px", display:"flex",flexDirection:"column" ,justifyContent:"center"}}>
+            < div className='art-page' style={{ width: "100%", minHeight: "300px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 {loader && <GalleryLoader />}
 
                 <Header search={search} setSearch={setSearch} />
                 <h1 style={{ textAlign: 'center' }}>Your Generated Art</h1>
                 {/* <h3 className='remaining-prompt' >Your remaining prompt is {promptCalculator?.remaining/4}</h3> */}
-                <h3 className='remaining-prompt' >Your remaining images is {promptCalculator?.remaining}</h3>
+                <h3 className='remaining-prompt' >Your remaining images {promptCalculator?.remaining}</h3>
                 <section className="home-first-section">
                     <div className="home-first-wraperr">
                         <div className="search" id="prompt">
                             <button ref={buttonRef} onClick={getMidjourneyId}>Prompt</button>
-                            <input
-                                type="text"
-                                placeholder="A cinematic wide shot of a hamster in a space suite, HD, NFT art, 2:3"
-                                value={prompt}
-                                onChange={(e) => setprompt(e.target.value)}
-                                required
-                                minLength={3}
-                            />
+                            <div className="search-input-wrap">
+                                <input
+                                    type="text"
+                                    placeholder="A cinematic wide shot of a hamster in a space suite, HD, NFT art, 2:3"
+                                    defaultValue={prompt}
+                                    onChange={(e) => getPromptValue(e)}
+                                    onKeyDown={handleKeyDown}
+                                    onClick={getSearchList}
+                                    ref={inputRef}
+                                />
+                                {inputOptions &&
+                                    <>
+                                        {prevSearchList?.result?.length === 0 ?
+                                            null
+                                            :
+                                            <div className="search-options">
+                                                <ul className="not-hide">
+                                                    {prevSearchList?.result?.slice(0, 5)?.map((item, index) => {
+                                                        return (
+                                                            <li key={index}>
+                                                                <div className="eIPGRd">
+                                                                    <div className="sbic sb27"></div>
+                                                                    <div className="pcTkSc" onClick={() => setprompt(item?.search_term)}>
+                                                                        {item?.search_term}
+                                                                    </div>
+                                                                    <div
+                                                                        className="AQZ9Vd"
+                                                                        aria-atomic="true"
+                                                                        role="button"
+                                                                        aria-label="Delete from history"
+                                                                        id="YjTQcc"
+                                                                    >
+                                                                        <div className="sbai JCHpcb" role="presentation" onClick={() => DeleteSearchHistoryByName(item?.search_term)}>
+                                                                            Delete
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </li>
+                                                        )
+                                                    })}
+                                                    <li className="search-all-delete">
+                                                        <span onClick={() => { goToPromptSearchPage() }}>See All</span>
+                                                        <span onClick={() => { DeleteAllSearchHistory() }}>Delete All</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        }
+                                    </>
+                                }
+                            </div>
                         </div>
                     </div>
                     <div className="connect-wallet-mobile">

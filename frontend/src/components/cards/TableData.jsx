@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import apis from "../../service";
 import EmailSigninPopup from "../../pages/Headers/EmailSigninPopup";
+import { ethers } from "ethers";
 
 const TableData = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const TableData = () => {
   };
 
   const navigateTo = (id) => {
-    if (userData && userData?.email != null) {
+    if (userData) {
       navigate(`/collection?id=${id}`);
     }else{
       setEmailSigninPopup(true)
@@ -41,12 +42,12 @@ const TableData = () => {
             <th>Name</th>
             <th>Floor Price</th>
             <th>Status</th>
-            <th>Owner</th>
-            <th>Item</th>
+            <th>Owners</th>
+            <th>Supply</th>
           </tr>
         </thead>
         <tbody>
-          {list.slice(0, 3).map((res, index) => {
+          {list?.slice(0, 3).map((res, index) => {
             return (
               <tr className="table-details" key={index}>
                 <td

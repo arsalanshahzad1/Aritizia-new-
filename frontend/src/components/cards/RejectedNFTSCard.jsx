@@ -20,19 +20,19 @@ const RejectedNFTSCard = ({
   title,
   image,
   price,
-  crypto,
+  paymentMethod,
   royalty,
   description,
   collection,
   collectionImages,
   userId,
 }) => {
+  
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [discountPrice, setDiscountPrice] = useState(0);
   const [rejectedNfts, setRejectedNfts] = useState([]);
 
-  const{getProviderMarketContrat ,getProviderNFTContrat,checkIsWalletConnected,account}=useContext(Store); 
+  const{ getProviderMarketContrat, getProviderNFTContrat, checkIsWalletConnected, account, getSignerMarketContrat } = useContext(Store); 
 
   useEffect(()=>{
     checkIsWalletConnected()
@@ -53,16 +53,11 @@ const RejectedNFTSCard = ({
     }
   };
 
-  // const [rejectedList, setRejectedList] = useState([]);
-
   const viewRejectedNftList = async (userId) => {
-    console.log("userId", userId);
     try {
       const response = await apis.viewRejectedNftList(userId);
-      console.log("response.data.data", response?.data?.data);
       if (response?.status) {
-        // setRejectedList(response.data.data);
-        getRejecteNfts(response?.data?.data);
+           getRejecteNfts(response?.data?.data);
       }
     } catch (e) {
       console.log("Error: ", e);
@@ -71,118 +66,55 @@ const RejectedNFTSCard = ({
   };
 
   const getRejecteNfts = async (rejectedList) => {
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
-
-    // const provider = await getProviderOrSigner();
-
-    console.log("LISY", rejectedList);
-
-    // console.log("rejectedList", rejectedList);
-
+    
     let rejected = [];
     let emptyList = [];
     setRejectedNfts(emptyList);
 
-    // console.log("rejectedList", rejectedList);
-
-    console.log("Running");
-    if (rejectedList?.length > 0 && rejectedList != "") {
-      for (let i = 0; i < rejectedList?.length; i++) {
+      if (rejectedList?.length > 0 && rejectedList != "") {
+        for (let i = 0; i < rejectedList?.length; i++) {
         let id;
         let collectionImage = rejectedList[i]?.collection_image;
         id = +rejectedList[i];
         // id =i;
-        console.log("zzz", id);
+        
+        const structData = await getSignerMarketContrat()._idToNFT(id);
 
-        const metaData = await getProviderNFTContrat().tokenURI(id);
+        let response;
 
-        const structData = await getProviderMarketContrat()._idToNFT(id);
+          try {
+            response = await apis.getNFTByTokenId(id);
+          } catch (error) {
+            console.log(error.message)
+          }
 
-        const fanNftData = await getProviderMarketContrat()._idToNFT2(id);
+          const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
+          const user_id = response?.data?.data?.owner?.id;
 
-        let discountOnNFT = +fanNftData?.fanDiscountPercent?.toString();
+          const price = structData?.price?.toString();
+          const metaData = await getProviderNFTContrat().tokenURI(id);
+          const responses = await fetch(metaData)
+          const metadata = await responses.json()
 
-        setDiscountPrice(discountOnNFT);
-
-        let auctionData = await getProviderMarketContrat()._idToAuction(id);
-
-        let listingType = structData?.listingType;
-
-        let highestBid = ethers.utils.formatEther(
-          auctionData?.highestBid?.toString()
-        );
-
-        setDiscountPrice(discountOnNFT);
-
-        let collectionId = structData?.collectionId?.toString();
-
-        console.log("collectionId", collectionId);
-        const response = await apis.getNFTCollectionImage(collectionId);
-        if (response.status) {
-          console.log(response.data, "saad");
-          const collectionImages =
-            response?.data?.data?.media?.[0]?.original_url;
-          console.log(
-            response?.data?.data?.media?.[0]?.original_url,
-            "collectionImagesss"
-          );
-
-          console.log("zayyan", id);
-
-          // let auctionData = await getProviderMarketContrat()._idToAuction(id);
-
-          // let listingType = structData.listingType;
-
-          const price = ethers.utils.formatEther(structData?.price?.toString());
-
-          axios
-            .get(metaData)
-            .then((response) => {
-              const meta = response?.data;
-              let data = JSON.stringify(meta);
-
-              data = data.slice(2, -5);
-              data = data.replace(/\\/g, "");
-
-              data = JSON.parse(data);
-              // Extracting values using dot notation
-              // const price = data.price;
-              // listingType = data.listingType;
-              const crypto = data?.crypto;
-              const title = data?.title;
-              const image = data?.image;
-              const royalty = data?.royalty;
-              const description = data?.description;
-              const collection = data?.collection;
-
-              const nftData = {
-                id: id, //
-                title: title,
-                image: image,
-                price: price,
-                crypto: crypto,
-                royalty: royalty,
-                description: description,
-                collection: collection,
-                collectionImages: collectionImages,
-              };
-              console.log("nftData", nftData);
-              // rejected.push(nftData);
-              setRejectedNfts((prev) => [...prev, nftData]);
-            })
-
-            .catch((error) => {
-              console.error("Error fetching metadata:", error);
-            });
-        } else {
-          console.log("error:", response?.data?.message);
-        }
+          const nftData = {
+            id: id,
+            title: metadata?.title,
+            image: metadata?.image,
+            price: price,
+            paymentMethod: structData?.paymentMethod,
+            royalty: structData?.royalty,
+            royaltyPrice: structData?.royaltyPrice,
+            description: metadata?.description,
+            collection: structData?.collectionId?.toString(),
+            collectionImages: collectionImages,
+            seller: structData?.seller,
+            user_id: user_id
+          };
+          setRejectedNfts((prev) => [...prev, nftData]);
+        } 
       }
+      
     }
-  };
 
   useEffect(() => {
     viewRejectedNftList(userId);
@@ -250,8 +182,7 @@ const RejectedNFTSCard = ({
                                 fill="white"
                               />
                             </svg>
-
-                            {item?.price}
+                            {Number(ethers.utils.formatEther(item?.price?.toString()))?.toFixed(5)}
                           </div>
                         </div>
                       </div>

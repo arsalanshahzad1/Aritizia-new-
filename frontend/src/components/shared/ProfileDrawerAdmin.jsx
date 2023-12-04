@@ -114,8 +114,8 @@ function ProfileDrawerAdmin({
 
     const structData = await marketplaceContract._idToNFT(id);
     let approve = structData.approve;
-    console.log("checkSeller id", id);
-    console.log("checkSeller approve", approve);
+    // console.log("checkSeller id", id);
+    // console.log("checkSeller approve", approve);
   };
 
   const getNFTLike = async () => {
@@ -171,18 +171,12 @@ function ProfileDrawerAdmin({
     );
 
     const structData = await marketplaceContract._idToNFT(id);
-    // const structData2 = await marketplaceContract._idToNFT2(id);
-
-    // let discount = +structData2.fanDiscountPercent?.toString();
-    // console.log("fanDiscountPercent", discount);
 
     let nftEthPrice = ethers.utils.formatEther(structData.price.toString());
     setPriceETH(nftEthPrice);
     let priceETH = nftEthPrice;
     let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
     setPlatformFeeETH(feeETH);
-
-    // let dollarPriceOfETH = 1831;
 
     let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
 
@@ -197,35 +191,6 @@ function ProfileDrawerAdmin({
     let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
     setPlatformFeeUSDT(Math.ceil(feeUSD));
 
-    // let fee = Math.ceil((priceInUSD * 3) / 100);
-    // setPlatformFee(fee);
-
-    // if (discount != 0) {
-    //   let discountedEthPrice = (nftEthPrice * discount) / 100;
-    //   // let discountedEthPrice = (nftEthPrice * discount) / 100;
-    //   let priceETH = discountedEthPrice;
-    //   // platformFeeCalculate(priceETH, _buyerPercentFromDB);
-    //   setDiscountedEth(discountedEthPrice?.toFixed(2));
-    //   console.log("discountedEthPrice", discountedEthPrice);
-
-    //   // let dollarPriceOfETH = 1831;
-
-    //   let dollarPriceOfETH = await marketplaceContract.getLatestUSDTPrice();
-    //   let priceInETH = dollarPriceOfETH?.toString() / 1e18;
-    //   let feeETH = await platformFeeCalculate(priceETH, _buyerPercentFromDB);
-
-    //   setDiscountedPlatformFeeETH(Math.ceil(feeETH));
-    //   let oneETHInUSD = 1 / priceInETH;
-    //   let priceInUSD = priceETH;
-    //   priceInUSD = oneETHInUSD * priceInUSD;
-    //   priceInUSD = Math.ceil(priceInUSD);
-    //   setDiscountedAmountUSD(priceInUSD?.toString());
-    //   // let feeUSD = Math.ceil((priceInUSD * 3) / 100);
-    //   let feeUSD = await platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-    //   feeUSD = Math.ceil(feeUSD);
-    //   // platformFeeCalculate(priceInUSD, _buyerPercentFromDB);
-    //   setDiscountedPlatformFeeUSDT(feeUSD);
-    // }
   };
 
   const getNFTDetailByNFTTokenId = async () => {
@@ -783,26 +748,6 @@ function ProfileDrawerAdmin({
                         style={{ fontSize: "18px", marginRight: "10px" }}
                       />
                     </div>
-                    {/* <div className="col-lg-8 col-md-8 col-12">
-                      <button
-                        className={`${propertyTabs === 0 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(0)}
-                      >
-                        Details
-                      </button>
-                      <button
-                        className={`${propertyTabs === 1 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(1)}
-                      >
-                        Bids
-                      </button>
-                      <button
-                        className={`${propertyTabs === 2 ? "active" : ""}`}
-                        onClick={() => setPropertyTabs(2)}
-                      >
-                        History
-                      </button>
-                    </div> */}
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen">
                       <SocialShare
                         style={{ fontSize: "18px", marginRight: "10px" }}
@@ -810,23 +755,16 @@ function ProfileDrawerAdmin({
                     </div>
                   </div>
                 </div>
-                {/* <div>
-                  {propertyTabs === 0 && <Details />}
-                  {propertyTabs === 1 && <Bids />}
-                  {propertyTabs === 2 && <History />}
-                </div> */}
                 <div className="six-line">
                   <div className="row">
                     <div className="col-lg-6 col-md-8 col-8">
-                      {/* <h3>Current Price</h3> */}
+
                       <div className="left">
                         <p>
                           {price} ETH
                           <span>
                             ${amountUSD} + Platform Fee ${platformFeeUSDT}
                           </span>
-                          {/* {console.log("USDAmount", amountUSD)} */}
-                          {/* {price} ETH<span>$234</span>   */}
                         </p>
                       </div>
                     </div>

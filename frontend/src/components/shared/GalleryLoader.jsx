@@ -5,9 +5,6 @@ function GalleryLoader() {
 
   const images = [
     '/assets/gallery-loader/gallery-loader-1.jpg',
-    '/assets/gallery-loader/gallery-loader-2.jpg',
-    '/assets/gallery-loader/gallery-loader-3.jpg',
-    '/assets/gallery-loader/gallery-loader-4.jpg',
     '/assets/gallery-loader/gallery-loader-5.jpg',
     '/assets/gallery-loader/gallery-loader-6.jpg',
     '/assets/gallery-loader/gallery-loader-7.jpg',

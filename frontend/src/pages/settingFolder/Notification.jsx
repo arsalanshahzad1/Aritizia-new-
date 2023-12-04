@@ -1,4 +1,5 @@
-import  React, { useState, useEffect } from "react";
+import React from 'react'
+import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import apis from "../../service";
 import { ToastContainer, toast } from "react-toastify";
@@ -76,7 +77,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When someone purhased your item.</p>
+                <p> When someone purchased your item.</p>
               </div>
             </div>
           </div>
@@ -110,7 +111,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When someone purhased your item.</p>
+                <p>When someone bids on your NFT.</p>
               </div>
             </div>
           </div>
@@ -127,7 +128,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When someone follows you.</p>
+                <p>When someone followed you.</p>
               </div>
             </div>
           </div>
@@ -144,7 +145,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When anyone likes your NFT.</p>
+                <p>When someone liked your NFT.</p>
               </div>
             </div>
           </div>
@@ -161,7 +162,7 @@ const Notification = () => {
                 />
               </div>
               <div>
-                <p>When you successfully buy an item.</p>
+                <p> When you successfully purchased an NFT.</p>
               </div>
             </div>
           </div>

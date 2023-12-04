@@ -82,11 +82,11 @@ const Footer = () => {
                   <li>
                     <p>
                     <Link to="/terms" target='_blank'>
-                      TERMS
+                    Terms of Use
                     </Link>
                     <p>&</p>
                     <Link to="/privacy-policy" target='_blank'>
-                      POLICY
+                    Privacy Policy
                     </Link>
                     </p>
                     

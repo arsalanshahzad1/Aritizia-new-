@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState,useContext } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { useContext } from "react";
@@ -40,11 +40,11 @@ const WalletHeader = ({ search, setSearch }) => {
   const id = JSON.parse(localStorage.getItem("data"));
   const user_id = id?.id;
 
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const { account, checkIsWalletConnected } = useContext(Store);
 
-  useEffect(()=>{
+  useEffect(() => {
     checkIsWalletConnected()
-  },[account])
+  }, [account])
 
 
   useEffect(() => {
@@ -212,11 +212,11 @@ const WalletHeader = ({ search, setSearch }) => {
               <div className="left">
                 {path === "/" ? (
                   <>
-                    <FiSearch
-                      className={`search ${scrolled ? "black-color" : "white-color"
-                        }`}
-                      onClick={() => setSearch(true)}
-                    />
+
+                    <Link to={'/search'}>
+                      <FiSearch className={`search ${scrolled ? "black-color" : "white-color"
+                        }`} />
+                    </Link>
 
                     <span
                       className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -304,7 +304,7 @@ const WalletHeader = ({ search, setSearch }) => {
                         onClick={() => {
                           setShowNotification(!showNotification);
                           setshowMessage(false);
-                          viewNotification("notification", user_id);
+                          viewNotification("notification", 0);
                           setNotificationArrive(false);
                         }}
                         className={`icon-for-header ${scrolled ? "black-svgs" : ""
@@ -381,10 +381,9 @@ const WalletHeader = ({ search, setSearch }) => {
                   </>
                 ) : (
                   <>
-                    <FiSearch
-                      className="search black-color"
-                      onClick={() => setSearch(true)}
-                    />
+                    <Link to={'/search'}>
+                      <FiSearch className="search black-color" />
+                    </Link>
                     <span className="icon-for-header">
                       <svg
                         width="1"
@@ -592,24 +591,24 @@ const WalletHeader = ({ search, setSearch }) => {
                                     </li>
                                   </Link>
                                   {userAddress === "false" ? <></> : <>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Purchase")
-                                      }
-                                    >
-                                      Purchase
-                                    </li>
-                                  </Link>
-                                  <Link to={"/setting"}>
-                                    <li
-                                      onClick={() =>
-                                        setactiveTabsSetting("Earnings")
-                                      }
-                                    >
-                                      Earning
-                                    </li>
-                                  </Link>
+                                    <Link to={"/setting"}>
+                                      <li
+                                        onClick={() =>
+                                          setactiveTabsSetting("Purchase")
+                                        }
+                                      >
+                                        Purchase
+                                      </li>
+                                    </Link>
+                                    <Link to={"/setting"}>
+                                      <li
+                                        onClick={() =>
+                                          setactiveTabsSetting("Earnings")
+                                        }
+                                      >
+                                        Earning
+                                      </li>
+                                    </Link>
                                   </>}
                                   <Link to={"/setting"}>
                                     <li

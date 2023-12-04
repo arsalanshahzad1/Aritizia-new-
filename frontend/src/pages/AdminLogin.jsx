@@ -3,8 +3,8 @@ import { BsCheck } from 'react-icons/bs'
 import {useNavigate, Link } from 'react-router-dom';
 import {  toast } from "react-toastify";
 
-function AdminLogin() {
-    const [loader, setLoader] = useState(false);
+function AdminLogin({loader,setLoader}) {
+    // const [loader, setLoader] = useState(false);
   
     const [registerData, setRegisterData] = useState('');
     const navigate = useNavigate()

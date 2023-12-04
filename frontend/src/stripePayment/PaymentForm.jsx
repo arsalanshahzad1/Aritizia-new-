@@ -246,7 +246,7 @@ const PaymentForm = ({
         </form>
       ) : (
         <div>
-          <h2>You just buy an nft</h2>
+          <h2>You just buy an NFT</h2>
         </div>
       )}
       {/* <ToastContainer /> */}

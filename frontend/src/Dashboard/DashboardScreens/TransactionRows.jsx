@@ -1,4 +1,5 @@
-import  React, { useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import nft from '../../../public/assets/images/nft-2.png'
 import './../DashboardScreens/Dashboard.css'

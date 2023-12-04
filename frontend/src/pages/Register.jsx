@@ -11,16 +11,16 @@ import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 
 
-function Register() {
+function Register({loader,setLoader}) {
     const [chack, setChack] = useState(false);
     const [varificationPopup, setVarificationPopup] = useState(false);
     const [otpCode, setOtpCode] = useState('');
-    const [showPass, setShowPass] = useState(false);
-    const [showConformPass, setShowConformPass] = useState(false);
     const [registerData, setRegisterData] = useState('');
-    const [loader, setLoader] = useState(false)
+    const [passError, setPassError] = useState(false)
     const navigate = useNavigate()
     const userData = JSON.parse(localStorage.getItem('data')) 
+    const [showPass, setShowPass] = useState(false);
+
     console.log(userData , 'fsdfsdfsdf');
 
     const getOtp = (event) => {
@@ -35,32 +35,40 @@ function Register() {
 
     const registerUser = async (event) => {
         event.preventDefault()
-        setLoader(true)
-        let temp;
+        // setLoader(true)
+        const pwdFilter = /^(?=.*\d)(?=.*[a-z])(?=.*[^a-zA-Z0-9])(?!.*\s).{7,15}$/
         if(userData != false && userData.email === null){
-            temp = {...registerData , wallet_address : userData?.wallet_address}
+            // wallet_address
+            setRegisterData((prev) =>( {...prev , wallet_address : userData?.wallet_address}))
         }
         else{
-             temp = {...registerData , wallet_address : null}
+            setRegisterData((prev) =>( {...prev , wallet_address : null})) 
         }
-        try {
-            const response = await apis.register(temp)
-            console.log(response?.data?.data?.status, 'status');
-            console.log(response?.data?.message, 'message');
-            if (response?.data?.data?.status) {
-                toast.success(response?.data?.message, {
+
+        if(pwdFilter.test(registerData?.password)){
+            setLoader(true)
+            try {
+                const response = await apis.register(registerData)
+                console.log(response?.data?.data?.status, 'status');
+                console.log(response?.data?.message, 'message');
+                if (response?.data?.data?.status) {
+                    toast.success(response?.data?.message, {
+                        position: toast.POSITION.TOP_RIGHT,
+                    });
+                    setLoader(false)
+                    setVarificationPopup(true)
+                }
+                console.log(response);
+            } catch (error) {
+                setLoader(false)
+                toast.error(error?.message, {
                     position: toast.POSITION.TOP_RIGHT,
                 });
-                setLoader(false)
-                setVarificationPopup(true)
+                console.log(error?.message);
             }
-            console.log(response);
-        } catch (error) {
-            setLoader(false)
-            toast.error(error?.message, {
-                position: toast.POSITION.TOP_RIGHT,
-            });
-            console.log(error?.message);
+        }
+        else{
+            setPassError(true)
         }
     }
     const verifyOtp = async (event) => {
@@ -118,16 +126,17 @@ function Register() {
                             <Link to={'/'}>
                                 <img src="/assets/logo/logo.png" alt="logo" />
                             </Link>
-                            <h1 className='title'>Create your account</h1>
+                            <h1 className='title'>Create Account</h1>
                             <p className='desc'>Let’s get started</p>
                             <form onSubmit={registerUser}>
-                                <input type="text" name="first_name" onChange={onChangeHandler} id="" placeholder='First name' required style={{marginBottom:'15px'}}/>
-                                <input type="text" name="last_name" onChange={onChangeHandler} id="" placeholder='Last name' required  style={{marginBottom:'15px'}}/>
-                                <input type="email" name="email" onChange={onChangeHandler} id="" placeholder='Email Address' required style={{marginBottom:'15px'}}/>
+                                <input type="text" name="first_name" onChange={onChangeHandler} id="" placeholder='First name' required />
+                                <input type="text" name="last_name" onChange={onChangeHandler} id="" placeholder='Last name' required />
+                                <input type="email" name="email" onChange={onChangeHandler} id="" placeholder='Email Address' required />
                                 <div className="pass">
                                 <input type={showPass ? "text" : "password"} name="password" onChange={onChangeHandler} id="" placeholder='Password' required />
                                 {showPass ?<span onClick={() =>{setShowPass(!showPass)}}><FaRegEye/></span>  : <span onClick={() =>{setShowPass(!showPass)}}><FaRegEyeSlash/></span> }
                                 </div>
+                                <p className={`${passError ? 'password-validation-unclear' : 'password-validation-unclear-bioo'}`}>Password must contain at least 8 characters, 1 special character, 1 lowercase letter and 1 uppercase letter</p>                               
                                 <div className="term-condition">
                                     <div className="one">
                                         <div className="registor-chack" onClick={() => { setChack(!chack) }}>
@@ -137,7 +146,7 @@ function Register() {
                                         </div>
                                     </div>
                                     <div className="two">
-                                        <p>I agree to all <Link to={'/terms'} target='_blank'>Terms</Link> , <Link to={'/privacy-policy'}target='_blank'>Privacy Policy</Link> and fees</p>
+                                        <p>"I agree to Artizia's <Link to={'/terms'} target='_blank'> Terms of Use</Link> and <Link to={'/privacy-policy'}target='_blank'>Privacy Policy</Link> and fees</p>
                                     </div>
                                 </div>
                                 <button type='submit' disabled={loader} className={`signup ${!chack ? 'disable' : ''}`}>Sign up</button>

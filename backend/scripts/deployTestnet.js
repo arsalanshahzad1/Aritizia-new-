@@ -3,32 +3,15 @@ const { ethers } = require("hardhat");
 async function main() {
   // TETHER TOKEN
 
-  // const TetherTokenContract = await ethers.getContractFactory("TetherToken");
-
-  // // here we deploy the contract
-  // const deployedTetherTokenContract = await TetherTokenContract.deploy();
-  // // 10 is the Maximum number of whitelisted addresses allowed
-
-  // // Wait for it to finish deploying
-  // await deployedTetherTokenContract.deployed();
-
-  // // print the address of the deployed contract
-  // console.log(
-  //   "TetherToken Contract Address:",
-  //   deployedTetherTokenContract.address
-  // );
-
-  //  MARKETPLACE TOKEN
-
   const usd = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 
-  const usdToken = await ethers.getContractAt("TetherToken", usd);
+  // const usdToken = await ethers.getContractAt("TetherToken", usd);
 
   const marketplaceContract = await ethers.getContractFactory(
     "ArtiziaMarketplace"
   );
 
-  const deployedMarketplaceContract = await marketplaceContract.deploy(usd);
+  const deployedMarketplaceContract = await marketplaceContract.deploy();
 
   await deployedMarketplaceContract.deployed();
 
@@ -46,29 +29,32 @@ async function main() {
 
   console.log("Artizia NFT Contract:", deployedNFTContract.address);
 
-  const imperUSDC = "0xA7A93fd0a276fc1C0197a5B5623eD117786eeD06";
+  //   const imperUSDC = "0xA7A93fd0a276fc1C0197a5B5623eD117786eeD06";
 
-  await network.provider.request({
-    method: "hardhat_impersonateAccount",
-    params: [imperUSDC],
-  });
+  //   await network.provider.request({
+  //     method: "hardhat_impersonateAccount",
+  //     params: [imperUSDC],
+  //   });
 
-  const signer = await ethers.getSigner(imperUSDC);
+  //   const signer = await ethers.getSigner(imperUSDC);
 
-  console.log(
-    "Vitalik account before transaction",
-    ethers.utils.formatEther(await signer.getBalance())
-  );
+  //   console.log(
+  //     "Vitalik account before transaction",
+  //     ethers.utils.formatEther(await signer.getBalance())
+  //   );
 
-  let usdctoken = await usdToken.connect(signer).balanceOf(signer.getAddress());
+  //   let usdctoken = await usdToken.connect(signer).balanceOf(signer.getAddress());
 
-  let account2 = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
-  await usdToken.connect(signer).transfer(account2, usdctoken);
+  //   let account2 = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+  //   await usdToken.connect(signer).transfer(account2, usdctoken);
 
   // saveFrontendFiles(usd, "TetherToken");
   saveFrontendFiles(deployedMarketplaceContract, "ArtiziaMarketplace");
   saveFrontendFiles(deployedNFTContract, "ArtiziaNFT");
 }
+
+// Artizia Marketplace:  0x03030f2A8D286fcc6a29d48CCA1578208aD09aD8
+// Artizia NFT Contract: 0x9721E0C212c10A936a1F67c07EE4757Fc4Aa33f5
 
 function saveFrontendFiles(contract, name) {
   const fs = require("fs");
@@ -97,6 +83,3 @@ main()
     console.error(error);
     process.exit(1);
   });
-
-//marketplace contract 0x41498e4ec6f2C4FcAc61A25aAB24825Ad886E288
-// nftcntract  0xc0D61eBCCcc94d518D3e8CCf6787FDA1441EaDbB

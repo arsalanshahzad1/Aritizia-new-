@@ -96,7 +96,7 @@ const createBackendServer = (baseURL) => {
   const postChatMessages = async (body) =>
     await api.post(`send-chat-message`, body, headers);
 
-  const viewNotification = async (count) => await api.get(`view-notifications/${count}`);
+  const viewNotification = async (count) => await api.get(`view-notifications/${RealUserId}?last_count=${count}`);
 
   const ReadNotification = async () => await api.get(`read-notification/7`);
 
@@ -238,6 +238,9 @@ const createBackendServer = (baseURL) => {
   const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
   const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
   const removeArtGallery = async (RealUserId) => await api.get(`remove-art-gallery/${RealUserId}`);
+  const storeTempArtGallery = async (body) => await api.post(`store-temp-art-gallery`, body);
+  const generateBase = async (body) => await api.post(`generate-base`, body);
+  const deleteTempArtGallery = async (body) => await api.post(`generate-base`, body);
 
 
 
@@ -253,6 +256,13 @@ const createBackendServer = (baseURL) => {
   const forgotVerify = async (body) => await api.post(`forgot-verify`, body);
   const changePassword = async (body) => await api.post(`change-password`, body);
 
+
+  //Search History
+
+  const storeSearchHistory = async (body) => await api.post(`store-search-history`, body);
+  const getUserSearchHistory = async (user_id , search_key , page) => await api.get(`user-search-history?user_id=${user_id}&search_key=${search_key}&page=${page}`);
+  const DeleteAllSearchHistory = async (body) => await api.post(`clear-search-history`, body);
+  const DeleteSearchHistoryByName = async (body) => await api.post(`delete-search-history`, body);
 
   //Returning all the API
   return {
@@ -344,6 +354,9 @@ const createBackendServer = (baseURL) => {
     viewArtGallery,
     viewRemainingArtGallery,
     removeArtGallery,
+    storeTempArtGallery,
+    generateBase,
+    deleteTempArtGallery,
 
     viewLandingPageDetail,
 
@@ -361,13 +374,19 @@ const createBackendServer = (baseURL) => {
     forgotVerify,
     changePassword,
 
+
+    storeSearchHistory,
+    getUserSearchHistory,
+    DeleteAllSearchHistory,
+    DeleteSearchHistoryByName,
+
   };
 };
 
 const apis = createBackendServer("http://143.198.70.237");
 // const apis = createBackendServer("http://165.232.142.3");
 
-//     Testing DB: http://165.232.142.3
+// Testing DB: http://165.232.142.3
 // Development DB: http://143.198.70.237
 
 export default apis;

@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import React from 'react'
 import Chart from 'react-apexcharts';
 import {
@@ -84,7 +85,7 @@ function ChartForEarning({data, chartLabel}) {
                 <div className='Custom-tool-tip'>
                     <p>
                         {/* {label} */}
-                       {chartLabel ? chartLabel: "Total Subscribers"} : {payload[0]?.payload?.value}
+                       {chartLabel ? chartLabel: "Total Subscribers"} : {payload[0]?.payload?.value?.toString() ? Number(ethers.utils.formatEther(payload[0]?.payload?.value?.toString())).toFixed(5) : "0"}
                     </p>
                 </div>
             )

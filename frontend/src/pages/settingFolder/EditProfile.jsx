@@ -4,13 +4,13 @@ import apis from "../../service";
 import { toast } from "react-toastify";
 import Loader from "../../components/shared/Loader";
 
-const EditProfile = () => {
+const EditProfile = ({loader,setLoader}) => {
   const [profileImage, setProfileImage] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const profileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const [data, setData] = useState("");
-  const [loader, setLoader] = useState(false)
+  // const [loader, setLoader] = useState(false)
 
   useEffect(() => {
     const localstorageData = JSON.parse(localStorage.getItem("data"));
@@ -55,7 +55,7 @@ const EditProfile = () => {
     e.preventDefault();
     setLoader(true)
 
-    const clonedObject = { ...data };
+    const clonedObject = { ...data};
     clonedObject.user_id = clonedObject.id;
     const sendData = new FormData();
 
@@ -71,8 +71,13 @@ const EditProfile = () => {
       }
       setLoader(false)
     } catch (error) {
+      console.log(error , 'error');
       setLoader(false)
-      toast.error(error?.message)
+      if(error?.message?.[0] != 0){
+        toast.error(error?.message?.[0])
+      }else{
+        toast.error(error?.message)
+      }
     }
   };
 
@@ -137,13 +142,18 @@ const EditProfile = () => {
             <div>
               <p>Bio</p> <p></p>
             </div>
-            <input
+            <textarea
               defaultValue={data?.bio === "null" ? "" : data?.bio}
               type="text"
               placeholder="Tell the world who are you!"
               name="bio"
               onChange={onChangeHandler}
+              cols={5}  
+              rows={3}
+              maxLength={500}
             />
+            <span className="password-validation-unclear-bio">Bio length should not be greather then {data?.bio?.length > 0 ? data?.bio?.length : ''}/500 words.</span>
+         
           </div>
 
           <div>
@@ -162,7 +172,7 @@ const EditProfile = () => {
 
           <div>
             <div>
-              <p>Linkdin url</p>
+              <p>LinkedIn URL</p>
             </div>
             <input
               defaultValue={data?.your_site}

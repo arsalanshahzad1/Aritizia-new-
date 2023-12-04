@@ -1,4 +1,5 @@
-import  React, { useEffect, useState,useContext } from "react";
+import React from 'react'
+import { useEffect, useState,useContext } from "react";
 import apis from "../../service";
 import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import MARKETPLACE_CONTRACT_ABI from "../../contractsData/ArtiziaMarketplace.json";
@@ -24,81 +25,42 @@ function Fan({ id, fanToggle }) {
     checkIsWalletConnected()
   },[account])
 
-  const getFanListing = async (ids) => {
-    const response = await apis.getFanList(id);
-    setFanListing(response?.data?.data);
-    console.log(response?.data?.data, "fanlist");
-    setLoader(false)
-  };
+  // const getFanListing = async (ids) => {
+  //   const response = await apis.getFanList(id);
+  //   setFanListing(response?.data?.data);
+  //   console.log(response?.data?.data, "fanlist");
+  //   setLoader(false)
+  // };
 
-  useEffect(()=>{
-    setLoader(true)
-    getFanListing(ids)
-  }
-  ,[fanToggle])
+  // useEffect(()=>{
+  //   setLoader(true)
+  //   getFanListing(ids)
+  // }
+  // ,[fanToggle])
 
   let selectedUser;
   
-  const removeFan = async (id) => {
-    selectedUser = id;
-    let userToRemove;
-    for (let i = 0; i < fanListing.length; i++) {
-      if (fanListing[i].fan_id == id) {
-        console.log("selected fan", fanListing[i].wallet_address);
-        userToRemove = fanListing[i].wallet_address;
-      }
-    }
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      signer
-    );
-
-    const remove = await marketplaceContract.removeFans(userToRemove);
-    let response = marketplaceContract.on("removeFan", handleRemoveFansEvent);
-    console.log("kkkkkkkkkkkkkkkk" , marketplaceContract);
-
-  };
-
-  const handleRemoveFansEvent = async (removedFan) => {
-    console.log("kkkkkkkkkkkkkkkk");
-
-    console.log("removedFan", removedFan);
-    getRemoveFan(selectedUser);
-  };
-
-  const getRemoveFan = async (selectedUser) => {
-    const response = await apis.getremovedFan(selectedUser);
-    setFanListing(response?.data?.data);
-    getFanListing();
-    // setFanListing([]);
-  };
 
 
-  const getFansBC = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
+  // const handleRemoveFansEvent = async (removedFan) => {
+  //   console.log("kkkkkkkkkkkkkkkk");
 
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
+  //   console.log("removedFan", removedFan);
+  //   getRemoveFan(selectedUser);
+  // };
 
-    const fans = await marketplaceContract.getFans(userAddress);
+  // const getRemoveFan = async (selectedUser) => {
+  //   const response = await apis.getremovedFan(selectedUser);
+  //   setFanListing(response?.data?.data);
+  //   getFanListing();
+  //   // setFanListing([]);
+  // };
 
-    console.log("fans", fans);
-  };
 
-  useEffect(() => {
-    getFanListing();
-  }, []);
+
+  // useEffect(() => {
+  //   getFanListing();
+  // }, []);
 
   const [loader, setLoader] = useState(true)
 
@@ -144,7 +106,6 @@ function Fan({ id, fanToggle }) {
               Remove
             </button>
           </div>
-          {/* <button onClick={getFansBC}>getBC</button> */}
         </div>
       );
     })}

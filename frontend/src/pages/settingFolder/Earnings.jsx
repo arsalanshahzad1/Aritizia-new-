@@ -17,6 +17,7 @@ import Loader from "../../components/shared/Loader";
 const Earnings = () => {
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const [earning, setEarning] = useState([]);
+  
   const handleStatus = (e) => {
     setStatus(e);
   };
@@ -25,8 +26,7 @@ const Earnings = () => {
     const response = await apis.getSalesHistory();
     console.log(response?.data?.data);
     setEarning(response?.data?.data);
-    setLoader(false)
-    
+    setLoader(false);    
   };
 
   useEffect(() => {
@@ -34,7 +34,6 @@ const Earnings = () => {
   }, []);
 
   useEffect(()=>{
-    console.log(earning, "arsalan")
   },[earning])
 
   const statusOptions = [
@@ -415,145 +414,45 @@ const Earnings = () => {
     },
   ];
 
-  const [walletConnected, setWalletConnected] = useState(false);
-  const web3ModalRef = useRef();
-
-  const {account,checkIsWalletConnected}=useContext(Store);
+  const {account,checkIsWalletConnected,getProviderMarketContrat}=useContext(Store);
 
   useEffect(()=>{
     checkIsWalletConnected()
   },[account])
 
-  // const [userAddress, setUserAddress] = useState("0x000000....");
   const [totalPrice, setTotalPrice] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
 
-  // useEffect(() => {
-  //   getAddress();
-  // }, []);
-
   useEffect(() => {
     getTotalBalance();
-  }, [totalPrice]);
+  }, [userAddress]);
 
-  // async function getProvider() {
-  //   // Create a provider using any Ethereum node URL
-  //   const provider = new ethers.providers.JsonRpcProvider(
-  //     // "https://eth-mainnet.g.alchemy.com/v2/hmgNbqVFAngktTuwmAB2KceU06IJx-Fh"
-  //     // "http://localhost:8545"
-  //     "https://rpc.sepolia.org"
-  //   );
-
-  //   return provider;
-  // }
-
-  // const getAddress = async () => {
-  //   const accounts = await window.ethereum.request({
-  //     method: "eth_requestAccounts",
-  //   });
-  //   setUserAddress(accounts[0]);
-  //   localStorage.setItem("walletAddress", accounts[0]);
-
-  //   postWalletAddress(accounts[0]);
-  //   // console.log("getAddress", accounts[0]);
-  // };
-
-  // const postWalletAddress = (address) => {
-  //   console.log("in post wallet ");
-  //   const postData = {
-  //     // Specify the data you want to send in the POST request
-  //     // For example:
-  //     walletAddress: address,
-  //   };
-
-  //   axios
-  //     .post("https://artizia-backend.pluton.ltd/api/connect-wallet", postData)
-  //     .then((response) => {
-  //       // Handle the response from the server/API
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       // Handle any errors that occurred during the request
-  //       console.error(error);
-  //     });
-  //   console.log("in post wallet 1");
-  // };
-
-  //
 
   const getTotalBalance = async () => {
     let total = 0;
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
-    const signer = provider.getSigner()
-
-    const marketplaceContract = new Contract(
-      MARKETPLACE_CONTRACT_ADDRESS.address,
-      MARKETPLACE_CONTRACT_ABI.abi,
-      provider
-    );
-    console.log("provider2");
-
-    const nftContract = new Contract(
-      NFT_CONTRACT_ADDRESS.address,
-      NFT_CONTRACT_ABI.abi,
-      provider
-    );
-    // const signer = provider.getSigner();
-    // const address = await signer.getAddress();
-    console.log("provider3");
-
-    let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
-    console.log("asd111asdasd");
-
-    let myListedTokens = await marketplaceContract.getMyListedNfts(userAddress);
-    console.log("22222222");
-
-    let myTokens = await marketplaceContract.getMyNfts(userAddress);
-
-    console.log("mintedTokens", mintedTokens);
-    console.log("myListedTokens", myListedTokens);
-    console.log("myTokens", myTokens);
+    let mintedTokens = await getProviderMarketContrat().getMyListedNfts(userAddress);
 
     for (let i = 0; i < mintedTokens.length; i++) {
       let id;
       id = +mintedTokens[i].tokenId.toString();
 
-      const metaData = await nftContract.tokenURI(id);
+      const structData = await getProviderMarketContrat()._idToNFT(id);
 
-      axios
-        .get(metaData)
-        .then((response) => {
-          const meta = response.data;
-          let data = JSON.stringify(meta);
-
-          data = data.slice(2, -5);
-          data = data.replace(/\\/g, "");
-
-          data = JSON.parse(data);
-          const price = data.price;
-          console.log("price", price);
-          total += total + +price;
-          console.log("Total price", totalPrice);
-        })
-
-        .catch((error) => {
-          console.error("Error fetching metadata:", error);
-        });
+      total += +structData?.price?.toString();
     }
-    console.log("total out loops", total);
     setTotalPrice(total);
     // return total;
   };
 
   useEffect(() => {
-    // setTotalPrice(getTotalBalance);
   }, [totalPrice]);
 
   const [loader, setLoader] = useState(true)
+
+
   return (
     <>
     {loader && <Loader/>}
@@ -561,11 +460,11 @@ const Earnings = () => {
       <div className="earning-box">
         <div>
           <p>Your Balance</p>
-          <h2>{totalPrice ? totalPrice : 0} ETH</h2>
+          <h2>{Number(ethers.utils.formatEther(totalPrice?.toString() ? totalPrice?.toString() : "0"))?.toFixed(5)} ETH</h2>
         </div>
         <div>
           <p>Total Sales Value</p>
-          <h2>{earning?.total_sale_values} ETH</h2>
+          <h2>{Number(ethers.utils.formatEther(earning?.total_sale_values?.toString() ? earning?.total_sale_values?.toString() : "0"))?.toFixed(5)} ETH</h2>
           {/* <p>-5,6K USD</p> */}
         </div>
         <div>

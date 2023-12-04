@@ -1,4 +1,5 @@
-import  React, { useEffect, useState,useContext } from "react";
+import React from 'react'
+import { useEffect, useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import adminApis from "../../service/adminIndex";
 import apis from "../../service/adminIndex";
