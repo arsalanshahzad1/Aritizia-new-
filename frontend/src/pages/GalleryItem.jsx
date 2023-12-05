@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selected, user }) => {
+const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selected, user, title, setSelectedPart }) => {
     const [isSelected, setIsSelected] = useState(selected)
 
     useEffect(() => {
@@ -9,11 +9,23 @@ const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selecte
 
     console.log(Image, "image in art")
     const selectDecision = () => {
-        if (selected) {
-            handleUnselectArt(Index)
-        }
-        else {
-            handleSelectArt(Index)
+        if (title === "All") {
+            if (selected) {
+                handleUnselectArt(Index, 'All')
+            }
+            else {
+                handleSelectArt(Index, 'All')
+            }
+        } else {
+            if (selected) {
+                handleUnselectArt(Index, title)
+                setSelectedPart(title)
+            }
+            else {
+                handleSelectArt(Index, title)
+                setSelectedPart(title)
+
+            }
         }
     }
     const [showIcon, setshowIcon] = useState(false)
@@ -29,7 +41,7 @@ const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selecte
                 </span>
             } */}
             {
-                user =="admin" ? 
+                user == "admin" ?
                     <span onClick={selectDecision} className='select-art-btn'>
                         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="18" cy="18" r="18" fill={`${selected ? "#B600D1" : "#7F7E7E"}`} fillOpacity="0.5" />
@@ -51,12 +63,7 @@ const GalleryItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selecte
                 </div>
 
             } */}
-            {Image.includes("http") ?
             <img src={Image} alt="" />
-            :
-            <img src={`data:image/jpeg;base64,${Image}`} alt="Red dot" />
-            // <h2>hellow</h2>
-        }
         </div>
     )
 }

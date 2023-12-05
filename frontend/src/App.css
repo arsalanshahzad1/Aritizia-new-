@@ -5704,6 +5704,12 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
   flex-wrap: wrap;
   justify-content: center;
 }
+.Arts-holder.folder {
+  margin-top: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
 .art-img-div {
   width: 230px;
@@ -6514,12 +6520,14 @@ h3 {
   padding: 0;
   margin: 0;
   position: absolute;
-  border-radius: 20px;
+  border-radius: 20px 12px 12px 20px;
   background: #FFF;
   box-shadow: 10px 10px 20px 0px rgba(0, 0, 0, 0.80);
   width: 100%;
   top: 46px;
   z-index: 2;
+  max-height: 162px;
+  overflow-y: scroll;
 }
 
 .add-to-collection-modal-wrap .dd {
@@ -6573,6 +6581,10 @@ h3 {
   position: relative;
   min-width: 115px;
   text-align: center;
+}
+.add-to-collection-modal-wrap .button button:nth-child(1).disable {
+  background: gray;
+  pointer-events: none;
 }
 
 .add-to-collection-modal-wrap .button button:nth-child(2) {
@@ -6887,4 +6899,26 @@ h3 {
 .prompt-search-page .search-input .b-wrap .next svg {
   color: #fff;
   font-size: 24px;
+}
+
+.images-folder-collection{}
+.images-folder-collection .image-collection-folder-section{}
+.images-folder-collection .image-collection-folder-section .sec-title{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 30px;
+}
+.images-folder-collection .image-collection-folder-section .sec-title h3{
+  font-family: 'Jost';
+font-size: 34px;
+font-weight: 500;
+line-height: 58px;
+letter-spacing: 0em;
+text-align: left;
+color: #121212;
+}
+.images-folder-collection .image-collection-folder-section .sec-title svg{
+font-size: 27px;
+cursor: pointer;
 }

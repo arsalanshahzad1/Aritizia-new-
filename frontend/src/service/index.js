@@ -235,7 +235,7 @@ const createBackendServer = (baseURL) => {
 
   const createArtGalleryImages = async (body) => await api.post(`create-art-gallery`, body, { headers: headers });
   const generateArtGalleryImages = async (body) => await api.post(`generate-art-gallery`, body);
-  const viewArtGallery = async (RealUserId) => await api.get(`view-art-gallery/${RealUserId}`);
+  const viewArtGallery = async (RealUserId,folder_pagination,page) => await api.get(`view-art-gallery/${RealUserId}?folder_pagination=${folder_pagination}&page=${page}`);
   const viewRemainingArtGallery = async (RealUserId) => await api.get(`view-remaining-art-gallery/${RealUserId}`);
   const removeArtGallery = async (RealUserId) => await api.get(`remove-art-gallery/${RealUserId}`);
   const storeTempArtGallery = async (body) => await api.post(`store-temp-art-gallery`, body);
@@ -260,9 +260,19 @@ const createBackendServer = (baseURL) => {
   //Search History
 
   const storeSearchHistory = async (body) => await api.post(`store-search-history`, body);
-  const getUserSearchHistory = async (user_id , search_key , page) => await api.get(`user-search-history?user_id=${user_id}&search_key=${search_key}&page=${page}`);
+  const getUserSearchHistory = async (user_id, search_key, page) => await api.get(`user-search-history?user_id=${user_id}&search_key=${search_key}&page=${page}`);
   const DeleteAllSearchHistory = async (body) => await api.post(`clear-search-history`, body);
   const DeleteSearchHistoryByName = async (body) => await api.post(`delete-search-history`, body);
+
+  //Art Gallery Folders
+  const listFolders = async (user_id) => await api.get(`list-folders?user_id=${user_id}`);
+  const editFolder = async (filder_id) => await api.get(`edit-folder/${filder_id}`);
+  const storeFolder = async (body) => await api.post(`store-folder`, body);
+  const updateFolder = async (body) => await api.post(`update-folder`, body);
+  const moveImagesFolder = async (body) => await api.post(`move-images-folder`, body);
+  const copyImagesFolder = async (body) => await api.post(`copy-images-folder`, body);
+  const deleteImagesFolder = async (body) => await api.post(`delete-images-folder`, body);
+
 
   //Returning all the API
   return {
@@ -379,6 +389,15 @@ const createBackendServer = (baseURL) => {
     getUserSearchHistory,
     DeleteAllSearchHistory,
     DeleteSearchHistoryByName,
+
+    //Art Gallery Folders
+    listFolders,
+    editFolder,
+    storeFolder,
+    updateFolder,
+    moveImagesFolder,
+    copyImagesFolder,
+    deleteImagesFolder,
 
   };
 };
