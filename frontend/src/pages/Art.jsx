@@ -169,8 +169,8 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
         console.log(midjourneyId, 'id');
         if (promptCalculator?.remaining > 0) {
             try {
-                const response = await apis.getMidjourneyImagesFromId()
-                // const response = await apis.getMidjourneyImagesFromId(midjourneyId)
+                // const response = await apis.getMidjourneyImagesFromId()
+                const response = await apis.getMidjourneyImagesFromId(midjourneyId)
                 if (response?.data?.progress < 100 || response?.data?.progress == 'incomplete') {
                     getMidjourneyImagesFromId()
                 } else {
@@ -252,9 +252,9 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
             const body = {
                 width: 512,
                 height: 512,
-                steps: 10,
-                seed: 0,
-                cfg_scale: 0,
+                steps: 10, //50
+                seed: 0, //10
+                cfg_scale: 0,//10
                 samples: 4,
                 // steps: 50,
                 // seed: 10,
