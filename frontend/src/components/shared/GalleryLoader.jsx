@@ -4,11 +4,10 @@ function GalleryLoader() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-    '/assets/gallery-loader/gallery-loader-1.jpg',
-    '/assets/gallery-loader/gallery-loader-5.jpg',
-    '/assets/gallery-loader/gallery-loader-6.jpg',
-    '/assets/gallery-loader/gallery-loader-7.jpg',
-    '/assets/gallery-loader/gallery-loader-8.jpg',
+    '/assets/gallery-loader/gallery-loader-1.webp',
+    '/assets/gallery-loader/gallery-loader-2.webp',
+    '/assets/gallery-loader/gallery-loader-3.webp',
+    '/assets/gallery-loader/gallery-loader-4.webp',
     // Add more image URLs as needed
   ];
 

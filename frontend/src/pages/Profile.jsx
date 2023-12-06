@@ -49,7 +49,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   const navigate = useNavigate();
 
   const { account, checkIsWalletConnected, getSignerMarketContrat, getSignerNFTContrat, getProviderMarketContrat, getProviderNFTContrat } = useContext(Store);
-  
+
   console.log("accountaccount", account);
 
 
@@ -57,10 +57,10 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   ///////////////////////////////////////////////////////////////////////////////////
 
   const getLikedNftsList = async () => {
-    try {    
+    try {
       const response = await apis.getLikeNFTList(userId);
       return response?.data?.data;
-    } catch (error) { 
+    } catch (error) {
       setLikedNftLoader(false)
     }
 
@@ -71,10 +71,10 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
       const response = await apis.getPurchasedNfts(userId);
       if (response?.data?.data?.length > 0) {
         getMyNfts(response?.data?.data);
-      } 
+      }
       else {
-      //   getMyNfts(0);
-      setMyNftLoader(false)
+        //   getMyNfts(0);
+        setMyNftLoader(false)
       }
     } catch (error) {
       setMyNftLoader(false)
@@ -90,8 +90,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
       if (response?.data?.data?.length > 0) {
         getMyListedNfts(response?.data?.data);
       }
-      else{
-      setNftLoader(false)
+      else {
+        setNftLoader(false)
       }
       // // setNftLoader(false)
       // setNftAuctionLoader(false)
@@ -204,7 +204,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
   //get Collection(Minted + Listed (fix + Auction) nft's BLC/DB)
   const getMyListedNfts = async (nftsList) => {
-    
+
     setNftLoader(true);
 
     let listingType;
@@ -221,7 +221,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
     for (let i = 0; i < nftsList?.length; i++) {
       let id;
       id = nftsList[i]?.id;
-      console.log("checckdart",nftsList[i]?.id)
+      console.log("checckdart", nftsList[i]?.id)
 
       const structData = await getProviderMarketContrat()._idToNFT(id);
 
@@ -400,7 +400,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
     //     }
     //   }
     // }
-   
+
   };
 
   const onClose = useCallback(() => {
@@ -542,7 +542,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="profile-bio">
-                  <p className="">{userData?.bio}</p>
+                    <p className="">{userData?.bio}</p>
                   </div>
                 </div>
               </div>
@@ -550,16 +550,16 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                 <div className="profile-tabs">
                   {userData === "false" ? <></> : <>
                     <button
-                      className={`${tabs === 1 ? "active" : ""}`}
-                      onClick={() => setTabs(1)}
+                      className={`${tabs === 0 ? "active" : ""}`}
+                      onClick={() => setTabs(0)}
                     >
                       Gallery
                     </button>
                   </>}
                   {userWalletAddress === "false" ? <></> : <>
                     <button
-                      className={`${tabs === 0 ? "active" : ""}`}
-                      onClick={() => setTabs(0)}
+                      className={`${tabs === 1 ? "active" : ""}`}
+                      onClick={() => setTabs(1)}
                     >
                       Collection
                     </button>
@@ -599,6 +599,11 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
               <div className="profile-buy-card">
                 {tabs === 0 && (
                   <>
+                    <Gallery setLoader={setLoader} loader={loader} user="admin" />
+                  </>
+                )}
+                {tabs === 1 && (
+                  <>
                     <div className="row">
                       <div className="Collection-tabs">
                         <div
@@ -621,8 +626,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                               <div className="one"></div>
                             </section>
                             :
-                            nftListFP?.length > 0 ?                              
-                            nftListFP?.map((item) => (
+                            nftListFP?.length > 0 ?
+                              nftListFP?.map((item) => (
                                 <SimpleCard
                                   setLoader={setLoader}
                                   onOpen={onOpen}
@@ -642,7 +647,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                   firstOwner={item?.firstOwner}
                                   user_id={item?.user_id}
                                 />
-                              ))                               
+                              ))
                               :
                               <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }
@@ -687,11 +692,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                     </div>
                   </>
                 )}
-                {tabs === 1 && (
-                  <>
-                    <Gallery setLoader={setLoader} loader={loader} user="admin" />
-                  </>
-                )}
+
                 {tabs === 2 && (
                   <>
                     <div className="row">
