@@ -252,9 +252,9 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
             const body = {
                 width: 512,
                 height: 512,
-                steps: 10,
-                seed: 0,
-                cfg_scale: 0,
+                steps: 10, //50
+                seed: 0, //10
+                cfg_scale: 0,//10
                 samples: 4,
                 // steps: 50,
                 // seed: 10,
