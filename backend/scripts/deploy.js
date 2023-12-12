@@ -64,6 +64,31 @@ async function main() {
   await usdToken.connect(signer).transfer(account2, usdctoken);
 
   // saveFrontendFiles(usd, "TetherToken");
+
+  //Send a POST request to another server's API
+  //console.log("checckData2",apiData);
+  try {
+    var options = {
+      method: "POST",
+      // uri: "http://143.198.70.237/api/list-nft",
+      uri: `http://165.232.142.3/api/admin/truncate-tables?wallet_address=${deployedMarketplaceContract.address}`,
+      body: apiData,
+      json: true, // Automatically stringifies the body to JSON
+    };
+
+    rp(options)
+      .then(function (parsedBody) {
+        // POST succeeded...
+        console.log("DONEE", parsedBody);
+      })
+      .catch(function (err) {
+        // POST failed...
+        console.log("FAIL", err);
+      });
+  } catch (error) {
+    console.error("API Request Error:", error);
+  }
+  
   saveFrontendFiles(deployedMarketplaceContract, "ArtiziaMarketplace");
   saveFrontendFiles(deployedNFTContract, "ArtiziaNFT");
 }

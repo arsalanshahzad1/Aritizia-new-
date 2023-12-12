@@ -12,8 +12,7 @@ export default defineConfig(({ command, mode }) => {
             'process.env.MATIC_RPC_ADDRESS': JSON.stringify(env.MATIC_RPC_ADDRESS),
             'process.env.PRIVATE_KEYS': JSON.stringify(env.PRIVATE_KEYS),
             'process.env.CHAIN_ID': JSON.stringify(env.CHAIN_ID),
-
-            
+            'process.env.SERVER_API': JSON.stringify(env.SERVER_API),
             // If you want to exposes all env variables, which is not recommended
             // 'process.env': env
         },

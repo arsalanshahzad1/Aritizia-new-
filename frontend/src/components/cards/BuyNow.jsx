@@ -90,13 +90,12 @@ const BuyNow = ({
     setPlatformFeeETH(feeETH);
 
     let EthIntoUSDT = (+feeETH + +price?.toString())
-
+    
+    let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString());
+    
     setEthForFiat(EthIntoUSDT);
 
-    console.log(EthIntoUSDT, "totalInUSDTsssss");
-
-    let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
-
+    console.log(intoUSDT?.toString() / 10**6, "totalInUSDTsssss");
     setPriceIntoUSD(intoUSDT?.toString());
     setFiatAmount(Math.round(intoUSDT?.toString() / 10**6));
 
@@ -334,7 +333,7 @@ const BuyNow = ({
   useEffect(() => {
     getPriceInUSDAndDetials();
     getNFTDetailByNFTTokenId();
-  }, [account, price])
+  }, [account, price,fiatAmount])
 
   return (
     <>

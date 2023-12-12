@@ -225,7 +225,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
       const structData = await getProviderMarketContrat()._idToNFT(id);
 
-      if (structData?.firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed) {
+      if (structData?.firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed && structData?.approve) {
 
         const auctionData = await getProviderMarketContrat()._idToAuction(id);
 
@@ -353,54 +353,6 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
         setMyNftLoader(false)
       }
     }
-    // else {
-
-    //   let mintedTokens = await getSignerMarketContrat().getMyNfts(account);
-
-    //   for (let i = 0; i < mintedTokens?.length; i++) {
-    //     let id;
-    //     id = mintedTokens[i]?.tokenId?.toString();
-
-    //     const structData = await getSignerMarketContrat()._idToNFT(id);
-
-    //     //check if not listed
-    //     if (!structData?.listed && structData?.owner?.toString()?.toLowerCase() === account?.toString()?.toLowerCase()) {
-
-    //       let response;
-
-    //       try {
-    //         response = await apis.getNFTByTokenId(id);
-    //       } catch (error) {
-    //         console.log(error.message)
-    //       }
-
-    //       const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;
-    //       const user_id = response?.data?.data?.owner?.id;
-
-    //       const price = structData?.price?.toString();
-    //       const metaData = await getSignerNFTContrat().tokenURI(id);
-    //       const responses = await fetch(metaData)
-    //       const metadata = await responses.json()
-
-    //       const nftData = {
-    //         id: id,
-    //         title: metadata?.title,
-    //         image: metadata?.image,
-    //         price: price,
-    //         paymentMethod: structData?.paymentMethod,
-    //         royalty: structData?.royalty,
-    //         royaltyPrice: structData?.royaltyPrice,
-    //         description: metadata?.description,
-    //         collection: structData?.collectionId?.toString(),
-    //         collectionImages: collectionImages,
-    //         seller: structData?.seller,
-    //         user_id: user_id
-    //       };
-    //       setUserNfts((prev) => [...prev, nftData]);
-    //     }
-    //   }
-    // }
-
   };
 
   const onClose = useCallback(() => {

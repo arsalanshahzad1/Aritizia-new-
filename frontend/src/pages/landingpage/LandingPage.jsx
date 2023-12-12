@@ -49,7 +49,6 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
   };
 
   const getListedNfts = async (allNftIds) => {
-
     let listingType;
 
     if (allNftIds?.length > 0) {
@@ -149,108 +148,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
           }
         }
       }
-    } 
-    // else {
-    //   //Blockchain
-    //   let mintedTokens = await getProviderMarketContrat().getListedNfts();
-    //   for (let i = 0; i < mintedTokens?.length; i++) {
-    //     let id;
-    //     id = mintedTokens?.[i].tokenId?.toString();
-
-    //     const structData = await getProviderMarketContrat()._idToNFT(id);
-
-    //     if (
-    //       structData?.firstOwner !=
-    //         "0x0000000000000000000000000000000000000000" &&
-    //       structData?.listed &&
-    //       structData?.approve
-    //     ) {
-    //       const auctionData = await getProviderMarketContrat()._idToAuction(id);
-
-    //       let response;
-    //       let nftLikes;
-
-    //       try {
-    //         response = await apis.getNFTCollectionImage(
-    //           structData?.collectionId?.toString()
-    //         );
-    //       } catch (error) {
-    //         console.log(error);
-    //       }
-
-    //       try {
-    //         nftLikes = await apis.getLikeNFT(
-    //           response?.data?.data?.user?.id,
-    //           id
-    //         );
-    //       } catch (error) {
-    //         console.log(error);
-    //       }
-
-    //       const collectionImages =
-    //         response?.data?.data?.media?.[0]?.original_url;
-    //       const user_id = response?.data?.data?.user_id;
-
-    //       const auctionLive =
-    //         await getProviderMarketContrat().getStatusOfAuction(id);
-
-    //       const price = structData?.price?.toString();
-    //       const metaData = await getProviderNFTContrat().tokenURI(id);
-    //       const responses = await fetch(metaData);
-    //       const metadata = await responses.json();
-    //       console.log("structData", structData?.seller);
-
-    //       listingType = structData?.listingType;
-
-    //       if (listingType === 0) {
-    //         const nftData = {
-    //           id: id,
-    //           title: metadata?.title,
-    //           image: metadata?.image,
-    //           price: price,
-    //           paymentMethod: structData?.paymentMethod,
-    //           royalty: structData?.royalty,
-    //           royaltyPrice: structData?.royaltyPrice,
-    //           description: metadata?.description,
-    //           collection: structData?.collectionId?.toString(),
-    //           collectionImages: collectionImages,
-    //           seller: structData?.seller,
-    //           owner: structData?.owner,
-    //           firstOwner: structData?.firstOwner,
-    //           user_id: user_id,
-    //           is_unapproved: structData?.approve,
-    //         };
-    //         setNftListFP((prev) => [...prev, nftData]);
-    //       } else if (listingType === 1) {
-    //         const nftData = {
-    //           id: id,
-    //           isLive: auctionLive,
-    //           title: metadata?.title,
-    //           image: metadata?.image,
-    //           description: metadata?.description,
-    //           basePrice: price,
-    //           startTime: auctionData?.startTime?.toString(),
-    //           endTime: auctionData?.endTime?.toString(),
-    //           highestBidIntoETH: auctionData?.highestBidIntoETH?.toString(),
-    //           highestBidIntoUSDT: auctionData?.highestBidIntoUSDT?.toString(),
-    //           highestBidderAddress: auctionData?.highestBidder?.toString(),
-    //           paymentMethod: structData?.paymentMethod,
-    //           royaltyPrice: structData?.royaltyPrice,
-    //           collection: structData?.collectionId?.toString(),
-    //           collectionImages: collectionImages,
-    //           seller: auctionData?.seller,
-    //           owner: structData?.owner,
-    //           firstOwner: structData?.firstOwner,
-    //           user_id: user_id,
-    //           is_unapproved: structData?.approve,
-    //           nft_like: nftLikes?.data?.data?.like_count,
-    //         };
-    //         setNftListAuction((prev) => [...prev, nftData]);
-    //       }
-    //     }
-    //   }
-    // }
-
+    }
   };
 
   useEffect(() => {
@@ -390,7 +288,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                     <>
                       {nftListFP
                         ?.slice(0, nftListFP?.length > 4 ? 4 : nftListFP?.list)
-                        .map((item, index) => (
+                        .map((item) => (
                           <>
                             <BuyNow
                               setLoader={setLoader}
@@ -414,6 +312,16 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                             />
                           </>
                         ))}
+                         <>
+                         {console.log(nftListFP?.length,"clg")}
+                      {(nftListFP?.length < 2 && nftListFP?.length >= 1) && <DummyCard />}
+                      {(nftListFP?.length - 1 < 3 && nftListFP?.length > nftListFP?.length -1) && <DummyCard />}
+                      {(nftListFP?.length - 1 < 4 && nftListFP?.length > nftListFP?.length -1) && <DummyCard />}
+                      {/* {(nftListFP?.length < 0  && nftListFP?.length < (nftListFP?.length + 1)) && <DummyCard />}
+                      {(nftListFP?.length > 1 && nftListFP?.length < 1 ) && <DummyCard />} */}
+                      {/* {(nftListFP?.length > 2 && nftListFP?.length < 4) && <DummyCard />} */}
+                      {/* {(nftListFP?.length > 3 && nftListFP?.length < 4) && <DummyCard />}  */}
+                    </>
                     </>
                   ) : (
                     <>
@@ -459,39 +367,38 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
               <div className="d-flex">
                 {nftListAuction?.length > 0 ? (
                   <>
-                    {nftListAuction
-                      ?.slice(
-                        0,
-                        nftListAuction?.length > 4 ? 4 : nftListAuction?.length
-                      )
-                      .map((item) => (
-                        <>
-                          <NewItemCard
-                            setLoader={setLoader}
-                            id={item?.id}
-                            isLive={item?.isLive}
-                            title={item?.title}
-                            image={item?.image}
-                            description={item?.description}
-                            basePrice={item?.basePrice}
-                            startTime={item?.startTime}
-                            endTime={item?.endTime}
-                            highestBidIntoETH={item?.highestBidIntoETH}
-                            highestBidIntoUSDT={item?.highestBidIntoUSDT}
-                            highestBidderAddress={item?.highestBidderAddress}
-                            royaltyPrice={item?.royaltyPrice}
-                            collection={item.collection}
-                            collectionImages={item?.collectionImages}
-                            seller={item?.seller}
-                            owner={item?.owner}
-                            firstOwner={item?.firstOwner}
-                            user_id={item?.user_id}
-                            nft_like={item?.nft_like}
-                            is_unapproved={item?.approve}
-                            size={"col-lg-3"}
-                          />
-                        </>
-                      ))}
+                    <>
+                      {nftListAuction?.slice(0,nftListAuction?.length > 4 ? 4: nftListAuction?.length)
+                        .map((item) => (
+                          <>                       
+                            <NewItemCard
+                              setLoader={setLoader}
+                              id={item?.id}
+                              isLive={item?.isLive}
+                              title={item?.title}
+                              image={item?.image}
+                              description={item?.description}
+                              basePrice={item?.basePrice}
+                              startTime={item?.startTime}
+                              endTime={item?.endTime}
+                              highestBidIntoETH={item?.highestBidIntoETH}
+                              highestBidIntoUSDT={item?.highestBidIntoUSDT}
+                              highestBidderAddress={item?.highestBidderAddress}
+                              royaltyPrice={item?.royaltyPrice}
+                              collection={item.collection}
+                              collectionImages={item?.collectionImages}
+                              seller={item?.seller}
+                              owner={item?.owner}
+                              firstOwner={item?.firstOwner}
+                              user_id={item?.user_id}
+                              nft_like={item?.nft_like}
+                              is_unapproved={item?.approve}
+                              size={"col-lg-3"}
+                            />
+                          </>
+                        ))}
+                    </>
+                   
                   </>
                 ) : (
                   <>

@@ -69,6 +69,7 @@ function ProfileDrawer({
   const [nftDetails, setNftDetails] = useState("");
   const [likeAndViewData, setLikeAndViewData] = useState("");
   const [emailSigninPopup, setEmailSigninPopup] = useState(false);
+  const [ethForFiat, setEthForFiat] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
@@ -113,12 +114,15 @@ function ProfileDrawer({
     }
     
     let EthIntoUSDT = (+feeETH + +price?.toString())
-
+    setEthForFiat(EthIntoUSDT);
+    
     let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
     setPriceIntoUSD(intoUSDT?.toString());
+    setFiatAmount(Math.round(intoUSDT?.toString() / 10**6));
 
   };
+
 
   const getNFTLike = async () => {
     var temp = JSON.parse(localStorage.getItem("data"));
@@ -307,7 +311,7 @@ function ProfileDrawer({
   useEffect(() => {
     getPriceInUSDAndDetials();
     getNFTDetailByNFTTokenId();
-  }, [account, price])
+  }, [account, price,fiatAmount])
 
 
   const statusOptions = [
@@ -1046,12 +1050,20 @@ function ProfileDrawer({
               <p>Nft Price: ${fiatAmount}</p>
             </div>
             <FiatStripeContainer
-              id={id}
+              setLoader={setLoader}
               amount={fiatAmount}
               setShowPaymentForm={setShowFiatPaymentForm}
               showResponseMessage={showResponseMessage}
               setSucess={setSucess}
               setIsVisible={setIsVisible}
+              _nftContract={getSignerNFTContrat().address}
+              _tokenId={id}
+              _sellerPlan={sellerPlan}
+              _buyerAddress={account}
+              _buyerPlan={buyerPlan}
+              sellerId={nftDetails?.user_id}
+              buyerId={userData?.id} 
+              ethAmount={ethForFiat}
             />
           </div>
         </div>

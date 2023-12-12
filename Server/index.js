@@ -44,7 +44,7 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
   try {
     var options = {
       method: "POST",
-      uri: "http://143.198.70.237/api/sold-nft",
+      uri: `${process.env.API_URL}/sold-nft`,
       // uri: "http://165.232.142.3/api/sold-nft",
       body: apiData,
       json: true, // Automatically stringifies the body to JSON
@@ -65,17 +65,7 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
 };
 
 const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,price,collectionId,listingType,sellerId) => {
-  // console.log("NFTListed Event:", event.args);
-  // Define the data you want to send in the API request
-  // const apiData = {
-  //   contractAddress: event?.args?.nftContract?.toString(),
-  //   token_id: event?.args?.tokenId?.toString(),
-  //   seller: event?.args?.seller?.toString(),
-  //   owner: event?.args?.buyer?.toString(),
-  //   price: event?.args?.price?.toString(),
-  //   collection_id: event?.args?.collectionId?.toString(),
-  //   listing_type : event?.args?.listingType?.toString(),
-  // };
+
   const nftcontract = new ethers.Contract(
     nftContract?.toString(),
     nftabis.abi,
@@ -103,7 +93,7 @@ const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,price,coll
   try {
     var options = {
       method: "POST",
-      uri: "http://143.198.70.237/api/list-nft",
+      uri: `${process.env.API_URL}/list-nft`,
       // uri: "http://165.232.142.3/api/sold-nft",
       body: apiData,
       json: true, // Automatically stringifies the body to JSON
@@ -138,7 +128,7 @@ const processReceivedABidEvent = (tokenId, seller, highestBidder, highestBidInto
   try {
     var options = {
       method: "POST",
-      uri: "http://143.198.70.237/api/bidding-nft",
+      uri: `${process.env.API_URL}/bidding-nft`,
       // uri: "http://165.232.142.3/api/sold-nft",
       body: apiData,
       json: true, // Automatically stringifies the body to JSON
@@ -171,7 +161,7 @@ const processCancelListEvent = (nftContract,tokenId,owner,sellerId) => {
   try {
     var options = {
       method: "POST",
-      uri: "http://143.198.70.237/api/cancel-nft-listing",
+      uri: `${process.env.API_URL}/cancel-nft-listing`,
       // uri: "http://165.232.142.3/api/sold-nft",
       body: apiData,
       json: true, // Automatically stringifies the body to JSON

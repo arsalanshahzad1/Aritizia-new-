@@ -32,7 +32,8 @@ const CARD_OPTIONS = {
   },
 };
 
-const FiatPaymentFrom = ({
+const 
+FiatPaymentFrom = ({
   id,
   amount,
   setShowPaymentForm,
