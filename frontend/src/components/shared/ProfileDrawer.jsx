@@ -119,7 +119,8 @@ function ProfileDrawer({
     let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
     setPriceIntoUSD(intoUSDT?.toString());
-    setFiatAmount(Math.round(intoUSDT?.toString() / 10**6));
+    // console.log(intoUSDT?.toString() / 10**6,"USDTAmount")
+    setFiatAmount(intoUSDT?.toString() / 10**6);
 
   };
 

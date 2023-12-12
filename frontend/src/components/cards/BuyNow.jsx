@@ -92,12 +92,12 @@ const BuyNow = ({
     let EthIntoUSDT = (+feeETH + +price?.toString())
     
     let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString());
-    
+
     setEthForFiat(EthIntoUSDT);
 
     console.log(intoUSDT?.toString() / 10**6, "totalInUSDTsssss");
     setPriceIntoUSD(intoUSDT?.toString());
-    setFiatAmount(Math.round(intoUSDT?.toString() / 10**6));
+    setFiatAmount(intoUSDT?.toString() / 10**6);
 
   };
 
