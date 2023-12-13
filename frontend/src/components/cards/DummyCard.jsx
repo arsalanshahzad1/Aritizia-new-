@@ -10,11 +10,11 @@ import {
   LinkedinShareButton,
 } from "react-share";
 import ProfileDrawer from "../shared/ProfileDrawer";
-const DummyCard = () => {
+const DummyCard = ({id , classNam}) => {
 
   return (
     <>
-      <div className="col-lg-3 col-md-4 mt-5">
+      <div className={`col-lg-3 col-md-4 ${classNam} col-sm-12`} id={id}>
         <div class="carddd is-loading">
           <div class="image"></div>
           <div class="content">

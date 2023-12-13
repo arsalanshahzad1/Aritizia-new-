@@ -13,10 +13,11 @@ import {
     Label
 } from "recharts";
 function ChartForEarning({data, chartLabel}) {
+    const isMobile = window.innerWidth <= 768; // Adjust the breakpoint as needed
     const gradientColor = "#2438CB"
     return (
         <div>
-            <ResponsiveContainer width="100%" height={400}>
+            <ResponsiveContainer width="100%" height={isMobile ? 200 : 400}>
                 <AreaChart data={data}>
                     <YAxis label={{ value: 'Volume ETH', angle: -90, position: 'insideLeft' }} />
 

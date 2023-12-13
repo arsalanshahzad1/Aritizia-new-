@@ -11,7 +11,7 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import Modal from "react-bootstrap/Modal";
 import { AiOutlineClose } from "react-icons/ai";
-import MARKETPLACE_CONTRACT_ADDRESS  from "../../contractsData/ArtiziaMarketplace-address.json";
+import MARKETPLACE_CONTRACT_ADDRESS from "../../contractsData/ArtiziaMarketplace-address.json";
 import apis from "../../service";
 import {
   Area,
@@ -73,11 +73,11 @@ function ProfileDrawer({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
-  
+
   const navigate = useNavigate();
-  
+
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
-  
+
   const handleStatus = (e) => {
     setStatus(e);
   };
@@ -107,11 +107,11 @@ function ProfileDrawer({
     let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
     setPlatformFeeETH(feeETH?.toString());
 
-    if(feeETH!=0){
+    if (feeETH != 0) {
       const ethIntoUsdtBase = await getSignerMarketContrat().getETHIntoUSDT(feeETH?.toString());
-      setPlatformFeeInUSDT(ethIntoUsdtBase / 10**6)
+      setPlatformFeeInUSDT(ethIntoUsdtBase / 10 ** 6)
     }
-    
+
     let EthIntoUSDT = (+feeETH + +price?.toString())
 
     let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
@@ -149,7 +149,7 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     try {
-      console.log("checkIID",id);
+      console.log("checkIID", id);
       const response = await apis.getNFTByTokenId(id);
       // console.log("ressss", response?.data?.data?.subscription_plan);
       setNftDetails(response?.data?.data);
@@ -171,13 +171,13 @@ function ProfileDrawer({
   const buyWithETH = async () => {
     setLoader(true)
     try {
-    ethPurchase = true;
-    
-    let totalPrice = ((+price?.toString()) + (+platformFeeETH));
+      ethPurchase = true;
 
-    console.log(totalPrice,+price?.toString(),+platformFeeETH,getBuyerPlan,"totalPrice");
+      let totalPrice = ((+price?.toString()) + (+platformFeeETH));
 
-    await (await getSignerMarketContrat().buyWithETH(
+      console.log(totalPrice, +price?.toString(), +platformFeeETH, getBuyerPlan, "totalPrice");
+
+      await (await getSignerMarketContrat().buyWithETH(
         getSignerNFTContrat().address,
         id,
         sellerPlan, // must be multiple of 10 of the users percent //TODO: change here
@@ -191,18 +191,18 @@ function ProfileDrawer({
       )
       ).wait();
 
-    let response = await getSignerMarketContrat().on(
-      "NFTSold",
-      ethPurchase ? handleNFTSoldEvent : null
-    );
+      let response = await getSignerMarketContrat().on(
+        "NFTSold",
+        ethPurchase ? handleNFTSoldEvent : null
+      );
 
-    console.log("Response of bid even", response);
-    setTimeout(()=>{
-      setLoader(false)
-    },[10000])
-    onClose(false)
-    window.location.reload()
-  } catch (error) {
+      console.log("Response of bid even", response);
+      setTimeout(() => {
+        setLoader(false)
+      }, [10000])
+      onClose(false)
+      window.location.reload()
+    } catch (error) {
       setLoader(false)
       toast.error(error?.data?.message)
     }
@@ -217,40 +217,40 @@ function ProfileDrawer({
       usdtPurchase = true;
       let accBalance = await getSignerUSDTContrat().balanceOf(userAddress)
       if (+priceInUSDT > +accBalance?.toString()) {
-        return toast.error("You dont have balance"),setLoader(false);
+        return toast.error("You dont have balance"), setLoader(false);
       }
-      
+
       let usdtToEth = await getSignerMarketContrat().getUSDTIntoETH(priceInUSDT);
-     
-      console.log("checckkk", usdtToEth?.toString() ,(+platformFeeETH + +price?.toString()));
-      
+
+      console.log("checckkk", usdtToEth?.toString(), (+platformFeeETH + +price?.toString()));
+
       const appprove = await getSignerUSDTContrat().approve(
         MARKETPLACE_CONTRACT_ADDRESS.address,
         // 0
         priceInUSDT?.toString()
       );
-  
+
       appprove.wait();
-  
+
       await (
         await getSignerMarketContrat().buyWithUSDT(
           getSignerNFTContrat().address,
           id,
           priceInUSDT?.toString(),
-          sellerPlan, 
+          sellerPlan,
           buyerPlan,
           nftDetails?.user_id, //selllerId
           userData?.id, //buyerId 
           { gasLimit: ethers.BigNumber.from("5000000") }
-          )).wait();
-  
+        )).wait();
+
       let response = await getSignerMarketContrat().on(
         "NFTSold",
         usdtPurchase ? handleNFTSoldEvent : null
       );
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoader(false)
-      },[10000])
+      }, [10000])
       onClose(false)
       window.location.reload()
       // console.log("Response of bid even", response);
@@ -270,7 +270,7 @@ function ProfileDrawer({
   ) => {
     // console.log("handleNFTSoldEvent");
     let soldData = {
-      contractAddress : nftContract?.toString(),
+      contractAddress: nftContract?.toString(),
       token_id: +tokenId?.toString(),
       seller: seller?.toString(),
       buyer: buyer?.toString(),
@@ -279,10 +279,10 @@ function ProfileDrawer({
     // console.log("soldData", soldData);
 
     if (ethPurchase || usdtPurchase) {
-     nftSoldPost(soldData);
+      nftSoldPost(soldData);
       ethPurchase = false;
       usdtPurchase = false;
-    }else{
+    } else {
       setLoader(false);
     }
 
@@ -293,12 +293,12 @@ function ProfileDrawer({
       // const response = await apis.postNftSold(value);
       setSucess(false);
       setLoader(false);
-       onClose(false)
-      window.location.reload(); 
+      onClose(false)
+      window.location.reload();
     } catch (error) {
       setSucess(false);
       setLoader(false);
-       onClose(false)
+      onClose(false)
       window.location.reload();
     }
 
@@ -686,16 +686,16 @@ function ProfileDrawer({
     navigate(
       `/other-profile?add=${nftDetails?.user?.id}`
     )
-   
+
   }
 
-  console.log(platformFeeETH , 'platformFeeETH2');
+  console.log(platformFeeETH, 'platformFeeETH2');
   const userAccountAddress = localStorage.getItem("userAddress")
 
   const navigateTo = (id) => {
     if (userData) {
       navigate(`/collection?id=${id}`);
-    }else{
+    } else {
       setEmailSigninPopup(true)
     }
   };
@@ -740,11 +740,7 @@ function ProfileDrawer({
               </div>
               <div className="earning-map">
                 <div
-                  style={{
-                    position: "relative",
-                    height: "400px",
-                    background: "linear-gradient(to bottom, #ffffff, #F0F0F0)",
-                  }}
+                className="earning-map-one"
                 >
                   <div
                     style={{
@@ -885,19 +881,19 @@ function ProfileDrawer({
                             </div>
                           )
                         }
-                
+
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
                       {/* <Link to={`collection?id=${nftDetails?.collection?.id}`}>/ */}
-                        <div className="logo-name" onClick={() => navigateTo(nftDetails?.collection?.id)}>
-                          <img
-                            src={nftDetails?.collection?.media[0]?.original_url}
-                            alt=""
-                          />{" "}
-                          <span>{nftDetails?.collection?.name}</span>
-                        </div>
+                      <div className="logo-name" onClick={() => navigateTo(nftDetails?.collection?.id)}>
+                        <img
+                          src={nftDetails?.collection?.media[0]?.original_url}
+                          alt=""
+                        />{" "}
+                        <span>{nftDetails?.collection?.name}</span>
+                      </div>
                       {/* </Link> */}
                     </div>
                   </div>
@@ -905,16 +901,16 @@ function ProfileDrawer({
                 <div className="five-line">
                   <div className="row d-flex">
                     <div className="col-lg-4 col-md-4 col-12 hide-on-desktop-screen">
-                      <SocialShare 
-                      style={{ fontSize: "18px", marginRight: "40px" }} 
-                      user_id={user_id}
+                      <SocialShare
+                        style={{ fontSize: "18px", marginRight: "40px" }}
+                        user_id={user_id}
                       />
                     </div>
                     <div className="col-lg-4 col-md-4 col-12 hide-on-mobile-screen" style={{ marginLeft: "0px" }}>
-                      <SocialShare 
-                      bidStyle="bid-style"
-                      style={{ fontSize: "18px", marginRight: "10px" }}
-                      user_id={user_id}
+                      <SocialShare
+                        bidStyle="bid-style"
+                        style={{ fontSize: "18px", marginRight: "10px" }}
+                        user_id={user_id}
                       />
                     </div>
                   </div>
@@ -926,11 +922,11 @@ function ProfileDrawer({
                       <div className="left">
                         <p>
                           {Number(ethers.utils.formatEther(price?.toString()))?.toFixed(5)} ETH
-                          <br/>
+                          <br />
                           <span>
-                          Current Price $ {Number(priceInUSDT / 10**6)?.toFixed(5)} + Platform Fee $ {Number(platformFeeUSDT)?.toFixed(5)}
+                            Current Price $ {Number(priceInUSDT / 10 ** 6)?.toFixed(5)} + Platform Fee $ {Number(platformFeeUSDT)?.toFixed(5)}
                           </span>
-                          
+
                         </p>
                       </div>
                     </div>
@@ -947,13 +943,13 @@ function ProfileDrawer({
                       </div>
                     </div>
                   </div>
-                  <img
+                  {/* <img
                     src="/assets/images/progress-bar.png"
                     className="hide-on-desktop-screen"
                     alt=""
                     width={"100%"}
                     style={{ marginTop: "20px", marginBottom: "20px" }}
-                  />
+                  /> */}
                 </div>
                 {ShowAcceptbtn && (
                   <div className="drawer-inner-accept-btn">
@@ -970,7 +966,7 @@ function ProfileDrawer({
                       className="seven-line"
                       onClick={() => setChack(!chack)}
                     >
-                  
+
                       <span>
                         <BsCheck className={`${chack ? "red" : "black"}`} />
                       </span>{" "}

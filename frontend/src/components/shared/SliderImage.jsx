@@ -15,7 +15,6 @@ const SliderImage = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("data")));
   const inputRef = useRef(null);
 
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCount((prevCount) => prevCount + 1);
@@ -223,11 +222,6 @@ const SliderImage = () => {
           <p>
             Turn AI-Generated Masterpieces into NFTs and Monetize Your Creativity
           </p>
-        </div>
-        <div className="connect-wallet-mobile">
-          <button className={`connect-wallet`}>
-            {user ? "Connected" : "Connect Wallet"}
-          </button>
         </div>
       </section>
       <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />

@@ -22,6 +22,9 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
   // const [loader, setLoader] = useState(false)
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalNfts, setTotalNfts] = useState(0);
+  const [totalArts, setTotalArts] = useState(0);
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
@@ -61,7 +64,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
 
         if (
           structData?.firstOwner !=
-            "0x0000000000000000000000000000000000000000" &&
+          "0x0000000000000000000000000000000000000000" &&
           structData?.listed &&
           structData?.approve
         ) {
@@ -149,7 +152,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
           }
         }
       }
-    } 
+    }
     // else {
     //   //Blockchain
     //   let mintedTokens = await getProviderMarketContrat().getListedNfts();
@@ -286,6 +289,24 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
       const response = await apis.viewLandingPageDetail();
       if (response?.data) {
         setCounterData(response?.data?.data);
+        console.log(response?.data?.data, 'total');
+        if (response?.data?.data?.total_users > 999) {
+          console.log();
+          setTotalUsers(Math.floor(response?.data?.data?.total_users / 1000))
+        } else {
+          setTotalUsers(response?.data?.data?.total_users)
+        }
+        if (response?.data?.data?.total_nfts > 999) {
+          setTotalNfts(`${Math.floor(response?.data?.data?.total_nfts / 1000)}k`)
+        } else {
+          setTotalNfts(response?.data?.data?.total_nfts)
+        }
+        if (response?.data?.data?.total_artgallery > 999) {
+          setTotalArts(`${Math.floor(response?.data?.data?.total_artgallery / 1000)}k`)
+        } else {
+          setTotalArts(response?.data?.data?.total_artgallery)
+        }
+
       }
       setLoader(false);
     } catch (error) {
@@ -324,10 +345,13 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                         <div className="inner-wrap">
                           <h3>
                             {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_users}
-                                prefix="0"
-                              />
+                              <>
+                                <CountUp
+                                  end={totalUsers}
+                                  prefix={counterData?.total_users <= 9 ? "0" : ""}
+                                />
+                                {counterData?.total_users > 999 ? 'k' : ''}
+                              </>
                             ) : (
                               0
                             )}
@@ -339,10 +363,13 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                         <div className="inner-wrap">
                           <h3>
                             {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_nfts}
-                                prefix="0"
-                              />
+                              <>
+                                <CountUp
+                                  end={totalNfts}
+                                  prefix={counterData?.total_nfts <= 9 ? "0" : ""}
+                                />
+                                {counterData?.total_users > 999 ? 'k' : ''}
+                              </>
                             ) : (
                               0
                             )}
@@ -354,10 +381,13 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                         <div className="inner-wrap">
                           <h3>
                             {isVisible ? (
-                              <CountUp
-                                end={counterData?.total_artgallery}
-                                prefix="0"
-                              />
+                              <>
+                                <CountUp
+                                  end={totalArts}
+                                  prefix={counterData?.total_artgallery <= 9 ? "0" : ""}
+                                />
+                                {counterData?.total_users > 999 ? 'k' : ''}
+                              </>
                             ) : (
                               0
                             )}
@@ -385,7 +415,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                   </div>
                 </div>
                 <div></div>
-                <div className="row">
+                <div className="row mx-auto">
                   {nftListFP?.length > 0 ? (
                     <>
                       {nftListFP
@@ -417,10 +447,12 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                     </>
                   ) : (
                     <>
-                      <DummyCard />
-                      <DummyCard />
-                      <DummyCard />
-                      <DummyCard />
+                      <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                      <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                      <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                      <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                      <DummyCard classNam={'mb-3'} id={'hide-on-desktop'} />
+
                     </>
                   )}
                 </div>
@@ -495,10 +527,11 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                   </>
                 ) : (
                   <>
-                    <DummyCard />
-                    <DummyCard />
-                    <DummyCard />
-                    <DummyCard />
+                    <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                    <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                    <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                    <DummyCard classNam={'mb-5'} id={'hide-on-mobile'} />
+                    <DummyCard classNam={'mb-3'} id={'hide-on-desktop'} />
                   </>
                 )}
               </div>

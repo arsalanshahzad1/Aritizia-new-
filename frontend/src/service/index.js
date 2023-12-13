@@ -16,6 +16,7 @@ const createBackendServer = (baseURL) => {
   // const userId = 2;
   const localStoragedata = JSON.parse(localStorage.getItem("data"));
   const RealUserId = localStoragedata?.id;
+  console.log("RealUserId", localStoragedata)
   console.log("RealUserId", RealUserId)
 
   //Interceptor
@@ -96,7 +97,7 @@ const createBackendServer = (baseURL) => {
   const postChatMessages = async (body) =>
     await api.post(`send-chat-message`, body, headers);
 
-  const viewNotification = async (count) => await api.get(`view-notifications/${RealUserId}?last_count=${count}`);
+  const viewNotification = async (user_id ,count) => await api.get(`view-notifications/${user_id}?last_count=${count}`);
 
   const ReadNotification = async () => await api.get(`read-notification/7`);
 
