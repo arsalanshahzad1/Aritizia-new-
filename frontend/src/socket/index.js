@@ -6,7 +6,7 @@ const laravelEcho = new Echo({
     broadcaster: 'pusher',
     key: 'ea38f6d859801e337591',
     // wsHost: '143.198.70.237',
-    wsHost: '143.198.70.237',
+    wsHost: '164.92.111.85',
     wsPort: 6001,
     forceTLS: false,
     disableStats: true,
