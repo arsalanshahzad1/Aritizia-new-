@@ -3,6 +3,9 @@ require("dotenv").config({ path: ".env" });
 
 const QUICKNODE_HTTP_URL_SEP = process.env.QUICKNODE_HTTP_URL_SEP
 const QUICKNODE_HTTP_URL_MAT = process.env.QUICKNODE_HTTP_URL_MAT
+const QUICKNODE_HTTP_URL = process.env.QUICKNODE_HTTP_URL
+
+const BNB_MAINNET = process.env.BNB_MAINNET;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 module.exports = {
@@ -44,13 +47,18 @@ module.exports = {
       accounts: [PRIVATE_KEY], // Use the private key from the environment variable
       gasPrice: "auto",
     },
-    // goerli: {
-    //   url: QUICKNODE_HTTP_URL, // Use the URL from the environment variable
-    //   accounts: [PRIVATE_KEY], // Use the private key from the environment variable
-    //   gasPrice: "auto",
-    // },
+    goerli: {
+      url: QUICKNODE_HTTP_URL, // Use the URL from the environment variable
+      accounts: [PRIVATE_KEY], // Use the private key from the environment variable
+      gasPrice: "auto",
+    },
     polygon_mumbai: {
       url: QUICKNODE_HTTP_URL_MAT, // Use the URL from the environment variable
+      accounts: [PRIVATE_KEY], // Use the private key from the environment variable
+      gasPrice: "auto",
+    },
+    bnb_mainnet: {
+      url: BNB_MAINNET, // Use the URL from the environment variable
       accounts: [PRIVATE_KEY], // Use the private key from the environment variable
       gasPrice: "auto",
     },

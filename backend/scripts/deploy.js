@@ -1,4 +1,5 @@
 const { ethers } = require("hardhat");
+const rp = require('request-promise');
 
 async function main() {
   // TETHER TOKEN
@@ -72,10 +73,9 @@ async function main() {
       method: "POST",
       // uri: "http://143.198.70.237/api/list-nft",
       uri: `http://165.232.142.3/api/admin/truncate-tables?wallet_address=${deployedMarketplaceContract.address}`,
-      body: apiData,
+      //body: apiData,
       json: true, // Automatically stringifies the body to JSON
     };
-
     rp(options)
       .then(function (parsedBody) {
         // POST succeeded...

@@ -214,15 +214,12 @@ interface IERC20USDT {
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-// import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
-import "hardhat/console.sol";
 
 error invalidPrice();
 error invalidListingFee();
 error invalidListingType();
 
 contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
-  
     uint256 public _nftsSold = 1;
     uint256 public _nftCount = 1;
 
@@ -318,7 +315,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
 
     event approvalUpdate(uint256 tokenId, bool decision);
-    
+
     event auctionEndTimeIncreased(
         uint256 tokenId,
         address seller,
@@ -360,15 +357,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         address owner,
         uint256 sellerId
     );
-    
+
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
     ////////////    INITIALIZERS    ///////////////
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
-    address public UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
-    address public USDT_ADDRESS = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
+    address public UNISWAP_ROUTER_ADDRESS = 0x10ED43C718714eb63d5aA57B78B54704E256024E; //BNB Router 0x10ED43C718714eb63d5aA57B78B54704E256024E //ETH Router 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
+    address public USDT_ADDRESS = 0x55d398326f99059fF775485246999027B3197955; //USDT In BNB 0x55d398326f99059fF775485246999027B3197955 18 Decimals // Eth USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7
 
     IUniswapV2Router02 uniswapRouter;
     IERC20USDT USDTtoken;
@@ -381,7 +378,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         setSubscriptionFee(SubscriptionLevel.Diamond, 0);
         setSubscriptionFee(SubscriptionLevel.Platinum, 100);
         setSubscriptionFee(SubscriptionLevel.Gold, 150);
-        setSubscriptionFee(SubscriptionLevel.FreeTrial, 150);      
+        setSubscriptionFee(SubscriptionLevel.FreeTrial, 150);
     }
 
     function setSubscriptionFee(
@@ -407,7 +404,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     //     // Commenting for testing
     //     AggregatorV3Interface USDTPriceFeed = AggregatorV3Interface(
     //         0xEe9F2375b4bdF6387aa8265dD4FB8F16512A1d46
-    //     ); 
+    //     );
     //     // Mainnet contract address for USDT price feed
     //     (, int256 price, , , ) = USDTPriceFeed.latestRoundData(); // Get the latest USDT price data from Chainlink
     //     require(price > 0, "Invalid USDT price"); // Ensure that the price is valid
@@ -423,12 +420,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
 
     modifier auctionIsLive(uint256 _tokenId) {
-        console.log(
-            _idToAuction[_tokenId].startTime,
-            _idToAuction[_tokenId].endTime
-        );
-        console.log("Auctiins", block.timestamp, _tokenId);
-
         require(
             block.timestamp > _idToAuction[_tokenId].startTime &&
                 block.timestamp < _idToAuction[_tokenId].endTime,
@@ -486,7 +477,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     // Function to swap ETH for USDT
     // Swap ko bol rhey hn itney USDT chahye
-    function swapETHForUSDT(uint256 usdtAmountOut,uint256 meth) public payable returns (uint256) {
+    function swapETHForUSDT(
+        uint256 usdtAmountOut,
+        uint256 meth
+    ) public payable returns (uint256) {
         // Specify the desired USDT output amount
         // uint256 usdtAmountOut = 1000; // Example: Swap 1 ETH for 1000 USDT
 
@@ -499,8 +493,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         //amountIn(amountsOut[0]) kr k batao aspe amountsOut[1] kitna milega
         amountsOut = uniswapRouter.getAmountsOut(usdtAmountOut, path);
-        console.log("usdtAmountOutusdtAmountOut", usdtAmountOut);
-        console.log("amountsOut", amountsOut[1], amountsOut[0]);
 
         // Perform the swap transaction
         if (meth == 0) {
@@ -550,7 +542,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 );
 
                 // _marketOwner.transfer(LISTING_FEE);
-                // console.log("this is 3");
 
                 _nftCount++;
 
@@ -611,17 +602,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _sellerId
     ) public payable nonReentrant isUserBanned {
         NFT storage nft = _idToNFT[_tokenId];
-        require(msg.sender == nft.seller ,"Only Seller can cancelListing");                    
-            nft.owner = payable(msg.sender);
-            nft.seller = payable(address(0));
-            nft.listed = false;
+        require(msg.sender == nft.seller, "Only Seller can cancelListing");
+        nft.owner = payable(msg.sender);
+        nft.seller = payable(address(0));
+        nft.listed = false;
         // IERC721(_nftContract).approve(msg.sender,_tokenId);
-        IERC721(_nftContract).transferFrom(address(this),msg.sender,_tokenId);        
-        emit cancelList(_nftContract,_tokenId,msg.sender,_sellerId);            
-    
+        IERC721(_nftContract).transferFrom(address(this), msg.sender, _tokenId);
+        emit cancelList(_nftContract, _tokenId, msg.sender, _sellerId);
     }
-    
-    
 
     function buyWithUSDT(
         address _nftContract,
@@ -633,7 +621,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 buyerId
     ) public payable isApproved(_tokenId) isUserBanned nonReentrant {
         NFT storage nft = _idToNFT[_tokenId];
-        
+
         uint256 _sellerPercent = getSubscriptionFee(_sellerPlan);
         uint256 _buyerPercent = getSubscriptionFee(_buyerPlan);
 
@@ -650,7 +638,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.listingType == ListingType.FixedPrice,
             "This NFT is not at auction"
         );
-        uint256 texForBuyer = _buyerFeeCalculate(nft.price,_buyerPercent);
+        uint256 texForBuyer = _buyerFeeCalculate(nft.price, _buyerPercent);
 
         uint256 usdtToEth = getUSDTIntoETH(_amount);
 
@@ -659,14 +647,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             "Not enough amount to cover asking price"
         );
 
-
         bool check = true;
         uint256 _amountToBePaid;
         uint256 _amountAfterRoyalty;
         address payable buyer = payable(msg.sender);
         address seller = nft.seller;
 
-        USDTtoken.transferFrom(msg.sender,address(this),_amount);
+        USDTtoken.transferFrom(msg.sender, address(this), _amount);
 
         if (!nft.royalty) {
             _amountToBePaid =
@@ -684,21 +671,16 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             }
         } else {
             uint256 _royaltyFee = royaltyCalculate(_amount, nft.royaltyPrice);
-            console.log("_royaltyFee", _royaltyFee);
 
             _amountAfterRoyalty = _amount - _royaltyFee;
-            console.log("_amountAfterRoyalty", _amountAfterRoyalty);
 
             _amountToBePaid =
                 _amountAfterRoyalty -
                 platformFeeCalculate(_amount, _sellerPercent, _buyerPercent);
 
-            console.log("_amountToBePaid", _amountToBePaid);
-
             USDTtoken.transfer(nft.firstOwner, _royaltyFee);
 
             if (nft.paymentMethod == PaymentMethod.USDT) {
-                console.log("paymentMethod");
                 USDTtoken.transfer(nft.seller, _amountToBePaid);
                 check = true;
             } else {
@@ -721,7 +703,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.listed = false;
             _nftsSold++;
 
-            emit NFTSold(_nftContract, nft.tokenId, _amount, seller, buyer,sellerId,buyerId);
+            emit NFTSold(
+                _nftContract,
+                nft.tokenId,
+                _amount,
+                seller,
+                buyer,
+                sellerId,
+                buyerId
+            );
         }
     }
 
@@ -729,7 +719,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     function buyWithETH(
         address _nftContract,
         uint256 _tokenId,
-        uint8 _sellerPlan,//0x00
+        uint8 _sellerPlan, //0x00
         uint8 _buyerPlan,
         uint256 sellerId,
         uint256 buyerId
@@ -755,8 +745,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         );
 
         require(nft.listed == true, "Nft is not listed to purchase");
-        
-        uint256 texForBuyer = _buyerFeeCalculate(nft.price,_buyerPercent);
+
+        uint256 texForBuyer = _buyerFeeCalculate(nft.price, _buyerPercent);
 
         require(
             msg.value >= (nft.price + texForBuyer),
@@ -771,18 +761,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         if (!nft.royalty) {
             _amountToBePaid =
                 _amountToBePaid -
-                platformFeeCalculate(
-                     nft.price,
-                    _sellerPercent,
-                    _buyerPercent
-                );
+                platformFeeCalculate(nft.price, _sellerPercent, _buyerPercent);
 
             if (nft.paymentMethod == PaymentMethod.ETHER) {
                 payable(nft.seller).transfer(_amountToBePaid);
                 check = true;
             } else {
                 uint256 usdtAmount = swapETHForUSDT(_amountToBePaid, 0); // 0 means msg.value
-                console.log("usdtAmount", usdtAmount);
                 USDTtoken.transfer(nft.seller, usdtAmount);
                 check = true;
             }
@@ -792,19 +777,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
             _amountToBePaid =
                 (_amount - _royaltyFee) -
-                platformFeeCalculate(nft.price,_sellerPercent, _buyerPercent);
-
-            console.log("_amountToBePaid_amountToBePaid", _amountToBePaid);
+                platformFeeCalculate(nft.price, _sellerPercent, _buyerPercent);
 
             payable(nft.firstOwner).transfer(_royaltyFee);
-            console.log("_royaltyFee,_royaltyFee", _royaltyFee);
 
             if (nft.paymentMethod == PaymentMethod.ETHER) {
                 payable(nft.seller).transfer(_amountToBePaid);
                 check = true;
             } else {
                 uint256 usdtAmount = swapETHForUSDT(_amountToBePaid, 1); // 0 means msg.value
-                console.log("usdtAmount", usdtAmount);
                 USDTtoken.transfer(nft.seller, usdtAmount);
                 check = true;
             }
@@ -822,15 +803,23 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.listed = false;
             _nftsSold++;
 
-            emit NFTSold(_nftContract, nft.tokenId, msg.value, seller, buyer,sellerId,buyerId);
+            emit NFTSold(
+                _nftContract,
+                nft.tokenId,
+                msg.value,
+                seller,
+                buyer,
+                sellerId,
+                buyerId
+            );
         }
     }
 
     //Buy an NFT with Fiat
-    function buyWithFIAT( 
+    function buyWithFIAT(
         address _nftContract,
         uint256 _tokenId,
-        uint8 _sellerPlan,//0x00
+        uint8 _sellerPlan, //0x00
         address _buyerAddress,
         uint8 _buyerPlan,
         uint256 sellerId,
@@ -857,11 +846,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         );
 
         require(nft.listed == true, "Nft is not listed to purchase");
-        
-        uint256 texForBuyer = _buyerFeeCalculate(nft.price,_buyerPercent);
 
-        require(
-            msg.value >= (nft.price + texForBuyer),
+        uint256 texForBuyer = _buyerFeeCalculate(nft.price, _buyerPercent);
+
+        require(msg.value >= (nft.price + texForBuyer),
             "Not enough ether to cover asking price"
         );
 
@@ -873,18 +861,13 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         if (!nft.royalty) {
             _amountToBePaid =
                 _amountToBePaid -
-                platformFeeCalculate(
-                     nft.price,
-                    _sellerPercent,
-                    _buyerPercent
-                );
+                platformFeeCalculate(nft.price, _sellerPercent, _buyerPercent);
 
             if (nft.paymentMethod == PaymentMethod.ETHER) {
                 payable(nft.seller).transfer(_amountToBePaid);
                 check = true;
             } else {
                 uint256 usdtAmount = swapETHForUSDT(_amountToBePaid, 0); // 0 means msg.value
-                console.log("usdtAmount", usdtAmount);
                 USDTtoken.transfer(nft.seller, usdtAmount);
                 check = true;
             }
@@ -894,19 +877,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
             _amountToBePaid =
                 (_amount - _royaltyFee) -
-                platformFeeCalculate(nft.price,_sellerPercent, _buyerPercent);
-
-            console.log("_amountToBePaid_amountToBePaid", _amountToBePaid);
+                platformFeeCalculate(nft.price, _sellerPercent, _buyerPercent);
 
             payable(nft.firstOwner).transfer(_royaltyFee);
-            console.log("_royaltyFee,_royaltyFee", _royaltyFee);
 
             if (nft.paymentMethod == PaymentMethod.ETHER) {
                 payable(nft.seller).transfer(_amountToBePaid);
                 check = true;
             } else {
                 uint256 usdtAmount = swapETHForUSDT(_amountToBePaid, 1); // 0 means msg.value
-                console.log("usdtAmount", usdtAmount);
                 USDTtoken.transfer(nft.seller, usdtAmount);
                 check = true;
             }
@@ -924,7 +903,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.listed = false;
             _nftsSold++;
 
-            emit NFTSold(_nftContract, nft.tokenId, msg.value, seller, buyer, sellerId,buyerId);
+            emit NFTSold(
+                _nftContract,
+                nft.tokenId,
+                msg.value,
+                seller,
+                buyer,
+                sellerId,
+                buyerId
+            );
         }
     }
 
@@ -992,25 +979,21 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         Auction storage auction = _idToAuction[_tokenId];
         NFT storage nft = _idToNFT[_tokenId];
 
-      uint256 _buyerPlans = getSubscriptionFee(_buyerPlan);
+        uint256 _buyerPlans = getSubscriptionFee(_buyerPlan);
 
-      uint256 tax_amount =  _buyerFeeCalculate(auction.basePrice,_buyerPlans);
-      uint256 tax_amountOnBid =  _buyerFeeCalculate(auction.highestBidIntoETH,_buyerPlans);
-
+        uint256 tax_amount = _buyerFeeCalculate(auction.basePrice, _buyerPlans);
+        uint256 tax_amountOnBid = _buyerFeeCalculate(
+            auction.highestBidIntoETH,
+            _buyerPlans
+        );
 
         bool check = false;
-        require(
-            msg.sender != nft.seller,
-            "seller can't bid in auction"
-        );     
+        require(msg.sender != nft.seller, "seller can't bid in auction");
         require(
             nft.listingType == ListingType.Auction,
             "This NFT is at at auction"
         );
-        require(
-            nft.listed == true,
-            "Nft is not listed to purchase"
-        );
+        require(nft.listed == true, "Nft is not listed to purchase");
         require(
             msg.value >= (auction.basePrice + tax_amount),
             "Minimum bid has to be higher"
@@ -1019,8 +1002,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             msg.value > (auction.highestBidIntoETH + tax_amountOnBid),
             "You have to bid higher than the highest bid to make an offer"
         );
-
-        
 
         address payable prevBidder = auction.highestBidder;
 
@@ -1045,11 +1026,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         if (auction.endTime < block.timestamp + 10 minutes) {
             auction.endTime += 5 minutes;
-            console.log(
-                auction.endTime,
-                block.timestamp + 10 minutes,
-                auction.endTime += 5 minutes
-            );
+
             emit auctionEndTimeIncreased(
                 _tokenId,
                 auction.seller,
@@ -1077,20 +1054,23 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         Auction storage auction = _idToAuction[_tokenId];
         NFT storage nft = _idToNFT[_tokenId];
 
-      uint256 _buyerPlans = getSubscriptionFee(_buyerPlan);
+        uint256 _buyerPlans = getSubscriptionFee(_buyerPlan);
 
-      uint256 tax_amount =  _sellerFeeCalculate(auction.basePrice,_buyerPlans);
-      
-      uint256 tax_amountOnBid =  _sellerFeeCalculate(auction.highestBidIntoETH,_buyerPlans);
+        uint256 tax_amount = _sellerFeeCalculate(
+            auction.basePrice,
+            _buyerPlans
+        );
+
+        uint256 tax_amountOnBid = _sellerFeeCalculate(
+            auction.highestBidIntoETH,
+            _buyerPlans
+        );
 
         bool check = false;
 
         uint256 usdtintoEth = getUSDTIntoETH(_amount);
-        
-        require(
-            msg.sender != nft.seller,
-            "seller can't bid in auction"
-        );
+
+        require(msg.sender != nft.seller, "seller can't bid in auction");
         require(
             usdtintoEth >= (auction.basePrice + tax_amount),
             "Minimum bid has to be higher"
@@ -1103,14 +1083,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.listingType == ListingType.Auction,
             "This NFT is at at auction"
         );
-        require(
-            nft.listed == true,
-            "Nft is not listed to purchase"
-        );
+        require(nft.listed == true, "Nft is not listed to purchase");
 
         USDTtoken.transferFrom(msg.sender, address(this), _amount);
-
-        
 
         address payable prevBidder = auction.highestBidder;
         uint256 prevBidInETH = auction.highestBidIntoETH;
@@ -1161,7 +1136,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 sellerId,
         uint256 buyerId
     ) public payable {
-
         NFT storage nft = _idToNFT[_tokenId];
         Auction storage auction = _idToAuction[_tokenId];
 
@@ -1188,7 +1162,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         } else {
             require(
                 msg.sender == auction.highestBidder ||
-                msg.sender == auction.seller,
+                    msg.sender == auction.seller,
                 "Only the highest bidder and the seller can claim the NFT"
             );
 
@@ -1203,7 +1177,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             uint256 _amountInETH = auction.highestBidIntoETH; // alreay saving all bids in ether
             uint256 _amountInUSDT = auction.highestBidIntoUSDT;
             uint256 _amountToBePaid;
-           
+
             // if the seller wants to be paid in ether
             if (nft.paymentMethod == PaymentMethod.ETHER) {
                 ////////////////////////////
@@ -1215,7 +1189,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     _amountToBePaid = swapUSDTForETH(_amountInUSDT);
 
                     if (!nft.royalty) {
-                        // console.log("Test 11");
                         _amountToBePaid =
                             _amountToBePaid -
                             platformFeeCalculate(
@@ -1225,7 +1198,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                             );
                         payable(nft.seller).transfer(_amountToBePaid);
                     } else {
-                        // console.log("Test 12");
                         _royaltyFee = royaltyCalculate(
                             _amountToBePaid,
                             nft.royaltyPrice
@@ -1364,7 +1336,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     }
 
     function royaltyCalculate(
-       uint256 _price, uint256 noOfBips
+        uint256 _price,
+        uint256 noOfBips
     ) private pure returns (uint256) {
         return (_price / 10000) * noOfBips; //100 means 1 %
     }
@@ -1376,15 +1349,21 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ) internal pure returns (uint256) {
         uint256 _amountToDeduct;
         _amountToDeduct = (_amount / 10000) * _sellerPercent;
-        _amountToDeduct = _amountToDeduct + ((_amount / 10000 ) * _buyerPercent);
+        _amountToDeduct = _amountToDeduct + ((_amount / 10000) * _buyerPercent);
         return _amountToDeduct;
     }
 
-    function _buyerFeeCalculate(uint256 _amount,uint256 _buyerPercent) internal pure returns(uint256){
+    function _buyerFeeCalculate(
+        uint256 _amount,
+        uint256 _buyerPercent
+    ) internal pure returns (uint256) {
         return (_amount / 10000) * _buyerPercent;
     }
 
-    function _sellerFeeCalculate( uint256 _amount, uint256 _sellerPercent) internal pure returns(uint256){
+    function _sellerFeeCalculate(
+        uint256 _amount,
+        uint256 _sellerPercent
+    ) internal pure returns (uint256) {
         return (_amount / 10000) * _sellerPercent;
     }
 
@@ -1410,7 +1389,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                 // then return highestBid to highest Bidder
                 Auction storage auction = _idToAuction[id];
                 if (auction.highestBidder != address(0)) {
-
                     address payable prevBidder = auction.highestBidder;
                     uint256 prevBidETH = auction.highestBidIntoETH;
                     uint256 prevBidUSDT = auction.highestBidIntoUSDT;
@@ -1513,7 +1491,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     }
 
     function getListedNfts() public view returns (NFT[] memory) {
-       
         uint256 nftCount = _nftCount;
         uint256 unsoldNftsCount = nftCount - _nftsSold;
 
