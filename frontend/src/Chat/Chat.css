@@ -1,5 +1,5 @@
 .Chat-page {
-    margin: 8% auto 0 auto;
+    margin: 100px auto 0 auto;
     display: flex;
     width: 95%;
     justify-content: center;
@@ -141,6 +141,7 @@
 
 .chat-area .head .user {
     display: flex;
+    align-items: center;
 }
 
 .chat-area .head .user .username {
@@ -199,6 +200,7 @@
 .display-images-List{
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .display-images-List img{
@@ -329,6 +331,8 @@
     font-weight: 400;
     font-family: 'Jost';
     max-width: 500px !important;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 
@@ -358,6 +362,8 @@
     font-family: 'Jost';
     max-width: 500px !important;
     margin-inline: 8px;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .other-msg .time {
@@ -373,7 +379,7 @@
     background: #EFEFEF;
     padding: 5px 10px;
     border-radius: 6px;
-    width: 350px;
+    max-width: 350px;
 }
 .msg-document .wrap{
     display: flex;
@@ -426,7 +432,7 @@
 }
 
 .msg-document .wrap .right{
-   
+   margin-left: 15px;
 }
 .msg-document .wrap .right svg{
    font-size: 28px;
@@ -447,3 +453,119 @@
         border-radius: 50px;
         font-size: 12px;
     }
+
+
+    @media only screen and (max-width: 991px) {}
+    @media only screen and (max-width: 768px) {
+        .Chat-page {
+            margin: 72px auto 0 auto;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            height: calc(100vh - 72px);
+        }
+
+        .chat-item {
+            padding: 5px 5px;
+            display: flex;
+            font-family: 'Jost';
+            color: #121212;
+            margin: 5px;
+            border-radius: 6px;
+        }
+
+        .chat-item .text-area .name-txt span {
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 0px;
+            text-transform: capitalize;
+        }
+
+        .chat-item .text-area .msg-txt {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .other-msg .msg {
+            border-radius: 6px;
+            padding: 2px 5px;
+            background-color: #2636D9;
+            color: white;
+            font-size: 12px;
+            font-weight: 400;
+            font-family: 'Jost';
+            max-width: 500px !important;
+            margin-inline: 8px;
+            word-break: break-all;
+        }
+
+        .My-message .msg {
+            border-radius: 6px;
+            padding: 2px 5px;
+            background-color: #B600D1;
+            color: white;
+            font-size: 12px;
+            font-weight: 400;
+            font-family: 'Jost';
+            max-width: 500px !important;
+        }
+
+        .display-images-List p {
+            height: 70px;
+            width: 130px;
+            background-color: gray;
+            border-radius: 6px;
+            padding: 5px !important;
+            font-size: 10px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-right: 10px !important;
+            text-align: center;
+            color: #fff;
+        }
+
+        .display-images-List .plus-wrap {
+            display: flex;
+            align-items: center;
+            background: gray;
+            padding-inline: 6px;
+            border-radius: 6px;
+        }
+        .msg-document .wrap .center div:nth-child(1) {
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Jost';
+            line-height: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            text-transform: capitalize;
+        }
+    }
+    @media only screen and (max-width: 568px) {
+        .chat-title {
+            margin: 5px 0;
+            font-size: 32px;
+            font-weight: 600;
+            padding: 10px 5px;
+        }
+
+        .chat-item-holder {
+            height: 75vh;
+            overflow-y: scroll;
+        }
+
+        .chat-canvas {
+            background-color: #F8F8F8;
+            height: calc(100vh - 199px);
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column-reverse;
+            /* justify-content: flex-end; */
+            overflow-y: auto;
+        }
+    }
+    @media only screen and (max-width: 500px) {}

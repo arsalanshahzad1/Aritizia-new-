@@ -40,7 +40,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
   const [nftLoader, setNftLoader] = useState(true)
   const [likedNftLoader, setLikedNftLoader] = useState(true)
 
-  const { account, checkIsWalletConnected,getProviderMarketContrat,getProviderNFTContrat,getSignerMarketContrat, getSignerNFTContrat } = useContext(Store);
+  const { account, checkIsWalletConnected, getProviderMarketContrat, getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat } = useContext(Store);
 
   useEffect(() => {
     checkIsWalletConnected()
@@ -161,7 +161,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
           };
           setLikedNftsAuction((prev) => [...prev, nftData]);
         }
-         setLikedNftLoader(false)
+        setLikedNftLoader(false)
       }
     }
     setLikedNftLoader(false)
@@ -206,67 +206,67 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
       let auctionData = await getProviderMarketContrat()._idToAuction(id);
       const structData = await getProviderMarketContrat()._idToNFT(id);
       const auctionLive = await getProviderMarketContrat().getStatusOfAuction(id);
-      
+
       let collectionId;
       collectionId = +mintedTokens?.[i]?.collectionId?.toString();
       let price = structData?.price?.toString();
       const response = await apis.getNFTCollectionImage(collectionId);
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
       const user_id = response?.data?.data?.user_id;
-      
+
       let nftLikes
-        try {
-          nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
-          console.log(nftLikes?.data?.data?.like_count, 'ressssss');
-        } catch (error) {
-          
-        }
+      try {
+        nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
+        console.log(nftLikes?.data?.data?.like_count, 'ressssss');
+      } catch (error) {
 
-        listingType = structData?.listingType;
+      }
 
-        if (listingType === 0) {
-          const nftData = {
-            id: id,
-            title: metadata?.title,
-            image: metadata?.image,
-            price: price,
-            paymentMethod: structData?.paymentMethod,
-            royalty: structData?.royalty,
-            royaltyPrice: structData?.royaltyPrice,
-            description: metadata?.description,
-            collection: structData?.collectionId?.toString(),
-            collectionImages: collectionImages,
-            seller: structData?.seller,
-            owner: structData?.owner,
-            firstOwner: structData?.firstOwner,
-            user_id: user_id
-          };
-          setNftListFP((prev) => [...prev, nftData]);
-        } else if (listingType === 1) {
-          const nftData = {
-            id: id,
-            isLive: auctionLive,
-            title: metadata?.title,
-            image: metadata?.image,
-            description: metadata?.description,
-            basePrice: price,
-            startTime: auctionData?.startTime?.toString(),
-            endTime: auctionData?.endTime?.toString(),
-            highestBidIntoETH: auctionData?.highestBidIntoETH?.toString(),
-            highestBidIntoUSDT: auctionData?.highestBidIntoUSDT?.toString(),
-            highestBidderAddress: auctionData?.highestBidder?.toString(),
-            paymentMethod: structData?.paymentMethod,
-            royaltyPrice: structData?.royaltyPrice,
-            collection: structData?.collectionId?.toString(),
-            collectionImages: collectionImages,
-            seller: auctionData?.seller?.toString(),
-            owner: structData?.owner,
-            firstOwner: structData?.firstOwner,
-            user_id: user_id,
-            nft_like: nftLikes?.data?.data?.like_count
-          };
-          setNftListAuction((prev) => [...prev, nftData]);
-        }
+      listingType = structData?.listingType;
+
+      if (listingType === 0) {
+        const nftData = {
+          id: id,
+          title: metadata?.title,
+          image: metadata?.image,
+          price: price,
+          paymentMethod: structData?.paymentMethod,
+          royalty: structData?.royalty,
+          royaltyPrice: structData?.royaltyPrice,
+          description: metadata?.description,
+          collection: structData?.collectionId?.toString(),
+          collectionImages: collectionImages,
+          seller: structData?.seller,
+          owner: structData?.owner,
+          firstOwner: structData?.firstOwner,
+          user_id: user_id
+        };
+        setNftListFP((prev) => [...prev, nftData]);
+      } else if (listingType === 1) {
+        const nftData = {
+          id: id,
+          isLive: auctionLive,
+          title: metadata?.title,
+          image: metadata?.image,
+          description: metadata?.description,
+          basePrice: price,
+          startTime: auctionData?.startTime?.toString(),
+          endTime: auctionData?.endTime?.toString(),
+          highestBidIntoETH: auctionData?.highestBidIntoETH?.toString(),
+          highestBidIntoUSDT: auctionData?.highestBidIntoUSDT?.toString(),
+          highestBidderAddress: auctionData?.highestBidder?.toString(),
+          paymentMethod: structData?.paymentMethod,
+          royaltyPrice: structData?.royaltyPrice,
+          collection: structData?.collectionId?.toString(),
+          collectionImages: collectionImages,
+          seller: auctionData?.seller?.toString(),
+          owner: structData?.owner,
+          firstOwner: structData?.firstOwner,
+          user_id: user_id,
+          nft_like: nftLikes?.data?.data?.like_count
+        };
+        setNftListAuction((prev) => [...prev, nftData]);
+      }
     }
   };
 
@@ -325,7 +325,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
 
   useEffect(() => {
     getOtherUsersDetails(otherUsersId);
-  }, [userADDRESS , otherUsersId]);
+  }, [userADDRESS, otherUsersId]);
 
   return (
     <>
@@ -376,7 +376,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
           <div className="detail">
             <div className="container-fluid">
               <div className="row">
-                <div className="col-lg-4 col-md-4 col-12 followers-div">
+                <div className="col-lg-4 col-md-4 col-12 followers-div" id="hide-on-mobile">
                   {userData?.email !== null ?
                     <>
                       {followUnfollowStatus.is_follow === 1 ? (
@@ -404,12 +404,12 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                   }
                   <div>Followers {followUnfollowStatus?.follower_count}</div>
                 </div>
-                <div className="col-lg-4 col-md-4 col-6">
+                <div className="col-lg-4 col-md-4 col-12">
                   <h2 className="user-name">
                     {userDetails?.first_name} {userDetails?.last_name}
                   </h2>
                 </div>
-                <div className="col-lg-4 col-md-4 col-6 my-auto">
+                <div className="col-lg-4 col-md-4 col-6 my-auto" id="hide-on-mobile">
                   <div className="other-user-icons">
                     <a href={userDetails?.facebook_url} target="_blank"><FaFacebookF /></a>
                     <a href={userDetails?.twitter_url} target="_blank"><BsTwitter /></a>
@@ -420,6 +420,67 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
               </div>
               <div className="row">
                 <p className="user-email">@{userDetails?.username}</p>
+              </div>
+              <div className="row">
+                <div className="col-lg-4 col-md-4 col-12 followers-div justify-content-center" id="hide-on-desktop">
+                  {userData?.email !== null ?
+                    <>
+                      {followUnfollowStatus.is_follow === 1 ? (
+                        <div onClick={followOther} style={{ cursor: "pointer" }}>
+                          Unfollow
+                        </div>
+                      ) : (
+                        <div onClick={followOther} style={{ cursor: "pointer" }}>
+                          Follow
+                        </div>
+                      )}
+                    </>
+                    :
+                    <>
+                      {followUnfollowStatus.is_follow === 1 ? (
+                        <div onClick={() => setEmailSigninPopup(true)} style={{ cursor: "pointer" }}>
+                          Unfollow
+                        </div>
+                      ) : (
+                        <div onClick={() => setEmailSigninPopup(true)} style={{ cursor: "pointer" }}>
+                          Follow
+                        </div>
+                      )}
+                    </>
+                  }
+                  <div>Followers {followUnfollowStatus?.follower_count}</div>
+                </div>
+              </div>
+              <div className="row mt-2">
+              <div className="col-lg-3 col-md-3 col-6 my-auto" id="hide-on-desktop">
+                  {userData?.email !== null ?
+                    <>
+                      <div className="message-btn" onClick={() => { postChatMeaage(); }}>
+                        <button>
+                          <BsFillEnvelopeFill />
+                          MESSAGE
+                        </button>
+                      </div>
+                    </>
+                    :
+                    <>
+                      <div className="message-btn" onClick={() => { setEmailSigninPopup(true) }}>
+                        <button>
+                          <BsFillEnvelopeFill />
+                          MESSAGE
+                        </button>
+                      </div>
+                    </>
+                  }
+                </div>
+              <div className="col-lg-4 col-md-4 col-6 justify-content-center" id="hide-on-desktop">
+                  <div className="other-user-icons">
+                    <a href={userDetails?.facebook_url} style={{marginRight : '0px' , marginLeft : '0'}} target="_blank"><FaFacebookF style={{marginRight : '0px'}}/></a>
+                    <a href={userDetails?.twitter_url} style={{marginRight : '0px' , marginLeft : '7px'}} target="_blank"><BsTwitter style={{marginRight : '0px'}}/></a>
+                    <a href={userDetails?.instagram_url} style={{marginRight : '0px' , marginLeft : '7px'}} target="_blank"><BsInstagram style={{marginRight : '0px'}}/></a>
+                    <a href={userDetails?.your_site} style={{marginRight : '0px' , marginLeft : '7px'}}  target="_blank"><BsLinkedin style={{marginRight : '0px'}}/></a>
+                  </div>
+                </div>
               </div>
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
@@ -435,7 +496,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     </button>
                   </div>
                 </div>
-                <div className="col-lg-3 col-md-3 col-12 my-auto">
+                <div className="col-lg-3 col-md-3 col-12 my-auto" id="hide-on-mobile">
                   {userData?.email !== null ?
                     <>
                       <div className="message-btn" onClick={() => { postChatMeaage(); }}>
@@ -460,7 +521,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="profile-bio">
-                  <p className="">{userDetails?.bio}</p>
+                    <p className="">{userDetails?.bio}</p>
                   </div>
                 </div>
               </div>
@@ -490,13 +551,13 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                           onClick={() => setCollectionTabs(0)}
                           className={`${collectionTabs === 0 && "active-tab"}`}
                         >
-                         On Sale
+                          On Sale
                         </div>
                         <div
                           onClick={() => setCollectionTabs(1)}
                           className={`${collectionTabs === 1 && "active-tab"}`}
                         >
-                          Auction 
+                          Auction
                         </div>
                       </div>
                       <div className="d-flex other-profile-cards d-flex flex-wrap">
@@ -509,7 +570,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                               :
                               nftListFP?.length > 0 ? nftListFP?.map((item) => (
                                 <BuyNow
-                                setLoader={setLoader}
+                                  setLoader={setLoader}
                                   onOpen={onOpen}
                                   // onClose={onClose}
                                   key={item.id}
@@ -524,7 +585,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   collectionImages={item?.collectionImages}
                                   user_id={item?.user_id}
                                   royaltyPrice={item?.royaltyPrice}
-                                  seller={item?.seller}      
+                                  seller={item?.seller}
                                   size={'col-lg-3'}
                                 />
                               )) :
@@ -543,26 +604,26 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                               :
                               nftListAuction?.length > 0 ? nftListAuction?.map((item) => (
                                 <NewItemCard
-                                setLoader={setLoader}
-                                id={item?.id}
-                                isLive={item?.isLive}
-                                title={item?.title}
-                                image={item?.image}
-                                description={item?.description}
-                                basePrice={item?.basePrice}
-                                startTime={item?.startTime}
-                                endTime={item?.endTime}
-                                highestBidIntoETH={item?.highestBidIntoETH }
-                                highestBidIntoUSDT={item?.highestBidIntoUSDT}
-                                highestBidderAddress={item?.highestBidderAddress}
-                                royaltyPrice={item?.royaltyPrice}
-                                collection = {item.collection}
-                                collectionImages={item?.collectionImages}
-                                seller={item?.seller}
-                                user_id={item?.user_id}
-                                nft_like={item?.nft_like}
-                                size={'col-lg-3'}
-                              />
+                                  setLoader={setLoader}
+                                  id={item?.id}
+                                  isLive={item?.isLive}
+                                  title={item?.title}
+                                  image={item?.image}
+                                  description={item?.description}
+                                  basePrice={item?.basePrice}
+                                  startTime={item?.startTime}
+                                  endTime={item?.endTime}
+                                  highestBidIntoETH={item?.highestBidIntoETH}
+                                  highestBidIntoUSDT={item?.highestBidIntoUSDT}
+                                  highestBidderAddress={item?.highestBidderAddress}
+                                  royaltyPrice={item?.royaltyPrice}
+                                  collection={item.collection}
+                                  collectionImages={item?.collectionImages}
+                                  seller={item?.seller}
+                                  user_id={item?.user_id}
+                                  nft_like={item?.nft_like}
+                                  size={'col-lg-3'}
+                                />
                               )) :
                                 <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
@@ -580,13 +641,13 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                           onClick={() => setLikeNftTabsTabs(0)}
                           className={`${likeNftTabs === 0 && "active-tab"}`}
                         >
-                         On Sale 
+                          On Sale
                         </div>
                         <div
                           onClick={() => setLikeNftTabsTabs(1)}
                           className={`${likeNftTabs === 1 && "active-tab"}`}
                         >
-                          Auction 
+                          Auction
                         </div>
                       </div>
                       <div className="d-flex other-profile-cards d-flex flex-wrap">
@@ -632,27 +693,27 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                               :
                               likedNftsAuction?.length > 0 ? nftListAuction?.map((item) => (
                                 <NewItemCard
-                                id={item?.id}
-                                isLive={item?.isLive}
-                                title={item?.title}
-                                image={item?.image}
-                                description={item?.description}
-                                basePrice={item?.basePrice}
-                                startTime={item?.startTime}
-                                endTime={item?.endTime}
-                                highestBidIntoETH={item?.highestBidIntoETH }
-                                highestBidIntoUSDT={item?.highestBidIntoUSDT}
-                                highestBidderAddress={item?.highestBidderAddress}
-                                royaltyPrice={item?.royaltyPrice}
-                                collection = {item.collection}
-                                collectionImages={item?.collectionImages}
-                                seller={item?.seller}
-                                owner={item?.owner}
-                                firstOwner={item?.firstOwner}
-                                user_id={item?.user_id}
-                                nft_like={item?.nft_like}
-                                size={'col-lg-3'}
-                              />
+                                  id={item?.id}
+                                  isLive={item?.isLive}
+                                  title={item?.title}
+                                  image={item?.image}
+                                  description={item?.description}
+                                  basePrice={item?.basePrice}
+                                  startTime={item?.startTime}
+                                  endTime={item?.endTime}
+                                  highestBidIntoETH={item?.highestBidIntoETH}
+                                  highestBidIntoUSDT={item?.highestBidIntoUSDT}
+                                  highestBidderAddress={item?.highestBidderAddress}
+                                  royaltyPrice={item?.royaltyPrice}
+                                  collection={item.collection}
+                                  collectionImages={item?.collectionImages}
+                                  seller={item?.seller}
+                                  owner={item?.owner}
+                                  firstOwner={item?.firstOwner}
+                                  user_id={item?.user_id}
+                                  nft_like={item?.nft_like}
+                                  size={'col-lg-3'}
+                                />
                               )) :
                                 <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }

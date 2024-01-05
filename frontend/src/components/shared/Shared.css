@@ -411,26 +411,7 @@ p {
 
 .profile-drawer .six-line .left {}
 
-.profile-drawer .six-line .left p {
-  font-family: 'Jost';
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 43px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #121212;
-}
 
-.profile-drawer .six-line .left p span {
-  font-family: 'Jost';
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 29px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #6F6F6F;
-  margin-left: 0px;
-}
 
 .profile-drawer .six-line .right {
   text-align: right;
@@ -600,158 +581,8 @@ p {
 }
 
 
-@media only screen and (max-width: 992px) {
-  .profile-drawer .first-line h2 {
-    font-size: 28px;
-    line-height: 48px;
-  }
-
-  .profile-drawer .second-line p {
-    font-size: 18px;
-    line-height: 22px;
-  }
-
-  .profile-drawer .three-line span {
-    font-size: 16px;
-    line-height: 22px;
-  }
-
-  .profile-drawer .three-line svg {
-    font-size: 20px;
-    margin-top: -4px;
-    margin-right: 5px;
-  }
-
-  .profile-drawer .four-line p {
-    font-family: 'Jost';
-    font-size: 18px;
-    font-weight: 500;
-    line-height: 22px;
-    padding-right: 0px !important;
-  }
-
-  .profile-drawer .four-line h3 {
-    font-size: 16px;
-  }
-
-  .profile-drawer .four-line .logo-name span {
-    font-family: 'Jost';
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 29px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #121212;
-  }
-
-  .profile-drawer {
-    padding: 25px 10px;
-  }
-
-  .profile-drawer .five-line button {
-    font-family: 'Poppins';
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 27px;
-    letter-spacing: 0em;
-    text-align: left;
-    border: 2px solid #929292;
-    color: #929292;
-    border-radius: 8px;
-    padding: 2px 15px;
-    margin-right: 12px;
-  }
-
-  .profile-drawer .six-line h3 {
-    font-size: 18px;
-  }
-
-  .profile-drawer .six-line .left p {
-    font-family: 'Jost';
-    font-size: 22px;
-    padding-top: 10px !important;
-  }
-
-  .profile-drawer .six-line .right p {
-    font-family: 'Jost';
-    font-size: 18px;
-    padding-top: 10px !important;
-  }
-}
-
-@media only screen and (max-width: 768px) {
 
 
-
-  .profile-drawer {
-    padding: 0px 0px 25px 10px;
-  }
-
-  .profile-drawer .first-line {
-    padding-top: 15px;
-  }
-
-  .profile-drawer .pro-dtails {
-    padding-left: 0px;
-  }
-
-  .profile-drawer .four-line .logo-name img {
-    width: 40px;
-  }
-
-  .profile-drawer .five-line {
-    margin-top: 20px;
-  }
-
-  .profile-drawer .five-line .share-links-social {
-    margin-bottom: 20px;
-  }
-
-
-
-}
-
-@media only screen and (max-width: 568px) {
-  .hide-on-desktop-screen {
-    display: block;
-  }
-
-  .hide-on-mobile-screen {
-    display: none;
-  }
-
-  .profile-drawer-cancle {
-    font-size: 32px;
-    font-weight: 600;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 9999;
-    background: #fff;
-    height: 30px;
-    width: 30px;
-    line-height: 19px;
-    text-align: center;
-    border-radius: 15px;
-  }
-}
-
-.stock-div {
-  width: max-content;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  color: #121212;
-  font-size: 30px;
-  font-weight: 700;
-}
-
-.stock-div span {
-  margin-left: 10px;
-  color: #6F6F6F;
-  font-weight: 500;
-  font-size: 18px
-}
 
 
 /* .share-links-social .share-icons{
@@ -903,7 +734,8 @@ p {
   font-weight: 500;
   line-height: normal;
 }
-.registor .registor-wrap .right .content form .term-condition .two p a{
+
+.registor .registor-wrap .right .content form .term-condition .two p a {
   color: #B600D1;
   font-family: 'Jost';
   font-size: 18px;
@@ -1047,9 +879,10 @@ p {
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
-  line-height: 
-  normal;
+  line-height:
+    normal;
 }
+
 .varification-modal-wrap .modal-body .desc-forget {
   color: #8C8C8C;
   text-align: center;
@@ -1061,6 +894,7 @@ p {
   line-height: 20px;
   margin-bottom: 20px !important;
 }
+
 .varification-modal-wrap .modal-body .desc-change {
   color: #8C8C8C;
   text-align: center;
@@ -1073,6 +907,7 @@ p {
   margin-bottom: 20px !important;
   margin-top: 20px !important;
 }
+
 .varification-modal-wrap .modal-body .resent-code-login {
   color: #B600D1;
   text-align: left;
@@ -1097,6 +932,7 @@ p {
   margin-top: 14px !important;
   margin-bottom: 34px !important;
 }
+
 .varification-modal-wrap .modal-body .email-forget {
   color: #3E3E3E;
   text-align: left;
@@ -1114,6 +950,7 @@ p {
   background: #F2F2F2;
   margin-top: 15px;
 }
+
 .varification-modal-wrap .modal-body .password-forget {
   color: #3E3E3E;
   text-align: left;
@@ -1164,7 +1001,7 @@ p {
   padding: 11px 0px;
 }
 
-.varification-modal-wrap .modal-body .back{
+.varification-modal-wrap .modal-body .back {
   border-radius: 10px;
   background: transparent;
   color: #000;
@@ -1180,7 +1017,7 @@ p {
   padding: 20px 0px 0px 0px;
 }
 
-.varification-modal-wrap .modal-body .email{
+.varification-modal-wrap .modal-body .email {
   width: 100%;
   padding: 10px 28px;
   border-radius: 20px;
@@ -1189,7 +1026,7 @@ p {
   margin-top: 15px;
 }
 
-.varification-modal-wrap .modal-body .back:hover{
+.varification-modal-wrap .modal-body .back:hover {
   text-decoration: underline;
 }
 
@@ -1208,19 +1045,511 @@ p {
   flex-shrink: 0;
 }
 
-.registor .registor-wrap .right .content form .pass{
+.registor .registor-wrap .right .content form .pass {
   position: relative;
   width: 100%;
 }
-.registor .registor-wrap .right .content form .pass input{
+
+.registor .registor-wrap .right .content form .pass input {
   width: 100%;
 }
 
-.registor .registor-wrap .right .content form .pass span{
+.registor .registor-wrap .right .content form .pass span {
   position: absolute;
   top: 60%;
   transform: translateY(-50%);
   right: 20px;
   z-index: 9;
   cursor: pointer;
+}
+
+
+@media only screen and (max-width: 992px) {
+  .registor .registor-wrap .left {
+    width: 50%;
+  }
+
+  .registor .registor-wrap .right {
+    width: 50%;
+  }
+
+  .profile-drawer .first-line h2 {
+    font-size: 28px;
+    line-height: 48px;
+  }
+
+  .profile-drawer .second-line p {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .profile-drawer .three-line span {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  .profile-drawer .three-line svg {
+    font-size: 20px;
+    margin-top: -4px;
+    margin-right: 5px;
+  }
+
+  .profile-drawer .four-line p {
+    font-family: 'Jost';
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    padding-right: 0px !important;
+  }
+
+  .profile-drawer .four-line h3 {
+    font-size: 16px;
+  }
+
+  .profile-drawer .four-line .logo-name span {
+    font-family: 'Jost';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #121212;
+  }
+
+  .profile-drawer {
+    padding: 25px 10px;
+  }
+
+  .profile-drawer .five-line button {
+    font-family: 'Poppins';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 27px;
+    letter-spacing: 0em;
+    text-align: left;
+    border: 2px solid #929292;
+    color: #929292;
+    border-radius: 8px;
+    padding: 2px 15px;
+    margin-right: 12px;
+  }
+
+  .profile-drawer .six-line h3 {
+    font-size: 18px;
+  }
+
+
+
+  .profile-drawer .six-line .right p {
+    font-family: 'Jost';
+    font-size: 18px;
+    padding-top: 10px !important;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .varification-modal-wrap .modal-body {
+    width: auto;
+    padding: 20px;
+  }
+
+  .registor {
+    overflow: auto;
+    height: auto;
+    padding: 0px 0px;
+  }
+
+
+  .registor .registor-wrap .right {
+    padding-inline: 5%;
+  }
+
+  .registor .registor-wrap .right .content .title {
+    color: #121212;
+    text-align: center;
+    font-family: 'Jost';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 0px;
+  }
+
+  .password-validation-unclear-bioo {
+    font-size: 10px;
+    color: gray;
+    font-weight: 600;
+    margin-top: 5px !important;
+    padding-inline: 5px !important;
+  }
+
+  .registor .registor-wrap .right .content form .term-condition .two p {
+    color: #121212;
+    font-family: 'Jost';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .registor .registor-wrap .right .content form .term-condition .two p a {
+    color: #B600D1;
+    font-family: 'Jost';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .registor .registor-wrap .right .content form .term-condition {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: -30px;
+  }
+
+  .registor .registor-wrap .right .content form .sign-up p a {
+    color: #B600D1;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+  .registor .registor-wrap .right .content form .sign-up {
+    margin-top: 10px;
+  }
+
+  .registor-chack span:nth-child(1) {
+    width: 20.51px;
+    height: 20.51px;
+    border: 2px solid #B600D1;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .registor .registor-wrap .right .content form .sign-up p {
+    color: #121212;
+    text-align: center;
+    font-family: 'Jost';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+
+
+  .registor .registor-wrap .right .content .desc {
+    color: #909090;
+    text-align: center;
+    font-family: 'Jost';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 16px;
+    margin-bottom: 0px !important;
+  }
+
+  .registor .registor-wrap .right .content form input {
+    width: 100%;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background: #F2F2F2;
+    margin-top: 15px;
+  }
+
+  .registor .registor-wrap .right .content .forget-pass {
+    color: #B600D1;
+    text-align: center;
+    font-family: 'Jost';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 10px;
+    margin-bottom: -36px;
+  }
+
+  .registor .registor-wrap .right .content form .signup {
+    border-radius: 7px;
+    background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+    width: 100%;
+    color: #FFF;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    outline: none;
+    padding: 10px 0px;
+    margin-top: 45px;
+    margin-bottom: 0px;
+  }
+
+  .registor .registor-wrap .right .content .or span {
+    color: #909090;
+    text-align: center;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    background-color: #fff;
+    position: relative;
+    padding-inline: 15px;
+  }
+
+  .registor .registor-wrap .right .content form .signin {
+    border-radius: 6px;
+    width: 100%;
+    color: #FFF;
+    font-family: 'Jost';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    border: 2px solid #B600D1;
+    outline: none;
+    padding: 10px 0px;
+    margin-top: 0px;
+  }
+
+  .registor .registor-wrap .left {
+    display: none;
+  }
+
+  .registor .registor-wrap .right {
+    width: 100%;
+  }
+
+  .profile-drawer {
+    padding: 0px 0px 25px 10px;
+  }
+
+  .profile-drawer .first-line {
+    padding-top: 15px;
+  }
+
+  .profile-drawer .pro-dtails {
+    padding-left: 0px;
+  }
+
+  .profile-drawer .four-line .logo-name img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .profile-drawer .five-line {
+    margin-top: 20px;
+  }
+
+  .profile-drawer .five-line .share-links-social {
+    margin-bottom: 20px;
+  }
+
+
+
+}
+
+
+
+@media only screen and (max-width: 568px) {
+  .hide-on-desktop-screen {
+    display: block;
+  }
+
+  .hide-on-mobile-screen {
+    display: none;
+  }
+
+  .profile-drawer-cancle {
+    font-size: 32px;
+    font-weight: 600;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 9999;
+    background: #fff;
+    height: 30px;
+    width: 30px;
+    line-height: 19px;
+    text-align: center;
+    border-radius: 15px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+
+  .profile-drawer .seven-line span:nth-child(2) {
+    font-family: 'Jost';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #929292;
+  }
+
+  .profile-drawer .eight-line button {
+    background: var(--bg-gradient);
+    color: var(--white);
+    border: none;
+    border-radius: 12px;
+    font-family: 'Poppins';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: center;
+    padding: 7px 20px;
+  }
+
+  .profile-drawer .seven-line span:nth-child(1) {
+    width: 23.51px;
+    height: 23.51px;
+    border: 3px solid #B600D1;
+    border-radius: 6px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  .share-links-social span,
+  .profile-drawer .five-line button {
+    margin-right: 20px !important
+  }
+
+
+
+  .profile-drawer .six-line h3 {
+    font-size: 14px;
+  }
+
+  .profile-drawer .six-line .left p {
+    font-family: 'Jost';
+    font-size: 16px;
+    padding-top: 0px !important;
+    line-height: 22px !important;
+  }
+
+  .profile-drawer .six-line .left p span {
+    font-family: 'Jost';
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #6F6F6F;
+    margin-left: 0px;
+  }
+
+  .profile-drawer .three-line span {
+    font-size: 12px;
+    line-height: 22px;
+  }
+
+  .profile-drawer img {
+    width: 12px;
+  }
+
+  .profile-drawer .second-line p {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .profile-drawer .first-line h2 {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .varification-modal-wrap .modal-body .email {
+    color: #3E3E3E;
+    text-align: center;
+    font-family: 'Jost';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 6px !important;
+    margin-bottom: 16px !important;
+    border-radius: 6px;
+  }
+
+  .varification-modal-wrap .modal-content {
+    width: 100%;
+    margin-inline: auto;
+}
+
+.varification-modal-wrap .modal-body .title {
+  color: #3E3E3E;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.varification-modal-wrap .modal-body .desc {
+  color: #8C8C8C;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.varification-modal-wrap .vi__wrapper .vi__container .vi__character {
+  border-radius: 10px;
+  border: 2px solid #D4D4D4;
+  background: #F4F4F4;
+  width: 42px;
+  height: 45px;
+  flex-shrink: 0;
+}
+
+.varification-modal-wrap .modal-body .resent-code {
+  color: #21132F;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 8px !important;
+  margin-bottom: 16px !important;
+}
+
+.varification-modal-wrap .modal-body .varify-code {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #2636D9 0%, #B600D1 100.01%);
+  color: #FFF;
+  text-align: center;
+  font-family: 'Jost';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 11px 0px;
+}
+
+:where(.vi__character) {
+  height: 100%;
+  flex-grow: 1;
+  flex-basis: 0;
+  text-align: center;
+  font-size: 22px;
+  line-height: 40px;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  cursor: default;
+  user-select: none;
+}
 }

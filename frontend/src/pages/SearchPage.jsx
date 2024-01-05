@@ -12,7 +12,7 @@ import NewItemCard from "../components/cards/NewItemCard";
 import { Store } from "../Context/Store";
 import Loader from "../components/shared/Loader";
 
-const SearchPage = ({ search, setSearch,loader,setLoader}) => {
+const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
   const [status, setStatus] = useState({ value: "", label: "Select" });
   const [categories, setCategories] = useState({ value: "", label: "Select" });
   const [currency, setCurrency] = useState({ value: "", label: "Select" });
@@ -363,7 +363,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader}) => {
   return (
     <>
      {loader && <Loader />}
-      <Header search={search} setSearch={setSearch} />
+      <Header search={search} setSearch={setSearch} user={user}/>
       <div className="search-page">
         <div className="container">
           <div className="filter-card-wrap">

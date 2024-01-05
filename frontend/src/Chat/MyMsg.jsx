@@ -145,7 +145,9 @@ const MyMsg = ({ data }) => {
             {hasText && (
                 <div style={{ marginLeft: 'auto' }}>
                     <div className='msg'>
+                        {/* <p> */}
                         {data?.text}
+                        {/* </p> */}
                     </div>
                     <div className='time'>
                         {data?.date}

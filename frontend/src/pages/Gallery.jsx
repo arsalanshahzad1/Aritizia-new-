@@ -616,7 +616,7 @@ const Gallery = ({ user, loader, setLoader }) => {
                 {user === "admin"
                     ? selectFolderCount === 0 &&
                     allGalleryItems.length > 0 && (
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="gallery-action-buttons" style={{ display: "flex", justifyContent: "space-between" }}>
                             {accountAddress !== "false" ? (
                                 <button
                                     onClick={ListGallery}
@@ -733,10 +733,7 @@ const Gallery = ({ user, loader, setLoader }) => {
                                             ? selectCount === 0 &&
                                             (selectedPart === "" || selectedPart === item?.title) && (
                                                 <div
-                                                    style={{
-                                                        display: "flex",
-                                                        justifyContent: "space-between",
-                                                    }}
+                                                className="gallery-action-buttons"
                                                 >
                                                     {accountAddress !== "false" ? (
                                                         <button

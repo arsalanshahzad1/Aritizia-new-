@@ -238,7 +238,7 @@ function Login({loader,setLoader}) {
                         {/* <p className="resent-code">Didn’t receive code? <Link onClick={resentOtp}> Resend </Link></p> */}
                         <button className='varify-code'>Next</button>
                     </form>
-                        <button className='back' onClick={() => setForget(false)}>Cancle</button>
+                        <button className='back' onClick={() => setForget(false)}>Cancel</button>
                 </div>
             </Modal>
             <Modal

@@ -356,9 +356,6 @@ a {
   user-select: none;
 }
 
-.profile-buy-card {
-  padding: 60px 60px;
-}
 
 .css-15eyh94 {
   box-sizing: border-box;
@@ -716,9 +713,7 @@ img {
 
 @media only screen and (max-width: 992px) {
 
-  .home-first-wrap {
-    width: 600px;
-  }
+
 
   .css-vurnku {
     height: auto !important;

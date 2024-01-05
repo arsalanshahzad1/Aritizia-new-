@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { BiUserCircle } from 'react-icons/bi'
 
-const ChatItem = ({ data, activeUserId }) => {
+const ChatItem = ({ data, activeUserId , setShowChatList ,showChatList }) => {
     const navigate = useNavigate()
     const navigateToChat = (id) => {
         navigate(`/chat/${id}`)
@@ -10,7 +10,7 @@ const ChatItem = ({ data, activeUserId }) => {
 
     return (
         <div className={`chat-item ${activeUserId == data?.user_id ? 'active' : ''} ${data?.unseen_count > 0 && activeUserId != data?.user_id ? 'un_seen' : ''}`}
-            onClick={() => { navigateToChat(data?.user_id) }}
+            onClick={() => { navigateToChat(data?.user_id) ; setShowChatList(false) }}
             style={{ position: 'relative' }}
         >
             <div className='image-holder'>

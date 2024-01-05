@@ -447,29 +447,48 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
           <div className="detail">
             <div className="container-fluid">
               <div className="row">
-                <div className="col-lg-4 col-md-4 col-12"></div>
-                <div className="col-lg-4 col-md-4 col-6">
+                <div className="col-lg-4 col-md-4 col-4"></div>
+                <div className="col-lg-4 col-md-4 col-4">
                   <h2 className="user-name">
                     {userData?.first_name} {userData?.last_name}
                   </h2>
                 </div>
-                <div className="col-lg-4 col-md-4 col-6 my-auto">
-                  <div className="edit-profile-icon">
-                    <Link to={"/setting"} onClick={() => setactiveTabsSetting("Edit")}>
-                      <FaUserEdit />
-                    </Link>
+                <div className="col-lg-4 col-md-4 col-4 my-auto">
+                  <div id="hide-on-mobile" style={{ flexDirection: 'column' }}>
+                    <div className="edit-profile-icon">
+                      <Link to={"/setting"} onClick={() => setactiveTabsSetting("Edit")}>
+                        <FaUserEdit />
+                      </Link>
 
-                  </div>
-                  <div className="other-user-icons">
-                    <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
-                    <a href={userData?.twitter_url} target="_blank"><BsTwitter /></a>
-                    <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
-                    <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
+                    </div>
+                    <div className="other-user-icons">
+                      <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
+                      <a href={userData?.twitter_url} target="_blank"><BsTwitter /></a>
+                      <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
+                      <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="row">
                 <p className="user-email">@{userData?.username}</p>
+              </div>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div id="hide-on-desktop" style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0' }}>
+                    <div className="other-user-icons">
+                      <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
+                      <a href={userData?.twitter_url} target="_blank"><BsTwitter /></a>
+                      <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
+                      <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
+                    </div>
+                    <div className="edit-profile-icon">
+                      <Link to={"/setting"} onClick={() => setactiveTabsSetting("Edit")}>
+                        <FaUserEdit />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
@@ -491,6 +510,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto"></div>
               </div>
+
               <div className="row">
                 <div className="col-lg-12">
                   <div className="profile-bio">
@@ -529,7 +549,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                     className={`${tabs === 3 ? "active" : ""}`}
                     onClick={() => setTabs(3)}
                   >
-                    Favourites
+                    Favorites
                   </button>
                   <button
                     className={`${tabs === 4 ? "active" : ""}`}

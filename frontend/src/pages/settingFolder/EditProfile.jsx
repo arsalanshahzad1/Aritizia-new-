@@ -84,6 +84,43 @@ const EditProfile = ({loader,setLoader}) => {
   return (
     <>
      {loader && <Loader />}
+     <div className="col-lg-5 col-md-5">
+        <div className="upload-image-cover" id="hide-on-desktop">
+          <div className="upload-img">
+            <h2>Profile Image</h2>
+            {profileImage ? (
+              <img src={profileImage} alt="" width={"100%"} />
+            ) : (
+              <CiUser />
+            )}
+            <input
+              ref={profileInputRef}
+              name="image"
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleProfileUpload}
+              accept="image/png, image/gif, image/jpeg"
+            />
+            <button onClick={handleProfileClick}>Upload</button>
+          </div>
+          <div className="upload-img">
+            <h2>Cover Image</h2>
+            {coverImage ? (
+              <img src={coverImage} alt="" width={"100%"} />
+            ) : (
+              <CiUser />
+            )}
+            <input
+              ref={coverInputRef}
+              type="file"
+              style={{ display: "none" }}
+              onChange={handleCoverUpload}
+              accept="image/png, image/gif, image/jpeg"
+            />
+            <button onClick={handleCoverClick}>Upload</button>
+          </div>
+        </div>
+      </div>
       <div className="col-lg-7 col-md-7">
         <div className="inputfield-edit-profile">
           <div>
@@ -258,7 +295,7 @@ const EditProfile = ({loader,setLoader}) => {
         </div>
       </div>
       <div className="col-lg-5 col-md-5">
-        <div className="upload-image-cover">
+        <div className="upload-image-cover" id="hide-on-mobile">
           <div className="upload-img">
             <h2>Profile Image</h2>
             {profileImage ? (
