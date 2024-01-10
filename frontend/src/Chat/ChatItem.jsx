@@ -34,7 +34,7 @@ const ChatItem = ({ data, activeUserId , setShowChatList ,showChatList }) => {
                 <div className='msg-txt'>
                     {data?.last_message == null ?
                         <>
-                            {data?.file_media.at(-1).file_name}
+                            {data?.file_media.at(-1)?.file_name}
                         </>
                         :
                         <>

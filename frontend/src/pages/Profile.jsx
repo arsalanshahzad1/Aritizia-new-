@@ -514,7 +514,9 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="profile-bio">
+                    {userData?.bio !== 'null' &&
                     <p className="">{userData?.bio}</p>
+                    }
                   </div>
                 </div>
               </div>

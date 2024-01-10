@@ -54,7 +54,7 @@ function Purchase() {
                                 </td>
                                 <td>
                                     <div className="two">
-                                        <p className="price">{data?.date.substring(0, 13)}</p>
+                                        <p className="price">{data?.date.substring(0, 11)}</p>
                                     </div>
                                 </td>
                                 <td>

@@ -409,7 +409,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     {userDetails?.first_name} {userDetails?.last_name}
                   </h2>
                 </div>
-                <div className="col-lg-4 col-md-4 col-6 my-auto" id="hide-on-mobile">
+                <div className="col-lg-4 col-md-4 col-6 my-auto" id="hide-on-mobile" style={{justifyContent : 'end'}}>
                   <div className="other-user-icons">
                     <a href={userDetails?.facebook_url} target="_blank"><FaFacebookF /></a>
                     <a href={userDetails?.twitter_url} target="_blank"><BsTwitter /></a>
@@ -496,7 +496,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     </button>
                   </div>
                 </div>
-                <div className="col-lg-3 col-md-3 col-12 my-auto" id="hide-on-mobile">
+                <div className="col-lg-3 col-md-3 col-12 my-auto" id="hide-on-mobile" style={{justifyContent :'end'}}>
                   {userData?.email !== null ?
                     <>
                       <div className="message-btn" onClick={() => { postChatMeaage(); }}>

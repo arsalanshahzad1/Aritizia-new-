@@ -1350,6 +1350,7 @@ p {
 
   .profile-drawer .five-line .share-links-social {
     margin-bottom: 20px;
+    justify-content: start;
   }
 
 

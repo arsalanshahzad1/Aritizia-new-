@@ -1765,6 +1765,13 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
   display: inline-block;
   position: relative;
 }
+.login-user-profile img{
+  border-radius: 50%;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+}
 
 .user-login-dropdown {
   position: absolute;
@@ -4535,6 +4542,12 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
 .Notification-in-header .text-area .msg-txt {
   font-size: 14px;
   font-weight: 500;
+  width: 160px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: left;
 }
 
 .controlsDiv {
@@ -5015,7 +5028,7 @@ footer .footer-bottom .footer-bottom-wrap .three ul li:nth-child(2) a p span {
 }
 
 .stock-div {
-  width: max-content;
+  /* width: max-content; */
   margin-left: auto;
   display: flex;
   align-items: center;
@@ -6313,6 +6326,7 @@ h3 {
 #hide-on-mobile {
   display: flex;
 }
+
 #hide-on-desktop-new {
   display: none;
 }
@@ -6541,8 +6555,9 @@ h3 {
     width: 215px;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     z-index: 5;
-}
-  .terms-container{
+  }
+
+  .terms-container {
     margin-top: 80px !important;
   }
 
@@ -7006,8 +7021,9 @@ h3 {
 
   .upload-image-cover {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    width: 100%;
   }
 
   .home-first-wrap {
@@ -7280,10 +7296,11 @@ h3 {
   #hide-on-desktop-new {
     display: flex;
   }
-  
+
   #hide-on-mobile-new {
     display: none;
   }
+
   .prompt-search-page .search-input .top {
     display: flex;
     gap: 10px;
@@ -7481,10 +7498,13 @@ h3 {
 
 
 
-  .terms-container h1, .terms-container h2, .terms-container h3, .terms-container h4 {
+  .terms-container h1,
+  .terms-container h2,
+  .terms-container h3,
+  .terms-container h4 {
     text-align: left;
     font-size: 20px;
-}
+  }
 
 
 
@@ -7826,66 +7846,66 @@ h3 {
     border: #b600d1 2px solid;
     background-color: #b600d1;
     border-radius: 6px;
-}
+  }
 
-.followers-div div:nth-child(2) {
-  color: #747474;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: "Jost";
-  padding: 2px 14px;
-  height: max-content;
-  border: 2px solid transparent;
-}
+  .followers-div div:nth-child(2) {
+    color: #747474;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: "Jost";
+    padding: 2px 14px;
+    height: max-content;
+    border: 2px solid transparent;
+  }
 
-.profile-first-section .copy-url span {
-  width: 239px;
-  font-size: 14px;
-}
+  .profile-first-section .copy-url span {
+    width: 239px;
+    font-size: 14px;
+  }
 
-.profile-first-section .copy-url button {
-  font-family: "Poppins";
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0em;
-  text-align: left;
-  background-color: var(--secoundary);
-  color: var(--white);
-  border: none;
-  border-radius: 6px;
-  padding: 3px 15px;
-  /* margin-left: 10px; */
-}
+  .profile-first-section .copy-url button {
+    font-family: "Poppins";
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    background-color: var(--secoundary);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    padding: 3px 15px;
+    /* margin-left: 10px; */
+  }
 
-.profile-first-section .message-btn button {
-  font-family: "Jost";
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 29px;
-  letter-spacing: 0em;
-  color: #737373;
-  background-color: #eeeeee;
-  border: none;
-  padding: 0px 10px;
-  border-radius: 6px;
-}
+  .profile-first-section .message-btn button {
+    font-family: "Jost";
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 29px;
+    letter-spacing: 0em;
+    color: #737373;
+    background-color: #eeeeee;
+    border: none;
+    padding: 0px 10px;
+    border-radius: 6px;
+  }
 
-.profile-first-section .message-btn button svg {
-  font-size: 19px;
-  margin-top: -2px;
-  margin-right: 5px;
-}
+  .profile-first-section .message-btn button svg {
+    font-size: 19px;
+    margin-top: -2px;
+    margin-right: 5px;
+  }
 
-.Collection-tabs div {
-  margin-inline: 25px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #9d9d9d;
-  cursor: pointer;
-  /* width: 130px; */
-  text-align: center;
-}
+  .Collection-tabs div {
+    margin-inline: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #9d9d9d;
+    cursor: pointer;
+    /* width: 130px; */
+    text-align: center;
+  }
 }
 
 @media only screen and (max-width: 450px) {

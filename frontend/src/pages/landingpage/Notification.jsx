@@ -23,7 +23,7 @@ function Notification(props) {
                         <div className='text-area'>
                             <div className='name-txt'>
                                 <span>{res?.user?.first_name}</span>
-                                Sent you message
+                                {/* Sent you message */}
                             </div>
 
                             {res.text == null ?

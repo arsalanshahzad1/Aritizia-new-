@@ -485,7 +485,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
                                 user_id={uniqueItem?.user_id}
                                 nft_like={uniqueItem?.nft_like}
                                 is_unapproved={uniqueItem?.approve}
-                                size={"col-lg-3"}
+                                size={"col-lg-4"}
                               />
                             );
                           }
@@ -509,7 +509,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
                                 firstOwner={uniqueItem?.firstOwner}
                                 user_id={uniqueItem?.user_id}
                                 is_unapproved={uniqueItem?.approve}
-                                size={"col-lg-3"}
+                                size={"col-lg-4"}
                               />
                             );
                           }

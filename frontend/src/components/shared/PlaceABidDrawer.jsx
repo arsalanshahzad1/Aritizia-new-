@@ -956,8 +956,7 @@ const PlaceABidDrawer = ({
                     nftDetails?.user?.wallet_address ? (
                       <Link to={"/profile"}>
                         <span>
-                          {nftDetails?.user?.first_name}{" "}
-                          {nftDetails?.user?.last_name}
+                          {nftDetails?.user?.username}
                         </span>
                       </Link>
                     ) : (

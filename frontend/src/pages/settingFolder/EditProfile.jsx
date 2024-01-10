@@ -84,8 +84,8 @@ const EditProfile = ({loader,setLoader}) => {
   return (
     <>
      {loader && <Loader />}
-     <div className="col-lg-5 col-md-5">
-        <div className="upload-image-cover" id="hide-on-desktop">
+     <div className="col-lg-5 col-md-5" id="hide-on-desktop" style={{justifyContent:'space-evenly'}}>
+        <div className="upload-image-cover" >
           <div className="upload-img">
             <h2>Profile Image</h2>
             {profileImage ? (
@@ -121,7 +121,7 @@ const EditProfile = ({loader,setLoader}) => {
           </div>
         </div>
       </div>
-      <div className="col-lg-7 col-md-7">
+      <div className="col-lg-8 col-md-7">
         <div className="inputfield-edit-profile">
           <div>
             <div>
@@ -294,8 +294,8 @@ const EditProfile = ({loader,setLoader}) => {
                     </div> */}
         </div>
       </div>
-      <div className="col-lg-5 col-md-5">
-        <div className="upload-image-cover" id="hide-on-mobile">
+      <div className="col-lg-4 col-md-5"  id="hide-on-mobile" style={{justifyContent:'center'}}>
+        <div className="upload-image-cover">
           <div className="upload-img">
             <h2>Profile Image</h2>
             {profileImage ? (

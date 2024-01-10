@@ -112,6 +112,7 @@ const NewItemCard = ({
                 className="right"
                 style={{ cursor: "pointer", padding: "15px 0px 15px 20px" }}
               >
+                {id}
               </div>
             </div>
             <div className="bottom">

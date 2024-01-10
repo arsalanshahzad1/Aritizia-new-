@@ -118,10 +118,10 @@ const MyMsg = ({ data }) => {
                         <div style={{ marginLeft: 'auto' }}>
                             <div className='msg-document'>
                                 <div className='wrap'>
-                                    <div className='left'><AiOutlineFile /> <span>{res.file_name.split('.').pop()}</span></div>
+                                    <div className='left'><AiOutlineFile /> <span>{res?.file_name.split('.').pop()}</span></div>
                                     <div className='center'>
-                                        <div>{res.file_name}</div>
-                                        <div>{formatFileSize(res.size)} <BsCircleFill /> {res.file_name.split('.').pop()}</div>
+                                        <div>{res?.file_name}</div>
+                                        <div>{formatFileSize(res?.size)} <BsCircleFill /> {res?.file_name.split('.').pop()}</div>
                                     </div>
                                     <div className='right'>
                                       
