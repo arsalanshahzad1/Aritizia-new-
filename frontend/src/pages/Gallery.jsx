@@ -722,7 +722,7 @@ const Gallery = ({ user, loader, setLoader }) => {
                                             })}
                                         </>
                                     ) : (
-                                        <div class="data-not-avaliable">
+                                        <div className="data-not-avaliable">
                                             <h2>No data avaliable</h2>
                                         </div>
                                     )}

@@ -27,7 +27,6 @@ const MyNftCard = ({
   collectionImages,
   user_id
 }) => {
-  console.log(id,"iididd");
 
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);

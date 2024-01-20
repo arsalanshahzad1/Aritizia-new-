@@ -85,6 +85,7 @@ const PlaceABidDrawer = ({
 
   const userData = JSON.parse(localStorage.getItem("data"));
   let userAddress = userData?.wallet_address;
+  let userId = userData?.id;
   const getBuyerPlan = userData?.subscription_plan;
 
   const navigate = useNavigate();
@@ -100,15 +101,21 @@ const PlaceABidDrawer = ({
   
   const getEarning = async () => {
     const response = await apis.getSalesHistory();
-    console.log(response?.data?.data);
-    setEarning(response?.data?.data);
-    setLoader(false);    
+    try {
+      setEarning(response?.data?.data);
+      setLoader(false);    
+    } catch (error) {
+      setLoader(false);    
+      console.error(error);
+    }
   };
   
   
   
   useEffect(() => {
-    getEarning();
+    if(userId){
+      getEarning();
+    }
   }, []);
 
   useEffect(()=>{
@@ -557,6 +564,7 @@ const PlaceABidDrawer = ({
   };
 
   useEffect(() => {
+    var temp = JSON.parse(localStorage?.getItem("data"));
     if (isVisible) {
       getNFTDetailByNFTTokenId();
       postNFTView();
@@ -755,8 +763,6 @@ const PlaceABidDrawer = ({
   };
 
   const nftSoldPost = async (value) => {
-    // const response = await apis.postNftSold(value);
-    // console.log("response", response);
     setLoader(false);
     toast.success("NFT bought");
     navigate("/profile");
@@ -781,17 +787,11 @@ const PlaceABidDrawer = ({
   };
 
   const bidEventPost = async (bidData) => {
-    // const response = await apis.postBid(bidData);
-    // console.log("response", response);
     setLoader(false);
     toast.success("Bid Succesful", {
       position: toast.POSITION.TOP_CENTER,
     });
     window.location.reload();
-    // setTimeout(() => {
-    //   navigate("/");
-    //   window.location.reload();
-    // }, 3000);
   };
 
   const statusOptions = [
@@ -976,7 +976,10 @@ const PlaceABidDrawer = ({
                     <span>
                       {likeAndViewData?.view_count == ""
                         ? "00"
-                        : likeAndViewData?.view_count}{" "}
+                        : (likeAndViewData ?
+                          likeAndViewData?.view_count :
+                          '0' )
+                        }
                       View
                     </span>
                   </div>
@@ -984,12 +987,20 @@ const PlaceABidDrawer = ({
                     {likeAndViewData?.is_liked == 0 ? (
                       <AiOutlineHeart />
                     ) : (
+                      likeAndViewData ?
                       <AiFillHeart style={{ fill: "#2636d9" }} />
+                      :
+                      <AiOutlineHeart />
+
                     )}
                     <span>
                       {likeAndViewData?.like_count == ""
                         ? "0"
-                        : likeAndViewData?.like_count}{" "}
+                        : 
+                       ( likeAndViewData ?
+                        likeAndViewData?.like_count :
+                        '0')
+                      }
                       Favorite
                     </span>
                   </div>
@@ -1143,7 +1154,7 @@ const PlaceABidDrawer = ({
                         <span>
                           <BsCheck className={`${chack ? "red" : "black"}`} />
                         </span>{" "}
-                        <span>I agree to all the terms and policies</span>
+                        <span>I agree to all <a href="/terms" target="_blank">Terms</a> & <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Policy</a>.</span>
                       </div>
                     )}
 

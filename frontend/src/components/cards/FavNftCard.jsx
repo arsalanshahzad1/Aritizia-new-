@@ -48,8 +48,6 @@ const FavNftCard = ({
     setIsVisible(false);
   }, []);
 
-console.log("imageimageimageimage",id,image);
-
   const openDrawer = () => {
     if (showLinks === true) {
       return onOpen(false);
@@ -71,12 +69,9 @@ console.log("imageimageimageimage",id,image);
   const [showWarning, setShowWarning] = useState(false);
   
   const handleInputChange = (event) => {
-    // console.log(event);
     const value = event.target.value;
-    // console.log(value);
     if (/^\d*\.?\d*$/.test(value) || value === "") {
       pricee = Number(value);
-      // console.log("Price", pricee);
       setdiscountPercentage(value);
       setShowWarning(false);
     } else {

@@ -60,7 +60,7 @@ const RejectedNFTSCard = ({
            getRejecteNfts(response?.data?.data);
       }
     } catch (e) {
-      console.log("Error: ", e);
+      console.error("Error: ", e);
     }
     setLoader(false)
   };
@@ -85,7 +85,7 @@ const RejectedNFTSCard = ({
           try {
             response = await apis.getNFTByTokenId(id);
           } catch (error) {
-            console.log(error.message)
+            console.error(error.message)
           }
 
           const collectionImages = response?.data?.data?.collection?.media?.[0]?.original_url;

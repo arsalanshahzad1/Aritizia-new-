@@ -65,6 +65,7 @@ function ProfileDrawerDashboard({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
+  let userId = userData?.id;
   
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   

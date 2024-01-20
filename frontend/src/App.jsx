@@ -217,7 +217,7 @@ function App() {
                     />
                   }
                 />
-                <Route path="/prompt-search" element={<PromptSearchList/>}
+                <Route path="/prompt-search" element={<PromptSearchList />}
                 />
                 <Route
                   path="/collection"

@@ -19,7 +19,7 @@ const TableData = () => {
       const response = await apis.viewNftTopCollections();
       setList(response?.data?.data);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

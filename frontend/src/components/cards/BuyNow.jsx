@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 
 const BuyNow = ({
   setLoader,
-  path,//TODO: check this
+  path,
   id,
   title,
   image,
@@ -58,7 +58,7 @@ const BuyNow = ({
   const getBuyerPlan = userData?.subscription_plan;
 
 
-  const { account, checkIsWalletConnected, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat,buyWithFiatPayment} = useContext(Store);
+  const { account, checkIsWalletConnected, getProviderMarketContrat, getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat,buyWithFiatPayment} = useContext(Store);
 
   const userWalletAddress = localStorage.getItem("userAddress")
 
@@ -91,11 +91,9 @@ const BuyNow = ({
 
     let EthIntoUSDT = (+feeETH + +price?.toString())
     
-    let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString());
+    let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString());
 
     setEthForFiat(EthIntoUSDT);
-
-    console.log(intoUSDT?.toString() / 10**6, "totalInUSDTsssss");
     setPriceIntoUSD(intoUSDT?.toString());
     setFiatAmount(intoUSDT?.toString() / 10**6);
 
@@ -104,11 +102,10 @@ const BuyNow = ({
   const getNFTDetailByNFTTokenId = async () => {
     try {
       const response = await apis.getNFTByTokenId(id);
-      console.log(response,"response")
       setNftDetails(response?.data?.data);
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
-      console.log("Error: ", e);
+      console.error("Error: ", e);
     }
   };
 
@@ -120,7 +117,6 @@ const BuyNow = ({
   const openDrawer = () => {
     if (showLinks === true) {
       setShowLinks(false);
-      // setIsVisible(true);
     } else {
       setIsVisible(true);
     }
@@ -160,26 +156,23 @@ const BuyNow = ({
     });
   };
 
-
-
   ///////////////////////////////////////////////
   ///////////////////////////////////////////////
   //////////////// Buy With ETH /////////////////
   ///////////////////////////////////////////////
   ///////////////////////////////////////////////
+
+
   let ethPurchase = false;
   const buyWithETH = async () => {
     setLoader(true);
     try {
       ethPurchase = true;
-
       let totalPrice = +price?.toString() + +platformFeeETH;
-  
-      console.log(totalPrice, "totalPrice");
-      console.log("newewww",nftDetails)
+
       await (
-        await getSignerMarketContrat().buyWithETH(
-          getSignerNFTContrat().address,
+        await getSignerMarketContrat()?.buyWithETH(
+          getSignerNFTContrat()?.address,
           id,
           sellerPlan, // must be multiple of 10 of the users percent //TODO: change here
           buyerPlan, // must be multiple of 10 of the users percent //TODO: change here
@@ -187,16 +180,12 @@ const BuyNow = ({
           userData?.id, //buyerId
           {
             value: totalPrice?.toString()
-            // gasLimit: ethers.BigNumber.from("30000000"),
           }
         )
       ).wait();
-  
       let response = await getSignerMarketContrat().on("NFTSold",
       ethPurchase ? handleNFTSoldEvent : null
       );
-      
-      console.log("Response of bid even", response);
       setTimeout(()=>{
         setLoader(false);
       },[10000])
@@ -222,19 +211,16 @@ const BuyNow = ({
 
       let usdtToEth = await getSignerMarketContrat().getUSDTIntoETH(priceInUSDT);
 
-      console.log("checckkk", usdtToEth?.toString() ,(+platformFeeETH + +price?.toString()));
-
       const appprove = await getSignerUSDTContrat().approve(
         MARKETPLACE_CONTRACT_ADDRESS.address,
-        // 0
         priceInUSDT?.toString()
       );
   
       appprove.wait();
      
       await (
-        await getSignerMarketContrat().buyWithUSDT(
-          getSignerNFTContrat().address,
+        await getSignerMarketContrat()?.buyWithUSDT(
+          getSignerNFTContrat()?.address,
           id,
           priceInUSDT?.toString(),
           sellerPlan, 
@@ -253,7 +239,6 @@ const BuyNow = ({
       },[10000])
       onClose(false);
       window.location.reload()
-      // console.log("Response of bid even", response);
       setLoader(false);
     } catch (error) {
       setLoader(false);
@@ -268,7 +253,6 @@ const BuyNow = ({
     seller,
     buyer,
   ) => {
-    console.log("handleNFTSoldEvent");
 
     let soldData = {
       nftContract: +nftContract?.toString(),
@@ -277,7 +261,6 @@ const BuyNow = ({
       seller: seller?.toString(),
       buyer: buyer?.toString(),
     };
-    // console.log("soldData", soldData);
 
     if (ethPurchase || usdtPurchase) {
       nftSoldPost(soldData);
@@ -289,7 +272,6 @@ const BuyNow = ({
   const nftSoldPost = async (value) => {
     try {
       const response= await apis.postNftSold(value);
-      console.log("asdasdadas", response);
       setLoader(false);
       setSucess(false);
       window.location.reload();
@@ -317,18 +299,16 @@ const BuyNow = ({
   const cancelList = async ()=> {
     setLoader(true);
     try {
-      let cancel = await getSignerMarketContrat().cancelListing(getSignerNFTContrat().address,id,nftDetails?.user_id);
+      let cancel = await getSignerMarketContrat()?.cancelListing(getSignerNFTContrat()?.address,id,nftDetails?.user_id);
       cancel.wait();
       setTimeout(()=>{
         setLoader(false);
       },[10000])
     window.location.reload()
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
-
-  console.log("cejcccccccc",  userAddress?.toUpperCase() ,seller?.toUpperCase())
 
   useEffect(() => {
     getPriceInUSDAndDetials();
@@ -506,9 +486,6 @@ const BuyNow = ({
             <button onClick={()=>buyWithETH()}>Buy with ETH</button>
             <button onClick={()=>buyWithUSDT()}>Buy with USDT</button>
           </div>
-          {/* <div className="mobal-button-2">
-            <button onClick={() => setShowFiatPaymentForm(true)}>Buy with FIAT</button>
-          </div> */}
         </div>
       </Modal>
 
@@ -541,7 +518,7 @@ const BuyNow = ({
               showResponseMessage={showResponseMessage}
               setSucess={setSucess}
               setIsVisible={setIsVisible}
-              _nftContract={getSignerNFTContrat().address}
+              _nftContract={getProviderNFTContrat().address}
               _tokenId={id}
               _sellerPlan={sellerPlan}
               _buyerAddress={account}
@@ -554,7 +531,7 @@ const BuyNow = ({
         </div>
       </Modal>
 
-      <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
+      {/* <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} /> */}
     </>
   );
 };

@@ -42,7 +42,6 @@ const NewItemCard = ({
   const [endDate, setEndDate] = useState("");
 
   const unixTimestamp = Math.floor(Date.now() / 1000);
-  console.log(startTime > unixTimestamp , "timeeee");
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;

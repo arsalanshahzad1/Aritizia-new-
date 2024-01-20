@@ -53,8 +53,8 @@ const TopCollection = ({ loader, setLoader }) => {
             { loader ?
 
                 <div className="col-lg-12 col-md-12 mt-5">
-                    <div class="carddd is-loading">
-                        <div class="content">
+                    <div className="carddd is-loading">
+                        <div className="content">
                             <h2></h2>
                             <h2></h2>
                             <h2></h2>

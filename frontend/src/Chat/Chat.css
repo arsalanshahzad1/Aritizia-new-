@@ -187,7 +187,10 @@
 }
 
 .chat-area .head .user .img-holder img {
-    width: 100%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .chat-area .foot {

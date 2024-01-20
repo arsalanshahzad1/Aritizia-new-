@@ -12,7 +12,6 @@ import {
 } from "react-share";
 
 const SocialShare = ({ style, bidStyle ,user_id}) => {
-  // console.log(style);
   return (
     <div className={`share-links-social ${bidStyle}`}>
       <span

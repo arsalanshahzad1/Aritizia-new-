@@ -100,7 +100,6 @@ export const StoreProvider = ({ children }) => {
             });
 
             window.ethereum.on('chainChanged', async (chainId) => {
-                console.log("chainId", chainId);
                 if (chainId != process.env.CHAIN_ID) { //TODO
                     await ethereum.request({
                         method: "wallet_switchEthereumChain",
@@ -125,15 +124,11 @@ export const StoreProvider = ({ children }) => {
                 setAccount(accounts[0]);
                 setWalletConnected(true);
                 postWalletAddress(accounts?.[0]);
-                // window.location.reload()
             } else {
-                console.log("No account Found");
                 setWalletConnected(false);
-                // window.location.reload()
             }
         } catch (err) {
             setWalletConnected(false);
-            // window.location.reload()
             throw new Error("No ethereum Object");
         }
     };

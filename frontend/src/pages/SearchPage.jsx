@@ -87,9 +87,6 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
       1,
       event.target.value
     );
-    // getListedNfts(response?.data?.data)
-    // searchTexts = event.target.value;
-    // getSearchedNfts();
   };
 
   const searchNftCards = async (event) => {
@@ -106,14 +103,6 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
     );
   };
 
-  // useEffect(() => {
-  //   if (searchParams.get("name") || searchParams.get("name") == "") {
-  //     setSearchText(searchParams.get("name"));
-  //     console.log(searchParams.get("name"), "call");
-  //     navigate("/search");
-  //   }
-  // }, []);
-
   const getAllListedNfts = async (ids) => {
     setNftListFP([]);
 
@@ -125,14 +114,8 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
 
         const structData = await getProviderMarketContrat()._idToNFT(id);
 
-        if (
-          structData?.firstOwner !=
-          "0x0000000000000000000000000000000000000000" &&
-          structData?.listed &&
-          structData?.approve
-        ) {
+        if (structData?.firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed && structData?.approve) {
           const auctionData = await getProviderMarketContrat()._idToAuction(id);
-
           let response;
           let nftLikes;
 
@@ -141,7 +124,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
               structData?.collectionId?.toString()
             );
           } catch (error) {
-            console.log(error);
+            console.error(error);
           }
 
           try {
@@ -150,7 +133,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
               id
             );
           } catch (error) {
-            console.log(error);
+            console.error(error);
           }
 
           const collectionImages =
@@ -187,7 +170,6 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
               listingType: listingType,
 
             };
-            // setNftListFP((prev) => [...prev, nftData]);
             if (!nftListFP.map(item => item.id).includes(nftData.id)) {
               setNftListFP(prev => [...prev, nftData]);
             }
@@ -218,7 +200,6 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
               nft_like: nftLikes?.data?.data?.like_count,
               listingType: listingType,
             };
-            // setNftListFP((prev) => [...prev, nftData]);
             if (!nftListFP.map(item => item.id).includes(nftData.id)) {
               setNftListFP(prev => [...prev, nftData]);
             }
@@ -369,7 +350,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
           <div className="filter-card-wrap">
             <div className="row">
               <div className="col-lg-3 hide-on-desktop-screen-app">
-                <div className="search-filter">
+                <div className="search-filterr search-filter">
                   <div className="l-1">
                     <img src="/assets/images/filter.png" alt="" />{" "}
                     <span>Filter</span>
@@ -520,7 +501,7 @@ const SearchPage = ({ search, setSearch,loader,setLoader , user}) => {
                       })} */}
                     </>
                   ) : (
-                    <div class="data-not-avaliable">
+                    <div className="data-not-avaliable">
                       <h2>No data avaliable</h2>
                     </div>
                   )}

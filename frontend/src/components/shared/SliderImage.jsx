@@ -33,7 +33,6 @@ const SliderImage = () => {
     }
     if (e.key === 'Enter') {
       storeSearchHistory()
-      console.log('Enter key pressed. Submitting:', prompt);
       navigate(`/art`)
 
     }
@@ -51,7 +50,6 @@ const SliderImage = () => {
       !e.target.closest('.AQZ9Vd') &&
       !e.target.closest('.search-all-delete')
     ) {
-      console.log('Clicked outside the input field and not on delete button or "See All"/"Delete All"');
       // Perform your action for clicks outside the input field
       setInputOptions(false); // Hide input options when clicked outside
     }
@@ -71,7 +69,6 @@ const SliderImage = () => {
   const getUserSearchHistory = async (prompt, page) => {
     const response = await apis.getUserSearchHistory(user?.id, prompt, page)
     try {
-      console.log(response?.data?.data, 'response');
       if (response?.data?.data?.result?.length > 0) {
         setInputOptions(true)
       }
@@ -88,9 +85,8 @@ const SliderImage = () => {
     }
     const response = await apis.storeSearchHistory(data)
     try {
-      console.log(response?.data?.data, 'response');
     } catch (error) {
-
+      console.errpr(error, 'error');
     }
   }
 
@@ -134,7 +130,6 @@ const SliderImage = () => {
       const response = await apis.DeleteAllSearchHistory(data)
 
       // If the deletion is successful, update the state to remove the deleted item
-      console.log(response?.status, 'status');
       if (response?.status === 200) {
         setInputOptions(false)
         setPrevSearchList([]);

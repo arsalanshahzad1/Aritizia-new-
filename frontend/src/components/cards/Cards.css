@@ -363,7 +363,7 @@ a {
   min-width: 0px;
   position: relative;
   width: 100%;
-  padding-bottom: 82%;
+  padding-bottom: 74%;
 }
 
 .css-2r2ti0 {
@@ -433,13 +433,13 @@ img {
 }
 
 .css-vurnku .J-image {
-  /* height: 180px; */
+  height: 180px;
   width: 100%;
   object-fit: contain;
   border-radius: 8px 8px 0px 0px !important;
   background: none 0% 0% / contain;
   position: relative;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 /* .css-118gt74:hover .J-bottom {
@@ -660,6 +660,7 @@ img {
 
 .css-fwx73e .detail-wrap .center-icon .icon {
   position: relative;
+  margin-top: -10px;
 }
 
 .css-fwx73e .detail-wrap .center-icon .icon img:last-child {

@@ -38,6 +38,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
   const [nftLoader, setNftLoader] = useState(true) //collection nft
   const [myNftLoader, setMyNftLoader] = useState(true)
+  const [pNftLoader, setpNftLoader] = useState(true)
+  const [pautionNftLoader, setAutionNftLoader] = useState(true)
   const [likedNftLoader, setLikedNftLoader] = useState(true)
 
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -60,6 +62,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
     try {
       const response = await apis.getLikeNFTList(userId);
       return response?.data?.data;
+
     } catch (error) {
       setLikedNftLoader(false)
     }
@@ -68,17 +71,23 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
   const getPurchasedNfts = async () => {
     try {
+      setMyNftLoader(true)
+      setpNftLoader(true)
+      setAutionNftLoader(true)
       const response = await apis.getPurchasedNfts(userId);
       if (response?.data?.data?.length > 0) {
         getMyNfts(response?.data?.data);
       }
       else {
-        //   getMyNfts(0);
         setMyNftLoader(false)
+        setpNftLoader(false)
+        setAutionNftLoader(false)
       }
     } catch (error) {
       setMyNftLoader(false)
-      console.log(error, "errrrr")
+      setpNftLoader(false)
+        setAutionNftLoader(false)
+      console.error(error, "error")
     }
 
   };
@@ -107,13 +116,9 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
     //this is API get Liked NFT's
     let NFTId = await getLikedNftsList();
-    if (NFTId.length == 0) {
+    if (NFTId.length < 1) {
       setLikedNftLoader(false)
     }
-
-    // let emptyList = [];
-    // setLikedNfts(emptyList);
-    // setLikedNftsAuction(emptyList);
 
     if (NFTId?.length > 0 && NFTId != "") {
       for (let i = 0; i < NFTId?.length; i++) {
@@ -142,12 +147,9 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
         let nftLikes
         try {
-          // nftLikes = await getNFTLike(response?.data?.data?.user?.wallet_address , id);
           nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
-          console.log(nftLikes?.data?.data?.like_count, 'ressssss');
-          // nft_like:nftLikes?.data?.data?.like_count
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
 
         if (listingType === 0) {
@@ -169,6 +171,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
             user_id: user_id
           };
           setLikedNfts((prev) => [...prev, nftData])
+          setpNftLoader(false)
+
         } else if (listingType === 1) {
           const nftData = {
             id: id,
@@ -193,8 +197,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
             nft_like: nftLikes?.data?.data?.like_count
           };
           setLikedNftsAuction((prev) => [...prev, nftData]);
+          setAutionNftLoader(false)
         }
-        setLikedNftLoader(false)
       }
     }
   };
@@ -302,10 +306,6 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
   //get your purchase nft it show you purchased nft
   const getMyNfts = async (NFTid) => {
-    console.log(NFTid, "NFTid")
-    // let emptyList = [];
-    // setNftListAuction(emptyList);
-    // setNftListFP(emptyList);
 
     if (NFTid?.length > 0) {
       //for database
@@ -350,7 +350,9 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
           };
           setUserNfts((prev) => [...prev, nftData]);
         }
-        setMyNftLoader(false)
+        setTimeout(() => {
+          setMyNftLoader(false)
+        }, 7000);
       }
     }
   };
@@ -385,7 +387,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   useEffect(() => {
     viewAllNfts();
     getLikedNfts();
-    getPurchasedNfts();
+    // getPurchasedNfts();
     setLoader(false)
   }, [])
 
@@ -515,7 +517,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                 <div className="col-lg-12">
                   <div className="profile-bio">
                     {userData?.bio !== 'null' &&
-                    <p className="">{userData?.bio}</p>
+                      <p className="">{userData?.bio}</p>
                     }
                   </div>
                 </div>
@@ -541,7 +543,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
                     <button
                       className={`${tabs === 2 ? "active" : ""}`}
-                      onClick={() => setTabs(2)}
+                      onClick={() => { setTabs(2); getPurchasedNfts() }}
                     >
                       My NFT
                     </button>
@@ -671,7 +673,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                   <>
                     <div className="row">
                       {
-                        myNftLoader ?
+                        pNftLoader ?
                           <section className="sec-loading">
                             <div className="one"></div>
                           </section>
@@ -724,7 +726,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                       </div>
                       {likeNftTabs === 0 && (
                         <>
-                          {likedNftLoader ?
+                          {pNftLoader ?
                             <section className="sec-loading">
                               <div className="one"></div>
                             </section>
@@ -735,7 +737,6 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                   <FavNftCard
                                     setLoader={setLoader}
                                     onOpen={onOpen}
-                                    // onClose={onClose}
                                     key={item?.id}
                                     id={item?.id}
                                     title={item?.title}
@@ -753,14 +754,15 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                     user_id={item?.user_id}
                                   />
                                 ))}
-                              </> :
+                              </>
+                              :
                               <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }
                         </>
                       )}
                       {likeNftTabs === 1 && (
                         <>
-                          {likedNftLoader ?
+                          {pautionNftLoader ?
                             <section className="sec-loading">
                               <div className="one"></div>
                             </section>

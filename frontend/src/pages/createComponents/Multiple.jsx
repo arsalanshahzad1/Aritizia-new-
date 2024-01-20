@@ -69,7 +69,7 @@ const Multiple = ({ search, setSearch }) => {
     { value: 1, label: "USDT" },
   ];
 
-  const { account, checkIsWalletConnected,getSignerNFTContrat,getSignerMarketContrat } = useContext(Store);
+  const { account, checkIsWalletConnected, getSignerNFTContrat, getSignerMarketContrat } = useContext(Store);
 
   const location = useLocation();
 
@@ -660,10 +660,10 @@ const Multiple = ({ search, setSearch }) => {
   const handleNFTMintedEvent2 = async (mintedTokens) => {
     let id;
     let list = [];
-    console.log("check mintedTokens",mintedTokens);
+    console.log("check mintedTokens", mintedTokens);
     for (let i = 0; i < mintedTokens.length; i++) {
       id = +mintedTokens[i]?.toString();
-      console.log("check mintedTokens",id);
+      console.log("check mintedTokens", id);
       list.push(id);
       listedddd.push(id);
       addListOfMintedTokens(id);
@@ -699,26 +699,26 @@ const Multiple = ({ search, setSearch }) => {
               endingDateList,
               collection?.collection_id,
               collection?.crypto);
-            
-             let list = await getSignerMarketContrat().listNft(
-                NFT_CONTRACT_ADDRESS?.address,
-                multi ? mintedTokens : [mintedTokens],
-                ethParsedList,
-                royaltyList,
-                listingType,
-                startingDateList,
-                endingDateList,
-                collection?.collection_id,
-                collection?.crypto,
-                user_id
-              );
 
-          list.wait();
-          await getSignerMarketContrat().on("NFTListed", handleNFTListedEvent2);
-          listCalled = true;
-          setLoading(false);
+            let list = await getSignerMarketContrat().listNft(
+              NFT_CONTRACT_ADDRESS?.address,
+              multi ? mintedTokens : [mintedTokens],
+              ethParsedList,
+              royaltyList,
+              listingType,
+              startingDateList,
+              endingDateList,
+              collection?.collection_id,
+              collection?.crypto,
+              user_id
+            );
+
+            list.wait();
+            await getSignerMarketContrat().on("NFTListed", handleNFTListedEvent2);
+            listCalled = true;
+            setLoading(false);
           }
-          } catch (error) {
+        } catch (error) {
           toast.error(`Error while minting NFT: ${error}`, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -796,13 +796,13 @@ const Multiple = ({ search, setSearch }) => {
     collectionId,
     listingType
   ) => {
-console.log( "checck",
-  tokenId?.toString(),
-  seller?.toString(),
-  owner?.toString(),
-  price,
-  collectionId,
-  listingType);
+    console.log("checck",
+      tokenId?.toString(),
+      seller?.toString(),
+      owner?.toString(),
+      price,
+      collectionId,
+      listingType);
     if (multiListing) {
       let listedData = {
         title: titleList[count],
@@ -1081,9 +1081,10 @@ console.log( "checck",
                                       <input
 
                                         value={collectionName}
-                                        onChange={(e) =>
-                                          setCreateCollection(e.target.value)
-                                        }
+                                        onChange={(e) =>{
+                                          const newValue = e.target.value.replace(/[^a-zA-Z]/g, '');
+                                          setCreateCollection(newValue)
+                                        }}
                                         type="text"
                                         placeholder="Enter collection name"
                                       />
@@ -1700,12 +1701,7 @@ console.log( "checck",
                                     <div>Mint</div>
                                   </button>
                                 ) : (
-                                  <button
-                                    className="disabledButton"
-
-                                  >
-                                    Mint
-                                  </button>
+                                  null
                                 )}
                               </div>
                             )}

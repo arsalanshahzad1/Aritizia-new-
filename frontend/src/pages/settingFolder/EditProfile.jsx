@@ -83,7 +83,7 @@ const EditProfile = ({loader,setLoader}) => {
 
   return (
     <>
-     {loader && <Loader />}
+     {/* {loader && <Loader />} */}
      <div className="col-lg-5 col-md-5" id="hide-on-desktop" style={{justifyContent:'space-evenly'}}>
         <div className="upload-image-cover" >
           <div className="upload-img">
@@ -133,6 +133,7 @@ const EditProfile = ({loader,setLoader}) => {
               placeholder="First Name"
               name="first_name"
               onChange={onChangeHandler}
+              maxLength={10}
             />
           </div>
 
@@ -146,6 +147,7 @@ const EditProfile = ({loader,setLoader}) => {
               placeholder="Last Name"
               name="last_name"
               onChange={onChangeHandler}
+              maxLength={10}
             />
           </div>
 
@@ -159,6 +161,7 @@ const EditProfile = ({loader,setLoader}) => {
               placeholder="Enter username"
               name="username"
               onChange={onChangeHandler}
+              maxLength={20}
             />
           </div>
 
@@ -282,7 +285,7 @@ const EditProfile = ({loader,setLoader}) => {
             </div>
             <input
               defaultValue={data?.phone_no}
-              type="number"
+              type="tel"
               placeholder="Enter your phone number"
               name="phone_no"
               onChange={onChangeHandler}

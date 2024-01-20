@@ -504,14 +504,14 @@ const Single = ({ search, setSearch }) => {
                                       <div className="left">
                                         <p>Collection Name</p>
                                         <input
-                                          // value={collectionName}
-                                          value={collectionName}
-                                          onChange={(e) =>
-                                            setCreateCollection(e.target.value)
-                                          }
-                                          type="text"
-                                          placeholder="Enter collection name"
-                                        />
+                                        value={collectionName}
+                                        onChange={(e) =>{
+                                          const newValue = e.target.value.replace(/[^a-zA-Z]/g, '');
+                                          setCreateCollection(newValue)
+                                        }}
+                                        type="text"
+                                        placeholder="Enter collection name"
+                                      />
                                       </div>
                                       <div className="right">
                                         <h2>Crypto</h2>

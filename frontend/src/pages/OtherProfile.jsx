@@ -589,7 +589,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   size={'col-lg-3'}
                                 />
                               )) :
-                                <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                                <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
                           </>
                         )}
@@ -625,7 +625,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   size={'col-lg-3'}
                                 />
                               )) :
-                                <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                                <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
                           </>
                         )}
@@ -678,7 +678,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   size={'col-lg-3'}
                                 />
                               )) :
-                                <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                                <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
                           </>
                         )}
@@ -715,7 +715,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   size={'col-lg-3'}
                                 />
                               )) :
-                                <div class="data-not-avaliable"><h2>No data avaliable</h2></div>
+                                <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                             }
                           </>
                         )}

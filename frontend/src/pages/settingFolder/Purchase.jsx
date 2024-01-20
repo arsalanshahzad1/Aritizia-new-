@@ -76,7 +76,7 @@ function Purchase() {
                     </Table>
 
                     {purchase.length <= 0 ?
-                        <div class="data-not-avaliable">
+                        <div className="data-not-avaliable">
                             <h2>No data avaliable</h2>
                         </div> : ""
                     }

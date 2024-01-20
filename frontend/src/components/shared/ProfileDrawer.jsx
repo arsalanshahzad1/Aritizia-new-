@@ -74,6 +74,7 @@ function ProfileDrawer({
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
+  let userId = userData?.id;
 
   const navigate = useNavigate();
 
@@ -83,7 +84,7 @@ function ProfileDrawer({
     setStatus(e);
   };
 
-  const { account, checkIsWalletConnected, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat } = useContext(Store);
+  const { account, checkIsWalletConnected, getProviderMarketContrat,getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat } = useContext(Store);
 
   useEffect(() => {
     checkIsWalletConnected()
@@ -93,36 +94,35 @@ function ProfileDrawer({
     return (_amount * _buyerPercent) / 10000;
   };
 
-  const getPriceInUSDAndDetials = async () => {
-    let _buyerPercent;
+  // const getPriceInUSDAndDetials = async () => {
+  //   let _buyerPercent;
 
-    if (getBuyerPlan == 3) {
-      _buyerPercent = 0;
-    } else if (getBuyerPlan == 2) {
-      _buyerPercent = 100;
-    } else {
-      _buyerPercent = 150;
-    }
+  //   if (getBuyerPlan == 3) {
+  //     _buyerPercent = 0;
+  //   } else if (getBuyerPlan == 2) {
+  //     _buyerPercent = 100;
+  //   } else {
+  //     _buyerPercent = 150;
+  //   }
 
-    setBuyerPlan(getBuyerPlan);
-    let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
-    setPlatformFeeETH(feeETH?.toString());
+  //   setBuyerPlan(getBuyerPlan);
+  //   let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
+  //   setPlatformFeeETH(feeETH?.toString());
 
-    if (feeETH != 0) {
-      const ethIntoUsdtBase = await getSignerMarketContrat().getETHIntoUSDT(feeETH?.toString());
-      setPlatformFeeInUSDT(ethIntoUsdtBase / 10 ** 6)
-    }
+  //   if (feeETH != 0) {
+  //     const ethIntoUsdtBase = await getProviderMarketContrat()?.getETHIntoUSDT(feeETH?.toString());
+  //     setPlatformFeeInUSDT(ethIntoUsdtBase / 10 ** 6)
+  //   }
 
-    let EthIntoUSDT = (+feeETH + +price?.toString())
-    setEthForFiat(EthIntoUSDT);
+  //   let EthIntoUSDT = (+feeETH + +price?.toString())
+  //   setEthForFiat(EthIntoUSDT);
     
-    let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
+  //   let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
-    setPriceIntoUSD(intoUSDT?.toString());
-    // console.log(intoUSDT?.toString() / 10**6,"USDTAmount")
-    setFiatAmount(intoUSDT?.toString() / 10**6);
+  //   setPriceIntoUSD(intoUSDT?.toString());
+  //   setFiatAmount(intoUSDT?.toString() / 10**6);
 
-  };
+  // };
 
 
   const getNFTLike = async () => {
@@ -154,19 +154,18 @@ function ProfileDrawer({
 
   const getNFTDetailByNFTTokenId = async () => {
     try {
-      console.log("checkIID", id);
       const response = await apis.getNFTByTokenId(id);
-      // console.log("ressss", response?.data?.data?.subscription_plan);
       setNftDetails(response?.data?.data);
-      // console.log(response?.data?.data , 'fsfweffsdfsfwe');
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
-      console.log("Error: ", e);
+      console.error("Error: ", e);
     }
   };
 
   useEffect(() => {
-    if (isVisible) {
+    var temp = JSON.parse(localStorage?.getItem("data"));
+    if (isVisible
+      ) {
       postNFTView();
     }
   }, [isVisible]);
@@ -180,9 +179,7 @@ function ProfileDrawer({
 
       let totalPrice = ((+price?.toString()) + (+platformFeeETH));
 
-      console.log(totalPrice, +price?.toString(), +platformFeeETH, getBuyerPlan, "totalPrice");
-
-      await (await getSignerMarketContrat().buyWithETH(
+      await (await getSignerMarketContrat()?.buyWithETH(
         getSignerNFTContrat().address,
         id,
         sellerPlan, // must be multiple of 10 of the users percent //TODO: change here
@@ -191,7 +188,6 @@ function ProfileDrawer({
         userData?.id, //buyerId
         {
           value: totalPrice?.toString()
-          // gasLimit: ethers.BigNumber.from("30000000"),
         }
       )
       ).wait();
@@ -201,7 +197,6 @@ function ProfileDrawer({
         ethPurchase ? handleNFTSoldEvent : null
       );
 
-      console.log("Response of bid even", response);
       setTimeout(() => {
         setLoader(false)
       }, [10000])
@@ -220,14 +215,12 @@ function ProfileDrawer({
     try {
 
       usdtPurchase = true;
-      let accBalance = await getSignerUSDTContrat().balanceOf(userAddress)
+      let accBalance = await getSignerUSDTContrat()?.balanceOf(userAddress)
       if (+priceInUSDT > +accBalance?.toString()) {
         return toast.error("You dont have balance"), setLoader(false);
       }
 
-      let usdtToEth = await getSignerMarketContrat().getUSDTIntoETH(priceInUSDT);
-
-      console.log("checckkk", usdtToEth?.toString(), (+platformFeeETH + +price?.toString()));
+      let usdtToEth = await getSignerMarketContrat()?.getUSDTIntoETH(priceInUSDT);
 
       const appprove = await getSignerUSDTContrat().approve(
         MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -238,7 +231,7 @@ function ProfileDrawer({
       appprove.wait();
 
       await (
-        await getSignerMarketContrat().buyWithUSDT(
+        await getSignerMarketContrat()?.buyWithUSDT(
           getSignerNFTContrat().address,
           id,
           priceInUSDT?.toString(),
@@ -258,7 +251,6 @@ function ProfileDrawer({
       }, [10000])
       onClose(false)
       window.location.reload()
-      // console.log("Response of bid even", response);
     } catch (error) {
       setLoader(false)
       toast.error(error?.data?.message)
@@ -273,7 +265,6 @@ function ProfileDrawer({
     seller,
     buyer,
   ) => {
-    // console.log("handleNFTSoldEvent");
     let soldData = {
       contractAddress: nftContract?.toString(),
       token_id: +tokenId?.toString(),
@@ -281,7 +272,6 @@ function ProfileDrawer({
       buyer: buyer?.toString(),
       price: price?.toString(),
     };
-    // console.log("soldData", soldData);
 
     if (ethPurchase || usdtPurchase) {
       nftSoldPost(soldData);
@@ -310,7 +300,7 @@ function ProfileDrawer({
   };
 
   useEffect(() => {
-    getPriceInUSDAndDetials();
+    // getPriceInUSDAndDetials(); 
     getNFTDetailByNFTTokenId();
   }, [account, price,fiatAmount])
 
@@ -694,7 +684,6 @@ function ProfileDrawer({
 
   }
 
-  console.log(platformFeeETH, 'platformFeeETH2');
   const userAccountAddress = localStorage.getItem("userAddress")
 
   const navigateTo = (id) => {
@@ -810,7 +799,10 @@ function ProfileDrawer({
                     <span>
                       {likeAndViewData?.view_count == ""
                         ? "00"
-                        : likeAndViewData?.view_count}{" "}
+                        : (likeAndViewData ?
+                          likeAndViewData?.view_count :
+                          '0' )
+                        }
                       View
                     </span>
                   </div>
@@ -818,12 +810,20 @@ function ProfileDrawer({
                     {likeAndViewData?.is_liked == 0 ? (
                       <AiOutlineHeart />
                     ) : (
+                      likeAndViewData ?
                       <AiFillHeart style={{ fill: "#2636d9" }} />
+                      :
+                      <AiOutlineHeart />
+
                     )}
                     <span>
                       {likeAndViewData?.like_count == ""
                         ? "0"
-                        : likeAndViewData?.like_count}{" "}
+                        : 
+                       ( likeAndViewData ?
+                        likeAndViewData?.like_count :
+                        '0')
+                      }
                       Favorite
                     </span>
                   </div>
@@ -1000,6 +1000,7 @@ function ProfileDrawer({
           </div>
         </div>
       </Drawer>
+
       <Modal
         show={sucess}
         onHide={() => setSucess(false)}
@@ -1017,9 +1018,6 @@ function ProfileDrawer({
             <button onClick={buyWithETH}>Buy with ETH</button>
             <button onClick={buyWithUSDT}>Buy with USDT</button>
           </div>
-          {/* <div className="mobal-button-2">
-            <button onClick={() => setShowFiatPaymentForm(true)}>Buy with FIAT</button>
-          </div> */}
         </div>
       </Modal>
 
@@ -1051,7 +1049,7 @@ function ProfileDrawer({
               showResponseMessage={showResponseMessage}
               setSucess={setSucess}
               setIsVisible={setIsVisible}
-              _nftContract={getSignerNFTContrat().address}
+              _nftContract={getProviderNFTContrat().address}
               _tokenId={id}
               _sellerPlan={sellerPlan}
               _buyerAddress={account}
@@ -1065,8 +1063,8 @@ function ProfileDrawer({
       </Modal>
 
 
-      <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
-      <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
+      {/* <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
+      <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} /> */}
     </>
   );
 }

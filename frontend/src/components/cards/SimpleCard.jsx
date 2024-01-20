@@ -89,7 +89,7 @@ const SimpleCard = ({
       window.location.reload();
     } catch (error) {
       setLoader(false)
-      console.log(error);
+      console.error(error);
     }
   };
 

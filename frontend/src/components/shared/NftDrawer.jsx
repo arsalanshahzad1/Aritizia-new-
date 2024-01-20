@@ -330,12 +330,9 @@ const [relist, setRelist] = useState(false);
 
 const { account, checkIsWalletConnected} = useContext(Store);
 
-console.log(nftListingType,"nftListingType");
-
 const userData = JSON.parse(localStorage.getItem("data"));
 const userAddress = userData?.wallet_address;
 
-console.log(userData,"userData")
 useEffect(() => {
   checkIsWalletConnected();
 }, [account]);
@@ -405,37 +402,6 @@ const reListNFT = async (e) => {
   window.location.reload();
   // await getSignerMarketContrat().on("NFTListed", handleNFTListedEvent);
 };
-
-// const handleNFTListedEvent = async (
-//   nftContract,
-//   tokenId,
-//   seller,
-//   owner,
-//   price,
-//   collectionId,
-//   listingType
-// ) => {
-//   console.log("checkEVENT");
-//   if (relist) {
-//     let listedData = {
-//       token_id: tokenId?.toString(),
-//       seller: seller?.toString(),
-//       owner: owner?.toString(),
-//       price: price?.toString(),
-//       collection_id: collectionId?.toString(),
-//       listing_type: listingType?.toString(),
-//     };
-//     await nftDataPost(listedData);
-//   }
-// };
-
-// const nftDataPost = async (listedData) => {
-//   // const response = await apis.postListNft(listedData);
-//   setRelist(false);
-//   onClose(false);
-//   toast.success("NFT listed");
-//   window.location.reload();
-// };
 
 return (
     <>

@@ -19,7 +19,6 @@ import { Store } from "../../Context/Store";
 const LandingPage = ({ search, setSearch, loader, setLoader }) => {
   const [isVisible, setIsVisible] = useState(true);
   const targetRef = useRef(null);
-  // const [loader, setLoader] = useState(false)
   const [nftListFP, setNftListFP] = useState([]);
   const [nftListAuction, setNftListAuction] = useState([]);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -59,7 +58,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
         let id;
         id = allNftIds?.[i]?.id;
 
-        const structData = await getProviderMarketContrat()._idToNFT(id);
+        const structData = await getProviderMarketContrat()?._idToNFT(id);
 
         if (
           structData?.firstOwner !=
@@ -67,7 +66,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
           structData?.listed &&
           structData?.approve
         ) {
-          const auctionData = await getProviderMarketContrat()._idToAuction(id);
+          const auctionData = await getProviderMarketContrat()?._idToAuction(id);
 
           let response;
           let nftLikes;
@@ -94,10 +93,10 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
           const user_id = response?.data?.data?.user_id;
 
           const auctionLive =
-            await getProviderMarketContrat().getStatusOfAuction(id);
+            await getProviderMarketContrat()?.getStatusOfAuction(id);
 
           const price = structData?.price?.toString();
-          const metaData = await getProviderNFTContrat().tokenURI(id);
+          const metaData = await getProviderNFTContrat()?.tokenURI(id);
           const responses = await fetch(metaData);
           const metadata = await responses.json();
 
@@ -306,7 +305,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="header">
-                    <div className="left">NFT</div>
+                    <div className="left">NFTs</div>
                     <Link to="/search">
                       <div className="right">View more</div>
                     </Link>
@@ -318,7 +317,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                     <>
                       {nftListFP
                         ?.slice(0, nftListFP?.length > 4 ? 4 : nftListFP?.list)
-                        .map((item) => (
+                        .map((item, index) => (
                           <>
                             <BuyNow
                               setLoader={setLoader}
@@ -339,19 +338,15 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                               user_id={item?.user_id}
                               is_unapproved={item?.approve}
                               size={"col-lg-3"}
+                              index={index}
                             />
                           </>
                         ))}
-                         <>
-                         {console.log(nftListFP?.length,"clg")}
-                      {(nftListFP?.length < 2 && nftListFP?.length >= 1) && <DummyCard />}
-                      {(nftListFP?.length - 1 < 3 && nftListFP?.length > nftListFP?.length -1) && <DummyCard />}
-                      {(nftListFP?.length - 1 < 4 && nftListFP?.length > nftListFP?.length -1) && <DummyCard />}
-                      {/* {(nftListFP?.length < 0  && nftListFP?.length < (nftListFP?.length + 1)) && <DummyCard />}
-                      {(nftListFP?.length > 1 && nftListFP?.length < 1 ) && <DummyCard />} */}
-                      {/* {(nftListFP?.length > 2 && nftListFP?.length < 4) && <DummyCard />} */}
-                      {/* {(nftListFP?.length > 3 && nftListFP?.length < 4) && <DummyCard />}  */}
-                    </>
+                      <>
+                        {(nftListFP?.length < 2 && nftListFP?.length >= 1) && <DummyCard />}
+                        {(nftListFP?.length - 1 < 3 && nftListFP?.length > nftListFP?.length - 1) && <DummyCard />}
+                        {/* {(nftListFP?.length - 1 < 4 && nftListFP?.length > nftListFP?.length - 1) && <DummyCard />} */}
+                      </>
                     </>
                   ) : (
                     <>
@@ -400,9 +395,9 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                 {nftListAuction?.length > 0 ? (
                   <>
                     <>
-                      {nftListAuction?.slice(0,nftListAuction?.length > 4 ? 4: nftListAuction?.length)
-                        .map((item) => (
-                          <>                       
+                      {nftListAuction?.slice(0, nftListAuction?.length > 4 ? 4 : nftListAuction?.length)
+                        .map((item, index) => (
+                          <>
                             <NewItemCard
                               setLoader={setLoader}
                               id={item?.id}
@@ -426,11 +421,12 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                               nft_like={item?.nft_like}
                               is_unapproved={item?.approve}
                               size={"col-lg-3"}
+                              index={index}
                             />
                           </>
                         ))}
                     </>
-                   
+
                   </>
                 ) : (
                   <>

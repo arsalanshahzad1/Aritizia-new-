@@ -129,8 +129,8 @@ function Register({loader,setLoader}) {
                             <h1 className='title'>Create Account</h1>
                             <p className='desc'>Let’s get started</p>
                             <form onSubmit={registerUser}>
-                                <input type="text" name="first_name" onChange={onChangeHandler} id="" placeholder='First name' required />
-                                <input type="text" name="last_name" onChange={onChangeHandler} id="" placeholder='Last name' required />
+                                <input type="text" name="first_name" onChange={onChangeHandler} id="" placeholder='First name' required maxLength={10} minLength={3}/>
+                                <input type="text" name="last_name" onChange={onChangeHandler} id="" placeholder='Last name' required maxLength={10} minLength={3}/>
                                 <input type="email" name="email" onChange={onChangeHandler} id="" placeholder='Email Address' required />
                                 <div className="pass">
                                 <input type={showPass ? "text" : "password"} name="password" onChange={onChangeHandler} id="" placeholder='Password' required />
@@ -146,7 +146,7 @@ function Register({loader,setLoader}) {
                                         </div>
                                     </div>
                                     <div className="two">
-                                        <p>"I agree to Artizia's <Link to={'/terms'} target='_blank'> Terms of Use</Link> and <Link to={'/privacy-policy'}target='_blank'>Privacy Policy</Link> and fees</p>
+                                        <p>I agree to Artizia's <Link to={'/terms'} target='_blank'> Terms of Use</Link> and <Link to={'/privacy-policy'}target='_blank'>Privacy Policy</Link> and fees</p>
                                     </div>
                                 </div>
                                 <button type='submit' disabled={loader} className={`signup ${!chack ? 'disable' : ''}`}>Sign up</button>

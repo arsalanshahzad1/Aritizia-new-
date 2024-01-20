@@ -7,9 +7,7 @@ const ProtectedRoute = ({isAuth , isAdmin}) => {
     const userAddress = localStorage.getItem("userAddress")
     
     const adminAuth = localStorage.getItem("adminAuth")
-// console.log(data?.is_email,"data?.is_emaildata?.is_emaildata?.is_email")
     const {pathname} = useLocation()
-        // console.log(userAddress,"userAddressuserAddressuserAddressuserAddress")
       if(isAuth)
       {
         return  userAddress  !== "false" ? <Outlet/> : <Navigate to={`/`} state={{from: pathname}}/>       

@@ -17,6 +17,9 @@ import Loader from "../../components/shared/Loader";
 const Earnings = () => {
   const [status, setStatus] = useState({ value: "Monthly", label: "Monthly" });
   const [earning, setEarning] = useState([]);
+    const userData = JSON.parse(localStorage.getItem("data"));
+  const userAddress = userData?.wallet_address;
+  let userId = userData?.id;
   
   const handleStatus = (e) => {
     setStatus(e);
@@ -24,13 +27,18 @@ const Earnings = () => {
 
   const getEarning = async () => {
     const response = await apis.getSalesHistory();
-    console.log(response?.data?.data);
-    setEarning(response?.data?.data);
-    setLoader(false);    
+    try {
+      setEarning(response?.data?.data);
+      setLoader(false);    
+    } catch (error) {
+      setLoader(false);    
+      console.error(error);
+    }
   };
-
   useEffect(() => {
-    getEarning();
+    if(userId){
+      getEarning();
+    }
   }, []);
 
   useEffect(()=>{
@@ -422,8 +430,7 @@ const Earnings = () => {
 
   const [totalPrice, setTotalPrice] = useState("");
 
-  const userData = JSON.parse(localStorage.getItem("data"));
-  const userAddress = userData?.wallet_address;
+
 
   useEffect(() => {
     getTotalBalance();

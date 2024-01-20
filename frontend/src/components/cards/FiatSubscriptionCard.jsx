@@ -14,20 +14,15 @@ const DateDisplay = ({ datetime }) => {
 }
 
 const FiatSubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, index, viewSubscriptions }) => {
-    // console.log(data);
 
     const userData = JSON.parse(localStorage.getItem("data"));
     const userId = userData?.id;
     const [emailSigninPopup, setEmailSigninPopup] = useState(false);
     const autoRecursionOnoff = async (id, subId) => {
-        // console.log(id);
-        // console.log(subId);
         const response = await apis.autoRecursionOnoff({ user_id: id, subscription_id: subId })
         if (response.status) {
-            // console.log(response);
             viewSubscriptions(userId)
         } else {
-            // console.log(response);
         }
     }
 

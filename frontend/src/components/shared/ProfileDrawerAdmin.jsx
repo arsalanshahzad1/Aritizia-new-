@@ -84,6 +84,7 @@ function ProfileDrawerAdmin({
 
   const userData = JSON.parse(localStorage.getItem("data"));
   const userAddress = userData?.wallet_address;
+  let userId = userData?.id;
 
   const [priceETH, setPriceETH] = useState("");
   const [amountUSD, setAmountUSD] = useState("");
@@ -114,8 +115,6 @@ function ProfileDrawerAdmin({
 
     const structData = await marketplaceContract._idToNFT(id);
     let approve = structData.approve;
-    // console.log("checkSeller id", id);
-    // console.log("checkSeller approve", approve);
   };
 
   const getNFTLike = async () => {
@@ -146,6 +145,7 @@ function ProfileDrawerAdmin({
   };
 
   useEffect(() => {
+    var temp = JSON.parse(localStorage?.getItem("data"));
     if (isVisible) {
       postNFTView();
     }
@@ -651,7 +651,10 @@ function ProfileDrawerAdmin({
                     <span>
                       {likeAndViewData?.view_count == ""
                         ? "00"
-                        : likeAndViewData?.view_count}{" "}
+                        : (likeAndViewData ?
+                          likeAndViewData?.view_count :
+                          '0' )
+                        }
                       View
                     </span>
                   </div>
@@ -659,12 +662,19 @@ function ProfileDrawerAdmin({
                     {likeAndViewData?.is_liked == 0 ? (
                       <AiOutlineHeart />
                     ) : (
+                      likeAndViewData ?
                       <AiFillHeart style={{ fill: "#2636d9" }} />
+                      :
+                      <AiOutlineHeart />
                     )}
                     <span>
                       {likeAndViewData?.like_count == ""
                         ? "0"
-                        : likeAndViewData?.like_count}{" "}
+                        : 
+                       ( likeAndViewData ?
+                        likeAndViewData?.like_count :
+                        '0' )
+                      }
                       Favorite
                     </span>
                   </div>

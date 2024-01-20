@@ -15,9 +15,9 @@ const DummyCard = ({id , classNam}) => {
   return (
     <>
       <div className={`col-lg-3 col-md-4 ${classNam} col-sm-12`} id={id}>
-        <div class="carddd is-loading">
-          <div class="image"></div>
-          <div class="content">
+        <div className="carddd is-loading">
+          <div className="image"></div>
+          <div className="content">
             <h2></h2>
             <p></p>
           </div>

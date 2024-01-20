@@ -331,6 +331,8 @@ const PlaceABidDrawerDashboard = ({
   const userData = JSON.parse(localStorage.getItem("data"));
   let userAddress = userData?.wallet_address;
   const getBuyerPlan = userData?.subscription_plan;
+  let userId = userData?.id;
+
 
   const navigate = useNavigate();
 
