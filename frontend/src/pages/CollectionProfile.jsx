@@ -264,7 +264,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                       <>
                         <div className="row">
                           {NftLoader ?
-                            <section className="sec-loading">
+                            <section className="sec-loading" style={{height : '300px'}}>
                               <div className="one"></div>
                             </section>
                             :
@@ -301,7 +301,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                       <>
                         <div className="row">
                           {autionNftLoader ?
-                            <section className="sec-loading">
+                            <section className="sec-loading" style={{height : '300px'}}>
                               <div className="one"></div>
                             </section>
                             :

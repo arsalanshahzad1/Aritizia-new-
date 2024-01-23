@@ -64,7 +64,7 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
   }
 };
 
-const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,price,collectionId,listingType,sellerId) => {
+const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner,price,collectionId,listingType,sellerId) => {
 
   const nftcontract = new ethers.Contract(
     nftContract?.toString(),
@@ -80,8 +80,11 @@ const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,price,coll
     contractAddress: nftContract?.toString(),
     token_id: tokenId?.toString(),
     title: metadata?.title,
+    description:metadata.description,
+    image_url:metadata.image,
     seller: seller?.toString(),
     owner: buyer?.toString(),
+    creator_address:firstOwner?.toString(),
     price: price?.toString(),
     collection_id: collectionId?.toString(),
     listing_type : listingType?.toString(),

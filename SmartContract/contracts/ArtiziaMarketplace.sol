@@ -345,9 +345,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 tokenId,
         address seller,
         address owner,
+        address firstOwner,
         uint256 price,
+        uint256 min_bid,
+        uint256 last_bid,
         uint256 collectionId,
         uint256 listingType,
+        uint256 start_time,
+        uint256 end_time,
         uint256 sellerId
     );
 
@@ -541,12 +546,47 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     _tokenId[i]
                 );
 
-                // _marketOwner.transfer(LISTING_FEE);
+            _nftCount++;
 
-                _nftCount++;
+            collection[_collectionId].push(_tokenId[i]);
 
-                collection[_collectionId].push(_tokenId[i]);
+             
+            
 
+                if (_listingType == uint256(ListingType.Auction)) {
+
+                    _idToAuction[_tokenId[i]] = Auction(
+                        _tokenId[i], //tokenId
+                        payable(msg.sender), // seller
+                        _price[i], // basePrice
+                        _startTime[i], // startTime
+                        _endTime[i], // endTime
+                        0,
+                        0, // highestBid
+                        payable(address(0)), // highestBidder
+                        PaymentMethod(_paymentMethod),
+                        150,
+                        false
+                    );
+
+                         emit NFTListed(
+                    _nftContract,
+                    _tokenId[i],
+                    msg.sender,
+                    address(this),
+                    payable(msg.sender),
+                    _price[i],
+                    0,
+                    0,
+                    _collectionId,
+                    _listingType,
+                    0,
+                    0,
+                    _sellerId
+                );
+                
+                }
+                else{
                 _idToNFT[_tokenId[i]] = NFT(
                     _nftContract,
                     _tokenId[i],
@@ -563,35 +603,39 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     false
                 );
 
-                // _idToNFT2[_tokenId[i]] = NFT2(_tokenId[i], false, 0);
-
-                if (_listingType == uint256(ListingType.Auction)) {
-                    _idToAuction[_tokenId[i]] = Auction(
-                        _tokenId[i], //tokenId
-                        payable(msg.sender), // seller
-                        _price[i], // basePrice
-                        _startTime[i], // startTime
-                        _endTime[i], // endTime
-                        0,
-                        0, // highestBid
-                        payable(address(0)), // highestBidder
-                        PaymentMethod(_paymentMethod),
-                        150,
-                        false
-                        // false // isLive
-                    );
-                }
-
                 emit NFTListed(
                     _nftContract,
                     _tokenId[i],
                     msg.sender,
                     address(this),
+                    payable(msg.sender),
                     _price[i],
+                    0,
+                    0,
                     _collectionId,
                     _listingType,
+                    0,
+                    0,
                     _sellerId
                 );
+
+                }
+
+        // address nftContract,
+        // uint256 tokenId,
+        // address seller,
+        // address owner,
+        // address firstOwner,
+        // uint256 price,
+        // uint256 min_bid,
+        // uint256 last_bid,
+        // uint256 collectionId,
+        // uint256 listingType,
+        // uint256 start_time,
+        // uint256 end_time,
+        // uint256 sellerId
+
+     
             }
         }
     }
@@ -965,6 +1009,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             _tokenId,
             msg.sender,
             address(this),
+            nft.firstOwner,
             _price,
             nft.collectionId,
             _listingType,

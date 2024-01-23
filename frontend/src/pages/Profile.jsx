@@ -767,7 +767,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                               <div className="one"></div>
                             </section>
                             :
-                            likedNftsAuction?.length > 0 ?
+                            likedNftsAuction?.length > 0 
+                            ?
                               <>
                                 {likedNftsAuction?.map((item) => (
                                   <NewItemCard

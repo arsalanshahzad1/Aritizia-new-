@@ -52,11 +52,14 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
 
   const getListedNfts = async (allNftIds) => {
     let listingType;
-
+    console.log(allNftIds , 'allNftIds');
+    
     if (allNftIds?.length > 0) {
       for (let i = 0; i < allNftIds?.length; i++) {
         let id;
-        id = allNftIds?.[i]?.id;
+        id = allNftIds?.[i]?.token_id;
+        
+        console.log(id , 'allNftIds');
 
         const structData = await getProviderMarketContrat()?._idToNFT(id);
 
@@ -101,6 +104,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
           const metadata = await responses.json();
 
           listingType = structData?.listingType;
+          console.log(listingType,"listingType")
 
           if (listingType === 0) {
             const nftData = {
@@ -343,9 +347,10 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                           </>
                         ))}
                       <>
-                        {(nftListFP?.length < 2 && nftListFP?.length >= 1) && <DummyCard />}
-                        {(nftListFP?.length - 1 < 3 && nftListFP?.length > nftListFP?.length - 1) && <DummyCard />}
-                        {/* {(nftListFP?.length - 1 < 4 && nftListFP?.length > nftListFP?.length - 1) && <DummyCard />} */}
+                        {(nftListFP?.length != 1 && nftListFP?.length < 2) && <DummyCard />}
+                        {(nftListFP?.length != 2 && nftListFP?.length < 3) && <DummyCard />}
+                        {(nftListFP?.length != 3 && nftListFP?.length < 4) && <DummyCard />}
+                        {(nftListFP?.length != 4 && nftListFP?.length < 5) && <DummyCard />}
                       </>
                     </>
                   ) : (
@@ -392,6 +397,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                 </div>
               </div>
               <div className="d-flex">
+                {console.log(nftListAuction,"nftListAuction" )}
                 {nftListAuction?.length > 0 ? (
                   <>
                     <>
@@ -425,8 +431,13 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                             />
                           </>
                         ))}
+                        <>
+                        {(nftListAuction?.length != 1 && nftListAuction?.length < 2) && <DummyCard />}
+                        {(nftListAuction?.length != 2 && nftListAuction?.length < 3) && <DummyCard />}
+                        {(nftListAuction?.length != 3 && nftListAuction?.length < 4) && <DummyCard />}
+                        {(nftListAuction?.length != 4 && nftListAuction?.length < 5) && <DummyCard />}
+                      </>
                     </>
-
                   </>
                 ) : (
                   <>

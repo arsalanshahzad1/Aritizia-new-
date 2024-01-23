@@ -84,7 +84,7 @@ function ProfileDrawer({
     setStatus(e);
   };
 
-  const { account, checkIsWalletConnected, getProviderMarketContrat,getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat } = useContext(Store);
+  const { account, checkIsWalletConnected, getProviderMarketContrat, getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat } = useContext(Store);
 
   useEffect(() => {
     checkIsWalletConnected()
@@ -116,7 +116,7 @@ function ProfileDrawer({
 
   //   let EthIntoUSDT = (+feeETH + +price?.toString())
   //   setEthForFiat(EthIntoUSDT);
-    
+
   //   let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
   //   setPriceIntoUSD(intoUSDT?.toString());
@@ -165,7 +165,7 @@ function ProfileDrawer({
   useEffect(() => {
     var temp = JSON.parse(localStorage?.getItem("data"));
     if (isVisible
-      ) {
+    ) {
       postNFTView();
     }
   }, [isVisible]);
@@ -302,7 +302,7 @@ function ProfileDrawer({
   useEffect(() => {
     // getPriceInUSDAndDetials(); 
     getNFTDetailByNFTTokenId();
-  }, [account, price,fiatAmount])
+  }, [account, price, fiatAmount])
 
 
   const statusOptions = [
@@ -687,6 +687,7 @@ function ProfileDrawer({
   const userAccountAddress = localStorage.getItem("userAddress")
 
   const navigateTo = (id) => {
+    console.log('calling');
     if (userData) {
       navigate(`/collection?id=${id}`);
     } else {
@@ -734,7 +735,7 @@ function ProfileDrawer({
               </div>
               <div className="earning-map">
                 <div
-                className="earning-map-one"
+                  className="earning-map-one"
                 >
                   <div
                     style={{
@@ -772,25 +773,22 @@ function ProfileDrawer({
                 </div>
                 <div className="second-line">
                   <p>
-                    Owned by{" "}
-                    {userData?.wallet_address ==
-                      nftDetails?.user?.wallet_address ? (
-                      <Link to={"/profile"}>
-                        <span>
-                          {nftDetails?.user?.username}
+                    Owned by
+                    {userData ?
+                      userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                        <Link to={"/profile"}>
+                          <span>{nftDetails?.user?.username}</span>
+                        </Link>
+                      ) : (
+                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.id}`)}>
+                          {nftDetails?.owner?.username}
                         </span>
-                      </Link>
-                    ) : (
-                      <span
-                        onClick={() =>
-                          navigate(
-                            `/other-profile?add=${nftDetails?.user?.id}`
-                          )
-                        }
-                      >
+                      )
+                      :
+                      <span onClick={() => { setEmailSigninPopup(true) }} style={{ cursor: 'pointer' }}>
                         {nftDetails?.owner?.username}
                       </span>
-                    )}
+                    }
                   </p>
                 </div>
                 <div className="three-line">
@@ -801,8 +799,8 @@ function ProfileDrawer({
                         ? "00"
                         : (likeAndViewData ?
                           likeAndViewData?.view_count :
-                          '0' )
-                        }
+                          '0')
+                      }
                       View
                     </span>
                   </div>
@@ -811,18 +809,18 @@ function ProfileDrawer({
                       <AiOutlineHeart />
                     ) : (
                       likeAndViewData ?
-                      <AiFillHeart style={{ fill: "#2636d9" }} />
-                      :
-                      <AiOutlineHeart />
+                        <AiFillHeart style={{ fill: "#2636d9" }} />
+                        :
+                        <AiOutlineHeart />
 
                     )}
                     <span>
                       {likeAndViewData?.like_count == ""
                         ? "0"
-                        : 
-                       ( likeAndViewData ?
-                        likeAndViewData?.like_count :
-                        '0')
+                        :
+                        (likeAndViewData ?
+                          likeAndViewData?.like_count :
+                          '0')
                       }
                       Favorite
                     </span>
@@ -835,69 +833,56 @@ function ProfileDrawer({
                   <div className="row">
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
-                      <div className="logo-name"
-                      >
-                        {
+                      <div className="logo-name">
+                        {userData ?
                           userData?.wallet_address == nftDetails?.user?.wallet_address ? (
                             <Link to={`/profile`}>
-
-                              {nftDetails?.user?.profile_image ? (
-                                <img
-                                  src={nftDetails?.user?.profile_image}
-                                  alt=""
-                                />
-                              ) : (
-                                <img
-                                  src={"/public/assets/images/user-none.png"}
-                                  alt=""
-                                />
-                              )}
-                              <span>
-                                {nftDetails?.user?.username}
-                              </span>
+                              {nftDetails?.user?.profile_image ?
+                                (<img src={nftDetails?.user?.profile_image} alt="" />) :
+                                (<img src={"/public/assets/images/user-none.png"} alt="" />)
+                              }
+                              <span>{nftDetails?.user?.username}</span>
                             </Link>
                           ) : (
-                            <div
-                              onClick={() =>
-                                navigate(
-                                  `/other-profile?add=${nftDetails?.owner?.id}`,
-                                  {
-                                    state: {
-                                      address: nftDetails?.user?.wallet_address,
-                                    },
-                                  }
-                                )
-                              }
+                            <div onClick={() => navigate(`/other-profile?add=${nftDetails?.owner?.id}`, { state: { address: nftDetails?.user?.wallet_address } })
+                            }
                             >
                               {nftDetails?.user?.profile_image ? (
-                                <img
-                                  src={nftDetails?.user?.profile_image}
-                                  alt=""
-                                />
+                                <img src={nftDetails?.user?.profile_image} alt="" />
                               ) : (
-                                <img
-                                  src={"/public/assets/images/user-none.png"}
-                                  alt=""
-                                />
+                                <img src={"/public/assets/images/user-none.png"} alt="" />
                               )}
                               <span>{nftDetails?.user?.username}</span>
                             </div>
                           )
+                          :
+                          <div onClick={() => setEmailSigninPopup(true)}>
+                            {nftDetails?.user?.profile_image ? (
+                              <img src={nftDetails?.user?.profile_image} alt="" />
+                            ) : (
+                              <img src={"/public/assets/images/user-none.png"} alt="" />
+                            )}
+                            <span>{nftDetails?.user?.username}</span>
+                          </div>
+
+
                         }
 
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
-                      {/* <Link to={`collection?id=${nftDetails?.collection?.id}`}>/ */}
-                      <div className="logo-name" onClick={() => navigateTo(nftDetails?.collection?.id)}>
-                        <img
-                          src={nftDetails?.collection?.media[0]?.original_url}
-                          alt=""
-                        />{" "}
-                        <span>{nftDetails?.collection?.name}</span>
-                      </div>
-                      {/* </Link> */}
+                      {userData ?
+                        <div className="logo-name" onClick={() => navigateTo(nftDetails?.collection?.id)}>
+                          <img src={nftDetails?.collection?.media[0]?.original_url} alt="" />
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                        :
+                        <div className="logo-name" onClick={() => setEmailSigninPopup(true)}>
+                          <img src={nftDetails?.collection?.media[0]?.original_url} alt="" />
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      }
                     </div>
                   </div>
                 </div>
@@ -1055,7 +1040,7 @@ function ProfileDrawer({
               _buyerAddress={account}
               _buyerPlan={buyerPlan}
               sellerId={nftDetails?.user_id}
-              buyerId={userData?.id} 
+              buyerId={userData?.id}
               ethAmount={ethForFiat}
             />
           </div>
@@ -1063,8 +1048,8 @@ function ProfileDrawer({
       </Modal>
 
 
-      {/* <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
-      <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} /> */}
+      {/* <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} /> */}
+      <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
     </>
   );
 }

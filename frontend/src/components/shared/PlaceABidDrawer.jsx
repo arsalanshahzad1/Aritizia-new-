@@ -952,22 +952,21 @@ const PlaceABidDrawer = ({
                 <div className="second-line">
                   <p>
                     Owned by{" "}
-                    {userData?.wallet_address ==
-                    nftDetails?.user?.wallet_address ? (
-                      <Link to={"/profile"}>
-                        <span>
-                          {nftDetails?.user?.username}
+                    {userData ?
+                      userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                        <Link to={"/profile"}>
+                          <span>{nftDetails?.user?.username}</span>
+                        </Link>
+                      ) : (
+                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.id}`)}>
+                          {nftDetails?.owner?.username}
                         </span>
-                      </Link>
-                    ) : (
-                      <span
-                        onClick={() =>
-                          navigate(`/other-profile?add=${nftDetails?.user?.id}`)
-                        }
-                      >
+                      )
+                      :
+                      <span onClick={() => { setEmailSigninPopup(true) }} style={{ cursor: 'pointer' }}>
                         {nftDetails?.owner?.username}
                       </span>
-                    )}
+                    }
                   </p>
                 </div>
                 <div className="three-line">
@@ -1013,18 +1012,14 @@ const PlaceABidDrawer = ({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        {userData?.id == nftDetails?.user?.id ? (
+                        {userData ? 
+                        
+                       ( userData?.id == nftDetails?.user?.id ? (
                           <Link to={`/profile`}>
                             {nftDetails?.user?.profile_image ? (
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />
+                              <img src={nftDetails?.user?.profile_image} alt="" />
                             ) : (
-                              <img
-                                src={"/public/assets/images/user-none.png"}
-                                alt=""
-                              />
+                              <img src={"/public/assets/images/user-none.png"}alt=""/>
                             )}
                             <span>
                               {nftDetails?.user?.username}
@@ -1056,23 +1051,42 @@ const PlaceABidDrawer = ({
                             )}
                             <span>{nftDetails?.user?.username}</span>
                           </div>
-                        )}
+                        ))
+                        :(
+                          <div
+                            onClick={() => setEmailSigninPopup(true)}
+                          >
+                            {nftDetails?.user?.profile_image ? (
+                              <img
+                                src={nftDetails?.user?.profile_image}
+                                alt=""
+                              />
+                            ) : (
+                              <img
+                                src={"/public/assets/images/user-none.png"}
+                                alt=""
+                              />
+                            )}
+                            <span>{nftDetails?.user?.username}</span>
+                          </div>
+                        )
+                      }
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
-                      {/* <Link to={`collection?id=${nftDetails?.collection?.id}`}> */}
-                      <div
-                        className="logo-name"
-                        onClick={() => navigateTo(nftDetails?.collection?.id)}
-                      >
-                        <img
-                          src={nftDetails?.collection?.media[0]?.original_url}
-                          alt=""
-                        />{" "}
+                      {userData ?
+                      <div className="logo-name" onClick={() => navigateTo(nftDetails?.collection?.id)}>
+                        <img src={nftDetails?.collection?.media[0]?.original_url} alt=""/>
                         <span>{nftDetails?.collection?.name}</span>
                       </div>
-                      {/* </Link> */}
+                      :
+                      <div className="logo-name" onClick={() => setEmailSigninPopup(true)}>
+                        <img src={nftDetails?.collection?.media[0]?.original_url} alt=""/>
+                        <span>{nftDetails?.collection?.name}</span>
+                      </div>
+
+                    }
                     </div>
                   </div>
                 </div>
