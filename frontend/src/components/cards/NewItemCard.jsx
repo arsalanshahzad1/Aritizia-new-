@@ -36,10 +36,9 @@ const NewItemCard = ({
   size
 }) => {
   console.log(
-
-    collection,
-    collectionImages,
-
+    highestBidIntoETH,
+    highestBidIntoUSDT,
+    highestBidderAddress,
     "checkinnggggg")
 
   // const [showLinks, setShowLinks] = useState(false);

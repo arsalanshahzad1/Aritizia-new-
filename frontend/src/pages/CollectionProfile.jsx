@@ -47,8 +47,16 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
     setAutionNftLoader(true)
     const response = await apis.viewNftCollectionProfile(id);
     try {
+      console.log(response?.data?.data?.nfts?.auction,"responseresponseresponseresponseresponse")
+      
+      setNftListFP(response?.data?.data?.nfts?.onsale)
+      setNftListAuction(response?.data?.data?.nfts?.auction)
+
       setCollectionData(response?.data?.data);
-      getCollectionNfts(response?.data?.data?.nfts)
+      
+      setNftLoader(false)
+      setAutionNftLoader(false)
+      
     } catch (error) {
       toast.error(error.message);
       setNftLoader(false)
@@ -61,105 +69,105 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
   }, []);
 
 
-  const getCollectionNfts = async (nftIds) => {
+  // const getCollectionNfts = async (nftIds) => {
 
-    let listingType;
-    const myArray = nftIds;
+  //   let listingType;
+  //   const myArray = nftIds;
 
-    for (let i = 0; i < myArray?.length; i++) {
-      let id = myArray[i];
-
-
-      const structData = await getProviderMarketContrat()._idToNFT(id);
+  //   for (let i = 0; i < myArray?.length; i++) {
+  //     let id = myArray[i];
 
 
-      let firstOwner = structData[i]?.firstOwner;
-      if (firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed && structData?.listed) {
+  //     const structData = await getProviderMarketContrat()._idToNFT(id);
 
-        const metaData = await getProviderNFTContrat()?.tokenURI(id);
 
-        let collectionId = structData?.collectionId?.toString();
+  //     let firstOwner = structData[i]?.firstOwner;
+  //     if (firstOwner != "0x0000000000000000000000000000000000000000" && structData?.listed && structData?.listed) {
 
-        let auctionData = await getProviderMarketContrat()._idToAuction(id);
+  //       const metaData = await getProviderNFTContrat()?.tokenURI(id);
 
-        let collectionImages;
-        let user_id;
-        let response;
-        let nftLikes;
+  //       let collectionId = structData?.collectionId?.toString();
 
-        try {
-          response = await apis.getNFTCollectionImage(collectionId);
-          collectionImages = response?.data?.data?.media?.[0]?.original_url;
-          user_id = response?.data?.data?.media?.[0]?.original_url;
-        } catch (error) {
-          console.log(error)
-        }
+  //       let auctionData = await getProviderMarketContrat()._idToAuction(id);
 
-        try { nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id) }
-        catch (error) {
-          console.log(error)
-        }
+  //       let collectionImages;
+  //       let user_id;
+  //       let response;
+  //       let nftLikes;
 
-        const auctionLive = await getProviderMarketContrat().getStatusOfAuction(id);
+  //       try {
+  //         response = await apis.getNFTCollectionImage(collectionId);
+  //         collectionImages = response?.data?.data?.media?.[0]?.original_url;
+  //         user_id = response?.data?.data?.media?.[0]?.original_url;
+  //       } catch (error) {
+  //         console.log(error)
+  //       }
 
-        const price = structData?.price?.toString();
-        const responses = await fetch(metaData)
-        const metadata = await responses.json()
+  //       try { nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id) }
+  //       catch (error) {
+  //         console.log(error)
+  //       }
 
-        listingType = structData?.listingType;
+  //       const auctionLive = await getProviderMarketContrat().getStatusOfAuction(id);
 
-        if (listingType === 0) {
-          const nftData = {
-            id: id,
-            title: metadata?.title,
-            image: metadata?.image,
-            price: price,
-            paymentMethod: structData?.paymentMethod,
-            royalty: structData?.royalty,
-            royaltyPrice: structData?.royaltyPrice,
-            description: metadata?.description,
-            collection: structData?.collectionId?.toString(),
-            collectionImages: collectionImages,
-            seller: structData?.seller,
-            owner: structData?.owner,
-            firstOwner: structData?.firstOwner,
-            user_id: user_id
-          };
-          console.log(nftData, 'nftData');
-          setNftListFP((prev) => [...prev, nftData]);
-          setNftLoader(false)
-        } else if (listingType === 1) {
-          const nftData = {
-            id: id,
-            isLive: auctionLive,
-            title: metadata?.title,
-            image: metadata?.image,
-            description: metadata?.description,
-            basePrice: price,
-            startTime: auctionData?.startTime?.toString(),
-            endTime: auctionData?.endTime?.toString(),
-            highestBidIntoETH: auctionData?.highestBidIntoETH?.toString(),
-            highestBidIntoUSDT: auctionData?.highestBidIntoUSDT?.toString(),
-            highestBidderAddress: auctionData?.highestBidder?.toString(),
-            paymentMethod: structData?.paymentMethod,
-            royaltyPrice: structData?.royaltyPrice,
-            collection: structData?.collectionId?.toString(),
-            collectionImages: collectionImages,
-            seller: auctionData?.seller,
-            owner: structData?.owner,
-            firstOwner: structData?.firstOwner,
-            user_id: user_id,
-            nft_like: nftLikes?.data?.data?.like_count
-          };
-          setNftListAuction((prev) => [...prev, nftData]);
-          setAutionNftLoader(false)
-        }
-        // setTimeout(() => {
-        //   setMyNftLoader(false)
-        // }, 10000);
-      }
-    }
-  };
+  //       const price = structData?.price?.toString();
+  //       const responses = await fetch(metaData)
+  //       const metadata = await responses.json()
+
+  //       listingType = structData?.listingType;
+
+  //       if (listingType === 0) {
+  //         const nftData = {
+  //           id: id,
+  //           title: metadata?.title,
+  //           image: metadata?.image,
+  //           price: price,
+  //           paymentMethod: structData?.paymentMethod,
+  //           royalty: structData?.royalty,
+  //           royaltyPrice: structData?.royaltyPrice,
+  //           description: metadata?.description,
+  //           collection: structData?.collectionId?.toString(),
+  //           collectionImages: collectionImages,
+  //           seller: structData?.seller,
+  //           owner: structData?.owner,
+  //           firstOwner: structData?.firstOwner,
+  //           user_id: user_id
+  //         };
+  //         console.log(nftData, 'nftData');
+  //         setNftListFP((prev) => [...prev, nftData]);
+  //         setNftLoader(false)
+  //       } else if (listingType === 1) {
+  //         const nftData = {
+  //           id: id,
+  //           isLive: auctionLive,
+  //           title: metadata?.title,
+  //           image: metadata?.image,
+  //           description: metadata?.description,
+  //           basePrice: price,
+  //           startTime: auctionData?.startTime?.toString(),
+  //           endTime: auctionData?.endTime?.toString(),
+  //           highestBidIntoETH: auctionData?.highestBidIntoETH?.toString(),
+  //           highestBidIntoUSDT: auctionData?.highestBidIntoUSDT?.toString(),
+  //           highestBidderAddress: auctionData?.highestBidder?.toString(),
+  //           paymentMethod: structData?.paymentMethod,
+  //           royaltyPrice: structData?.royaltyPrice,
+  //           collection: structData?.collectionId?.toString(),
+  //           collectionImages: collectionImages,
+  //           seller: auctionData?.seller,
+  //           owner: structData?.owner,
+  //           firstOwner: structData?.firstOwner,
+  //           user_id: user_id,
+  //           nft_like: nftLikes?.data?.data?.like_count
+  //         };
+  //         setNftListAuction((prev) => [...prev, nftData]);
+  //         setAutionNftLoader(false)
+  //       }
+  //       // setTimeout(() => {
+  //       //   setMyNftLoader(false)
+  //       // }, 10000);
+  //     }
+  //   }
+  // };
 
 
   return (
@@ -273,19 +281,19 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                                 <BuyNow
                                   setLoader={setLoader}
                                   key={item?.id}
-                                  id={item?.id}
+                                  nftId={item?.token_id}
                                   title={item?.title}
-                                  image={item?.image}
+                                  image={item?.image_url}
                                   price={item?.price}
                                   paymentMethod={item?.paymentMethod}
                                   royalty={item?.royalty}
                                   royaltyPrice={item?.royaltyPrice}
                                   description={item?.description}
-                                  collection={item?.collection}
-                                  collectionImages={item?.collectionImages}
-                                  seller={item?.seller}
-                                  owner={item?.owner}
-                                  firstOwner={item?.firstOwner}
+                                  collection={item?.collection_id}
+                                  collectionImages={item?.collection?.media[0]?.original_url}
+                                  seller={item?.seller_address}
+                                  owner={item?.owner_address}
+                                  firstOwner={item?.creator_address}
                                   user_id={item?.user_id}
                                   size={'col-lg-3'}
                                 />
@@ -312,20 +320,20 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                                   id={item?.id}
                                   isLive={item?.isLive}
                                   title={item?.title}
-                                  image={item?.image}
+                                  image={item?.image_url}
                                   description={item?.description}
-                                  basePrice={item?.basePrice}
-                                  startTime={item?.startTime}
-                                  endTime={item?.endTime}
-                                  highestBidIntoETH={item?.highestBidIntoETH}
-                                  highestBidIntoUSDT={item?.highestBidIntoUSDT}
-                                  highestBidderAddress={item?.highestBidderAddress}
+                                  basePrice={item?.price}
+                                  startTime={item?.start_time}
+                                  endTime={item?.end_time}
+                                  highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0 }
+                                  highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
+                                  highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
                                   royaltyPrice={item?.royaltyPrice}
-                                  collection={item.collection}
-                                  collectionImages={item?.collectionImages}
-                                  seller={item?.seller}
-                                  owner={item?.owner}
-                                  firstOwner={item?.firstOwner}
+                                  collection={item.collection_id}
+                                  collectionImages={item?.collection?.media[0]?.original_url}
+                                  seller={item?.seller_address}
+                                  owner={item?.owner_address}
+                                  firstOwner={item?.creator_address}
                                   user_id={item?.user_id}
                                   nft_like={item?.nft_like}
                                   size={'col-lg-3'}

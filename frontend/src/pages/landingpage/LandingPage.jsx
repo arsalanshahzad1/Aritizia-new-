@@ -414,9 +414,9 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                               startTime={item?.start_time}
                               endTime={item?.end_time}
 
-                              highestBidIntoETH={item?.bidding[0]?.bidding_price_eth ? item?.bidding[0]?.bidding_price_eth : 0 }
-                              highestBidIntoUSDT={item?.bidding[0]?.bidding_price_usdt ? item?.bidding[0]?.bidding_price_usdt : 0}
-                              highestBidderAddress={item?.bidding[0]?.bidder ? item?.bidding[0]?.bidder : 0}
+                              highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0 }
+                              highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
+                              highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
           
                               collection={item.collection_id}
                               collectionImages={item?.collection?.media[0]?.original_url}

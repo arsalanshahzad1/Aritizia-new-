@@ -72,17 +72,24 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   };
 
   const manageAPIData = async ()=>{
-    let APIData = await getProfileData();
-    console.log(APIData,"APIData");
-    console.log(APIData?.nft_stock?.onsale[0],"APIData");
-      setFollwers(APIData?.data?.follower);
-      setNftListFP(APIData?.nft_stock?.onsale);
-      setNftListAuction(APIData?.nft_stock?.auction);
-      setUserNfts(APIData?.my_nfts)
-      setLoader(false);
-      setNftLoader(false);
-      setpNftLoader(false);
-      setAutionNftLoader(false);
+    try {
+      let APIData = await getProfileData();
+      console.log(APIData,"APIData");
+      console.log(APIData?.nft_stock?.onsale[0],"APIData");
+        setFollwers(APIData?.data?.follower);
+        setNftListFP(APIData?.nft_stock?.onsale);
+        setNftListAuction(APIData?.nft_stock?.auction);
+        setUserNfts(APIData?.my_nfts)
+        setLoader(false);
+        setNftLoader(false);
+        setpNftLoader(false);
+        setAutionNftLoader(false);
+    } catch (error) {
+      console.log(error)
+      window.location.reload();
+      
+    }
+
   }
 
   // const getLikedNftsList = async () => {
@@ -665,9 +672,9 @@ console.log(nftListAuction,"nftListAuction")
                                   basePrice={item?.price}
                                   startTime={item?.start_time}
                                   endTime={item?.end_time}
-                                  highestBidIntoETH={item?.bidding[0]?.bidding_price_eth ? item?.bidding[0]?.bidding_price_eth : 0 }
-                                  highestBidIntoUSDT={item?.bidding[0]?.bidding_price_usdt ? item?.bidding[0]?.bidding_price_usdt : 0}
-                                  highestBidderAddress={item?.bidding[0]?.bidder ? item?.bidding[0]?.bidder : 0}
+                                  highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0}
+                                  highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
+                                  highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
                                   collection={item.collection_id}
                                   collectionImages={item?.collection?.media[0]?.original_url}
                                   seller={item?.seller_address}
@@ -799,9 +806,9 @@ console.log(nftListAuction,"nftListAuction")
                                     startTime={item?.start_time}
                                     endTime={item?.end_time}
                      
-                                    highestBidIntoETH={item?.bidding[0]?.bidding_price_eth ? item?.bidding[0]?.bidding_price_eth : 0 }
-                                    highestBidIntoUSDT={item?.bidding[0]?.bidding_price_usdt ? item?.bidding[0]?.bidding_price_usdt : 0}
-                                    highestBidderAddress={item?.bidding[0]?.bidder ? item?.bidding[0]?.bidder : 0}
+                                    highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0 }
+                                    highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
+                                    highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
                 
                                     royaltyPrice={item?.royaltyPrice}
                                     collection={item.collection_id}
