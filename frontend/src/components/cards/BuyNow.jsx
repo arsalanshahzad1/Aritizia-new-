@@ -23,13 +23,10 @@ import { toast } from "react-toastify";
 const BuyNow = ({
   setLoader,
   path,
-  id,
+  nftId,
   title,
   image,
   price,
-  paymentMethod,
-  royalty,
-  royaltyPrice,
   description,
   collection,
   collectionImages,
@@ -67,14 +64,13 @@ const BuyNow = ({
   }, [account])
 
 
-
-
   const buyerFeeCalculate = (_amount, _buyerPercent) => {
     return (_amount * _buyerPercent) / 10000;
   };
 
 
   const getPriceInUSDAndDetials = async () => {
+
     let _buyerPercent;
 
     if (getBuyerPlan == 3) {
@@ -91,8 +87,9 @@ const BuyNow = ({
 
     let EthIntoUSDT = (+feeETH + +price?.toString())
     
+    console.log("intoUSDT2")
     let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString());
-
+    console.log(intoUSDT,"intoUSDT")
     setEthForFiat(EthIntoUSDT);
     setPriceIntoUSD(intoUSDT?.toString());
     setFiatAmount(intoUSDT?.toString() / 10**6);
@@ -101,7 +98,7 @@ const BuyNow = ({
 
   const getNFTDetailByNFTTokenId = async () => {
     try {
-      const response = await apis.getNFTByTokenId(id);
+      const response = await apis.getNFTByTokenId(nftId);
       setNftDetails(response?.data?.data);
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
@@ -156,11 +153,11 @@ const BuyNow = ({
     });
   };
 
-  ///////////////////////////////////////////////
-  ///////////////////////////////////////////////
-  //////////////// Buy With ETH /////////////////
-  ///////////////////////////////////////////////
-  ///////////////////////////////////////////////
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
+  ////////////// Buy With ETH /////////////////
+  /////////////////////////////////////////////
+  /////////////////////////////////////////////
 
 
   let ethPurchase = false;
@@ -173,7 +170,7 @@ const BuyNow = ({
       await (
         await getSignerMarketContrat()?.buyWithETH(
           getSignerNFTContrat()?.address,
-          id,
+          nftId,
           sellerPlan, // must be multiple of 10 of the users percent //TODO: change here
           buyerPlan, // must be multiple of 10 of the users percent //TODO: change here
           nftDetails?.user_id, //selllerId
@@ -221,7 +218,7 @@ const BuyNow = ({
       await (
         await getSignerMarketContrat()?.buyWithUSDT(
           getSignerNFTContrat()?.address,
-          id,
+          nftId,
           priceInUSDT?.toString(),
           sellerPlan, 
           buyerPlan,
@@ -299,7 +296,7 @@ const BuyNow = ({
   const cancelList = async ()=> {
     setLoader(true);
     try {
-      let cancel = await getSignerMarketContrat()?.cancelListing(getSignerNFTContrat()?.address,id,nftDetails?.user_id);
+      let cancel = await getSignerMarketContrat()?.cancelListing(getSignerNFTContrat()?.address,nftId,nftDetails?.user_id);
       cancel.wait();
       setTimeout(()=>{
         setLoader(false);
@@ -315,8 +312,13 @@ const BuyNow = ({
     getNFTDetailByNFTTokenId();
   }, [account, price,fiatAmount])
 
+
+
+  console.log(owner?.toUpperCase() , MARKETPLACE_CONTRACT_ADDRESS?.address?.toUpperCase(),"checking")
+
   return (
     <>
+
       <div className={`${size} col-md-4`}>
         <Link to={path}>
           <div className="css-vurnku" style={{ position: "relative" }}>
@@ -378,12 +380,12 @@ const BuyNow = ({
                 className="J-bottom css-1xg74gr"
                 style={{ position: "relative" }}
               >
-                {/* <BiDotsHorizontalRounded className="doted-icon" /> */}
+           
                 <div className="css-fwx73e">
                   <div className="css-10nf7hq detail-wrap" onClick={() => openDrawer()}>
                     <div className="center-icon">
                       <div className="icon">
-                        {/* <img src={collectionImages && collectionImages} alt="" /> */}
+                    
                         {collectionImages == null ?
                           <img src='/assets/images/user-none.png' alt="" />
                           :
@@ -394,7 +396,7 @@ const BuyNow = ({
                     </div>
                     <div className="top">
                       <div className="left">{title}</div>
-                      <div className="right">{id}</div>
+                      <div className="right">{nftId}</div>
                     </div>
                     <div className="bottom">
                       <div className="left">Price</div>
@@ -407,8 +409,7 @@ const BuyNow = ({
                   </div>
                 </div>
                 <div className="J-buynow css-1elubna">
-                  {
-                  owner?.toUpperCase() === MARKETPLACE_CONTRACT_ADDRESS?.address?.toUpperCase() &&(
+                  {owner?.toUpperCase() === MARKETPLACE_CONTRACT_ADDRESS?.address?.toUpperCase() &&(
                     account?.toUpperCase() !== seller?.toUpperCase() ? (
                     <div className="button css-pxd23z" onClick={() => {
                       if (userWalletAddress === "false") {
@@ -452,12 +453,10 @@ const BuyNow = ({
         setLoader={setLoader}
         isVisible={isVisible}
         onClose={onClose}
-        id={id}
+        nftId={nftId}
         title={title}
         image={image}
         price={price}
-        paymentMethod={paymentMethod}
-        royalty={royalty}
         description={description}
         collection={collection}
         collectionImages={collectionImages}
@@ -466,8 +465,7 @@ const BuyNow = ({
         owner={owner}
         firstOwner={firstOwner}
         user_id={user_id}
-        royaltyPrice={royaltyPrice}
-      />
+      /> 
 
       <Modal
         show={sucess}
@@ -489,7 +487,7 @@ const BuyNow = ({
         </div>
       </Modal>
 
-      <Modal
+       <Modal
         show={showFiatPaymentForm}
         onHide={() => setShowFiatPaymentForm(false)}
         centered
@@ -512,14 +510,14 @@ const BuyNow = ({
             </div>
             <FiatStripeContainer
             setLoader={setLoader}
-              id={id}
+            nftId={nftId}
               amount={fiatAmount}
               setShowPaymentForm={setShowFiatPaymentForm}
               showResponseMessage={showResponseMessage}
               setSucess={setSucess}
               setIsVisible={setIsVisible}
               _nftContract={getProviderNFTContrat().address}
-              _tokenId={id}
+              _tokenId={nftId}
               _sellerPlan={sellerPlan}
               _buyerAddress={account}
               _buyerPlan={buyerPlan}

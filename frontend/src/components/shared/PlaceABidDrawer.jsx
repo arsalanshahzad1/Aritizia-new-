@@ -42,7 +42,7 @@ const PlaceABidDrawer = ({
   setLoader,
   isVisible,
   onClose,
-  id,
+  nftId,
   isLive,
   title,
   image,
@@ -53,7 +53,6 @@ const PlaceABidDrawer = ({
   highestBidIntoETH,
   highestBidIntoUSDT,
   highestBidderAddress,
-  royaltyPrice,
   collection,
   collectionImages,
   seller,
@@ -61,7 +60,6 @@ const PlaceABidDrawer = ({
   firstOwner,
   user_id,
   nft_like,
-  is_unapproved,
 }) => {
   const [chack, setChack] = useState(false);
   const [sucess, setSucess] = useState(false);
@@ -98,29 +96,27 @@ const PlaceABidDrawer = ({
   };
 
   const unixTimestamp = Math.floor(Date.now() / 1000);
-  
+
   const getEarning = async () => {
     const response = await apis.getSalesHistory();
     try {
       setEarning(response?.data?.data);
-      setLoader(false);    
+      setLoader(false);
     } catch (error) {
-      setLoader(false);    
+      setLoader(false);
       console.error(error);
     }
   };
-  
-  
-  
+
+  console.log(nftId,"nftIdnftIdnftIdnftIdnftId")
   useEffect(() => {
-    if(userId){
+    if (userId) {
       getEarning();
     }
   }, []);
 
-  useEffect(()=>{
-  },[earning])
-  
+  useEffect(() => {}, [earning]);
+
   var today = new Date(); // Get the current date and time
   var last30Days = [];
 
@@ -240,7 +236,7 @@ const PlaceABidDrawer = ({
       Date: "May 07 at 5:00 PM",
     },
     {
-      data:last30Days[4],
+      data: last30Days[4],
       value: earning?.lastWeek_earning?.[4],
       Average_price: "0.62 ETH",
       Num_sales: "1",
@@ -260,7 +256,7 @@ const PlaceABidDrawer = ({
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
-    
+
     {
       data: last30Days[1],
       value: earning?.lastWeek_earning?.[1],
@@ -268,7 +264,7 @@ const PlaceABidDrawer = ({
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
-   
+
     {
       data: last30Days[0],
       value: earning?.lastWeek_earning?.[0],
@@ -294,7 +290,7 @@ const PlaceABidDrawer = ({
       Date: "May 07 at 5:00 PM",
     },
     {
-      data:  last30Days[27],
+      data: last30Days[27],
       value: earning?.LastMonth_earning?.[27],
       Average_price: "0.62 ETH",
       Num_sales: "1",
@@ -455,7 +451,7 @@ const PlaceABidDrawer = ({
       Date: "May 07 at 5:00 PM",
     },
     {
-      data:last30Days[4],
+      data: last30Days[4],
       value: earning?.LastMonth_earning?.[4],
       Average_price: "0.62 ETH",
       Num_sales: "1",
@@ -475,7 +471,7 @@ const PlaceABidDrawer = ({
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
-    
+
     {
       data: last30Days[1],
       value: earning?.LastMonth_earning?.[1],
@@ -483,7 +479,7 @@ const PlaceABidDrawer = ({
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
-   
+
     {
       data: last30Days[0],
       value: earning?.LastMonth_earning?.[0],
@@ -491,8 +487,8 @@ const PlaceABidDrawer = ({
       Num_sales: "1",
       Date: "May 07 at 5:00 PM",
     },
-  ];  
-  
+  ];
+
   const buyerFeeCalculate = (_amount, _buyerPercent) => {
     return (_amount * _buyerPercent) / 10000;
   };
@@ -519,7 +515,10 @@ const PlaceABidDrawer = ({
         setPlatformFeeInUSDT(+ethIntoUsdtBase?.toString() / 10 ** 6);
       }
     } else if (+highestBidIntoETH?.toString() > +basePrice?.toString()) {
-      const fee = buyerFeeCalculate(+highestBidIntoETH?.toString(),buyerPercentage);
+      const fee = buyerFeeCalculate(
+        +highestBidIntoETH?.toString(),
+        buyerPercentage
+      );
       setPlatformFeeInETH(fee);
       if (fee != 0) {
         const ethIntoUsdtBase = await getSignerMarketContrat().getETHIntoUSDT(
@@ -531,7 +530,7 @@ const PlaceABidDrawer = ({
   };
 
   const getNFTDetailByNFTTokenId = async () => {
-    const response = await apis.getNFTByTokenId(id);
+    const response = await apis.getNFTByTokenId(nftId);
     setNftDetails(response?.data?.data);
     setSellerPlan(response?.data?.data?.subscription_plan);
   };
@@ -539,7 +538,7 @@ const PlaceABidDrawer = ({
   const getNFTLike = async () => {
     var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp?.id;
-    const response = await apis.getLikeNFT(address, id);
+    const response = await apis.getLikeNFT(address, nftId);
     setLikeAndViewData(response?.data?.data);
   };
 
@@ -548,7 +547,7 @@ const PlaceABidDrawer = ({
     var address = temp.id;
     const response = await apis.postLikeNFT({
       like_by: address,
-      nft_token: id,
+      nft_token: nftId,
     });
     getNFTLike();
   };
@@ -558,7 +557,7 @@ const PlaceABidDrawer = ({
     var address = temp?.id;
     const response = await apis.postViewNFT({
       view_by: address,
-      nft_token: id,
+      nft_token: nftId,
     });
     getNFTLike();
   };
@@ -578,6 +577,10 @@ const PlaceABidDrawer = ({
 
   let ethBid = false;
   const bidWithETH = async (amount) => {
+    
+    console.log(amount,"amount")
+
+
     setLoader(true);
     try {
       //please note buyerFeeCalculate main Plane(1,2) nhi percentage(0,100,150) jaigi
@@ -603,8 +606,8 @@ const PlaceABidDrawer = ({
         );
 
       ethBid = true;
-
-      let bid = await getSignerMarketContrat().bidInETH(id, buyerPlan, {
+        console.log( bidAmount?.toString(),nftId, buyerPlan,"bidingDetails")
+      let bid = await getSignerMarketContrat().bidInETH(nftId,buyerPlan, {
         value: bidAmount?.toString(),
         gasLimit: ethers.BigNumber.from("2000000"),
       });
@@ -689,7 +692,7 @@ const PlaceABidDrawer = ({
       appprove.wait();
 
       const tx = await getSignerMarketContrat().bidInUSDT(
-        id,
+        nftId,
         usdtAmount,
         sellerPlan
       );
@@ -720,7 +723,7 @@ const PlaceABidDrawer = ({
       await (
         await getSignerMarketContrat().closeAuction(
           NFT_CONTRACT_ADDRESS.address,
-          id,
+          nftId,
           sellerPlan,
           nftDetails?.user_id, //selllerId
           userData?.id //buyerId
@@ -838,7 +841,6 @@ const PlaceABidDrawer = ({
               </span>
               <img className="nft-image" src={image} alt="" />
 
-              {/* place your chart here */}
               <div className="Earning-Filter-Holder">
                 <div className="d-flex align-items-center">
                   <p className="Earning-filter-text">Price History</p>
@@ -928,10 +930,6 @@ const PlaceABidDrawer = ({
                             )}
                           </p>
                           <button className="CollectibleCardCountdown-sc-ll8ha7-30 lccacU">
-                            {/* <img
-                              src="data:image/gif;base64,R0lGODlhEgASANUAAAwMDNzc3NTU1Hx8fCQkJHR0dPT09CwsLBQUFJycnGxsbOTk5MzMzKSkpOzs7JSUlBwcHMTExERERDw8PISEhFRUVDMzM1xcXGRkZExMTIyMjLy8vLS0tKysrPz8/AQEBP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDcuMS1jMDAwIDc5LmRhYmFjYmIsIDIwMjEvMDQvMTQtMDA6Mzk6NDQgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCAyMi41IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkEzRkFCNEY5NDE2RDExRUM4MjRFQ0FCMDA3RUI4MTlFIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkEzRkFCNEZBNDE2RDExRUM4MjRFQ0FCMDA3RUI4MTlFIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTNGQUI0Rjc0MTZEMTFFQzgyNEVDQUIwMDdFQjgxOUUiIHN0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"
-                              alt="running auction"
-                            /> */}
                             <span>
                               {isLive ? (
                                 <NftCountdown
@@ -952,21 +950,33 @@ const PlaceABidDrawer = ({
                 <div className="second-line">
                   <p>
                     Owned by{" "}
-                    {userData ?
-                      userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                    {userData ? (
+                      userData?.wallet_address ==
+                      nftDetails?.user?.wallet_address ? (
                         <Link to={"/profile"}>
                           <span>{nftDetails?.user?.username}</span>
                         </Link>
                       ) : (
-                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.id}`)}>
+                        <span
+                          onClick={() =>
+                            navigate(
+                              `/other-profile?add=${nftDetails?.user?.id}`
+                            )
+                          }
+                        >
                           {nftDetails?.owner?.username}
                         </span>
                       )
-                      :
-                      <span onClick={() => { setEmailSigninPopup(true) }} style={{ cursor: 'pointer' }}>
+                    ) : (
+                      <span
+                        onClick={() => {
+                          setEmailSigninPopup(true);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      >
                         {nftDetails?.owner?.username}
                       </span>
-                    }
+                    )}
                   </p>
                 </div>
                 <div className="three-line">
@@ -975,31 +985,26 @@ const PlaceABidDrawer = ({
                     <span>
                       {likeAndViewData?.view_count == ""
                         ? "00"
-                        : (likeAndViewData ?
-                          likeAndViewData?.view_count :
-                          '0' )
-                        }
+                        : likeAndViewData
+                        ? likeAndViewData?.view_count
+                        : "0"}
                       View
                     </span>
                   </div>
                   <div onClick={() => postNFTLike()}>
                     {likeAndViewData?.is_liked == 0 ? (
                       <AiOutlineHeart />
-                    ) : (
-                      likeAndViewData ?
+                    ) : likeAndViewData ? (
                       <AiFillHeart style={{ fill: "#2636d9" }} />
-                      :
+                    ) : (
                       <AiOutlineHeart />
-
                     )}
                     <span>
                       {likeAndViewData?.like_count == ""
                         ? "0"
-                        : 
-                       ( likeAndViewData ?
-                        likeAndViewData?.like_count :
-                        '0')
-                      }
+                        : likeAndViewData
+                        ? likeAndViewData?.like_count
+                        : "0"}
                       Favorite
                     </span>
                   </div>
@@ -1012,32 +1017,51 @@ const PlaceABidDrawer = ({
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        {userData ? 
-                        
-                       ( userData?.id == nftDetails?.user?.id ? (
-                          <Link to={`/profile`}>
-                            {nftDetails?.user?.profile_image ? (
-                              <img src={nftDetails?.user?.profile_image} alt="" />
-                            ) : (
-                              <img src={"/public/assets/images/user-none.png"}alt=""/>
-                            )}
-                            <span>
-                              {nftDetails?.user?.username}
-                            </span>
-                          </Link>
+                        {userData ? (
+                          userData?.id == nftDetails?.user?.id ? (
+                            <Link to={`/profile`}>
+                              {nftDetails?.user?.profile_image ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
+                              <span>{nftDetails?.user?.username}</span>
+                            </Link>
+                          ) : (
+                            <div
+                              onClick={() =>
+                                navigate(
+                                  `/other-profile?add=${nftDetails?.user?.id}`,
+                                  {
+                                    state: {
+                                      address: nftDetails?.user?.wallet_address,
+                                    },
+                                  }
+                                )
+                              }
+                            >
+                              {nftDetails?.user?.profile_image ? (
+                                <img
+                                  src={nftDetails?.user?.profile_image}
+                                  alt=""
+                                />
+                              ) : (
+                                <img
+                                  src={"/public/assets/images/user-none.png"}
+                                  alt=""
+                                />
+                              )}
+                              <span>{nftDetails?.user?.username}</span>
+                            </div>
+                          )
                         ) : (
-                          <div
-                            onClick={() =>
-                              navigate(
-                                `/other-profile?add=${nftDetails?.user?.id}`,
-                                {
-                                  state: {
-                                    address: nftDetails?.user?.wallet_address,
-                                  },
-                                }
-                              )
-                            }
-                          >
+                          <div onClick={() => setEmailSigninPopup(true)}>
                             {nftDetails?.user?.profile_image ? (
                               <img
                                 src={nftDetails?.user?.profile_image}
@@ -1051,42 +1075,34 @@ const PlaceABidDrawer = ({
                             )}
                             <span>{nftDetails?.user?.username}</span>
                           </div>
-                        ))
-                        :(
-                          <div
-                            onClick={() => setEmailSigninPopup(true)}
-                          >
-                            {nftDetails?.user?.profile_image ? (
-                              <img
-                                src={nftDetails?.user?.profile_image}
-                                alt=""
-                              />
-                            ) : (
-                              <img
-                                src={"/public/assets/images/user-none.png"}
-                                alt=""
-                              />
-                            )}
-                            <span>{nftDetails?.user?.username}</span>
-                          </div>
-                        )
-                      }
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Collection</h3>
-                      {userData ?
-                      <div className="logo-name" onClick={() => navigateTo(nftDetails?.collection?.id)}>
-                        <img src={nftDetails?.collection?.media[0]?.original_url} alt=""/>
-                        <span>{nftDetails?.collection?.name}</span>
-                      </div>
-                      :
-                      <div className="logo-name" onClick={() => setEmailSigninPopup(true)}>
-                        <img src={nftDetails?.collection?.media[0]?.original_url} alt=""/>
-                        <span>{nftDetails?.collection?.name}</span>
-                      </div>
-
-                    }
+                      {userData ? (
+                        <div
+                          className="logo-name"
+                          onClick={() => navigateTo(collection)}
+                        >
+                          <img
+                            src={collectionImages}
+                            alt=""
+                          />
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      ) : (
+                        <div
+                          className="logo-name"
+                          onClick={() => setEmailSigninPopup(true)}
+                        >
+                          <img
+                            src={nftDetails?.collection?.media[0]?.original_url}
+                            alt=""
+                          />
+                          <span>{nftDetails?.collection?.name}</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -1138,15 +1154,15 @@ const PlaceABidDrawer = ({
                             ETH
                           </p>
                           <span>
-                            Last bid $ {+highestBidIntoUSDT?.toString() / 10 ** 6} + Platform
-                            Fee $ {+platformFeeInUSDT?.toFixed(5)}
+                            Last bid ${" "}
+                            {+highestBidIntoUSDT?.toString() / 10 ** 6} +
+                            Platform Fee $ {+platformFeeInUSDT?.toFixed(5)}
                           </span>
                         </p>
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-4 col-4">
                       <div className="right">
-                        <p>{/* 13<span>in stock</span> */}</p>
                       </div>
                     </div>
                   </div>
@@ -1168,7 +1184,21 @@ const PlaceABidDrawer = ({
                         <span>
                           <BsCheck className={`${chack ? "red" : "black"}`} />
                         </span>{" "}
-                        <span>I agree to all <a href="/terms" target="_blank">Terms</a> & <a href="/privacy-policy" target="_blank" rel="noopener noreferrer">Policy</a>.</span>
+                        <span>
+                          I agree to all{" "}
+                          <a href="/terms" target="_blank">
+                            Terms
+                          </a>{" "}
+                          &{" "}
+                          <a
+                            href="/privacy-policy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Policy
+                          </a>
+                          .
+                        </span>
                       </div>
                     )}
 
@@ -1231,7 +1261,6 @@ const PlaceABidDrawer = ({
         </div>
       </Drawer>
 
-      {/* bidding Model */}
       <Modal
         show={sucess}
         onHide={() => setSucess(false)}
@@ -1269,7 +1298,7 @@ const PlaceABidDrawer = ({
         </div>
       </Modal>
 
-      {/* buyWithETH Model */}
+  
       <Modal
         show={ethShow}
         onHide={() => setEthShow(false)}
@@ -1320,7 +1349,7 @@ const PlaceABidDrawer = ({
         </div>
       </Modal>
 
-      {/* buyWithUSDT Model */}
+
       <Modal
         show={usdtShow}
         onHide={() => setUSDTShow(false)}
@@ -1371,7 +1400,7 @@ const PlaceABidDrawer = ({
         </div>
       </Modal>
 
-      <HeaderConnectPopup
+       <HeaderConnectPopup
         connectPopup={connectPopup}
         setConnectPopup={setConnectPopup}
       />

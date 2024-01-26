@@ -62,6 +62,7 @@ async function main() {
   let usdctoken = await usdToken.connect(signer).balanceOf(signer.getAddress());
 
   let account2 = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8";
+  
   await usdToken.connect(signer).transfer(account2, usdctoken);
 
   // saveFrontendFiles(usd, "TetherToken");
@@ -72,7 +73,7 @@ async function main() {
     var options = {
       method: "POST",
       // uri: "http://143.198.70.237/api/list-nft",
-      uri: `http://165.232.142.3/api/admin/truncate-tables?wallet_address=${deployedMarketplaceContract.address}`,
+      uri: `http://api.artizia.io/api/admin/truncate-tables?wallet_address=${deployedMarketplaceContract.address}`,
       //body: apiData,
       json: true, // Automatically stringifies the body to JSON
     };

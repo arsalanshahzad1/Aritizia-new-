@@ -29,7 +29,7 @@ import { Store } from "../../Context/Store";
 const SimpleCard = ({
   onOpen,
   path,
-  id,
+  nftId,
   title,
   image,
   price,
@@ -43,6 +43,22 @@ const SimpleCard = ({
   user_id,
   setLoader
 }) => {
+
+
+  console.log(path,
+    nftId,
+    title,
+    image,
+    price,
+    paymentMethod,
+    royalty,
+    royaltyPrice,
+    description,
+    collection,
+    collectionImages,
+    seller,
+    user_id,
+    setLoader,"itemitemitemitemitemitem")
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -78,7 +94,7 @@ const SimpleCard = ({
       setLoader(true)
       let cancel = await getSignerMarketContrat().cancelListing(
         getSignerNFTContrat().address,
-        id,
+        nftId,
         userData?.id
       );
       cancel.wait();
@@ -167,7 +183,7 @@ const SimpleCard = ({
               <div className="text-area">
                 <div className="line-1">
                   <div>{title}</div>
-                  <div>{id}</div>
+                  <div>{nftId}</div>
                 </div>
                 <div className="line-1">
                   <div>Price</div>
@@ -206,7 +222,7 @@ const SimpleCard = ({
       <ProfileDrawer
         isVisible={isVisible}
         onClose={onClose}
-        id={id}
+        nftId={nftId}
         title={title}
         image={image}
         price={price}

@@ -32,10 +32,10 @@ export const StoreProvider = ({ children }) => {
     const [walletConnected, setWalletConnected] = useState(false);
     const [loader, setloader] = useState(false);
     const [firstTimeCall, setFirstTimeCall] = useState(false);
-
     const user = localStorage.getItem("data")
     const { ethereum } = window;
     const userAddress = localStorage.getItem("userAddress")
+    const [isLive, setIsLive]= useState(false);
 
     if (account) {
         if (userAddress === "false" && account !== undefined) {
@@ -46,7 +46,6 @@ export const StoreProvider = ({ children }) => {
         if (firstTimeCall === false) {
             localStorage.setItem("address", account)
             localStorage.setItem("firstTimeCall", "true")
-
             setFirstTimeCall(true);
         }
     }
@@ -221,6 +220,10 @@ export const StoreProvider = ({ children }) => {
         
     }
 
+    const getLiveStatus= async (nftId)=> {
+        let status = await getProviderMarketContrat().getStatusOfAuction(nftId);
+        setIsLive(status);
+    }
 
 
     return (
@@ -231,6 +234,8 @@ export const StoreProvider = ({ children }) => {
                     account,
                     walletConnected,
                     loader,
+                    isLive,
+getLiveStatus,
                     buyWithFiatPayment,
                     getSignerUSDTContrat,
                     getSignerMarketContrat,

@@ -15,11 +15,10 @@ const MyNftCard = ({
   setLoader,
   onOpen,
   path,
-  id,
+  nftId,
   title,
   image,
   price,
-  paymentMethod,
   royalty,
   royaltyPrice,
   description,
@@ -43,22 +42,6 @@ const MyNftCard = ({
 
   const [nftListingType, setNftListingType] = useState(0);
   
-  // const AddCollection = () => {
-  //   if (CreateCollection.length < 1) {
-  //     alert("Input Collection Name to Create");
-  //   } else {
-  //     setcollectionOptions((previousOptions) => [
-  //       ...previousOptions,
-  //       { value: CreateCollection.toLowerCase(), label: CreateCollection },
-  //     ]);
-  //     hideCreateCollection();
-  //   }
-  // };
-
-  // const hideCreateCollection = () => {
-  //   setCreateCollection("");
-  //   setshowCreateCollection(false);
-  // };
 
   const ListingNft =(listingType, openModel)=>{
     setNftListingType(listingType);
@@ -69,14 +52,7 @@ const MyNftCard = ({
   return (
     <>
       <div className="col-lg-3 col-md-4">
-        {/* <Link to={path}> */}
           <div
-            // onMouseEnter={() => {
-            //   setShowLinks(true);
-            // }}
-            // onMouseLeave={() => {
-            //   setShowLinks(false);
-            // }}
             className="simple-card-main"
             style={{ position: "relative" }}
           >
@@ -115,7 +91,7 @@ const MyNftCard = ({
               <div className="text-area">
                 <div className="line-1" style={{marginTop:"12px"}}>
                   <div>{title}</div>
-                  <div>{id}</div>
+                  <div>{nftId}</div>
                 </div>
                 <div className="line-1">
                   <div>Price</div>
@@ -133,7 +109,7 @@ const MyNftCard = ({
       </div>
       <NftDrawer
       setLoader={setLoader} 
-        id={id}
+      nftId={nftId}
         isVisible={isVisible}
         onClose={onClose}
         nftListingType={nftListingType}

@@ -64,7 +64,10 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
   }
 };
 
-const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner,price,collectionId,listingType,sellerId) => {
+const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner,price,last_bid,collectionId,listingType,
+start_time,
+end_time,
+sellerId) => {
 
   const nftcontract = new ethers.Contract(
     nftContract?.toString(),
@@ -75,6 +78,25 @@ const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner
   let tokenUris = await nftcontract.tokenURI(tokenId?.toString())
   const responses = await fetch(tokenUris);
   const metadata = await responses.json();
+
+  console.log(nftContract,tokenId,seller,buyer,firstOwner,
+    price,last_bid,collectionId,listingType,
+    start_time,
+    end_time,
+    sellerId,"Details");
+
+  // address nftContract,
+  // uint256 tokenId,
+  // address seller,
+  // address owner,
+  // address firstOwner,
+  // uint256 price,
+  // uint256 last_bid,
+  // uint256 collectionId,
+  // uint256 listingType,
+  // uint256 start_time,
+  // uint256 end_time,
+  // uint256 sellerId
   
   const apiData = {
     contractAddress: nftContract?.toString(),
@@ -88,8 +110,12 @@ const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner
     price: price?.toString(),
     collection_id: collectionId?.toString(),
     listing_type : listingType?.toString(),
+    start_time : start_time?.toString(),
+    end_time : end_time?.toString(),
     sellerId: sellerId?.toString(),
+    last_bid:last_bid?.toString()
   };
+
 
   // Send a POST request to another server's API
   console.log("checckData2",apiData);
@@ -116,7 +142,7 @@ const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner
   }
 };
 
-const processReceivedABidEvent = (tokenId, seller, highestBidder, highestBidIntoETH) => {
+const processReceivedABidEvent = (tokenId, seller, highestBidder, highestBidIntoETH, highestBidIntoUSDT) => {
   // console.log("NFTListed Event:", event.args);
   // Define the data you want to send in the API request
 
@@ -124,7 +150,8 @@ const processReceivedABidEvent = (tokenId, seller, highestBidder, highestBidInto
     token_id: tokenId?.toString(),
     seller: seller?.toString(),
     bidder: highestBidder?.toString(),
-    bidding_price: highestBidIntoETH?.toString(),
+    bidding_price_eth: highestBidIntoETH?.toString(),
+    bidding_price_usdt: highestBidIntoUSDT?.toString(),
   };
   // Send a POST request to another server's API
   console.log("checckData2",apiData);
@@ -188,6 +215,40 @@ contract.on("receivedABid",processReceivedABidEvent);
 contract.on("NFTSold",processNFTSoldEvent);
 contract.on("NFTListed",processNFTListedEvent);
 contract.on("cancelList",processCancelListEvent);
+
+
+
+// async function getLatestBlockNumber() {
+//   try {
+//     const blockNumber = await provider.getBlockNumber();
+//     console.log(blockNumber,"blockNumber")
+//     return blockNumber;
+//   } catch (error) {
+//     console.error('Error getting latest block number:', error);
+//     throw error;
+//   }
+// }
+
+
+// async function GetPastEvents()
+// {
+//   console.log("try")
+//   console.log(await getLatestBlockNumber(),"await getLatestBlockNumber()")
+//   var event = await contract.getPastEvents(
+//     'AllEvents', // Feel free to change this to 'Transfer' to see only the transfer events 
+//     {
+//       fromBlock: await getLatestBlockNumber() - 5,
+//       toBlock: 'latest'
+//     }
+//   )
+//   console.log("get");
+//   console.log('Total events: ', event.length)
+//   console.log(event[event.length - 1])
+// }
+
+// GetPastEvents();
+
+
 //PAY WITH FIAT 
 
 // Function to process approvalUpdate event

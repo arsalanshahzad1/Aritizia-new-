@@ -9,206 +9,222 @@ interface IUniswapV2Router01 {
     function addLiquidity(
         address tokenA,
         address tokenB,
-        uint amountADesired,
-        uint amountBDesired,
-        uint amountAMin,
-        uint amountBMin,
+        uint256 amountADesired,
+        uint256 amountBDesired,
+        uint256 amountAMin,
+        uint256 amountBMin,
         address to,
-        uint deadline
-    ) external returns (uint amountA, uint amountB, uint liquidity);
+        uint256 deadline
+    )
+        external
+        returns (
+            uint256 amountA,
+            uint256 amountB,
+            uint256 liquidity
+        );
 
     function addLiquidityETH(
         address token,
-        uint amountTokenDesired,
-        uint amountTokenMin,
-        uint amountETHMin,
+        uint256 amountTokenDesired,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
         address to,
-        uint deadline
+        uint256 deadline
     )
         external
         payable
-        returns (uint amountToken, uint amountETH, uint liquidity);
+        returns (
+            uint256 amountToken,
+            uint256 amountETH,
+            uint256 liquidity
+        );
 
     function removeLiquidity(
         address tokenA,
         address tokenB,
-        uint liquidity,
-        uint amountAMin,
-        uint amountBMin,
+        uint256 liquidity,
+        uint256 amountAMin,
+        uint256 amountBMin,
         address to,
-        uint deadline
-    ) external returns (uint amountA, uint amountB);
+        uint256 deadline
+    ) external returns (uint256 amountA, uint256 amountB);
 
     function removeLiquidityETH(
         address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
         address to,
-        uint deadline
-    ) external returns (uint amountToken, uint amountETH);
+        uint256 deadline
+    ) external returns (uint256 amountToken, uint256 amountETH);
 
     function removeLiquidityWithPermit(
         address tokenA,
         address tokenB,
-        uint liquidity,
-        uint amountAMin,
-        uint amountBMin,
+        uint256 liquidity,
+        uint256 amountAMin,
+        uint256 amountBMin,
         address to,
-        uint deadline,
+        uint256 deadline,
         bool approveMax,
         uint8 v,
         bytes32 r,
         bytes32 s
-    ) external returns (uint amountA, uint amountB);
+    ) external returns (uint256 amountA, uint256 amountB);
 
     function removeLiquidityETHWithPermit(
         address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
         address to,
-        uint deadline,
+        uint256 deadline,
         bool approveMax,
         uint8 v,
         bytes32 r,
         bytes32 s
-    ) external returns (uint amountToken, uint amountETH);
+    ) external returns (uint256 amountToken, uint256 amountETH);
 
     function swapExactTokensForTokens(
-        uint amountIn,
-        uint amountOutMin,
+        uint256 amountIn,
+        uint256 amountOutMin,
         address[] calldata path,
         address to,
-        uint deadline
-    ) external returns (uint[] memory amounts);
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
 
     function swapTokensForExactTokens(
-        uint amountOut,
-        uint amountInMax,
+        uint256 amountOut,
+        uint256 amountInMax,
         address[] calldata path,
         address to,
-        uint deadline
-    ) external returns (uint[] memory amounts);
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
 
     function swapExactETHForTokens(
-        uint amountOutMin,
+        uint256 amountOutMin,
         address[] calldata path,
         address to,
-        uint deadline
-    ) external payable returns (uint[] memory amounts);
+        uint256 deadline
+    ) external payable returns (uint256[] memory amounts);
 
     function swapTokensForExactETH(
-        uint amountOut,
-        uint amountInMax,
+        uint256 amountOut,
+        uint256 amountInMax,
         address[] calldata path,
         address to,
-        uint deadline
-    ) external returns (uint[] memory amounts);
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
 
     function swapExactTokensForETH(
-        uint amountIn,
-        uint amountOutMin,
+        uint256 amountIn,
+        uint256 amountOutMin,
         address[] calldata path,
         address to,
-        uint deadline
-    ) external returns (uint[] memory amounts);
+        uint256 deadline
+    ) external returns (uint256[] memory amounts);
 
     function swapETHForExactTokens(
-        uint amountOut,
+        uint256 amountOut,
         address[] calldata path,
         address to,
-        uint deadline
-    ) external payable returns (uint[] memory amounts);
+        uint256 deadline
+    ) external payable returns (uint256[] memory amounts);
 
     function quote(
-        uint amountA,
-        uint reserveA,
-        uint reserveB
-    ) external pure returns (uint amountB);
+        uint256 amountA,
+        uint256 reserveA,
+        uint256 reserveB
+    ) external pure returns (uint256 amountB);
 
     function getAmountOut(
-        uint amountIn,
-        uint reserveIn,
-        uint reserveOut
-    ) external pure returns (uint amountOut);
+        uint256 amountIn,
+        uint256 reserveIn,
+        uint256 reserveOut
+    ) external pure returns (uint256 amountOut);
 
     function getAmountIn(
-        uint amountOut,
-        uint reserveIn,
-        uint reserveOut
-    ) external pure returns (uint amountIn);
+        uint256 amountOut,
+        uint256 reserveIn,
+        uint256 reserveOut
+    ) external pure returns (uint256 amountIn);
 
-    function getAmountsOut(
-        uint amountIn,
-        address[] calldata path
-    ) external view returns (uint[] memory amounts);
+    function getAmountsOut(uint256 amountIn, address[] calldata path)
+        external
+        view
+        returns (uint256[] memory amounts);
 
-    function getAmountsIn(
-        uint amountOut,
-        address[] calldata path
-    ) external view returns (uint[] memory amounts);
+    function getAmountsIn(uint256 amountOut, address[] calldata path)
+        external
+        view
+        returns (uint256[] memory amounts);
 }
 
 interface IUniswapV2Router02 is IUniswapV2Router01 {
     function removeLiquidityETHSupportingFeeOnTransferTokens(
         address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
         address to,
-        uint deadline
-    ) external returns (uint amountETH);
+        uint256 deadline
+    ) external returns (uint256 amountETH);
 
     function removeLiquidityETHWithPermitSupportingFeeOnTransferTokens(
         address token,
-        uint liquidity,
-        uint amountTokenMin,
-        uint amountETHMin,
+        uint256 liquidity,
+        uint256 amountTokenMin,
+        uint256 amountETHMin,
         address to,
-        uint deadline,
+        uint256 deadline,
         bool approveMax,
         uint8 v,
         bytes32 r,
         bytes32 s
-    ) external returns (uint amountETH);
+    ) external returns (uint256 amountETH);
 
     function swapExactTokensForTokensSupportingFeeOnTransferTokens(
-        uint amountIn,
-        uint amountOutMin,
+        uint256 amountIn,
+        uint256 amountOutMin,
         address[] calldata path,
         address to,
-        uint deadline
+        uint256 deadline
     ) external;
 
     function swapExactETHForTokensSupportingFeeOnTransferTokens(
-        uint amountOutMin,
+        uint256 amountOutMin,
         address[] calldata path,
         address to,
-        uint deadline
+        uint256 deadline
     ) external payable;
 
     function swapExactTokensForETHSupportingFeeOnTransferTokens(
-        uint amountIn,
-        uint amountOutMin,
+        uint256 amountIn,
+        uint256 amountOutMin,
         address[] calldata path,
         address to,
-        uint deadline
+        uint256 deadline
     ) external;
 }
 
 interface IERC20USDT {
-    function allowance(address owner, address spender) external returns (uint);
+    function allowance(address owner, address spender)
+        external
+        returns (uint256);
 
-    function transferFrom(address from, address to, uint value) external;
+    function transferFrom(
+        address from,
+        address to,
+        uint256 value
+    ) external;
 
-    function approve(address spender, uint value) external;
+    function approve(address spender, uint256 value) external;
 
-    function totalSupply() external returns (uint);
+    function totalSupply() external returns (uint256);
 
-    function balanceOf(address who) external returns (uint);
+    function balanceOf(address who) external returns (uint256);
 
-    function transfer(address to, uint value) external;
+    function transfer(address to, uint256 value) external;
 }
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -222,8 +238,6 @@ error invalidListingType();
 contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     uint256 public _nftsSold = 1;
     uint256 public _nftCount = 1;
-
-    address payable private _marketOwner;
 
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
@@ -347,7 +361,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         address owner,
         address firstOwner,
         uint256 price,
-        uint256 min_bid,
         uint256 last_bid,
         uint256 collectionId,
         uint256 listingType,
@@ -369,14 +382,14 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
-    address public UNISWAP_ROUTER_ADDRESS = 0x10ED43C718714eb63d5aA57B78B54704E256024E; //BNB Router 0x10ED43C718714eb63d5aA57B78B54704E256024E //ETH Router 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
-    address public USDT_ADDRESS = 0x55d398326f99059fF775485246999027B3197955; //USDT In BNB 0x55d398326f99059fF775485246999027B3197955 18 Decimals // Eth USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7
+    address public UNISWAP_ROUTER_ADDRESS =
+        0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D; //BNB Router 0x10ED43C718714eb63d5aA57B78B54704E256024E //ETH Router 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D
+    address public USDT_ADDRESS = 0xdAC17F958D2ee523a2206206994597C13D831ec7; //USDT In BNB 0x55d398326f99059fF775485246999027B3197955 18 Decimals // Eth USDT 0xdAC17F958D2ee523a2206206994597C13D831ec7
 
     IUniswapV2Router02 uniswapRouter;
     IERC20USDT USDTtoken;
 
     constructor() {
-        _marketOwner = payable(msg.sender);
         uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
         USDTtoken = IERC20USDT(USDT_ADDRESS);
 
@@ -386,10 +399,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         setSubscriptionFee(SubscriptionLevel.FreeTrial, 150);
     }
 
-    function setSubscriptionFee(
-        SubscriptionLevel _level,
-        uint256 _fee
-    ) private onlyOwner {
+    function setSubscriptionFee(SubscriptionLevel _level, uint256 _fee)
+        private
+        onlyOwner
+    {
         subscriptionFees[_level] = _fee;
     }
 
@@ -482,10 +495,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
     // Function to swap ETH for USDT
     // Swap ko bol rhey hn itney USDT chahye
-    function swapETHForUSDT(
-        uint256 usdtAmountOut,
-        uint256 meth
-    ) public payable returns (uint256) {
+    function swapETHForUSDT(uint256 usdtAmountOut, uint256 meth)
+        public
+        payable
+        returns (uint256)
+    {
         // Specify the desired USDT output amount
         // uint256 usdtAmountOut = 1000; // Example: Swap 1 ETH for 1000 USDT
 
@@ -546,15 +560,27 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                     _tokenId[i]
                 );
 
-            _nftCount++;
+                _nftCount++;
 
-            collection[_collectionId].push(_tokenId[i]);
-
-             
-            
+                collection[_collectionId].push(_tokenId[i]);
+                
+                _idToNFT[_tokenId[i]] = NFT(
+                        _nftContract,
+                        _tokenId[i],
+                        payable(msg.sender),
+                        payable(msg.sender),
+                        payable(address(this)),
+                        _price[i],
+                        true,
+                        _royaltyPrice[i],
+                        ListingType(_listingType),
+                        PaymentMethod(_paymentMethod),
+                        true,
+                        _collectionId,
+                        false
+                    );
 
                 if (_listingType == uint256(ListingType.Auction)) {
-
                     _idToAuction[_tokenId[i]] = Auction(
                         _tokenId[i], //tokenId
                         payable(msg.sender), // seller
@@ -568,74 +594,24 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                         150,
                         false
                     );
-
-                         emit NFTListed(
-                    _nftContract,
-                    _tokenId[i],
-                    msg.sender,
-                    address(this),
-                    payable(msg.sender),
-                    _price[i],
-                    0,
-                    0,
-                    _collectionId,
-                    _listingType,
-                    0,
-                    0,
-                    _sellerId
-                );
-                
-                }
-                else{
-                _idToNFT[_tokenId[i]] = NFT(
-                    _nftContract,
-                    _tokenId[i],
-                    payable(msg.sender),
-                    payable(msg.sender),
-                    payable(address(this)),
-                    _price[i],
-                    true,
-                    _royaltyPrice[i],
-                    ListingType(_listingType),
-                    PaymentMethod(_paymentMethod),
-                    true,
-                    _collectionId,
-                    false
-                );
+                } 
 
                 emit NFTListed(
-                    _nftContract,
-                    _tokenId[i],
-                    msg.sender,
-                    address(this),
-                    payable(msg.sender),
-                    _price[i],
-                    0,
-                    0,
-                    _collectionId,
-                    _listingType,
-                    0,
-                    0,
-                    _sellerId
-                );
-
-                }
-
-        // address nftContract,
-        // uint256 tokenId,
-        // address seller,
-        // address owner,
-        // address firstOwner,
-        // uint256 price,
-        // uint256 min_bid,
-        // uint256 last_bid,
-        // uint256 collectionId,
-        // uint256 listingType,
-        // uint256 start_time,
-        // uint256 end_time,
-        // uint256 sellerId
-
-     
+                        _nftContract,
+                        _tokenId[i],
+                        msg.sender,
+                        address(this),
+                        payable(msg.sender),
+                        _price[i],
+                        0,
+                        _collectionId,
+                        _listingType,
+                        _startTime[i],
+                        _endTime[i],
+                        _sellerId
+                    );
+                
+                
             }
         }
     }
@@ -650,7 +626,6 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         nft.owner = payable(msg.sender);
         nft.seller = payable(address(0));
         nft.listed = false;
-        // IERC721(_nftContract).approve(msg.sender,_tokenId);
         IERC721(_nftContract).transferFrom(address(this), msg.sender, _tokenId);
         emit cancelList(_nftContract, _tokenId, msg.sender, _sellerId);
     }
@@ -893,7 +868,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
 
         uint256 texForBuyer = _buyerFeeCalculate(nft.price, _buyerPercent);
 
-        require(msg.value >= (nft.price + texForBuyer),
+        require(
+            msg.value >= (nft.price + texForBuyer),
             "Not enough ether to cover asking price"
         );
 
@@ -967,7 +943,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 _listingType,
         uint256 _startTime,
         uint256 _endTime,
-        uint256 sellerId
+        uint256 _sellerId
     ) public isUserBanned nonReentrant {
         NFT storage nft = _idToNFT[_tokenId];
 
@@ -1011,16 +987,22 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             address(this),
             nft.firstOwner,
             _price,
+            0,
             nft.collectionId,
             _listingType,
-            sellerId
+            _startTime,
+            _endTime,
+            _sellerId
         );
     }
 
-    function bidInETH(
-        uint256 _tokenId,
-        uint8 _buyerPlan
-    ) public payable auctionIsLive(_tokenId) isApproved(_tokenId) isUserBanned {
+    function bidInETH(uint256 _tokenId, uint8 _buyerPlan)
+        public
+        payable
+        auctionIsLive(_tokenId)
+        isApproved(_tokenId)
+        isUserBanned
+    {
         Auction storage auction = _idToAuction[_tokenId];
         NFT storage nft = _idToNFT[_tokenId];
 
@@ -1380,10 +1362,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         );
     }
 
-    function royaltyCalculate(
-        uint256 _price,
-        uint256 noOfBips
-    ) private pure returns (uint256) {
+    function royaltyCalculate(uint256 _price, uint256 noOfBips)
+        private
+        pure
+        returns (uint256)
+    {
         return (_price / 10000) * noOfBips; //100 means 1 %
     }
 
@@ -1398,17 +1381,19 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         return _amountToDeduct;
     }
 
-    function _buyerFeeCalculate(
-        uint256 _amount,
-        uint256 _buyerPercent
-    ) internal pure returns (uint256) {
+    function _buyerFeeCalculate(uint256 _amount, uint256 _buyerPercent)
+        internal
+        pure
+        returns (uint256)
+    {
         return (_amount / 10000) * _buyerPercent;
     }
 
-    function _sellerFeeCalculate(
-        uint256 _amount,
-        uint256 _sellerPercent
-    ) internal pure returns (uint256) {
+    function _sellerFeeCalculate(uint256 _amount, uint256 _sellerPercent)
+        internal
+        pure
+        returns (uint256)
+    {
         return (_amount / 10000) * _sellerPercent;
     }
 
@@ -1416,10 +1401,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         bannedUsers[_user] = _status;
     }
 
-    function approveNfts(
-        uint256[] memory _tokenId,
-        bool _decision
-    ) public onlyOwner returns (bool) {
+    function approveNfts(uint256[] memory _tokenId, bool _decision)
+        public
+        onlyOwner
+        returns (bool)
+    {
         uint256 id;
 
         for (uint256 i = 0; i < _tokenId.length; i++) {
@@ -1460,9 +1446,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     ///////////////////////////////////////////////
 
     //yeh function apko usdt ke against kitne ETH miln ga yeh bataiga
-    function getUSDTIntoETH(
-        uint256 usdtAmountIn
-    ) public view returns (uint256) {
+    function getUSDTIntoETH(uint256 usdtAmountIn)
+        public
+        view
+        returns (uint256)
+    {
         address[] memory path = new address[](2);
         path[0] = USDT_ADDRESS;
         path[1] = uniswapRouter.WETH();
@@ -1486,9 +1474,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     }
 
     //yeh function apko jine eth chaiyn aske against kitne usdt dene hnga bataiga
-    function getETHOutUSDTInOutPut(
-        uint256 EthAmountOut
-    ) public view returns (uint256) {
+    function getETHOutUSDTInOutPut(uint256 EthAmountOut)
+        public
+        view
+        returns (uint256)
+    {
         address[] memory path = new address[](2);
         path[0] = USDT_ADDRESS;
         path[1] = uniswapRouter.WETH();
@@ -1500,9 +1490,11 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
     }
 
     //yeh function apko jine eth chaiyn aske against kitne usdt dene hnga bataiga
-    function getUSDTOutETHInOutPut(
-        uint256 USDTAmountOut
-    ) public view returns (uint256) {
+    function getUSDTOutETHInOutPut(uint256 USDTAmountOut)
+        public
+        view
+        returns (uint256)
+    {
         address[] memory path = new address[](2);
         path[0] = uniswapRouter.WETH();
         path[1] = USDT_ADDRESS;
@@ -1513,16 +1505,18 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         return amountsOut[0];
     }
 
-    function getCollectionNfts(
-        uint256 _collectionId
-    ) public view returns (NFT[] memory) {
+    function getCollectionNfts(uint256 _collectionId)
+        public
+        view
+        returns (NFT[] memory)
+    {
         uint256 nftCount = _nftCount;
         uint256 unsoldNftsCount = nftCount - _nftsSold;
 
         NFT[] memory nfts = new NFT[](unsoldNftsCount);
-        uint nftsIndex = 0;
+        uint256 nftsIndex = 0;
 
-        for (uint i = 0; i < nftCount; i++) {
+        for (uint256 i = 0; i < nftCount; i++) {
             if (
                 _idToNFT[i].listed &&
                 _idToNFT[i].collectionId == _collectionId &&
@@ -1540,9 +1534,9 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 unsoldNftsCount = nftCount - _nftsSold;
 
         NFT[] memory nfts = new NFT[](unsoldNftsCount);
-        uint nftsIndex = 0;
+        uint256 nftsIndex = 0;
 
-        for (uint i = 0; i < nftCount; i++) {
+        for (uint256 i = 0; i < nftCount; i++) {
             if (_idToNFT[i].listed && _idToNFT[i].approve) {
                 nfts[nftsIndex] = _idToNFT[i];
                 nftsIndex++;
@@ -1551,20 +1545,23 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         return nfts;
     }
 
-    function getMyNfts(
-        address _user
-    ) public view isUserBanned returns (NFT[] memory) {
-        uint nftCount = _nftCount;
-        uint myNftCount = 0;
-        for (uint i = 0; i < nftCount; i++) {
+    function getMyNfts(address _user)
+        public
+        view
+        isUserBanned
+        returns (NFT[] memory)
+    {
+        uint256 nftCount = _nftCount;
+        uint256 myNftCount = 0;
+        for (uint256 i = 0; i < nftCount; i++) {
             if (_idToNFT[i].owner == _user) {
                 myNftCount++;
             }
         }
 
         NFT[] memory nfts = new NFT[](myNftCount);
-        uint nftsIndex = 0;
-        for (uint i = 0; i < nftCount; i++) {
+        uint256 nftsIndex = 0;
+        for (uint256 i = 0; i < nftCount; i++) {
             if (_idToNFT[i].owner == _user) {
                 nfts[nftsIndex] = _idToNFT[i];
                 nftsIndex++;
@@ -1573,29 +1570,24 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         return nfts;
     }
 
-    function getUsersNfts(
-        address _user
-    ) public view isUserBanned returns (NFT[] memory) {
-        uint nftCount = _nftCount;
-        uint myListedNftCount = 0;
-        for (uint i = 0; i < nftCount; i++) {
-            if (
-                _idToNFT[i].seller == _user
-                // && _idToAuction[i].approve
-                //   && _idToNFT[i].listed
-            ) {
+    function getUsersNfts(address _user)
+        public
+        view
+        isUserBanned
+        returns (NFT[] memory)
+    {
+        uint256 nftCount = _nftCount;
+        uint256 myListedNftCount = 0;
+        for (uint256 i = 0; i < nftCount; i++) {
+            if (_idToNFT[i].seller == _user) {
                 myListedNftCount++;
             }
         }
 
         NFT[] memory nfts = new NFT[](myListedNftCount);
-        uint nftsIndex = 0;
-        for (uint i = 0; i < nftCount; i++) {
-            if (
-                _idToNFT[i].seller == _user
-                //  && _idToNFT[i].listed
-                //   && _idToAuction[id].approve
-            ) {
+        uint256 nftsIndex = 0;
+        for (uint256 i = 0; i < nftCount; i++) {
+            if (_idToNFT[i].seller == _user) {
                 nfts[nftsIndex] = _idToNFT[i];
                 nftsIndex++;
             }
@@ -1603,12 +1595,15 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         return nfts;
     }
 
-    function getMyListedNfts(
-        address _user
-    ) public view isUserBanned returns (NFT[] memory) {
-        uint nftCount = _nftCount;
-        uint myListedNftCount = 0;
-        for (uint i = 0; i < nftCount; i++) {
+    function getMyListedNfts(address _user)
+        public
+        view
+        isUserBanned
+        returns (NFT[] memory)
+    {
+        uint256 nftCount = _nftCount;
+        uint256 myListedNftCount = 0;
+        for (uint256 i = 0; i < nftCount; i++) {
             if (
                 _idToNFT[i].seller == _user &&
                 _idToNFT[i].listed &&
@@ -1619,8 +1614,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         }
 
         NFT[] memory nfts = new NFT[](myListedNftCount);
-        uint nftsIndex = 0;
-        for (uint i = 0; i < nftCount; i++) {
+        uint256 nftsIndex = 0;
+        for (uint256 i = 0; i < nftCount; i++) {
             if (
                 _idToNFT[i].seller == _user &&
                 _idToNFT[i].listed &&
@@ -1642,6 +1637,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         } else {
             return false;
         }
+    }
+
+    function withdrawTokens(uint256 _amount) public onlyOwner {
+        USDTtoken.transfer(owner(), _amount);
     }
 
     receive() external payable {}

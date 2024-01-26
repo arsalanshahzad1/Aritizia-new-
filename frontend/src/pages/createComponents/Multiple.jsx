@@ -712,7 +712,7 @@ const Multiple = ({ search, setSearch }) => {
               collection?.crypto,
               user_id
             );
-
+            
             list.wait();
             await getSignerMarketContrat().on("NFTListed", handleNFTListedEvent2);
             listCalled = true;

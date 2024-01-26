@@ -305,7 +305,7 @@ const getSignerNFTContrat = () => {
 const ProfileDrawer = ({
   setLoader,
   nftListingType,
-  id,
+  nftId,
   isVisible,
   onClose,
   timedAuction,
@@ -377,7 +377,7 @@ const reListNFT = async (e) => {
  
   const tx = await getSignerNFTContrat().approve(
     marketplaceAddr.address,
-    id,
+    nftId,
     {
       gasLimit: ethers.BigNumber.from("500000"),
     }
@@ -388,7 +388,7 @@ const reListNFT = async (e) => {
   await (
     await getSignerMarketContrat().resellNft(
       nftContractAddr.address,
-      id,
+      nftId,
       price,
       nftListingType,
       startTimestamp,

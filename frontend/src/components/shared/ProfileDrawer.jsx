@@ -39,11 +39,10 @@ function ProfileDrawer({
   isVisible,
   onClose,
   setIsVisible,
-  id,
+  nftId,
   title,
   image,
   price,
-  paymentMethod,
   royalty,
   description,
   collection,
@@ -94,41 +93,41 @@ function ProfileDrawer({
     return (_amount * _buyerPercent) / 10000;
   };
 
-  // const getPriceInUSDAndDetials = async () => {
-  //   let _buyerPercent;
+  const getPriceInUSDAndDetials = async () => {
+    let _buyerPercent;
 
-  //   if (getBuyerPlan == 3) {
-  //     _buyerPercent = 0;
-  //   } else if (getBuyerPlan == 2) {
-  //     _buyerPercent = 100;
-  //   } else {
-  //     _buyerPercent = 150;
-  //   }
+    if (getBuyerPlan == 3) {
+      _buyerPercent = 0;
+    } else if (getBuyerPlan == 2) {
+      _buyerPercent = 100;
+    } else {
+      _buyerPercent = 150;
+    }
 
-  //   setBuyerPlan(getBuyerPlan);
-  //   let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
-  //   setPlatformFeeETH(feeETH?.toString());
+    setBuyerPlan(getBuyerPlan);
+    let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
+    setPlatformFeeETH(feeETH?.toString());
 
-  //   if (feeETH != 0) {
-  //     const ethIntoUsdtBase = await getProviderMarketContrat()?.getETHIntoUSDT(feeETH?.toString());
-  //     setPlatformFeeInUSDT(ethIntoUsdtBase / 10 ** 6)
-  //   }
+    if (feeETH != 0) {
+      const ethIntoUsdtBase = await getProviderMarketContrat()?.getETHIntoUSDT(feeETH?.toString());
+      setPlatformFeeInUSDT(ethIntoUsdtBase / 10 ** 6)
+    }
 
-  //   let EthIntoUSDT = (+feeETH + +price?.toString())
-  //   setEthForFiat(EthIntoUSDT);
+    let EthIntoUSDT = (+feeETH + +price?.toString())
+    setEthForFiat(EthIntoUSDT);
 
-  //   let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
+    let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
-  //   setPriceIntoUSD(intoUSDT?.toString());
-  //   setFiatAmount(intoUSDT?.toString() / 10**6);
+    setPriceIntoUSD(intoUSDT?.toString());
+    setFiatAmount(intoUSDT?.toString() / 10**6);
 
-  // };
+  };
 
 
   const getNFTLike = async () => {
     var temp = JSON.parse(localStorage.getItem("data"));
     var address = temp.id;
-    const response = await apis.getLikeNFT(address, id);
+    const response = await apis.getLikeNFT(address, nftId);
     setLikeAndViewData(response.data.data);
   };
 
@@ -137,7 +136,7 @@ function ProfileDrawer({
     var address = temp.id;
     const response = await apis.postLikeNFT({
       like_by: address,
-      nft_token: id,
+      nft_token: nftId,
     });
     getNFTLike();
   };
@@ -147,14 +146,14 @@ function ProfileDrawer({
     var address = temp.id;
     const response = await apis.postViewNFT({
       view_by: address,
-      nft_token: id,
+      nft_token: nftId,
     });
     getNFTLike();
   };
 
   const getNFTDetailByNFTTokenId = async () => {
     try {
-      const response = await apis.getNFTByTokenId(id);
+      const response = await apis.getNFTByTokenId(nftId);
       setNftDetails(response?.data?.data);
       setSellerPlan(response?.data?.data?.subscription_plan);
     } catch (e) {
@@ -181,7 +180,7 @@ function ProfileDrawer({
 
       await (await getSignerMarketContrat()?.buyWithETH(
         getSignerNFTContrat().address,
-        id,
+        nftId,
         sellerPlan, // must be multiple of 10 of the users percent //TODO: change here
         getBuyerPlan, // must be multiple of 10 of the users percent //TODO: change here
         nftDetails?.user_id, //selllerId
@@ -233,7 +232,7 @@ function ProfileDrawer({
       await (
         await getSignerMarketContrat()?.buyWithUSDT(
           getSignerNFTContrat().address,
-          id,
+          nftId,
           priceInUSDT?.toString(),
           sellerPlan,
           buyerPlan,
@@ -300,7 +299,7 @@ function ProfileDrawer({
   };
 
   useEffect(() => {
-    // getPriceInUSDAndDetials(); 
+    getPriceInUSDAndDetials(); 
     getNFTDetailByNFTTokenId();
   }, [account, price, fiatAmount])
 
@@ -1035,7 +1034,7 @@ function ProfileDrawer({
               setSucess={setSucess}
               setIsVisible={setIsVisible}
               _nftContract={getProviderNFTContrat().address}
-              _tokenId={id}
+              _tokenId={nftId}
               _sellerPlan={sellerPlan}
               _buyerAddress={account}
               _buyerPlan={buyerPlan}

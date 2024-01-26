@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useContext } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import "./Cards.css";
 import PlaceABidDrawer from "../shared/PlaceABidDrawer";
@@ -11,11 +11,11 @@ import {
   LinkedinShareButton,
 } from "react-share";
 import { ethers } from "ethers";
+import { Store } from "../../Context/Store";
 
 const NewItemCard = ({
   setLoader,
-  id,
-  isLive,
+  nftId,
   title,
   image,
   description,
@@ -33,13 +33,23 @@ const NewItemCard = ({
   firstOwner,
   user_id,
   nft_like,
-  size,
-  is_unapproved
+  size
 }) => {
+  console.log(
+
+    collection,
+    collectionImages,
+
+    "checkinnggggg")
 
   // const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [endDate, setEndDate] = useState("");
+
+  const [isLive, setIsLive] = useState(false);
+
+  // const {isLive, getLiveStatus}= useContext(Store)
+
 
   const unixTimestamp = Math.floor(Date.now() / 1000);
 
@@ -47,6 +57,11 @@ const NewItemCard = ({
   const userAddress = userData?.wallet_address;
 
   function convertTimestampToCustomFormat() {
+
+    if(unixTimestamp > startTime && unixTimestamp < endTime){
+      setIsLive(true)
+    }
+
     const date = new Date(endTime * 1000);
 
     const day = date.getDate();
@@ -56,13 +71,14 @@ const NewItemCard = ({
     const minutes = date.getMinutes();
 
     const formattedTimestamp = `${day} ${year} ${hours}:${minutes}`;
+
     setEndDate(formattedTimestamp);
   }
-
+  
   useEffect(() => {
     // if wallet is not connected, create a new instance of Web3Modal and connect the MetaMask wallet
     convertTimestampToCustomFormat();
-  }, [endDate]);
+  }, [endDate,startTime]);
 
   const onClose = useCallback(() => {
     setIsVisible(false);
@@ -111,7 +127,7 @@ const NewItemCard = ({
                 className="right"
                 style={{ cursor: "pointer", padding: "15px 0px 15px 20px" }}
               >
-                {id}
+                {nftId}
               </div>
             </div>
             <div className="bottom">
@@ -146,8 +162,8 @@ const NewItemCard = ({
         setLoader={setLoader}
         isVisible={isVisible}
         onClose={onClose}
-        id={id}
         isLive={isLive}
+        nftId={nftId}
         title={title}
         image={image}
         description={description}
@@ -164,7 +180,6 @@ const NewItemCard = ({
         owner={owner}
         firstOwner={firstOwner}
         user_id={user_id}
-        is_unapproved={is_unapproved}
         nft_like={nft_like}
       />
     </>

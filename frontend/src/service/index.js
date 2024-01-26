@@ -157,8 +157,9 @@ const createBackendServer = (baseURL) => {
   const getPurchasedNfts = async (userId) =>
     await api.get(`view-all-my-nfts/${userId}`);
 
-  const getUserData = async (id) =>
-    await api.get(`get-user-data/${id}`);
+  const getUserData = async (id) => await api.get(`get-user-data/${id}`);
+
+  const getProfileData = async (id) => await api.get(`get-profile-data-by-user/${id}`);
 
   // const getOtherUser = async (userAddress) =>
   //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
@@ -211,6 +212,8 @@ const createBackendServer = (baseURL) => {
   const viewNftCollectionStock = async (collectionID) => await api.get(`view-nft-collection-stock/${collectionID}`);
   const viewNftCollectionProfile = async (collectionID) => await api.get(`view-nft-collection-profile/${collectionID}`);
   const viewNftTopCollections = async () => await api.get(`view-nft-top-collections`);
+
+  const getLandingPageData = async () => await api.get('get-landing-page-data');
 
 
 
@@ -282,6 +285,7 @@ const createBackendServer = (baseURL) => {
     editProfile,
     postListNft,
     postNftSold,
+    
 
     // Auth api start //
 
@@ -399,6 +403,10 @@ const createBackendServer = (baseURL) => {
     moveImagesFolder,
     copyImagesFolder,
     deleteImagesFolder,
+
+    //newAPI's
+    getProfileData,
+    getLandingPageData
 
   };
 };
