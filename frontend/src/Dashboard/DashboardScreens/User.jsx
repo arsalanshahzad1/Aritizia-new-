@@ -290,7 +290,7 @@ const User = ({ search, setSearch, loader, setLoader}) => {
 
   //get your purchase nft it show you purchased nft
   const getMyNfts = async (NFTid) => {
-    console.log(NFTid, "NFTid")
+   
     // let emptyList = [];
     // setNftListAuction(emptyList);
     // setNftListFP(emptyList);
@@ -651,7 +651,7 @@ const User = ({ search, setSearch, loader, setLoader}) => {
                                   seller={item?.seller}
                                   user_id={item?.user_id}
                                   nft_like={item?.nft_like}
-                                  size={'col-lg-3'}
+                                  size={'col-lg-4'}
                                 />
                               )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
                           }

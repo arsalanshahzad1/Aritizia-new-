@@ -51,7 +51,7 @@ const FollowersUserDashboard = ({ data, id }) => {
                 ?
                 <>
                     {followers?.map((data, i) => {
-                        console.log(data, "data value")
+                        // console.log(data, "data value")
                         return (
                             <div className="Follow-row" key={i}>
                                 <Link to={`/other-profile?add=${data?.user_id}`}>

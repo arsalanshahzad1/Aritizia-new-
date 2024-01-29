@@ -54,7 +54,7 @@ const Header = ({ search, setSearch }) => {
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
-      console.log(data, 'data');
+      // console.log(data, 'data');
       // Handle the received event data
       setMessageArrive(true);
     });
@@ -81,9 +81,9 @@ const Header = ({ search, setSearch }) => {
 
   function handleDisconnect() {
     // Handle wallet disconnection here
-    console.log(
-      "Wallet disconnected. Updating state and clearing local storage..."
-    );
+    // console.log(
+    //   "Wallet disconnected. Updating state and clearing local storage..."
+    // );
     // Clear localStorage:
     localStorage.clear();
   }
@@ -123,14 +123,14 @@ const Header = ({ search, setSearch }) => {
     }
     const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
-      console.log(response, 'response');
+      // console.log(response, 'response');
       setChatNotificationRes((prevState) => [
         ...prevState,
         ...response?.data?.data,
       ]);
-      console.log(response?.data?.total_count);
+      // console.log(response?.data?.total_count);
       setCountLength(response?.data?.total_count)
-      console.log(countLength)
+      // console.log(countLength)
       setloader(false);
     } else {
       setloader(false);
@@ -179,9 +179,9 @@ const Header = ({ search, setSearch }) => {
   // console.log(userParse?.email, "userParse")
 
 
-  console.log("data", data)
+  // console.log("data", data)
 
-  console.log("accountAddress", accountAddress)
+  // console.log("accountAddress", accountAddress)
   useEffect(() => {
     if (accountAddress == null && data == null) {
       window.location.reload()

@@ -55,7 +55,7 @@ const BuyNow = ({
   const getBuyerPlan = userData?.subscription_plan;
 
 
-  const { account, checkIsWalletConnected, getProviderMarketContrat, getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat,buyWithFiatPayment} = useContext(Store);
+  const { account, checkIsWalletConnected, walletConnected, getProviderMarketContrat, getProviderNFTContrat, getSignerMarketContrat, getSignerNFTContrat, getSignerUSDTContrat,buyWithFiatPayment} = useContext(Store);
 
   const userWalletAddress = localStorage.getItem("userAddress")
 
@@ -81,15 +81,14 @@ const BuyNow = ({
       _buyerPercent = 150;
     }
     setBuyerPlan(getBuyerPlan);
-    let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
 
+    let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
     setPlatformFeeETH(feeETH);
 
     let EthIntoUSDT = (+feeETH + +price?.toString())
-    
-    console.log("intoUSDT2")
+    // console.log("intoUSDT2")
     let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString());
-    console.log(intoUSDT,"intoUSDT")
+    // console.log(intoUSDT,"intoUSDT")
     setEthForFiat(EthIntoUSDT);
     setPriceIntoUSD(intoUSDT?.toString());
     setFiatAmount(intoUSDT?.toString() / 10**6);
@@ -202,12 +201,11 @@ const BuyNow = ({
     try {
       usdtPurchase = true;
       let accBalance = await getSignerUSDTContrat().balanceOf(userAddress)
+
       if (+priceInUSDT > +accBalance?.toString()) {
         return toast.error("You dont have balance"),setLoader(false);
       }
-
-      let usdtToEth = await getSignerMarketContrat().getUSDTIntoETH(priceInUSDT);
-
+      
       const appprove = await getSignerUSDTContrat().approve(
         MARKETPLACE_CONTRACT_ADDRESS.address,
         priceInUSDT?.toString()
@@ -314,7 +312,7 @@ const BuyNow = ({
 
 
 
-  console.log(owner?.toUpperCase() , MARKETPLACE_CONTRACT_ADDRESS?.address?.toUpperCase(),"checking")
+  // console.log(owner?.toUpperCase() , MARKETPLACE_CONTRACT_ADDRESS?.address?.toUpperCase(),"checking")
 
   return (
     <>
@@ -529,7 +527,7 @@ const BuyNow = ({
         </div>
       </Modal>
 
-      {/* <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} /> */}
+      <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
     </>
   );
 };

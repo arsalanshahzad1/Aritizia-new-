@@ -61,7 +61,7 @@ const SearchPage = ({ search, setSearch, loader, setLoader, user }) => {
       );
     
       setNftIds(response?.data?.data);
-      console.log(response?.data?.data,"datadata");
+      // console.log(response?.data?.data,"datadata");
       // setNftListFP(response?.data?.auction,response?.data?.onSlae);
       setAuctionNft(response?.data?.data?.auction);
       setOnSaleNft(response?.data?.data?.onsale);
@@ -71,7 +71,9 @@ const SearchPage = ({ search, setSearch, loader, setLoader, user }) => {
       // getAllListedNfts(response?.data?.data);
 
       // setPriceRange({ min: 0, max: response?.data?.highest_price })
-    } catch (error) { }
+    } catch (error) { 
+      setNftLoader(false)
+    }
   };
 
   useEffect(() => {
@@ -86,21 +88,50 @@ const SearchPage = ({ search, setSearch, loader, setLoader, user }) => {
     );
   }, []);
 
-  const handleSearchChange = (event) => {
-    console.log(event.target.value);
-    setSearchText(event.target.value);
-    setNftListFP([]);
-
-    viewFilteredNfts(
-      currency.value,
-      status.value,
-      priceRange.min,
-      priceRange.max * 10 ** 18,
-      categories.value,
-      1,
-      event.target.value
-    );
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      if (searchText.trim() !== '') {
+        // Perform search when Enter key is pressed and search text is not empty
+        viewFilteredNfts(
+          currency.value,
+          status.value,
+          priceRange.min,
+          priceRange.max * 10 ** 18,
+          categories.value,
+          1,
+          searchText
+        );
+      } else {
+        // Reload all NFTs when Enter key is pressed and search text is empty
+        // You may need to adjust this part based on how you fetch the original list
+        // viewFilteredNfts(
+        //   currency.value,
+        //   status.value,
+        //   priceRange.min,
+        //   priceRange.max * 10 ** 18,
+        //   categories.value,
+        //   1,
+        //   searchText
+        // );
+      }
+    }
   };
+
+  // const handleSearchChange = (event) => {
+  //   // console.log(event.target.value);
+  //   setSearchText(event.target.value);
+  //   setNftListFP([]);
+
+  //   viewFilteredNfts(
+  //     currency.value,
+  //     status.value,
+  //     priceRange.min,
+  //     priceRange.max * 10 ** 18,
+  //     categories.value,
+  //     1,
+  //     event.target.value
+  //   );
+  // };
 
   const searchNftCards = async (event) => {
     event.preventDefault();
@@ -249,6 +280,11 @@ const SearchPage = ({ search, setSearch, loader, setLoader, user }) => {
     });
   };
 
+  const handleSearchChange = (event) => {
+    setSearchText(event.target.value);
+    setNftListFP([]);
+  };
+
   return (
     <>
       {loader && <Loader />}
@@ -331,10 +367,11 @@ const SearchPage = ({ search, setSearch, loader, setLoader, user }) => {
                         </div>
                       </div>
                       <input
-                        type="search"
-                        placeholder="Search for NFT item"
-                        value={searchText}
-                        onChange={handleSearchChange}
+                       type="search"
+                       placeholder="Search for NFT item"
+                       value={searchText}
+                       onChange={handleSearchChange}
+                       onKeyPress={handleKeyPress}
                       />
                     </div>
                   </div>

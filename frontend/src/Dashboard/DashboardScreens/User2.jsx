@@ -45,12 +45,12 @@ function User2({ search, setSearch }) {
   }, []);
 
   const getUsersNfts = async () => {
-    console.log("aaaa");
+   
     let emptyList = [];
     setNftList(emptyList);
 
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    // Set signer
+
     const signer = provider.getSigner()
 
     const userAddress = signer.getAddress();
@@ -60,7 +60,6 @@ function User2({ search, setSearch }) {
       MARKETPLACE_CONTRACT_ABI.abi,
       provider
     );
-    console.log("222222");
 
     const nftContract = new Contract(
       NFT_CONTRACT_ADDRESS.address,
@@ -70,11 +69,8 @@ function User2({ search, setSearch }) {
 
     let listingType;
 
-    // let mintedTokens = await marketplaceContract.getMyListedNfts(userAddress);
     let mintedTokens = await marketplaceContract.getUsersNfts(userAddress);
-
-    // let mintedTokens = [1, 4, 2];
-    console.log("mintedTokens", mintedTokens);
+   
     let myNFTs = [];
 
     for (let i = 0; i < mintedTokens.length; i++) {
@@ -83,23 +79,14 @@ function User2({ search, setSearch }) {
 
       let collectionId;
       collectionId = +mintedTokens[i]?.collectionId?.toString();
-      console.log("YESS", id);
 
       const response = await apis.getNFTCollectionImage(collectionId);
-      console.log(response, "responses");
+
       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
-      console.log(response?.data?.data?.media?.[0]?.original_url, "responsess");
-      console.log(collectionImages, "trrrr");
 
       const metaData = await nftContract.tokenURI(id);
 
       const structData = await marketplaceContract._idToNFT(id);
-
-      // const fanNftData = await marketplaceContract._idToNFT2(id);
-
-      // let discountOnNFT = +fanNftData.fanDiscountPercent.toString();
-
-      // setDiscountPrice(discountOnNFT);
 
       let auctionData = await marketplaceContract._idToAuction(id);
 
@@ -124,7 +111,6 @@ function User2({ search, setSearch }) {
           const description = data?.description;
           const collection = data?.collection;
 
-          // if (listingType === 0) {
           const nftData = {
             id: id, //
             title: title,
@@ -136,39 +122,14 @@ function User2({ search, setSearch }) {
             collection: collection,
             collectionImages: collectionImages,
           };
-          console.log(nftData);
-          // myNFTs.push(nftData);
-
-          // setNftList(myNFTs);
           setNftList((prev) => [...prev, nftData]);
-
-          // } else if (listingType === 1) {
-          //   const nftData = {
-          //     id: id, //
-          //     title: title,
-          //     image: image,
-          //     price: price,
-          //     basePrice: price,
-          //     collectionImages: collectionImages,
-          //     endTime: auctionData.endTime.toString(),
-          //     highestBid: highestBid,
-          //     highestBidder: auctionData.highestBidder.toString(),
-          //     seller: auctionData.seller.toString(),
-          //     startTime: auctionData.startTime.toString(),
-          //   };
-          //   myAuctions.push(nftData);
-          //   setNftList(myAuctions);
-          //   console.log(nftListAuction, "nftData");
-          // }
         })
-
         .catch((error) => {
           console.error("Error fetching metadata:", error);
         });
     }
   };
 
-  console.log("DONEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
   return (
     <div className="user">
       <div className="back-btn">

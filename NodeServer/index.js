@@ -24,7 +24,7 @@ const contract = new ethers.Contract(
   provider
 );
 
-console.log(contractAddress)
+// console.log(contractAddress)
 
 // Function to process NFT Sold event
 const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buyerId) => {
@@ -39,7 +39,7 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
     buyerId: buyerId?.toString(),
   };
   // ("");
-  console.log("checckData",apiData);
+  // console.log("checckData",apiData);
   // Send a POST request to another server's API
   try {
     var options = {

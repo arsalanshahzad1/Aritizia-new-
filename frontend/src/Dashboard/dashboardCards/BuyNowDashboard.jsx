@@ -74,7 +74,7 @@ const BuyNowDashboard = ({
 
         let EthIntoUSDT = (+feeETH + +price?.toString())
 
-        console.log(EthIntoUSDT, "totalInUSDTsssss");
+        // console.log(EthIntoUSDT, "totalInUSDTsssss");
 
         let intoUSDT = await getSignerMarketContrat().getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
@@ -157,7 +157,7 @@ const BuyNowDashboard = ({
         seller,
         buyer,
     ) => {
-        console.log("handleNFTSoldEvent");
+        // console.log("handleNFTSoldEvent");
         let soldData = {
             token_id: +tokenId?.toString(),
             seller: seller?.toString(),
@@ -175,7 +175,7 @@ const BuyNowDashboard = ({
 
     const nftSoldPost = async (value) => {
         const response = await apis.postNftSold(value);
-        console.log("asdasdadas", response);
+        // console.log("asdasdadas", response);
         setLoader(false);
         setSucess(false);
         window.location.reload();

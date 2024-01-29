@@ -21,7 +21,7 @@ function Register({loader,setLoader}) {
     const userData = JSON.parse(localStorage.getItem('data')) 
     const [showPass, setShowPass] = useState(false);
 
-    console.log(userData , 'fsdfsdfsdf');
+    // console.log(userData , 'fsdfsdfsdf');
 
     const getOtp = (event) => {
         setOtpCode(event)
@@ -30,7 +30,7 @@ function Register({loader,setLoader}) {
     const onChangeHandler = (e) => {
         const { value, name } = e.target;
         setRegisterData((prevState) => ({ ...prevState, [name]: value }));
-        console.log(registerData);
+        // console.log(registerData);
     };
 
     const registerUser = async (event) => {
@@ -49,8 +49,8 @@ function Register({loader,setLoader}) {
             setLoader(true)
             try {
                 const response = await apis.register(registerData)
-                console.log(response?.data?.data?.status, 'status');
-                console.log(response?.data?.message, 'message');
+                // console.log(response?.data?.data?.status, 'status');
+                // console.log(response?.data?.message, 'message');
                 if (response?.data?.data?.status) {
                     toast.success(response?.data?.message, {
                         position: toast.POSITION.TOP_RIGHT,
@@ -58,7 +58,7 @@ function Register({loader,setLoader}) {
                     setLoader(false)
                     setVarificationPopup(true)
                 }
-                console.log(response);
+                // console.log(response);
             } catch (error) {
                 setLoader(false)
                 toast.error(error?.message, {
@@ -75,8 +75,8 @@ function Register({loader,setLoader}) {
         event.preventDefault()
         try {
             const response = await apis.verifyOtp({ email: registerData?.email, otp: otpCode })
-            console.log(response?.data?.status, 'status');
-            console.log(response?.data?.message, 'message');
+            // console.log(response?.data?.status, 'status');
+            // console.log(response?.data?.message, 'message');
             if (response?.data?.status) {
                 toast.success(response?.data?.message, {
                     position: toast.POSITION.TOP_RIGHT,
@@ -84,7 +84,7 @@ function Register({loader,setLoader}) {
                 setVarificationPopup(false);
                 navigate('/login')
             }
-            console.log(response);
+            // console.log(response);
         } catch (error) {
             toast.error(error?.message, {
                 position: toast.POSITION.TOP_RIGHT,
@@ -96,14 +96,14 @@ function Register({loader,setLoader}) {
         event.preventDefault()
         try {
             const response = await apis.resendOtp(registerData?.email)
-            console.log(response?.data?.status, 'status');
-            console.log(response?.data?.message, 'message');
+            // console.log(response?.data?.status, 'status');
+            // console.log(response?.data?.message, 'message');
             if (response?.data?.status) {
                 toast.success(response?.data?.message, {
                     position: toast.POSITION.TOP_RIGHT,
                 });
             }
-            console.log(response);
+            // console.log(response);
         } catch (error) {
             toast.error(error?.message, {
                 position: toast.POSITION.TOP_RIGHT,

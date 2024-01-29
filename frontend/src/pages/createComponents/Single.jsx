@@ -139,7 +139,7 @@ const Single = ({ search, setSearch }) => {
       }
       catch (e) {
         setLoading(false);
-        console.log(e?.message, "EEEEEEEEEEEEEEEEEEEEE")
+        // console.log(e?.message, "EEEEEEEEEEEEEEEEEEEEE")
         toast.warning(e?.message)
 
       }
@@ -196,7 +196,7 @@ const Single = ({ search, setSearch }) => {
       setLoading(true);
       // console.log("this is image selectedImage ", selectedImage);
       const resut = await uploadFileToIPFS(selectedImage);
-      console.log("Result.pinata", resut?.pinataURL);
+      // console.log("Result.pinata", resut?.pinataURL);
       setPinataImage(resut?.pinataURL);
       setLoading(false);
       createNFT(resut?.pinataURL);
@@ -242,7 +242,7 @@ const Single = ({ search, setSearch }) => {
         gasLimit: ethers.BigNumber.from("5000000"),
       });
       minted.wait();
-      console.log("NFT minting is complete!",minted);
+      // console.log("NFT minting is complete!",minted);
       await getSignerNFTContrat().on("NFTMinted",handleNFTMintedEvent2);
     } catch (error) {
       setIsSingleSubmit(false)
@@ -263,13 +263,13 @@ const Single = ({ search, setSearch }) => {
       const startTimestamp = Math.floor(startDate.getTime() / 1000)
       const endTimestamp = Math.floor(endDate.getTime() / 1000); 
 
-      console.log("data", tokenId);
-      console.log("data", startTimestamp);
-      console.log("data", endTimestamp);
-      console.log("data", collection?.collection_id);
-      console.log("data",listingType);
-      console.log("data",royaltyValue);
-      console.log("data",price?.toString());
+      // console.log("data", tokenId);
+      // console.log("data", startTimestamp);
+      // console.log("data", endTimestamp);
+      // console.log("data", collection?.collection_id);
+      // console.log("data",listingType);
+      // console.log("data",royaltyValue);
+      // console.log("data",price?.toString());
 
        let listed =  await getSignerMarketContrat().listNft(
           getSignerNFTContrat().address,
@@ -288,7 +288,7 @@ const Single = ({ search, setSearch }) => {
         );
 
       listed.wait();
-      console.log("NFT listing is complete!");
+      // console.log("NFT listing is complete!");
       await getSignerMarketContrat().on("NFTListed", handleNFTListedEvent2);
     } catch (error) {
       setIsSingleSubmit(false)
@@ -308,7 +308,7 @@ const Single = ({ search, setSearch }) => {
     collectionId,
     listingType
   ) => {
-    console.log("handleNFTListedEvent2");
+    // console.log("handleNFTListedEvent2");
 
       let listedData = {
         title: title,
@@ -379,7 +379,7 @@ const Single = ({ search, setSearch }) => {
     setSelectedImage2(file);
   };
 
-  console.log("Renderrrrr");
+  // console.log("Renderrrrr");
 
   return (
     <>

@@ -142,7 +142,7 @@ function ProfileDrawerDashboard({
 
   const getNFTDetailByNFTTokenId = async () => {
     try {
-      console.log("checkIID",id);
+      // console.log("checkIID",id);
       const response = await apis.getNFTByTokenId(id);
       // console.log("ressss", response?.data?.data?.subscription_plan);
       setNftDetails(response?.data?.data);
@@ -169,7 +169,7 @@ function ProfileDrawerDashboard({
 
     let totalPrice = +price?.toString() + +platformFeeETH;
 
-    console.log(totalPrice, "totalPrice");
+    // console.log(totalPrice, "totalPrice");
 
     await (
       await getSignerMarketContrat().buyWithETH(
@@ -190,7 +190,7 @@ function ProfileDrawerDashboard({
       "NFTSold",
       ethPurchase ? handleNFTSoldEvent : null
     );
-    console.log("Response of bid even", response);
+    // console.log("Response of bid even", response);
       
     } catch (error) {
       setLoader(false)
@@ -212,7 +212,7 @@ function ProfileDrawerDashboard({
       
       let usdtToEth = await getSignerMarketContrat().getUSDTIntoETH(priceInUSDT);
      
-      console.log("checckkk", usdtToEth?.toString() ,(+platformFeeETH + +price?.toString()));
+      // console.log("checckkk", usdtToEth?.toString() ,(+platformFeeETH + +price?.toString()));
       
       const appprove = await getSignerUSDTContrat().approve(
         MARKETPLACE_CONTRACT_ADDRESS.address,

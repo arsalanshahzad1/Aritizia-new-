@@ -2,7 +2,7 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 const ChartAnalytics = ({chatData , option}) => {
-  console.log(chatData , 'data');
+  // console.log(chatData , 'data');
   const series = [
     {
       name: 'series1',

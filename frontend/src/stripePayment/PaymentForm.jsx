@@ -40,7 +40,7 @@ const PaymentForm = ({
   index,
   viewSubscriptions
 }) => {
-  console.log(index, "index");
+  // console.log(index, "index");
   const [success, setSuccess] = useState(false);
   const [planeType, setPlaneType] = useState("monthly");
   const [showPlaneType, setShowPlaneType] = useState(false);
@@ -68,7 +68,7 @@ const PaymentForm = ({
 
     if (!error) {
       try {
-        console.log("payment_method_id: " + paymentMethod.id);
+        // console.log("payment_method_id: " + paymentMethod.id);
         const { id } = paymentMethod.id;
         const response = await apis.userSubscribe({
           user_id: user_id,
@@ -155,9 +155,9 @@ const PaymentForm = ({
     let buySubscription = await (
       await marketplaceContract.setUserSubscription(planId)
     ).wait();
-    console.log("QQ Four");
+    // console.log("QQ Four");
 
-    console.log("buySubscription", buySubscription);
+    // console.log("buySubscription", buySubscription);
 
     // toast.success("Plan purchased!", {
     //   position: toast.POSITION.TOP_RIGHT,

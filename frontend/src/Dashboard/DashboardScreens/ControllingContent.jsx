@@ -274,7 +274,7 @@ function ControllingContent({ search, setSearch }) {
           className="table-for-user-management"
           style={{ top: selectedNTFIds.length > 0 ? "160px" : "120px" }}
         >
-          {console.log(list, "list data")}
+        
           {list?.data?.length > 0 ? (
             <>
               <div className="row">

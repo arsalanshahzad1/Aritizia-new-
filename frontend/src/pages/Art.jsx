@@ -32,7 +32,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
     const viewRemainingArtGallery = async (user_id) => {
         try {
             const response = await apis.viewRemainingArtGallery(user_id)
-            console.log(response?.data?.data, 'dsfsdfsdf');
             setPromptCalculator(response?.data?.data)
             if (response?.data?.data?.remaining == 0) {
                 setLoader(false)
@@ -42,7 +41,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
             }
         } catch (error) {
             console.log(error, 'viewRemainingArtGallery');
-
         }
     }
     const generateArtGalleryImages = async (user_id, total_generates) => {
@@ -64,14 +62,12 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
     }, [generatedArts])
 
     const handleSelectArt = (index) => {
-        console.log("I'm being selected", index);
         const updatedArts = [...generatedArts];
         updatedArts[index].selected = true;
         setgeneratedArts(updatedArts);
     };
 
     const handleUnselectArt = (index) => {
-        console.log("I'm being unselected", index);
         const updatedArts = [...generatedArts];
         updatedArts[index].selected = false;
         setgeneratedArts(updatedArts);
@@ -82,14 +78,11 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
     const [midjourneyId, setMidjourneyId] = useState('')
 
     const convertImageUrlToImageFile = async (url, i) => {
-        console.log(url , 'imageDataObject');
         try {
             if (url.includes("http")) {
                 // Download the image from the URL
                 const imageUrl = url;
                 const response = await fetch(url);
-                console.log(response);
-
                 if (!response.ok) {
                     throw new Error(`Failed to fetch image. Status: ${response.status}`);
                 }
@@ -109,8 +102,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
             } else {
                 const imageUrl = url;
                 const response = await fetch(`data:image/png;base64,${url}`);
-                console.log(response);
-
                 if (!response.ok) {
                     throw new Error(`Failed to fetch image. Status: ${response.status}`);
                 }
@@ -166,7 +157,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
     };
 
     const getMidjourneyImagesFromId = async () => {
-        console.log(midjourneyId, 'id');
         if (promptCalculator?.remaining > 0) {
             try {
                 // const response = await apis.getMidjourneyImagesFromId()
@@ -184,7 +174,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
                             console.error(`Error fetching image for URL ${response?.data?.response?.imageUrls?.[i]}:`, error);
                         }
                     }
-                    console.log(imageDataObject, 'imageDataObject');
 
                     const sendData = new FormData();
                     sendData.append('user_id', user_id);
@@ -195,7 +184,7 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
 
                     const resp = await apis.storeTempArtGallery(sendData);
                     try {
-                        console.log(resp?.data?.data?.media , 'imageDataObject');
+                     
                         let tempImages = []
                         for (let index = 0; index < resp?.data?.data?.media?.length; index++) {
                             tempImages.push({ image: resp?.data?.data?.media?.[index], selected: false })
@@ -205,9 +194,9 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
                         generateArtGalleryImages(user_id, 4)
                         setLoader(false)
                         setMidjourneyId('')
-                        console.log(tempImages , 'imageDataObject');
+                       
                     } catch (error) {
-                        console.log(error , 'imageDataObject');
+                       
                         getStabilityImages()
                         setMidjourneyId('')
                     }
@@ -238,7 +227,7 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
     }, [midjourneyId])
 
     useEffect(() => {
-        console.log('outslide');
+       
         if (prompt !== '') {
             viewRemainingArtGallery(user_id)
             buttonRef.current.click();
@@ -294,8 +283,7 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
                             console.error(`Error fetching image for URL ${response?.data?.artifacts?.[i]}:`, error);
                         }
                     }
-                    console.log(imageDataObject, 'imageDataObject');
-
+               
                     const sendData = new FormData();
                     sendData.append('user_id', user_id);
 
@@ -305,7 +293,7 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
 
                     const resp = await apis.storeTempArtGallery(sendData);
                     try {
-                        console.log(resp?.data?.data?.media , 'imageDataObject');
+                       
                         let tempImages = []
                         for (let index = 0; index < resp?.data?.data?.media?.length; index++) {
                             tempImages.push({ image: resp?.data?.data?.media?.[index], selected: false })
@@ -314,10 +302,9 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
                         setprompt('')
                         generateArtGalleryImages(user_id, 4)
                         setLoader(false)
-                        console.log(tempImages , 'imageDataObject');
                     } catch (error) {
-                        console.log(error , 'imageDataObject');
-                        setLoader(false)
+                        console.log(error)   
+                  setLoader(false)
                     }
 
 
@@ -391,7 +378,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
     const getUserSearchHistory = async (prompt, page) => {
         const response = await apis.getUserSearchHistory(user?.id, prompt, page)
         try {
-            console.log(response?.data?.data, 'response');
             if (response?.data?.data?.result?.length > 0) {
                 setInputOptions(true)
             }
@@ -407,11 +393,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
             search_key: prompt
         }
         const response = await apis.storeSearchHistory(data)
-        try {
-            console.log(response?.data?.data, 'response');
-        } catch (error) {
-
-        }
     }
 
     const getSearchList = () => {
@@ -452,9 +433,6 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
         try {
             // Make the API call to delete the search history item
             const response = await apis.DeleteAllSearchHistory(data)
-
-            // If the deletion is successful, update the state to remove the deleted item
-            console.log(response?.status, 'status');
             if (response?.status === 200) {
                 setInputOptions(false)
                 setPrevSearchList([]);
@@ -483,7 +461,7 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
             !e.target.closest('.AQZ9Vd') &&
             !e.target.closest('.search-all-delete')
         ) {
-            console.log('Clicked outside the input field and not on delete button or "See All"/"Delete All"');
+            // console.log('Clicked outside the input field and not on delete button or "See All"/"Delete All"');
             // Perform your action for clicks outside the input field
             setInputOptions(false); // Hide input options when clicked outside
         }

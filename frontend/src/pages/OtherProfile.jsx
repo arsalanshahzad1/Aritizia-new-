@@ -32,10 +32,13 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
   const [FollowersTab, setFollowersTab] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [followUnfollowStatus, setFollowUnfollowStatus] = useState(false);
-  const [nftListFP, setNftListFP] = useState([]);
-  const [nftListAuction, setNftListAuction] = useState([]);
+
+  const [nftListFP, setNftListFP] = useState("");
+  const [nftListAuction, setNftListAuction] = useState("");
   const [userDetails, setUserDetails] = useState("");
-  const [likedNfts, setLikedNfts] = useState([]);
+  const [likedNftsAuction, setLikedNftsAuction] = useState("");
+  const [likedNfts, setLikedNfts] = useState("");
+  
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const userData = JSON.parse(localStorage.getItem("data"));
@@ -43,7 +46,6 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
   const [userID, setUserID] = useState(searchParams.get("id"));
   const otherUsersId = searchParams.get("add");
   const [userADDRESS, setUserADDRESS] = useState(otherUsersId);
-  const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   const [emailSigninPopup, setEmailSigninPopup] = useState(false);
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [isFollow, setIsFollow] = useState(false);
@@ -66,7 +68,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
   const getOtherUsersDetails = async (address) => {
     setLoader(true);
     try {
-      console.log(address, "addressaddressaddressaddressaddressaddress");
+      // console.log(address, "addressaddressaddressaddressaddressaddress");
       const response = await apis.getOtherUser(address);
 
       setUserDetails(response?.data?.data);
@@ -81,8 +83,8 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
       const APIData = await apis.getProfileData(address);
 
       console.log(APIData?.data?.data, "datafataddada");
-      // setLikedNfts()
-      // setLikedNftsAuction()
+      setLikedNfts(APIData?.data?.data?.liked_nft?.onsale)
+      setLikedNftsAuction(APIData?.data?.data?.liked_nft?.auction)
       setNftListFP(APIData?.data?.data?.nft_stock?.onsale);
       setNftListAuction(APIData?.data?.data?.nft_stock?.auction);
       setLoader(false);
@@ -307,7 +309,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
   };
 
   const postChatMeaage = async () => {
-    console.log("clicking");
+    // console.log("clicking");
     const id = JSON.parse(localStorage?.getItem("data"));
     const user_id = id?.id;
     const response = await apis.postCheckChatMessage({
@@ -332,7 +334,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
   };
 
   const copyToClipboard = (link) => {
-    console.log(link);
+    // console.log(link);
     navigator.clipboard.writeText(link);
     toast.success(`Copied Successfully`, {
       position: toast.POSITION.TOP_CENTER,
@@ -353,6 +355,8 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
     getOtherUsersDetails(otherUsersId);
   }, [userADDRESS, otherUsersId]);
 
+
+  console.log(likedNfts,tabs,"likedNftslikedNftslikedNfts")
   return (
     <>
       {loader && <Loader />}
@@ -708,7 +712,9 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   user_id={item?.user_id}
                                   royaltyPrice={item?.royaltyPrice}
                                   seller={item?.seller_address}
-                                  size={"col-lg-3"}
+                                  firstOwner={item?.creator_address}
+                                  owner={item?.owner_address}
+                                  size={"col-lg-4"}
                                 />
                               ))
                             ) : (
@@ -746,9 +752,11 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                   collection={item.collection_id}
                                   collectionImages={item?.collection?.media[0]?.original_url}
                                   seller={item?.seller_address}
+                                  firstOwner={item?.creator_address}
+                                  owner={item?.owner_address}
                                   user_id={item?.user_id}
                                   nft_like={item?.nft_like}
-                                  size={"col-lg-3"}
+                                  size={"col-lg-4"}
                                 />
                               ))
                             ) : (
@@ -787,12 +795,12 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                 <div className="one"></div>
                               </section>
                             ) : likedNfts?.length > 0 ? (
-                              nftListFP?.map((item) => (
+                              likedNfts?.map((item) => (
                                 <BuyNow
                                 setLoader={setLoader}
                                 onOpen={onOpen}
                                 // onClose={onClose}
-                                key={item.id}
+                                key={item?.id}
                                 nftId={item?.token_id}
                                 title={item?.title}
                                 image={item?.image_url}
@@ -805,7 +813,9 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                 user_id={item?.user_id}
                                 royaltyPrice={item?.royaltyPrice}
                                 seller={item?.seller_address}
-                                size={"col-lg-3"}
+                                firstOwner={item?.creator_address}
+                                owner={item?.owner_address}
+                                size={"col-lg-4"}
                                 />
                               ))
                             ) : (
@@ -824,7 +834,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                 <div className="one"></div>
                               </section>
                             ) : likedNftsAuction?.length > 0 ? (
-                              nftListAuction?.map((item) => (
+                              likedNftsAuction?.map((item) => (
                                 <NewItemCard
                                 setLoader={setLoader}
                                 nftId={item?.token_id}
@@ -835,6 +845,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                 basePrice={item?.price}
                                 startTime={item?.start_time}
                                 endTime={item?.end_time}
+
                                 highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0 }
                                 highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
                                 highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
@@ -843,9 +854,11 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                                 collection={item.collection_id}
                                 collectionImages={item?.collection?.media[0]?.original_url}
                                 seller={item?.seller_address}
+                                firstOwner={item?.creator_address}
+                                owner={item?.owner_address}
                                 user_id={item?.user_id}
                                 nft_like={item?.nft_like}
-                                size={"col-lg-3"}
+                                size={"col-lg-4"}
                                 />
                               ))
                             ) : (

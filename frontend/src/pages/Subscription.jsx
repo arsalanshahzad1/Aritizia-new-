@@ -40,7 +40,7 @@ const Subscription = ({ search, setSearch }) => {
             if (response.status) {
                 setSubscriptionData(response?.data?.data);
             }
-            console.log(response);
+            // console.log(response);
             setLoader(false)
 
         } catch (error) {
@@ -58,11 +58,11 @@ const Subscription = ({ search, setSearch }) => {
     const autoRecursionOnoff = async (userSebData) => {
         const response = await apis.autoRecursionOnoff(userSebData)
         if (response.status) {
-            console.log(response);
+            // console.log(response);
             viewSubscriptions(userId)
             setreneval(false)
         } else {
-            console.log(response);
+            // console.log(response);
             setreneval(false)
         }
     }
@@ -70,12 +70,12 @@ const Subscription = ({ search, setSearch }) => {
         setLoader(true)
         const response = await apis.cancelSubscription(userSebData)
         if (response.status) {
-            console.log(response);
+            // console.log(response);
             viewSubscriptions(userId)
             setCancleSubscription(false)
             setLoader(false)
         } else {
-            console.log(response);
+            // console.log(response);
             setCancleSubscription(false)
             setLoader(false)
         }

@@ -12,7 +12,7 @@ const Notification = () => {
   const getNotificationSetting = async () => {
     try{
       const response = await apis.getCurrentNotificationSettings(userData?.id);
-      console.log(response?.status, "igotit");
+      // console.log(response?.status, "igotit");
       if (response?.status === 200) {
         setData(response.data.data);
       }
@@ -27,9 +27,9 @@ const Notification = () => {
     setLoader(true)
     const settings = data;
     settings["user_id"] = userData?.id;
-    console.log(settings, "settings data");
+    // console.log(settings, "settings data");
     const response = await apis.updateNotificationSettings(settings);
-    console.log(response, "igotitupdated");
+    // console.log(response, "igotitupdated");
 
     if (response?.status === 201) {
       toast.success("Notification settings updated", {
@@ -52,7 +52,7 @@ const Notification = () => {
 
   const handleSwitchChange = (e) => {
     const { checked, name } = e.target;
-    console.log(data, "this is checked");
+    // console.log(data, "this is checked");
     const newValue = checked ? 1 : 0;
     setData((prevData) => ({ ...prevData, [name]: newValue }));
   };

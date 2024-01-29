@@ -19,7 +19,7 @@ const GalleryItem = ({
         setIsSelected(selected)
     }, [selected])
 
-    console.log(Image, "image in art")
+    // console.log(Image, "image in art")
     const selectDecision = () => {
         if (title === "All") {
             if (selected) {

@@ -15,7 +15,7 @@ const DateDisplay = ({ datetime }) => {
   const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
   const day = String(parsedDate.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
-  console.log(formattedDate, " end time now")
+  // console.log(formattedDate, " end time now")
   return formattedDate;
 };
 
@@ -47,7 +47,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
     setAutionNftLoader(true)
     const response = await apis.viewNftCollectionProfile(id);
     try {
-      console.log(response?.data?.data?.nfts?.auction,"responseresponseresponseresponseresponse")
+      console.log(response?.data?.data,"responseresponseresponseresponseresponse")
       
       setNftListFP(response?.data?.data?.nfts?.onsale)
       setNftListAuction(response?.data?.data?.nfts?.auction)
@@ -295,7 +295,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                                   owner={item?.owner_address}
                                   firstOwner={item?.creator_address}
                                   user_id={item?.user_id}
-                                  size={'col-lg-3'}
+                                  size={'col-lg-4'}
                                 />
                               ))
                               :
@@ -317,7 +317,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                               nftListAuction.map((item) => (
                                 <NewItemCard
                                   setLoader={setLoader}
-                                  id={item?.id}
+                                  nftId={item?.token_id}
                                   isLive={item?.isLive}
                                   title={item?.title}
                                   image={item?.image_url}
@@ -325,9 +325,11 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                                   basePrice={item?.price}
                                   startTime={item?.start_time}
                                   endTime={item?.end_time}
+
                                   highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0 }
                                   highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
                                   highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
+                                  
                                   royaltyPrice={item?.royaltyPrice}
                                   collection={item.collection_id}
                                   collectionImages={item?.collection?.media[0]?.original_url}
@@ -336,7 +338,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                                   firstOwner={item?.creator_address}
                                   user_id={item?.user_id}
                                   nft_like={item?.nft_like}
-                                  size={'col-lg-3'}
+                                  size={'col-lg-4'}
                                 />
                               )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
 
