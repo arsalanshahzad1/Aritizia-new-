@@ -195,7 +195,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
         setPageData(response?.data?.data);
         setNftListFP(response?.data?.data?.all_nfts?.onsale);
         setNftListAuction(response?.data?.data?.all_nfts?.auction);
-        // console.log(response?.data?.data, 'total');
+        console.log(response?.data?.data, 'total');
         if (response?.data?.data?.total_users > 999) {
           
           setTotalUsers(Math.floor(response?.data?.data?.total_users / 1000))

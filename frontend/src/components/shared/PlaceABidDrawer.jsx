@@ -123,6 +123,9 @@ const PlaceABidDrawer = ({
     }
   }, []);
 
+  console.log( unixTimestamp > +endTime,nftId," unixTimestamp > +endTime")
+  console.log( unixTimestamp < +endTime,nftId," unixTimestamp < +endTime")
+
   useEffect(() => {}, [earning]);
 
   var today = new Date(); // Get the current date and time
@@ -523,7 +526,7 @@ const PlaceABidDrawer = ({
         const ethIntoUsdtTax = await getProviderMarketContrat().getETHIntoUSDT(
           totalFee?.toString()
         );
-        // setPlatformFeeInUSDT(+ethIntoUsdtTax?.toString() / 10 ** 6);
+        setPlatformFeeInUSDT(+ethIntoUsdtTax?.toString() / 10 ** 6);
         setPriceInUSDTPlusTax(ethIntoUsdtTax?.toString() / 10 ** 6);
       }
     } else if (+highestBidIntoETH?.toString() > +basePrice?.toString()) {
@@ -548,7 +551,7 @@ const PlaceABidDrawer = ({
         // );
 
         setPriceInUSDTPlusTax(ethIntoUsdtBase?.toString() / 10 ** 6);
-        // setPlatformFeeInUSDT(+ethIntoUsdtBase?.toString() / 10 ** 6);
+        setPlatformFeeInUSDT(+ethIntoUsdtBase?.toString() / 10 ** 6);
       }
     }
   };
@@ -669,10 +672,10 @@ const PlaceABidDrawer = ({
 
       if (usdtAmount > +accBalance.toString()) {
         return (
-          toast.error("you dont have balance", {
+          setLoader(false), toast.error("you dont have balance", {
             position: toast.POSITION.TOP_CENTER,
-          }),
-          setLoader(true)
+          })
+          
         );
       }
 
@@ -739,6 +742,11 @@ const PlaceABidDrawer = ({
     setLoader(true);
     try {
       auctionPurchase = true;
+      console.log(          NFT_CONTRACT_ADDRESS.address,
+        nftId,
+        sellerPlan,
+        nftDetails?.user_id,
+        userData?.id,'nft Detials' )
 
       await (
         await getSignerMarketContrat().closeAuction(
@@ -833,6 +841,10 @@ const PlaceABidDrawer = ({
       setEmailSigninPopup(true);
     }
   };
+
+  console.log( account?.toString()?.toLowerCase(),
+  seller?.toString()?.toLowerCase(),
+highestBidderAddress?.toString()?.toLowerCase(),"adressadressadressadressadressadressadressadress")
   return (
     <>
       <Drawer
@@ -1259,7 +1271,14 @@ const PlaceABidDrawer = ({
                         >
                           Bid Now
                         </button>
-                      ) : unixTimestamp > +endTime &&
+                      ) : 
+                      unixTimestamp < +endTime &&
+                        account?.toString()?.toLowerCase() ===
+                          seller?.toString()?.toLowerCase() ? (
+                        <button className="nft-buy-btn">Ongoing</button>
+                          )
+                          :
+                      unixTimestamp > +endTime &&
                         account?.toString()?.toLowerCase() ===
                           seller?.toString()?.toLowerCase() ? (
                         <button className="nft-buy-btn" onClick={claimAuction}>
@@ -1271,10 +1290,6 @@ const PlaceABidDrawer = ({
                         <button className="nft-buy-btn" onClick={claimAuction}>
                           Claim
                         </button>
-                      ) : unixTimestamp < +endTime &&
-                        account?.toString()?.toLowerCase() ===
-                          seller?.toString()?.toLowerCase() ? (
-                        <button className="nft-buy-btn">Ongoing</button>
                       ) : (
                         <button className="nft-buy-btn">Auctin Ended</button>
                       )}

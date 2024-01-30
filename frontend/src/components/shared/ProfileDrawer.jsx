@@ -1010,7 +1010,7 @@ setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
           </div>
         </div>
       </Modal>
-
+      
       <Modal
         show={showFiatPaymentForm}
         onHide={() => setShowFiatPaymentForm(false)}
@@ -1051,7 +1051,6 @@ setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
           </div>
         </div>
       </Modal>
-
 
       <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
       <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />

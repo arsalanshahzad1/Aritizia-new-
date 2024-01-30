@@ -91,7 +91,8 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
       setNftLoader(false)
     } catch (error) {
       setLoader(false);
-      toast.error("getting some error");
+      console.log(error)
+      // toast.error("getting some error");
     }
   };
 

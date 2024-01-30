@@ -73,12 +73,14 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   const manageAPIData = async () => {
     try {
       let APIData = await getProfileData();
-      console.log(APIData,"APIData");
+      console.log(APIData, "APIData");
       // console.log(APIData?.nft_stock?.onsale[0],"APIData");
       setFollwers(APIData?.data?.follower);
       setNftListFP(APIData?.nft_stock?.onsale);
       setNftListAuction(APIData?.nft_stock?.auction);
       setUserNfts(APIData?.my_nfts);
+      setLikedNfts(APIData?.liked_nft?.onsale)
+      setLikedNftsAuction(APIData?.liked_nft?.auction)
       setLoader(false);
       setNftLoader(false);
       setpNftLoader(false);
@@ -428,7 +430,8 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   const userWalletAddress = localStorage.getItem("userAddress");
   const accountAddress = localStorage.getItem("userAddress");
   // console.log(nftListFP,"nftListFP")
-  // console.log(nftListAuction,"nftListAuction")
+  console.log(likedNfts,likedNftsAuction, "nftListAuctionnftListAuction");
+
   return (
     <>
       {loader && <Loader />}
@@ -672,8 +675,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                 image={item?.image_url}
                                 price={item?.price}
                                 paymentMethod={0}
-                                royalty={item?.royalty}
-                                royaltyPrice={item?.royaltyPrice}
+                                royaltyPrice={item?.royality}
                                 description={item?.description}
                                 collection={item?.collection_id}
                                 collectionImages={
@@ -699,7 +701,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                               <div className="one"></div>
                             </section>
                           ) : nftListAuction.length > 0 ? (
-                            nftListAuction.map((item) => (
+                            nftListAuction.map((item, index) => (
                               <NewItemCard
                                 setLoader={setLoader}
                                 nftId={item?.token_id}
@@ -729,11 +731,12 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                   item?.collection?.media[0]?.original_url
                                 }
                                 seller={item?.seller_address}
+                                royaltyPrice={item?.royality}
                                 owner={item?.owner_address}
                                 firstOwner={item?.creator_address}
                                 user_id={item?.user_id}
                                 nft_like={item?.nft_like}
-                                size={"col-lg-3"}
+                                size={"col-lg-4"}
                               />
                             ))
                           ) : (
@@ -765,8 +768,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                               title={item?.title}
                               image={item?.image_url}
                               price={item?.price}
-                              royalty={item?.royalty}
-                              royaltyPrice={item?.royaltyPrice}
+                              royaltyPrice={item?.royality}
                               description={item?.description}
                               collection={item?.collection_id}
                               collectionImages={
@@ -821,8 +823,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                   image={item?.image_url}
                                   price={item?.price}
                                   paymentMethod={item?.paymentMethod}
-                                  royalty={item?.royalty}
-                                  royaltyPrice={item?.royaltyPrice}
+                                  royaltyPrice={item?.royality}
                                   description={item?.description}
                                   collection={item.collection_id}
                                   collectionImages={
@@ -832,6 +833,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                   owner={item?.owner_address}
                                   firstOwner={item?.creator_address}
                                   user_id={item?.user_id}
+                                  size={"col-lg-4"}
                                 />
                               ))}
                             </>
@@ -876,7 +878,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                       ? item?.bidding[0]?.bidder
                                       : 0
                                   }
-                                  royaltyPrice={item?.royaltyPrice}
+                                  royaltyPrice={item?.royality}
                                   collection={item.collection_id}
                                   collectionImages={
                                     item?.collection?.media[0]?.original_url
@@ -886,7 +888,7 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
                                   nft_like={item?.nft_like}
                                   owner={item?.owner_address}
                                   firstOwner={item?.creator_address}
-                                  size={"col-lg-3"}
+                                  size={"col-lg-4"}
                                 />
                               ))}
                             </>

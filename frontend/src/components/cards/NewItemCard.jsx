@@ -36,7 +36,9 @@ const NewItemCard = ({
   size
 }) => {
 
-
+console.log(highestBidIntoETH,
+  highestBidIntoUSDT,
+  highestBidderAddress,"response")
   // const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [endDate, setEndDate] = useState("");
