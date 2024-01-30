@@ -52,7 +52,7 @@ const EmailHeader = ({ search, setSearch }) => {
   useEffect(() => {
     const channel = laravelEcho.channel("chat-channel-" + user_id);
     channel.listen(".chat-event", (data) => {
-      console.log(data, 'data');
+      // console.log(data, 'data');
       // Handle the received event data
       setMessageArrive(true);
     });
@@ -83,9 +83,9 @@ const EmailHeader = ({ search, setSearch }) => {
 
   function handleDisconnect() {
     // Handle wallet disconnection here
-    console.log(
-      "Wallet disconnected. Updating state and clearing local storage..."
-    );
+    // console.log(
+    //   "Wallet disconnected. Updating state and clearing local storage..."
+    // );
     // For example, update state using React useState hook:
     // setState(null);
 
@@ -128,14 +128,14 @@ const EmailHeader = ({ search, setSearch }) => {
     }
     const response = await apis.getChatNotification(user_id, count);
     if (response.status) {
-      console.log(response?.data?.data, 'response?.data?.data');
+      // console.log(response?.data?.data, 'response?.data?.data');
       setChatNotificationRes((prevState) => [
         ...prevState,
         ...response?.data?.data,
       ]);
-      console.log(response?.data?.total_count);
+      // console.log(response?.data?.total_count);
       setCountLength(response?.data?.total_count)
-      console.log(countLength)
+      // console.log(countLength)
       setloader(false);
     } else {
       setloader(false);

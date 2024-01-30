@@ -20,7 +20,7 @@ const EditProfile = ({loader,setLoader}) => {
     setCoverImage(localstorageData?.cover_image);
   }, []);
 
-  console.log(data, "DATA");
+  // console.log(data, "DATA");
   const handleProfileUpload = (event) => {
     setProfileImage(URL.createObjectURL(event.target.files[0]));
     setData((prevState) => ({
@@ -36,12 +36,12 @@ const EditProfile = ({loader,setLoader}) => {
     }));
   };
 
-  console.log(data,"user edit")
+  // console.log(data,"user edit")
 
   const onChangeHandler = (e) => {
     const { files, value, name } = e.target;
     setData((prevState) => ({ ...prevState, [name]: value }));
-    console.log(data);
+    // console.log(data);
   };
 
   const handleProfileClick = () => {

@@ -375,6 +375,14 @@ const reListNFT = async (e) => {
     }
   }
  
+  console.log(nftContractAddr.address?.toString(),
+  nftId?.toString(),
+  price?.toString(),
+  nftListingType?.toString(),
+  startTimestamp?.toString(),
+  endTimestamp?.toString(),
+  userData?.id?.toString(),"changesssssssssssssssssss")
+
   const tx = await getSignerNFTContrat().approve(
     marketplaceAddr.address,
     nftId,
@@ -387,13 +395,16 @@ const reListNFT = async (e) => {
 
   await (
     await getSignerMarketContrat().resellNft(
-      nftContractAddr.address,
-      nftId,
-      price,
-      nftListingType,
-      startTimestamp,
-      endTimestamp,
-      userData?.id
+      nftContractAddr.address?.toString(),
+      nftId?.toString(),
+      price?.toString(),
+      nftListingType?.toString(),
+      startTimestamp?.toString(),
+      endTimestamp?.toString(),
+      userData?.id?.toString(),
+      {
+        gasLimit: ethers.BigNumber.from("500000"),
+      }
     )
   ).wait();
 

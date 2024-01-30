@@ -7,7 +7,7 @@ const ArtItem = ({ handleSelectArt, handleUnselectArt, Image, Index, selected })
         setIsSelected(selected)
     }, [selected])
 
-    console.log(Image, "image in art")
+    // console.log(Image, "image in art")
     const selectDecision = () => {
         if (selected) {
             handleUnselectArt(Index)

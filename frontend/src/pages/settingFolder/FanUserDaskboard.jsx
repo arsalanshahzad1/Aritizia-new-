@@ -26,20 +26,20 @@ function FanUserDaskboard({id}) {
   const getFanListing = async () => {
     const response = await apis.getFanList(id);
     setFanListing(response?.data?.data);
-    console.log(response?.data?.data, "fanlist");
+    // console.log(response?.data?.data, "fanlist");
   };
 
   let selectedUser;
   const removeFan = async (id) => {
-    console.log("id", id);
+    // console.log("id", id);
     selectedUser = id;
-    console.log("fanListing", fanListing);
+    // console.log("fanListing", fanListing);
 
     let userToRemove;
 
     for (let i = 0; i < fanListing.length; i++) {
       if (fanListing[i].fan_id == id) {
-        console.log("selected fan", fanListing[i].wallet_address);
+        // console.log("selected fan", fanListing[i].wallet_address);
         userToRemove = fanListing[i].wallet_address;
       }
     }
@@ -54,28 +54,28 @@ function FanUserDaskboard({id}) {
       signer
     );
 
-    console.log("userToRemove", userToRemove);
+    // console.log("userToRemove", userToRemove);
 
     // getRemoveFan();
 
     const remove = await marketplaceContract.removeFans(userToRemove);
-    console.log("remove", remove);
+    // console.log("remove", remove);
 
     let response = marketplaceContract.on("removeFan", handleRemoveFansEvent);
 
-    console.log("Response of removeFan event", response);
+    // console.log("Response of removeFan event", response);
   };
 
   const handleRemoveFansEvent = async (removedFan) => {
-    console.log("removedFan", removedFan);
+    // console.log("removedFan", removedFan);
     getRemoveFan();
   };
 
   const getRemoveFan = async () => {
-    console.log("figetRemoveFanrst");
-    console.log("selectedUser", selectedUser);
+    // console.log("figetRemoveFanrst");
+    // console.log("selectedUser", selectedUser);
     const response = await apis.getremovedFan(selectedUser);
-    console.log("response from getRemoveFan", response);
+    // console.log("response from getRemoveFan", response);
     // setFanListing(response?.data?.data);
     // getFanListing();
     // setFanListing([]);
@@ -94,7 +94,7 @@ function FanUserDaskboard({id}) {
 
     const fans = await marketplaceContract.getFans(userAddress);
 
-    console.log("fans", fans);
+    // console.log("fans", fans);
   };
 
   useEffect(() => {

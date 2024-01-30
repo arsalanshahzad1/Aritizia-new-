@@ -62,6 +62,10 @@ function ProfileDrawer({
   const [connectPopup, setConnectPopup] = useState(false);
   const [platformFeeETH, setPlatformFeeETH] = useState(0);
   const [platformFeeUSDT, setPlatformFeeInUSDT] = useState(0);
+
+  const [totalPricePlusFeesInUsdt, setToalPricePlustFeesInUSDT] = useState(0);
+  const [totalPricePlusFeesInEth, setToalPricePlustFeesInETH] = useState(0);
+  
   const [priceInUSDT, setPriceIntoUSD] = useState("");
   const [sellerPlan, setSellerPlan] = useState(0);
   const [buyerPlan, setBuyerPlan] = useState(0);
@@ -108,18 +112,20 @@ function ProfileDrawer({
     let feeETH = buyerFeeCalculate(price?.toString(), _buyerPercent);
     setPlatformFeeETH(feeETH?.toString());
 
-    if (feeETH != 0) {
+    if (feeETH > 0) {
       const ethIntoUsdtBase = await getProviderMarketContrat()?.getETHIntoUSDT(feeETH?.toString());
       setPlatformFeeInUSDT(ethIntoUsdtBase / 10 ** 6)
     }
 
     let EthIntoUSDT = (+feeETH + +price?.toString())
-    setEthForFiat(EthIntoUSDT);
 
+    setEthForFiat(EthIntoUSDT);
+setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
     let intoUSDT = await getProviderMarketContrat()?.getETHOutUSDTInOutPut(EthIntoUSDT?.toString())
 
     setPriceIntoUSD(intoUSDT?.toString());
     setFiatAmount(intoUSDT?.toString() / 10**6);
+    setToalPricePlustFeesInUSDT(intoUSDT?.toString() / 10**6)
 
   };
 
@@ -686,7 +692,7 @@ function ProfileDrawer({
   const userAccountAddress = localStorage.getItem("userAddress")
 
   const navigateTo = (id) => {
-    console.log('calling');
+    // console.log('calling');
     if (userData) {
       navigate(`/collection?id=${id}`);
     } else {
@@ -905,13 +911,13 @@ function ProfileDrawer({
                 <div className="six-line">
                   <div className="row">
                     <div className="col-lg-12 col-md-8 col-8">
-                      <h3>Current Price</h3>
+                      <h3>Price </h3>
                       <div className="left">
                         <p>
                           {Number(ethers.utils.formatEther(price?.toString()))?.toFixed(5)} ETH
                           <br />
                           <span>
-                            Current Price $ {Number(priceInUSDT / 10 ** 6)?.toFixed(5)} + Platform Fee $ {Number(platformFeeUSDT)?.toFixed(5)}
+                          Total Payable Price Including Tax In $ {Number(totalPricePlusFeesInUsdt)?.toFixed(5)}
                           </span>
 
                         </p>
@@ -1004,7 +1010,7 @@ function ProfileDrawer({
           </div>
         </div>
       </Modal>
-
+      
       <Modal
         show={showFiatPaymentForm}
         onHide={() => setShowFiatPaymentForm(false)}
@@ -1046,8 +1052,7 @@ function ProfileDrawer({
         </div>
       </Modal>
 
-
-      {/* <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} /> */}
+      <HeaderConnectPopup connectPopup={connectPopup} setConnectPopup={setConnectPopup} />
       <EmailSigninPopup emailSigninPopup={emailSigninPopup} setEmailSigninPopup={setEmailSigninPopup} />
     </>
   );

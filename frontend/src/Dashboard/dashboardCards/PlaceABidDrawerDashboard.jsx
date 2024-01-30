@@ -452,7 +452,7 @@ const PlaceABidDrawerDashboard = ({
       ethBid ? handleBidEvent : null
     );
 
-    console.log("Response of bid even", response);
+    // console.log("Response of bid even", response);
     ethBid = false;
     } catch (error) {
       setLoader(false)
@@ -573,7 +573,7 @@ const PlaceABidDrawerDashboard = ({
 
   const nftSoldPost = async (value) => {
     const response = await apis.postNftSold(value);
-    console.log("response", response);
+    // console.log("response", response);
     setLoader(false)
     toast.success("NFT bought");
     navigate("/profile");
@@ -593,7 +593,7 @@ const PlaceABidDrawerDashboard = ({
 
   const bidEventPost = async (bidData) => {
     const response = await apis.postBid(bidData);
-    console.log("response", response);
+    // console.log("response", response);
     setLoader(false)
     toast.success("Bid Succesful", {
       position: toast.POSITION.TOP_CENTER,

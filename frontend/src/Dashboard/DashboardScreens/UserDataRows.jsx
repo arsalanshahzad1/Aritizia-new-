@@ -22,8 +22,6 @@ function UserDataRows({
   filter,
   searchInput,
 }) {
-  console.log(listCount, "reciving data");
-  console.log(data, "data");
 
   const navigate = useNavigate();
 
@@ -32,9 +30,6 @@ function UserDataRows({
     // navigate(`/dashboard/other-profile?add=${address}`);  
   };
   const unbanUser = async (id, wallet_address) => {
-    console.log("unbanUser");
-    console.log(" wallet_address", wallet_address);
-    console.log("id", id);
 
     await unbanUserFromSC(wallet_address);
 
@@ -55,7 +50,7 @@ function UserDataRows({
         // Set signer
   const signer = provider.getSigner()
 
-    console.log("QQ Three");
+ 
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -66,9 +61,8 @@ function UserDataRows({
     let unbanUser = await (
       await marketplaceContract.unbanUser(user_address)
     ).wait();
-    console.log("QQ Four");
+   
 
-    console.log("unbanUser", unbanUser);
 
     // setTimeout(() => {
     //   window.location.reload();
@@ -76,9 +70,6 @@ function UserDataRows({
   };
 
   const banUser = async (id, wallet_address) => {
-    console.log("banUser");
-    console.log(" wallet_address", wallet_address);
-    console.log("id", id);
 
     await banUserFromSC(wallet_address);
 
@@ -97,7 +88,6 @@ function UserDataRows({
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
     const signer = provider.getSigner()
-    console.log("QQ Three");
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -108,9 +98,6 @@ function UserDataRows({
     let banUser = await (
       await marketplaceContract.banUser(user_address)
     ).wait();
-    console.log("QQ Four");
-
-    console.log("banUser", banUser);
 
     // setTimeout(() => {
     //   window.location.reload();

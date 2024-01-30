@@ -5,7 +5,7 @@ import '../../App.css';
 function UserNotification(props) {
     const { data } = props;
     const userData = JSON.parse(localStorage.getItem('data'))
-    console.log(typeof userData?.id, 'adsfhf');
+    // console.log(typeof userData?.id, 'adsfhf');
     const navigate = useNavigate();
     const navigateToProfile = (id) => {
 
@@ -14,7 +14,7 @@ function UserNotification(props) {
         } else {
             navigate(`/other-profile?add=${id}`)
         }
-        console.log(typeof id, 'adsfhf');
+        // console.log(typeof id, 'adsfhf');
         // navigate(`/profile/${id}`)
     }
 

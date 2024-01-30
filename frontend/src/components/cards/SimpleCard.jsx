@@ -41,11 +41,10 @@ const SimpleCard = ({
   collectionImages,
   seller,
   user_id,
-  setLoader
+  setLoader,
 }) => {
-
-
-  console.log(path,
+  console.log(
+    path,
     nftId,
     title,
     image,
@@ -58,7 +57,9 @@ const SimpleCard = ({
     collectionImages,
     seller,
     user_id,
-    setLoader,"itemitemitemitemitemitem")
+    setLoader,
+    "itemitemitemitemitemitem"
+  );
   const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -91,7 +92,7 @@ const SimpleCard = ({
 
   const cancelList = async () => {
     try {
-      setLoader(true)
+      setLoader(true);
       let cancel = await getSignerMarketContrat().cancelListing(
         getSignerNFTContrat().address,
         nftId,
@@ -101,10 +102,10 @@ const SimpleCard = ({
       setTimeout(() => {
         setLoader(false);
       }, [10000]);
-      setLoader(false)
+      setLoader(false);
       window.location.reload();
     } catch (error) {
-      setLoader(false)
+      setLoader(false);
       console.error(error);
     }
   };
@@ -209,13 +210,13 @@ const SimpleCard = ({
                 </div>
               </div>
             </div>
-              {account?.toUpperCase() === seller?.toUpperCase() && (
-            <div className="J-buynow css-1elubna">
+            {account?.toUpperCase() === seller?.toUpperCase() && (
+              <div className="J-buynow css-1elubna">
                 <div className="button css-pxd23z" onClick={() => cancelList()}>
                   <p>Cancel Listing</p>
                 </div>
-            </div>
-              )}
+              </div>
+            )}
           </div>
         </Link>
       </div>

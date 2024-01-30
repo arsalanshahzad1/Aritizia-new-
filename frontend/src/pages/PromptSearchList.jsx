@@ -16,7 +16,7 @@ const PromptSearchList = () => {
         const response = await apis.getUserSearchHistory(user?.id, prompt, page)
         try {
             setPrevSearchList(response?.data?.data)
-            console.log(response?.data?.data, 'response?.data?.data');
+            // console.log(response?.data?.data, 'response?.data?.data');
         } catch (error) {
 
         }
@@ -68,7 +68,7 @@ const PromptSearchList = () => {
             const response = await apis.DeleteAllSearchHistory(data)
 
             // If the deletion is successful, update the state to remove the deleted item
-            console.log(response?.status, 'status');
+            // console.log(response?.status, 'status');
             if (response?.status === 200) {
                 setPrevSearchList([]);
             }

@@ -33,14 +33,12 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   const [likedNfts, setLikedNfts] = useState([]);
   const [likedNftsAuction, setLikedNftsAuction] = useState([]);
   const [addedFans, setAddedFans] = useState({});
-  const [discountPrice, setDiscountPrice] = useState(0)
-  // const [loader, setLoader] = useState(true)
-
-  const [nftLoader, setNftLoader] = useState(true) //collection nft
-  const [myNftLoader, setMyNftLoader] = useState(true)
-  const [pNftLoader, setpNftLoader] = useState(true)
-  const [pautionNftLoader, setAutionNftLoader] = useState(true)
-  const [likedNftLoader, setLikedNftLoader] = useState(true)
+  const [discountPrice, setDiscountPrice] = useState(0);
+  const [nftLoader, setNftLoader] = useState(true); //collection nft
+  const [myNftLoader, setMyNftLoader] = useState(true);
+  const [pNftLoader, setpNftLoader] = useState(true);
+  const [pautionNftLoader, setAutionNftLoader] = useState(true);
+  const [likedNftLoader, setLikedNftLoader] = useState(true);
   const [followers, setFollwers] = useState([]);
 
   const { setactiveTabsSetting } = useContext(GlobalContext);
@@ -51,46 +49,47 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
   const navigate = useNavigate();
 
-  const { account, checkIsWalletConnected, getSignerMarketContrat, getSignerNFTContrat, getProviderMarketContrat, getProviderNFTContrat } = useContext(Store);
-
-  console.log("accountaccount", account);
-
+  const {
+    account,
+    checkIsWalletConnected,
+    getSignerMarketContrat,
+    getSignerNFTContrat,
+    getProviderMarketContrat,
+    getProviderNFTContrat,
+  } = useContext(Store);
 
   //////////////////////// API Section ///////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////////////////
 
-
-  
   const getProfileData = async () => {
     try {
       const response = await apis.getProfileData(userId);
       return response?.data?.data;
     } catch (error) {
-      setLikedNftLoader(false)
+      setLikedNftLoader(false);
     }
-
   };
 
-  const manageAPIData = async ()=>{
+  const manageAPIData = async () => {
     try {
       let APIData = await getProfileData();
-      console.log(APIData,"APIData");
-      console.log(APIData?.nft_stock?.onsale[0],"APIData");
-        setFollwers(APIData?.data?.follower);
-        setNftListFP(APIData?.nft_stock?.onsale);
-        setNftListAuction(APIData?.nft_stock?.auction);
-        setUserNfts(APIData?.my_nfts)
-        setLoader(false);
-        setNftLoader(false);
-        setpNftLoader(false);
-        setAutionNftLoader(false);
+      console.log(APIData, "APIData");
+      // console.log(APIData?.nft_stock?.onsale[0],"APIData");
+      setFollwers(APIData?.data?.follower);
+      setNftListFP(APIData?.nft_stock?.onsale);
+      setNftListAuction(APIData?.nft_stock?.auction);
+      setUserNfts(APIData?.my_nfts);
+      setLikedNfts(APIData?.liked_nft?.onsale)
+      setLikedNftsAuction(APIData?.liked_nft?.auction)
+      setLoader(false);
+      setNftLoader(false);
+      setpNftLoader(false);
+      setAutionNftLoader(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       window.location.reload();
-      
     }
-
-  }
+  };
 
   // const getLikedNftsList = async () => {
   //   try {
@@ -177,7 +176,6 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   //       const user_id = response?.data?.data?.user_id;
   //       const collectionImages = response?.data?.data?.media?.[0]?.original_url;
 
-
   //       let nftLikes
   //       try {
   //         nftLikes = await apis.getLikeNFT(response?.data?.data?.user?.id, id)
@@ -252,7 +250,6 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
   //   // for (let i = 0; i < mintedTokens?.length; i++) {
   //   //   let id;
   //   //   id = mintedTokens?.[i].tokenId?.toString();
-
 
   //   //DataBase
   //   for (let i = 0; i < nftsList?.length; i++) {
@@ -413,15 +410,15 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
 
   useEffect(() => {
     checkIsWalletConnected();
-  }, [account])
+  }, [account]);
 
   useEffect(() => {
     // viewAllNfts();
     // getLikedNfts();
     // getPurchasedNfts();
-   manageAPIData()
-    setLoader(false)
-  }, [])
+    manageAPIData();
+    setLoader(false);
+  }, []);
 
   const copyToClipboard = (link) => {
     navigator.clipboard.writeText(link);
@@ -430,10 +427,11 @@ const Profile = ({ search, setSearch, loader, setLoader }) => {
     });
   };
 
-  const userWalletAddress = localStorage.getItem("userAddress")
-  const accountAddress = localStorage.getItem("userAddress")
-console.log(nftListFP,"nftListFP")
-console.log(nftListAuction,"nftListAuction")
+  const userWalletAddress = localStorage.getItem("userAddress");
+  const accountAddress = localStorage.getItem("userAddress");
+  // console.log(nftListFP,"nftListFP")
+  console.log(likedNfts,likedNftsAuction, "nftListAuctionnftListAuction");
+
   return (
     <>
       {loader && <Loader />}
@@ -489,18 +487,28 @@ console.log(nftListAuction,"nftListAuction")
                   </h2>
                 </div>
                 <div className="col-lg-4 col-md-4 col-4 my-auto">
-                  <div id="hide-on-mobile" style={{ flexDirection: 'column' }}>
+                  <div id="hide-on-mobile" style={{ flexDirection: "column" }}>
                     <div className="edit-profile-icon">
-                      <Link to={"/setting"} onClick={() => setactiveTabsSetting("Edit")}>
+                      <Link
+                        to={"/setting"}
+                        onClick={() => setactiveTabsSetting("Edit")}
+                      >
                         <FaUserEdit />
                       </Link>
-
                     </div>
                     <div className="other-user-icons">
-                      <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
-                      <a href={userData?.twitter_url} target="_blank"><BsTwitter /></a>
-                      <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
-                      <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
+                      <a href={userData?.facebook_url} target="_blank">
+                        <FaFacebookF />
+                      </a>
+                      <a href={userData?.twitter_url} target="_blank">
+                        <BsTwitter />
+                      </a>
+                      <a href={userData?.instagram_url} target="_blank">
+                        <BsInstagram />
+                      </a>
+                      <a href={userData?.your_site} target="_blank">
+                        <BsLinkedin />
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -510,15 +518,33 @@ console.log(nftListAuction,"nftListAuction")
               </div>
               <div className="row">
                 <div className="col-lg-12">
-                  <div id="hide-on-desktop" style={{ justifyContent: 'space-between', alignItems: 'center', padding: '0' }}>
+                  <div
+                    id="hide-on-desktop"
+                    style={{
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "0",
+                    }}
+                  >
                     <div className="other-user-icons">
-                      <a href={userData?.facebook_url} target="_blank"><FaFacebookF /></a>
-                      <a href={userData?.twitter_url} target="_blank"><BsTwitter /></a>
-                      <a href={userData?.instagram_url} target="_blank"><BsInstagram /></a>
-                      <a href={userData?.your_site} target="_blank"><BsLinkedin /></a>
+                      <a href={userData?.facebook_url} target="_blank">
+                        <FaFacebookF />
+                      </a>
+                      <a href={userData?.twitter_url} target="_blank">
+                        <BsTwitter />
+                      </a>
+                      <a href={userData?.instagram_url} target="_blank">
+                        <BsInstagram />
+                      </a>
+                      <a href={userData?.your_site} target="_blank">
+                        <BsLinkedin />
+                      </a>
                     </div>
                     <div className="edit-profile-icon">
-                      <Link to={"/setting"} onClick={() => setactiveTabsSetting("Edit")}>
+                      <Link
+                        to={"/setting"}
+                        onClick={() => setactiveTabsSetting("Edit")}
+                      >
                         <FaUserEdit />
                       </Link>
                     </div>
@@ -528,7 +554,7 @@ console.log(nftListAuction,"nftListAuction")
               <div className="row">
                 <div className="col-lg-3 col-md-3 col-12"></div>
                 <div className="col-lg-6 col-md-6 col-12">
-                  {accountAddress !== "false" ?
+                  {accountAddress !== "false" ? (
                     <div className="copy-url">
                       <span>{userData?.wallet_address}</span>
                       <button
@@ -539,9 +565,9 @@ console.log(nftListAuction,"nftListAuction")
                         Copy
                       </button>
                     </div>
-                    :
+                  ) : (
                     <></>
-                  }
+                  )}
                 </div>
                 <div className="col-lg-3 col-md-3 col-12 my-auto"></div>
               </div>
@@ -549,39 +575,48 @@ console.log(nftListAuction,"nftListAuction")
               <div className="row">
                 <div className="col-lg-12">
                   <div className="profile-bio">
-                    {userData?.bio !== 'null' &&
+                    {userData?.bio !== "null" && (
                       <p className="">{userData?.bio}</p>
-                    }
+                    )}
                   </div>
                 </div>
               </div>
               <div className="row">
                 <div className="profile-tabs">
-                  {userData === "false" ? <></> : <>
-                    <button
-                      className={`${tabs === 0 ? "active" : ""}`}
-                      onClick={() => setTabs(0)}
-                    >
-                      Gallery
-                    </button>
-                  </>}
-                  {userWalletAddress === "false" ? <></> : <>
-                    <button
-                      className={`${tabs === 1 ? "active" : ""}`}
-                      onClick={() => setTabs(1)}
-                    >
-                      Collection
-                    </button>
+                  {userData === "false" ? (
+                    <></>
+                  ) : (
+                    <>
+                      <button
+                        className={`${tabs === 0 ? "active" : ""}`}
+                        onClick={() => setTabs(0)}
+                      >
+                        Gallery
+                      </button>
+                    </>
+                  )}
+                  {userWalletAddress === "false" ? (
+                    <></>
+                  ) : (
+                    <>
+                      <button
+                        className={`${tabs === 1 ? "active" : ""}`}
+                        onClick={() => setTabs(1)}
+                      >
+                        Collection
+                      </button>
 
-
-                    <button
-                      className={`${tabs === 2 ? "active" : ""}`}
-                      onClick={() => { setTabs(2); getPurchasedNfts() }}
-                    >
-                      My NFT
-                    </button>
-                  </>
-                  }
+                      <button
+                        className={`${tabs === 2 ? "active" : ""}`}
+                        onClick={() => {
+                          setTabs(2);
+                          // getPurchasedNfts();
+                        }}
+                      >
+                        My NFT
+                      </button>
+                    </>
+                  )}
                   <button
                     className={`${tabs === 3 ? "active" : ""}`}
                     onClick={() => setTabs(3)}
@@ -594,13 +629,16 @@ console.log(nftListAuction,"nftListAuction")
                   >
                     Followers
                   </button>
-
                 </div>
               </div>
               <div className="profile-buy-card">
                 {tabs === 0 && (
                   <>
-                    <Gallery setLoader={setLoader} loader={loader} user="admin" />
+                    <Gallery
+                      setLoader={setLoader}
+                      loader={loader}
+                      user="admin"
+                    />
                   </>
                 )}
                 {tabs === 1 && (
@@ -622,70 +660,90 @@ console.log(nftListAuction,"nftListAuction")
                       </div>
                       {collectionTabs === 0 && (
                         <>
-                          {loader ?
+                          {loader ? (
                             <section className="sec-loading">
                               <div className="one"></div>
                             </section>
-                            :
-                            nftListFP?.length > 0 ?
+                          ) : nftListFP?.length > 0 ? (
                             nftListFP?.map((item) => (
-                                <SimpleCard
-                                  setLoader={setLoader}
-                                  onOpen={onOpen}
-                                  key={item?.id}
-                                  id={item?.token_id}
-                                  title={item?.title}
-                                  image={item?.image_url}
-                                  price={item?.price}
-                                  paymentMethod={0}
-                                  royalty={item?.royalty}
-                                  royaltyPrice={item?.royaltyPrice}
-                                  description={item?.description}
-                                  collection={item?.collection_id}
-                                  collectionImages={item?.collection?.media[0]?.original_url}
-                                  seller={item?.seller_address}
-                                  owner={item?.owner_address}
-                                  firstOwner={item?.creator_address}
-                                  user_id={item?.user_id}
-                                />
-                              ))
-                              :
-                              <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                          }
+                              <SimpleCard
+                                setLoader={setLoader}
+                                onOpen={onOpen}
+                                key={item?.id}
+                                nftId={item?.token_id}
+                                title={item?.title}
+                                image={item?.image_url}
+                                price={item?.price}
+                                paymentMethod={0}
+                                royaltyPrice={item?.royality}
+                                description={item?.description}
+                                collection={item?.collection_id}
+                                collectionImages={
+                                  item?.collection?.media[0]?.original_url
+                                }
+                                seller={item?.seller_address}
+                                owner={item?.owner_address}
+                                firstOwner={item?.creator_address}
+                                user_id={item?.user_id}
+                              />
+                            ))
+                          ) : (
+                            <div className="data-not-avaliable">
+                              <h2>No data avaliable</h2>
+                            </div>
+                          )}
                         </>
                       )}
                       {collectionTabs === 1 && (
                         <>
-                          {nftLoader ?
+                          {nftLoader ? (
                             <section className="sec-loading">
                               <div className="one"></div>
                             </section>
-                            :
-                            nftListAuction.length > 0 ?
-                              nftListAuction.map((item) => (
-                                <NewItemCard
-                                  setLoader={setLoader}
-                                  id={item?.token_id}
-                                  title={item?.title}
-                                  image={item?.image_url}
-                                  description={item?.description}
-                                  basePrice={item?.price}
-                                  startTime={item?.start_time}
-                                  endTime={item?.end_time}
-                                  highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0}
-                                  highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
-                                  highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
-                                  collection={item.collection_id}
-                                  collectionImages={item?.collection?.media[0]?.original_url}
-                                  seller={item?.seller_address}
-                                  owner={item?.owner_address}
-                                  firstOwner={item?.creator_address}
-                                  user_id={item?.user_id}
-                                  nft_like={item?.nft_like}
-                                  size={'col-lg-3'}
-                                />
-                              )) : <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                          }
+                          ) : nftListAuction.length > 0 ? (
+                            nftListAuction.map((item, index) => (
+                              <NewItemCard
+                                setLoader={setLoader}
+                                nftId={item?.token_id}
+                                title={item?.title}
+                                image={item?.image_url}
+                                description={item?.description}
+                                basePrice={item?.price}
+                                startTime={item?.start_time}
+                                endTime={item?.end_time}
+                                highestBidIntoETH={
+                                  item?.bidding?.length > 0
+                                    ? item?.bidding[0]?.bidding_price_eth
+                                    : 0
+                                }
+                                highestBidIntoUSDT={
+                                  item?.bidding?.length > 0
+                                    ? item?.bidding[0]?.bidding_price_usdt
+                                    : 0
+                                }
+                                highestBidderAddress={
+                                  item?.bidding?.length > 0
+                                    ? item?.bidding[0]?.bidder
+                                    : 0
+                                }
+                                collection={item.collection_id}
+                                collectionImages={
+                                  item?.collection?.media[0]?.original_url
+                                }
+                                seller={item?.seller_address}
+                                royaltyPrice={item?.royality}
+                                owner={item?.owner_address}
+                                firstOwner={item?.creator_address}
+                                user_id={item?.user_id}
+                                nft_like={item?.nft_like}
+                                size={"col-lg-4"}
+                              />
+                            ))
+                          ) : (
+                            <div className="data-not-avaliable">
+                              <h2>No data avaliable</h2>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
@@ -694,40 +752,39 @@ console.log(nftListAuction,"nftListAuction")
                 {tabs === 2 && (
                   <>
                     <div className="row">
-                      {pNftLoader ?
-                          <section className="sec-loading">
-                            <div className="one"></div>
-                            {console.log(userNFTs,"userNFTsuserNFTs")}
-                          </section>
-                          :
-                          userNFTs?.length > 0 ?
-                            <>
-                              {userNFTs?.map((item) => (
-                                <MyNftCard
-                                  setLoader={setLoader}
-                                  onOpen={onOpen}
-                                  key={item?.id}
-                                  nftId={item?.token_id}
-                                  title={item?.title}
-                                  image={item?.image_url}
-                                  price={item?.price}
-                                  royalty={item?.royalty}
-                                  royaltyPrice={item?.royaltyPrice}
-                                  description={item?.description}
-                                  
-                                  collection={item?.collection_id}
-                                  collectionImages={item?.collection?.media[0]?.original_url}
-
-                              
-                                  owner={item?.owner_address}
-                                  firstOwner={item?.creator_address}
-                                  user_id={item?.user_id}
-                                />
-                              ))}
-                            </>
-                            :
-                            <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                      }
+                      {pNftLoader ? (
+                        <section className="sec-loading">
+                          <div className="one"></div>
+                          {/* {console.log(userNFTs,"userNFTsuserNFTs")} */}
+                        </section>
+                      ) : userNFTs?.length > 0 ? (
+                        <>
+                          {userNFTs?.map((item) => (
+                            <MyNftCard
+                              setLoader={setLoader}
+                              onOpen={onOpen}
+                              key={item?.id}
+                              nftId={item?.token_id}
+                              title={item?.title}
+                              image={item?.image_url}
+                              price={item?.price}
+                              royaltyPrice={item?.royality}
+                              description={item?.description}
+                              collection={item?.collection_id}
+                              collectionImages={
+                                item?.collection?.media[0]?.original_url
+                              }
+                              owner={item?.owner_address}
+                              firstOwner={item?.creator_address}
+                              user_id={item?.user_id}
+                            />
+                          ))}
+                        </>
+                      ) : (
+                        <div className="data-not-avaliable">
+                          <h2>No data avaliable</h2>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
@@ -750,86 +807,100 @@ console.log(nftListAuction,"nftListAuction")
                       </div>
                       {likeNftTabs === 0 && (
                         <>
-                          {pNftLoader ?
+                          {pNftLoader ? (
                             <section className="sec-loading">
                               <div className="one"></div>
                             </section>
-                            :
-                            likedNfts?.length > 0 ?
-                              <>
-                                {likedNfts?.map((item) => (
-                                  <FavNftCard
-                                    setLoader={setLoader}
-                                    onOpen={onOpen}
-                                    key={item?.id}
-                                    id={item?.token_id}
-                                    title={item?.title}
-                                    image={item?.image_url}
-                                    price={item?.price}
-                                    paymentMethod={item?.paymentMethod}
-                                    royalty={item?.royalty}
-                                    royaltyPrice={item?.royaltyPrice}
-                                    description={item?.description}
-                                    collection={item.collection_id}
-                                    collectionImages={item?.collection?.media[0]?.original_url}
-                                    seller={item?.seller_address}
-                                    owner={item?.owner_address}
-                                    firstOwner={item?.creator_address}
-                                    user_id={item?.user_id}
-                                  />
-                                ))}
-                              </>
-                              :
-                              <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                          }
+                          ) : likedNfts?.length > 0 ? (
+                            <>
+                              {likedNfts?.map((item) => (
+                                <FavNftCard
+                                  setLoader={setLoader}
+                                  onOpen={onOpen}
+                                  key={item?.id}
+                                  id={item?.token_id}
+                                  title={item?.title}
+                                  image={item?.image_url}
+                                  price={item?.price}
+                                  paymentMethod={item?.paymentMethod}
+                                  royaltyPrice={item?.royality}
+                                  description={item?.description}
+                                  collection={item.collection_id}
+                                  collectionImages={
+                                    item?.collection?.media[0]?.original_url
+                                  }
+                                  seller={item?.seller_address}
+                                  owner={item?.owner_address}
+                                  firstOwner={item?.creator_address}
+                                  user_id={item?.user_id}
+                                  size={"col-lg-4"}
+                                />
+                              ))}
+                            </>
+                          ) : (
+                            <div className="data-not-avaliable">
+                              <h2>No data avaliable</h2>
+                            </div>
+                          )}
                         </>
                       )}
                       {likeNftTabs === 1 && (
                         <>
-                          {pautionNftLoader ?
+                          {pautionNftLoader ? (
                             <section className="sec-loading">
                               <div className="one"></div>
                             </section>
-                            :
-                            likedNftsAuction?.length > 0 
-                            ?
-                              <>
-                                {likedNftsAuction?.map((item) => (
-                                  <NewItemCard
-                                    setLoader={setLoader}
-                                    id={item?.token_id}
-                                    isLive={item?.isLive}
-                                    title={item?.title}
-                                    image={item?.image_url}
-                                    description={item?.description}
-                                    basePrice={item?.price}
-                                    startTime={item?.start_time}
-                                    endTime={item?.end_time}
-                     
-                                    highestBidIntoETH={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_eth : 0 }
-                                    highestBidIntoUSDT={item?.bidding?.length > 0 ? item?.bidding[0]?.bidding_price_usdt : 0}
-                                    highestBidderAddress={item?.bidding?.length > 0 ? item?.bidding[0]?.bidder : 0}
-                
-                                    royaltyPrice={item?.royaltyPrice}
-                                    collection={item.collection_id}
-                                    collectionImages={item?.collection?.media[0]?.original_url}
-                                    seller={item?.seller_address}
-                                    user_id={item?.user_id}
-                                    nft_like={item?.nft_like}
-                                    owner={item?.owner_address}
-                                    firstOwner={item?.creator_address}
-                                    size={'col-lg-3'}
-                                  />
-                                ))}
-                              </>
-                              :
-                              <div className="data-not-avaliable"><h2>No data avaliable</h2></div>
-                          }
+                          ) : likedNftsAuction?.length > 0 ? (
+                            <>
+                              {likedNftsAuction?.map((item) => (
+                                <NewItemCard
+                                  setLoader={setLoader}
+                                  id={item?.token_id}
+                                  isLive={item?.isLive}
+                                  title={item?.title}
+                                  image={item?.image_url}
+                                  description={item?.description}
+                                  basePrice={item?.price}
+                                  startTime={item?.start_time}
+                                  endTime={item?.end_time}
+                                  highestBidIntoETH={
+                                    item?.bidding?.length > 0
+                                      ? item?.bidding[0]?.bidding_price_eth
+                                      : 0
+                                  }
+                                  highestBidIntoUSDT={
+                                    item?.bidding?.length > 0
+                                      ? item?.bidding[0]?.bidding_price_usdt
+                                      : 0
+                                  }
+                                  highestBidderAddress={
+                                    item?.bidding?.length > 0
+                                      ? item?.bidding[0]?.bidder
+                                      : 0
+                                  }
+                                  royaltyPrice={item?.royality}
+                                  collection={item.collection_id}
+                                  collectionImages={
+                                    item?.collection?.media[0]?.original_url
+                                  }
+                                  seller={item?.seller_address}
+                                  user_id={item?.user_id}
+                                  nft_like={item?.nft_like}
+                                  owner={item?.owner_address}
+                                  firstOwner={item?.creator_address}
+                                  size={"col-lg-4"}
+                                />
+                              ))}
+                            </>
+                          ) : (
+                            <div className="data-not-avaliable">
+                              <h2>No data avaliable</h2>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
                   </>
-
                 )}
                 {tabs === 4 && (
                   <>
@@ -852,7 +923,6 @@ console.log(nftListAuction,"nftListAuction")
                         {FollowersTab === 0 ? (
                           <>
                             <Followers id={userId} />
-
                           </>
                         ) : (
                           <>
@@ -870,7 +940,6 @@ console.log(nftListAuction,"nftListAuction")
                     </div>
                   </>
                 )}
-
               </div>
             </div>
           </div>

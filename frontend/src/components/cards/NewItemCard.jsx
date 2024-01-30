@@ -35,12 +35,10 @@ const NewItemCard = ({
   nft_like,
   size
 }) => {
-  console.log(
-    highestBidIntoETH,
-    highestBidIntoUSDT,
-    highestBidderAddress,
-    "checkinnggggg")
 
+console.log(highestBidIntoETH,
+  highestBidIntoUSDT,
+  highestBidderAddress,"response")
   // const [showLinks, setShowLinks] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [endDate, setEndDate] = useState("");
@@ -56,21 +54,15 @@ const NewItemCard = ({
   const userAddress = userData?.wallet_address;
 
   function convertTimestampToCustomFormat() {
-
     if(unixTimestamp > startTime && unixTimestamp < endTime){
       setIsLive(true)
     }
-
     const date = new Date(endTime * 1000);
-
     const day = date.getDate();
     const year = date.getFullYear();
-
     const hours = date.getHours();
     const minutes = date.getMinutes();
-
     const formattedTimestamp = `${day} ${year} ${hours}:${minutes}`;
-
     setEndDate(formattedTimestamp);
   }
   

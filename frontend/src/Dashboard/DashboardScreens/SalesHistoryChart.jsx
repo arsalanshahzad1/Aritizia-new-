@@ -29,7 +29,7 @@ const SalesHistoryChart = ({chartData}) => {
   }, []);
 
   useEffect(() => {
-    console.log(transactionHistory.all_months, "user Transections");
+ 
   }, [transactionHistory]);
 
   console.log(chartData, "chart data")

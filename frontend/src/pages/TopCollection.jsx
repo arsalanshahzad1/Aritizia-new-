@@ -26,7 +26,7 @@ const TopCollection = ({ loader, setLoader }) => {
             setList(response?.data?.data);
             setLoader(false)
         } catch (error) {
-            console.log(error.message);
+            // console.log(error.message);
             setLoader(false)
             toast.success(error.message, {
                 position: toast.POSITION.TOP_CENTER,

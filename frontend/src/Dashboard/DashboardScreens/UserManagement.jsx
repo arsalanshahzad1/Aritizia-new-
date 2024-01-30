@@ -32,15 +32,11 @@ function UserManagement({ search, setSearch }) {
     try {
       const response = await adminApis.viewUserList(count, filter, searchInput);
       if (response?.status) {
-        setUserList(response?.data);
-        console.log(userList, "userList");
-        console.log(response?.data, "asasas");
-    
+        setUserList(response?.data); 
       } else {
         console.log("error");
       }
       setLoader(false)
-      
     } catch (error) {
       setLoader(false)
       

@@ -366,7 +366,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
         uint256 listingType,
         uint256 start_time,
         uint256 end_time,
-        uint256 sellerId
+        uint256 sellerId,
+        uint256 royaltyPrice
     );
 
     event cancelList(
@@ -608,7 +609,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
                         _listingType,
                         _startTime[i],
                         _endTime[i],
-                        _sellerId
+                        _sellerId,
+                        _royaltyPrice[i]
                     );
                 
                 
@@ -992,7 +994,8 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             _listingType,
             _startTime,
             _endTime,
-            _sellerId
+            _sellerId,
+            nft.royaltyPrice
         );
     }
 
@@ -1186,7 +1189,18 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.listed = false;
             nft.owner = nft.seller;
             transferred = true;
-        } else {
+
+        emit NFTSold(
+            _nftContract,
+            nft.tokenId,
+            nft.price,
+            nft.seller,
+            nft.seller,
+            sellerId,
+            buyerId
+        );
+        } 
+        else {
             require(
                 msg.sender == auction.highestBidder ||
                     msg.sender == auction.seller,
@@ -1349,7 +1363,7 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             nft.seller = payable(address(0));
             nft.listed = false;
             _nftsSold++;
-        }
+
 
         emit NFTSold(
             _nftContract,
@@ -1360,6 +1374,10 @@ contract ArtiziaMarketplace is ReentrancyGuard, Ownable {
             sellerId,
             buyerId
         );
+
+        }
+
+
     }
 
     function royaltyCalculate(uint256 _price, uint256 noOfBips)

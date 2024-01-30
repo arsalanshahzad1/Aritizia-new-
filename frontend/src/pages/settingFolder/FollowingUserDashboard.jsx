@@ -20,7 +20,7 @@ const FollowingUserDashboard = ({ data, id }) => {
     const getFollowingList = async () => {
         const response = await apis.getFollowingList(id);
         if (response.status) {
-            console.log(response?.data?.data, " ");
+            // console.log(response?.data?.data, " ");
             setFollwing(response?.data?.data);
         }
         else {

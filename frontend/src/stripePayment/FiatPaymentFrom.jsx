@@ -51,13 +51,13 @@ FiatPaymentFrom = ({
     setLoader
 }) => {
   // console.log(index, "index");
-  console.log(_nftContract,
-    _tokenId,
-    _sellerPlan,      
-    _buyerAddress,
-    _buyerPlan,
-    sellerId,
-    buyerId,"Mohsinssss")
+  // console.log(_nftContract,
+  //   _tokenId,
+  //   _sellerPlan,      
+  //   _buyerAddress,
+  //   _buyerPlan,
+  //   sellerId,
+  //   buyerId,"Mohsinssss")
   const [success, setSuccess] = useState(false);
   const [planeType, setPlaneType] = useState("monthly");
   const [showPlaneType, setShowPlaneType] = useState(false);
@@ -86,7 +86,7 @@ FiatPaymentFrom = ({
     if (!error) {
       setLoader(true)
       try {
-        console.log("payment_method_id: " + paymentMethod.id);
+        // console.log("payment_method_id: " + paymentMethod.id);
         const { id } = paymentMethod.id;
         const response = await apis.payNftByFiat({
           user_id: user_id,
@@ -167,7 +167,7 @@ FiatPaymentFrom = ({
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
     const signer = provider.getSigner()
-    console.log("QQ Three");
+    // console.log("QQ Three");
 
     const marketplaceContract = new Contract(
       MARKETPLACE_CONTRACT_ADDRESS.address,
@@ -178,9 +178,9 @@ FiatPaymentFrom = ({
     let buySubscription = await (
       await marketplaceContract.setUserSubscription(planId)
     ).wait();
-    console.log("QQ Four");
+    // console.log("QQ Four");
 
-    console.log("buySubscription", buySubscription);
+    // console.log("buySubscription", buySubscription);
 
     // toast.success("Plan purchased!", {
     //   position: toast.POSITION.TOP_RIGHT,

@@ -108,13 +108,13 @@ const Multiple = ({ search, setSearch }) => {
   const getCollection = async () => {
     try {
       const response = await apis.getNFTCollection(user_id);
-      console.log("collection api", response);
+      // console.log("collection api", response);
       if (response?.status) {
         setcollectionOptions("");
 
         for (let i = 0; i < response?.data?.data?.length; i++) {
           let type = response?.data?.data[i]?.payment_type;
-          console.log(type == "eth", "eth", "TYpe", type);
+          // console.log(type == "eth", "eth", "TYpe", type);
 
           if (type == "eth") {
             setcollectionOptions((previousOptions) => [
@@ -140,8 +140,7 @@ const Multiple = ({ search, setSearch }) => {
           }
         }
       }
-      console.log(collectionOptions, "collectionOptions");
-
+      // console.log(collectionOptions, "collectionOptions");
     } catch (error) {
       console.log(error.message);
     }
@@ -151,7 +150,7 @@ const Multiple = ({ search, setSearch }) => {
   const postSingleCollection = async () => {
     try {
       let cryptoType;
-      console.log(user_id, collectionName, crypto, selectedImage2);
+      // console.log(user_id, collectionName, crypto, selectedImage2);
       if (collectionName.length < 1 || !selectedImage2) {
         toast.warning("All Fields are required", {
           position: toast.POSITION.TOP_CENTER,
@@ -184,7 +183,7 @@ const Multiple = ({ search, setSearch }) => {
   };
 
   const addListOfMintedTokens = (newValue) => {
-    console.log("newValue", newValue);
+    // console.log("newValue", newValue);
     listOfMintedTokens.push(newValue);
   };
 
@@ -222,25 +221,25 @@ const Multiple = ({ search, setSearch }) => {
       const file = files[i];
       setSelectedUploadNFTImage((prevState) => [...prevState, file]);
     }
-    console.log("selectedUploadNFTImage", selectedUploadNFTImage);
+    // console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
 
   const handleArtGalleryUpload = (event) => {
     const files = event;
-    console.log(files, 'event');
+    // console.log(files, 'event');
     // const im
     const imageUrls = Array.from(files).map((file) =>
       URL.createObjectURL(file)
     );
     setSelectedImagesNFT([...selectedImagesNFT, ...imageUrls]);
-    console.log("selectedUploadNFTImage", selectedImagesNFT);
+    // console.log("selectedUploadNFTImage", selectedImagesNFT);
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      console.log(files[i], 'files[i]');
-      console.log('working');
+      // console.log(files[i], 'files[i]');
+      // console.log('working');
       setSelectedUploadNFTImage((prevState) => [...prevState, file]);
     }
-    console.log("selectedUploadNFTImage", selectedUploadNFTImage);
+    // console.log("selectedUploadNFTImage", selectedUploadNFTImage);
   };
 
   const handleRemoveImage = (index) => {
@@ -356,7 +355,7 @@ const Multiple = ({ search, setSearch }) => {
 
   const handleSliderChange = (value) => {
     // Update the value or perform any other actions
-    console.log("Slider value:", value);
+    // console.log("Slider value:", value);
     setRoyalty(value);
   };
 
@@ -422,7 +421,7 @@ const Multiple = ({ search, setSearch }) => {
         let imageFile = new File([NFts[i].image], `image${i}.jpg`, {
           type: "image/jpeg",
         });
-        console.log("new image", imageFile);
+        // console.log("new image", imageFile);
         imageList.push(imageFile);
         priceList.push(ethers.utils.parseEther(NFts[i]?.price?.toString()));
         titleList.push(NFts[i]?.title);
@@ -446,11 +445,11 @@ const Multiple = ({ search, setSearch }) => {
       }
     }
 
-    console.log("imageList", imageList);
-    console.log("priceList", priceList);
-    console.log("titleList", titleList);
-    console.log("descriptionList", descriptionList);
-    console.log("royaltyList", royaltyList);
+    // console.log("imageList", imageList);
+    // console.log("priceList", priceList);
+    // console.log("titleList", titleList);
+    // console.log("descriptionList", descriptionList);
+    // console.log("royaltyList", royaltyList);
 
     uploadToIPFS();
   };
@@ -464,14 +463,14 @@ const Multiple = ({ search, setSearch }) => {
 
         try {
           const result = await uploadFileToIPFS(selectedUploadNFTImage[i]);
-          console.log("resulttt", result.pinataURL);
+          // console.log("resulttt", result.pinataURL);
 
           // Extract the IPFS hash from the pinataURL
           const ipfsHash = result.pinataURL.split("/").pop();
-          console.log("resulttt", ipfsHash);
+          // console.log("resulttt", ipfsHash);
           // Construct a new URL that directly points to the image
           const imageUrl = `https://ipfs.io/ipfs/${ipfsHash}`;
-          console.log("imageUrl new final", ipfsHash);
+          // console.log("imageUrl new final", ipfsHash);
           // Update your logic to use the imageUrl as needed
           addImageIPFSInList(imageUrl);
         } catch (error) {
@@ -517,11 +516,11 @@ const Multiple = ({ search, setSearch }) => {
             description,
             royalty,
           });
-          console.log("dataInJSON", nftJSON);
+          // console.log("dataInJSON", nftJSON);
           const result = await uploadJSONToIPFS(nftJSON);
-          console.log("result", result);
+          // console.log("result", result);
           addDataIPFSInList(result.pinataURL);
-          console.log("result.pinataURL", result.pinataURL);
+          // console.log("result.pinataURL", result.pinataURL);
         } catch (error) {
           console.log("ipfs uri upload error: ", error);
         }
@@ -554,7 +553,7 @@ const Multiple = ({ search, setSearch }) => {
           });
           const result = await uploadJSONToIPFS(nftJSON);
           addDataIPFSInList(result.pinataURL);
-          console.log("RESULT.pinataURL", result.pinataURL);
+          // console.log("RESULT.pinataURL", result.pinataURL);
         } catch (error) {
           console.log("ipfs uri upload error: ", error);
         }
@@ -576,7 +575,7 @@ const Multiple = ({ search, setSearch }) => {
         gasLimit: ethers.BigNumber.from("5000000"),
       });
       minted.wait();
-      console.log("NFT minting is complete!", minted);
+      // console.log("NFT minting is complete!", minted);
       await getSignerNFTContrat().on("NFTMinted", handleNFTMintedEvent2);
     } catch (error) {
       setIsSingleSubmit(false)
@@ -660,10 +659,10 @@ const Multiple = ({ search, setSearch }) => {
   const handleNFTMintedEvent2 = async (mintedTokens) => {
     let id;
     let list = [];
-    console.log("check mintedTokens", mintedTokens);
+    // console.log("check mintedTokens", mintedTokens);
     for (let i = 0; i < mintedTokens.length; i++) {
       id = +mintedTokens[i]?.toString();
-      console.log("check mintedTokens", id);
+      // console.log("check mintedTokens", id);
       list.push(id);
       listedddd.push(id);
       addListOfMintedTokens(id);
@@ -690,15 +689,16 @@ const Multiple = ({ search, setSearch }) => {
           }
 
           if (!listCalled) {
-            console.log("ListingDSat", NFT_CONTRACT_ADDRESS?.address,
-              multi ? mintedTokens : [mintedTokens],
-              ethParsedList,
-              royaltyList,
-              listingType,
-              startingDateList,
-              endingDateList,
-              collection?.collection_id,
-              collection?.crypto);
+
+            // console.log("ListingDSat", NFT_CONTRACT_ADDRESS?.address,
+            //   multi ? mintedTokens : [mintedTokens],
+            //   ethParsedList,
+            //   royaltyList,
+            //   listingType,
+            //   startingDateList,
+            //   endingDateList,
+            //   collection?.collection_id,
+            //   collection?.crypto);
 
             let list = await getSignerMarketContrat().listNft(
               NFT_CONTRACT_ADDRESS?.address,
@@ -726,7 +726,7 @@ const Multiple = ({ search, setSearch }) => {
         }
       }
     }
-    console.log("GOOODTRY");
+    // console.log("GOOODTRY");
   };
 
   //step7
@@ -796,13 +796,13 @@ const Multiple = ({ search, setSearch }) => {
     collectionId,
     listingType
   ) => {
-    console.log("checck",
-      tokenId?.toString(),
-      seller?.toString(),
-      owner?.toString(),
-      price,
-      collectionId,
-      listingType);
+    // console.log("checck",
+    //   tokenId?.toString(),
+    //   seller?.toString(),
+    //   owner?.toString(),
+    //   price,
+    //   collectionId,
+    //   listingType);
     if (multiListing) {
       let listedData = {
         title: titleList[count],
@@ -833,7 +833,7 @@ const Multiple = ({ search, setSearch }) => {
         //   window.location.reload();
         // }, 3000);
       } else {
-        console.log("Nhi mili");
+        // console.log("Nhi mili");
       }
     }
   };
@@ -841,7 +841,7 @@ const Multiple = ({ search, setSearch }) => {
   //step9
   const nftDataPost = async () => {
     for (let i = 0; i < listToPost?.current?.length; i++) {
-      console.log("listToPost.current[i]", listToPost.current[i]);
+      // console.log("listToPost.current[i]", listToPost.current[i]);
       // const response = await apis.postListNft(listToPost?.current[i]); //TODO
       // console.log("response", response);
     }
@@ -901,8 +901,8 @@ const Multiple = ({ search, setSearch }) => {
   }, [selectedImagesNFT]);
 
   useEffect(() => {
-    console.log(NFts, "final data");
-    console.log(currentNFT, "Current NFT");
+    // console.log(NFts, "final data");
+    // console.log(currentNFT, "Current NFT");
   }, [currentNFT, NFts]);
 
   useEffect(() => {
@@ -922,7 +922,7 @@ const Multiple = ({ search, setSearch }) => {
         }
       }
     }
-    console.log("curent nft is", currentNFT);
+    // console.log("curent nft is", currentNFT);
   }, [NFts]);
 
   useEffect(() => {
@@ -963,7 +963,7 @@ const Multiple = ({ search, setSearch }) => {
 
   useEffect(() => {
     setChoosenCollection(collection);
-    console.log("choosen", choosenCollection);
+    // console.log("choosen", choosenCollection);
   }, [collection]);
 
   return (
@@ -1017,10 +1017,10 @@ const Multiple = ({ search, setSearch }) => {
                                               collectionOptions[index]
                                             );
 
-                                            console.log(
-                                              "collection select",
-                                              collection
-                                            );
+                                            // console.log(
+                                            //   "collection select",
+                                            //   collection
+                                            // );
 
                                           }}
                                         >
@@ -1095,7 +1095,7 @@ const Multiple = ({ search, setSearch }) => {
                                         options={cryptoOptions}
                                         onChange={(e) => {
                                           setCrypto(e);
-                                          console.log("ALIMONIS", crypto);
+                                          // console.log("ALIMONIS", crypto);
                                         }}
                                         value={defaultCrypto.value}
                                       />

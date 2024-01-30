@@ -38,7 +38,7 @@ const FavNftCardDashboard = ({
     setIsVisible(false);
   }, []);
 
-console.log("imageimageimageimage",id,image);
+// console.log("imageimageimageimage",id,image);
 
   const openDrawer = () => {
     if (showLinks === true) {

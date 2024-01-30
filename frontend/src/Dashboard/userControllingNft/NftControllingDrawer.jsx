@@ -98,7 +98,6 @@ function NftControllingDrawer({
   const nftDetailByToken = async (id) => {
     const response = await adminApis.nftDetailByToken(id);
     setDrawerData(response?.data?.data);
-    console.log(response?.data?.data, "drawerData");
   };
 
   useEffect(() => {
@@ -110,8 +109,6 @@ function NftControllingDrawer({
   let bulkCall = false;
 
   const approveNFT = async (decision, id) => {
-
-    console.log("decisiondecision",decision,id);
 
     bulkCall = true;
 
@@ -141,12 +138,10 @@ function NftControllingDrawer({
 
     if (decision) {
       const response = await adminApis.approveNfts(body);
-      // console.log("response", response);
       deleteItems(id);
       await onClose(false);
     } else {
       const response = await adminApis.rejectNfts(body);
-      // console.log("response", response);
       deleteItems(id);
       await onClose(false);
     }

@@ -8,7 +8,7 @@ import { FiLogOut } from 'react-icons/fi'
 
 function Sidebar() {
     const location = useLocation();
-    console.log(location.pathname);
+
     // useEffect(() =>{} , [currentURL])
     const { sidebarCollapsed, setsidebarCollapsed, DashboardActiveTab, setDashboardActiveTab } = useContext(GlobalContext)
     return (

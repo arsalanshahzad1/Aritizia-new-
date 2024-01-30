@@ -21,8 +21,8 @@ function ArtWorkManagement({ search, setSearch }) {
     if (response?.status) {
       setList((prev) => [...prev, ...response?.data?.data])
       setPagination(response?.data?.pagination);
-      console.log(response?.data?.data, "data me");
-      console.log(response?.data?.pagination, "pagination");
+      // console.log(response?.data?.data, "data me");
+      // console.log(response?.data?.pagination, "pagination");
     } else {
       console.log("error");
     }

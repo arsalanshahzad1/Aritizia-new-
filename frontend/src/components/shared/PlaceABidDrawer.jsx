@@ -68,13 +68,21 @@ const PlaceABidDrawer = ({
   const [nftDetails, setNftDetails] = useState("");
   const [likeAndViewData, setLikeAndViewData] = useState("");
   const [platformFeeInETH, setPlatformFeeInETH] = useState(0);
+
+  const [priceInUsdt, setPriceInUsdt] = useState(0);
+
   const [platformFeeInUSDT, setPlatformFeeInUSDT] = useState(0);
+
+  const [priceInUsdtWithTax, setPriceInUSDTPlusTax] = useState(0);
+  const [priceInEthWithTax, setPriceInETHPlusTax] = useState(0);
+
   const [emailSigninPopup, setEmailSigninPopup] = useState(false);
   const [imputAmount, setInputAmount] = useState("");
   const {
     account,
     checkIsWalletConnected,
     getSignerMarketContrat,
+    getProviderMarketContrat,
     getSignerUSDTContrat,
   } = useContext(Store);
   const [buyerPercentage, setBuyerPercentage] = useState(150);
@@ -108,12 +116,15 @@ const PlaceABidDrawer = ({
     }
   };
 
-  console.log(nftId,"nftIdnftIdnftIdnftIdnftId")
+  // console.log(nftId,"nftIdnftIdnftIdnftIdnftId")
   useEffect(() => {
     if (userId) {
       getEarning();
     }
   }, []);
+
+  console.log( unixTimestamp > +endTime,nftId," unixTimestamp > +endTime")
+  console.log( unixTimestamp < +endTime,nftId," unixTimestamp < +endTime")
 
   useEffect(() => {}, [earning]);
 
@@ -494,36 +505,52 @@ const PlaceABidDrawer = ({
   };
 
   const getBuyerPlans = async () => {
-    let _buyerPercent;
+    let _buyerPercents;
     if (getBuyerPlan == 4) {
-      _buyerPercent = 0;
+      _buyerPercents = 0;
     } else if (getBuyerPlan == 3) {
-      _buyerPercent = 100;
+      _buyerPercents = 100;
     } else {
-      _buyerPercent = 150;
+      _buyerPercents = 150;
     }
     setBuyerPlan(getBuyerPlan);
-    setBuyerPercentage(_buyerPercent);
+    setBuyerPercentage(_buyerPercents);
 
     if (+basePrice?.toString() > +highestBidIntoETH?.toString()) {
-      const fee = buyerFeeCalculate(+basePrice?.toString(), buyerPercentage);
-      setPlatformFeeInETH(fee);
-      if (fee != 0) {
-        const ethIntoUsdtBase = await getSignerMarketContrat().getETHIntoUSDT(
-          fee?.toString()
+      const fee = buyerFeeCalculate(+basePrice?.toString(), _buyerPercents);
+      setPlatformFeeInETH(fee); //This is fee in Eth from calculator fees
+      let totalFee = +fee + +basePrice?.toString();
+      setPriceInETHPlusTax(totalFee / 10 ** 18);
+
+      if (fee > 0) {
+        const ethIntoUsdtTax = await getProviderMarketContrat().getETHIntoUSDT(
+          totalFee?.toString()
         );
-        setPlatformFeeInUSDT(+ethIntoUsdtBase?.toString() / 10 ** 6);
+        setPlatformFeeInUSDT(+ethIntoUsdtTax?.toString() / 10 ** 6);
+        setPriceInUSDTPlusTax(ethIntoUsdtTax?.toString() / 10 ** 6);
       }
     } else if (+highestBidIntoETH?.toString() > +basePrice?.toString()) {
-      const fee = buyerFeeCalculate(
+      const fees = buyerFeeCalculate(
         +highestBidIntoETH?.toString(),
-        buyerPercentage
+        _buyerPercents
       );
-      setPlatformFeeInETH(fee);
-      if (fee != 0) {
-        const ethIntoUsdtBase = await getSignerMarketContrat().getETHIntoUSDT(
-          fee?.toString()
+
+      setPlatformFeeInETH(fees);
+
+      let totalFees = +fees + +highestBidIntoETH?.toString();
+
+      setPriceInETHPlusTax(totalFees / 10 ** 18);
+
+      if (fees > 0) {
+        const ethIntoUsdtBase = await getProviderMarketContrat().getETHIntoUSDT(
+          totalFees?.toString()
         );
+
+        // const ethIntoUsdtPrice = await getSignerMarketContrat().getETHIntoUSDT(
+        //   highestBidIntoETH?.toString()
+        // );
+
+        setPriceInUSDTPlusTax(ethIntoUsdtBase?.toString() / 10 ** 6);
         setPlatformFeeInUSDT(+ethIntoUsdtBase?.toString() / 10 ** 6);
       }
     }
@@ -577,10 +604,6 @@ const PlaceABidDrawer = ({
 
   let ethBid = false;
   const bidWithETH = async (amount) => {
-    
-    console.log(amount,"amount")
-
-
     setLoader(true);
     try {
       //please note buyerFeeCalculate main Plane(1,2) nhi percentage(0,100,150) jaigi
@@ -606,8 +629,8 @@ const PlaceABidDrawer = ({
         );
 
       ethBid = true;
-        console.log( bidAmount?.toString(),nftId, buyerPlan,"bidingDetails")
-      let bid = await getSignerMarketContrat().bidInETH(nftId,buyerPlan, {
+      // console.log( bidAmount?.toString(),nftId, buyerPlan,"bidingDetails")
+      let bid = await getSignerMarketContrat().bidInETH(nftId, buyerPlan, {
         value: bidAmount?.toString(),
         gasLimit: ethers.BigNumber.from("2000000"),
       });
@@ -649,10 +672,10 @@ const PlaceABidDrawer = ({
 
       if (usdtAmount > +accBalance.toString()) {
         return (
-          toast.error("you dont have balance", {
+          setLoader(false), toast.error("you dont have balance", {
             position: toast.POSITION.TOP_CENTER,
-          }),
-          setLoader(true)
+          })
+          
         );
       }
 
@@ -719,6 +742,11 @@ const PlaceABidDrawer = ({
     setLoader(true);
     try {
       auctionPurchase = true;
+      console.log(          NFT_CONTRACT_ADDRESS.address,
+        nftId,
+        sellerPlan,
+        nftDetails?.user_id,
+        userData?.id,'nft Detials' )
 
       await (
         await getSignerMarketContrat().closeAuction(
@@ -813,6 +841,10 @@ const PlaceABidDrawer = ({
       setEmailSigninPopup(true);
     }
   };
+
+  console.log( account?.toString()?.toLowerCase(),
+  seller?.toString()?.toLowerCase(),
+highestBidderAddress?.toString()?.toLowerCase(),"adressadressadressadressadressadressadressadress")
   return (
     <>
       <Drawer
@@ -1085,10 +1117,7 @@ const PlaceABidDrawer = ({
                           className="logo-name"
                           onClick={() => navigateTo(collection)}
                         >
-                          <img
-                            src={collectionImages}
-                            alt=""
-                          />
+                          <img src={collectionImages} alt="" />
                           <span>{nftDetails?.collection?.name}</span>
                         </div>
                       ) : (
@@ -1144,7 +1173,7 @@ const PlaceABidDrawer = ({
                             )?.toFixed(5)}{" "}
                             ETH
                           </p>
-                          <p>
+                          {/* <p>
                             Platfrom Fee{" "}
                             {Number(
                               ethers.utils.formatEther(
@@ -1152,18 +1181,27 @@ const PlaceABidDrawer = ({
                               )
                             )?.toFixed(5)}{" "}
                             ETH
+                          </p> */}
+                          <p>
+                            Total Payable Amount In ETH Including Tax{" "}
+                            {Number(priceInEthWithTax?.toString())?.toFixed(5)}{" "}
+                            ETH
                           </p>
-                          <span>
+                          {/* <span>
                             Last bid ${" "}
                             {+highestBidIntoUSDT?.toString() / 10 ** 6} +
                             Platform Fee $ {+platformFeeInUSDT?.toFixed(5)}
+                          </span> */}
+                          <span>
+                            Total Payable Amount In USDT Including Tax ${" "}
+                            {+priceInUsdtWithTax}
+                            {/* Platform Fee $ {+platformFeeInUSDT?.toFixed(5)} */}
                           </span>
                         </p>
                       </div>
                     </div>
                     <div className="col-lg-6 col-md-4 col-4">
-                      <div className="right">
-                      </div>
+                      <div className="right"></div>
                     </div>
                   </div>
                   <img
@@ -1233,7 +1271,14 @@ const PlaceABidDrawer = ({
                         >
                           Bid Now
                         </button>
-                      ) : unixTimestamp > +endTime &&
+                      ) : 
+                      unixTimestamp < +endTime &&
+                        account?.toString()?.toLowerCase() ===
+                          seller?.toString()?.toLowerCase() ? (
+                        <button className="nft-buy-btn">Ongoing</button>
+                          )
+                          :
+                      unixTimestamp > +endTime &&
                         account?.toString()?.toLowerCase() ===
                           seller?.toString()?.toLowerCase() ? (
                         <button className="nft-buy-btn" onClick={claimAuction}>
@@ -1245,10 +1290,6 @@ const PlaceABidDrawer = ({
                         <button className="nft-buy-btn" onClick={claimAuction}>
                           Claim
                         </button>
-                      ) : unixTimestamp < +endTime &&
-                        account?.toString()?.toLowerCase() ===
-                          seller?.toString()?.toLowerCase() ? (
-                        <button className="nft-buy-btn">Ongoing</button>
                       ) : (
                         <button className="nft-buy-btn">Auctin Ended</button>
                       )}
@@ -1298,7 +1339,6 @@ const PlaceABidDrawer = ({
         </div>
       </Modal>
 
-  
       <Modal
         show={ethShow}
         onHide={() => setEthShow(false)}
@@ -1348,7 +1388,6 @@ const PlaceABidDrawer = ({
           </div>
         </div>
       </Modal>
-
 
       <Modal
         show={usdtShow}
@@ -1400,7 +1439,7 @@ const PlaceABidDrawer = ({
         </div>
       </Modal>
 
-       <HeaderConnectPopup
+      <HeaderConnectPopup
         connectPopup={connectPopup}
         setConnectPopup={setConnectPopup}
       />

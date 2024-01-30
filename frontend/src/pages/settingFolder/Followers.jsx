@@ -30,7 +30,7 @@ const Followers = ({ data  , id}) => {
     const response = await apis.getFollowersList(id);
     if(response?.status){
       setFollwers(response?.data?.data);
-      console.log(followers)
+      // console.log(followers)
     }else{
       setFollwers('');
     }
@@ -42,7 +42,7 @@ const Followers = ({ data  , id}) => {
       follow_by: id,
       follow_to: newId,
     });
-    console.log(response?.data, "new data loading")
+    // console.log(response?.data, "new data loading")
     setFollowStatus(!followStatus)
   };
   

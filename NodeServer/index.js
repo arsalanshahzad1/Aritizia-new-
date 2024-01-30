@@ -39,7 +39,7 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
     buyerId: buyerId?.toString(),
   };
   // ("");
-  console.log("checckData",apiData);
+  // console.log("checckData",apiData);
   // Send a POST request to another server's API
   try {
     var options = {
@@ -67,7 +67,7 @@ const processNFTSoldEvent = (nftContract,tokenId,price,seller,buyer,sellerId,buy
 const processNFTListedEvent = async (nftContract,tokenId,seller,buyer,firstOwner,price,last_bid,collectionId,listingType,
 start_time,
 end_time,
-sellerId) => {
+sellerId,royaltyPrice) => {
 
   const nftcontract = new ethers.Contract(
     nftContract?.toString(),
@@ -113,7 +113,8 @@ sellerId) => {
     start_time : start_time?.toString(),
     end_time : end_time?.toString(),
     sellerId: sellerId?.toString(),
-    last_bid:last_bid?.toString()
+    last_bid: last_bid?.toString(),
+    royality: royaltyPrice?.toString()
   };
 
 

@@ -69,27 +69,35 @@ async function main() {
 
   //Send a POST request to another server's API
   //console.log("checckData2",apiData);
-  try {
-    var options = {
-      method: "POST",
-      // uri: "http://143.198.70.237/api/list-nft",
-      uri: `http://api.artizia.io/api/admin/truncate-tables?wallet_address=${deployedMarketplaceContract.address}`,
-      //body: apiData,
-      json: true, // Automatically stringifies the body to JSON
-    };
-    rp(options)
-      .then(function (parsedBody) {
-        // POST succeeded...
-        console.log("DONEE", parsedBody);
-      })
-      .catch(function (err) {
-        // POST failed...
-        console.log("FAIL", err);
-      });
-  } catch (error) {
-    console.error("API Request Error:", error);
+
+  const main = async ()=>{
+    console.log("Calling API........")
+    try {
+      var options = {
+        method: "POST",
+        uri: `https://api.artizia.io/api/admin/truncate-tables?wallet_address=${deployedMarketplaceContract.address}`,
+        // Uncomment the following line if you need to send data in the request body
+        // body: apiData,
+        json: true, // Automatically stringifies the body to JSON
+      };
+    
+      rp(options)
+        .then(function (parsedBody) {
+          // Check the response from the server
+          console.log("API Response:", parsedBody);
+        })
+        .catch(function (err) {
+          // Log any errors that occur during the request
+          console.error("API Request Error:", err);
+        });
+    } catch (error) {
+      // Handle any synchronous errors
+      console.error("Synchronous Error:", error);
+    }
+    
+    console.log("Call Done")
   }
-  
+  main();
   saveFrontendFiles(deployedMarketplaceContract, "ArtiziaMarketplace");
   saveFrontendFiles(deployedNFTContract, "ArtiziaNFT");
 }

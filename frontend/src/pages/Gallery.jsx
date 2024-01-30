@@ -47,7 +47,7 @@ const Gallery = ({ user, loader, setLoader }) => {
         if (count === 0) {
             setSelectedPart("");
         }
-        console.log(allGalleryItems , 'allGalleryItems');
+        // console.log(allGalleryItems , 'allGalleryItems');
     }, [allGalleryItems]);
     useEffect(() => {
         var totalCount = folderGalleryItems.reduce(function (accumulator, folder) {

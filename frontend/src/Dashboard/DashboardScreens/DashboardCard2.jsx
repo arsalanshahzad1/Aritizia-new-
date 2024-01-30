@@ -27,7 +27,7 @@ const
     is_unapproved
   }) => {
 
-    console.log(image,"image1");
+  
     const [showLinks, setShowLinks] = useState(false);
     const userData = JSON.parse(localStorage.getItem("data"));
     const userAddress = userData?.wallet_address;

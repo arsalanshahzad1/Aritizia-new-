@@ -197,7 +197,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
         setNftListAuction(response?.data?.data?.all_nfts?.auction);
         console.log(response?.data?.data, 'total');
         if (response?.data?.data?.total_users > 999) {
-          console.log();
+          
           setTotalUsers(Math.floor(response?.data?.data?.total_users / 1000))
         } else {
           setTotalUsers(response?.data?.data?.total_users)
@@ -397,7 +397,7 @@ const LandingPage = ({ search, setSearch, loader, setLoader }) => {
                 </div>
               </div>
               <div className="d-flex">
-                {console.log(nftListAuction,"nftListAuction" )}
+                {/* {console.log(nftListAuction,"nftListAuction" )} */}
                 {nftListAuction?.length > 0 ? (
                   <>
                     <>
