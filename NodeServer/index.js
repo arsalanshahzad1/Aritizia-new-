@@ -8,7 +8,7 @@ const nftabis = require("../frontend/src/contractsData/ArtiziaNFT.json");
 
 
 const app = express();
-const port = 3000; // Replace with your desired port
+const port = 5000; // Replace with your desired port
 
 // Initialize an Ethereum provider (e.g., Infura or your own Ethereum node)
 const MATIC_RPC_ADDRESS = process.env.MATIC_RPC_ADDRESS;
