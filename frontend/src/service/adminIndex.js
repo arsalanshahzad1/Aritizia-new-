@@ -129,7 +129,7 @@ const createBackendServer = (baseURL) => {
   };
 };
 
-const adminApis = createBackendServer("http://143.198.70.237");
+const adminApis = createBackendServer(process.env.SERVER_API);
 
 
 //     Testing DB: http://165.232.142.3
