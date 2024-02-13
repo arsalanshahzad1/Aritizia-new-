@@ -9,7 +9,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { BiSearchAlt2 } from "react-icons/bi";
 import "react-dropdown/style.css";
 import Loader from "../../components/shared/Loader";
-
 function UserManagement({ search, setSearch }) {
   const [toggleUserDropdown, setToggleUserDropdown] = useState(true);
   const [listCount, setListCount] = useState(0);
@@ -32,14 +31,28 @@ function UserManagement({ search, setSearch }) {
     try {
       const response = await adminApis.viewUserList(count, filter, searchInput);
       if (response?.status) {
-        setUserList(response?.data); 
+        setUserList(response?.data);
       } else {
         console.log("error");
       }
-      setLoader(false)
+      setLoader(false);
     } catch (error) {
-      setLoader(false)
-      
+      setLoader(false);
+    }
+  };
+
+  const csvDownload = async () => {
+    try {
+      // Assuming adminApis.downloadCSVUserData() fetches the API response
+      const response = await adminApis.donwnloadCSVUserData();
+
+      if (response.status && response.data) {
+        const csvUrl = response.data.data;
+        console.log(csvUrl, "csvUrlcsvUrlcsvUrl");
+        window.open(csvUrl, "_blank");
+      }
+    } catch (error) {
+      console.error("Error opening CSV in new tab:", error);
     }
   };
 
@@ -55,11 +68,11 @@ function UserManagement({ search, setSearch }) {
     }
   }, [searchInput]);
 
-  const [loader, setLoader] = useState(true)
+  const [loader, setLoader] = useState(true);
 
   return (
     <div className="user-management">
-       {loader && <Loader/>}
+      {loader && <Loader />}
       {/* <Header search={search} setSearch={setSearch} /> */}
       <AdminHeader />
       <div className="user-management-after-header">
@@ -126,6 +139,14 @@ function UserManagement({ search, setSearch }) {
                 <BiSearchAlt2 />
               </div>
             </div>
+          </div>
+          <div className="csvButton">
+            <button
+              onClick={() => csvDownload()}
+              className={`dashboard-front-section-2-row-2`}
+            >
+              Extract CSV
+            </button>
           </div>
         </div>
         <div className="table-for-user-management">

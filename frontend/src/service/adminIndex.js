@@ -125,6 +125,7 @@ const createBackendServer = (baseURL) => {
     viewAnalyticTransaction,
     viewNftList,
     nftDetailByToken,
+    donwnloadCSVUserData,
     approveNfts,
     rejectNfts,
     viewAnalyticDashboard,

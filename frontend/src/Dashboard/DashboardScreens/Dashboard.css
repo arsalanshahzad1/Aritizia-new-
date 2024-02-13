@@ -200,6 +200,33 @@
     justify-content: space-between;
 }
 
+.csvButton {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    text-align: right;
+    margin-top: 20px;
+}
+
+.dashboard-front-section-2-row-2 {
+    display: flex;
+    margin-inline: 25px;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-gradient);
+    padding: 12px 32px;
+    border-radius: 66px;
+    border: none;
+    font-family: "Jost";
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: var(--white);
+
+}
+
 .df-s2-r1-c1 {
     display: flex;
     align-items: center;
