@@ -75,6 +75,8 @@ const createBackendServer = (baseURL) => {
   const approvedUnapprovedArtGalleryImages = async (artGalleryId) =>
     await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 
+  const donwnloadCSVUserData = async () => await api.get(`view-analytic-transaction-csv`);
+
   // Subscription Section Apis //
 
   const viewPlans = async () => await api.get(`subscriptions`);
@@ -129,7 +131,7 @@ const createBackendServer = (baseURL) => {
   };
 };
 
-const adminApis = createBackendServer("http://143.198.70.237");
+const adminApis = createBackendServer(process.env.SERVER_API);
 
 
 //     Testing DB: http://165.232.142.3
