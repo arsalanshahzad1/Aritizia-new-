@@ -238,12 +238,30 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
 
     const getStabilityImages = async () => {
         if (promptCalculator?.remaining != 0) {
+            // const body = {
+            //     steps: 40,
+            //     width: 512,
+            //     height: 768,
+            //     seed: 0,
+            //     cfg_scale: 5,
+            //     samples: 1,
+            //     text_prompts: [
+            //       {
+            //         "text": prompt,
+            //         "weight": 1
+            //       },
+            //       {
+            //         "text": prompt,
+            //         "weight": -1
+            //       }
+            //     ],
+            //   };
             const body = {
                 width: 512,
                 height: 512,
-                steps: 10, //50
+                steps: 40, //50
                 seed: 0, //10
-                cfg_scale: 0,//10
+                cfg_scale: 5,//10
                 samples: 4,
                 // steps: 50,
                 // seed: 10,
@@ -254,7 +272,7 @@ const Art = ({ search, setSearch, loader, setLoader }) => {
                     {
                         text: prompt,
                         weight: 1,
-                    },
+                    }
                 ],
             };
 
