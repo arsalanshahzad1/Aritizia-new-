@@ -58,7 +58,7 @@ const Setting = ({ search, setSearch, loader, setLoader }) => {
                                    <></>
                                    :<>
                                        <li onClick={() => { setActiveTabs('Earnings') }}><button className={`${activeTabs === 'Earnings' ? 'active' : ''}`}><FaHandHoldingUsd />Earnings</button> </li>
-                                    <li onClick={() => { setActiveTabs('Purchase') }}><button className={`${activeTabs === 'Purchase' ? 'active' : ''}`}><FaHandHoldingUsd />purchased</button> </li>
+                                    <li onClick={() => { setActiveTabs('Purchase') }}><button className={`${activeTabs === 'Purchase' ? 'active' : ''}`}><FaHandHoldingUsd />Purchased</button> </li>
                                    
                                      </>}
                                     <li onClick={() => { setActiveTabs('Edit') }}><button className={`${activeTabs === 'Edit' ? 'active' : ''}`}><FaEdit />Edit</button></li>
