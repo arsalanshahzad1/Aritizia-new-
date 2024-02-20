@@ -75,6 +75,8 @@ const createBackendServer = (baseURL) => {
   const approvedUnapprovedArtGalleryImages = async (artGalleryId) =>
     await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 
+  const donwnloadCSVUserData = async () => await api.get(`view-analytic-transaction-csv`);
+
   // Subscription Section Apis //
 
   const viewPlans = async () => await api.get(`subscriptions`);
@@ -123,6 +125,7 @@ const createBackendServer = (baseURL) => {
     viewAnalyticTransaction,
     viewNftList,
     nftDetailByToken,
+    donwnloadCSVUserData,
     approveNfts,
     rejectNfts,
     viewAnalyticDashboard,
