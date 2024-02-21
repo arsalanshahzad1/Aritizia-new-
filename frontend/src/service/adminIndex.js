@@ -75,7 +75,8 @@ const createBackendServer = (baseURL) => {
   const approvedUnapprovedArtGalleryImages = async (artGalleryId) =>
     await api.get(`approved-unapproved-art-gallery/${artGalleryId}`);
 
-  const donwnloadCSVUserData = async () => await api.get(`view-analytic-transaction-csv`);
+  // const donwnloadCSVUserData = async () => await api.get(`view-analytic-transaction-csv`);
+  const donwnloadCSVUserData = async () => await api.get(`view-user-list-csv`);
 
   // Subscription Section Apis //
 
