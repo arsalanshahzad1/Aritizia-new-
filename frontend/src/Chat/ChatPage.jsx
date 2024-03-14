@@ -9,11 +9,15 @@ import { HiOutlinePaperClip } from "react-icons/hi";
 import laravelEcho from "../socket/index";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlinePlus } from "react-icons/ai";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa";
+import adminApis from "../service/adminIndex";
 
 function ChatPage({ search, setSearch }) {
+
+  const navigate = useNavigate()
+
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [userMessagesListing, setUserMessagesListing] = useState("");
@@ -29,6 +33,12 @@ function ChatPage({ search, setSearch }) {
   const id = JSON.parse(localStorage.getItem("data"));
   const [disableSend, setDisableSend] = useState(true)
   const [showChatList, setShowChatList] = useState(true)
+  
+  const [userList, setUserList] = useState([])
+  
+
+  
+  const [searchText, setSearchText] = useState("");
   const user_id = id?.id;
   const acceptedFileTypes = [
     ".png",
@@ -108,6 +118,19 @@ function ChatPage({ search, setSearch }) {
     setFileMessages(newFileMessages);
   };
 
+
+  const viewUserList = async (count, filter, searchInput) => {
+    try {
+      const response = await adminApis.viewUserList(count, filter, searchInput);
+      if (response?.status) {
+        setUserList(response?.data?.data);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+    }
+  };
+console.log("userList",userList)
   const sendChat = async (e) => {
     e.preventDefault();
 
@@ -176,14 +199,54 @@ function ChatPage({ search, setSearch }) {
     };
   }, [userMessagesDetails, userMessagesListing]);
 
+  useEffect(()=>{
+    viewUserList(1, "yearly", "");
+  },[])
+
+
+const handleSearchChange = (e)=>{
+  setSearchText(e.target.value)
+}
+
   return (
     <div>
       <Header search={search} setSearch={setSearch} />
-
+   
       <div className="Chat-page" id="hide-on-mobile-new">
         <div className="chat-sidebar">
           <h2 className="chat-title">Chat</h2>
           <div className="chat-item-holder">
+         
+
+
+                      <input
+                      className="mx-3"
+                       type="search"
+                       placeholder="Search user name"
+                       value={searchText}
+                       onChange={handleSearchChange}
+                      />
+
+{
+  searchText  !== "" &&
+  <div>
+  {userList.filter((item)=>item.username.includes(searchText)).map((item)=>{
+    return <div className="search-box">
+      <p onClick={async()=>{
+      const id = JSON.parse(localStorage?.getItem("data"));
+      const user_id = id?.id;
+        await apis.postCheckChatMessage({
+        sender_id: user_id,
+        receiver_id: item?.id,
+      });
+      navigate(`/chat/${item?.id}`)
+      setSearchText("")
+    }}>{item.username}</p></div>
+  })}
+</div>
+
+}
+                    
             <>
               {userMessagesListing ? (
                 <>
@@ -404,6 +467,7 @@ function ChatPage({ search, setSearch }) {
                           </svg>
                         </span>
                       </div> */}
+                      
                     </div>
                   </div>
                 </div>

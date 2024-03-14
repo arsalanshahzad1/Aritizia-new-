@@ -7,6 +7,9 @@ import adminApis from "../../service/adminIndex";
 import Dropdown from "react-dropdown";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { BiSearchAlt2 } from "react-icons/bi";
+
+import { CSVLink } from "react-csv";
+
 import "react-dropdown/style.css";
 import Loader from "../../components/shared/Loader";
 function UserManagement({ search, setSearch }) {
@@ -70,6 +73,7 @@ function UserManagement({ search, setSearch }) {
 
   const [loader, setLoader] = useState(true);
 
+  console.log(userList?.data,"userListuserList")
   return (
     <div className="user-management">
       {loader && <Loader />}
@@ -145,7 +149,17 @@ function UserManagement({ search, setSearch }) {
               onClick={() => csvDownload()}
               className={`dashboard-front-section-2-row-2`}
             >
-              Extract CSV
+
+<CSVLink
+                      style={{ color: "white" }}
+                      data={userList?.data || []}
+                      filename="data"
+                    >
+                    
+                      <span className="links_name">   Extract CSV</span>
+                    </CSVLink>
+
+           
             </button>
           </div>
         </div>

@@ -779,7 +779,18 @@ setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
                 <div className="second-line">
                   <p>
                     Owned by
-                    {userData ?
+                    {
+                      userData && userData?.wallet_address == nftDetails?.user?.wallet_address ? (
+                        <Link to={"/profile"}>
+                          <span>{nftDetails?.user?.username}</span>
+                        </Link>
+                      ) : (
+                        <span onClick={() => navigate(`/other-profile?add=${nftDetails?.user?.id}`)}>
+                          {nftDetails?.owner?.username}
+                        </span>
+                      )
+                      }
+                     {/* {userData ?
                       userData?.wallet_address == nftDetails?.user?.wallet_address ? (
                         <Link to={"/profile"}>
                           <span>{nftDetails?.user?.username}</span>
@@ -793,7 +804,7 @@ setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
                       <span onClick={() => { setEmailSigninPopup(true) }} style={{ cursor: 'pointer' }}>
                         {nftDetails?.owner?.username}
                       </span>
-                    }
+                    } */}
                   </p>
                 </div>
                 <div className="three-line">

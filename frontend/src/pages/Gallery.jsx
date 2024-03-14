@@ -1063,7 +1063,7 @@ const Gallery = ({ user, loader, setLoader }) => {
                                     setTransferType("move");
                                 }}
                             >
-                                move<span></span>
+                                move
                             </p>
                             <p
                                 className={`${transferType === "copy" ? "active" : ""}`}
@@ -1071,7 +1071,7 @@ const Gallery = ({ user, loader, setLoader }) => {
                                     setTransferType("copy");
                                 }}
                             >
-                                copy<span></span>
+                                copy
                             </p>
                             <div className="button">
                                 {selectedFolderId === 0 ? (

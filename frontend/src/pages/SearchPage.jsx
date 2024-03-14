@@ -368,7 +368,7 @@ const SearchPage = ({ search, setSearch, loader, setLoader, user }) => {
                       </div>
                       <input
                        type="search"
-                       placeholder="Search for NFT item"
+                       placeholder="Search for NFT item or artist name"
                        value={searchText}
                        onChange={handleSearchChange}
                        onKeyPress={handleKeyPress}
