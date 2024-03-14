@@ -850,7 +850,7 @@ setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
                     <div className="col-lg-6 col-md-6 col-6">
                       <h3>Creator</h3>
                       <div className="logo-name">
-                        {userData ?
+                        {/* {userData ?
                           userData?.wallet_address == nftDetails?.user?.wallet_address ? (
                             <Link to={`/profile`}>
                               {nftDetails?.user?.profile_image ?
@@ -882,7 +882,17 @@ setToalPricePlustFeesInETH(EthIntoUSDT / 10 **18)
                           </div>
 
 
-                        }
+                        } */}
+                         <div onClick={() => navigate(`/other-profile?add=${nftDetails?.owner?.id}`, { state: { address: nftDetails?.user?.wallet_address } })
+                            }
+                            >
+                              {nftDetails?.user?.profile_image ? (
+                                <img src={nftDetails?.user?.profile_image} alt="" />
+                              ) : (
+                                <img src={"/public/assets/images/user-none.png"} alt="" />
+                              )}
+                              <span>{nftDetails?.user?.username}</span>
+                            </div>
 
                       </div>
                     </div>
