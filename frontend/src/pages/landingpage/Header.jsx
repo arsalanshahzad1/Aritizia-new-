@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { GlobalContext } from "../../Context/GlobalContext";
 import Notification from "./Notification";
@@ -22,6 +22,9 @@ import { GiHamburgerMenu } from "react-icons/gi";
 
 
 const Header = ({ search, setSearch }) => {
+
+
+  let navigate = useNavigate()
   const { setactiveTabsSetting } = useContext(GlobalContext);
   const [showMessage, setshowMessage] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -474,7 +477,7 @@ const Header = ({ search, setSearch }) => {
                                     {chatNotificationRes?.length > 0 ? (
                                       <Notification data={chatNotificationRes} />
                                     ) : (
-                                      <section className="header-empty-record"> <span> No record found </span> </section>
+                                      <section className="header-empty-record"> <span onClick={()=>navigate(`/chat/${user?.id}`)}> No record found , Inbox </span> </section>
                                     )}
                                     {chatNotificationRes.length < countLength &&
                                       chatNotificationRes.length > 0 ? (
