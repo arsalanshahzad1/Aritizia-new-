@@ -72,6 +72,12 @@ function ProfileDrawerAdmin({
   const [discountedPlatformFeeUSDT, setDiscountedPlatformFeeUSDT] = useState(0);
   const [nftDetails, setNftDetails] = useState("");
 
+
+
+
+  const [data, setData] = useState({product_id : null ,addons:[],quantity:1,message:''});
+
+
   const navigate = useNavigate();
 
   useEffect(() => {

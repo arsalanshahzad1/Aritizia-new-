@@ -177,6 +177,18 @@ function App() {
                   />
                 }
               />
+
+<Route
+                  path="/other-profile"
+                  element={
+                    <OtherProfile
+                      search={search}
+                      setSearch={setSearch}
+                      loader={loader}
+                      setLoader={setLoader}
+                    />
+                  }
+                />
               <Route
                 element={
                   <ProtectedRoute loader={loader} setLoader={setLoader} />
@@ -193,17 +205,7 @@ function App() {
                     />
                   }
                 />
-                <Route
-                  path="/other-profile"
-                  element={
-                    <OtherProfile
-                      search={search}
-                      setSearch={setSearch}
-                      loader={loader}
-                      setLoader={setLoader}
-                    />
-                  }
-                />
+               
                 {/* <Route
                 path="/user-profile"
                 element={<UserProfile search={search} setSearch={setSearch} />}
