@@ -314,7 +314,7 @@ const Header = ({ search, setSearch }) => {
                                     {chatNotificationRes?.length > 0 ? (
                                       <Notification data={chatNotificationRes} />
                                     ) : (
-                                      <section className="header-empty-record"> <span> No record found </span> </section>
+                                      <section className="header-empty-record"> <a href={`/chat/${user_id}`}> Inbox</a></section>
                                     )}
                                     {chatNotificationRes.length < countLength &&
                                       chatNotificationRes.length > 0 ? (
@@ -477,7 +477,7 @@ const Header = ({ search, setSearch }) => {
                                     {chatNotificationRes?.length > 0 ? (
                                       <Notification data={chatNotificationRes} />
                                     ) : (
-                                      <section className="header-empty-record"> <span onClick={()=>navigate(`/chat/${user?.id}`)}> No record found , Inbox </span> </section>
+                                      <section className="header-empty-record"><a href={`/chat/${user_id}`}> Inbox</a> </section>
                                     )}
                                     {chatNotificationRes.length < countLength &&
                                       chatNotificationRes.length > 0 ? (
@@ -738,7 +738,7 @@ const Header = ({ search, setSearch }) => {
                                 {chatNotificationRes?.length > 0 ? (
                                   <Notification data={chatNotificationRes} />
                                 ) : (
-                                  <section className="header-empty-record"> <span> No record found </span> </section>
+                                  <section className="header-empty-record"> <a href={`/chat/${user_id}`}> Inbox</a> </section>
                                 )}
                                 {chatNotificationRes.length < countLength &&
                                   chatNotificationRes.length > 0 ? (

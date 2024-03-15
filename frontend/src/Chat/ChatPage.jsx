@@ -200,7 +200,7 @@ console.log("userList",userList)
   }, [userMessagesDetails, userMessagesListing]);
 
   useEffect(()=>{
-    viewUserList(1, "yearly", "");
+    viewUserList(9, "yearly", "");
   },[])
 
 
@@ -220,7 +220,7 @@ const handleSearchChange = (e)=>{
 
 
                       <input
-                      className="mx-3"
+                      className="mx-3 search-input-user"
                        type="search"
                        placeholder="Search user name"
                        value={searchText}
@@ -229,8 +229,9 @@ const handleSearchChange = (e)=>{
 
 {
   searchText  !== "" &&
-  <div>
-  {userList.filter((item)=>item.username.includes(searchText)).map((item)=>{
+  <div className="search-box-user">
+    {userList?.length > 0 ? 
+  userList.filter((item)=>item.username.includes(searchText)).map((item)=>{
     return <div className="search-box">
       <p onClick={async()=>{
       const id = JSON.parse(localStorage?.getItem("data"));
@@ -242,7 +243,10 @@ const handleSearchChange = (e)=>{
       navigate(`/chat/${item?.id}`)
       setSearchText("")
     }}>{item.username}</p></div>
-  })}
+  })
+  :
+  <p className="d-flex justify-content-center align-items-center mt-4">No record found</p>
+  }
 </div>
 
 }

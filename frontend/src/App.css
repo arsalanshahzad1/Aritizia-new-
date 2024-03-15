@@ -8008,3 +8008,32 @@ h3 {
   justify-content: center;
   align-items: center;
 }
+
+.search-box-user {
+  position: fixed;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 1000;
+  width: 420px;
+  margin-left: 20px;
+  max-height: 500px;
+  overflow: scroll;
+}
+
+
+.search-input-user {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  width: 90%; 
+  margin: 20px 20px 10px;
+}
+
+.search-input-user:focus {
+  outline: none;
+  border-color: #007bff;
+}

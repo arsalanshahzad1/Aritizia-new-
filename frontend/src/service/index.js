@@ -161,6 +161,9 @@ const createBackendServer = (baseURL) => {
 
   const getProfileData = async (id) => await api.get(`get-profile-data-by-user/${id}`);
 
+  const postWebsiteUser = async (body) => await api.post(`add-website-visitor`, body);
+
+
   // const getOtherUser = async (userAddress) =>
   //   await api.get(`view-user-detail-by-wallet/${userAddress}/${RealUserId}`);
 
@@ -406,7 +409,8 @@ const createBackendServer = (baseURL) => {
 
     //newAPI's
     getProfileData,
-    getLandingPageData
+    getLandingPageData,
+    postWebsiteUser
 
   };
 };

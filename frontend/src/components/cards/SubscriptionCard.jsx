@@ -197,16 +197,16 @@ const SubscriptionCard = ({ data, setShowPaymentForm, setPlanName, setIndex, ind
                                         {res?.monthly_generated_images == 0 ?
                                             <>
                                                 {index === 0 && <><p className='p1'>Images Generated 40/Month</p><Cross /></>}
-                                                {index === 1 && <><p className='p1'>Images Generated 400/Month</p><Cross /></>}
-                                                {index === 2 && <><p className='p1'>Images Generated 700/Month</p><Cross /></>}
-                                                {index === 3 && <><p className='p1'>Images Generated 1600/Month</p><Cross /></>}
+                                                {index === 1 && <><p className='p1'>Images Generated 800/Month</p><Cross /></>}
+                                                {index === 2 && <><p className='p1'>Images Generated 2000/Month</p><Cross /></>}
+                                                {index === 3 && <><p className='p1'>Images Generated 4500/Month</p><Cross /></>}
                                             </>
                                             :
                                             <>
                                             {index === 0 && <><p className='p1'>Images Generated 40/Month </p><Check /></>}
-                                            {index === 1 && <><p className='p1'>Images Generated 400/Month </p><Check /></>}
-                                            {index === 2 && <><p className='p1'>Images Generated 700/Month </p><Check /></>}
-                                            {index === 3 && <><p className='p1'>Images Generated 1600/Month </p><Check /></>}
+                                            {index === 1 && <><p className='p1'>Images Generated 800/Month </p><Check /></>}
+                                            {index === 2 && <><p className='p1'>Images Generated 2000/Month </p><Check /></>}
+                                            {index === 3 && <><p className='p1'>Images Generated 4500/Month </p><Check /></>}
                                             </>
                                         }
                                     </div>

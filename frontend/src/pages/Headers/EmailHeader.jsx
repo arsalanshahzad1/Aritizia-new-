@@ -161,6 +161,7 @@ const EmailHeader = ({ search, setSearch }) => {
     }
   };
 
+
   return (
     <>
       <header id={`${scrolled ? "active" : ""}`}>
@@ -279,7 +280,7 @@ const EmailHeader = ({ search, setSearch }) => {
                               {chatNotificationRes?.length > 0 ? (
                                 <Notification data={chatNotificationRes} />
                               ) : (
-                                <section className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <a href={`/chat/${user_id}`}> Inbox</a> </section>
                               )}
                               {chatNotificationRes.length < countLength &&
                                 chatNotificationRes.length > 0 ? (
@@ -439,7 +440,7 @@ const EmailHeader = ({ search, setSearch }) => {
                                 <Notification data={chatNotificationRes} />
 
                               ) : (
-                                <section className="header-empty-record"> <span> No record found </span> </section>
+                                <section className="header-empty-record"> <a href={`/chat/${user_id}`}> Inbox</a></section>
                               )}
                               {chatNotificationRes.length < countLength &&
                                 chatNotificationRes.length > 0 ? (
@@ -719,7 +720,7 @@ const EmailHeader = ({ search, setSearch }) => {
                           {chatNotificationRes?.length > 0 ? (
                             <Notification data={chatNotificationRes} />
                           ) : (
-                            <section className="header-empty-record"> <span> No record found </span> </section>
+                            <section className="header-empty-record"><a href={`/chat/${user_id}`}> Inbox</a> </section>
                           )}
                           {chatNotificationRes.length < countLength &&
                             chatNotificationRes.length > 0 ? (

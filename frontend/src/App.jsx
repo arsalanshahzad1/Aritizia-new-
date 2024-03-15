@@ -107,6 +107,19 @@ function App() {
       localStorage.setItem("firstTimeCall", "false");
     }
   }, []);
+
+  useEffect(() => {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(async data => {
+        if (data.ip) {
+          await apis.postWebsiteUser({ ip: data.ip });
+        }
+      })
+      .catch(error => console.error('Error fetching IP address:', error));
+  }, []);
+
+
   return (
     <>
       <Router>
