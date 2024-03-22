@@ -36,7 +36,9 @@ function Register({loader,setLoader}) {
     const registerUser = async (event) => {
         event.preventDefault()
         // setLoader(true)
-        const pwdFilter = /^(?=.*\d)(?=.*[a-z])(?=.*[^a-zA-Z0-9])(?!.*\s).{7,15}$/
+     
+        var pwdFilter = /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/;
+console.log(pwdFilter.test(registerData?.password),"pwdFilter.test(registerData?.password)")
         if(userData != false && userData.email === null){
             // wallet_address
             setRegisterData((prev) =>( {...prev , wallet_address : userData?.wallet_address}))

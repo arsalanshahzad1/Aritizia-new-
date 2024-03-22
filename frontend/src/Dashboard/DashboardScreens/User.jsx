@@ -437,7 +437,7 @@ const User = ({ search, setSearch, loader, setLoader}) => {
     });
   };
 
-
+console.log(userDetails,"userDetailsuserDetailsuserDetails")
   return (
     <>
       {loader && <Loader />}
@@ -494,11 +494,27 @@ const User = ({ search, setSearch, loader, setLoader}) => {
                 </div>
                 <div className="col-lg-4 col-md-4 col-6 my-auto">
                   <div className="other-user-icons">
+                  {
+                    userDetails?.facebook_url && 
                     <a href={userDetails?.facebook_url} target="_blank"><FaFacebookF /></a>
+                    
+                  }
+                   {
+                    userDetails?.twitter_url && 
                     <a href={userDetails?.twitter_url} target="_blank"><BsTwitter /></a>
-                    <a href={userDetails?.instagram_url} target="_blank"><BsInstagram /></a>
-                    <a href={userDetails?.your_site} target="_blank"><BsLinkedin /></a>
-                  </div>
+                  
+                  }
+                   {
+                    userDetails?.instagram_url && 
+                    <a href={userDetails?.instagram_url} target="_blank"><BsTwitter /></a>
+                  
+                  }
+                   {
+                    userDetails?.your_site && 
+                    <a href={userDetails?.your_site} target="_blank"><BsTwitter /></a>
+                  
+                  }
+                   </div>
                   </div>
               </div>
               <div className="row">

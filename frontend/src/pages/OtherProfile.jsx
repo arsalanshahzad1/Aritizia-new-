@@ -461,18 +461,39 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                   style={{ justifyContent: "end" }}
                 >
                   <div className="other-user-icons">
+
+                        
+                  {
+                      userDetails?.facebook_url && 
+                  
                     <a href={userDetails?.facebook_url} target="_blank">
                       <FaFacebookF />
                     </a>
-                    <a href={userDetails?.twitter_url} target="_blank">
+}
+
+{
+                      userDetails?.twitter_url && 
+                  
+                  <a href={userDetails?.twitter_url} target="_blank">
                       <BsTwitter />
                     </a>
+                    }
+
+{
+                      userDetails?.instagram_url && 
+                  
                     <a href={userDetails?.instagram_url} target="_blank">
                       <BsInstagram />
                     </a>
+                    }
+{
+                      userDetails?.your_site && 
+      
+
                     <a href={userDetails?.your_site} target="_blank">
                       <BsLinkedin />
                     </a>
+}
                   </div>
                 </div>
               </div>
@@ -564,13 +585,20 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                   id="hide-on-desktop"
                 >
                   <div className="other-user-icons">
-                    <a
+                    
+                    {
+                      userDetails?.facebook_url && 
+                      <a
                       href={userDetails?.facebook_url}
                       style={{ marginRight: "0px", marginLeft: "0" }}
                       target="_blank"
                     >
                       <FaFacebookF style={{ marginRight: "0px" }} />
                     </a>
+                    }
+                   
+                   {
+                      userDetails?.twitter_url && 
                     <a
                       href={userDetails?.twitter_url}
                       style={{ marginRight: "0px", marginLeft: "7px" }}
@@ -578,6 +606,11 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     >
                       <BsTwitter style={{ marginRight: "0px" }} />
                     </a>
+}
+
+{
+                      userDetails?.instagram_url && 
+                 
                     <a
                       href={userDetails?.instagram_url}
                       style={{ marginRight: "0px", marginLeft: "7px" }}
@@ -585,6 +618,10 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     >
                       <BsInstagram style={{ marginRight: "0px" }} />
                     </a>
+                    }
+                    {
+                      userDetails?.your_site && 
+                 
                     <a
                       href={userDetails?.your_site}
                       style={{ marginRight: "0px", marginLeft: "7px" }}
@@ -592,6 +629,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     >
                       <BsLinkedin style={{ marginRight: "0px" }} />
                     </a>
+                    }
                   </div>
                 </div>
               </div>

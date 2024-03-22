@@ -276,7 +276,7 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                               <div className="one"></div>
                             </section>
                             :
-                            nftListFP.length > 0 ?
+                            nftListFP?.length > 0 ?
                               nftListFP?.map((item) => (
                                 <BuyNow
                                   setLoader={setLoader}
@@ -313,8 +313,8 @@ function CollectionProfile({ search, setSearch, loader, setLoader }) {
                               <div className="one"></div>
                             </section>
                             :
-                            nftListAuction.length > 0 ?
-                              nftListAuction.map((item) => (
+                            nftListAuction?.length > 0 ?
+                              nftListAuction?.map((item) => (
                                 <NewItemCard
                                   setLoader={setLoader}
                                   nftId={item?.token_id}
