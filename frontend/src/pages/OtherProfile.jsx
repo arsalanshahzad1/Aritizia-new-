@@ -23,6 +23,7 @@ import { FaFacebookF } from "react-icons/fa";
 import EmailSigninPopup from "./Headers/EmailSigninPopup";
 import Loader from "../components/shared/Loader";
 import { Store } from "../Context/Store";
+import Gallery from "./Gallery";
 const { ethereum } = window;
 
 const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
@@ -692,6 +693,13 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
               </div>
               <div className="row">
                 <div className="profile-tabs">
+                <button
+                    className={`${tabs === 2 ? "active" : ""}`}
+                    onClick={() => setTabs(2)}
+                  >
+                    Gallery
+                  </button>
+
                   <button
                     className={`${tabs === 0 ? "active" : ""}`}
                     onClick={() => setTabs(0)}
@@ -705,6 +713,7 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                   >
                     Liked
                   </button>
+                  
                 </div>
               </div>
               <div className="profile-buy-card">
@@ -911,6 +920,14 @@ const OtherProfile = ({ search, setSearch, loader, setLoader }) => {
                     </div>
                   </>
                 )}
+                {
+                  tabs == 2 &&
+                  <>
+                  <Gallery
+                    user="admin"
+                  />
+                </>
+                }
               </div>
             </div>
           </div>
